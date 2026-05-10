@@ -156,17 +156,19 @@ tokenizer.pad_token = tokenizer.eos_token
 tokenizer.padding_side = "right"
 
 # ── Model — bf16 (Gemma 4 native dtype, no GradScaler needed on MPS) ────────
-# Use Gemma4ForConditionalGeneration — correct class for this model's weight layout.
-# Gemma4ForCausalLM has a key-name mismatch vs the checkpoint and hangs during load.
-# The vision encoder (0.48B params) stays frozen; LoRA targets text layers only.
-print("📥 Loading Gemma 4 E4B in bf16 (Gemma4ForConditionalGeneration)...")
+# Load to CPU first (low_cpu_mem_usage streams tensors one-by-one, avoids peak RAM).
+# Then .to(device) — on Apple Silicon unified memory this is a zero-copy remap, instant.
+# Avoids the accelerate device_map dispatch which hangs on MPS for multimodal models.
+print("📥 Loading Gemma 4 E4B in bf16 → CPU then move to MPS...")
 model = Gemma4ForConditionalGeneration.from_pretrained(
     MODEL_ID,
     torch_dtype=torch.bfloat16,
-    device_map={"": device},
+    low_cpu_mem_usage=True,
     trust_remote_code=True,
     token=HF_TOKEN,
 )
+print(f"   Moving model to {device}...")
+model = model.to(device)
 print("   ✅ Loaded in bf16")
 model.config.use_cache = False
 
