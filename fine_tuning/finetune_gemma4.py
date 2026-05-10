@@ -156,20 +156,20 @@ tokenizer.pad_token = tokenizer.eos_token
 tokenizer.padding_side = "right"
 
 # ── Model — bf16 (Gemma 4 native dtype, no GradScaler needed on MPS) ────────
-# Load to CPU first (low_cpu_mem_usage streams tensors one-by-one, avoids peak RAM).
-# Then .to(device) — on Apple Silicon unified memory this is a zero-copy remap, instant.
-# Avoids the accelerate device_map dispatch which hangs on MPS for multimodal models.
-print("📥 Loading Gemma 4 E4B in bf16 → CPU then move to MPS...")
+# Bulk-load to CPU (no low_cpu_mem_usage — reads entire file in one shot via SSD,
+# ~6s for 16 GB on M4 Pro). Then .to(device) is zero-copy on unified memory.
+# Avoids: (a) accelerate device_map dispatch hang on MPS,
+#         (b) per-tensor mmap page-fault bottleneck (~90 min with low_cpu_mem_usage).
+print("📥 Loading Gemma 4 E4B in bf16 → bulk CPU load then move to MPS...")
 model = Gemma4ForConditionalGeneration.from_pretrained(
     MODEL_ID,
     torch_dtype=torch.bfloat16,
-    low_cpu_mem_usage=True,
     trust_remote_code=True,
     token=HF_TOKEN,
 )
 print(f"   Moving model to {device}...")
 model = model.to(device)
-print("   ✅ Loaded in bf16")
+print("   ✅ Loaded and on MPS")
 model.config.use_cache = False
 
 # ── LoRA config ──────────────────────────────────────────────────────────────
