@@ -52,6 +52,7 @@ from datasets import Dataset
 from transformers import (
     AutoTokenizer,
     AutoModelForCausalLM,
+    Gemma4ForCausalLM,
     DataCollatorForLanguageModeling,
 )
 from peft import LoraConfig, get_peft_model, TaskType
@@ -156,10 +157,12 @@ tokenizer.pad_token = tokenizer.eos_token
 tokenizer.padding_side = "right"
 
 # ── Model — bf16 (Gemma 4 native dtype, no GradScaler needed on MPS) ────────
-print("📥 Loading Gemma 4 E4B in bf16...")
-model = AutoModelForCausalLM.from_pretrained(
+# Use Gemma4ForCausalLM (text-only) — NOT Gemma4ForConditionalGeneration (multimodal)
+# The multimodal class hangs on MPS because it tries to initialise vision/audio heads
+print("📥 Loading Gemma 4 E4B in bf16 (text-only: Gemma4ForCausalLM)...")
+model = Gemma4ForCausalLM.from_pretrained(
     MODEL_ID,
-    dtype=torch.bfloat16,
+    torch_dtype=torch.bfloat16,
     device_map={"": device},
     trust_remote_code=True,
     token=HF_TOKEN,
