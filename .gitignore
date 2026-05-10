@@ -1,14 +1,14 @@
+# Python
 .venv/
 __pycache__/
 *.pyc
 *.pyo
-.DS_Store
-*.bin
-*.safetensors
-*.pt
-*.ckpt
-results/checkpoints/
 .env
-*.env
-wandb/
-.ipynb_checkpoints/
+
+# Model weights (too large for git)
+fine_tuning/gemma-base-model/
+fine_tuning/gemma-finetuned*/
+fine_tuning/*.log
+
+# Logs
+*.log
