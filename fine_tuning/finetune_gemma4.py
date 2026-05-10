@@ -51,8 +51,7 @@ import torch
 from datasets import Dataset
 from transformers import (
     AutoTokenizer,
-    AutoModelForCausalLM,
-    Gemma4ForCausalLM,
+    Gemma4ForConditionalGeneration,
     DataCollatorForLanguageModeling,
 )
 from peft import LoraConfig, get_peft_model, TaskType
@@ -157,10 +156,11 @@ tokenizer.pad_token = tokenizer.eos_token
 tokenizer.padding_side = "right"
 
 # ── Model — bf16 (Gemma 4 native dtype, no GradScaler needed on MPS) ────────
-# Use Gemma4ForCausalLM (text-only) — NOT Gemma4ForConditionalGeneration (multimodal)
-# The multimodal class hangs on MPS because it tries to initialise vision/audio heads
-print("📥 Loading Gemma 4 E4B in bf16 (text-only: Gemma4ForCausalLM)...")
-model = Gemma4ForCausalLM.from_pretrained(
+# Use Gemma4ForConditionalGeneration — correct class for this model's weight layout.
+# Gemma4ForCausalLM has a key-name mismatch vs the checkpoint and hangs during load.
+# The vision encoder (0.48B params) stays frozen; LoRA targets text layers only.
+print("📥 Loading Gemma 4 E4B in bf16 (Gemma4ForConditionalGeneration)...")
+model = Gemma4ForConditionalGeneration.from_pretrained(
     MODEL_ID,
     torch_dtype=torch.bfloat16,
     device_map={"": device},
@@ -171,6 +171,9 @@ print("   ✅ Loaded in bf16")
 model.config.use_cache = False
 
 # ── LoRA config ──────────────────────────────────────────────────────────────
+# Target only the text language model layers (not vision encoder).
+# PEFT matches by suffix so "q_proj" hits language_model.layers.*.self_attn.q_proj
+# but we exclude vision modules via modules_to_save=[] and the name filter below.
 lora_config = LoraConfig(
     task_type=TaskType.CAUSAL_LM,
     r=LORA_R,
@@ -178,6 +181,8 @@ lora_config = LoraConfig(
     lora_dropout=LORA_DROPOUT,
     target_modules=["q_proj", "k_proj", "v_proj", "o_proj",
                     "gate_proj", "up_proj", "down_proj"],
+    layers_to_transform=None,          # transform all matching layers
+    exclude_modules="vision_tower|multi_modal_projector|audio",  # skip non-text
     bias="none",
 )
 model = get_peft_model(model, lora_config)
