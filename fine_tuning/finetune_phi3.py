@@ -62,8 +62,8 @@ from trl import SFTTrainer, SFTConfig
 import wandb
 
 # ── Config ───────────────────────────────────────────────────────────────────
-MODEL_ID   = "microsoft/Phi-3-mini-4k-instruct"
 BASE_DIR   = Path(__file__).parent.parent
+MODEL_ID   = str(Path(__file__).parent / "phi3-base-model")   # local path — avoids re-download via HF hub
 DATA_FILE  = BASE_DIR / "data" / f"{FRAMEWORK}_dataset.jsonl"
 OUTPUT_DIR = Path(__file__).parent / f"phi3-{FRAMEWORK}"
 WANDB_KEY  = os.environ.get("WANDB_API_KEY", "")
@@ -159,7 +159,7 @@ print(f"   Sample text length: {len(train_data[0]['text'])} chars")
 print("\n📥 Loading tokeniser...")
 tokenizer = AutoTokenizer.from_pretrained(
     MODEL_ID,
-    trust_remote_code=True,
+    trust_remote_code=False,   # native Phi3 in transformers 5.x — no custom code needed
     token=HF_TOKEN,
 )
 # Phi-3 uses eos_token as pad; padding_side right for causal LM
@@ -168,26 +168,30 @@ if tokenizer.pad_token is None:
 tokenizer.padding_side = "right"
 
 # ── Model — bf16 on MPS ──────────────────────────────────────────────────────
-print("📥 Loading Phi-3-mini-4k-instruct in bf16...")
+# Bulk-load to CPU first (zero-copy move to unified MPS memory), same pattern as Gemma4.
+# trust_remote_code=False: transformers 5.x has native Phi3ForCausalLM.
+# attn_implementation='eager': flash_attn not available on MPS.
+print("📥 Loading Phi-3-mini-4k-instruct in bf16 → bulk CPU then move to MPS...")
 model = AutoModelForCausalLM.from_pretrained(
     MODEL_ID,
     torch_dtype=torch.bfloat16,
-    device_map={"": device},
-    trust_remote_code=True,
+    trust_remote_code=False,
     token=HF_TOKEN,
     attn_implementation="eager",   # flash_attn not available on MPS
 )
-print("   ✅ Loaded in bf16")
+print(f"   Moving model to {device}...")
+model = model.to(device)
+print("   ✅ Loaded and on MPS")
 model.config.use_cache = False
 
 # ── LoRA config ──────────────────────────────────────────────────────────────
+# Native transformers 5.x Phi3 uses qkv_proj (combined) and gate_up_proj (combined).
 lora_config = LoraConfig(
     task_type=TaskType.CAUSAL_LM,
     r=LORA_R,
     lora_alpha=LORA_ALPHA,
     lora_dropout=LORA_DROPOUT,
-    target_modules=["q_proj", "k_proj", "v_proj", "o_proj",
-                    "gate_up_proj", "down_proj"],
+    target_modules=["qkv_proj", "o_proj", "gate_up_proj", "down_proj"],
     bias="none",
 )
 model = get_peft_model(model, lora_config)

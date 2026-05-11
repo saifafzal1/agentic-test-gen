@@ -59,8 +59,8 @@ from trl import SFTTrainer, SFTConfig
 import wandb
 
 # ── Config ───────────────────────────────────────────────────────────────────
-MODEL_ID   = "google/gemma-4-E4B-it"
 BASE_DIR   = Path(__file__).parent.parent
+MODEL_ID   = str(Path(__file__).parent / "gemma4-base-model")   # local path — avoids re-download via HF hub
 DATA_FILE  = BASE_DIR / "data" / f"{FRAMEWORK}_dataset.jsonl"
 OUTPUT_DIR = Path(__file__).parent / f"gemma4-{FRAMEWORK}"
 WANDB_KEY  = os.environ.get("WANDB_API_KEY", "")
@@ -172,10 +172,29 @@ model = model.to(device)
 print("   ✅ Loaded and on MPS")
 model.config.use_cache = False
 
+# ── Unwrap Gemma4ClippableLinear → nn.Linear (language model only) ───────────
+# Gemma 4 wraps all Linear projections in Gemma4ClippableLinear, which PEFT
+# does not recognise as a supported module type for LoRA injection.
+# Solution: replace each ClippableLinear in the language_model with its inner
+# nn.Linear (weights are preserved; clipping is not needed for fine-tuning).
+try:
+    from transformers.models.gemma4.modeling_gemma4 import Gemma4ClippableLinear
+    replaced = 0
+    for mod_name, module in list(model.named_modules()):
+        if isinstance(module, Gemma4ClippableLinear) and "language_model" in mod_name:
+            parts = mod_name.split(".")
+            parent = model
+            for part in parts[:-1]:
+                parent = getattr(parent, part)
+            setattr(parent, parts[-1], module.linear)   # swap wrapper → inner Linear
+            replaced += 1
+    print(f"   Unwrapped {replaced} Gemma4ClippableLinear → nn.Linear (language_model only)")
+except (ImportError, AttributeError) as e:
+    print(f"   ⚠️  ClippableLinear unwrap skipped: {e}")
+
 # ── LoRA config ──────────────────────────────────────────────────────────────
-# Target only the text language model layers (not vision encoder).
-# PEFT matches by suffix so "q_proj" hits language_model.layers.*.self_attn.q_proj
-# but we exclude vision modules via modules_to_save=[] and the name filter below.
+# Target standard nn.Linear projections in the text transformer only.
+# exclude_modules regex guards against any remaining vision/audio layers.
 lora_config = LoraConfig(
     task_type=TaskType.CAUSAL_LM,
     r=LORA_R,
@@ -183,8 +202,8 @@ lora_config = LoraConfig(
     lora_dropout=LORA_DROPOUT,
     target_modules=["q_proj", "k_proj", "v_proj", "o_proj",
                     "gate_proj", "up_proj", "down_proj"],
-    layers_to_transform=None,          # transform all matching layers
-    exclude_modules="vision_tower|multi_modal_projector|audio",  # skip non-text
+    layers_to_transform=None,
+    exclude_modules=r".*(?:vision_tower|multi_modal_projector|audio).*",  # fullmatch needs .* anchors
     bias="none",
 )
 model = get_peft_model(model, lora_config)
