@@ -47,8 +47,8 @@ MODEL_REGISTRY = {
             "playwright": str(BASE_DIR / "fine_tuning" / "phi3-playwright"),
         },
         "hf_adapters": {
-            "cypress"   : "saifafzal1/phi3-cypress-qlora",
-            "playwright": "saifafzal1/phi3-playwright-qlora",
+            "cypress"   : "saifafzal1/phi3-mini-cypress-qlora",
+            "playwright": "saifafzal1/phi3-mini-playwright-qlora",
         },
         "model_class": "AutoModelForCausalLM",
         "trust_remote_code": False,
@@ -61,8 +61,8 @@ MODEL_REGISTRY = {
             "playwright": str(BASE_DIR / "fine_tuning" / "gemma4-playwright"),
         },
         "hf_adapters": {
-            "cypress"   : "saifafzal1/gemma4-cypress-qlora",
-            "playwright": "saifafzal1/gemma4-playwright-qlora",
+            "cypress"   : "saifafzal1/gemma4-E4B-cypress-qlora",
+            "playwright": "saifafzal1/gemma4-E4B-playwright-qlora",
         },
         "model_class": "Gemma4ForConditionalGeneration",
         "trust_remote_code": True,

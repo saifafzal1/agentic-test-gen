@@ -54,7 +54,7 @@ FINETUNING_RUNS = [
         "learning_rate"     : 2e-4,
         "max_seq_len"       : 2048,
         "hardware"          : "Apple M4 Pro MPS bf16",
-        "hf_adapter_repo"   : "saifafzal1/gemma4-cypress-qlora",
+        "hf_adapter_repo"   : "saifafzal1/gemma4-E4B-cypress-qlora",
     },
     {
         "run_name"          : "gemma4-playwright-qlora",
@@ -76,7 +76,7 @@ FINETUNING_RUNS = [
         "learning_rate"     : 2e-4,
         "max_seq_len"       : 2048,
         "hardware"          : "Apple M4 Pro MPS bf16",
-        "hf_adapter_repo"   : "saifafzal1/gemma4-playwright-qlora",
+        "hf_adapter_repo"   : "saifafzal1/gemma4-E4B-playwright-qlora",
     },
     {
         "run_name"          : "phi3-cypress-qlora",
@@ -98,7 +98,7 @@ FINETUNING_RUNS = [
         "learning_rate"     : 2e-4,
         "max_seq_len"       : 2048,
         "hardware"          : "Apple M4 Pro MPS bf16",
-        "hf_adapter_repo"   : "saifafzal1/phi3-cypress-qlora",
+        "hf_adapter_repo"   : "saifafzal1/phi3-mini-cypress-qlora",
     },
     {
         "run_name"          : "phi3-playwright-qlora",
@@ -120,7 +120,7 @@ FINETUNING_RUNS = [
         "learning_rate"     : 2e-4,
         "max_seq_len"       : 2048,
         "hardware"          : "Apple M4 Pro MPS bf16",
-        "hf_adapter_repo"   : "saifafzal1/phi3-playwright-qlora",
+        "hf_adapter_repo"   : "saifafzal1/phi3-mini-playwright-qlora",
     },
 ]
 
