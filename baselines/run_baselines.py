@@ -1,12 +1,13 @@
 """
 Phase 3 — Baseline Evaluation
 ==============================
-Generates test scripts from all 279 user stories using 3 LLM APIs × 2 frameworks = 6 runs.
+Generates test scripts from all 279 user stories using 2 LLM APIs × 2 frameworks = 4 runs.
 
 Models:
   - GPT-4o-mini      (OpenAI)
   - Claude Haiku     (Anthropic claude-haiku-4-5)
-  - Gemini 1.5 Flash (Google)
+  - Gemini Flash     (Google) — EXCLUDED: free-tier quota (20 req/day) insufficient for 558 calls;
+                                paid billing not available. Evaluation proceeds with 2 commercial baselines.
 
 Frameworks:
   - Cypress    → baselines/results/cypress/{model}/
