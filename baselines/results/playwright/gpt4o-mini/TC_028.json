@@ -1,0 +1,13 @@
+{
+  "id": "TC_028",
+  "category": "form_validation",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see success feedback after a valid form submission.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Submission Success Feedback', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/form'); // Replace with the actual URL of the form\n  });\n\n  test('should display success message on valid form submission', async ({ page }) => {\n    await page.getByLabel('Name').fill('John Doe');\n    await page.getByLabel('Email').fill('john.doe@example.com');\n    await page.getByLabel('Message').fill('This is a test message.');\n    await page.getByRole('button', { name: 'Submit' }).click();\n\n    const successMessage = await page.getByText('Thank you for your submission!');\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should not display success message on invalid form submission', async ({ page }) => {\n    await page.getByLabel('Email').fill('invalid-email');\n    await page.getByRole('button', { name: 'Submit' }).click();\n\n    const successMessage = page.getByText('Thank you for your submission!');\n    await expect(successMessage).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 250,
+  "latency_s": 4.03,
+  "timestamp": "2026-06-19T16:45:18.810220"
+}

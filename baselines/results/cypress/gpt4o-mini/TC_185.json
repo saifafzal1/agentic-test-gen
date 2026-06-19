@@ -1,0 +1,13 @@
+{
+  "id": "TC_185",
+  "category": "file_upload",
+  "complexity": "simple",
+  "user_story": "As a user, I want uploaded files to be organised into folders.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('File Upload and Organization', () => {\n    beforeEach(() => {\n        cy.visit('/upload'); // Replace with the actual URL of the upload page\n    });\n\n    it('should successfully upload a file and organize it into a folder', () => {\n        const fileName = 'test-file.txt';\n        const folderName = 'Test Folder';\n\n        // Create a folder\n        cy.get('[data-cy=create-folder-input]').type(folderName);\n        cy.get('[data-cy=create-folder-button]').click();\n\n        // Upload a file\n        cy.get('[data-cy=file-upload-input]').attachFile(fileName);\n        cy.get('[data-cy=upload-button]').click();\n\n        // Verify the file is in the correct folder\n        cy.get('[data-cy=folder]').contains(folderName).click();\n        cy.get('[data-cy=file-list]').should('contain', fileName);\n    });\n\n    it('should show an error when trying to upload a file without selecting a folder', () => {\n        const fileName = 'test-file.txt';\n\n        // Attempt to upload a file without creating/selecting a folder\n        cy.get('[data-cy=file-upload-input]').attachFile(fileName);\n        cy.get('[data-cy=upload-button]').click();\n\n        // Verify the error message\n        cy.get('[data-cy=error-message]').should('be.visible').and('contain', 'Please select a folder before uploading.');\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 299,
+  "latency_s": 4.26,
+  "timestamp": "2026-06-19T16:36:53.328472"
+}

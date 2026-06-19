@@ -1,0 +1,13 @@
+{
+  "id": "TC_194",
+  "category": "search_filter",
+  "complexity": "simple",
+  "user_story": "As a user, I want faceted search to update results without a full page reload.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Faceted Search', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should display results based on selected filters', async ({ page }) => {\n    await page.getByRole('button', { name: 'Filter by Category' }).click();\n    await page.getByText('Electronics').click();\n    \n    const results = await page.getByRole('list', { name: 'Search Results' });\n    await expect(results).toContainText('Electronics');\n  });\n\n  test('should update results when multiple filters are applied', async ({ page }) => {\n    await page.getByRole('button', { name: 'Filter by Category' }).click();\n    await page.getByText('Electronics').click();\n    await page.getByRole('button', { name: 'Filter by Brand' }).click();\n    await page.getByText('Brand A').click();\n    \n    const results = await page.getByRole('list', { name: 'Search Results' });\n    await expect(results).toContainText('Brand A');\n    await expect(results).toContainText('Electronics');\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 265,
+  "latency_s": 3.24,
+  "timestamp": "2026-06-19T16:56:39.630059"
+}

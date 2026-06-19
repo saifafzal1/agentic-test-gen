@@ -1,0 +1,13 @@
+{
+  "id": "TC_130",
+  "category": "modal_dialog",
+  "complexity": "complex",
+  "user_story": "As a user, I want to close a modal by clicking the backdrop.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Dialog', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-application-url.com');\n    await page.getByText('Open Modal').click();\n  });\n\n  test('should close the modal when clicking the backdrop', async ({ page }) => {\n    const modal = page.getByRole('dialog');\n    const backdrop = page.getByRole('presentation');\n\n    await expect(modal).toBeVisible();\n    await backdrop.click();\n    await expect(modal).not.toBeVisible();\n  });\n\n  test('should not close the modal when clicking inside the modal', async ({ page }) => {\n    const modal = page.getByRole('dialog');\n    const modalContent = modal.getByText('Modal Content');\n\n    await expect(modal).toBeVisible();\n    await modalContent.click();\n    await expect(modal).toBeVisible();\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 199,
+  "latency_s": 2.75,
+  "timestamp": "2026-06-19T16:52:30.598662"
+}

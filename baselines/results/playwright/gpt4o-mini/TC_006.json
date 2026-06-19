@@ -1,0 +1,13 @@
+{
+  "id": "TC_006",
+  "category": "authentication",
+  "complexity": "medium",
+  "user_story": "As a user, I want to be prevented from submitting the login form with empty fields.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Form Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should not allow submission with empty fields', async ({ page }) => {\n    await page.getByRole('button', { name: /login/i }).click();\n    const errorMessage = await page.getByText(/please fill out this field/i);\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should show error messages for empty username and password', async ({ page }) => {\n    await page.getByLabel('Username').fill('');\n    await page.getByLabel('Password').fill('');\n    await page.getByRole('button', { name: /login/i }).click();\n    \n    const usernameError = await page.getByText(/please fill out this field/i).nth(0);\n    const passwordError = await page.getByText(/please fill out this field/i).nth(1);\n    \n    await expect(usernameError).toBeVisible();\n    await expect(passwordError).toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 234,
+  "latency_s": 3.83,
+  "timestamp": "2026-06-19T16:43:42.538644"
+}

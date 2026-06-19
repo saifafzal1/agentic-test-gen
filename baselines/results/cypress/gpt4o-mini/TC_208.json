@@ -1,0 +1,13 @@
+{
+  "id": "TC_208",
+  "category": "accessibility",
+  "complexity": "complex",
+  "user_story": "As a screen reader user, I want form fields to have associated labels.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Form Accessibility Tests', () => {\n    beforeEach(() => {\n        cy.visit('/form-page'); // Replace with the actual URL of the form page\n    });\n\n    it('should have associated labels for all form fields', () => {\n        cy.get('form').within(() => {\n            cy.get('input, select, textarea').each(($field) => {\n                const id = $field.prop('id');\n                const label = cy.get(`label[for=\"${id}\"]`);\n                label.should('exist');\n                label.should('not.be.empty');\n            });\n        });\n    });\n\n    it('should not have any form fields without associated labels', () => {\n        cy.get('form').within(() => {\n            cy.get('input, select, textarea').each(($field) => {\n                const id = $field.prop('id');\n                cy.get(`label[for=\"${id}\"]`).should('exist');\n            });\n        });\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 196,
+  "latency_s": 3.18,
+  "timestamp": "2026-06-19T16:38:14.959316"
+}

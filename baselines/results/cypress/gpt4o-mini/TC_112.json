@@ -1,0 +1,13 @@
+{
+  "id": "TC_112",
+  "category": "async_await",
+  "complexity": "complex",
+  "user_story": "As a user, I want an async image upload to show progress percentage.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Async Image Upload Progress', () => {\n    beforeEach(() => {\n        cy.visit('/upload'); // Adjust the URL to your application's upload page\n    });\n\n    it('should show progress percentage during image upload', () => {\n        const fileName = 'test-image.jpg'; // Ensure this file exists in the fixtures\n        cy.fixture(fileName).then(fileContent => {\n            cy.get('input[type=\"file\"]').attachFile(fileName);\n            cy.intercept('POST', '/upload', (req) => {\n                req.on('response', (res) => {\n                    res.send({ status: 'success', url: 'http://example.com/image.jpg' });\n                });\n            }).as('uploadImage');\n\n            cy.get('button[type=\"submit\"]').click();\n            cy.wait('@uploadImage');\n\n            cy.get('.progress-bar').should('be.visible');\n            cy.get('.progress-percentage').should('contain', '100%');\n        });\n    });\n\n    it('should handle upload failure gracefully', () => {\n        const fileName = 'test-image.jpg'; // Ensure this file exists in the fixtures\n        cy.fixture(fileName).then(fileContent => {\n            cy.get('input[type=\"file\"]').attachFile(fileName);\n            cy.intercept('POST', '/upload', {\n                statusCode: 500,\n                body: { error: 'Upload failed' }\n            }).as('uploadImageFail');\n\n            cy.get('button[type=\"submit\"]').click();\n            cy.wait('@uploadImageFail');\n\n            cy.get('.error-message').should('be.visible').and('contain', 'Upload failed');\n            cy.get('.progress-bar').should('not.exist');\n        });\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 346,
+  "latency_s": 4.48,
+  "timestamp": "2026-06-19T16:32:41.413122"
+}

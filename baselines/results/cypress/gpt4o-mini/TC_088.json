@@ -1,0 +1,13 @@
+{
+  "id": "TC_088",
+  "category": "crud_operations",
+  "complexity": "complex",
+  "user_story": "As a user, I want to mention another user in a comment using @.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('User Mention in Comment', () => {\n    beforeEach(() => {\n        cy.visit('/comments'); // Navigate to the comments page\n        cy.login('testuser', 'password'); // Assuming a login function exists\n    });\n\n    it('should allow a user to mention another user in a comment', () => {\n        cy.get('textarea.comment-input').type('Hello @john_doe, how are you?');\n        cy.get('button.submit-comment').click();\n        cy.get('.comment').should('contain', '@john_doe');\n        cy.get('.comment').should('contain', 'Hello @john_doe, how are you?');\n    });\n\n    it('should not allow mentioning a non-existent user', () => {\n        cy.get('textarea.comment-input').type('Hello @non_existent_user, how are you?');\n        cy.get('button.submit-comment').click();\n        cy.get('.error-message').should('be.visible').and('contain', 'User not found');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 207,
+  "latency_s": 3.6,
+  "timestamp": "2026-06-19T16:31:00.536558"
+}

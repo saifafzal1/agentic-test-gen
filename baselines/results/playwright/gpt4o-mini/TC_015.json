@@ -1,0 +1,13 @@
+{
+  "id": "TC_015",
+  "category": "authentication",
+  "complexity": "medium",
+  "user_story": "As a user, I want to log in with my email or username interchangeably.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Authentication', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should log in with email', async ({ page }) => {\n    await page.getByLabel('Email or Username').fill('user@example.com');\n    await page.getByLabel('Password').fill('password123');\n    await page.getByRole('button', { name: 'Log In' }).click();\n    await expect(page.getByText('Welcome back!')).toBeVisible();\n  });\n\n  test('should log in with username', async ({ page }) => {\n    await page.getByLabel('Email or Username').fill('username123');\n    await page.getByLabel('Password').fill('password123');\n    await page.getByRole('button', { name: 'Log In' }).click();\n    await expect(page.getByText('Welcome back!')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 206,
+  "latency_s": 2.98,
+  "timestamp": "2026-06-19T16:44:20.831005"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_073",
+  "category": "crud_operations",
+  "complexity": "complex",
+  "user_story": "As a user, I want to create a new task by filling out a form and clicking Save.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Task Creation', () => {\n    beforeEach(() => {\n        cy.visit('/tasks/new');\n    });\n\n    it('should create a new task successfully', () => {\n        cy.get('input[name=\"taskName\"]').type('New Task');\n        cy.get('textarea[name=\"taskDescription\"]').type('This is a description for the new task.');\n        cy.get('input[name=\"dueDate\"]').type('2023-12-31');\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.url().should('include', '/tasks');\n        cy.contains('New Task').should('be.visible');\n        cy.contains('This is a description for the new task.').should('be.visible');\n    });\n\n    it('should show an error when required fields are not filled', () => {\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.get('.error-message').should('be.visible');\n        cy.get('.error-message').should('contain', 'Task name is required');\n        cy.get('.error-message').should('contain', 'Task description is required');\n    });\n});",
+  "prompt_tokens": 114,
+  "completion_tokens": 223,
+  "latency_s": 3.16,
+  "timestamp": "2026-06-19T16:29:57.171081"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_196",
+  "category": "search_filter",
+  "complexity": "complex",
+  "user_story": "As a user, I want to share a filtered search URL with someone else.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Filtered Search URL Sharing', () => {\n    beforeEach(() => {\n        cy.visit('/search');\n        cy.get('input[name=\"search\"]').type('Cypress');\n        cy.get('select[name=\"filter\"]').select('Latest');\n        cy.get('button[type=\"submit\"]').click();\n    });\n\n    it('should generate a shareable URL after applying filters', () => {\n        cy.url().should('include', 'search?q=Cypress&filter=Latest');\n        cy.get('.share-url-button').click();\n        cy.get('.share-url-input').should('have.value', cy.url());\n    });\n\n    it('should handle empty search input gracefully', () => {\n        cy.get('input[name=\"search\"]').clear();\n        cy.get('button[type=\"submit\"]').click();\n        cy.url().should('include', 'search?q=&filter=Latest');\n        cy.get('.error-message').should('be.visible').and('contain', 'Please enter a search term');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 201,
+  "latency_s": 2.78,
+  "timestamp": "2026-06-19T16:37:30.903616"
+}

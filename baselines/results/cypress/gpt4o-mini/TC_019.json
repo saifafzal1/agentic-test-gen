@@ -1,0 +1,13 @@
+{
+  "id": "TC_019",
+  "category": "form_validation",
+  "complexity": "complex",
+  "user_story": "As a user, I want the phone number field to accept only numeric input.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Phone Number Input Validation', () => {\n    beforeEach(() => {\n        cy.visit('/your-form-page'); // Replace with the actual URL of the form page\n    });\n\n    it('should accept numeric input in the phone number field', () => {\n        cy.get('input[name=\"phoneNumber\"]') // Replace with the actual selector for the phone number input\n            .type('1234567890')\n            .should('have.value', '1234567890');\n    });\n\n    it('should not accept non-numeric input in the phone number field', () => {\n        cy.get('input[name=\"phoneNumber\"]') // Replace with the actual selector for the phone number input\n            .type('abc123')\n            .should('have.value', ''); // Assuming the field clears on invalid input\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 170,
+  "latency_s": 2.41,
+  "timestamp": "2026-06-19T16:26:24.178322"
+}

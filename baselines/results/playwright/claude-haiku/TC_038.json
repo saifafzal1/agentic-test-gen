@@ -1,0 +1,13 @@
+{
+  "id": "TC_038",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want to navigate to the home page by clicking the logo.",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "```typescript\nimport { test, expect } from '@playwright/test';\n\ntest.describe('Logo Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com');\n  });\n\n  test('should navigate to home page when clicking the logo', async ({ page }) => {\n    // Navigate to a different page first\n    await page.goto('https://example.com/about');\n    \n    // Click the logo to navigate back to home\n    const logo = page.getByRole('link', { name: /logo/i });\n    await logo.click();\n    \n    // Verify we're on the home page\n    await expect(page).toHaveURL('https://example.com/');\n  });\n\n  test('should display the logo on the home page', async ({ page }) => {\n    // Verify the logo is visible on the home page\n    const logo = page.getByRole('link', { name: /logo/i });\n    await expect(logo).toBeVisible();\n  });\n\n  test('should navigate to home page from multiple pages via logo click', async ({ page }) => {\n    // Test from about page\n    await page.goto('https://example.com/about');\n    let logo = page.getByRole('link', { name: /logo/i });\n    await logo.click();\n    await expect(page).toHaveURL('https://example.com/');\n    \n    // Test from contact page\n    await page.goto('https://example.com/contact');\n    logo = page.getByRole('link', { name: /logo/i });\n    await logo.click();\n    await expect(page).toHaveURL('https://example.com/');\n  });\n});\n```",
+  "prompt_tokens": 143,
+  "completion_tokens": 415,
+  "latency_s": 3.32,
+  "timestamp": "2026-06-19T17:41:35.701375"
+}

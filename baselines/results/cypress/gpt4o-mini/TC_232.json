@@ -1,0 +1,13 @@
+{
+  "id": "TC_232",
+  "category": "responsive",
+  "complexity": "complex",
+  "user_story": "As a user, I want data tables to stack vertically on small screens.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Responsive Data Table', () => {\n    beforeEach(() => {\n        cy.visit('/data-table'); // Adjust the URL to the actual page\n        cy.viewport('iphone-6'); // Simulate a small screen\n    });\n\n    it('should display data tables stacked vertically on small screens', () => {\n        cy.get('.data-table').should('have.length.greaterThan', 1); // Ensure there are multiple tables\n        cy.get('.data-table').each(($table) => {\n            cy.wrap($table).should('be.visible'); // Check each table is visible\n            cy.wrap($table).should('have.css', 'display', 'block'); // Ensure tables are displayed as block\n        });\n    });\n\n    it('should not display tables side by side on small screens', () => {\n        cy.get('.data-table').then(($tables) => {\n            const tablePositions = [];\n            $tables.each((index, table) => {\n                const position = Cypress.$(table).position().top;\n                tablePositions.push(position);\n            });\n            const allStacked = tablePositions.every((pos, index) => index === 0 || pos > tablePositions[index - 1]);\n            expect(allStacked).to.be.true; // Ensure all tables are stacked vertically\n        });\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 269,
+  "latency_s": 4.08,
+  "timestamp": "2026-06-19T16:39:33.467075"
+}

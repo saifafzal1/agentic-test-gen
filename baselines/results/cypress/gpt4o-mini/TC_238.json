@@ -1,0 +1,13 @@
+{
+  "id": "TC_238",
+  "category": "responsive",
+  "complexity": "complex",
+  "user_story": "As a user, I want the search bar to expand on focus on mobile.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Search Bar Expansion on Focus', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n        cy.viewport('iphone-6'); // Set viewport to mobile size\n    });\n\n    it('should expand the search bar on focus', () => {\n        cy.get('.search-bar') // Replace with the actual selector for the search bar\n            .focus()\n            .should('have.class', 'expanded'); // Replace with the actual class that indicates expansion\n    });\n\n    it('should not expand the search bar if already expanded', () => {\n        cy.get('.search-bar') // Replace with the actual selector for the search bar\n            .focus()\n            .should('have.class', 'expanded'); // Ensure it expands first\n        cy.get('.search-bar') // Focus again to check edge case\n            .focus()\n            .should('have.class', 'expanded'); // Should remain expanded\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 198,
+  "latency_s": 2.8,
+  "timestamp": "2026-06-19T16:39:54.695601"
+}

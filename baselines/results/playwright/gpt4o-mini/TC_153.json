@@ -1,0 +1,13 @@
+{
+  "id": "TC_153",
+  "category": "table_list",
+  "complexity": "medium",
+  "user_story": "As a user, I want column visibility to be toggled from a settings menu.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Column Visibility Toggle', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should display all columns by default', async ({ page }) => {\n    const columns = await page.locator('table thead th').count();\n    expect(columns).toBeGreaterThan(0);\n  });\n\n  test('should toggle column visibility from settings menu', async ({ page }) => {\n    await page.getByRole('button', { name: /settings/i }).click();\n    await page.getByLabel('Column A').uncheck();\n    await page.getByRole('button', { name: /apply/i }).click();\n\n    const columnA = await page.locator('table thead th:has-text(\"Column A\")').count();\n    expect(columnA).toBe(0);\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 190,
+  "latency_s": 2.69,
+  "timestamp": "2026-06-19T16:53:53.193678"
+}

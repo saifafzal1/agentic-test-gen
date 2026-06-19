@@ -1,0 +1,13 @@
+{
+  "id": "TC_017",
+  "category": "authentication",
+  "complexity": "simple",
+  "user_story": "As a user, I want the login page to display correctly on mobile devices.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Page Mobile Display', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n    await page.setViewportSize({ width: 375, height: 812 }); // iPhone X dimensions\n  });\n\n  test('should display the login form correctly', async ({ page }) => {\n    const loginForm = page.getByRole('form', { name: /login/i });\n    await expect(loginForm).toBeVisible();\n    await expect(loginForm).toHaveCSS('max-width', '100%');\n  });\n\n  test('should have a visible username and password field', async ({ page }) => {\n    const usernameField = page.getByLabel('Username');\n    const passwordField = page.getByLabel('Password');\n\n    await expect(usernameField).toBeVisible();\n    await expect(passwordField).toBeVisible();\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 194,
+  "latency_s": 6.05,
+  "timestamp": "2026-06-19T16:44:33.533982"
+}

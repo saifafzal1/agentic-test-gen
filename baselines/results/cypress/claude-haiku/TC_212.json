@@ -1,0 +1,13 @@
+{
+  "id": "TC_212",
+  "category": "accessibility",
+  "complexity": "simple",
+  "user_story": "As a user, I want all icon buttons to have accessible names.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Icon Button Accessibility - Accessible Names', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should have accessible names for all icon buttons', () => {\n    cy.get('button[class*=\"icon\"]').each(($button) => {\n      cy.wrap($button).should(($el) => {\n        const ariaLabel = $el.attr('aria-label');\n        const ariaLabelledBy = $el.attr('aria-labelledby');\n        const title = $el.attr('title');\n        const textContent = $el.text().trim();\n\n        const hasAccessibleName = ariaLabel || ariaLabelledBy || title || textContent;\n        expect(hasAccessibleName).to.be.ok;\n      });\n    });\n  });\n\n  it('should have aria-label for icon buttons without visible text', () => {\n    cy.get('button[class*=\"icon\"]').each(($button) => {\n      const textContent = $button.text().trim();\n      \n      if (!textContent) {\n        cy.wrap($button).should(($el) => {\n          const ariaLabel = $el.attr('aria-label');\n          const ariaLabelledBy = $el.attr('aria-labelledby');\n          const title = $el.attr('title');\n\n          const hasAccessibleName = ariaLabel || ariaLabelledBy || title;\n          expect(hasAccessibleName).to.be.ok;\n        });\n      }\n    });\n  });\n\n  it('should have non-empty accessible names', () => {\n    cy.get('button[class*=\"icon\"]').each(($button) => {\n      cy.wrap($button).should(($el) => {\n        const ariaLabel = $el.attr('aria-label');\n        const title = $el.attr('title');\n        const textContent = $el.text().trim();\n\n        if (ariaLabel) {\n          expect(ariaLabel.length).to.be.greaterThan(0);\n        }\n        if (title) {\n          expect(title.length).to.be.greaterThan(0);\n        }\n        if (!ariaLabel && !title) {\n          expect(textContent.length).to.be.greaterThan(0);\n        }\n      });\n    });\n  });\n\n  it('should pass axe accessibility checks for icon buttons', () => {\n    cy.injectAxe();\n    cy.get('button[class*=\"icon\"]').each(($button) => {\n      cy.wrap($button).checkA11y(null, {\n        rules: {\n          'button-name': { enabled: true }\n        }\n      });\n    });\n  });\n});",
+  "prompt_tokens": 117,
+  "completion_tokens": 664,
+  "latency_s": 4.76,
+  "timestamp": "2026-06-19T17:27:54.269487"
+}

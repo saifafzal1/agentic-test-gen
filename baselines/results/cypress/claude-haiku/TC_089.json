@@ -1,0 +1,13 @@
+{
+  "id": "TC_089",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error page if the server returns a 500 error.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('500 Error Page Display', () => {\n  beforeEach(() => {\n    cy.visit('http://localhost:3000');\n  });\n\n  it('should display error page when server returns 500 error', () => {\n    cy.intercept('GET', '/api/data', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' }\n    }).as('serverError');\n\n    cy.get('[data-testid=\"fetch-data-button\"]').click();\n    cy.wait('@serverError');\n\n    cy.get('[data-testid=\"error-page\"]').should('be.visible');\n    cy.get('[data-testid=\"error-title\"]').should('contain', '500');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Internal Server Error');\n  });\n\n  it('should display error page with retry option on 500 error', () => {\n    cy.intercept('GET', '/api/data', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' }\n    }).as('serverError');\n\n    cy.get('[data-testid=\"fetch-data-button\"]').click();\n    cy.wait('@serverError');\n\n    cy.get('[data-testid=\"error-page\"]').should('be.visible');\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n    cy.get('[data-testid=\"retry-button\"]').should('not.be.disabled');\n  });\n\n  it('should handle multiple consecutive 500 errors gracefully', () => {\n    cy.intercept('GET', '/api/data', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' }\n    }).as('serverError');\n\n    cy.get('[data-testid=\"fetch-data-button\"]').click();\n    cy.wait('@serverError');\n    cy.get('[data-testid=\"error-page\"]').should('be.visible');\n\n    cy.get('[data-testid=\"retry-button\"]').click();\n    cy.wait('@serverError');\n    cy.get('[data-testid=\"error-page\"]').should('be.visible');\n    cy.get('[data-testid=\"error-count\"]').should('contain', '2');\n  });\n\n  it('should display error page with proper styling and accessibility', () => {\n    cy.intercept('GET', '/api/data', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' }\n    }).as('serverError');\n\n    cy.get('[data-testid=\"fetch-data-button\"]').click();\n    cy.wait('@serverError');\n\n    cy.get('[data-testid=\"error-page\"]').should('have.css', 'display', 'block');\n    cy.get('[data-testid=\"error-title\"]').should('have.attr', 'role', 'heading');\n    cy.get('[data-testid=\"error-message\"]').should('have.attr', 'aria-live', 'polite');\n  });\n});",
+  "prompt_tokens": 126,
+  "completion_tokens": 748,
+  "latency_s": 4.61,
+  "timestamp": "2026-06-19T17:14:36.352279"
+}

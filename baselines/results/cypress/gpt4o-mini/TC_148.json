@@ -1,0 +1,13 @@
+{
+  "id": "TC_148",
+  "category": "table_list",
+  "complexity": "complex",
+  "user_story": "As a user, I want to filter table rows by typing in a search input.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Table Row Filtering', () => {\n    beforeEach(() => {\n        cy.visit('/table-page'); // Adjust the URL to your application's table page\n    });\n\n    it('should filter table rows based on user input', () => {\n        cy.get('input[name=\"search\"]').type('Test Item'); // Replace with the actual input selector\n        cy.get('table tbody tr').should('have.length', 1); // Expecting 1 row to match the search\n        cy.get('table tbody tr').first().should('contain', 'Test Item'); // Replace with the expected item\n    });\n\n    it('should show all rows when search input is cleared', () => {\n        cy.get('input[name=\"search\"]').type('Test Item'); // Filter to a specific item\n        cy.get('table tbody tr').should('have.length', 1); // Ensure only 1 row is shown\n        cy.get('input[name=\"search\"]').clear(); // Clear the search input\n        cy.get('table tbody tr').should('have.length.greaterThan', 1); // Expecting more than 1 row to be visible\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 238,
+  "latency_s": 2.81,
+  "timestamp": "2026-06-19T16:34:56.656912"
+}

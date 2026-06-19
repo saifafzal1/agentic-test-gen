@@ -1,0 +1,13 @@
+{
+  "id": "TC_177",
+  "category": "file_upload",
+  "complexity": "medium",
+  "user_story": "As a user, I want to download a previously uploaded file.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('File Download Functionality', () => {\n    const fileName = 'uploadedFile.txt';\n    const downloadUrl = '/downloads/' + fileName;\n\n    beforeEach(() => {\n        cy.visit('/file-upload-page');\n    });\n\n    it('should successfully download the previously uploaded file', () => {\n        cy.intercept('GET', downloadUrl).as('downloadFile');\n        cy.get('button#download-file').click();\n        cy.wait('@downloadFile').its('response.statusCode').should('eq', 200);\n        cy.readFile(`cypress/downloads/${fileName}`).should('exist');\n    });\n\n    it('should handle file not found error gracefully', () => {\n        cy.intercept('GET', downloadUrl, { statusCode: 404 }).as('downloadFileNotFound');\n        cy.get('button#download-file').click();\n        cy.wait('@downloadFileNotFound');\n        cy.get('.error-message').should('contain', 'File not found');\n    });\n});",
+  "prompt_tokens": 107,
+  "completion_tokens": 204,
+  "latency_s": 3.55,
+  "timestamp": "2026-06-19T16:36:27.676275"
+}

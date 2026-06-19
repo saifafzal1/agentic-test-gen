@@ -1,0 +1,13 @@
+{
+  "id": "TC_106",
+  "category": "error_states",
+  "complexity": "complex",
+  "user_story": "As a user, I want form submission errors to scroll into view automatically.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Submission Errors', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form-page');\n  });\n\n  test('should display error message when form is submitted with empty fields', async ({ page }) => {\n    await page.getByRole('button', { name: /submit/i }).click();\n    const errorMessage = await page.getByText(/this field is required/i);\n    await expect(errorMessage).toBeVisible();\n    await errorMessage.scrollIntoViewIfNeeded();\n    await expect(page).toHaveURL(/form-page/);\n  });\n\n  test('should scroll to error message when invalid email is submitted', async ({ page }) => {\n    await page.getByLabel('Email').fill('invalid-email');\n    await page.getByRole('button', { name: /submit/i }).click();\n    const errorMessage = await page.getByText(/please enter a valid email/i);\n    await expect(errorMessage).toBeVisible();\n    await errorMessage.scrollIntoViewIfNeeded();\n    await expect(page).toHaveURL(/form-page/);\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 239,
+  "latency_s": 3.21,
+  "timestamp": "2026-06-19T16:50:49.201842"
+}

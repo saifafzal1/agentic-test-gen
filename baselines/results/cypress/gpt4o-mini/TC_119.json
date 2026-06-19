@@ -1,0 +1,13 @@
+{
+  "id": "TC_119",
+  "category": "async_await",
+  "complexity": "simple",
+  "user_story": "As a user, I want a countdown timer to update every second using an interval.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Countdown Timer', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Adjust the URL to the application page with the countdown timer\n    });\n\n    it('should display the countdown timer starting from 60 seconds', () => {\n        cy.get('.countdown-timer').should('contain', '60');\n    });\n\n    it('should update the countdown timer every second', () => {\n        cy.get('.countdown-timer').then(($timer) => {\n            const initialTime = parseInt($timer.text(), 10);\n            cy.wait(1000); // Wait for 1 second\n            cy.get('.countdown-timer').should(($newTimer) => {\n                const newTime = parseInt($newTimer.text(), 10);\n                expect(newTime).to.eq(initialTime - 1);\n            });\n        });\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 177,
+  "latency_s": 3.1,
+  "timestamp": "2026-06-19T16:33:12.957719"
+}

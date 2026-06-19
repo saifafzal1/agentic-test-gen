@@ -1,0 +1,13 @@
+{
+  "id": "TC_109",
+  "category": "async_await",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a spinner while an async login request is in progress.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Login Spinner', () => {\n    beforeEach(() => {\n        cy.visit('/login');\n    });\n\n    it('should display spinner during async login request', () => {\n        cy.intercept('POST', '/api/login', {\n            delay: 2000,\n            statusCode: 200,\n            body: { token: 'fake_token' }\n        }).as('loginRequest');\n\n        cy.get('input[name=\"username\"]').type('testuser');\n        cy.get('input[name=\"password\"]').type('password123');\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.get('.spinner').should('be.visible');\n        cy.wait('@loginRequest');\n        cy.get('.spinner').should('not.exist');\n        cy.url().should('include', '/dashboard');\n    });\n\n    it('should handle login failure without spinner', () => {\n        cy.intercept('POST', '/api/login', {\n            statusCode: 401,\n            body: { error: 'Invalid credentials' }\n        }).as('loginRequest');\n\n        cy.get('input[name=\"username\"]').type('wronguser');\n        cy.get('input[name=\"password\"]').type('wrongpassword');\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.get('.spinner').should('not.exist');\n        cy.get('.error-message').should('be.visible').and('contain', 'Invalid credentials');\n    });\n});",
+  "prompt_tokens": 114,
+  "completion_tokens": 284,
+  "latency_s": 4.68,
+  "timestamp": "2026-06-19T16:32:29.041106"
+}

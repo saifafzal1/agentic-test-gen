@@ -1,0 +1,13 @@
+{
+  "id": "TC_207",
+  "category": "accessibility",
+  "complexity": "medium",
+  "user_story": "As a user, I want colour contrast to meet WCAG 2.1 AA standards.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Color Contrast Accessibility Tests', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should have sufficient color contrast for text elements', () => {\n        cy.get('body').find('*').each(($el) => {\n            const color = $el.css('color');\n            const backgroundColor = $el.css('background-color');\n            if (color && backgroundColor) {\n                cy.task('checkContrast', { color, backgroundColor }).then((result) => {\n                    expect(result).to.be.greaterThan(4.5); // AA standard for normal text\n                });\n            }\n        });\n    });\n\n    it('should fail if any text element does not meet the color contrast standards', () => {\n        cy.get('body').find('*').each(($el) => {\n            const color = $el.css('color');\n            const backgroundColor = $el.css('background-color');\n            if (color && backgroundColor) {\n                cy.task('checkContrast', { color, backgroundColor }).then((result) => {\n                    if (result < 4.5) {\n                        cy.log(`Element ${$el.prop('tagName')} does not meet contrast standards`);\n                        expect(result).to.be.greaterThan(4.5); // This will fail the test\n                    }\n                });\n            }\n        });\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 289,
+  "latency_s": 10.97,
+  "timestamp": "2026-06-19T16:38:11.477625"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_063",
+  "category": "api_response_handling",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see a 'No results found' message when an API returns an empty list.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('No results found message', () => {\n    beforeEach(() => {\n        cy.intercept('GET', '/api/items', []).as('getEmptyItems');\n        cy.visit('/items'); // Adjust the URL to your application\n    });\n\n    it('should display \"No results found\" message when API returns an empty list', () => {\n        cy.wait('@getEmptyItems');\n        cy.get('.no-results-message').should('be.visible').and('contain', 'No results found');\n    });\n\n    it('should not display any items when API returns an empty list', () => {\n        cy.wait('@getEmptyItems');\n        cy.get('.item').should('not.exist');\n    });\n});",
+  "prompt_tokens": 119,
+  "completion_tokens": 143,
+  "latency_s": 2.87,
+  "timestamp": "2026-06-19T16:29:15.105893"
+}

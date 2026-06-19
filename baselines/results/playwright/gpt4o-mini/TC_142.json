@@ -1,0 +1,13 @@
+{
+  "id": "TC_142",
+  "category": "modal_dialog",
+  "complexity": "complex",
+  "user_story": "As a user, I want to move focus back to the trigger button when a modal closes.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Dialog Focus Management', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should focus back on trigger button after modal closes', async ({ page }) => {\n    const triggerButton = page.getByRole('button', { name: /open modal/i });\n    await triggerButton.click();\n\n    const modalCloseButton = page.getByRole('button', { name: /close modal/i });\n    await modalCloseButton.click();\n\n    await expect(triggerButton).toBeFocused();\n  });\n\n  test('should keep focus on trigger button when modal is closed with escape key', async ({ page }) => {\n    const triggerButton = page.getByRole('button', { name: /open modal/i });\n    await triggerButton.click();\n\n    await page.keyboard.press('Escape');\n\n    await expect(triggerButton).toBeFocused();\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 207,
+  "latency_s": 4.38,
+  "timestamp": "2026-06-19T16:53:12.114860"
+}

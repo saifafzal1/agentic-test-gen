@@ -1,0 +1,13 @@
+{
+  "id": "TC_251",
+  "category": "payment_flow",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an order summary before confirming payment.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Payment Flow', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should display order summary before payment confirmation', async ({ page }) => {\n    await page.getByRole('button', { name: /proceed to payment/i }).click();\n    const orderSummary = await page.getByRole('heading', { name: /order summary/i });\n    await expect(orderSummary).toBeVisible();\n  });\n\n  test('should show correct order details in summary', async ({ page }) => {\n    await page.getByRole('button', { name: /proceed to payment/i }).click();\n    const orderDetails = await page.getByText(/item details/i);\n    await expect(orderDetails).toBeVisible();\n    const totalAmount = await page.getByText(/total amount/i);\n    await expect(totalAmount).toHaveText('$99.99'); // Example total amount\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 211,
+  "latency_s": 4.43,
+  "timestamp": "2026-06-19T17:00:53.389743"
+}

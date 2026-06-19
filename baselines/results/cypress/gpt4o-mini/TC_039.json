@@ -1,0 +1,13 @@
+{
+  "id": "TC_039",
+  "category": "navigation",
+  "complexity": "medium",
+  "user_story": "As a user, I want the active menu item to be highlighted in the navigation bar.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Navigation Menu Highlight', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Adjust the URL to your application's homepage\n    });\n\n    it('should highlight the active menu item', () => {\n        cy.get('nav') // Adjust the selector to target your navigation bar\n            .find('a.active') // Adjust the selector to target the active menu item\n            .should('have.class', 'highlight'); // Adjust the class name as necessary\n    });\n\n    it('should not highlight inactive menu items', () => {\n        cy.get('nav') // Adjust the selector to target your navigation bar\n            .find('a') // Adjust the selector to target all menu items\n            .each(($el) => {\n                if (!$el.hasClass('active')) {\n                    cy.wrap($el).should('not.have.class', 'highlight'); // Adjust the class name as necessary\n                }\n            });\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 191,
+  "latency_s": 2.67,
+  "timestamp": "2026-06-19T16:27:39.414588"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_179",
+  "category": "file_upload",
+  "complexity": "simple",
+  "user_story": "As a user, I want an uploaded PDF to display in an inline viewer.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('PDF Upload and Viewer', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload');\n  });\n\n  test('should upload a PDF file and display it in the inline viewer', async ({ page }) => {\n    const filePath = 'path/to/sample.pdf';\n    await page.getByLabel('Upload PDF').setInputFiles(filePath);\n    await expect(page.getByText('PDF uploaded successfully')).toBeVisible();\n    await expect(page.getByRole('document')).toBeVisible();\n  });\n\n  test('should show error message for invalid file type', async ({ page }) => {\n    const filePath = 'path/to/sample.txt';\n    await page.getByLabel('Upload PDF').setInputFiles(filePath);\n    await expect(page.getByText('Invalid file type. Please upload a PDF.')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 193,
+  "latency_s": 3.0,
+  "timestamp": "2026-06-19T16:55:33.209819"
+}

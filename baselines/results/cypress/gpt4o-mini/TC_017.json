@@ -1,0 +1,13 @@
+{
+  "id": "TC_017",
+  "category": "authentication",
+  "complexity": "simple",
+  "user_story": "As a user, I want the login page to display correctly on mobile devices.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Login Page Mobile View', () => {\n    beforeEach(() => {\n        cy.viewport('iphone-6'); // Set viewport to mobile size\n        cy.visit('/login'); // Visit the login page\n    });\n\n    it('should display the login form correctly on mobile', () => {\n        cy.get('h1').should('contain', 'Login'); // Check for the login heading\n        cy.get('form').should('be.visible'); // Ensure the form is visible\n        cy.get('input[name=\"username\"]').should('be.visible'); // Check username input\n        cy.get('input[name=\"password\"]').should('be.visible'); // Check password input\n        cy.get('button[type=\"submit\"]').should('be.visible').and('contain', 'Submit'); // Check submit button\n    });\n\n    it('should show an error message for invalid login on mobile', () => {\n        cy.get('input[name=\"username\"]').type('invalidUser'); // Type invalid username\n        cy.get('input[name=\"password\"]').type('invalidPass'); // Type invalid password\n        cy.get('button[type=\"submit\"]').click(); // Click submit\n        cy.get('.error-message').should('be.visible').and('contain', 'Invalid credentials'); // Check for error message\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 264,
+  "latency_s": 3.83,
+  "timestamp": "2026-06-19T16:26:18.199629"
+}

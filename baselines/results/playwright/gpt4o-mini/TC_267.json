@@ -1,0 +1,13 @@
+{
+  "id": "TC_267",
+  "category": "notifications",
+  "complexity": "medium",
+  "user_story": "As a user, I want to receive a browser push notification for urgent alerts.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Push Notifications', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com');\n    await page.click(getByRole('button', { name: /allow notifications/i }));\n  });\n\n  test('should display push notification for urgent alerts', async ({ page }) => {\n    await page.click(getByRole('button', { name: /send urgent alert/i }));\n    const notification = await page.waitForEvent('notification');\n    expect(notification.title).toBe('Urgent Alert');\n    expect(notification.body).toContain('This is an urgent message');\n  });\n\n  test('should not display push notification for non-urgent alerts', async ({ page }) => {\n    await page.click(getByRole('button', { name: /send non-urgent alert/i }));\n    const notification = await page.waitForEvent('notification', { timeout: 5000 }).catch(() => null);\n    expect(notification).toBeNull();\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 213,
+  "latency_s": 10.09,
+  "timestamp": "2026-06-19T17:02:25.498584"
+}

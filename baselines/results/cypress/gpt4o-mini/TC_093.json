@@ -1,0 +1,13 @@
+{
+  "id": "TC_093",
+  "category": "error_states",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see a timeout error if a request takes longer than 10 seconds.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Timeout Error Handling', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Adjust the URL to your application\n    });\n\n    it('should display a timeout error message when the request takes longer than 10 seconds', () => {\n        cy.intercept('GET', '/api/data', (req) => {\n            req.reply((res) => {\n                // Simulate a delay of 12 seconds\n                res.delay(12000).send({ data: 'some data' });\n            });\n        }).as('getData');\n\n        cy.get('button#fetchData').click(); // Adjust selector to trigger the request\n        cy.wait('@getData', { timeout: 15000 }); // Wait for the request to complete\n\n        cy.get('.error-message').should('be.visible').and('contain', 'Request timed out'); // Adjust selector for error message\n    });\n\n    it('should not display a timeout error message when the request completes within 10 seconds', () => {\n        cy.intercept('GET', '/api/data', (req) => {\n            req.reply(200, { data: 'some data' });\n        }).as('getData');\n\n        cy.get('button#fetchData').click(); // Adjust selector to trigger the request\n        cy.wait('@getData', { timeout: 10000 }); // Wait for the request to complete\n\n        cy.get('.error-message').should('not.exist'); // Ensure no error message is displayed\n        cy.get('.data-display').should('be.visible').and('contain', 'some data'); // Adjust selector for data display\n    });\n});",
+  "prompt_tokens": 115,
+  "completion_tokens": 333,
+  "latency_s": 4.02,
+  "timestamp": "2026-06-19T16:31:21.652085"
+}

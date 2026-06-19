@@ -1,0 +1,13 @@
+{
+  "id": "TC_160",
+  "category": "table_list",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a summary row at the bottom of a numeric column.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Table Summary Row', () => {\n    beforeEach(() => {\n        cy.visit('/table-page'); // Replace with the actual URL of the page containing the table\n    });\n\n    it('should display the summary row at the bottom of the numeric column', () => {\n        cy.get('table').within(() => {\n            cy.get('tbody tr').should('have.length.greaterThan', 0); // Ensure there are rows in the table\n            cy.get('tr:last-child').within(() => {\n                cy.get('td.numeric-column').should('exist'); // Replace with the actual selector for the numeric column\n                cy.get('td.numeric-column').should('contain.text', 'Total'); // Check if the summary row contains 'Total'\n                cy.get('td.numeric-column').invoke('text').then((text) => {\n                    const total = parseFloat(text.replace(/[^0-9.-]+/g, \"\"));\n                    expect(total).to.be.gte(0); // Ensure the total is a non-negative number\n                });\n            });\n        });\n    });\n\n    it('should not display the summary row if there are no numeric entries', () => {\n        // Simulate a scenario where there are no numeric entries\n        cy.intercept('GET', '/api/table-data', { fixture: 'emptyTableData.json' }).as('getEmptyTableData'); // Replace with actual API call\n        cy.wait('@getEmptyTableData');\n        \n        cy.get('table').within(() => {\n            cy.get('tbody tr').should('have.length', 0); // Ensure there are no rows in the table\n            cy.get('tr:last-child').should('not.exist'); // Summary row should not exist\n        });\n    });\n});",
+  "prompt_tokens": 113,
+  "completion_tokens": 358,
+  "latency_s": 5.31,
+  "timestamp": "2026-06-19T16:35:38.223571"
+}

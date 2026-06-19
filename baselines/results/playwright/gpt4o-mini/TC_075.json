@@ -1,0 +1,13 @@
+{
+  "id": "TC_075",
+  "category": "crud_operations",
+  "complexity": "medium",
+  "user_story": "As a user, I want to delete a task with a confirmation dialog.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Task Management', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/tasks');\n  });\n\n  test('should delete a task and confirm deletion', async ({ page }) => {\n    // Assuming the task to delete has the text 'Sample Task'\n    await page.getByText('Sample Task').hover();\n    await page.getByRole('button', { name: 'Delete' }).click();\n\n    // Confirm the deletion in the dialog\n    await page.getByRole('button', { name: 'Confirm' }).click();\n\n    // Verify the task is deleted\n    const task = page.getByText('Sample Task');\n    await expect(task).toBeHidden();\n  });\n\n  test('should cancel deletion of a task', async ({ page }) => {\n    await page.getByText('Sample Task').hover();\n    await page.getByRole('button', { name: 'Delete' }).click();\n\n    // Cancel the deletion in the dialog\n    await page.getByRole('button', { name: 'Cancel' }).click();\n\n    // Verify the task is still present\n    const task = page.getByText('Sample Task');\n    await expect(task).toBeVisible();\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 265,
+  "latency_s": 6.04,
+  "timestamp": "2026-06-19T16:48:37.388008"
+}

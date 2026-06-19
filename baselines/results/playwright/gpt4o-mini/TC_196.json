@@ -1,0 +1,13 @@
+{
+  "id": "TC_196",
+  "category": "search_filter",
+  "complexity": "complex",
+  "user_story": "As a user, I want to share a filtered search URL with someone else.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Filtered Search URL Sharing', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com');\n  });\n\n  test('should filter search results and generate URL', async ({ page }) => {\n    await page.fill(getByLabel('Search'), 'test query');\n    await page.click(getByRole('button', { name: 'Filter' }));\n    \n    const filteredResults = await page.locator(getByText('Filtered Results')).count();\n    expect(filteredResults).toBeGreaterThan(0);\n\n    const currentUrl = page.url();\n    expect(currentUrl).toContain('filter=test');\n  });\n\n  test('should share the filtered search URL', async ({ page }) => {\n    await page.fill(getByLabel('Search'), 'test query');\n    await page.click(getByRole('button', { name: 'Filter' }));\n\n    const currentUrl = page.url();\n    await page.click(getByRole('button', { name: 'Share' }));\n    \n    const sharedUrl = await page.locator(getByText('Shared URL')).innerText();\n    expect(sharedUrl).toBe(currentUrl);\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 250,
+  "latency_s": 3.8,
+  "timestamp": "2026-06-19T16:56:47.368044"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_010",
+  "category": "authentication",
+  "complexity": "complex",
+  "user_story": "As a user, I want to log in using Google OAuth so I don't need a separate password.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Google OAuth Login', () => {\n    beforeEach(() => {\n        cy.visit('/login');\n    });\n\n    it('should log in successfully with valid Google account', () => {\n        cy.get('button').contains('Log in with Google').click();\n        cy.origin('https://accounts.google.com', () => {\n            cy.get('input[type=\"email\"]').type('validuser@gmail.com');\n            cy.get('#identifierNext').click();\n            cy.get('input[type=\"password\"]').type('validpassword{enter}');\n        });\n        cy.url().should('include', '/dashboard');\n        cy.get('.welcome-message').should('contain', 'Welcome, validuser!');\n    });\n\n    it('should show an error for invalid Google account', () => {\n        cy.get('button').contains('Log in with Google').click();\n        cy.origin('https://accounts.google.com', () => {\n            cy.get('input[type=\"email\"]').type('invaliduser@gmail.com');\n            cy.get('#identifierNext').click();\n            cy.get('input[type=\"password\"]').type('invalidpassword{enter}');\n        });\n        cy.url().should('include', '/login');\n        cy.get('.error-message').should('contain', 'Couldn\u2019t sign you in');\n    });\n});",
+  "prompt_tokens": 113,
+  "completion_tokens": 258,
+  "latency_s": 3.69,
+  "timestamp": "2026-06-19T16:25:54.609297"
+}

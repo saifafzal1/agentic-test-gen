@@ -1,0 +1,13 @@
+{
+  "id": "TC_015",
+  "category": "authentication",
+  "complexity": "medium",
+  "user_story": "As a user, I want to log in with my email or username interchangeably.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('User Login', () => {\n    beforeEach(() => {\n        cy.visit('/login');\n    });\n\n    it('should log in with email successfully', () => {\n        cy.get('input[name=\"usernameOrEmail\"]').type('user@example.com');\n        cy.get('input[name=\"password\"]').type('password123');\n        cy.get('button[type=\"submit\"]').click();\n        cy.url().should('include', '/dashboard');\n        cy.contains('Welcome back, user!').should('be.visible');\n    });\n\n    it('should log in with username successfully', () => {\n        cy.get('input[name=\"usernameOrEmail\"]').type('username123');\n        cy.get('input[name=\"password\"]').type('password123');\n        cy.get('button[type=\"submit\"]').click();\n        cy.url().should('include', '/dashboard');\n        cy.contains('Welcome back, user!').should('be.visible');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 188,
+  "latency_s": 2.64,
+  "timestamp": "2026-06-19T16:26:10.272209"
+}

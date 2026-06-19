@@ -1,0 +1,13 @@
+{
+  "id": "TC_049",
+  "category": "navigation",
+  "complexity": "complex",
+  "user_story": "As a user, I want to use the browser Back button without breaking the app state.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Browser Back Button Navigation', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Visit the home page\n    });\n\n    it('should navigate to the second page and back without breaking app state', () => {\n        cy.get('a[href=\"/second-page\"]').click(); // Navigate to second page\n        cy.url().should('include', '/second-page'); // Verify URL\n        cy.get('h1').should('contain', 'Second Page'); // Verify content on second page\n\n        cy.go('back'); // Go back to the previous page\n        cy.url().should('eq', Cypress.config().baseUrl + '/'); // Verify URL is back to home\n        cy.get('h1').should('contain', 'Home Page'); // Verify content on home page\n    });\n\n    it('should maintain app state when navigating back after form submission', () => {\n        cy.get('input[name=\"username\"]').type('testuser'); // Fill out a form\n        cy.get('form').submit(); // Submit the form\n        cy.url().should('include', '/confirmation'); // Verify URL after submission\n        cy.get('h1').should('contain', 'Confirmation Page'); // Verify confirmation content\n\n        cy.go('back'); // Go back to the previous page\n        cy.url().should('eq', Cypress.config().baseUrl + '/'); // Verify URL is back to home\n        cy.get('input[name=\"username\"]').should('have.value', 'testuser'); // Verify form state is maintained\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 319,
+  "latency_s": 4.33,
+  "timestamp": "2026-06-19T16:28:14.430585"
+}

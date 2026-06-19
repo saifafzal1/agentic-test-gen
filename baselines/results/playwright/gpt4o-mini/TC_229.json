@@ -1,0 +1,13 @@
+{
+  "id": "TC_229",
+  "category": "responsive",
+  "complexity": "complex",
+  "user_story": "As a mobile user, I want images to scale down to fit the screen width.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Responsive Image Scaling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should display images scaled down on mobile view', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 667 }); // Mobile viewport size\n    const image = page.getByRole('img', { name: /example image/i }); // Replace with actual image alt text\n    const boundingBox = await image.boundingBox();\n    \n    expect(boundingBox).not.toBeNull();\n    expect(boundingBox.width).toBeLessThanOrEqual(375); // Ensure image width fits the screen\n  });\n\n  test('should maintain aspect ratio of images on mobile view', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 667 }); // Mobile viewport size\n    const image = page.getByRole('img', { name: /example image/i }); // Replace with actual image alt text\n    const originalWidth = 800; // Replace with the original image width\n    const originalHeight = 600; // Replace with the original image height\n    const boundingBox = await image.boundingBox();\n    \n    expect(boundingBox).not.toBeNull();\n    const scaledHeight = (boundingBox.width / originalWidth) * originalHeight;\n    expect(boundingBox.height).toBeCloseTo(scaledHeight, { tolerance: 1 }); // Allow for minor discrepancies\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 335,
+  "latency_s": 4.93,
+  "timestamp": "2026-06-19T16:59:06.616151"
+}

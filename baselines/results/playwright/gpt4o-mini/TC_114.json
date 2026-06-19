@@ -1,0 +1,13 @@
+{
+  "id": "TC_114",
+  "category": "async_await",
+  "complexity": "medium",
+  "user_story": "As a user, I want lazy-loaded components to appear smoothly without layout shift.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Lazy-loaded components', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should load lazy components smoothly', async ({ page }) => {\n    await page.waitForSelector('img[data-lazyload]'); // Wait for the lazy-loaded image to appear\n    const lazyImage = page.getByRole('img', { name: /lazy loaded image/i });\n    await expect(lazyImage).toBeVisible();\n    await expect(lazyImage).toHaveAttribute('src', /actual-image-url/i); // Check if the src is set correctly\n  });\n\n  test('should not cause layout shift on lazy load', async ({ page }) => {\n    const initialLayout = await page.evaluate(() => document.body.innerHTML);\n    await page.waitForSelector('img[data-lazyload]');\n    const lazyImage = page.getByRole('img', { name: /lazy loaded image/i });\n    await expect(lazyImage).toBeVisible();\n    const finalLayout = await page.evaluate(() => document.body.innerHTML);\n    expect(initialLayout).toEqual(finalLayout); // Ensure layout remains the same\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 265,
+  "latency_s": 4.94,
+  "timestamp": "2026-06-19T16:51:24.115989"
+}

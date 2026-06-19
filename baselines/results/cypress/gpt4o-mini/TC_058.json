@@ -1,0 +1,13 @@
+{
+  "id": "TC_058",
+  "category": "api_response_handling",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see an error banner if an API call fails.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('API Error Handling', () => {\n    beforeEach(() => {\n        cy.intercept('GET', '/api/data', {\n            statusCode: 500,\n            body: { error: 'Internal Server Error' },\n        }).as('getData');\n        cy.visit('/'); // Adjust the URL to your application's entry point\n    });\n\n    it('should display an error banner when the API call fails', () => {\n        cy.wait('@getData');\n        cy.get('.error-banner').should('be.visible');\n        cy.get('.error-banner').should('contain', 'An error occurred while fetching data.');\n    });\n\n    it('should not display the error banner when the API call succeeds', () => {\n        cy.intercept('GET', '/api/data', {\n            statusCode: 200,\n            body: { data: 'Success' },\n        }).as('getDataSuccess');\n        \n        cy.visit('/'); // Reload the page to trigger the successful API call\n        cy.wait('@getDataSuccess');\n        cy.get('.error-banner').should('not.exist');\n    });\n});",
+  "prompt_tokens": 113,
+  "completion_tokens": 222,
+  "latency_s": 2.87,
+  "timestamp": "2026-06-19T16:28:52.458215"
+}

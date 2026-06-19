@@ -1,0 +1,13 @@
+{
+  "id": "TC_122",
+  "category": "async_await",
+  "complexity": "simple",
+  "user_story": "As a user, I want an async operation to be cancellable via an Abort button.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Async Operation Cancellation', () => {\n  beforeEach(() => {\n    cy.visit('http://localhost:3000');\n  });\n\n  it('should cancel an async operation when abort button is clicked', () => {\n    cy.get('[data-testid=\"start-async-btn\"]').click();\n    cy.get('[data-testid=\"abort-btn\"]').should('be.visible');\n    cy.get('[data-testid=\"abort-btn\"]').click();\n    cy.get('[data-testid=\"operation-status\"]').should('contain', 'Cancelled');\n    cy.get('[data-testid=\"loading-spinner\"]').should('not.exist');\n  });\n\n  it('should complete async operation successfully when abort button is not clicked', () => {\n    cy.get('[data-testid=\"start-async-btn\"]').click();\n    cy.get('[data-testid=\"loading-spinner\"]').should('be.visible');\n    cy.get('[data-testid=\"operation-status\"]', { timeout: 10000 }).should('contain', 'Completed');\n    cy.get('[data-testid=\"result-data\"]').should('be.visible');\n  });\n\n  it('should disable abort button after operation completes', () => {\n    cy.get('[data-testid=\"start-async-btn\"]').click();\n    cy.get('[data-testid=\"operation-status\"]', { timeout: 10000 }).should('contain', 'Completed');\n    cy.get('[data-testid=\"abort-btn\"]').should('be.disabled');\n  });\n\n  it('should handle rapid abort clicks gracefully', () => {\n    cy.get('[data-testid=\"start-async-btn\"]').click();\n    cy.get('[data-testid=\"abort-btn\"]').click();\n    cy.get('[data-testid=\"abort-btn\"]').click();\n    cy.get('[data-testid=\"abort-btn\"]').click();\n    cy.get('[data-testid=\"operation-status\"]').should('contain', 'Cancelled');\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n  });\n\n  it('should show abort button only during async operation', () => {\n    cy.get('[data-testid=\"abort-btn\"]').should('not.exist');\n    cy.get('[data-testid=\"start-async-btn\"]').click();\n    cy.get('[data-testid=\"abort-btn\"]').should('be.visible');\n    cy.get('[data-testid=\"operation-status\"]', { timeout: 10000 }).should('contain', 'Completed');\n    cy.get('[data-testid=\"abort-btn\"]').should('not.exist');\n  });\n});",
+  "prompt_tokens": 125,
+  "completion_tokens": 659,
+  "latency_s": 3.91,
+  "timestamp": "2026-06-19T17:18:20.416269"
+}

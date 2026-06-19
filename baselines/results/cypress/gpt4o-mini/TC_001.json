@@ -1,0 +1,13 @@
+{
+  "id": "TC_001",
+  "category": "authentication",
+  "complexity": "complex",
+  "user_story": "As a user, I want to log in with valid credentials so I can access my dashboard.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('User Login', () => {\n    beforeEach(() => {\n        cy.visit('/login');\n    });\n\n    it('should log in with valid credentials and redirect to dashboard', () => {\n        cy.get('input[name=\"username\"]').type('validUser');\n        cy.get('input[name=\"password\"]').type('validPassword');\n        cy.get('button[type=\"submit\"]').click();\n        \n        cy.url().should('include', '/dashboard');\n        cy.get('.welcome-message').should('contain', 'Welcome, validUser');\n    });\n\n    it('should show an error message for invalid credentials', () => {\n        cy.get('input[name=\"username\"]').type('invalidUser');\n        cy.get('input[name=\"password\"]').type('invalidPassword');\n        cy.get('button[type=\"submit\"]').click();\n        \n        cy.get('.error-message').should('be.visible').and('contain', 'Invalid username or password');\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 189,
+  "latency_s": 4.7,
+  "timestamp": "2026-06-19T16:25:18.726392"
+}

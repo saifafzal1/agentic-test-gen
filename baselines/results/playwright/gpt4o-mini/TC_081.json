@@ -1,0 +1,13 @@
+{
+  "id": "TC_081",
+  "category": "crud_operations",
+  "complexity": "medium",
+  "user_story": "As a user, I want inline editing on a table row without opening a modal.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Inline Editing on Table Row', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/your-table-page-url');\n  });\n\n  test('should allow inline editing of a table row', async ({ page }) => {\n    const row = page.getByRole('row', { name: 'Row Name' });\n    const editButton = row.getByRole('button', { name: 'Edit' });\n    \n    await editButton.click();\n    \n    const inputField = row.getByLabel('Editable Field');\n    await inputField.fill('New Value');\n    \n    const saveButton = row.getByRole('button', { name: 'Save' });\n    await saveButton.click();\n    \n    const updatedRow = page.getByRole('row', { name: 'Row Name' });\n    await expect(updatedRow).toContainText('New Value');\n  });\n\n  test('should cancel inline editing of a table row', async ({ page }) => {\n    const row = page.getByRole('row', { name: 'Row Name' });\n    const editButton = row.getByRole('button', { name: 'Edit' });\n    \n    await editButton.click();\n    \n    const inputField = row.getByLabel('Editable Field');\n    await inputField.fill('Temporary Value');\n    \n    const cancelButton = row.getByRole('button', { name: 'Cancel' });\n    await cancelButton.click();\n    \n    await expect(inputField).toHaveValue('Original Value');\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 323,
+  "latency_s": 3.59,
+  "timestamp": "2026-06-19T16:49:05.820269"
+}

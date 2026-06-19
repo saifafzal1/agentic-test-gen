@@ -1,0 +1,13 @@
+{
+  "id": "TC_280",
+  "category": "user_profile",
+  "complexity": "complex",
+  "user_story": "As a user, I want to change my password from the profile settings page.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Change Password from Profile Settings', () => {\n    beforeEach(() => {\n        cy.visit('/profile/settings');\n        cy.login('testuser', 'oldpassword'); // Assuming a custom command for login\n    });\n\n    it('should successfully change the password with valid inputs', () => {\n        cy.get('input[name=\"currentPassword\"]').type('oldpassword');\n        cy.get('input[name=\"newPassword\"]').type('newpassword123');\n        cy.get('input[name=\"confirmPassword\"]').type('newpassword123');\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.get('.notification').should('contain', 'Password changed successfully');\n        cy.logout(); // Assuming a custom command for logout\n        cy.login('testuser', 'newpassword123'); // Verify new password works\n        cy.url().should('include', '/dashboard');\n    });\n\n    it('should show an error message when new passwords do not match', () => {\n        cy.get('input[name=\"currentPassword\"]').type('oldpassword');\n        cy.get('input[name=\"newPassword\"]').type('newpassword123');\n        cy.get('input[name=\"confirmPassword\"]').type('differentpassword');\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.get('.error-message').should('contain', 'Passwords do not match');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 271,
+  "latency_s": 3.14,
+  "timestamp": "2026-06-19T16:42:37.979593"
+}

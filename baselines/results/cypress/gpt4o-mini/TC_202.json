@@ -1,0 +1,13 @@
+{
+  "id": "TC_202",
+  "category": "search_filter",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see highlighted search terms in the result snippets.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Search Result Highlighting', () => {\n    beforeEach(() => {\n        cy.visit('/search'); // Adjust the URL to your application's search page\n    });\n\n    it('should highlight search terms in the result snippets', () => {\n        const searchTerm = 'Cypress';\n        cy.get('input[name=\"search\"]').type(searchTerm);\n        cy.get('button[type=\"submit\"]').click();\n        \n        cy.get('.result-snippet').each(($snippet) => {\n            cy.wrap($snippet).should('contain.text', searchTerm);\n            cy.wrap($snippet).find('.highlight').should('exist');\n        });\n    });\n\n    it('should not highlight terms that are not in the results', () => {\n        const searchTerm = 'NonExistentTerm';\n        cy.get('input[name=\"search\"]').type(searchTerm);\n        cy.get('button[type=\"submit\"]').click();\n        \n        cy.get('.result-snippet').each(($snippet) => {\n            cy.wrap($snippet).should('not.contain.text', searchTerm);\n            cy.wrap($snippet).find('.highlight').should('not.exist');\n        });\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 232,
+  "latency_s": 3.19,
+  "timestamp": "2026-06-19T16:37:48.182220"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_210",
+  "category": "accessibility",
+  "complexity": "medium",
+  "user_story": "As a user, I want ARIA landmarks to define page regions.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Accessibility - ARIA Landmarks', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('Check if main landmark is present', async ({ page }) => {\n    const mainLandmark = await page.getByRole('main');\n    expect(await mainLandmark.count()).toBe(1);\n  });\n\n  test('Check if navigation landmark is present', async ({ page }) => {\n    const navLandmark = await page.getByRole('navigation');\n    expect(await navLandmark.count()).toBe(1);\n  });\n});",
+  "prompt_tokens": 130,
+  "completion_tokens": 145,
+  "latency_s": 3.41,
+  "timestamp": "2026-06-19T16:57:46.642927"
+}

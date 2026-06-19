@@ -1,0 +1,13 @@
+{
+  "id": "TC_214",
+  "category": "accessibility",
+  "complexity": "complex",
+  "user_story": "As a user, I want skip navigation links to be the first focusable element.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Accessibility - Skip Navigation Links', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://yourwebsite.com'); // Replace with your actual URL\n  });\n\n  test('Skip navigation link is the first focusable element', async ({ page }) => {\n    await page.keyboard.press('Tab'); // Simulate pressing Tab to focus the first element\n    const firstFocusedElement = await page.evaluate(() => document.activeElement);\n    const skipLink = await page.getByRole('link', { name: /skip to main content/i }).elementHandle();\n    \n    expect(firstFocusedElement).toBe(skipLink);\n  });\n\n  test('Skip navigation link is visible and accessible', async ({ page }) => {\n    const skipLink = await page.getByRole('link', { name: /skip to main content/i });\n    \n    await expect(skipLink).toBeVisible();\n    await expect(skipLink).toHaveAttribute('href', '#main-content'); // Assuming the skip link points to an ID\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 227,
+  "latency_s": 3.46,
+  "timestamp": "2026-06-19T16:58:01.394785"
+}

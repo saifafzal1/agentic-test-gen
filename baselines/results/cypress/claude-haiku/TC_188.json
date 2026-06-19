@@ -1,0 +1,13 @@
+{
+  "id": "TC_188",
+  "category": "search_filter",
+  "complexity": "simple",
+  "user_story": "As a user, I want to sort search results by relevance, price, or date.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Search Results Sorting', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n    cy.get('[data-testid=\"search-input\"]').type('laptop');\n    cy.get('[data-testid=\"search-button\"]').click();\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n  });\n\n  it('should sort search results by relevance by default', () => {\n    cy.get('[data-testid=\"sort-dropdown\"]').should('have.value', 'relevance');\n    cy.get('[data-testid=\"result-item\"]').first().should('contain', 'Most Relevant');\n  });\n\n  it('should sort search results by price when selected', () => {\n    cy.get('[data-testid=\"sort-dropdown\"]').select('price');\n    cy.get('[data-testid=\"sort-dropdown\"]').should('have.value', 'price');\n    \n    cy.get('[data-testid=\"result-item\"]').then(($items) => {\n      const prices = [];\n      $items.each((index, item) => {\n        const price = parseFloat(cy.wrap(item).find('[data-testid=\"price\"]').text().replace('$', ''));\n        prices.push(price);\n      });\n      \n      const sortedPrices = [...prices].sort((a, b) => a - b);\n      expect(prices).to.deep.equal(sortedPrices);\n    });\n  });\n\n  it('should sort search results by date when selected', () => {\n    cy.get('[data-testid=\"sort-dropdown\"]').select('date');\n    cy.get('[data-testid=\"sort-dropdown\"]').should('have.value', 'date');\n    \n    cy.get('[data-testid=\"result-item\"]').first().should('be.visible');\n    cy.get('[data-testid=\"result-date\"]').first().should('contain', 'Posted');\n  });\n\n  it('should maintain sort order when navigating between pages', () => {\n    cy.get('[data-testid=\"sort-dropdown\"]').select('price');\n    cy.get('[data-testid=\"next-page-button\"]').click();\n    cy.get('[data-testid=\"sort-dropdown\"]').should('have.value', 'price');\n  });\n\n  it('should handle empty search results with sort options available', () => {\n    cy.get('[data-testid=\"search-input\"]').clear();\n    cy.get('[data-testid=\"search-input\"]').type('xyznonexistentproduct12345');\n    cy.get('[data-testid=\"search-button\"]').click();\n    \n    cy.get('[data-testid=\"no-results-message\"]').should('be.visible');\n    cy.get('[data-testid=\"sort-dropdown\"]').should('be.disabled');\n  });\n});",
+  "prompt_tokens": 124,
+  "completion_tokens": 703,
+  "latency_s": 4.05,
+  "timestamp": "2026-06-19T17:24:57.324616"
+}

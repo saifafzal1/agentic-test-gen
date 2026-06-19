@@ -1,0 +1,13 @@
+{
+  "id": "TC_124",
+  "category": "async_await",
+  "complexity": "complex",
+  "user_story": "As a user, I want a long-running task to persist across page refreshes.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Long-running task persistence', () => {\n    beforeEach(() => {\n        cy.visit('/task-page');\n    });\n\n    it('should persist the long-running task across page refreshes', () => {\n        cy.get('#start-task-button').click();\n        cy.get('#task-status').should('contain', 'Task in progress');\n        \n        // Simulate a delay for the task\n        cy.wait(5000);\n        \n        cy.reload();\n        \n        cy.get('#task-status').should('contain', 'Task in progress');\n    });\n\n    it('should handle edge case when task is completed before refresh', () => {\n        cy.get('#start-task-button').click();\n        cy.get('#task-status').should('contain', 'Task in progress');\n        \n        // Simulate task completion\n        cy.wait(5000);\n        cy.get('#complete-task-button').click();\n        \n        cy.reload();\n        \n        cy.get('#task-status').should('contain', 'Task completed');\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 202,
+  "latency_s": 3.4,
+  "timestamp": "2026-06-19T16:33:32.919599"
+}

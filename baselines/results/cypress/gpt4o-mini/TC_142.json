@@ -1,0 +1,13 @@
+{
+  "id": "TC_142",
+  "category": "modal_dialog",
+  "complexity": "complex",
+  "user_story": "As a user, I want to move focus back to the trigger button when a modal closes.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Modal Dialog Focus Management', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n        cy.get('#trigger-button').as('triggerButton'); // Replace with the actual selector for the trigger button\n        cy.get('#modal').as('modal'); // Replace with the actual selector for the modal\n    });\n\n    it('should move focus back to the trigger button when the modal closes', () => {\n        cy.get('@triggerButton').click();\n        cy.get('@modal').should('be.visible');\n        cy.get('@modal').find('.close-button').click(); // Replace with the actual selector for the close button\n        cy.get('@triggerButton').should('be.focused');\n    });\n\n    it('should not lose focus on the trigger button if modal is closed without interaction', () => {\n        cy.get('@triggerButton').click();\n        cy.get('@modal').should('be.visible');\n        cy.get('@modal').find('.overlay').click(); // Simulate clicking outside the modal to close it\n        cy.get('@triggerButton').should('be.focused');\n    });\n});",
+  "prompt_tokens": 113,
+  "completion_tokens": 234,
+  "latency_s": 2.96,
+  "timestamp": "2026-06-19T16:34:36.472343"
+}

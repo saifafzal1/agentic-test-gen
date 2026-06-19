@@ -1,0 +1,13 @@
+{
+  "id": "TC_091",
+  "category": "error_states",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a specific validation error for each invalid field.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Validation Error Messages', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form'); // Replace with the actual form URL\n  });\n\n  test('should display validation error for empty name field', async ({ page }) => {\n    await page.getByLabel('Name').fill('');\n    await page.getByRole('button', { name: 'Submit' }).click();\n    const errorMessage = await page.getByText('Name is required');\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should display validation error for invalid email format', async ({ page }) => {\n    await page.getByLabel('Email').fill('invalid-email');\n    await page.getByRole('button', { name: 'Submit' }).click();\n    const errorMessage = await page.getByText('Please enter a valid email address');\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 205,
+  "latency_s": 3.19,
+  "timestamp": "2026-06-19T16:49:44.018981"
+}

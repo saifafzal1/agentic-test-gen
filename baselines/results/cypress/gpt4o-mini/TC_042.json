@@ -1,0 +1,13 @@
+{
+  "id": "TC_042",
+  "category": "navigation",
+  "complexity": "medium",
+  "user_story": "As a user, I want tabs within a page to update the URL hash.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Tab Navigation with URL Hash Update', () => {\n    beforeEach(() => {\n        cy.visit('/your-page-url'); // Replace with the actual page URL\n    });\n\n    it('should update the URL hash when the first tab is clicked', () => {\n        cy.get('[data-testid=\"tab-1\"]').click();\n        cy.url().should('include', '#tab1');\n    });\n\n    it('should update the URL hash when the second tab is clicked', () => {\n        cy.get('[data-testid=\"tab-2\"]').click();\n        cy.url().should('include', '#tab2');\n    });\n\n    it('should not change the URL hash if the same tab is clicked again', () => {\n        cy.get('[data-testid=\"tab-1\"]').click();\n        cy.url().should('include', '#tab1');\n        cy.get('[data-testid=\"tab-1\"]').click();\n        cy.url().should('include', '#tab1'); // URL should remain the same\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 206,
+  "latency_s": 3.42,
+  "timestamp": "2026-06-19T16:27:49.392308"
+}

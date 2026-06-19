@@ -1,0 +1,13 @@
+{
+  "id": "TC_221",
+  "category": "accessibility",
+  "complexity": "simple",
+  "user_story": "As a user, I want form autocomplete attributes to be set correctly.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Form Autocomplete Attributes', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n  });\n\n  it('should have correct autocomplete attributes on standard form fields', () => {\n    cy.get('input[name=\"email\"]').should('have.attr', 'autocomplete', 'email');\n    cy.get('input[name=\"password\"]').should('have.attr', 'autocomplete', 'current-password');\n    cy.get('input[name=\"username\"]').should('have.attr', 'autocomplete', 'username');\n    cy.get('input[name=\"phone\"]').should('have.attr', 'autocomplete', 'tel');\n    cy.get('input[name=\"address\"]').should('have.attr', 'autocomplete', 'street-address');\n    cy.get('input[name=\"city\"]').should('have.attr', 'autocomplete', 'address-level2');\n    cy.get('input[name=\"zipcode\"]').should('have.attr', 'autocomplete', 'postal-code');\n  });\n\n  it('should have autocomplete disabled on sensitive fields', () => {\n    cy.get('input[name=\"creditCard\"]').should('have.attr', 'autocomplete', 'off');\n    cy.get('input[name=\"cvv\"]').should('have.attr', 'autocomplete', 'off');\n    cy.get('input[name=\"securityQuestion\"]').should('have.attr', 'autocomplete', 'off');\n  });\n\n  it('should have correct autocomplete attributes on name fields', () => {\n    cy.get('input[name=\"firstName\"]').should('have.attr', 'autocomplete', 'given-name');\n    cy.get('input[name=\"lastName\"]').should('have.attr', 'autocomplete', 'family-name');\n  });\n\n  it('should handle missing autocomplete attributes gracefully', () => {\n    cy.get('input[name=\"optionalField\"]').then(($input) => {\n      const autocompleteAttr = $input.attr('autocomplete');\n      expect(autocompleteAttr).to.be.oneOf([undefined, 'off', 'on']);\n    });\n  });\n\n  it('should validate autocomplete on form submission with autofilled data', () => {\n    cy.get('input[name=\"email\"]').type('test@example.com');\n    cy.get('input[name=\"password\"]').type('password123');\n    cy.get('button[type=\"submit\"]').click();\n    cy.get('input[name=\"email\"]').should('have.value', 'test@example.com');\n    cy.get('input[name=\"password\"]').should('have.value', 'password123');\n  });\n});",
+  "prompt_tokens": 118,
+  "completion_tokens": 666,
+  "latency_s": 3.89,
+  "timestamp": "2026-06-19T17:28:55.137762"
+}

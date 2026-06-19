@@ -1,0 +1,13 @@
+{
+  "id": "TC_077",
+  "category": "crud_operations",
+  "complexity": "simple",
+  "user_story": "As a user, I want to bulk-delete selected items from a list.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Bulk Delete Items', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/items');\n  });\n\n  test('should select multiple items and delete them', async ({ page }) => {\n    await page.getByRole('checkbox', { name: 'Select Item 1' }).check();\n    await page.getByRole('checkbox', { name: 'Select Item 2' }).check();\n    await page.getByRole('button', { name: 'Delete Selected' }).click();\n    \n    const confirmationDialog = page.getByText('Are you sure you want to delete the selected items?');\n    await expect(confirmationDialog).toBeVisible();\n    await page.getByRole('button', { name: 'Confirm' }).click();\n\n    await expect(page.getByText('Item 1')).not.toBeVisible();\n    await expect(page.getByText('Item 2')).not.toBeVisible();\n  });\n\n  test('should not delete items if cancellation is chosen', async ({ page }) => {\n    await page.getByRole('checkbox', { name: 'Select Item 3' }).check();\n    await page.getByRole('button', { name: 'Delete Selected' }).click();\n    \n    const confirmationDialog = page.getByText('Are you sure you want to delete the selected items?');\n    await expect(confirmationDialog).toBeVisible();\n    await page.getByRole('button', { name: 'Cancel' }).click();\n\n    await expect(page.getByText('Item 3')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 336,
+  "latency_s": 5.08,
+  "timestamp": "2026-06-19T16:48:46.997744"
+}

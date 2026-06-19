@@ -1,0 +1,13 @@
+{
+  "id": "TC_074",
+  "category": "crud_operations",
+  "complexity": "simple",
+  "user_story": "As a user, I want to edit an existing task by clicking an Edit button.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Edit Task Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/tasks');\n  });\n\n  test('should display the Edit button for an existing task', async ({ page }) => {\n    const taskName = 'Sample Task';\n    await expect(page.getByText(taskName)).toBeVisible();\n    await expect(page.getByRole('button', { name: 'Edit' })).toBeVisible();\n  });\n\n  test('should allow user to edit an existing task', async ({ page }) => {\n    const taskName = 'Sample Task';\n    await page.getByText(taskName).click();\n    await page.getByRole('button', { name: 'Edit' }).click();\n    \n    const newTaskName = 'Updated Task';\n    await page.getByLabel('Task Name').fill(newTaskName);\n    await page.getByRole('button', { name: 'Save' }).click();\n    \n    await expect(page.getByText(newTaskName)).toBeVisible();\n    await expect(page.getByText(taskName)).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 241,
+  "latency_s": 3.64,
+  "timestamp": "2026-06-19T16:48:31.045316"
+}

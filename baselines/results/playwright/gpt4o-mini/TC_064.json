@@ -1,0 +1,13 @@
+{
+  "id": "TC_064",
+  "category": "api_response_handling",
+  "complexity": "complex",
+  "user_story": "As a user, I want search results to update as I type, debounced by 300ms.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should update search results as user types', async ({ page }) => {\n    const searchInput = page.getByRole('textbox', { name: /search/i });\n    await searchInput.fill('Playwright');\n    \n    // Wait for 300ms to simulate debounce\n    await page.waitForTimeout(300);\n    \n    const results = page.getByRole('list', { name: /search results/i });\n    await expect(results).toContainText('Playwright Test');\n  });\n\n  test('should not update results immediately on rapid input', async ({ page }) => {\n    const searchInput = page.getByRole('textbox', { name: /search/i });\n    await searchInput.fill('Play');\n    \n    // Wait for less than debounce time\n    await page.waitForTimeout(100);\n    \n    const results = page.getByRole('list', { name: /search results/i });\n    await expect(results).not.toContainText('Playwright Test');\n    \n    // Now wait for the debounce time and check again\n    await page.waitForTimeout(300);\n    await expect(results).toContainText('Playwright Test');\n  });\n});",
+  "prompt_tokens": 140,
+  "completion_tokens": 287,
+  "latency_s": 4.57,
+  "timestamp": "2026-06-19T16:47:48.407037"
+}

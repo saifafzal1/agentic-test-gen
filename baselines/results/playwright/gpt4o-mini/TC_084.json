@@ -1,0 +1,13 @@
+{
+  "id": "TC_084",
+  "category": "crud_operations",
+  "complexity": "medium",
+  "user_story": "As a user, I want to export a list of records to CSV.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Export Records to CSV', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should display export button', async ({ page }) => {\n    const exportButton = page.getByRole('button', { name: /export/i });\n    await expect(exportButton).toBeVisible();\n  });\n\n  test('should export records to CSV', async ({ page }) => {\n    const exportButton = page.getByRole('button', { name: /export/i });\n    await exportButton.click();\n\n    const downloadPromise = page.waitForEvent('download');\n    await exportButton.click();\n    const download = await downloadPromise;\n\n    const path = await download.path();\n    const fileContent = await fs.promises.readFile(path, 'utf-8');\n\n    expect(fileContent).toContain('header1,header2,header3'); // Adjust headers as necessary\n    expect(fileContent).toContain('record1value1,record1value2,record1value3'); // Adjust record values as necessary\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 235,
+  "latency_s": 2.82,
+  "timestamp": "2026-06-19T16:49:15.656618"
+}

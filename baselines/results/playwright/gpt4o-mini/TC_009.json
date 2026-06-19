@@ -1,0 +1,13 @@
+{
+  "id": "TC_009",
+  "category": "authentication",
+  "complexity": "medium",
+  "user_story": "As an admin, I want to lock an account after 5 failed login attempts.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Account Locking Feature', () => {\n  const username = 'adminUser';\n  const password = 'correctPassword';\n  \n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should lock account after 5 failed login attempts', async ({ page }) => {\n    for (let i = 0; i < 5; i++) {\n      await page.getByLabel('Username').fill(username);\n      await page.getByLabel('Password').fill('wrongPassword');\n      await page.getByRole('button', { name: 'Login' }).click();\n      await expect(page.getByText('Invalid credentials')).toBeVisible();\n    }\n    \n    await page.getByLabel('Username').fill(username);\n    await page.getByLabel('Password').fill(password);\n    await page.getByRole('button', { name: 'Login' }).click();\n    \n    await expect(page.getByText('Your account is locked due to multiple failed login attempts')).toBeVisible();\n  });\n\n  test('should allow admin to reset locked account', async ({ page }) => {\n    // Assuming the account is already locked from the previous test\n    await page.goto('/admin');\n    await page.getByRole('button', { name: 'Unlock Account' }).click();\n    \n    await expect(page.getByText('Account unlocked successfully')).toBeVisible();\n    \n    await page.goto('/login');\n    await page.getByLabel('Username').fill(username);\n    await page.getByLabel('Password').fill(password);\n    await page.getByRole('button', { name: 'Login' }).click();\n    \n    await expect(page.getByText('Welcome back!')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 368,
+  "latency_s": 6.76,
+  "timestamp": "2026-06-19T16:43:57.928793"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_014",
+  "category": "authentication",
+  "complexity": "simple",
+  "user_story": "As a user, I want the login form to be accessible via keyboard navigation.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Login Form Accessibility', () => {\n    beforeEach(() => {\n        cy.visit('/login');\n    });\n\n    it('should allow user to navigate through the login form using keyboard', () => {\n        cy.get('input[name=\"username\"]').focus().tab();\n        cy.focused().should('have.attr', 'name', 'password');\n        cy.focused().tab();\n        cy.focused().should('have.attr', 'type', 'submit');\n    });\n\n    it('should submit the form when Enter key is pressed', () => {\n        cy.get('input[name=\"username\"]').type('testuser').tab();\n        cy.get('input[name=\"password\"]').type('password123').tab();\n        cy.get('input[type=\"submit\"]').type('{enter}');\n        cy.url().should('include', '/dashboard');\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 170,
+  "latency_s": 2.83,
+  "timestamp": "2026-06-19T16:26:07.325326"
+}

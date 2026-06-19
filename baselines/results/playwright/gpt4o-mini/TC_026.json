@@ -1,0 +1,13 @@
+{
+  "id": "TC_026",
+  "category": "form_validation",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see inline validation as I type in the email field.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Email Field Inline Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should show validation error for invalid email', async ({ page }) => {\n    await page.getByLabel('Email').fill('invalid-email');\n    await page.getByLabel('Email').blur();\n    const errorMessage = await page.getByText('Please enter a valid email address.');\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should not show validation error for valid email', async ({ page }) => {\n    await page.getByLabel('Email').fill('valid.email@example.com');\n    await page.getByLabel('Email').blur();\n    const errorMessage = page.getByText('Please enter a valid email address.');\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 200,
+  "latency_s": 3.19,
+  "timestamp": "2026-06-19T16:45:11.628758"
+}

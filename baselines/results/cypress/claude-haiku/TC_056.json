@@ -1,0 +1,13 @@
+{
+  "id": "TC_056",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want to jump to a specific page using a page number input.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Page Navigation - Jump to Specific Page', () => {\n  beforeEach(() => {\n    cy.visit('http://localhost:3000');\n    cy.get('[data-testid=\"pagination-container\"]').should('be.visible');\n  });\n\n  it('should jump to a specific page when entering a valid page number', () => {\n    cy.get('[data-testid=\"page-input\"]').should('be.visible');\n    cy.get('[data-testid=\"page-input\"]').clear().type('5');\n    cy.get('[data-testid=\"go-to-page-button\"]').click();\n    \n    cy.get('[data-testid=\"current-page\"]').should('contain', '5');\n    cy.get('[data-testid=\"page-content\"]').should('contain', 'Page 5');\n    cy.url().should('include', 'page=5');\n  });\n\n  it('should display error message when entering an invalid page number', () => {\n    cy.get('[data-testid=\"page-input\"]').clear().type('999');\n    cy.get('[data-testid=\"go-to-page-button\"]').click();\n    \n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Page number out of range');\n    cy.get('[data-testid=\"current-page\"]').should('not.contain', '999');\n  });\n\n  it('should not navigate when page input is empty', () => {\n    const initialPage = '1';\n    cy.get('[data-testid=\"current-page\"]').then(($el) => {\n      cy.wrap($el.text()).as('initialPageNumber');\n    });\n    \n    cy.get('[data-testid=\"page-input\"]').clear();\n    cy.get('[data-testid=\"go-to-page-button\"]').click();\n    \n    cy.get('@initialPageNumber').then((initialPageNumber) => {\n      cy.get('[data-testid=\"current-page\"]').should('contain', initialPageNumber);\n    });\n  });\n\n  it('should handle negative page numbers gracefully', () => {\n    cy.get('[data-testid=\"page-input\"]').clear().type('-1');\n    cy.get('[data-testid=\"go-to-page-button\"]').click();\n    \n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Page number must be positive');\n  });\n\n  it('should jump to page 1 when entering minimum valid page number', () => {\n    cy.get('[data-testid=\"page-input\"]').clear().type('1');\n    cy.get('[data-testid=\"go-to-page-button\"]').click();\n    \n    cy.get('[data-testid=\"current-page\"]').should('contain', '1');\n    cy.get('[data-testid=\"page-content\"]').should('contain', 'Page 1');\n  });\n});",
+  "prompt_tokens": 121,
+  "completion_tokens": 755,
+  "latency_s": 5.73,
+  "timestamp": "2026-06-19T17:10:40.846532"
+}

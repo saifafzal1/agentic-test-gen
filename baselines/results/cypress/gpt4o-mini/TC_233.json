@@ -1,0 +1,13 @@
+{
+  "id": "TC_233",
+  "category": "responsive",
+  "complexity": "simple",
+  "user_story": "As a mobile user, I want modals to be full-screen on small viewports.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Full-Screen Modals on Small Viewports', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n        cy.viewport('iphone-6'); // Set viewport to a small size\n    });\n\n    it('should display the modal in full-screen on small viewports', () => {\n        cy.get('.open-modal-button').click(); // Replace with the actual selector for the button that opens the modal\n        cy.get('.modal').should('be.visible');\n        cy.get('.modal').should('have.css', 'width', '100%');\n        cy.get('.modal').should('have.css', 'height', '100%');\n    });\n\n    it('should close the modal when the close button is clicked', () => {\n        cy.get('.open-modal-button').click(); // Open the modal\n        cy.get('.modal .close-button').click(); // Replace with the actual selector for the close button\n        cy.get('.modal').should('not.be.visible'); // Verify that the modal is closed\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 222,
+  "latency_s": 2.91,
+  "timestamp": "2026-06-19T16:39:36.685183"
+}

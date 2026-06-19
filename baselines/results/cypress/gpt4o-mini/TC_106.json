@@ -1,0 +1,13 @@
+{
+  "id": "TC_106",
+  "category": "error_states",
+  "complexity": "complex",
+  "user_story": "As a user, I want form submission errors to scroll into view automatically.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Form Submission Error Handling', () => {\n    beforeEach(() => {\n        cy.visit('/form-page'); // Replace with the actual URL of the form page\n    });\n\n    it('should scroll to the error message on form submission failure', () => {\n        cy.get('input[name=\"username\"]').type('invalidUser'); // Simulate invalid input\n        cy.get('input[name=\"password\"]').type(''); // Leave password empty\n        cy.get('form').submit(); // Submit the form\n\n        cy.get('.error-message') // Replace with the actual selector for the error message\n            .should('be.visible')\n            .then(($error) => {\n                const errorOffset = $error.offset().top;\n                cy.window().then((win) => {\n                    const scrollY = win.scrollY;\n                    cy.wrap(scrollY).should('be.lessThan', errorOffset); // Ensure the error is scrolled into view\n                });\n            });\n    });\n\n    it('should not scroll if there are no error messages', () => {\n        cy.get('input[name=\"username\"]').type('validUser'); // Simulate valid input\n        cy.get('input[name=\"password\"]').type('validPassword'); // Simulate valid input\n        cy.get('form').submit(); // Submit the form\n\n        cy.get('.error-message') // Replace with the actual selector for the error message\n            .should('not.exist'); // Ensure no error message is displayed\n\n        cy.window().then((win) => {\n            const scrollY = win.scrollY;\n            expect(scrollY).to.equal(0); // Ensure the scroll position remains at the top\n        });\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 343,
+  "latency_s": 4.5,
+  "timestamp": "2026-06-19T16:32:13.371691"
+}

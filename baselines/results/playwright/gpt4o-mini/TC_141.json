@@ -1,0 +1,13 @@
+{
+  "id": "TC_141",
+  "category": "modal_dialog",
+  "complexity": "medium",
+  "user_story": "As a user, I want a modal with a video to pause the video when closed.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Video Modal', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should open the video modal', async ({ page }) => {\n    await page.getByRole('button', { name: /open video modal/i }).click();\n    const modal = page.getByRole('dialog', { name: /video modal/i });\n    await expect(modal).toBeVisible();\n  });\n\n  test('should pause the video when the modal is closed', async ({ page }) => {\n    await page.getByRole('button', { name: /open video modal/i }).click();\n    const video = page.getByRole('video');\n    await expect(video).toBeVisible();\n    \n    await page.getByRole('button', { name: /close/i }).click();\n    await expect(video).toHaveAttribute('paused', 'true');\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 211,
+  "latency_s": 2.69,
+  "timestamp": "2026-06-19T16:53:07.426297"
+}

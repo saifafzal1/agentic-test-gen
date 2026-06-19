@@ -1,0 +1,13 @@
+{
+  "id": "TC_275",
+  "category": "notifications",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a notification count reset to zero after reading all messages.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Count Reset', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should display notification count', async ({ page }) => {\n    const notificationCount = await page.getByRole('status', { name: /notification count/i });\n    expect(await notificationCount.textContent()).toBe('3'); // Assuming there are 3 notifications initially\n  });\n\n  test('should reset notification count to zero after reading all messages', async ({ page }) => {\n    const readAllButton = page.getByRole('button', { name: /read all/i });\n    await readAllButton.click();\n\n    const notificationCount = await page.getByRole('status', { name: /notification count/i });\n    expect(await notificationCount.textContent()).toBe('0');\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 185,
+  "latency_s": 3.18,
+  "timestamp": "2026-06-19T17:03:20.682432"
+}

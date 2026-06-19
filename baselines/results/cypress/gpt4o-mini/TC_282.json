@@ -1,0 +1,13 @@
+{
+  "id": "TC_282",
+  "category": "user_profile",
+  "complexity": "medium",
+  "user_story": "As a user, I want to toggle dark mode from my preferences.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('User Profile - Dark Mode Toggle', () => {\n    beforeEach(() => {\n        cy.visit('/user-profile');\n        cy.login(); // Assuming there's a custom command for login\n    });\n\n    it('should enable dark mode when toggled on', () => {\n        cy.get('.dark-mode-toggle').check(); // Assuming the toggle is a checkbox\n        cy.get('body').should('have.class', 'dark-mode'); // Check if dark mode class is applied\n        cy.get('.dark-mode-toggle').should('be.checked'); // Ensure the toggle is checked\n    });\n\n    it('should disable dark mode when toggled off', () => {\n        cy.get('.dark-mode-toggle').uncheck(); // Toggle off\n        cy.get('body').should('not.have.class', 'dark-mode'); // Check if dark mode class is removed\n        cy.get('.dark-mode-toggle').should('not.be.checked'); // Ensure the toggle is unchecked\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 198,
+  "latency_s": 5.54,
+  "timestamp": "2026-06-19T16:42:43.826754"
+}

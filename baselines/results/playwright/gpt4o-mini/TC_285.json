@@ -1,0 +1,13 @@
+{
+  "id": "TC_285",
+  "category": "user_profile",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see a public profile page with my shared information.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Profile Page', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/profile');\n  });\n\n  test('should display user name', async ({ page }) => {\n    const userName = page.getByRole('heading', { name: /user name/i });\n    await expect(userName).toBeVisible();\n  });\n\n  test('should display user bio', async ({ page }) => {\n    const userBio = page.getByText(/this is my bio/i);\n    await expect(userBio).toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 130,
+  "latency_s": 2.56,
+  "timestamp": "2026-06-19T17:03:58.421366"
+}

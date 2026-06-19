@@ -1,0 +1,13 @@
+{
+  "id": "TC_201",
+  "category": "search_filter",
+  "complexity": "medium",
+  "user_story": "As a user, I want search to be tolerant of minor spelling mistakes.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Search Functionality', () => {\n    beforeEach(() => {\n        cy.visit('/search');\n    });\n\n    it('should return results for a correctly spelled search term', () => {\n        cy.get('input[name=\"search\"]').type('laptop');\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.search-results').should('contain', 'laptop');\n    });\n\n    it('should return results for a misspelled search term', () => {\n        cy.get('input[name=\"search\"]').type('laptp');\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.search-results').should('contain', 'laptop');\n        cy.get('.search-results').should('contain', 'laptops');\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 157,
+  "latency_s": 2.45,
+  "timestamp": "2026-06-19T16:37:44.682490"
+}

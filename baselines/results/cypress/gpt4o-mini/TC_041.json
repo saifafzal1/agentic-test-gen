@@ -1,0 +1,13 @@
+{
+  "id": "TC_041",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want a 404 page to appear for invalid URLs.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('404 Page Navigation', () => {\n    beforeEach(() => {\n        cy.visit('/invalid-url'); // Replace with a base URL if needed\n    });\n\n    it('should display the 404 page for an invalid URL', () => {\n        cy.get('h1').should('contain', '404 Not Found'); // Adjust selector and text as per actual implementation\n        cy.get('p').should('contain', 'The page you are looking for does not exist.'); // Adjust selector and text as per actual implementation\n    });\n\n    it('should have a link to return to the homepage', () => {\n        cy.get('a').should('have.attr', 'href', '/').and('contain', 'Go to Homepage'); // Adjust selector and text as per actual implementation\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 164,
+  "latency_s": 2.57,
+  "timestamp": "2026-06-19T16:27:45.671369"
+}

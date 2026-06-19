@@ -1,0 +1,13 @@
+{
+  "id": "TC_134",
+  "category": "modal_dialog",
+  "complexity": "simple",
+  "user_story": "As a user, I want an alert dialog to block interaction with the page behind it.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Alert Dialog Interaction', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n        cy.get('#open-alert-dialog').click(); // Replace with the actual selector to open the alert dialog\n    });\n\n    it('should display the alert dialog and block interaction with the background', () => {\n        cy.get('.alert-dialog').should('be.visible'); // Replace with the actual selector for the alert dialog\n        cy.get('body').should('not.be.visible').and('not.have.class', 'interactable'); // Ensure background is not interactable\n    });\n\n    it('should close the alert dialog and allow interaction with the background', () => {\n        cy.get('.alert-dialog .close-button').click(); // Replace with the actual selector for the close button\n        cy.get('.alert-dialog').should('not.exist'); // Ensure the alert dialog is closed\n        cy.get('body').should('be.visible').and('have.class', 'interactable'); // Ensure background is interactable again\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 219,
+  "latency_s": 3.2,
+  "timestamp": "2026-06-19T16:34:11.523296"
+}

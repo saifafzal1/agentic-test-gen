@@ -1,0 +1,13 @@
+{
+  "id": "TC_203",
+  "category": "search_filter",
+  "complexity": "simple",
+  "user_story": "As a user, I want to filter a list by multiple statuses simultaneously.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Filter list by multiple statuses', () => {\n    beforeEach(() => {\n        cy.visit('/your-page-url'); // Replace with the actual URL of the page\n    });\n\n    it('should filter the list by selected statuses successfully', () => {\n        cy.get('[data-testid=\"status-filter\"]').check(['status1', 'status2']); // Replace with actual status values\n        cy.get('[data-testid=\"apply-filters\"]').click();\n        cy.get('[data-testid=\"list-item\"]').should('have.length.greaterThan', 0);\n        cy.get('[data-testid=\"list-item\"]').each(($item) => {\n            cy.wrap($item).should('contain.text', 'status1').or('contain.text', 'status2'); // Adjust based on expected content\n        });\n    });\n\n    it('should show no results when no matching statuses are selected', () => {\n        cy.get('[data-testid=\"status-filter\"]').uncheck(['status1', 'status2']); // Uncheck all statuses\n        cy.get('[data-testid=\"apply-filters\"]').click();\n        cy.get('[data-testid=\"no-results\"]').should('be.visible'); // Adjust based on actual no results element\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 246,
+  "latency_s": 3.29,
+  "timestamp": "2026-06-19T16:37:51.786874"
+}

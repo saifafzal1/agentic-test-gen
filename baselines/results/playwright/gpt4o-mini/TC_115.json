@@ -1,0 +1,13 @@
+{
+  "id": "TC_115",
+  "category": "async_await",
+  "complexity": "complex",
+  "user_story": "As a user, I want debounced search to trigger only after I stop typing for 300ms.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Debounced Search Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should not trigger search on every keystroke', async ({ page }) => {\n    const searchInput = page.getByRole('textbox', { name: /search/i });\n    await searchInput.fill('test');\n    await page.waitForTimeout(100); // Wait for less than 300ms\n    await expect(page.getByText(/loading/i)).not.toBeVisible(); // Ensure loading is not visible\n\n    await searchInput.fill('test search');\n    await page.waitForTimeout(100); // Wait for less than 300ms\n    await expect(page.getByText(/loading/i)).not.toBeVisible(); // Ensure loading is not visible\n  });\n\n  test('should trigger search after 300ms of inactivity', async ({ page }) => {\n    const searchInput = page.getByRole('textbox', { name: /search/i });\n    await searchInput.fill('test search');\n    await page.waitForTimeout(300); // Wait for 300ms\n    await expect(page.getByText(/loading/i)).toBeVisible(); // Ensure loading is visible\n    await expect(page.getByText(/results for \"test search\"/i)).toBeVisible(); // Ensure results are displayed\n  });\n});",
+  "prompt_tokens": 139,
+  "completion_tokens": 305,
+  "latency_s": 5.09,
+  "timestamp": "2026-06-19T16:51:29.514544"
+}

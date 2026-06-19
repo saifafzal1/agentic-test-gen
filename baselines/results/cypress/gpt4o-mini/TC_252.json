@@ -1,0 +1,13 @@
+{
+  "id": "TC_252",
+  "category": "payment_flow",
+  "complexity": "medium",
+  "user_story": "As a user, I want to receive an order confirmation after successful payment.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Order Confirmation after Successful Payment', () => {\n    beforeEach(() => {\n        cy.visit('/payment'); // Navigate to the payment page\n    });\n\n    it('should display order confirmation after successful payment', () => {\n        cy.get('#card-number').type('4111111111111111'); // Enter valid card number\n        cy.get('#expiry-date').type('12/25'); // Enter valid expiry date\n        cy.get('#cvv').type('123'); // Enter valid CVV\n        cy.get('#pay-button').click(); // Click on the pay button\n\n        cy.url().should('include', '/confirmation'); // Check if redirected to confirmation page\n        cy.get('.confirmation-message').should('contain', 'Thank you for your order!'); // Verify confirmation message\n    });\n\n    it('should show error message for failed payment', () => {\n        cy.get('#card-number').type('4000000000000002'); // Enter invalid card number\n        cy.get('#expiry-date').type('12/25'); // Enter valid expiry date\n        cy.get('#cvv').type('123'); // Enter valid CVV\n        cy.get('#pay-button').click(); // Click on the pay button\n\n        cy.get('.error-message').should('contain', 'Payment failed. Please try again.'); // Verify error message\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 281,
+  "latency_s": 4.71,
+  "timestamp": "2026-06-19T16:40:45.658708"
+}

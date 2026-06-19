@@ -1,0 +1,13 @@
+{
+  "id": "TC_257",
+  "category": "payment_flow",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see the total price update when I change the quantity.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Payment Flow - Total Price Update', () => {\n    beforeEach(() => {\n        cy.visit('/checkout'); // Adjust the URL to your application's checkout page\n    });\n\n    it('should update the total price when quantity is increased', () => {\n        cy.get('.quantity-input').clear().type('2'); // Assuming the quantity input has a class of 'quantity-input'\n        cy.get('.update-button').click(); // Assuming there is an update button to recalculate the total\n        cy.get('.total-price').should('contain', '$40.00'); // Adjust the expected total price accordingly\n    });\n\n    it('should not allow quantity to be less than 1', () => {\n        cy.get('.quantity-input').clear().type('0'); // Trying to set quantity to 0\n        cy.get('.update-button').click();\n        cy.get('.error-message').should('be.visible').and('contain', 'Quantity must be at least 1'); // Adjust the error message accordingly\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 209,
+  "latency_s": 4.27,
+  "timestamp": "2026-06-19T16:41:08.089884"
+}

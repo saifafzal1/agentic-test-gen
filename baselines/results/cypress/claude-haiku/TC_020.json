@@ -1,0 +1,13 @@
+{
+  "id": "TC_020",
+  "category": "form_validation",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a confirmation password mismatch error in real-time.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Password Mismatch Error Validation', () => {\n  beforeEach(() => {\n    cy.visit('/')\n    cy.get('[data-testid=\"password-input\"]').as('passwordInput')\n    cy.get('[data-testid=\"confirm-password-input\"]').as('confirmPasswordInput')\n    cy.get('[data-testid=\"password-error-message\"]').as('errorMessage')\n  })\n\n  it('should display password mismatch error in real-time when passwords do not match', () => {\n    cy.get('@passwordInput').type('SecurePass123!')\n    cy.get('@confirmPasswordInput').type('DifferentPass456!')\n    \n    cy.get('@errorMessage')\n      .should('be.visible')\n      .and('contain', 'Passwords do not match')\n  })\n\n  it('should clear password mismatch error when passwords match', () => {\n    cy.get('@passwordInput').type('SecurePass123!')\n    cy.get('@confirmPasswordInput').type('DifferentPass456!')\n    \n    cy.get('@errorMessage')\n      .should('be.visible')\n      .and('contain', 'Passwords do not match')\n    \n    cy.get('@confirmPasswordInput').clear().type('SecurePass123!')\n    \n    cy.get('@errorMessage').should('not.be.visible')\n  })\n\n  it('should handle edge case of empty confirm password field', () => {\n    cy.get('@passwordInput').type('SecurePass123!')\n    cy.get('@confirmPasswordInput').focus().blur()\n    \n    cy.get('@errorMessage')\n      .should('be.visible')\n      .and('contain', 'Passwords do not match')\n  })\n\n  it('should validate on each keystroke in confirm password field', () => {\n    cy.get('@passwordInput').type('Test1234')\n    \n    cy.get('@confirmPasswordInput').type('T')\n    cy.get('@errorMessage').should('be.visible')\n    \n    cy.get('@confirmPasswordInput').type('e')\n    cy.get('@errorMessage').should('be.visible')\n    \n    cy.get('@confirmPasswordInput').type('st1234')\n    cy.get('@errorMessage').should('not.be.visible')\n  })\n})",
+  "prompt_tokens": 125,
+  "completion_tokens": 549,
+  "latency_s": 4.31,
+  "timestamp": "2026-06-19T17:06:40.362592"
+}

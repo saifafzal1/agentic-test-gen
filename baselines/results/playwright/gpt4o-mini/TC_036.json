@@ -1,0 +1,13 @@
+{
+  "id": "TC_036",
+  "category": "form_validation",
+  "complexity": "medium",
+  "user_story": "As a user, I want to go back to a previous step in a multi-step form without losing data.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Multi-step form navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/multi-step-form');\n    await page.fill(getByLabel('First Name'), 'John');\n    await page.fill(getByLabel('Last Name'), 'Doe');\n    await page.click(getByRole('button', { name: 'Next' }));\n  });\n\n  test('should retain data when going back to the previous step', async ({ page }) => {\n    await page.click(getByRole('button', { name: 'Back' }));\n    \n    const firstName = await page.inputValue(getByLabel('First Name'));\n    const lastName = await page.inputValue(getByLabel('Last Name'));\n    \n    expect(firstName).toBe('John');\n    expect(lastName).toBe('Doe');\n  });\n\n  test('should allow user to proceed after going back', async ({ page }) => {\n    await page.click(getByRole('button', { name: 'Back' }));\n    await page.fill(getByLabel('First Name'), 'Jane');\n    await page.fill(getByLabel('Last Name'), 'Smith');\n    await page.click(getByRole('button', { name: 'Next' }));\n    \n    const confirmationMessage = await page.getByText('Thank you for your submission!');\n    expect(await confirmationMessage.isVisible()).toBeTruthy();\n  });\n});",
+  "prompt_tokens": 139,
+  "completion_tokens": 295,
+  "latency_s": 5.24,
+  "timestamp": "2026-06-19T16:45:58.454344"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_107",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error if image dimensions are too small for upload.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Image Upload Error Handling', () => {\n    beforeEach(() => {\n        cy.visit('/upload'); // Replace with the actual URL of the upload page\n    });\n\n    it('should display an error message for images with dimensions too small', () => {\n        const fileName = 'small-image.jpg'; // Replace with an actual small image file\n        cy.fixture(fileName).then(fileContent => {\n            cy.get('input[type=\"file\"]').attachFile({ fileContent, fileName, mimeType: 'image/jpeg' });\n        });\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.error-message').should('be.visible').and('contain', 'Image dimensions are too small');\n    });\n\n    it('should not display an error message for images with valid dimensions', () => {\n        const fileName = 'valid-image.jpg'; // Replace with an actual valid image file\n        cy.fixture(fileName).then(fileContent => {\n            cy.get('input[type=\"file\"]').attachFile({ fileContent, fileName, mimeType: 'image/jpeg' });\n        });\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.error-message').should('not.exist');\n    });\n});",
+  "prompt_tokens": 113,
+  "completion_tokens": 249,
+  "latency_s": 6.09,
+  "timestamp": "2026-06-19T16:32:19.769786"
+}

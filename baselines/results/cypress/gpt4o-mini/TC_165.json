@@ -1,0 +1,13 @@
+{
+  "id": "TC_165",
+  "category": "table_list",
+  "complexity": "medium",
+  "user_story": "As a user, I want to print a filtered table view.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Filtered Table View Printing', () => {\n    beforeEach(() => {\n        cy.visit('/table-view'); // Adjust the URL to your application's table view\n    });\n\n    it('should print the filtered table view correctly', () => {\n        // Apply filter\n        cy.get('input[name=\"filter\"]').type('Sample Filter'); // Adjust selector as necessary\n        cy.get('button[type=\"submit\"]').click(); // Adjust selector as necessary\n\n        // Verify filtered results\n        cy.get('.table-row').should('have.length.greaterThan', 0); // Ensure there are results\n\n        // Trigger print\n        cy.window().then((win) => {\n            cy.stub(win, 'print').as('printFunction');\n        });\n        cy.get('button.print').click(); // Adjust selector for print button\n\n        // Verify print function was called\n        cy.get('@printFunction').should('have.been.calledOnce');\n    });\n\n    it('should show no results message when filter returns no results', () => {\n        // Apply filter that returns no results\n        cy.get('input[name=\"filter\"]').type('Nonexistent Filter'); // Adjust selector as necessary\n        cy.get('button[type=\"submit\"]').click(); // Adjust selector as necessary\n\n        // Verify no results message\n        cy.get('.no-results-message').should('be.visible'); // Adjust selector as necessary\n    });\n});",
+  "prompt_tokens": 107,
+  "completion_tokens": 285,
+  "latency_s": 3.74,
+  "timestamp": "2026-06-19T16:35:50.904520"
+}

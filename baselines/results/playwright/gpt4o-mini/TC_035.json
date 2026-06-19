@@ -1,0 +1,13 @@
+{
+  "id": "TC_035",
+  "category": "form_validation",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a progress indicator on a multi-step form.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Multi-step form progress indicator', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/multi-step-form');\n  });\n\n  test('should display progress indicator on the first step', async ({ page }) => {\n    const progressIndicator = page.getByRole('progressbar');\n    await expect(progressIndicator).toBeVisible();\n    await expect(progressIndicator).toHaveText('Step 1 of 3');\n  });\n\n  test('should update progress indicator on moving to the next step', async ({ page }) => {\n    await page.getByRole('button', { name: 'Next' }).click();\n    const progressIndicator = page.getByRole('progressbar');\n    await expect(progressIndicator).toBeVisible();\n    await expect(progressIndicator).toHaveText('Step 2 of 3');\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 191,
+  "latency_s": 4.88,
+  "timestamp": "2026-06-19T16:45:52.909219"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_080",
+  "category": "crud_operations",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see the created date and last modified date on a record.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Record Date Display', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records'); // Navigate to the records page\n  });\n\n  test('should display created date for a record', async ({ page }) => {\n    const record = await page.getByText('Sample Record'); // Replace with actual record name\n    await expect(record).toBeVisible();\n    \n    const createdDate = await record.getByRole('cell', { name: /created date/i });\n    await expect(createdDate).toBeVisible();\n    await expect(createdDate).toHaveText(/^\\d{4}-\\d{2}-\\d{2}/); // Check for date format\n  });\n\n  test('should display last modified date for a record', async ({ page }) => {\n    const record = await page.getByText('Sample Record'); // Replace with actual record name\n    await expect(record).toBeVisible();\n    \n    const modifiedDate = await record.getByRole('cell', { name: /last modified date/i });\n    await expect(modifiedDate).toBeVisible();\n    await expect(modifiedDate).toHaveText(/^\\d{4}-\\d{2}-\\d{2}/); // Check for date format\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 277,
+  "latency_s": 4.63,
+  "timestamp": "2026-06-19T16:49:01.923324"
+}

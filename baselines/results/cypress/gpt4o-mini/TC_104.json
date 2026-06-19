@@ -1,0 +1,13 @@
+{
+  "id": "TC_104",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a user, I want error messages to be screen-reader accessible.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Error Messages Accessibility', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should display error message that is screen-reader accessible', () => {\n        // Trigger an error condition\n        cy.get('input[name=\"username\"]').type('invalidUser');\n        cy.get('form').submit();\n\n        // Check for the presence of the error message\n        cy.get('.error-message').should('be.visible')\n            .and('have.attr', 'role', 'alert')\n            .and('contain', 'Invalid username or password');\n    });\n\n    it('should not display error message when input is valid', () => {\n        // Trigger a valid input condition\n        cy.get('input[name=\"username\"]').type('validUser');\n        cy.get('input[name=\"password\"]').type('validPassword');\n        cy.get('form').submit();\n\n        // Check that no error message is displayed\n        cy.get('.error-message').should('not.exist');\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 212,
+  "latency_s": 3.47,
+  "timestamp": "2026-06-19T16:32:03.800736"
+}

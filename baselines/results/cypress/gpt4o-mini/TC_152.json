@@ -1,0 +1,13 @@
+{
+  "id": "TC_152",
+  "category": "table_list",
+  "complexity": "simple",
+  "user_story": "As a user, I want to expand a row to see nested details.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Table Row Expansion', () => {\n    beforeEach(() => {\n        cy.visit('/table-list'); // Adjust the URL to your application\n    });\n\n    it('should expand a row to show nested details', () => {\n        cy.get('.table-row').first().click(); // Assuming the rows have a class of 'table-row'\n        cy.get('.nested-details').should('be.visible'); // Assuming nested details have a class of 'nested-details'\n    });\n\n    it('should collapse the row when clicked again', () => {\n        cy.get('.table-row').first().click(); // Expand the row\n        cy.get('.table-row').first().click(); // Collapse the row\n        cy.get('.nested-details').should('not.be.visible'); // Ensure nested details are not visible\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 166,
+  "latency_s": 2.55,
+  "timestamp": "2026-06-19T16:35:07.464148"
+}

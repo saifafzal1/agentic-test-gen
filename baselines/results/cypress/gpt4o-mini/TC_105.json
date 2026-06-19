@@ -1,0 +1,13 @@
+{
+  "id": "TC_105",
+  "category": "error_states",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see a warning before navigating away from an unsaved form.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Unsaved Form Navigation Warning', () => {\n    beforeEach(() => {\n        cy.visit('/form'); // Replace with the actual form URL\n    });\n\n    it('should display a warning when trying to navigate away with unsaved changes', () => {\n        cy.get('input[name=\"exampleField\"]').type('Some unsaved data');\n        cy.window().then((win) => {\n            cy.stub(win, 'confirm').returns(true); // Simulate user confirming the navigation\n        });\n        cy.get('a[href=\"/another-page\"]').click(); // Replace with the actual link to navigate away\n        cy.on('window:alert', (str) => {\n            expect(str).to.equal('You have unsaved changes. Are you sure you want to leave?');\n        });\n    });\n\n    it('should not display a warning when navigating away after saving', () => {\n        cy.get('input[name=\"exampleField\"]').type('Some data');\n        cy.get('button[type=\"submit\"]').click(); // Assuming there's a submit button to save the form\n        cy.get('a[href=\"/another-page\"]').click(); // Replace with the actual link to navigate away\n        cy.url().should('include', '/another-page'); // Verify that the navigation occurred\n    });\n});",
+  "prompt_tokens": 113,
+  "completion_tokens": 260,
+  "latency_s": 4.46,
+  "timestamp": "2026-06-19T16:32:08.564873"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_028",
+  "category": "form_validation",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see success feedback after a valid form submission.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Form Submission Success Feedback', () => {\n    beforeEach(() => {\n        cy.visit('/form-page'); // Replace with the actual URL of the form page\n    });\n\n    it('should display success feedback after valid form submission', () => {\n        cy.get('input[name=\"username\"]').type('validUser');\n        cy.get('input[name=\"email\"]').type('valid@example.com');\n        cy.get('input[name=\"password\"]').type('ValidPassword123');\n        cy.get('form').submit();\n\n        cy.get('.success-message').should('be.visible')\n            .and('contain', 'Form submitted successfully!');\n    });\n\n    it('should not display success feedback for invalid form submission', () => {\n        cy.get('input[name=\"username\"]').type(''); // Invalid username\n        cy.get('input[name=\"email\"]').type('invalid-email'); // Invalid email\n        cy.get('input[name=\"password\"]').type('123'); // Invalid password\n        cy.get('form').submit();\n\n        cy.get('.success-message').should('not.exist');\n        cy.get('.error-message').should('be.visible')\n            .and('contain', 'Please correct the errors and try again.');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 245,
+  "latency_s": 3.63,
+  "timestamp": "2026-06-19T16:26:55.905472"
+}

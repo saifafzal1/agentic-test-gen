@@ -1,0 +1,13 @@
+{
+  "id": "TC_156",
+  "category": "table_list",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see row numbers in the first column.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Table Row Numbers Feature', () => {\n  beforeEach(() => {\n    cy.visit('/');\n    cy.get('table').should('be.visible');\n  });\n\n  it('should display row numbers in the first column of the table', () => {\n    cy.get('table tbody tr').each(($row, index) => {\n      cy.wrap($row)\n        .find('td')\n        .first()\n        .should('contain', (index + 1).toString());\n    });\n  });\n\n  it('should display correct sequential row numbers for multiple rows', () => {\n    cy.get('table tbody tr').should('have.length.greaterThan', 0);\n    \n    cy.get('table tbody tr').each(($row, index) => {\n      const expectedRowNumber = index + 1;\n      cy.wrap($row)\n        .find('td')\n        .first()\n        .invoke('text')\n        .then((text) => {\n          expect(parseInt(text.trim())).to.equal(expectedRowNumber);\n        });\n    });\n  });\n\n  it('should maintain row numbers when table is sorted', () => {\n    cy.get('table thead th').first().click();\n    cy.wait(500);\n    \n    cy.get('table tbody tr').each(($row, index) => {\n      cy.wrap($row)\n        .find('td')\n        .first()\n        .should('contain', (index + 1).toString());\n    });\n  });\n\n  it('should handle empty table gracefully', () => {\n    cy.get('table tbody tr').then(($rows) => {\n      if ($rows.length === 0) {\n        cy.get('table tbody').should('be.empty');\n      } else {\n        cy.get('table tbody tr').first().find('td').first().should('contain', '1');\n      }\n    });\n  });\n\n  it('should display row numbers with proper alignment in first column', () => {\n    cy.get('table tbody tr').first().find('td').first().should(($cell) => {\n      expect($cell).to.have.css('text-align');\n      expect($cell.text()).to.match(/^\\d+$/);\n    });\n  });\n});",
+  "prompt_tokens": 120,
+  "completion_tokens": 543,
+  "latency_s": 4.95,
+  "timestamp": "2026-06-19T17:21:52.881719"
+}

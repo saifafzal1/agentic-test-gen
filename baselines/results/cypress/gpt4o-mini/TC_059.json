@@ -1,0 +1,13 @@
+{
+  "id": "TC_059",
+  "category": "api_response_handling",
+  "complexity": "simple",
+  "user_story": "As a user, I want data to refresh automatically after a mutation.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Data Refresh After Mutation', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should refresh data automatically after a successful mutation', () => {\n        // Assuming there's a button to trigger the mutation\n        cy.intercept('POST', '/api/mutate', { statusCode: 200 }).as('mutateData');\n        \n        cy.get('[data-cy=mutate-button]').click(); // Replace with the actual selector for the mutation button\n        cy.wait('@mutateData');\n\n        // Check if the data has been refreshed\n        cy.get('[data-cy=data-container]').should('contain', 'Updated Data'); // Replace with actual expected data\n    });\n\n    it('should not refresh data if the mutation fails', () => {\n        cy.intercept('POST', '/api/mutate', { statusCode: 500 }).as('mutateDataFail');\n        \n        cy.get('[data-cy=mutate-button]').click(); // Replace with the actual selector for the mutation button\n        cy.wait('@mutateDataFail');\n\n        // Check that the data remains unchanged\n        cy.get('[data-cy=data-container]').should('not.contain', 'Updated Data'); // Replace with actual expected data\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 270,
+  "latency_s": 3.96,
+  "timestamp": "2026-06-19T16:28:56.725214"
+}

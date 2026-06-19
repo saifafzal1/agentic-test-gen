@@ -1,0 +1,13 @@
+{
+  "id": "TC_111",
+  "category": "async_await",
+  "complexity": "medium",
+  "user_story": "As a user, I want multiple concurrent API calls to resolve before displaying data.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Concurrent API Calls', () => {\n    beforeEach(() => {\n        cy.intercept('GET', '/api/data1', { fixture: 'data1.json' }).as('getData1');\n        cy.intercept('GET', '/api/data2', { fixture: 'data2.json' }).as('getData2');\n        cy.visit('/'); // Adjust the URL to your application's entry point\n    });\n\n    it('should display data after multiple concurrent API calls resolve', () => {\n        cy.wait(['@getData1', '@getData2']);\n        cy.get('.data-display').should('contain', 'Expected Data from API 1');\n        cy.get('.data-display').should('contain', 'Expected Data from API 2');\n    });\n\n    it('should handle failure of one API call gracefully', () => {\n        cy.intercept('GET', '/api/data2', { statusCode: 500 }).as('getData2Error');\n        cy.wait(['@getData1', '@getData2Error']);\n        cy.get('.data-display').should('contain', 'Expected Data from API 1');\n        cy.get('.error-message').should('be.visible').and('contain', 'Error loading data from API 2');\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 259,
+  "latency_s": 3.22,
+  "timestamp": "2026-06-19T16:32:36.627977"
+}

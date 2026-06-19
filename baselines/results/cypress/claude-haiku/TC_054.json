@@ -1,0 +1,13 @@
+{
+  "id": "TC_054",
+  "category": "navigation",
+  "complexity": "medium",
+  "user_story": "As a user, I want the page title to update when navigating between sections.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Page Title Update on Navigation', () => {\n  beforeEach(() => {\n    cy.visit('http://localhost:3000');\n  });\n\n  it('should update page title when navigating to different sections', () => {\n    cy.title().should('equal', 'Home');\n    \n    cy.get('a[href=\"/about\"]').click();\n    cy.title().should('equal', 'About');\n    \n    cy.get('a[href=\"/services\"]').click();\n    cy.title().should('equal', 'Services');\n    \n    cy.get('a[href=\"/contact\"]').click();\n    cy.title().should('equal', 'Contact');\n  });\n\n  it('should update page title when using browser back button', () => {\n    cy.title().should('equal', 'Home');\n    \n    cy.get('a[href=\"/about\"]').click();\n    cy.title().should('equal', 'About');\n    \n    cy.go('back');\n    cy.title().should('equal', 'Home');\n    \n    cy.go('forward');\n    cy.title().should('equal', 'About');\n  });\n\n  it('should handle rapid navigation and update title correctly', () => {\n    cy.get('a[href=\"/about\"]').click();\n    cy.get('a[href=\"/services\"]').click();\n    cy.get('a[href=\"/contact\"]').click();\n    \n    cy.title().should('equal', 'Contact');\n  });\n\n  it('should update title when navigating to section with special characters', () => {\n    cy.get('a[href=\"/faq\"]').click();\n    cy.title().should('equal', 'FAQ - Frequently Asked Questions');\n  });\n\n  it('should maintain correct title after page reload', () => {\n    cy.get('a[href=\"/services\"]').click();\n    cy.title().should('equal', 'Services');\n    \n    cy.reload();\n    cy.title().should('equal', 'Services');\n  });\n\n  it('should update title when navigating from nested section back to root', () => {\n    cy.get('a[href=\"/products\"]').click();\n    cy.title().should('equal', 'Products');\n    \n    cy.get('a[href=\"/\"]').click();\n    cy.title().should('equal', 'Home');\n  });\n});",
+  "prompt_tokens": 120,
+  "completion_tokens": 569,
+  "latency_s": 3.63,
+  "timestamp": "2026-06-19T17:10:27.425327"
+}

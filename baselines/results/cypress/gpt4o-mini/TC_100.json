@@ -1,0 +1,13 @@
+{
+  "id": "TC_100",
+  "category": "error_states",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a rate-limit error if I submit a form too many times.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Rate Limit Error Handling', () => {\n    beforeEach(() => {\n        cy.visit('/form-page'); // Replace with the actual URL of the form page\n    });\n\n    it('should display a rate-limit error after multiple submissions', () => {\n        const formData = { name: 'John Doe', email: 'john@example.com' };\n\n        for (let i = 0; i < 5; i++) {\n            cy.get('input[name=\"name\"]').type(formData.name);\n            cy.get('input[name=\"email\"]').type(formData.email);\n            cy.get('button[type=\"submit\"]').click();\n        }\n\n        cy.get('.error-message').should('be.visible')\n            .and('contain', 'You have submitted the form too many times. Please try again later.');\n    });\n\n    it('should not display a rate-limit error if submitted within limits', () => {\n        const formData = { name: 'Jane Doe', email: 'jane@example.com' };\n\n        cy.get('input[name=\"name\"]').type(formData.name);\n        cy.get('input[name=\"email\"]').type(formData.email);\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.get('.success-message').should('be.visible')\n            .and('contain', 'Form submitted successfully!');\n    });\n});",
+  "prompt_tokens": 115,
+  "completion_tokens": 269,
+  "latency_s": 3.47,
+  "timestamp": "2026-06-19T16:31:45.909128"
+}

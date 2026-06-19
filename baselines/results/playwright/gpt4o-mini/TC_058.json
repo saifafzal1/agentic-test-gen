@@ -1,0 +1,13 @@
+{
+  "id": "TC_058",
+  "category": "api_response_handling",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see an error banner if an API call fails.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('API Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/'); // Replace with the actual URL of the application\n  });\n\n  test('should display error banner on API call failure', async ({ page }) => {\n    await page.route('**/api/endpoint', (route) => {\n      route.fulfill({\n        status: 500,\n        body: JSON.stringify({ error: 'Internal Server Error' }),\n      });\n    });\n\n    await page.click(getByRole('button', { name: /submit/i })); // Replace with the actual button that triggers the API call\n\n    const errorBanner = await page.getByRole('alert');\n    await expect(errorBanner).toBeVisible();\n    await expect(errorBanner).toHaveText(/internal server error/i);\n  });\n\n  test('should not display error banner on successful API call', async ({ page }) => {\n    await page.route('**/api/endpoint', (route) => {\n      route.fulfill({\n        status: 200,\n        body: JSON.stringify({ success: true }),\n      });\n    });\n\n    await page.click(getByRole('button', { name: /submit/i })); // Replace with the actual button that triggers the API call\n\n    const errorBanner = await page.getByRole('alert');\n    await expect(errorBanner).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 300,
+  "latency_s": 4.02,
+  "timestamp": "2026-06-19T16:47:18.556723"
+}

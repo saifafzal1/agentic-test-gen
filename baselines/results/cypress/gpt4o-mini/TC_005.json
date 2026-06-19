@@ -1,0 +1,13 @@
+{
+  "id": "TC_005",
+  "category": "authentication",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a confirmation message after successfully resetting my password.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Password Reset Confirmation', () => {\n    beforeEach(() => {\n        cy.visit('/reset-password');\n    });\n\n    it('should display a confirmation message after successful password reset', () => {\n        cy.get('input[name=\"email\"]').type('user@example.com');\n        cy.get('button[type=\"submit\"]').click();\n        cy.contains('A confirmation link has been sent to your email.').should('be.visible');\n    });\n\n    it('should not display a confirmation message when email is not provided', () => {\n        cy.get('button[type=\"submit\"]').click();\n        cy.contains('Please enter your email address.').should('be.visible');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 136,
+  "latency_s": 2.68,
+  "timestamp": "2026-06-19T16:25:31.577920"
+}

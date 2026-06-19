@@ -1,0 +1,13 @@
+{
+  "id": "TC_133",
+  "category": "modal_dialog",
+  "complexity": "complex",
+  "user_story": "As a user, I want to submit a form inside a modal and see success feedback.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Form Submission', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n    await page.getByRole('button', { name: /open modal/i }).click(); // Open the modal\n  });\n\n  test('should fill the form and submit successfully', async ({ page }) => {\n    await page.getByLabel('Name').fill('John Doe');\n    await page.getByLabel('Email').fill('john.doe@example.com');\n    await page.getByRole('button', { name: /submit/i }).click();\n\n    const successMessage = await page.getByText(/submission successful/i);\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should show validation error for empty fields', async ({ page }) => {\n    await page.getByRole('button', { name: /submit/i }).click();\n\n    const errorMessage = await page.getByText(/please fill out this field/i);\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 234,
+  "latency_s": 3.34,
+  "timestamp": "2026-06-19T16:52:41.654119"
+}

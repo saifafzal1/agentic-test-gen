@@ -1,0 +1,13 @@
+{
+  "id": "TC_151",
+  "category": "table_list",
+  "complexity": "complex",
+  "user_story": "As a user, I want to freeze the first column when scrolling horizontally.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Table Column Freezing', () => {\n    beforeEach(() => {\n        cy.visit('/your-table-page-url'); // Replace with the actual URL of the page containing the table\n    });\n\n    it('should freeze the first column when scrolling horizontally', () => {\n        cy.get('.table') // Replace with the actual selector for the table\n            .scrollTo('right'); // Scroll horizontally to the right\n        cy.get('.table .first-column') // Replace with the actual selector for the first column\n            .should('have.css', 'position', 'sticky') // Check if the first column is sticky\n            .and('have.css', 'left', '0px'); // Ensure it stays at the left\n    });\n\n    it('should not affect the visibility of other columns when scrolling', () => {\n        cy.get('.table') // Replace with the actual selector for the table\n            .scrollTo('right'); // Scroll horizontally to the right\n        cy.get('.table .other-column') // Replace with the actual selector for another column\n            .should('be.visible'); // Ensure other columns are still visible\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 235,
+  "latency_s": 4.22,
+  "timestamp": "2026-06-19T16:35:04.616667"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_262",
+  "category": "notifications",
+  "complexity": "complex",
+  "user_story": "As a user, I want notifications to auto-dismiss after 5 seconds.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Auto-Dismiss', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-application-url.com');\n  });\n\n  test('should display notification', async ({ page }) => {\n    await page.click(getByRole('button', { name: /show notification/i }));\n    const notification = await page.getByRole('alert');\n    await expect(notification).toBeVisible();\n  });\n\n  test('should auto-dismiss notification after 5 seconds', async ({ page }) => {\n    await page.click(getByRole('button', { name: /show notification/i }));\n    const notification = await page.getByRole('alert');\n    await expect(notification).toBeVisible();\n    await page.waitForTimeout(5000);\n    await expect(notification).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 182,
+  "latency_s": 5.57,
+  "timestamp": "2026-06-19T17:01:59.266664"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_237",
+  "category": "responsive",
+  "complexity": "medium",
+  "user_story": "As a user, I want to pinch-to-zoom on product images.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Product Image Zoom', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/product');\n  });\n\n  test('should allow pinch-to-zoom on product images', async ({ page }) => {\n    const productImage = page.getByRole('img', { name: /product image/i });\n    await expect(productImage).toBeVisible();\n\n    // Simulate pinch-to-zoom gesture\n    await page.mouse.wheel(0, 100); // Zoom in\n    await expect(productImage).toHaveCSS('transform', /scale\\(1.5\\)/);\n\n    await page.mouse.wheel(0, -100); // Zoom out\n    await expect(productImage).toHaveCSS('transform', /scale\\(1\\)/);\n  });\n\n  test('should display zoomed image correctly', async ({ page }) => {\n    const productImage = page.getByRole('img', { name: /product image/i });\n    await expect(productImage).toBeVisible();\n\n    // Simulate pinch-to-zoom gesture\n    await page.mouse.wheel(0, 100); // Zoom in\n    await expect(productImage).toHaveCSS('transform', /scale\\(1.5\\)/);\n\n    // Verify that the image is still centered\n    const boundingBox = await productImage.boundingBox();\n    expect(boundingBox).not.toBeNull();\n    expect(boundingBox!.x).toBeLessThanOrEqual(0);\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 323,
+  "latency_s": 4.45,
+  "timestamp": "2026-06-19T16:59:42.619880"
+}

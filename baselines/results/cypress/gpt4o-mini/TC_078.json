@@ -1,0 +1,13 @@
+{
+  "id": "TC_078",
+  "category": "crud_operations",
+  "complexity": "medium",
+  "user_story": "As a user, I want to duplicate an existing record with one click.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Duplicate Record Functionality', () => {\n    beforeEach(() => {\n        cy.visit('/records'); // Adjust the URL to your application's records page\n        cy.get('.record-item').first().as('firstRecord'); // Assuming records have a class of 'record-item'\n    });\n\n    it('should duplicate an existing record successfully', () => {\n        cy.get('@firstRecord').find('.duplicate-button').click(); // Assuming there's a button with class 'duplicate-button'\n        cy.get('.confirmation-message').should('be.visible').and('contain', 'Record duplicated successfully'); // Check for success message\n        cy.get('.record-item').should('have.length', 2); // Verify that the record count has increased\n    });\n\n    it('should show an error message when duplication fails', () => {\n        cy.intercept('POST', '/api/records/duplicate', { statusCode: 500 }).as('duplicateError'); // Simulate a server error\n        cy.get('@firstRecord').find('.duplicate-button').click();\n        cy.wait('@duplicateError');\n        cy.get('.error-message').should('be.visible').and('contain', 'Failed to duplicate record'); // Check for error message\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 250,
+  "latency_s": 4.04,
+  "timestamp": "2026-06-19T16:30:18.483857"
+}

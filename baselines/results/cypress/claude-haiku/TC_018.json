@@ -1,0 +1,13 @@
+{
+  "id": "TC_018",
+  "category": "form_validation",
+  "complexity": "medium",
+  "user_story": "As a user, I want required fields to be highlighted if I submit an empty form.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Form Validation - Required Fields Highlighting', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n    cy.get('form').should('be.visible');\n  });\n\n  it('should highlight all required fields when submitting empty form', () => {\n    cy.get('button[type=\"submit\"]').click();\n\n    cy.get('input[required]').each(($input) => {\n      cy.wrap($input)\n        .should('have.class', 'error')\n        .or('have.attr', 'aria-invalid', 'true');\n    });\n\n    cy.get('textarea[required]').each(($textarea) => {\n      cy.wrap($textarea)\n        .should('have.class', 'error')\n        .or('have.attr', 'aria-invalid', 'true');\n    });\n\n    cy.get('select[required]').each(($select) => {\n      cy.wrap($select)\n        .should('have.class', 'error')\n        .or('have.attr', 'aria-invalid', 'true');\n    });\n\n    cy.get('[role=\"alert\"]').should('be.visible');\n  });\n\n  it('should remove highlight when required field is filled', () => {\n    cy.get('button[type=\"submit\"]').click();\n\n    cy.get('input[required]').first().should('have.class', 'error');\n\n    cy.get('input[required]').first().type('Valid input');\n\n    cy.get('input[required]').first().should('not.have.class', 'error');\n  });\n\n  it('should highlight only empty required fields when some fields are filled', () => {\n    cy.get('input[required]').first().type('Filled value');\n\n    cy.get('button[type=\"submit\"]').click();\n\n    cy.get('input[required]').first().should('not.have.class', 'error');\n\n    cy.get('input[required]').eq(1).should('have.class', 'error');\n  });\n\n  it('should display error messages for each required field', () => {\n    cy.get('button[type=\"submit\"]').click();\n\n    cy.get('input[required]').each(($input) => {\n      const fieldName = cy.wrap($input).invoke('attr', 'name');\n      cy.get(`[data-error-for=\"${fieldName}\"]`)\n        .should('be.visible')\n        .and('contain', 'required');\n    });\n  });\n\n  it('should not highlight optional fields on empty form submission', () => {\n    cy.get('button[type=\"submit\"]').click();\n\n    cy.get('input:not([required])').each(($input) => {\n      cy.wrap($input).should('not.have.class', 'error');\n    });\n  });\n});",
+  "prompt_tokens": 123,
+  "completion_tokens": 685,
+  "latency_s": 4.32,
+  "timestamp": "2026-06-19T17:06:28.926465"
+}

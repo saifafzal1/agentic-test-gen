@@ -1,0 +1,13 @@
+{
+  "id": "TC_089",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error page if the server returns a 500 error.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Error Page Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/'); // Navigate to the base URL\n  });\n\n  test('should display error page on 500 server error', async ({ page }) => {\n    await page.route('**/api/endpoint', (route) => {\n      route.fulfill({\n        status: 500,\n        body: 'Internal Server Error',\n      });\n    });\n\n    await page.click(getByText('Trigger 500 Error')); // Assuming there's a button to trigger the error\n    await expect(page.getByRole('heading', { name: /error/i })).toBeVisible(); // Check for error heading\n    await expect(page.getByText(/internal server error/i)).toBeVisible(); // Check for error message\n  });\n\n  test('should not display error page on successful response', async ({ page }) => {\n    await page.route('**/api/endpoint', (route) => {\n      route.fulfill({\n        status: 200,\n        body: JSON.stringify({ message: 'Success' }),\n      });\n    });\n\n    await page.click(getByText('Trigger Success')); // Assuming there's a button to trigger success\n    await expect(page.getByRole('heading', { name: /success/i })).toBeVisible(); // Check for success heading\n    await expect(page.getByText(/success/i)).toBeVisible(); // Check for success message\n  });\n});",
+  "prompt_tokens": 137,
+  "completion_tokens": 312,
+  "latency_s": 6.68,
+  "timestamp": "2026-06-19T16:49:36.139323"
+}

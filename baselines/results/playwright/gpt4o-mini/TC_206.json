@@ -1,0 +1,13 @@
+{
+  "id": "TC_206",
+  "category": "accessibility",
+  "complexity": "simple",
+  "user_story": "As a user, I want focus indicators to be visible on all interactive elements.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Accessibility - Focus Indicators', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should have focus indicator on button', async ({ page }) => {\n    const button = page.getByRole('button', { name: /submit/i });\n    await button.focus();\n    const isFocused = await button.evaluate(el => document.activeElement === el);\n    expect(isFocused).toBe(true);\n    await expect(button).toHaveCSS('outline', /solid/); // Adjust the CSS property as needed\n  });\n\n  test('should have focus indicator on link', async ({ page }) => {\n    const link = page.getByRole('link', { name: /learn more/i });\n    await link.focus();\n    const isFocused = await link.evaluate(el => document.activeElement === el);\n    expect(isFocused).toBe(true);\n    await expect(link).toHaveCSS('outline', /solid/); // Adjust the CSS property as needed\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 232,
+  "latency_s": 3.83,
+  "timestamp": "2026-06-19T16:57:28.768201"
+}

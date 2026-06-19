@@ -1,0 +1,13 @@
+{
+  "id": "TC_115",
+  "category": "async_await",
+  "complexity": "complex",
+  "user_story": "As a user, I want debounced search to trigger only after I stop typing for 300ms.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Debounced Search Functionality', () => {\n    beforeEach(() => {\n        cy.visit('/search'); // Adjust the URL to your application's search page\n    });\n\n    it('should trigger search after 300ms of inactivity', () => {\n        cy.get('input[name=\"search\"]')\n            .type('Cypress')\n            .wait(300) // Wait for debounce time\n            .then(() => {\n                cy.get('.search-results').should('exist'); // Check if results are displayed\n                cy.get('.search-results').should('contain', 'Cypress'); // Check if results contain the search term\n            });\n    });\n\n    it('should not trigger search if typing continues within 300ms', () => {\n        cy.get('input[name=\"search\"]')\n            .type('Cypress')\n            .wait(100) // Wait for less than debounce time\n            .type(' Testing')\n            .wait(300) // Wait for debounce time after typing\n            .then(() => {\n                cy.get('.search-results').should('not.exist'); // Ensure no results are displayed\n            });\n    });\n});",
+  "prompt_tokens": 116,
+  "completion_tokens": 231,
+  "latency_s": 4.0,
+  "timestamp": "2026-06-19T16:32:54.195258"
+}

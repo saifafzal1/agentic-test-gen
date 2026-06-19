@@ -1,0 +1,13 @@
+{
+  "id": "TC_103",
+  "category": "error_states",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a session expired message when my token times out.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Session Expiration', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n        cy.setCookie('session_token', 'expired_token'); // Simulate an expired session token\n    });\n\n    it('should display session expired message when token times out', () => {\n        cy.intercept('GET', '/api/your-endpoint', {\n            statusCode: 401,\n            body: { message: 'Session expired' },\n        }).as('getExpiredSession');\n\n        cy.visit('/dashboard'); // Replace with the actual page that requires authentication\n        cy.wait('@getExpiredSession');\n\n        cy.get('.session-expired-message') // Replace with the actual selector for the message\n            .should('be.visible')\n            .and('contain', 'Your session has expired. Please log in again.');\n    });\n\n    it('should redirect to login page after session expired', () => {\n        cy.intercept('GET', '/api/your-endpoint', {\n            statusCode: 401,\n            body: { message: 'Session expired' },\n        }).as('getExpiredSession');\n\n        cy.visit('/dashboard'); // Replace with the actual page that requires authentication\n        cy.wait('@getExpiredSession');\n\n        cy.url().should('include', '/login'); // Replace with the actual login page URL\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 281,
+  "latency_s": 3.96,
+  "timestamp": "2026-06-19T16:32:00.027850"
+}

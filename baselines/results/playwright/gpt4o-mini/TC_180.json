@@ -1,0 +1,13 @@
+{
+  "id": "TC_180",
+  "category": "file_upload",
+  "complexity": "medium",
+  "user_story": "As a user, I want the upload button to be disabled while a file is uploading.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/upload'); // Replace with the actual URL\n  });\n\n  test('should disable upload button while file is uploading', async ({ page }) => {\n    const uploadInput = page.getByLabel('Upload File'); // Adjust the label as necessary\n    const uploadButton = page.getByRole('button', { name: 'Upload' }); // Adjust the button name as necessary\n\n    await uploadInput.setInputFiles('path/to/file.txt'); // Replace with the actual file path\n    await expect(uploadButton).toBeDisabled();\n  });\n\n  test('should enable upload button after file upload is complete', async ({ page }) => {\n    const uploadInput = page.getByLabel('Upload File'); // Adjust the label as necessary\n    const uploadButton = page.getByRole('button', { name: 'Upload' }); // Adjust the button name as necessary\n\n    await uploadInput.setInputFiles('path/to/file.txt'); // Replace with the actual file path\n    await page.click(uploadButton);\n    \n    // Simulate waiting for the upload to complete\n    await page.waitForTimeout(3000); // Adjust timeout as necessary\n\n    await expect(uploadButton).toBeEnabled();\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 284,
+  "latency_s": 4.31,
+  "timestamp": "2026-06-19T16:55:37.825778"
+}

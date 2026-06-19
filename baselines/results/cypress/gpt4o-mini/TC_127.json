@@ -1,0 +1,13 @@
+{
+  "id": "TC_127",
+  "category": "async_await",
+  "complexity": "complex",
+  "user_story": "As a user, I want async form submission to disable the submit button until resolved.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Async Form Submission', () => {\n    beforeEach(() => {\n        cy.visit('/form-page'); // Replace with the actual URL of the form page\n    });\n\n    it('should disable the submit button while the form is submitting', () => {\n        cy.get('input[name=\"username\"]').type('testuser');\n        cy.get('input[name=\"email\"]').type('testuser@example.com');\n        cy.get('button[type=\"submit\"]').should('not.be.disabled');\n\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('button[type=\"submit\"]').should('be.disabled');\n        \n        // Simulate async operation\n        cy.wait(2000); // Adjust time as necessary for the async operation to complete\n        cy.get('button[type=\"submit\"]').should('not.be.disabled');\n    });\n\n    it('should not allow multiple submissions', () => {\n        cy.get('input[name=\"username\"]').type('testuser');\n        cy.get('input[name=\"email\"]').type('testuser@example.com');\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('button[type=\"submit\"]').should('be.disabled');\n\n        // Attempt to click submit again before async operation completes\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('button[type=\"submit\"]').should('still.be.disabled');\n\n        // Simulate async operation\n        cy.wait(2000); // Adjust time as necessary for the async operation to complete\n        cy.get('button[type=\"submit\"]').should('not.be.disabled');\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 315,
+  "latency_s": 4.51,
+  "timestamp": "2026-06-19T16:33:47.259019"
+}

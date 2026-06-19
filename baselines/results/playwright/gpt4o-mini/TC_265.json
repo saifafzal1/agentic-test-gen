@@ -1,0 +1,13 @@
+{
+  "id": "TC_265",
+  "category": "notifications",
+  "complexity": "complex",
+  "user_story": "As a user, I want to click a notification to navigate to the related content.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n    await page.click('text=Login'); // Assuming there's a login button\n    await page.fill('input[name=\"username\"]', 'testuser'); // Replace with actual username field\n    await page.fill('input[name=\"password\"]', 'password123'); // Replace with actual password field\n    await page.click('text=Submit'); // Assuming there's a submit button\n    await page.waitForNavigation();\n  });\n\n  test('should display notifications', async ({ page }) => {\n    const notificationsButton = page.getByRole('button', { name: /notifications/i });\n    await notificationsButton.click();\n    const notification = await page.getByText(/You have a new message/i);\n    await expect(notification).toBeVisible();\n  });\n\n  test('should navigate to related content when notification is clicked', async ({ page }) => {\n    await page.getByRole('button', { name: /notifications/i }).click();\n    const notification = await page.getByText(/You have a new message/i);\n    await notification.click();\n    await expect(page).toHaveURL(/.*related-content/i); // Adjust the URL pattern as necessary\n    const contentHeading = await page.getByRole('heading', { name: /Related Content/i });\n    await expect(contentHeading).toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 314,
+  "latency_s": 6.0,
+  "timestamp": "2026-06-19T17:02:12.652942"
+}

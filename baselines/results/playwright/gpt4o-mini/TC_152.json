@@ -1,0 +1,13 @@
+{
+  "id": "TC_152",
+  "category": "table_list",
+  "complexity": "simple",
+  "user_story": "As a user, I want to expand a row to see nested details.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Row Expansion', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/table'); // Replace with the actual URL\n  });\n\n  test('should expand a row to show nested details', async ({ page }) => {\n    const row = page.getByRole('row', { name: /row identifier/i }); // Replace with actual row identifier\n    await row.click();\n\n    const nestedDetails = page.getByRole('region', { name: /nested details/i }); // Replace with actual nested details identifier\n    await expect(nestedDetails).toBeVisible();\n  });\n\n  test('should collapse the row when clicked again', async ({ page }) => {\n    const row = page.getByRole('row', { name: /row identifier/i }); // Replace with actual row identifier\n    await row.click(); // Expand the row\n    await row.click(); // Collapse the row\n\n    const nestedDetails = page.getByRole('region', { name: /nested details/i }); // Replace with actual nested details identifier\n    await expect(nestedDetails).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 248,
+  "latency_s": 4.17,
+  "timestamp": "2026-06-19T16:53:50.193498"
+}

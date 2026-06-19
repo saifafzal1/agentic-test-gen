@@ -1,0 +1,13 @@
+{
+  "id": "TC_118",
+  "category": "async_await",
+  "complexity": "complex",
+  "user_story": "As a user, I want sequential async steps in a checkout flow to complete in order.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Checkout Flow', () => {\n    beforeEach(() => {\n        cy.visit('/checkout');\n    });\n\n    it('should complete the checkout flow in order (happy path)', () => {\n        cy.get('#cart').should('be.visible');\n        cy.get('#proceed-to-checkout').click();\n        \n        cy.url().should('include', '/checkout/details');\n        cy.get('#name').type('John Doe');\n        cy.get('#address').type('123 Main St');\n        cy.get('#payment-info').type('4111 1111 1111 1111');\n        cy.get('#confirm-order').click();\n\n        cy.url().should('include', '/checkout/confirmation');\n        cy.get('#confirmation-message').should('contain', 'Thank you for your order');\n    });\n\n    it('should show an error if payment fails (edge case)', () => {\n        cy.get('#cart').should('be.visible');\n        cy.get('#proceed-to-checkout').click();\n        \n        cy.url().should('include', '/checkout/details');\n        cy.get('#name').type('Jane Doe');\n        cy.get('#address').type('456 Elm St');\n        cy.get('#payment-info').type('1234 5678 9012 3456'); // Invalid card\n        cy.get('#confirm-order').click();\n\n        cy.url().should('include', '/checkout/details');\n        cy.get('#error-message').should('contain', 'Payment failed, please try again');\n    });\n});",
+  "prompt_tokens": 113,
+  "completion_tokens": 305,
+  "latency_s": 5.06,
+  "timestamp": "2026-06-19T16:33:09.557757"
+}

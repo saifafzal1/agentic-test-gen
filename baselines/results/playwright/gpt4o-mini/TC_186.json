@@ -1,0 +1,13 @@
+{
+  "id": "TC_186",
+  "category": "search_filter",
+  "complexity": "medium",
+  "user_story": "As a user, I want to search for products by keyword and see instant results.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Product Search Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should display search results when a valid keyword is entered', async ({ page }) => {\n    await page.getByRole('textbox', { name: /search/i }).fill('laptop');\n    await page.getByRole('button', { name: /search/i }).click();\n    \n    const results = await page.getByText(/laptop/i);\n    await expect(results).toBeVisible();\n  });\n\n  test('should display no results message for an invalid keyword', async ({ page }) => {\n    await page.getByRole('textbox', { name: /search/i }).fill('nonexistentproduct');\n    await page.getByRole('button', { name: /search/i }).click();\n    \n    const noResultsMessage = await page.getByText(/no results found/i);\n    await expect(noResultsMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 228,
+  "latency_s": 3.9,
+  "timestamp": "2026-06-19T16:56:07.949374"
+}

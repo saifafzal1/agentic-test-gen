@@ -1,0 +1,13 @@
+{
+  "id": "TC_068",
+  "category": "api_response_handling",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see the last updated timestamp for live data.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Live Data Timestamp', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/live-data');\n  });\n\n  test('should display the last updated timestamp', async ({ page }) => {\n    const timestamp = await page.getByRole('status', { name: /last updated/i });\n    await expect(timestamp).toBeVisible();\n  });\n\n  test('should update the timestamp when new data is fetched', async ({ page }) => {\n    const initialTimestamp = await page.getByRole('status', { name: /last updated/i }).innerText();\n    \n    // Simulate data fetch\n    await page.evaluate(() => {\n      // Mocking an API call that updates the timestamp\n      window.fetch = async () => {\n        return {\n          json: async () => ({ updatedAt: new Date().toISOString() }),\n        };\n      };\n    });\n\n    await page.reload();\n    \n    const updatedTimestamp = await page.getByRole('status', { name: /last updated/i }).innerText();\n    expect(updatedTimestamp).not.toEqual(initialTimestamp);\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 241,
+  "latency_s": 3.35,
+  "timestamp": "2026-06-19T16:48:06.027393"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_101",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a user, I want the app to recover gracefully after a JavaScript error.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('App Error Recovery', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Adjust the URL to your app's entry point\n    });\n\n    it('should display a user-friendly error message when a JavaScript error occurs', () => {\n        // Simulate a JavaScript error\n        cy.window().then((win) => {\n            win.onerror = () => {\n                return true; // Prevent the default error handling\n            };\n            win.dispatchEvent(new Event('error'));\n        });\n\n        // Check for the user-friendly error message\n        cy.get('.error-message') // Adjust the selector to match your app's error message element\n            .should('be.visible')\n            .and('contain', 'Something went wrong. Please try again later.');\n    });\n\n    it('should allow the user to continue using the app after an error', () => {\n        // Simulate a JavaScript error\n        cy.window().then((win) => {\n            win.onerror = () => {\n                return true; // Prevent the default error handling\n            };\n            win.dispatchEvent(new Event('error'));\n        });\n\n        // Check for the user-friendly error message\n        cy.get('.error-message') // Adjust the selector to match your app's error message element\n            .should('be.visible');\n\n        // Attempt to navigate to another page\n        cy.get('a[href=\"/another-page\"]').click(); // Adjust the selector to match your app's navigation\n\n        // Verify that the new page loads successfully\n        cy.url().should('include', '/another-page');\n        cy.get('.page-content') // Adjust the selector to match the content of the new page\n            .should('be.visible');\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 348,
+  "latency_s": 4.85,
+  "timestamp": "2026-06-19T16:31:51.059967"
+}

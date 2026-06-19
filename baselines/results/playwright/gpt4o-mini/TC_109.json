@@ -1,0 +1,13 @@
+{
+  "id": "TC_109",
+  "category": "async_await",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a spinner while an async login request is in progress.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async Login Spinner', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should display spinner during login request', async ({ page }) => {\n    await page.getByLabel('Username').fill('testuser');\n    await page.getByLabel('Password').fill('password123');\n    await page.getByRole('button', { name: 'Login' }).click();\n\n    const spinner = page.getByText('Loading...');\n    await expect(spinner).toBeVisible();\n    \n    // Simulate waiting for the async request to complete\n    await page.waitForTimeout(3000); // Adjust timeout as necessary\n\n    await expect(spinner).not.toBeVisible();\n  });\n\n  test('should not display spinner if login fails', async ({ page }) => {\n    await page.getByLabel('Username').fill('wronguser');\n    await page.getByLabel('Password').fill('wrongpassword');\n    await page.getByRole('button', { name: 'Login' }).click();\n\n    const spinner = page.getByText('Loading...');\n    await expect(spinner).toBeVisible();\n    \n    // Simulate waiting for the async request to complete\n    await page.waitForTimeout(3000); // Adjust timeout as necessary\n\n    await expect(spinner).not.toBeVisible();\n    await expect(page.getByText('Invalid credentials')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 137,
+  "completion_tokens": 308,
+  "latency_s": 3.86,
+  "timestamp": "2026-06-19T16:51:02.469294"
+}

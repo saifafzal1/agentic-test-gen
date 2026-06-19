@@ -1,0 +1,13 @@
+{
+  "id": "TC_263",
+  "category": "notifications",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a badge count on the notification bell icon.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Notification Bell Badge Count', () => {\n  beforeEach(() => {\n    cy.visit('/');\n    cy.login();\n  });\n\n  it('should display badge count on notification bell icon', () => {\n    cy.get('[data-testid=\"notification-bell\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-badge\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '3');\n  });\n\n  it('should update badge count when new notification arrives', () => {\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '3');\n    cy.triggerNotification('test-notification');\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '4');\n  });\n\n  it('should hide badge when notification count is zero', () => {\n    cy.clearAllNotifications();\n    cy.get('[data-testid=\"notification-badge\"]').should('not.exist');\n  });\n\n  it('should display correct badge count after reading notifications', () => {\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '3');\n    cy.get('[data-testid=\"notification-bell\"]').click();\n    cy.get('[data-testid=\"notification-item\"]').first().click();\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '2');\n  });\n\n  it('should handle large badge counts gracefully', () => {\n    cy.addNotifications(99);\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '99');\n    cy.addNotifications(1);\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '100');\n  });\n});",
+  "prompt_tokens": 120,
+  "completion_tokens": 441,
+  "latency_s": 3.05,
+  "timestamp": "2026-06-19T17:33:25.076254"
+}

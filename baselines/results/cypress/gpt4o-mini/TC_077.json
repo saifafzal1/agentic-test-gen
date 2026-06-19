@@ -1,0 +1,13 @@
+{
+  "id": "TC_077",
+  "category": "crud_operations",
+  "complexity": "simple",
+  "user_story": "As a user, I want to bulk-delete selected items from a list.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Bulk Delete Items from List', () => {\n    beforeEach(() => {\n        cy.visit('/items'); // Adjust the URL to the actual page where the items are listed\n    });\n\n    it('should successfully bulk delete selected items', () => {\n        // Select items to delete\n        cy.get('.item-checkbox').first().check();\n        cy.get('.item-checkbox').eq(1).check();\n        \n        // Click on the bulk delete button\n        cy.get('.bulk-delete-button').click();\n        \n        // Confirm the deletion\n        cy.get('.confirm-delete-button').click();\n        \n        // Verify items are deleted\n        cy.get('.item-list').should('not.contain', 'Item 1'); // Adjust based on actual item names\n        cy.get('.item-list').should('not.contain', 'Item 2'); // Adjust based on actual item names\n    });\n\n    it('should show an error message when no items are selected for deletion', () => {\n        // Click on the bulk delete button without selecting any items\n        cy.get('.bulk-delete-button').click();\n        \n        // Verify the error message is displayed\n        cy.get('.error-message').should('be.visible').and('contain', 'No items selected for deletion');\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 260,
+  "latency_s": 4.31,
+  "timestamp": "2026-06-19T16:30:14.145947"
+}

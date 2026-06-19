@@ -1,0 +1,13 @@
+{
+  "id": "TC_051",
+  "category": "navigation",
+  "complexity": "medium",
+  "user_story": "As a user, I want the mobile hamburger menu to open and close correctly.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Mobile Hamburger Menu', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should open the hamburger menu when clicked', () => {\n        cy.get('.hamburger-menu').click(); // Adjust selector as needed\n        cy.get('.menu').should('be.visible'); // Adjust selector as needed\n    });\n\n    it('should close the hamburger menu when clicked again', () => {\n        cy.get('.hamburger-menu').click(); // Open the menu\n        cy.get('.hamburger-menu').click(); // Close the menu\n        cy.get('.menu').should('not.be.visible'); // Adjust selector as needed\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 147,
+  "latency_s": 6.51,
+  "timestamp": "2026-06-19T16:28:23.743609"
+}

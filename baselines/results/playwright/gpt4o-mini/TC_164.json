@@ -1,0 +1,13 @@
+{
+  "id": "TC_164",
+  "category": "table_list",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see column sort direction indicated by an arrow icon.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Column Sort Direction', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/table'); // Replace with the actual URL\n  });\n\n  test('should display ascending sort direction arrow when sorted ascending', async ({ page }) => {\n    await page.getByRole('columnheader', { name: 'Column Name' }).click(); // Replace with actual column name\n    const sortArrow = await page.getByRole('columnheader', { name: 'Column Name' }).getByText('\u25b2'); // Replace with actual arrow indicator\n    await expect(sortArrow).toBeVisible();\n  });\n\n  test('should display descending sort direction arrow when sorted descending', async ({ page }) => {\n    await page.getByRole('columnheader', { name: 'Column Name' }).click(); // Replace with actual column name\n    await page.getByRole('columnheader', { name: 'Column Name' }).click(); // Click again to sort descending\n    const sortArrow = await page.getByRole('columnheader', { name: 'Column Name' }).getByText('\u25bc'); // Replace with actual arrow indicator\n    await expect(sortArrow).toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 267,
+  "latency_s": 3.57,
+  "timestamp": "2026-06-19T16:54:32.262522"
+}

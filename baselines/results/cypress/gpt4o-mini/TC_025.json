@@ -1,0 +1,13 @@
+{
+  "id": "TC_025",
+  "category": "form_validation",
+  "complexity": "complex",
+  "user_story": "As a user, I want a date picker to prevent selecting past dates for future bookings.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Date Picker Validation', () => {\n    beforeEach(() => {\n        cy.visit('/booking'); // Replace with the actual URL of the booking page\n    });\n\n    it('should allow selecting a future date', () => {\n        const futureDate = Cypress.moment().add(1, 'days').format('YYYY-MM-DD');\n        cy.get('input[type=\"date\"]').type(futureDate);\n        cy.get('form').submit();\n        cy.get('.success-message').should('be.visible').and('contain', 'Booking confirmed for ' + futureDate);\n    });\n\n    it('should prevent selecting a past date', () => {\n        const pastDate = Cypress.moment().subtract(1, 'days').format('YYYY-MM-DD');\n        cy.get('input[type=\"date\"]').type(pastDate);\n        cy.get('form').submit();\n        cy.get('.error-message').should('be.visible').and('contain', 'Please select a valid date in the future');\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 204,
+  "latency_s": 2.89,
+  "timestamp": "2026-06-19T16:26:45.488417"
+}

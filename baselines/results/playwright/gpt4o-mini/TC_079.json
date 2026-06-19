@@ -1,0 +1,13 @@
+{
+  "id": "TC_079",
+  "category": "crud_operations",
+  "complexity": "complex",
+  "user_story": "As a user, I want to restore an archived record.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Restore Archived Record', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n    await page.getByRole('button', { name: 'Archived Records' }).click();\n  });\n\n  test('should display archived records', async ({ page }) => {\n    const archivedRecord = await page.getByText('Archived Record 1');\n    await expect(archivedRecord).toBeVisible();\n  });\n\n  test('should restore an archived record', async ({ page }) => {\n    await page.getByText('Archived Record 1').click();\n    await page.getByRole('button', { name: 'Restore' }).click();\n    await page.getByRole('alert').waitFor();\n    const successMessage = await page.getByText('Record restored successfully');\n    await expect(successMessage).toBeVisible();\n    \n    await page.goto('/records');\n    const restoredRecord = await page.getByText('Archived Record 1');\n    await expect(restoredRecord).toBeVisible();\n  });\n});",
+  "prompt_tokens": 129,
+  "completion_tokens": 226,
+  "latency_s": 5.64,
+  "timestamp": "2026-06-19T16:48:56.980648"
+}

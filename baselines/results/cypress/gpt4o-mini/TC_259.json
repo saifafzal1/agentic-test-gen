@@ -1,0 +1,13 @@
+{
+  "id": "TC_259",
+  "category": "notifications",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a success toast notification after saving a record.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Success Toast Notification', () => {\n    beforeEach(() => {\n        cy.visit('/your-page-url'); // Replace with the actual URL of the page\n    });\n\n    it('should display a success toast notification after saving a record', () => {\n        cy.get('input[name=\"recordName\"]').type('Test Record'); // Replace with actual input selector\n        cy.get('button[type=\"submit\"]').click(); // Replace with actual submit button selector\n        cy.get('.toast-success') // Replace with actual success toast selector\n            .should('be.visible')\n            .and('contain', 'Record saved successfully!'); // Replace with actual success message\n    });\n\n    it('should not display a success toast notification if the save fails', () => {\n        cy.get('input[name=\"recordName\"]').type(''); // Simulate an invalid input\n        cy.get('button[type=\"submit\"]').click(); // Replace with actual submit button selector\n        cy.get('.toast-success') // Replace with actual success toast selector\n            .should('not.exist');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 218,
+  "latency_s": 2.78,
+  "timestamp": "2026-06-19T16:41:26.008797"
+}

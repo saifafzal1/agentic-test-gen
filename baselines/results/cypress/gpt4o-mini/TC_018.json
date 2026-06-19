@@ -1,0 +1,13 @@
+{
+  "id": "TC_018",
+  "category": "form_validation",
+  "complexity": "medium",
+  "user_story": "As a user, I want required fields to be highlighted if I submit an empty form.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Form Validation', () => {\n    beforeEach(() => {\n        cy.visit('/form'); // Replace with the actual URL of the form\n    });\n\n    it('should highlight required fields when the form is submitted empty', () => {\n        cy.get('form').submit();\n        cy.get('.required-field') // Replace with the actual selector for required fields\n            .should('have.class', 'highlight'); // Replace with the actual class that indicates highlighting\n    });\n\n    it('should not highlight required fields when the form is filled correctly', () => {\n        cy.get('input[name=\"requiredField1\"]').type('Valid Input'); // Replace with actual field name\n        cy.get('input[name=\"requiredField2\"]').type('Another Valid Input'); // Replace with actual field name\n        cy.get('form').submit();\n        cy.get('.required-field') // Replace with the actual selector for required fields\n            .should('not.have.class', 'highlight'); // Replace with the actual class that indicates highlighting\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 210,
+  "latency_s": 2.96,
+  "timestamp": "2026-06-19T16:26:21.463358"
+}

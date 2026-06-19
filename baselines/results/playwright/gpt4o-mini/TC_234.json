@@ -1,0 +1,13 @@
+{
+  "id": "TC_234",
+  "category": "responsive",
+  "complexity": "medium",
+  "user_story": "As a user, I want sticky footer navigation on mobile.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Sticky Footer Navigation on Mobile', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n    await page.setViewportSize({ width: 375, height: 812 }); // Mobile viewport\n  });\n\n  test('should display sticky footer navigation', async ({ page }) => {\n    const footer = page.getByRole('contentinfo');\n    await expect(footer).toBeVisible();\n    await expect(footer).toHaveCSS('position', 'fixed');\n    await expect(footer).toHaveCSS('bottom', '0px');\n  });\n\n  test('should remain visible when scrolling', async ({ page }) => {\n    await page.mouse.wheel(0, 500); // Scroll down\n    const footer = page.getByRole('contentinfo');\n    await expect(footer).toBeVisible();\n    await expect(footer).toHaveCSS('position', 'fixed');\n  });\n});",
+  "prompt_tokens": 128,
+  "completion_tokens": 215,
+  "latency_s": 3.66,
+  "timestamp": "2026-06-19T16:59:28.763244"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_091",
+  "category": "error_states",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a specific validation error for each invalid field.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Form Validation Error Messages', () => {\n    beforeEach(() => {\n        cy.visit('/form-page'); // Replace with the actual URL of the form page\n    });\n\n    it('should display a specific validation error for an empty name field', () => {\n        cy.get('input[name=\"name\"]').clear();\n        cy.get('form').submit();\n        cy.get('.error-message').should('contain', 'Name is required');\n    });\n\n    it('should display a specific validation error for an invalid email format', () => {\n        cy.get('input[name=\"email\"]').type('invalid-email');\n        cy.get('form').submit();\n        cy.get('.error-message').should('contain', 'Email is not valid');\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 151,
+  "latency_s": 2.44,
+  "timestamp": "2026-06-19T16:31:11.669849"
+}

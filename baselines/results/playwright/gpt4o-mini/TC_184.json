@@ -1,0 +1,13 @@
+{
+  "id": "TC_184",
+  "category": "file_upload",
+  "complexity": "complex",
+  "user_story": "As a user, I want to set a title and description for each uploaded file.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload with Title and Description', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload');\n  });\n\n  test('should allow user to upload a file and set title and description', async ({ page }) => {\n    await page.setInputFiles(getByLabel('File Upload'), 'path/to/file.txt');\n    await page.fill(getByLabel('Title'), 'Test File Title');\n    await page.fill(getByLabel('Description'), 'This is a test description for the uploaded file.');\n    await page.click(getByRole('button', { name: 'Submit' }));\n\n    const successMessage = await page.getByText('File uploaded successfully!');\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should display error when title is missing', async ({ page }) => {\n    await page.setInputFiles(getByLabel('File Upload'), 'path/to/file.txt');\n    await page.fill(getByLabel('Description'), 'This is a test description for the uploaded file.');\n    await page.click(getByRole('button', { name: 'Submit' }));\n\n    const errorMessage = await page.getByText('Title is required');\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 267,
+  "latency_s": 8.06,
+  "timestamp": "2026-06-19T16:55:59.988871"
+}

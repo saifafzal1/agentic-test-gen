@@ -1,0 +1,13 @@
+{
+  "id": "TC_245",
+  "category": "payment_flow",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error when I enter an invalid card number.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Payment Flow - Invalid Card Number', () => {\n  beforeEach(() => {\n    cy.visit('/payment');\n    cy.get('[data-testid=\"card-number-input\"]').should('be.visible');\n  });\n\n  it('should display error message when entering invalid card number', () => {\n    cy.get('[data-testid=\"card-number-input\"]').type('1234567890123456');\n    cy.get('[data-testid=\"submit-payment-btn\"]').click();\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid card number');\n  });\n\n  it('should display error for card number with invalid length', () => {\n    cy.get('[data-testid=\"card-number-input\"]').type('123');\n    cy.get('[data-testid=\"submit-payment-btn\"]').click();\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid card number');\n  });\n\n  it('should display error for card number with special characters', () => {\n    cy.get('[data-testid=\"card-number-input\"]').type('1234-5678-9012-34@5');\n    cy.get('[data-testid=\"submit-payment-btn\"]').click();\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid card number');\n  });\n\n  it('should clear error message when valid card number is entered', () => {\n    cy.get('[data-testid=\"card-number-input\"]').type('1234567890123456');\n    cy.get('[data-testid=\"submit-payment-btn\"]').click();\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"card-number-input\"]').clear().type('4532015112830366');\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n  });\n});",
+  "prompt_tokens": 123,
+  "completion_tokens": 547,
+  "latency_s": 3.39,
+  "timestamp": "2026-06-19T17:31:22.299599"
+}

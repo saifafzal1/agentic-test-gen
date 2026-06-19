@@ -1,0 +1,13 @@
+{
+  "id": "TC_243",
+  "category": "responsive",
+  "complexity": "medium",
+  "user_story": "As a user, I want the video player to resize proportionally on tablet viewports.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Video Player Resizing on Tablet Viewports', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n        cy.viewport('ipad-2'); // Set viewport to tablet size\n    });\n\n    it('should resize the video player proportionally on tablet viewports', () => {\n        cy.get('.video-player') // Replace with the actual selector for the video player\n            .should('be.visible')\n            .then(($videoPlayer) => {\n                const initialWidth = $videoPlayer.width();\n                const initialHeight = $videoPlayer.height();\n\n                // Simulate resizing the window\n                cy.viewport('ipad-2'); // Ensure we are in tablet mode\n                cy.wait(100); // Wait for any potential resizing animations\n\n                const newWidth = $videoPlayer.width();\n                const newHeight = $videoPlayer.height();\n\n                // Check if the aspect ratio is maintained\n                const aspectRatioBefore = initialWidth / initialHeight;\n                const aspectRatioAfter = newWidth / newHeight;\n\n                expect(aspectRatioBefore).to.equal(aspectRatioAfter);\n            });\n    });\n\n    it('should not exceed maximum width on tablet viewports', () => {\n        cy.get('.video-player') // Replace with the actual selector for the video player\n            .should('be.visible')\n            .then(($videoPlayer) => {\n                const maxWidth = 768; // Example max width for tablet viewports\n                cy.viewport('ipad-2'); // Ensure we are in tablet mode\n                cy.wait(100); // Wait for any potential resizing animations\n\n                const currentWidth = $videoPlayer.width();\n                expect(currentWidth).to.be.lessThan(maxWidth);\n            });\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 358,
+  "latency_s": 4.7,
+  "timestamp": "2026-06-19T16:40:10.726967"
+}

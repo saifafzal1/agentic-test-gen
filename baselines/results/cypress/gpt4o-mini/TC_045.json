@@ -1,0 +1,13 @@
+{
+  "id": "TC_045",
+  "category": "navigation",
+  "complexity": "medium",
+  "user_story": "As a user, I want internal links to open in the same tab.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Internal Links Navigation', () => {\n    beforeEach(() => {\n        cy.visit('https://example.com'); // Replace with the actual URL of the application\n    });\n\n    it('should open internal links in the same tab', () => {\n        cy.get('a[href*=\"/internal-page\"]').click(); // Replace with the actual internal link selector\n        cy.url().should('include', '/internal-page'); // Verify the URL has changed to the internal page\n        cy.get('h1').should('contain', 'Internal Page Title'); // Verify the content of the internal page\n    });\n\n    it('should not open external links in the same tab', () => {\n        cy.get('a[href*=\"https://external.com\"]').should('have.attr', 'target', '_blank'); // Replace with the actual external link selector\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 175,
+  "latency_s": 2.66,
+  "timestamp": "2026-06-19T16:27:58.259624"
+}

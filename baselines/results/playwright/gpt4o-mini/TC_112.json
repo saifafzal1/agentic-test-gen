@@ -1,0 +1,13 @@
+{
+  "id": "TC_112",
+  "category": "async_await",
+  "complexity": "complex",
+  "user_story": "As a user, I want an async image upload to show progress percentage.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async Image Upload Progress', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/upload');\n  });\n\n  test('should display progress percentage during image upload', async ({ page }) => {\n    const filePath = 'path/to/image.jpg';\n    const uploadInput = page.getByLabel('Upload Image');\n\n    await uploadInput.setInputFiles(filePath);\n    \n    const progressBar = page.getByRole('progressbar');\n    await expect(progressBar).toBeVisible();\n\n    const progressText = page.getByText(/uploading/i);\n    await expect(progressText).toBeVisible();\n\n    await expect(progressBar).toHaveAttribute('aria-valuenow', '100');\n  });\n\n  test('should show success message after upload completion', async ({ page }) => {\n    const filePath = 'path/to/image.jpg';\n    const uploadInput = page.getByLabel('Upload Image');\n\n    await uploadInput.setInputFiles(filePath);\n    \n    const successMessage = page.getByText(/upload successful/i);\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 244,
+  "latency_s": 3.66,
+  "timestamp": "2026-06-19T16:51:15.527061"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_056",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want to jump to a specific page using a page number input.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Pagination Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should navigate to the specified page using page number input', async ({ page }) => {\n    await page.getByLabel('Page Number').fill('3'); // Assuming there's a label for the input\n    await page.getByRole('button', { name: 'Go' }).click(); // Assuming there's a button to submit the page number\n    await expect(page.getByText('Page 3 Content')).toBeVisible(); // Replace with actual content to verify\n  });\n\n  test('should display an error message for invalid page number', async ({ page }) => {\n    await page.getByLabel('Page Number').fill('999'); // Assuming 999 is an invalid page number\n    await page.getByRole('button', { name: 'Go' }).click();\n    await expect(page.getByText('Invalid page number')).toBeVisible(); // Replace with actual error message\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 236,
+  "latency_s": 3.27,
+  "timestamp": "2026-06-19T16:47:09.369387"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_042",
+  "category": "navigation",
+  "complexity": "medium",
+  "user_story": "As a user, I want tabs within a page to update the URL hash.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Tab Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should update URL hash when the first tab is clicked', async ({ page }) => {\n    await page.getByRole('tab', { name: 'Tab 1' }).click();\n    expect(page.url()).toContain('#tab1');\n  });\n\n  test('should update URL hash when the second tab is clicked', async ({ page }) => {\n    await page.getByRole('tab', { name: 'Tab 2' }).click();\n    expect(page.url()).toContain('#tab2');\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 157,
+  "latency_s": 2.85,
+  "timestamp": "2026-06-19T16:46:20.533847"
+}

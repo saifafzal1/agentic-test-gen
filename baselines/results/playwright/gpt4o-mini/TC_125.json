@@ -1,0 +1,13 @@
+{
+  "id": "TC_125",
+  "category": "async_await",
+  "complexity": "simple",
+  "user_story": "As a user, I want async state to be preserved during browser navigation.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async State Preservation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('http://example.com');\n  });\n\n  test('should preserve async state after navigation', async ({ page }) => {\n    await page.getByRole('button', { name: 'Load Data' }).click();\n    await expect(page.getByText('Data Loaded')).toBeVisible();\n    \n    await page.getByRole('link', { name: 'Navigate to Another Page' }).click();\n    await expect(page.getByText('Another Page')).toBeVisible();\n    \n    await page.goBack();\n    await expect(page.getByText('Data Loaded')).toBeVisible();\n  });\n\n  test('should maintain state when refreshing the page', async ({ page }) => {\n    await page.getByRole('button', { name: 'Load Data' }).click();\n    await expect(page.getByText('Data Loaded')).toBeVisible();\n    \n    await page.reload();\n    await expect(page.getByText('Data Loaded')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 230,
+  "latency_s": 3.35,
+  "timestamp": "2026-06-19T16:52:11.547226"
+}

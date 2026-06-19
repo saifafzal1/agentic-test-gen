@@ -1,0 +1,13 @@
+{
+  "id": "TC_050",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want deep links to load the correct page directly.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Deep Link Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com');\n  });\n\n  test('should load the home page when navigating to the root URL', async ({ page }) => {\n    await page.goto('https://example.com/');\n    const heading = await page.getByRole('heading', { name: /welcome/i });\n    await expect(heading).toBeVisible();\n  });\n\n  test('should load the about page when navigating to the about URL', async ({ page }) => {\n    await page.goto('https://example.com/about');\n    const heading = await page.getByRole('heading', { name: /about us/i });\n    await expect(heading).toBeVisible();\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 171,
+  "latency_s": 3.05,
+  "timestamp": "2026-06-19T16:46:49.131539"
+}

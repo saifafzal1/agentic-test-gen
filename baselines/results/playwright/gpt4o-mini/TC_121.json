@@ -1,0 +1,13 @@
+{
+  "id": "TC_121",
+  "category": "async_await",
+  "complexity": "complex",
+  "user_story": "As a user, I want async PDF generation to download when ready.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async PDF Generation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/pdf-generator');\n  });\n\n  test('should initiate PDF generation and display loading message', async ({ page }) => {\n    await page.getByRole('button', { name: /generate pdf/i }).click();\n    const loadingMessage = page.getByText(/your pdf is being generated/i);\n    await expect(loadingMessage).toBeVisible();\n  });\n\n  test('should download PDF when generation is complete', async ({ page }) => {\n    await page.getByRole('button', { name: /generate pdf/i }).click();\n    const downloadPromise = page.waitForEvent('download');\n    await page.getByText(/your pdf is being generated/i);\n    const download = await downloadPromise;\n    const path = await download.path();\n    expect(path).toBeTruthy();\n    expect(path.endsWith('.pdf')).toBe(true);\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 214,
+  "latency_s": 3.15,
+  "timestamp": "2026-06-19T16:51:52.758503"
+}

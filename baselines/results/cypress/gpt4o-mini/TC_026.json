@@ -1,0 +1,13 @@
+{
+  "id": "TC_026",
+  "category": "form_validation",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see inline validation as I type in the email field.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Email Field Inline Validation', () => {\n    beforeEach(() => {\n        cy.visit('/your-form-page-url'); // Replace with the actual URL of the form page\n    });\n\n    it('should show valid message for a correctly formatted email', () => {\n        cy.get('input[name=\"email\"]') // Replace with the actual selector for the email input\n            .type('test@example.com')\n            .should('have.class', 'valid'); // Assuming 'valid' class is added for valid email\n        cy.get('.validation-message') // Replace with the actual selector for the validation message\n            .should('contain', 'Email is valid'); // Assuming this is the message displayed for valid email\n    });\n\n    it('should show error message for an incorrectly formatted email', () => {\n        cy.get('input[name=\"email\"]') // Replace with the actual selector for the email input\n            .type('invalid-email')\n            .should('have.class', 'invalid'); // Assuming 'invalid' class is added for invalid email\n        cy.get('.validation-message') // Replace with the actual selector for the validation message\n            .should('contain', 'Please enter a valid email address'); // Assuming this is the message displayed for invalid email\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 259,
+  "latency_s": 3.58,
+  "timestamp": "2026-06-19T16:26:49.376631"
+}

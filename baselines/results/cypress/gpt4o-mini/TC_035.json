@@ -1,0 +1,13 @@
+{
+  "id": "TC_035",
+  "category": "form_validation",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a progress indicator on a multi-step form.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Multi-step Form Progress Indicator', () => {\n    beforeEach(() => {\n        cy.visit('/multi-step-form');\n    });\n\n    it('should display the progress indicator on the first step', () => {\n        cy.get('.progress-indicator').should('be.visible');\n        cy.get('.progress-indicator').should('contain', 'Step 1 of 3');\n    });\n\n    it('should update the progress indicator when moving to the next step', () => {\n        cy.get('input[name=\"firstName\"]').type('John');\n        cy.get('input[name=\"lastName\"]').type('Doe');\n        cy.get('button.next-step').click();\n        \n        cy.get('.progress-indicator').should('be.visible');\n        cy.get('.progress-indicator').should('contain', 'Step 2 of 3');\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 171,
+  "latency_s": 2.32,
+  "timestamp": "2026-06-19T16:27:21.061313"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_009",
+  "category": "authentication",
+  "complexity": "medium",
+  "user_story": "As an admin, I want to lock an account after 5 failed login attempts.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Account Locking Feature', () => {\n    const adminCredentials = { username: 'admin', password: 'admin123' };\n    const userCredentials = { username: 'testuser', password: 'wrongpassword' };\n\n    beforeEach(() => {\n        cy.visit('/login');\n    });\n\n    it('should lock the account after 5 failed login attempts', () => {\n        for (let i = 0; i < 5; i++) {\n            cy.get('input[name=\"username\"]').type(userCredentials.username);\n            cy.get('input[name=\"password\"]').type(userCredentials.password);\n            cy.get('button[type=\"submit\"]').click();\n            cy.contains('Invalid username or password').should('be.visible');\n        }\n        cy.get('input[name=\"username\"]').type(userCredentials.username);\n        cy.get('input[name=\"password\"]').type(userCredentials.password);\n        cy.get('button[type=\"submit\"]').click();\n        cy.contains('Your account has been locked due to too many failed login attempts').should('be.visible');\n    });\n\n    it('should allow admin to unlock the account', () => {\n        cy.login(adminCredentials.username, adminCredentials.password);\n        cy.visit('/admin/users');\n        cy.get('input[name=\"search\"]').type(userCredentials.username);\n        cy.get('button[type=\"submit\"]').click();\n        cy.contains(userCredentials.username).parent().find('button.unlock').click();\n        cy.contains('Account unlocked successfully').should('be.visible');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 302,
+  "latency_s": 4.98,
+  "timestamp": "2026-06-19T16:25:50.613536"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_256",
+  "category": "payment_flow",
+  "complexity": "complex",
+  "user_story": "As a user, I want the checkout form to validate card expiry in MM/YY format.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Checkout Form - Card Expiry Validation', () => {\n    beforeEach(() => {\n        cy.visit('/checkout');\n    });\n\n    it('should accept a valid card expiry date in MM/YY format', () => {\n        cy.get('input[name=\"cardExpiry\"]').type('12/25');\n        cy.get('form').submit();\n        cy.get('.success-message').should('be.visible').and('contain', 'Payment processed successfully');\n    });\n\n    it('should show an error message for an invalid card expiry date', () => {\n        cy.get('input[name=\"cardExpiry\"]').type('13/25'); // Invalid month\n        cy.get('form').submit();\n        cy.get('.error-message').should('be.visible').and('contain', 'Please enter a valid expiry date in MM/YY format');\n    });\n});",
+  "prompt_tokens": 113,
+  "completion_tokens": 171,
+  "latency_s": 2.25,
+  "timestamp": "2026-06-19T16:41:03.514770"
+}

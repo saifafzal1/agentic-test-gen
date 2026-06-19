@@ -1,0 +1,13 @@
+{
+  "id": "TC_003",
+  "category": "authentication",
+  "complexity": "medium",
+  "user_story": "As a user, I want to log out securely so my session is terminated.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('User Logout Functionality', () => {\n    beforeEach(() => {\n        cy.visit('/login');\n        cy.get('input[name=\"username\"]').type('testuser');\n        cy.get('input[name=\"password\"]').type('password123');\n        cy.get('button[type=\"submit\"]').click();\n    });\n\n    it('should log out successfully and redirect to login page', () => {\n        cy.get('button#logout').click();\n        cy.url().should('include', '/login');\n        cy.get('h1').should('contain', 'Login');\n    });\n\n    it('should not allow access to protected routes after logout', () => {\n        cy.get('button#logout').click();\n        cy.visit('/dashboard');\n        cy.url().should('include', '/login');\n        cy.get('h1').should('contain', 'Login');\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 176,
+  "latency_s": 3.6,
+  "timestamp": "2026-06-19T16:25:26.375244"
+}

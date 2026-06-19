@@ -1,0 +1,13 @@
+{
+  "id": "TC_010",
+  "category": "authentication",
+  "complexity": "complex",
+  "user_story": "As a user, I want to log in using Google OAuth so I don't need a separate password.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Google OAuth Login', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-app-url.com');\n  });\n\n  test('should display the login button', async ({ page }) => {\n    const loginButton = page.getByRole('button', { name: /log in with google/i });\n    await expect(loginButton).toBeVisible();\n  });\n\n  test('should log in successfully using Google OAuth', async ({ page }) => {\n    const loginButton = page.getByRole('button', { name: /log in with google/i });\n    await loginButton.click();\n\n    // Assuming the Google login page is opened\n    await page.fill('input[type=\"email\"]', 'your-email@gmail.com');\n    await page.click('button[type=\"submit\"]');\n\n    await page.fill('input[type=\"password\"]', 'your-password');\n    await page.click('button[type=\"submit\"]');\n\n    // Redirect back to the app\n    await expect(page).toHaveURL('https://your-app-url.com/dashboard');\n    const welcomeMessage = page.getByText(/welcome back/i);\n    await expect(welcomeMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 257,
+  "latency_s": 4.23,
+  "timestamp": "2026-06-19T16:44:02.469585"
+}

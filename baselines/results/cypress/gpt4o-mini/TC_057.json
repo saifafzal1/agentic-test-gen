@@ -1,0 +1,13 @@
+{
+  "id": "TC_057",
+  "category": "api_response_handling",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see a loading skeleton while API data is fetching.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Loading Skeleton Display', () => {\n  beforeEach(() => {\n    cy.visit('/'); // Adjust the URL to your application's entry point\n  });\n\n  it('should display loading skeleton while fetching data', () => {\n    cy.intercept('GET', '/api/data', { delay: 2000, fixture: 'data.json' }).as('fetchData');\n    cy.get('.data-container').should('not.exist'); // Ensure data is not displayed initially\n    cy.wait('@fetchData');\n    cy.get('.loading-skeleton').should('be.visible'); // Check if loading skeleton is visible\n    cy.wait('@fetchData').then(() => {\n      cy.get('.loading-skeleton').should('not.exist'); // Check if loading skeleton is removed\n      cy.get('.data-container').should('be.visible'); // Verify that data is displayed\n    });\n  });\n\n  it('should handle API failure gracefully', () => {\n    cy.intercept('GET', '/api/data', { statusCode: 500 }).as('fetchDataFail');\n    cy.get('.data-container').should('not.exist'); // Ensure data is not displayed initially\n    cy.wait('@fetchDataFail');\n    cy.get('.loading-skeleton').should('not.exist'); // Ensure loading skeleton is removed\n    cy.get('.error-message').should('be.visible'); // Verify that error message is displayed\n  });\n});",
+  "prompt_tokens": 113,
+  "completion_tokens": 286,
+  "latency_s": 3.81,
+  "timestamp": "2026-06-19T16:28:49.288008"
+}

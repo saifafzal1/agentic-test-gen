@@ -1,0 +1,13 @@
+{
+  "id": "TC_002",
+  "category": "authentication",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error message when I enter an incorrect password.",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "```typescript\nimport { test, expect } from '@playwright/test';\n\ntest.describe('Authentication - Incorrect Password Error', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('http://localhost:3000/login');\n  });\n\n  test('should display error message when entering incorrect password', async ({ page }) => {\n    // Fill in email field\n    await page.getByLabel('Email').fill('user@example.com');\n    \n    // Fill in password field with incorrect password\n    await page.getByLabel('Password').fill('wrongpassword123');\n    \n    // Click login button\n    await page.getByRole('button', { name: /login/i }).click();\n    \n    // Verify error message is displayed\n    const errorMessage = page.getByText(/incorrect password|invalid credentials|authentication failed/i);\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should display error message with specific text for wrong password', async ({ page }) => {\n    // Fill in credentials\n    await page.getByLabel('Email').fill('testuser@example.com');\n    await page.getByLabel('Password').fill('incorrectpass');\n    \n    // Submit login form\n    await page.getByRole('button', { name: /sign in|login/i }).click();\n    \n    // Verify specific error message appears\n    const errorAlert = page.getByRole('alert');\n    await expect(errorAlert).toContainText(/password|credentials/i);\n  });\n\n  test('should clear error message when user modifies password field', async ({ page }) => {\n    // Enter incorrect credentials\n    await page.getByLabel('Email').fill('user@example.com');\n    await page.getByLabel('Password').fill('wrongpass');\n    \n    // Submit form\n    await page.getByRole('button', { name: /login/i }).click();\n    \n    // Wait for error message to appear\n    const errorMessage = page.getByText(/incorrect password|invalid credentials|authentication failed/i);\n    await expect(errorMessage).toBeVisible();\n    \n    // Modify password field\n    await page.getByLabel('Password').fill('newpassword');\n    \n    // Error message should disappear\n    await expect(errorMessage).not.toBeVisible();\n  });\n});\n```",
+  "prompt_tokens": 144,
+  "completion_tokens": 556,
+  "latency_s": 3.65,
+  "timestamp": "2026-06-19T17:36:40.377852"
+}

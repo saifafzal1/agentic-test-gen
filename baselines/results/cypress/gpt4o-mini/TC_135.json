@@ -1,0 +1,13 @@
+{
+  "id": "TC_135",
+  "category": "modal_dialog",
+  "complexity": "medium",
+  "user_story": "As a user, I want a drawer/slide-in panel to open from the right.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Drawer/Slide-in Panel', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should open the drawer panel when the button is clicked', () => {\n        cy.get('.open-drawer-button').click(); // Replace with the actual selector for the button\n        cy.get('.drawer-panel').should('be.visible'); // Replace with the actual selector for the drawer panel\n    });\n\n    it('should not display the drawer panel when it is not opened', () => {\n        cy.get('.drawer-panel').should('not.be.visible'); // Replace with the actual selector for the drawer panel\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 142,
+  "latency_s": 2.84,
+  "timestamp": "2026-06-19T16:34:14.667360"
+}

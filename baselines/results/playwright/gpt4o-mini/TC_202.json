@@ -1,0 +1,13 @@
+{
+  "id": "TC_202",
+  "category": "search_filter",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see highlighted search terms in the result snippets.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Result Highlighting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should highlight search terms in result snippets', async ({ page }) => {\n    await page.fill('input[name=\"search\"]', 'Playwright');\n    await page.click('button[type=\"submit\"]');\n\n    const resultSnippet = await page.getByText(/Playwright/i);\n    await expect(resultSnippet).toBeVisible();\n    await expect(resultSnippet).toHaveCSS('background-color', 'yellow'); // Assuming highlighted terms have a yellow background\n  });\n\n  test('should not highlight unrelated terms in result snippets', async ({ page }) => {\n    await page.fill('input[name=\"search\"]', 'Playwright');\n    await page.click('button[type=\"submit\"]');\n\n    const unrelatedSnippet = await page.getByText(/Selenium/i);\n    await expect(unrelatedSnippet).toBeVisible();\n    await expect(unrelatedSnippet).not.toHaveCSS('background-color', 'yellow');\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 238,
+  "latency_s": 4.35,
+  "timestamp": "2026-06-19T16:57:09.073751"
+}

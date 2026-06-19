@@ -1,0 +1,13 @@
+{
+  "id": "TC_162",
+  "category": "table_list",
+  "complexity": "medium",
+  "user_story": "As a user, I want a virtual scroll list to handle 10,000 rows without lag.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Virtual Scroll List Performance', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-application-url.com');\n  });\n\n  test('should render the virtual scroll list without lag', async ({ page }) => {\n    const list = page.getByRole('list', { name: 'Virtual Scroll List' });\n    await expect(list).toBeVisible();\n\n    const initialRowCount = await list.locator('li').count();\n    expect(initialRowCount).toBeLessThanOrEqual(100); // Assuming initial load shows 100 rows\n\n    await page.mouse.wheel(0, 1000); // Scroll down\n    await page.waitForTimeout(1000); // Wait for loading new rows\n\n    const newRowCount = await list.locator('li').count();\n    expect(newRowCount).toBeGreaterThan(initialRowCount);\n  });\n\n  test('should handle scrolling to the bottom without performance issues', async ({ page }) => {\n    const list = page.getByRole('list', { name: 'Virtual Scroll List' });\n    await expect(list).toBeVisible();\n\n    await page.mouse.wheel(0, 10000); // Scroll to the bottom\n    await page.waitForTimeout(1000); // Wait for loading new rows\n\n    const finalRowCount = await list.locator('li').count();\n    expect(finalRowCount).toBe(10000); // Assuming all rows are loaded\n  });\n});",
+  "prompt_tokens": 137,
+  "completion_tokens": 320,
+  "latency_s": 5.7,
+  "timestamp": "2026-06-19T16:54:28.385611"
+}

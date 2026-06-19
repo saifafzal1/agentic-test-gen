@@ -1,0 +1,13 @@
+{
+  "id": "TC_230",
+  "category": "responsive",
+  "complexity": "simple",
+  "user_story": "As a user, I want the font size to be readable on a small screen without zooming.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Responsive Font Size Test', () => {\n    beforeEach(() => {\n        cy.visit('https://example.com'); // Replace with the actual URL of the application\n        cy.viewport('iphone-6'); // Simulate a small screen\n    });\n\n    it('should display readable font size on small screens', () => {\n        cy.get('body').should('have.css', 'font-size').and('match', /16px/); // Adjust expected font size as necessary\n    });\n\n    it('should not require zooming to read the text', () => {\n        cy.get('body').then(($body) => {\n            const fontSize = parseFloat($body.css('font-size'));\n            expect(fontSize).to.be.greaterThan(12); // Ensure font size is greater than a minimum readable size\n        });\n    });\n});",
+  "prompt_tokens": 113,
+  "completion_tokens": 173,
+  "latency_s": 2.78,
+  "timestamp": "2026-06-19T16:39:26.725080"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_245",
+  "category": "payment_flow",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error when I enter an invalid card number.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Payment Flow - Invalid Card Number', () => {\n    beforeEach(() => {\n        cy.visit('/payment'); // Adjust the URL to your payment page\n    });\n\n    it('should display an error message for an invalid card number', () => {\n        cy.get('input[name=\"cardNumber\"]').type('1234 5678 9012 3456'); // Example of an invalid card number\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.error-message').should('be.visible').and('contain', 'Invalid card number');\n    });\n\n    it('should not display an error message for a valid card number', () => {\n        cy.get('input[name=\"cardNumber\"]').type('4111 1111 1111 1111'); // Example of a valid card number\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.error-message').should('not.exist');\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 194,
+  "latency_s": 2.7,
+  "timestamp": "2026-06-19T16:40:17.237568"
+}

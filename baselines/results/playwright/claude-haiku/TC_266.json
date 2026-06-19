@@ -1,0 +1,13 @@
+{
+  "id": "TC_266",
+  "category": "notifications",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an empty state when I have no notifications.",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "```typescript\nimport { test, expect } from '@playwright/test';\n\ntest.describe('Notifications Empty State', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should display empty state message when user has no notifications', async ({ page }) => {\n    const emptyStateMessage = page.getByText(/no notifications/i);\n    await expect(emptyStateMessage).toBeVisible();\n  });\n\n  test('should display empty state icon when notifications list is empty', async ({ page }) => {\n    const emptyStateIcon = page.getByRole('img', { name: /empty notifications/i });\n    await expect(emptyStateIcon).toBeVisible();\n  });\n\n  test('should display helpful text in empty state', async ({ page }) => {\n    const helpfulText = page.getByText(/you're all caught up/i);\n    await expect(helpfulText).toBeVisible();\n  });\n\n  test('should not display notification list when empty', async ({ page }) => {\n    const notificationList = page.getByRole('list', { name: /notifications/i });\n    await expect(notificationList).not.toBeVisible();\n  });\n});\n```",
+  "prompt_tokens": 143,
+  "completion_tokens": 296,
+  "latency_s": 2.41,
+  "timestamp": "2026-06-19T18:11:26.124800"
+}

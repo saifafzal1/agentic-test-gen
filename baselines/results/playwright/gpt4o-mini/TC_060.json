@@ -1,0 +1,13 @@
+{
+  "id": "TC_060",
+  "category": "api_response_handling",
+  "complexity": "medium",
+  "user_story": "As a user, I want a retry button when a network request times out.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Network Request Timeout Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('http://localhost:3000'); // Replace with your app's URL\n  });\n\n  test('should display retry button when network request times out', async ({ page }) => {\n    // Simulate a network timeout\n    await page.route('**/api/data', route => route.abort('timeout'));\n    await page.click(getByText('Fetch Data')); // Assuming there's a button to fetch data\n    const retryButton = await page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n  });\n\n  test('should retry the request when retry button is clicked', async ({ page }) => {\n    // Mock the API response after the retry button is clicked\n    await page.route('**/api/data', route => route.fulfill({ status: 200, body: JSON.stringify({ success: true }) }));\n    await page.click(getByText('Fetch Data')); // Trigger the timeout\n    await page.click(getByRole('button', { name: /retry/i })); // Click the retry button\n    const successMessage = await page.getByText('Data fetched successfully'); // Assuming a success message appears\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 290,
+  "latency_s": 4.18,
+  "timestamp": "2026-06-19T16:47:26.822786"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_045",
+  "category": "navigation",
+  "complexity": "medium",
+  "user_story": "As a user, I want internal links to open in the same tab.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Internal Links Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com');\n  });\n\n  test('should open internal link in the same tab', async ({ page }) => {\n    await page.getByText('About Us').click();\n    expect(page.url()).toBe('https://example.com/about');\n  });\n\n  test('should open another internal link in the same tab', async ({ page }) => {\n    await page.getByText('Contact').click();\n    expect(page.url()).toBe('https://example.com/contact');\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 137,
+  "latency_s": 1.89,
+  "timestamp": "2026-06-19T16:46:29.769297"
+}

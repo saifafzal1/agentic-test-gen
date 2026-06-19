@@ -1,0 +1,13 @@
+{
+  "id": "TC_189",
+  "category": "search_filter",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see the number of results for each filter option.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Search Filter Results Count', () => {\n    beforeEach(() => {\n        cy.visit('/search'); // Replace with the actual URL of the search page\n    });\n\n    it('should display the correct number of results for each filter option', () => {\n        cy.get('.filter-option').each(($filter) => {\n            const filterText = $filter.text();\n            cy.wrap($filter).click();\n            cy.get('.results-count').should('contain', `Results for ${filterText}:`);\n            cy.get('.results').should('have.length.greaterThan', 0);\n            cy.wrap($filter).click(); // Click again to reset the filter\n        });\n    });\n\n    it('should handle no results for a filter option gracefully', () => {\n        cy.get('.filter-option').contains('No Results Filter').click(); // Replace with an actual filter that yields no results\n        cy.get('.results-count').should('contain', 'Results for No Results Filter: 0');\n        cy.get('.results').should('have.length', 0);\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 219,
+  "latency_s": 3.15,
+  "timestamp": "2026-06-19T16:37:07.813322"
+}

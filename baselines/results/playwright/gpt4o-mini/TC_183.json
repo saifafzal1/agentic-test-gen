@@ -1,0 +1,13 @@
+{
+  "id": "TC_183",
+  "category": "file_upload",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see a virus scan status for uploaded files.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload and Virus Scan Status', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/upload');\n  });\n\n  test('should upload a file and display virus scan status', async ({ page }) => {\n    const filePath = 'path/to/your/file.txt';\n    await page.getByLabel('Upload File').setInputFiles(filePath);\n    await page.getByRole('button', { name: 'Submit' }).click();\n\n    const statusMessage = await page.getByText('Virus scan in progress...');\n    await expect(statusMessage).toBeVisible();\n  });\n\n  test('should show virus scan result after upload', async ({ page }) => {\n    const filePath = 'path/to/your/file.txt';\n    await page.getByLabel('Upload File').setInputFiles(filePath);\n    await page.getByRole('button', { name: 'Submit' }).click();\n\n    await page.waitForSelector('.scan-result'); // Assuming there's a class for the scan result\n    const scanResult = await page.getByText('No threats found');\n    await expect(scanResult).toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 254,
+  "latency_s": 3.8,
+  "timestamp": "2026-06-19T16:55:51.627923"
+}

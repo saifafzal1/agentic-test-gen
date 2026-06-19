@@ -1,0 +1,13 @@
+{
+  "id": "TC_152",
+  "category": "table_list",
+  "complexity": "simple",
+  "user_story": "As a user, I want to expand a row to see nested details.",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "```typescript\nimport { test, expect } from '@playwright/test';\n\ntest.describe('Table Row Expansion', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('data:text/html,<html><body><table><tr><td>Item 1</td><td><button>Expand</button></td></tr><tr class=\"details\" style=\"display:none\"><td colspan=\"2\">Nested details for Item 1</td></tr><tr><td>Item 2</td><td><button>Expand</button></td></tr><tr class=\"details\" style=\"display:none\"><td colspan=\"2\">Nested details for Item 2</td></tr></table></body></html>');\n  });\n\n  test('should expand a row to reveal nested details', async ({ page }) => {\n    const expandButtons = page.getByRole('button', { name: 'Expand' });\n    const firstButton = expandButtons.first();\n    \n    await firstButton.click();\n    \n    const detailsRow = page.locator('tr.details').first();\n    await expect(detailsRow).toBeVisible();\n  });\n\n  test('should display correct nested details when expanding different rows', async ({ page }) => {\n    const expandButtons = page.getByRole('button', { name: 'Expand' });\n    \n    await expandButtons.nth(1).click();\n    \n    const detailsRows = page.locator('tr.details');\n    const secondDetailsRow = detailsRows.nth(1);\n    \n    await expect(secondDetailsRow).toBeVisible();\n    await expect(secondDetailsRow).toContainText('Nested details for Item 2');\n  });\n\n  test('should collapse row when clicking expand button again', async ({ page }) => {\n    const expandButtons = page.getByRole('button', { name: 'Expand' });\n    const firstButton = expandButtons.first();\n    \n    await firstButton.click();\n    const detailsRow = page.locator('tr.details').first();\n    await expect(detailsRow).toBeVisible();\n    \n    await firstButton.click();\n    await expect(detailsRow).not.toBeVisible();\n  });\n});\n```",
+  "prompt_tokens": 143,
+  "completion_tokens": 540,
+  "latency_s": 3.6,
+  "timestamp": "2026-06-19T17:56:43.118004"
+}

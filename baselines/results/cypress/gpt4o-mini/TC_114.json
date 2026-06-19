@@ -1,0 +1,13 @@
+{
+  "id": "TC_114",
+  "category": "async_await",
+  "complexity": "medium",
+  "user_story": "As a user, I want lazy-loaded components to appear smoothly without layout shift.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Lazy-loaded components', () => {\n    beforeEach(() => {\n        cy.visit('/your-page-url'); // Replace with the actual URL of the page\n    });\n\n    it('should display lazy-loaded components smoothly without layout shift', () => {\n        cy.get('.lazy-load-trigger').scrollIntoView(); // Trigger lazy loading\n        cy.get('.lazy-loaded-component').should('be.visible').and('have.class', 'fade-in'); // Check visibility and animation class\n        cy.get('.layout-element').should('have.css', 'transition', 'all 0.3s ease'); // Ensure layout transition\n    });\n\n    it('should not cause layout shift when lazy-loaded component appears', () => {\n        cy.get('.layout-element').then(($el) => {\n            const initialHeight = $el.outerHeight(); // Get initial height\n            cy.get('.lazy-load-trigger').scrollIntoView(); // Trigger lazy loading\n            cy.get('.lazy-loaded-component').should('be.visible'); // Ensure component is visible\n            cy.get('.layout-element').should(($el) => {\n                const newHeight = $el.outerHeight(); // Get new height\n                expect(newHeight).to.eq(initialHeight); // Check that height remains the same\n            });\n        });\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 262,
+  "latency_s": 3.12,
+  "timestamp": "2026-06-19T16:32:49.884631"
+}

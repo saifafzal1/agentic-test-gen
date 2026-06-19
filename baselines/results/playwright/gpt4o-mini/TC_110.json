@@ -1,0 +1,13 @@
+{
+  "id": "TC_110",
+  "category": "async_await",
+  "complexity": "simple",
+  "user_story": "As a user, I want async data fetching to not block the initial page render.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async Data Fetching', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('http://localhost:3000'); // Replace with your app's URL\n  });\n\n  test('should render the initial page without blocking', async ({ page }) => {\n    const initialContent = await page.getByText('Initial Content'); // Replace with actual initial content\n    await expect(initialContent).toBeVisible();\n  });\n\n  test('should fetch data asynchronously and display it', async ({ page }) => {\n    await page.waitForTimeout(1000); // Wait for async data fetching to complete\n    const asyncContent = await page.getByText('Async Fetched Content'); // Replace with actual async content\n    await expect(asyncContent).toBeVisible();\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 177,
+  "latency_s": 3.22,
+  "timestamp": "2026-06-19T16:51:05.993297"
+}

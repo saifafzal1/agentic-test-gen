@@ -1,0 +1,13 @@
+{
+  "id": "TC_200",
+  "category": "search_filter",
+  "complexity": "simple",
+  "user_story": "As a user, I want to remove individual filter tags by clicking an x icon.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Filter Tag Removal', () => {\n    beforeEach(() => {\n        cy.visit('/search'); // Adjust the URL to your application's search page\n    });\n\n    it('should remove a filter tag when the x icon is clicked', () => {\n        // Assuming a filter tag with the text 'Example Tag' exists\n        cy.get('.filter-tag').contains('Example Tag').should('exist');\n        cy.get('.filter-tag').contains('Example Tag').find('.remove-icon').click();\n        cy.get('.filter-tag').contains('Example Tag').should('not.exist');\n    });\n\n    it('should not remove any filter tags if the x icon is clicked on a non-existing tag', () => {\n        // Click the x icon on a tag that does not exist\n        cy.get('.filter-tag').contains('Non-Existing Tag').find('.remove-icon').click();\n        cy.get('.filter-tag').should('have.length.greaterThan', 0); // Ensure at least one tag still exists\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 209,
+  "latency_s": 2.67,
+  "timestamp": "2026-06-19T16:37:41.923564"
+}

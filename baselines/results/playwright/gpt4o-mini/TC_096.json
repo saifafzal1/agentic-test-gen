@@ -1,0 +1,13 @@
+{
+  "id": "TC_096",
+  "category": "error_states",
+  "complexity": "medium",
+  "user_story": "As a user, I want an error message if a coupon code is invalid.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Coupon Code Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should display error message for invalid coupon code', async ({ page }) => {\n    await page.fill(getByLabel('Coupon Code'), 'INVALIDCODE');\n    await page.click(getByRole('button', { name: 'Apply' }));\n    const errorMessage = await page.getByText('The coupon code you entered is invalid.');\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should not display error message for valid coupon code', async ({ page }) => {\n    await page.fill(getByLabel('Coupon Code'), 'VALIDCODE');\n    await page.click(getByRole('button', { name: 'Apply' }));\n    const errorMessage = await page.getByText('The coupon code you entered is invalid.');\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 206,
+  "latency_s": 3.3,
+  "timestamp": "2026-06-19T16:50:05.869386"
+}

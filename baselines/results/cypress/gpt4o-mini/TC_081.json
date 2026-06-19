@@ -1,0 +1,13 @@
+{
+  "id": "TC_081",
+  "category": "crud_operations",
+  "complexity": "medium",
+  "user_story": "As a user, I want inline editing on a table row without opening a modal.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Inline Editing on Table Row', () => {\n    beforeEach(() => {\n        cy.visit('/your-table-page-url'); // Replace with your actual URL\n    });\n\n    it('should allow inline editing of a table row', () => {\n        cy.get('table tbody tr').first().find('td').first().dblclick(); // Double-click to edit\n        cy.get('input').clear().type('New Value'); // Assuming the input appears for editing\n        cy.get('input').blur(); // Trigger save on blur\n        cy.get('table tbody tr').first().find('td').first().should('contain', 'New Value'); // Verify the new value\n    });\n\n    it('should not save changes if input is empty', () => {\n        cy.get('table tbody tr').first().find('td').first().dblclick(); // Double-click to edit\n        cy.get('input').clear(); // Clear the input\n        cy.get('input').blur(); // Trigger save on blur\n        cy.get('table tbody tr').first().find('td').first().should('not.contain', ''); // Verify the cell is not empty\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 244,
+  "latency_s": 3.46,
+  "timestamp": "2026-06-19T16:30:32.160932"
+}

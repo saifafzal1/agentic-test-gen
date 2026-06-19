@@ -1,0 +1,13 @@
+{
+  "id": "TC_144",
+  "category": "modal_dialog",
+  "complexity": "medium",
+  "user_story": "As a user, I want a modal with tabbed content to remember the active tab.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Modal with Tabbed Content', () => {\n    beforeEach(() => {\n        cy.visit('/your-page-url'); // Replace with the actual URL\n        cy.get('.open-modal-button').click(); // Adjust selector to open the modal\n    });\n\n    it('should remember the active tab after closing and reopening the modal', () => {\n        cy.get('.tab-button').contains('Tab 1').click();\n        cy.get('.tab-content').should('contain', 'Content for Tab 1');\n        \n        cy.get('.close-modal-button').click(); // Adjust selector to close the modal\n        cy.get('.open-modal-button').click(); // Reopen the modal\n        \n        cy.get('.tab-button.active').should('contain', 'Tab 1');\n        cy.get('.tab-content').should('contain', 'Content for Tab 1');\n    });\n\n    it('should switch to the correct tab when clicked', () => {\n        cy.get('.tab-button').contains('Tab 2').click();\n        cy.get('.tab-content').should('contain', 'Content for Tab 2');\n        \n        cy.get('.tab-button').contains('Tab 1').click();\n        cy.get('.tab-content').should('contain', 'Content for Tab 1');\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 260,
+  "latency_s": 3.55,
+  "timestamp": "2026-06-19T16:34:42.976057"
+}

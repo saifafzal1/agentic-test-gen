@@ -1,0 +1,13 @@
+{
+  "id": "TC_200",
+  "category": "search_filter",
+  "complexity": "simple",
+  "user_story": "As a user, I want to remove individual filter tags by clicking an x icon.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Filter Tag Removal', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search'); // Replace with the actual URL of the search page\n  });\n\n  test('should display filter tags', async ({ page }) => {\n    const filterTag = await page.getByText('Sample Filter Tag'); // Replace with actual filter tag text\n    await expect(filterTag).toBeVisible();\n  });\n\n  test('should remove filter tag when x icon is clicked', async ({ page }) => {\n    const filterTag = await page.getByText('Sample Filter Tag'); // Replace with actual filter tag text\n    const removeIcon = filterTag.locator('xpath=./following-sibling::button[@aria-label=\"Remove\"]'); // Adjust the selector based on your HTML structure\n\n    await expect(filterTag).toBeVisible();\n    await removeIcon.click();\n    await expect(filterTag).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 208,
+  "latency_s": 2.87,
+  "timestamp": "2026-06-19T16:57:00.380780"
+}

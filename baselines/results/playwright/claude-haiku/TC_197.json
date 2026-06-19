@@ -1,0 +1,13 @@
+{
+  "id": "TC_197",
+  "category": "search_filter",
+  "complexity": "simple",
+  "user_story": "As a user, I want the search input to be focused when I press '/' on the keyboard.",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "```typescript\nimport { test, expect } from '@playwright/test';\n\ntest.describe('Search Input Focus on Slash Key', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should focus search input when \"/\" key is pressed', async ({ page }) => {\n    const searchInput = page.getByRole('searchbox');\n    \n    // Verify search input exists but is not focused initially\n    await expect(searchInput).toBeVisible();\n    \n    // Press the \"/\" key\n    await page.keyboard.press('/');\n    \n    // Verify the search input is now focused\n    await expect(searchInput).toBeFocused();\n  });\n\n  test('should allow typing in search input after \"/\" key focuses it', async ({ page }) => {\n    const searchInput = page.getByRole('searchbox');\n    \n    // Press \"/\" to focus the search input\n    await page.keyboard.press('/');\n    \n    // Verify input is focused\n    await expect(searchInput).toBeFocused();\n    \n    // Type in the search input\n    await page.keyboard.type('test query');\n    \n    // Verify the text was entered\n    await expect(searchInput).toHaveValue('test query');\n  });\n\n  test('should not interfere with \"/\" character in other contexts', async ({ page }) => {\n    const searchInput = page.getByRole('searchbox');\n    \n    // Click on the search input to focus it manually\n    await searchInput.click();\n    \n    // Type \"/\" character directly\n    await page.keyboard.type('/');\n    \n    // Verify \"/\" was typed in the input\n    await expect(searchInput).toHaveValue('/');\n  });\n\n  test('should maintain focus on search input after \"/\" key press', async ({ page }) => {\n    const searchInput = page.getByRole('searchbox');\n    \n    // Press \"/\" to focus\n    await page.keyboard.press('/');\n    \n    // Verify focus\n    await expect(searchInput).toBeFocused();\n    \n    // Press \"/\" again while focused\n    await page.keyboard.press('/');\n    \n    // Verify it remains focused\n    await expect(searchInput).toBeFocused();\n  });\n});\n```",
+  "prompt_tokens": 149,
+  "completion_tokens": 537,
+  "latency_s": 3.73,
+  "timestamp": "2026-06-19T18:02:06.999749"
+}

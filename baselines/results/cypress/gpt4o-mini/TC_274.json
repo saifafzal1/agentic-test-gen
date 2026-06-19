@@ -1,0 +1,13 @@
+{
+  "id": "TC_274",
+  "category": "notifications",
+  "complexity": "complex",
+  "user_story": "As a user, I want to delete a single notification from my notification list.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Notification Deletion', () => {\n    beforeEach(() => {\n        cy.visit('/notifications');\n        cy.login(); // Assuming there's a custom command for login\n    });\n\n    it('should delete a notification successfully', () => {\n        cy.get('.notification-item').first().as('firstNotification');\n        cy.get('@firstNotification').find('.delete-button').click();\n        cy.get('.confirmation-dialog .confirm-button').click();\n        \n        cy.get('@firstNotification').should('not.exist');\n        cy.get('.notification-list').should('contain', 'Notification deleted successfully');\n    });\n\n    it('should not delete a notification if cancellation is chosen', () => {\n        cy.get('.notification-item').first().as('firstNotification');\n        cy.get('@firstNotification').find('.delete-button').click();\n        cy.get('.confirmation-dialog .cancel-button').click();\n        \n        cy.get('@firstNotification').should('exist');\n        cy.get('.notification-list').should('not.contain', 'Notification deleted successfully');\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 208,
+  "latency_s": 3.21,
+  "timestamp": "2026-06-19T16:42:20.032250"
+}

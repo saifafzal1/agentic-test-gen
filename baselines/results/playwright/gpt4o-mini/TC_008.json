@@ -1,0 +1,13 @@
+{
+  "id": "TC_008",
+  "category": "authentication",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a loading spinner while my login request is processing.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Loading Spinner', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should display loading spinner during login request', async ({ page }) => {\n    await page.getByLabel('Username').fill('testuser');\n    await page.getByLabel('Password').fill('password123');\n    await page.getByRole('button', { name: 'Login' }).click();\n\n    const spinner = page.getByText('Loading...'); // Assuming 'Loading...' is the text of the spinner\n    await expect(spinner).toBeVisible();\n  });\n\n  test('should hide loading spinner after login request completes', async ({ page }) => {\n    await page.getByLabel('Username').fill('testuser');\n    await page.getByLabel('Password').fill('password123');\n    await page.getByRole('button', { name: 'Login' }).click();\n\n    const spinner = page.getByText('Loading...');\n    await expect(spinner).toBeVisible();\n\n    // Simulate waiting for the login request to complete\n    await page.waitForTimeout(2000); // Adjust timeout as necessary\n\n    await expect(spinner).toBeHidden();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 266,
+  "latency_s": 3.87,
+  "timestamp": "2026-06-19T16:43:50.857116"
+}

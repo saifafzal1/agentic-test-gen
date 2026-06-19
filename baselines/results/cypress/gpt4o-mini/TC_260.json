@@ -1,0 +1,13 @@
+{
+  "id": "TC_260",
+  "category": "notifications",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error toast notification when an action fails.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Error Toast Notification', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should display an error toast notification on action failure', () => {\n        // Simulate an action that fails\n        cy.get('button#trigger-failure').click(); // Replace with the actual button selector\n        cy.get('.toast-error') // Replace with the actual selector for the error toast\n            .should('be.visible')\n            .and('contain', 'An error occurred. Please try again.'); // Replace with the actual error message\n    });\n\n    it('should not display an error toast notification when action succeeds', () => {\n        // Simulate a successful action\n        cy.get('button#trigger-success').click(); // Replace with the actual button selector\n        cy.get('.toast-error') // Replace with the actual selector for the error toast\n            .should('not.exist');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 200,
+  "latency_s": 2.65,
+  "timestamp": "2026-06-19T16:41:28.967876"
+}

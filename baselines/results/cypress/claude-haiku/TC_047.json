@@ -1,0 +1,13 @@
+{
+  "id": "TC_047",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want a skip-to-content link for accessibility.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Skip-to-content link accessibility', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should display skip-to-content link at the top of the page', () => {\n    cy.get('a[href=\"#main-content\"]')\n      .should('exist')\n      .should('be.visible');\n  });\n\n  it('should have proper accessibility attributes', () => {\n    cy.get('a[href=\"#main-content\"]')\n      .should('have.attr', 'class')\n      .and('include', 'skip-link');\n    \n    cy.get('a[href=\"#main-content\"]')\n      .should('have.text', 'Skip to main content');\n  });\n\n  it('should focus on skip-to-content link when tabbing from the start', () => {\n    cy.get('body').tab();\n    cy.focused().should('have.attr', 'href', '#main-content');\n  });\n\n  it('should navigate to main content when skip link is clicked', () => {\n    cy.get('a[href=\"#main-content\"]').click();\n    cy.get('#main-content').should('have.focus');\n  });\n\n  it('should be keyboard accessible and properly positioned', () => {\n    cy.get('a[href=\"#main-content\"]')\n      .should('have.css', 'position')\n      .and('match', /absolute|fixed|relative/);\n    \n    cy.get('a[href=\"#main-content\"]')\n      .invoke('attr', 'tabindex')\n      .then((tabindex) => {\n        expect(tabindex).to.be.oneOf([null, '0', '1']);\n      });\n  });\n\n  it('should handle multiple skip links if present', () => {\n    cy.get('a[href*=\"#main\"]').each(($link) => {\n      cy.wrap($link)\n        .should('have.attr', 'href')\n        .and('match', /^#/);\n    });\n  });\n\n  it('should not be visible to mouse users but accessible to keyboard users', () => {\n    cy.get('a[href=\"#main-content\"]')\n      .should('have.css', 'clip')\n      .or('have.css', 'clip-path')\n      .or('have.css', 'position', 'absolute');\n  });\n\n  it('should have sufficient color contrast for accessibility', () => {\n    cy.get('a[href=\"#main-content\"]')\n      .should('have.css', 'color')\n      .and('not.equal', 'rgba(0, 0, 0, 0)');\n  });\n\n  it('should target a valid main content element', () => {\n    cy.get('#main-content')\n      .should('exist')\n      .should('have.attr', 'role', 'main')\n      .or('have.tag', 'main');\n  });\n});",
+  "prompt_tokens": 119,
+  "completion_tokens": 712,
+  "latency_s": 4.8,
+  "timestamp": "2026-06-19T17:09:41.365044"
+}

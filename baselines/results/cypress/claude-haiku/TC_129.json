@@ -1,0 +1,13 @@
+{
+  "id": "TC_129",
+  "category": "modal_dialog",
+  "complexity": "medium",
+  "user_story": "As a user, I want to close a modal by pressing the Escape key.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Modal Escape Key Closure', () => {\n  beforeEach(() => {\n    cy.visit('http://localhost:3000');\n    cy.get('[data-testid=\"open-modal-button\"]').click();\n    cy.get('[data-testid=\"modal\"]').should('be.visible');\n  });\n\n  it('should close modal when Escape key is pressed', () => {\n    cy.get('body').type('{esc}');\n    cy.get('[data-testid=\"modal\"]').should('not.be.visible');\n  });\n\n  it('should close modal when Escape key is pressed multiple times', () => {\n    cy.get('body').type('{esc}');\n    cy.get('[data-testid=\"modal\"]').should('not.be.visible');\n    \n    cy.get('[data-testid=\"open-modal-button\"]').click();\n    cy.get('[data-testid=\"modal\"]').should('be.visible');\n    \n    cy.get('body').type('{esc}{esc}');\n    cy.get('[data-testid=\"modal\"]').should('not.be.visible');\n  });\n\n  it('should not close modal when Escape key is pressed on disabled modal', () => {\n    cy.get('[data-testid=\"modal\"]').should('have.attr', 'data-closeable', 'true');\n    cy.get('[data-testid=\"modal\"]').invoke('attr', 'data-closeable', 'false');\n    \n    cy.get('body').type('{esc}');\n    cy.get('[data-testid=\"modal\"]').should('be.visible');\n  });\n\n  it('should close modal and restore focus to trigger button', () => {\n    cy.get('[data-testid=\"open-modal-button\"]').should('have.focus').blur();\n    cy.get('body').type('{esc}');\n    cy.get('[data-testid=\"modal\"]').should('not.be.visible');\n    cy.get('[data-testid=\"open-modal-button\"]').should('have.focus');\n  });\n\n  it('should close nested modal with Escape key', () => {\n    cy.get('[data-testid=\"open-nested-modal-button\"]').click();\n    cy.get('[data-testid=\"nested-modal\"]').should('be.visible');\n    \n    cy.get('body').type('{esc}');\n    cy.get('[data-testid=\"nested-modal\"]').should('not.be.visible');\n    cy.get('[data-testid=\"modal\"]').should('be.visible');\n  });\n\n  it('should not close modal when Escape key is pressed inside input field with stopPropagation', () => {\n    cy.get('[data-testid=\"modal-input\"]').type('{esc}');\n    cy.get('[data-testid=\"modal\"]').should('be.visible');\n  });\n});",
+  "prompt_tokens": 122,
+  "completion_tokens": 706,
+  "latency_s": 4.35,
+  "timestamp": "2026-06-19T17:19:09.484741"
+}

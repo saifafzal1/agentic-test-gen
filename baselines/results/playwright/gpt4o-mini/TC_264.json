@@ -1,0 +1,13 @@
+{
+  "id": "TC_264",
+  "category": "notifications",
+  "complexity": "medium",
+  "user_story": "As a user, I want to mark all notifications as read with one click.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notifications', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should mark all notifications as read', async ({ page }) => {\n    await expect(page.getByText('You have 5 new notifications')).toBeVisible();\n    await page.getByRole('button', { name: 'Mark all as read' }).click();\n    await expect(page.getByText('All notifications marked as read')).toBeVisible();\n  });\n\n  test('should verify all notifications are marked as read', async ({ page }) => {\n    await page.getByRole('button', { name: 'Mark all as read' }).click();\n    const notifications = await page.getByRole('listitem').all();\n    for (const notification of notifications) {\n      await expect(notification).toHaveClass(/read/);\n    }\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 195,
+  "latency_s": 3.85,
+  "timestamp": "2026-06-19T17:02:06.354233"
+}

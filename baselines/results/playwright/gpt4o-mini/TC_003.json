@@ -1,0 +1,13 @@
+{
+  "id": "TC_003",
+  "category": "authentication",
+  "complexity": "medium",
+  "user_story": "As a user, I want to log out securely so my session is terminated.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Logout', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/login');\n    await page.fill('input[name=\"username\"]', 'testuser');\n    await page.fill('input[name=\"password\"]', 'password123');\n    await page.click('button[type=\"submit\"]');\n    await expect(page.getByText('Welcome, testuser')).toBeVisible();\n  });\n\n  test('should log out successfully', async ({ page }) => {\n    await page.getByRole('button', { name: /logout/i }).click();\n    await expect(page.getByText('You have been logged out')).toBeVisible();\n  });\n\n  test('should not allow access to protected page after logout', async ({ page }) => {\n    await page.getByRole('button', { name: /logout/i }).click();\n    await page.goto('https://example.com/protected');\n    await expect(page).toHaveURL('https://example.com/login');\n    await expect(page.getByText('Please log in to continue')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 239,
+  "latency_s": 3.6,
+  "timestamp": "2026-06-19T16:43:32.459998"
+}

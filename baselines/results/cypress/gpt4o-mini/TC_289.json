@@ -1,0 +1,13 @@
+{
+  "id": "TC_289",
+  "category": "user_profile",
+  "complexity": "complex",
+  "user_story": "As a user, I want to set my language preference in profile settings.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('User Profile Language Preference', () => {\n    beforeEach(() => {\n        cy.visit('/profile/settings');\n        cy.login(); // Assuming there's a custom command for login\n    });\n\n    it('should allow the user to set their language preference to English', () => {\n        cy.get('select[name=\"language\"]').select('English');\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.notification').should('contain', 'Language preference updated successfully');\n        cy.get('select[name=\"language\"]').should('have.value', 'English');\n    });\n\n    it('should display an error when an invalid language is selected', () => {\n        cy.get('select[name=\"language\"]').select('InvalidLanguage');\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.error').should('contain', 'Invalid language selection');\n        cy.get('select[name=\"language\"]').should('not.have.value', 'InvalidLanguage');\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 194,
+  "latency_s": 6.0,
+  "timestamp": "2026-06-19T16:43:15.502633"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_232",
+  "category": "responsive",
+  "complexity": "complex",
+  "user_story": "As a user, I want data tables to stack vertically on small screens.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Responsive Data Tables', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should display data tables stacked vertically on small screens', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 812 }); // Simulate small screen\n    const table1 = await page.getByRole('table', { name: 'Data Table 1' });\n    const table2 = await page.getByRole('table', { name: 'Data Table 2' });\n\n    expect(await table1.evaluate(node => node.getBoundingClientRect().top)).toBeLessThan(await table2.evaluate(node => node.getBoundingClientRect().top));\n  });\n\n  test('should maintain horizontal layout on larger screens', async ({ page }) => {\n    await page.setViewportSize({ width: 1024, height: 768 }); // Simulate larger screen\n    const table1 = await page.getByRole('table', { name: 'Data Table 1' });\n    const table2 = await page.getByRole('table', { name: 'Data Table 2' });\n\n    expect(await table1.evaluate(node => node.getBoundingClientRect().top)).toBeGreaterThan(await table2.evaluate(node => node.getBoundingClientRect().top));\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 299,
+  "latency_s": 4.3,
+  "timestamp": "2026-06-19T16:59:20.280806"
+}

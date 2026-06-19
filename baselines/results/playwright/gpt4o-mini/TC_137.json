@@ -1,0 +1,13 @@
+{
+  "id": "TC_137",
+  "category": "modal_dialog",
+  "complexity": "simple",
+  "user_story": "As a user, I want the page behind a modal to not scroll when the modal is open.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Dialog', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should not allow scrolling on the background when modal is open', async ({ page }) => {\n    await page.getByRole('button', { name: /open modal/i }).click(); // Adjust the button role and name as necessary\n    const body = await page.locator('body');\n\n    const initialScrollY = await body.evaluate(el => el.scrollTop);\n    await page.keyboard.press('ArrowDown'); // Simulate scrolling\n    const afterScrollY = await body.evaluate(el => el.scrollTop);\n\n    expect(afterScrollY).toBe(initialScrollY); // Ensure scroll position hasn't changed\n  });\n\n  test('should close the modal and allow scrolling again', async ({ page }) => {\n    await page.getByRole('button', { name: /open modal/i }).click(); // Adjust the button role and name as necessary\n    await page.getByRole('button', { name: /close modal/i }).click(); // Adjust the close button role and name as necessary\n\n    const body = await page.locator('body');\n    const initialScrollY = await body.evaluate(el => el.scrollTop);\n    await page.keyboard.press('ArrowDown'); // Simulate scrolling\n    const afterScrollY = await body.evaluate(el => el.scrollTop);\n\n    expect(afterScrollY).toBeGreaterThan(initialScrollY); // Ensure scroll position has changed\n  });\n});",
+  "prompt_tokens": 137,
+  "completion_tokens": 332,
+  "latency_s": 4.73,
+  "timestamp": "2026-06-19T16:52:57.979750"
+}

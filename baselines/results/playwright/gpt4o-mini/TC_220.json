@@ -1,0 +1,13 @@
+{
+  "id": "TC_220",
+  "category": "accessibility",
+  "complexity": "complex",
+  "user_story": "As a user, I want the app to respect the prefers-reduced-motion setting.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Accessibility - Prefers Reduced Motion', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-app-url.com');\n  });\n\n  test('should respect prefers-reduced-motion setting', async ({ page }) => {\n    await page.evaluate(() => {\n      // Simulate prefers-reduced-motion setting\n      Object.defineProperty(window, 'matchMedia', {\n        value: (query) => ({\n          matches: query.includes('prefers-reduced-motion: reduce'),\n          media: query,\n          onchange: null,\n          addListener: () => {},\n          removeListener: () => {},\n        }),\n      });\n    });\n\n    const animationElement = page.getByRole('animated-element'); // Replace with actual role\n    await expect(animationElement).toHaveCSS('animation', 'none');\n  });\n\n  test('should not apply animations when prefers-reduced-motion is set', async ({ page }) => {\n    await page.evaluate(() => {\n      // Simulate prefers-reduced-motion setting\n      Object.defineProperty(window, 'matchMedia', {\n        value: (query) => ({\n          matches: query.includes('prefers-reduced-motion: reduce'),\n          media: query,\n          onchange: null,\n          addListener: () => {},\n          removeListener: () => {},\n        }),\n      });\n    });\n\n    const button = page.getByRole('button', { name: 'Submit' }); // Replace with actual button name\n    await button.click();\n\n    const resultElement = page.getByText('Submission Successful'); // Replace with actual text\n    await expect(resultElement).toBeVisible();\n    await expect(resultElement).toHaveCSS('animation', 'none');\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 360,
+  "latency_s": 4.98,
+  "timestamp": "2026-06-19T16:58:33.044936"
+}

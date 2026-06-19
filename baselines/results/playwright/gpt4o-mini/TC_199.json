@@ -1,0 +1,13 @@
+{
+  "id": "TC_199",
+  "category": "search_filter",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a tag for each active filter above the results.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Active Filters Display', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/search');\n  });\n\n  test('should display active filter tags when filters are applied', async ({ page }) => {\n    await page.getByLabel('Category').selectOption('Electronics');\n    await page.getByLabel('Brand').selectOption('Brand A');\n    await page.getByRole('button', { name: 'Apply Filters' }).click();\n\n    const filterTags = await page.getByRole('list', { name: 'Active Filters' }).locator('li');\n    expect(await filterTags.count()).toBe(2);\n    expect(await filterTags.nth(0).innerText()).toContain('Category: Electronics');\n    expect(await filterTags.nth(1).innerText()).toContain('Brand: Brand A');\n  });\n\n  test('should not display any filter tags when no filters are applied', async ({ page }) => {\n    const filterTags = await page.getByRole('list', { name: 'Active Filters' }).locator('li');\n    expect(await filterTags.count()).toBe(0);\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 254,
+  "latency_s": 3.71,
+  "timestamp": "2026-06-19T16:56:57.207225"
+}

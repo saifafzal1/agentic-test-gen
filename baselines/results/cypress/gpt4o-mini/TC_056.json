@@ -1,0 +1,13 @@
+{
+  "id": "TC_056",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want to jump to a specific page using a page number input.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Page Navigation', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should navigate to the specified page number', () => {\n        const pageNumber = 3; // Example page number\n        cy.get('input[name=\"page-number\"]').type(pageNumber);\n        cy.get('button[type=\"submit\"]').click();\n        cy.url().should('include', `page=${pageNumber}`);\n        cy.get('.current-page').should('contain', pageNumber);\n    });\n\n    it('should show an error message for invalid page number', () => {\n        const invalidPageNumber = -1; // Example of an invalid page number\n        cy.get('input[name=\"page-number\"]').type(invalidPageNumber);\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.error-message').should('be.visible').and('contain', 'Invalid page number');\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 197,
+  "latency_s": 2.86,
+  "timestamp": "2026-06-19T16:28:45.177567"
+}

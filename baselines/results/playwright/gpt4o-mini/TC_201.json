@@ -1,0 +1,13 @@
+{
+  "id": "TC_201",
+  "category": "search_filter",
+  "complexity": "medium",
+  "user_story": "As a user, I want search to be tolerant of minor spelling mistakes.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should return results for a misspelled search term', async ({ page }) => {\n    await page.getByRole('textbox', { name: /search/i }).fill('appl'); // Misspelled search term\n    await page.getByRole('button', { name: /search/i }).click();\n    \n    const results = await page.getByRole('heading', { name: /results/i }).isVisible();\n    expect(results).toBe(true);\n    \n    const firstResult = await page.getByText(/apple/i).isVisible();\n    expect(firstResult).toBe(true);\n  });\n\n  test('should suggest corrections for a misspelled search term', async ({ page }) => {\n    await page.getByRole('textbox', { name: /search/i }).fill('bananna'); // Misspelled search term\n    await page.getByRole('button', { name: /search/i }).click();\n    \n    const suggestion = await page.getByText(/did you mean banana\\?/i).isVisible();\n    expect(suggestion).toBe(true);\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 277,
+  "latency_s": 3.73,
+  "timestamp": "2026-06-19T16:57:04.420171"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_284",
+  "category": "user_profile",
+  "complexity": "simple",
+  "user_story": "As a user, I want to delete my account after confirming with my password.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Delete Account Feature', () => {\n  beforeEach(() => {\n    cy.visit('/account-settings');\n    cy.login('testuser@example.com', 'password123');\n  });\n\n  it('should successfully delete account with correct password confirmation', () => {\n    cy.get('[data-testid=\"delete-account-btn\"]').click();\n    \n    cy.get('[data-testid=\"delete-account-modal\"]').should('be.visible');\n    cy.get('[data-testid=\"delete-confirmation-text\"]').should('contain', 'Are you sure you want to delete your account?');\n    \n    cy.get('[data-testid=\"password-input\"]').type('password123');\n    cy.get('[data-testid=\"confirm-delete-btn\"]').click();\n    \n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Account deleted successfully');\n    cy.url().should('include', '/');\n    cy.get('[data-testid=\"login-btn\"]').should('be.visible');\n  });\n\n  it('should show error when incorrect password is provided', () => {\n    cy.get('[data-testid=\"delete-account-btn\"]').click();\n    \n    cy.get('[data-testid=\"delete-account-modal\"]').should('be.visible');\n    cy.get('[data-testid=\"password-input\"]').type('wrongpassword');\n    cy.get('[data-testid=\"confirm-delete-btn\"]').click();\n    \n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Incorrect password');\n    cy.get('[data-testid=\"delete-account-modal\"]').should('be.visible');\n  });\n\n  it('should close modal when cancel button is clicked', () => {\n    cy.get('[data-testid=\"delete-account-btn\"]').click();\n    cy.get('[data-testid=\"delete-account-modal\"]').should('be.visible');\n    \n    cy.get('[data-testid=\"cancel-btn\"]').click();\n    cy.get('[data-testid=\"delete-account-modal\"]').should('not.be.visible');\n  });\n\n  it('should require password field to be filled before submission', () => {\n    cy.get('[data-testid=\"delete-account-btn\"]').click();\n    cy.get('[data-testid=\"delete-account-modal\"]').should('be.visible');\n    \n    cy.get('[data-testid=\"confirm-delete-btn\"]').should('be.disabled');\n    cy.get('[data-testid=\"password-input\"]').type('password123');\n    cy.get('[data-testid=\"confirm-delete-btn\"]').should('not.be.disabled');\n  });\n});",
+  "prompt_tokens": 122,
+  "completion_tokens": 663,
+  "latency_s": 4.52,
+  "timestamp": "2026-06-19T17:35:47.252650"
+}

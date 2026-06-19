@@ -1,0 +1,13 @@
+{
+  "id": "TC_069",
+  "category": "api_response_handling",
+  "complexity": "medium",
+  "user_story": "As a user, I want API responses cached so repeat visits are instant.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('API Response Caching', () => {\n    beforeEach(() => {\n        cy.intercept('GET', '/api/data', (req) => {\n            req.reply((res) => {\n                res.send({\n                    statusCode: 200,\n                    body: { data: 'cached response' },\n                    headers: { 'Cache-Control': 'max-age=3600' }\n                });\n            });\n        }).as('getData');\n    });\n\n    it('should return cached response on first visit', () => {\n        cy.visit('/data-page');\n        cy.wait('@getData').its('response.statusCode').should('eq', 200);\n        cy.get('.data-display').should('contain', 'cached response');\n    });\n\n    it('should return cached response on repeat visit', () => {\n        cy.visit('/data-page');\n        cy.wait('@getData');\n        cy.reload();\n        cy.wait('@getData').its('response.statusCode').should('eq', 200);\n        cy.get('.data-display').should('contain', 'cached response');\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 219,
+  "latency_s": 4.6,
+  "timestamp": "2026-06-19T16:29:39.654213"
+}

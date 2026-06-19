@@ -1,0 +1,13 @@
+{
+  "id": "TC_147",
+  "category": "table_list",
+  "complexity": "medium",
+  "user_story": "As a user, I want to sort a table by clicking column headers.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Table Sorting Functionality', () => {\n    beforeEach(() => {\n        cy.visit('/table-page'); // Replace with the actual URL of the page containing the table\n    });\n\n    it('should sort the table by the first column when the header is clicked', () => {\n        cy.get('th').contains('First Column').click(); // Replace with the actual header text\n        cy.get('tbody tr').then(rows => {\n            const sortedRows = [...rows].sort((a, b) => {\n                return Cypress.$(a).find('td').first().text().localeCompare(Cypress.$(b).find('td').first().text());\n            });\n            expect(rows).to.deep.equal(sortedRows);\n        });\n    });\n\n    it('should not change the order of the table when clicking the same header twice', () => {\n        cy.get('th').contains('First Column').click(); // First click to sort\n        const initialOrder = [];\n        cy.get('tbody tr').each(row => {\n            initialOrder.push(row.text());\n        });\n\n        cy.get('th').contains('First Column').click(); // Second click to sort again\n        const newOrder = [];\n        cy.get('tbody tr').each(row => {\n            newOrder.push(row.text());\n        });\n\n        expect(initialOrder).to.deep.equal(newOrder);\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 279,
+  "latency_s": 3.52,
+  "timestamp": "2026-06-19T16:34:53.544505"
+}

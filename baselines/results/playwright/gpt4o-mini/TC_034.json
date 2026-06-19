@@ -1,0 +1,13 @@
+{
+  "id": "TC_034",
+  "category": "form_validation",
+  "complexity": "complex",
+  "user_story": "As a user, I want the form to auto-save as a draft every 30 seconds.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Auto-Save Feature', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should auto-save the form as a draft every 30 seconds', async ({ page }) => {\n    await page.fill(getByLabel('Name'), 'John Doe');\n    await page.fill(getByLabel('Email'), 'john.doe@example.com');\n\n    // Wait for 30 seconds to check for auto-save\n    await page.waitForTimeout(30000);\n\n    const draftMessage = await page.getByText('Draft saved successfully');\n    expect(await draftMessage.isVisible()).toBeTruthy();\n  });\n\n  test('should retain form data after auto-save', async ({ page }) => {\n    await page.fill(getByLabel('Name'), 'Jane Doe');\n    await page.fill(getByLabel('Email'), 'jane.doe@example.com');\n\n    // Wait for 30 seconds to trigger auto-save\n    await page.waitForTimeout(30000);\n\n    await page.reload();\n\n    expect(await page.getByLabel('Name').inputValue()).toBe('Jane Doe');\n    expect(await page.getByLabel('Email').inputValue()).toBe('jane.doe@example.com');\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 269,
+  "latency_s": 4.71,
+  "timestamp": "2026-06-19T16:45:47.714179"
+}

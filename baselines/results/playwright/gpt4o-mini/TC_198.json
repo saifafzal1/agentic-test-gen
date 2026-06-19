@@ -1,0 +1,13 @@
+{
+  "id": "TC_198",
+  "category": "search_filter",
+  "complexity": "medium",
+  "user_story": "As a user, I want to exclude a term from search by prefixing it with '-'.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Filter Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should exclude a term when prefixed with \"-\"', async ({ page }) => {\n    await page.fill('input[name=\"search\"]', 'apple -banana');\n    await page.click('button[type=\"submit\"]');\n\n    const results = await page.locator('.search-results'); // Adjust selector as needed\n    await expect(results).toContainText('apple');\n    await expect(results).not.toContainText('banana');\n  });\n\n  test('should return results when no exclusion term is used', async ({ page }) => {\n    await page.fill('input[name=\"search\"]', 'apple');\n    await page.click('button[type=\"submit\"]');\n\n    const results = await page.locator('.search-results'); // Adjust selector as needed\n    await expect(results).toContainText('apple');\n  });\n});",
+  "prompt_tokens": 137,
+  "completion_tokens": 217,
+  "latency_s": 2.39,
+  "timestamp": "2026-06-19T16:56:53.186122"
+}

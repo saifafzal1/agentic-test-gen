@@ -1,0 +1,13 @@
+{
+  "id": "TC_126",
+  "category": "async_await",
+  "complexity": "medium",
+  "user_story": "As a user, I want animated transitions between async page loads.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Animated transitions between async page loads', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Adjust the URL to your application's base URL\n    });\n\n    it('should display the loading animation during async page load', () => {\n        cy.get('button#loadPage').click(); // Trigger the async page load\n        cy.get('.loading-animation').should('be.visible'); // Check if loading animation is visible\n        cy.get('.loading-animation').should('not.exist'); // Ensure loading animation disappears after load\n        cy.url().should('include', '/new-page'); // Verify the new page URL\n    });\n\n    it('should not show loading animation if page is already loaded', () => {\n        cy.get('button#loadPage').click(); // Trigger the async page load\n        cy.get('.loading-animation').should('be.visible'); // Confirm loading animation is visible\n        cy.get('.loading-animation').should('not.exist'); // Ensure loading animation disappears after load\n\n        cy.get('button#loadPage').click(); // Trigger the async page load again\n        cy.get('.loading-animation').should('not.exist'); // Check that loading animation does not appear again\n        cy.url().should('include', '/new-page'); // Verify the new page URL remains the same\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 270,
+  "latency_s": 3.86,
+  "timestamp": "2026-06-19T16:33:42.442587"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_098",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a user, I want an error boundary to catch UI crashes and show a fallback screen.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Error Boundary Tests', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Adjust the URL to your application's base URL\n    });\n\n    it('should display the fallback screen when a UI crash occurs', () => {\n        // Simulate a UI crash\n        cy.intercept('GET', '/api/data', { statusCode: 500 }).as('getData');\n        cy.visit('/crash-route'); // Adjust to the route that triggers the crash\n        cy.wait('@getData');\n        \n        // Assert that the fallback screen is displayed\n        cy.get('.fallback-screen').should('be.visible');\n        cy.contains('Something went wrong. Please try again later.').should('be.visible');\n    });\n\n    it('should not display the fallback screen when the UI is functioning correctly', () => {\n        // Simulate a successful API response\n        cy.intercept('GET', '/api/data', { fixture: 'data.json' }).as('getData');\n        cy.visit('/'); // Adjust to the route that loads the data\n        cy.wait('@getData');\n        \n        // Assert that the main content is displayed\n        cy.get('.main-content').should('be.visible');\n        cy.contains('Welcome to the application!').should('be.visible');\n    });\n});",
+  "prompt_tokens": 113,
+  "completion_tokens": 264,
+  "latency_s": 3.42,
+  "timestamp": "2026-06-19T16:31:38.885167"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_274",
+  "category": "notifications",
+  "complexity": "complex",
+  "user_story": "As a user, I want to delete a single notification from my notification list.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Management', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n    await page.waitForSelector('text=Notifications'); // Ensure the notifications page is loaded\n  });\n\n  test('should delete a single notification', async ({ page }) => {\n    const notificationToDelete = await page.getByText('Sample Notification to Delete');\n    \n    // Ensure the notification exists before attempting to delete\n    await expect(notificationToDelete).toBeVisible();\n    \n    // Click the delete button associated with the notification\n    await notificationToDelete.locator('button', { hasText: 'Delete' }).click();\n    \n    // Confirm deletion in the confirmation dialog\n    await page.getByRole('button', { name: 'Confirm' }).click();\n    \n    // Verify the notification is no longer visible\n    await expect(notificationToDelete).not.toBeVisible();\n  });\n\n  test('should not delete a notification if cancel is clicked', async ({ page }) => {\n    const notificationToCancelDelete = await page.getByText('Sample Notification to Cancel Delete');\n    \n    // Ensure the notification exists before attempting to delete\n    await expect(notificationToCancelDelete).toBeVisible();\n    \n    // Click the delete button associated with the notification\n    await notificationToCancelDelete.locator('button', { hasText: 'Delete' }).click();\n    \n    // Cancel deletion in the confirmation dialog\n    await page.getByRole('button', { name: 'Cancel' }).click();\n    \n    // Verify the notification is still visible\n    await expect(notificationToCancelDelete).toBeVisible();\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 347,
+  "latency_s": 5.35,
+  "timestamp": "2026-06-19T17:03:17.199989"
+}

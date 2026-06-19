@@ -1,0 +1,13 @@
+{
+  "id": "TC_029",
+  "category": "form_validation",
+  "complexity": "simple",
+  "user_story": "As a user, I want form data to persist if I accidentally navigate away.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Data Persistence', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/form'); // Replace with the actual form URL\n  });\n\n  test('should retain form data after navigating away', async ({ page }) => {\n    await page.fill(getByLabel('Name'), 'John Doe');\n    await page.fill(getByLabel('Email'), 'john.doe@example.com');\n    \n    await page.click(getByText('Navigate Away')); // Replace with the actual navigation action\n    await page.goBack();\n\n    const nameValue = await page.inputValue(getByLabel('Name'));\n    const emailValue = await page.inputValue(getByLabel('Email'));\n\n    expect(nameValue).toBe('John Doe');\n    expect(emailValue).toBe('john.doe@example.com');\n  });\n\n  test('should not lose data on page refresh', async ({ page }) => {\n    await page.fill(getByLabel('Name'), 'Jane Doe');\n    await page.fill(getByLabel('Email'), 'jane.doe@example.com');\n\n    await page.reload();\n\n    const nameValue = await page.inputValue(getByLabel('Name'));\n    const emailValue = await page.inputValue(getByLabel('Email'));\n\n    expect(nameValue).toBe('Jane Doe');\n    expect(emailValue).toBe('jane.doe@example.com');\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 297,
+  "latency_s": 4.31,
+  "timestamp": "2026-06-19T16:45:23.425745"
+}

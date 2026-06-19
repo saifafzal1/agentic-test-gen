@@ -1,0 +1,13 @@
+{
+  "id": "TC_212",
+  "category": "accessibility",
+  "complexity": "simple",
+  "user_story": "As a user, I want all icon buttons to have accessible names.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Accessibility - Icon Buttons', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-application-url.com');\n  });\n\n  test('should have accessible names for all icon buttons', async ({ page }) => {\n    const iconButtons = await page.getByRole('button', { name: /icon/i });\n    for (const button of iconButtons) {\n      const accessibleName = await button.evaluate(el => el.getAttribute('aria-label') || el.textContent);\n      expect(accessibleName).toBeTruthy();\n    }\n  });\n\n  test('should ensure all icon buttons are labeled correctly', async ({ page }) => {\n    const iconButtons = await page.getByRole('button', { name: /icon/i });\n    for (const button of iconButtons) {\n      const accessibleName = await button.evaluate(el => el.getAttribute('aria-label') || el.textContent);\n      expect(accessibleName).not.toBe('');\n    }\n  });\n});",
+  "prompt_tokens": 130,
+  "completion_tokens": 217,
+  "latency_s": 3.31,
+  "timestamp": "2026-06-19T16:57:54.362247"
+}

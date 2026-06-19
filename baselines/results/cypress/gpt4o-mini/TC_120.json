@@ -1,0 +1,13 @@
+{
+  "id": "TC_120",
+  "category": "async_await",
+  "complexity": "medium",
+  "user_story": "As a user, I want a WebSocket connection to update the UI in real-time.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('WebSocket Connection Tests', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Visit the application page\n    });\n\n    it('should update the UI in real-time when a message is received', () => {\n        cy.window().then((win) => {\n            const socket = new WebSocket('ws://localhost:8080');\n            socket.onmessage = (event) => {\n                const data = JSON.parse(event.data);\n                win.document.querySelector('#message').innerText = data.message;\n            };\n            socket.onopen = () => {\n                socket.send(JSON.stringify({ action: 'subscribe' }));\n            };\n        });\n\n        cy.intercept('GET', '/api/messages', { fixture: 'messages.json' }).as('getMessages');\n        cy.wait('@getMessages');\n\n        cy.get('#message').should('have.text', 'Initial message');\n        \n        cy.wait(1000); // Wait for WebSocket message to be received\n        cy.get('#message').should('have.text', 'Updated message');\n    });\n\n    it('should handle WebSocket connection errors gracefully', () => {\n        cy.window().then((win) => {\n            const socket = new WebSocket('ws://localhost:8080');\n            socket.onerror = () => {\n                win.document.querySelector('#error').innerText = 'WebSocket error occurred';\n            };\n            socket.onopen = () => {\n                socket.close(); // Close immediately to trigger error\n            };\n        });\n\n        cy.get('#error').should('have.text', 'WebSocket error occurred');\n    });\n});",
+  "prompt_tokens": 113,
+  "completion_tokens": 321,
+  "latency_s": 3.78,
+  "timestamp": "2026-06-19T16:33:17.046483"
+}

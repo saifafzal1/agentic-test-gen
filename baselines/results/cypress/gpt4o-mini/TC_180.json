@@ -1,0 +1,13 @@
+{
+  "id": "TC_180",
+  "category": "file_upload",
+  "complexity": "medium",
+  "user_story": "As a user, I want the upload button to be disabled while a file is uploading.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('File Upload Button', () => {\n    beforeEach(() => {\n        cy.visit('/upload'); // Replace with the actual URL of the upload page\n    });\n\n    it('should disable the upload button while a file is uploading', () => {\n        const fileName = 'test-file.txt'; // Replace with an actual test file name\n        cy.fixture(fileName).then(fileContent => {\n            cy.get('input[type=\"file\"]').attachFile(fileName);\n            cy.get('button.upload-button').should('be.disabled'); // Assuming the button has a class 'upload-button'\n            cy.intercept('POST', '/upload-endpoint', { statusCode: 200 }).as('fileUpload');\n            cy.get('button.upload-button').click();\n            cy.wait('@fileUpload');\n            cy.get('button.upload-button').should('not.be.disabled');\n        });\n    });\n\n    it('should not allow multiple uploads at the same time', () => {\n        const fileName = 'test-file.txt'; // Replace with an actual test file name\n        cy.fixture(fileName).then(fileContent => {\n            cy.get('input[type=\"file\"]').attachFile(fileName);\n            cy.get('button.upload-button').should('be.disabled');\n            cy.get('input[type=\"file\"]').attachFile(fileName); // Attempt to upload another file\n            cy.get('button.upload-button').should('be.disabled'); // Button should still be disabled\n        });\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 297,
+  "latency_s": 3.42,
+  "timestamp": "2026-06-19T16:36:34.832181"
+}

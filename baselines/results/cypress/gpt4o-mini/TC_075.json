@@ -1,0 +1,13 @@
+{
+  "id": "TC_075",
+  "category": "crud_operations",
+  "complexity": "medium",
+  "user_story": "As a user, I want to delete a task with a confirmation dialog.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Task Deletion', () => {\n    beforeEach(() => {\n        cy.visit('/tasks'); // Adjust the URL to your application's task page\n    });\n\n    it('should delete a task when confirmed', () => {\n        cy.get('.task-item').first().as('firstTask'); // Assuming tasks have a class of 'task-item'\n        cy.get('@firstTask').find('.delete-button').click(); // Assuming delete button has a class of 'delete-button'\n        \n        cy.on('window:confirm', () => true); // Simulate clicking \"OK\" on the confirmation dialog\n        \n        cy.get('@firstTask').should('not.exist'); // Verify the task is deleted\n    });\n\n    it('should not delete a task when canceled', () => {\n        cy.get('.task-item').first().as('firstTask');\n        cy.get('@firstTask').find('.delete-button').click();\n        \n        cy.on('window:confirm', () => false); // Simulate clicking \"Cancel\" on the confirmation dialog\n        \n        cy.get('@firstTask').should('exist'); // Verify the task still exists\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 231,
+  "latency_s": 2.93,
+  "timestamp": "2026-06-19T16:30:04.996127"
+}

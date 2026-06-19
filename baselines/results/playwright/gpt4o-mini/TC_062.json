@@ -1,0 +1,13 @@
+{
+  "id": "TC_062",
+  "category": "api_response_handling",
+  "complexity": "simple",
+  "user_story": "As a user, I want stale data to be invalidated after a successful form submission.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Submission and Data Invalidation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/form');\n  });\n\n  test('should submit the form successfully', async ({ page }) => {\n    await page.getByLabel('Name').fill('John Doe');\n    await page.getByLabel('Email').fill('john.doe@example.com');\n    await page.getByRole('button', { name: 'Submit' }).click();\n\n    const successMessage = await page.getByText('Form submitted successfully!');\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should invalidate stale data after form submission', async ({ page }) => {\n    await page.getByLabel('Name').fill('Jane Doe');\n    await page.getByLabel('Email').fill('jane.doe@example.com');\n    await page.getByRole('button', { name: 'Submit' }).click();\n\n    const staleDataMessage = await page.getByText('Stale data invalidated.');\n    await expect(staleDataMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 137,
+  "completion_tokens": 239,
+  "latency_s": 6.09,
+  "timestamp": "2026-06-19T16:47:37.617514"
+}

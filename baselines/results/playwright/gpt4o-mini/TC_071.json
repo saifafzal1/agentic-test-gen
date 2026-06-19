@@ -1,0 +1,13 @@
+{
+  "id": "TC_071",
+  "category": "api_response_handling",
+  "complexity": "simple",
+  "user_story": "As a user, I want a conflict error message when saving a stale record.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Conflict Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/your-page-url');\n  });\n\n  test('should display conflict error message when saving a stale record', async ({ page }) => {\n    // Simulate loading a stale record\n    await page.fill(getByLabel('Record ID'), 'stale-record-id');\n    await page.click(getByText('Load Record'));\n\n    // Attempt to save the stale record\n    await page.click(getByText('Save Record'));\n\n    // Assert that the conflict error message is displayed\n    const errorMessage = await page.getByRole('alert');\n    await expect(errorMessage).toHaveText('Conflict: This record has been modified by another user.');\n  });\n\n  test('should not display conflict error message for valid save', async ({ page }) => {\n    // Simulate loading a fresh record\n    await page.fill(getByLabel('Record ID'), 'fresh-record-id');\n    await page.click(getByText('Load Record'));\n\n    // Attempt to save the fresh record\n    await page.click(getByText('Save Record'));\n\n    // Assert that no error message is displayed\n    const errorMessage = await page.queryByRole('alert');\n    await expect(errorMessage).toBeNull();\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 278,
+  "latency_s": 3.95,
+  "timestamp": "2026-06-19T16:48:18.852984"
+}

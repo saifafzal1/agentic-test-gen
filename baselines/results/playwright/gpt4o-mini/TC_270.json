@@ -1,0 +1,13 @@
+{
+  "id": "TC_270",
+  "category": "notifications",
+  "complexity": "medium",
+  "user_story": "As a user, I want unread notifications to be visually distinct from read ones.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Visual Distinction', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should display unread notifications with distinct styling', async ({ page }) => {\n    const unreadNotification = await page.getByRole('listitem', { name: 'Unread Notification' });\n    const readNotification = await page.getByRole('listitem', { name: 'Read Notification' });\n\n    const unreadStyle = await unreadNotification.evaluate(element => window.getComputedStyle(element).backgroundColor);\n    const readStyle = await readNotification.evaluate(element => window.getComputedStyle(element).backgroundColor);\n\n    expect(unreadStyle).not.toEqual(readStyle);\n    expect(unreadStyle).toMatch(/rgba?\\(255, 0, 0/); // Example: Expecting unread notifications to have a red background\n  });\n\n  test('should mark notifications as read when clicked', async ({ page }) => {\n    const unreadNotification = await page.getByRole('listitem', { name: 'Unread Notification' });\n    \n    await unreadNotification.click();\n    \n    const updatedNotification = await page.getByRole('listitem', { name: 'Unread Notification' });\n    const updatedStyle = await updatedNotification.evaluate(element => window.getComputedStyle(element).backgroundColor);\n\n    expect(updatedStyle).toMatch(/rgba?\\(0, 255, 0/); // Example: Expecting read notifications to have a green background\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 316,
+  "latency_s": 21.48,
+  "timestamp": "2026-06-19T17:02:56.072926"
+}

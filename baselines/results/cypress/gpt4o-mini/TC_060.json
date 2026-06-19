@@ -1,0 +1,13 @@
+{
+  "id": "TC_060",
+  "category": "api_response_handling",
+  "complexity": "medium",
+  "user_story": "As a user, I want a retry button when a network request times out.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Retry Button Functionality', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Adjust the URL to your application\n    });\n\n    it('should display retry button when network request times out', () => {\n        cy.intercept('GET', '/api/data', {\n            statusCode: 408, // Simulating a timeout\n            delay: 1000\n        }).as('getData');\n\n        cy.get('button#load-data').click(); // Assuming there's a button to load data\n        cy.wait('@getData');\n\n        cy.get('div#error-message').should('be.visible').and('contain', 'Request timed out');\n        cy.get('button#retry-button').should('be.visible');\n    });\n\n    it('should successfully fetch data after retrying', () => {\n        cy.intercept('GET', '/api/data', {\n            statusCode: 200,\n            body: { data: 'Success' }\n        }).as('getData');\n\n        cy.intercept('GET', '/api/data', {\n            statusCode: 408, // First request times out\n            delay: 1000\n        }).as('getTimeout');\n\n        cy.get('button#load-data').click(); // First request\n        cy.wait('@getTimeout');\n\n        cy.get('button#retry-button').click(); // Retry button click\n        cy.wait('@getData');\n\n        cy.get('div#data-display').should('be.visible').and('contain', 'Success');\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 309,
+  "latency_s": 4.18,
+  "timestamp": "2026-06-19T16:29:01.212112"
+}

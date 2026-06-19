@@ -1,0 +1,13 @@
+{
+  "id": "TC_004",
+  "category": "authentication",
+  "complexity": "complex",
+  "user_story": "As a user, I want to be redirected to login if I access a protected page unauthenticated.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Protected Page Access', () => {\n    beforeEach(() => {\n        cy.visit('/protected-page');\n    });\n\n    it('should redirect to login page when accessing protected page unauthenticated', () => {\n        cy.url().should('include', '/login');\n        cy.get('h1').should('contain', 'Login');\n    });\n\n    it('should not redirect to login page when accessing protected page authenticated', () => {\n        cy.login('validUser', 'validPassword'); // Assuming a custom command for login\n        cy.visit('/protected-page');\n        cy.url().should('include', '/protected-page');\n        cy.get('h1').should('contain', 'Protected Page');\n    });\n});",
+  "prompt_tokens": 114,
+  "completion_tokens": 144,
+  "latency_s": 1.91,
+  "timestamp": "2026-06-19T16:25:28.591500"
+}

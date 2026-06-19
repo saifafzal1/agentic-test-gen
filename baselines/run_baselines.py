@@ -148,7 +148,7 @@ def generate_anthropic(client, system: str, user: str) -> dict:
 def generate_gemini(genai_module, system: str, user: str) -> dict:
     t0 = time.time()
     model = genai_module.GenerativeModel(
-        model_name="gemini-1.5-flash",
+        model_name="gemini-2.0-flash",
         system_instruction=system,
         generation_config={"temperature": 0.2, "max_output_tokens": 2048},
     )

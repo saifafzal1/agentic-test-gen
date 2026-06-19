@@ -1,0 +1,13 @@
+{
+  "id": "TC_216",
+  "category": "accessibility",
+  "complexity": "medium",
+  "user_story": "As a user, I want modals to announce their title when opened.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Accessibility Tests', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-application-url.com');\n  });\n\n  test('should announce modal title when opened', async ({ page }) => {\n    await page.getByRole('button', { name: /open modal/i }).click();\n    const modalTitle = await page.getByRole('heading', { name: /modal title/i });\n    await expect(modalTitle).toBeVisible();\n    await expect(modalTitle).toHaveAttribute('aria-live', 'assertive');\n  });\n\n  test('should not announce modal title when closed', async ({ page }) => {\n    await page.getByRole('button', { name: /open modal/i }).click();\n    await page.getByRole('button', { name: /close modal/i }).click();\n    const modalTitle = await page.getByRole('heading', { name: /modal title/i });\n    await expect(modalTitle).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 225,
+  "latency_s": 3.14,
+  "timestamp": "2026-06-19T16:58:11.545293"
+}

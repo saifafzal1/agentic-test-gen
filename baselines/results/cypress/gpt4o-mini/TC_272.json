@@ -1,0 +1,13 @@
+{
+  "id": "TC_272",
+  "category": "notifications",
+  "complexity": "simple",
+  "user_story": "As a user, I want in-app notifications to update in real-time without refresh.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('In-App Notifications', () => {\n    beforeEach(() => {\n        cy.visit('/notifications');\n    });\n\n    it('should display new notifications in real-time', () => {\n        // Simulate receiving a new notification\n        cy.intercept('POST', '/api/notifications', { fixture: 'newNotification.json' }).as('newNotification');\n        \n        // Trigger the event that causes a new notification to be sent\n        cy.get('button#send-notification').click();\n\n        // Wait for the notification to be received\n        cy.wait('@newNotification');\n\n        // Check if the new notification appears in the notifications list\n        cy.get('.notification-list').should('contain', 'You have a new message!');\n    });\n\n    it('should not display duplicate notifications', () => {\n        // Simulate receiving the same notification twice\n        cy.intercept('POST', '/api/notifications', { fixture: 'duplicateNotification.json' }).as('duplicateNotification');\n        \n        // Trigger the event that causes the duplicate notification to be sent\n        cy.get('button#send-duplicate-notification').click();\n\n        // Wait for the notification to be received\n        cy.wait('@duplicateNotification');\n\n        // Check if the duplicate notification does not appear again\n        cy.get('.notification-list').should('have.length', 1);\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 273,
+  "latency_s": 4.17,
+  "timestamp": "2026-06-19T16:42:13.067290"
+}

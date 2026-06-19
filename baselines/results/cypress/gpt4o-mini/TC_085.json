@@ -1,0 +1,13 @@
+{
+  "id": "TC_085",
+  "category": "crud_operations",
+  "complexity": "complex",
+  "user_story": "As a user, I want to import records from a CSV file.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('CSV Import Functionality', () => {\n    beforeEach(() => {\n        cy.visit('/import'); // Navigate to the import page\n    });\n\n    it('should successfully import records from a valid CSV file', () => {\n        const fileName = 'valid_records.csv';\n        cy.get('input[type=\"file\"]').attachFile(fileName); // Attach the valid CSV file\n        cy.get('button.import-button').click(); // Click the import button\n        cy.get('.notification').should('contain', 'Import successful'); // Verify success message\n        cy.get('.records-list').should('contain', 'Record 1'); // Verify records are displayed\n    });\n\n    it('should show an error message when importing an invalid CSV file', () => {\n        const fileName = 'invalid_records.csv';\n        cy.get('input[type=\"file\"]').attachFile(fileName); // Attach the invalid CSV file\n        cy.get('button.import-button').click(); // Click the import button\n        cy.get('.notification').should('contain', 'Import failed'); // Verify error message\n        cy.get('.error-details').should('be.visible'); // Verify error details are displayed\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 243,
+  "latency_s": 4.47,
+  "timestamp": "2026-06-19T16:30:49.766005"
+}

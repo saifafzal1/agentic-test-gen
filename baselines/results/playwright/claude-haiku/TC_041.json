@@ -1,0 +1,13 @@
+{
+  "id": "TC_041",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want a 404 page to appear for invalid URLs.",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "```typescript\nimport { test, expect } from '@playwright/test';\n\ntest.describe('404 Page Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should display 404 page when navigating to invalid URL', async ({ page }) => {\n    await page.goto('/invalid-page-that-does-not-exist');\n    \n    const heading = page.getByRole('heading', { level: 1 });\n    await expect(heading).toContainText('404');\n  });\n\n  test('should display 404 error message on invalid route', async ({ page }) => {\n    await page.goto('/this-route-does-not-exist-12345');\n    \n    const errorMessage = page.getByText(/page not found|not found|404/i);\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should have working home link on 404 page', async ({ page }) => {\n    await page.goto('/nonexistent-url');\n    \n    const homeLink = page.getByRole('link', { name: /home|back to home/i });\n    await expect(homeLink).toBeVisible();\n    \n    await homeLink.click();\n    await expect(page).toHaveURL('/');\n  });\n\n  test('should display 404 for deeply nested invalid paths', async ({ page }) => {\n    await page.goto('/invalid/nested/path/structure');\n    \n    const notFoundElement = page.getByText(/404|not found/i);\n    await expect(notFoundElement).toBeVisible();\n  });\n});\n```",
+  "prompt_tokens": 143,
+  "completion_tokens": 397,
+  "latency_s": 3.11,
+  "timestamp": "2026-06-19T17:41:52.980192"
+}

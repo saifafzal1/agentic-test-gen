@@ -1,0 +1,13 @@
+{
+  "id": "TC_068",
+  "category": "api_response_handling",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see the last updated timestamp for live data.",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "```typescript\nimport { test, expect } from '@playwright/test';\n\ntest.describe('Live Data Last Updated Timestamp', () => {\n  let testUrl: string;\n\n  test.beforeEach(async ({ page }) => {\n    testUrl = process.env.TEST_URL || 'http://localhost:3000';\n    await page.goto(testUrl);\n  });\n\n  test('should display last updated timestamp on page load', async ({ page }) => {\n    const timestampElement = page.getByText(/last updated/i);\n    await expect(timestampElement).toBeVisible();\n    \n    const timestampText = await timestampElement.textContent();\n    expect(timestampText).toBeTruthy();\n    expect(timestampText).toMatch(/\\d{1,2}:\\d{2}:\\d{2}|last updated/i);\n  });\n\n  test('should update timestamp when live data refreshes', async ({ page }) => {\n    const timestampElement = page.getByText(/last updated/i);\n    const initialTimestamp = await timestampElement.textContent();\n    \n    await page.waitForTimeout(2000);\n    \n    const refreshButton = page.getByRole('button', { name: /refresh|update/i });\n    if (await refreshButton.isVisible()) {\n      await refreshButton.click();\n      await page.waitForTimeout(1000);\n    }\n    \n    const updatedTimestamp = await timestampElement.textContent();\n    expect(updatedTimestamp).toBeTruthy();\n  });\n\n  test('should display timestamp in valid datetime format', async ({ page }) => {\n    const timestampElement = page.getByText(/last updated/i);\n    const timestampText = await timestampElement.textContent();\n    \n    const datetimeRegex = /(\\d{1,2}\\/\\d{1,2}\\/\\d{4}|\\d{4}-\\d{2}-\\d{2}).*(\\d{1,2}:\\d{2}:\\d{2})/;\n    expect(timestampText).toMatch(datetimeRegex);\n  });\n\n  test('should show timestamp in accessible format', async ({ page }) => {\n    const timestampContainer = page.getByRole('region', { name: /live data|timestamp/i });\n    const timestampElement = page.getByText(/last updated/i);\n    \n    await expect(timestampElement).toBeVisible();\n    const ariaLabel = await timestampElement.getAttribute('aria-label');\n    \n    if (ariaLabel) {\n      expect(ariaLabel.toLowerCase()).toContain('updated');\n    }\n  });\n});\n```",
+  "prompt_tokens": 146,
+  "completion_tokens": 640,
+  "latency_s": 4.14,
+  "timestamp": "2026-06-19T17:45:19.057319"
+}

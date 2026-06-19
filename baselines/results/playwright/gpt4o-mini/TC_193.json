@@ -1,0 +1,13 @@
+{
+  "id": "TC_193",
+  "category": "search_filter",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a 'No results' message when no items match my search.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Filter', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should display \"No results\" message when search yields no results', async ({ page }) => {\n    await page.fill(getByLabel('Search'), 'nonexistent item'); // Replace with the actual label\n    await page.click(getByRole('button', { name: 'Search' })); // Replace with the actual button name\n    const noResultsMessage = await page.getByText('No results found'); // Replace with the actual message\n    await expect(noResultsMessage).toBeVisible();\n  });\n\n  test('should not display \"No results\" message when search yields results', async ({ page }) => {\n    await page.fill(getByLabel('Search'), 'existing item'); // Replace with the actual label and item\n    await page.click(getByRole('button', { name: 'Search' })); // Replace with the actual button name\n    const noResultsMessage = page.getByText('No results found'); // Replace with the actual message\n    await expect(noResultsMessage).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 138,
+  "completion_tokens": 264,
+  "latency_s": 3.66,
+  "timestamp": "2026-06-19T16:56:36.092837"
+}

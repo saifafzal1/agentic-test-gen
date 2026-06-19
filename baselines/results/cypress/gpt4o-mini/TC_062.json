@@ -1,0 +1,13 @@
+{
+  "id": "TC_062",
+  "category": "api_response_handling",
+  "complexity": "simple",
+  "user_story": "As a user, I want stale data to be invalidated after a successful form submission.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Form Submission and Stale Data Invalidation', () => {\n    beforeEach(() => {\n        cy.visit('/form-page'); // Adjust the URL to your form page\n    });\n\n    it('should successfully submit the form and invalidate stale data', () => {\n        cy.intercept('POST', '/api/submit-form', {\n            statusCode: 200,\n            body: { success: true }\n        }).as('formSubmit');\n\n        cy.get('input[name=\"field1\"]').type('Test Data');\n        cy.get('input[name=\"field2\"]').type('More Test Data');\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.wait('@formSubmit').its('response.statusCode').should('eq', 200);\n        cy.get('.success-message').should('be.visible').and('contain', 'Form submitted successfully');\n\n        // Check that stale data is invalidated\n        cy.get('.data-display').should('not.contain', 'Stale Data');\n    });\n\n    it('should handle form submission failure gracefully', () => {\n        cy.intercept('POST', '/api/submit-form', {\n            statusCode: 500,\n            body: { success: false, message: 'Submission failed' }\n        }).as('formSubmitFail');\n\n        cy.get('input[name=\"field1\"]').type('Test Data');\n        cy.get('input[name=\"field2\"]').type('More Test Data');\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.wait('@formSubmitFail').its('response.statusCode').should('eq', 500);\n        cy.get('.error-message').should('be.visible').and('contain', 'Submission failed');\n\n        // Check that stale data is still present\n        cy.get('.data-display').should('contain', 'Stale Data');\n    });\n});",
+  "prompt_tokens": 114,
+  "completion_tokens": 372,
+  "latency_s": 4.65,
+  "timestamp": "2026-06-19T16:29:11.928114"
+}

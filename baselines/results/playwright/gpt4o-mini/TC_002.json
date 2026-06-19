@@ -1,0 +1,13 @@
+{
+  "id": "TC_002",
+  "category": "authentication",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error message when I enter an incorrect password.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Authentication Error Message', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should display error message for incorrect password', async ({ page }) => {\n    await page.getByLabel('Email').fill('user@example.com');\n    await page.getByLabel('Password').fill('wrongpassword');\n    await page.getByRole('button', { name: 'Login' }).click();\n\n    const errorMessage = await page.getByText('Incorrect password. Please try again.');\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should not display error message for correct password', async ({ page }) => {\n    await page.getByLabel('Email').fill('user@example.com');\n    await page.getByLabel('Password').fill('correctpassword');\n    await page.getByRole('button', { name: 'Login' }).click();\n\n    const errorMessage = page.getByText('Incorrect password. Please try again.');\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 231,
+  "latency_s": 3.34,
+  "timestamp": "2026-06-19T16:43:28.556387"
+}

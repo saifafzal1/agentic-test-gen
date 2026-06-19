@@ -1,0 +1,13 @@
+{
+  "id": "TC_093",
+  "category": "error_states",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see a timeout error if a request takes longer than 10 seconds.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Timeout Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('http://your-application-url.com');\n  });\n\n  test('should display timeout error after 10 seconds', async ({ page }) => {\n    // Simulate a request that takes longer than 10 seconds\n    await page.evaluate(() => {\n      return new Promise((resolve) => setTimeout(resolve, 12000));\n    });\n\n    const errorMessage = await page.getByText('Request timed out. Please try again.');\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should not display timeout error for requests under 10 seconds', async ({ page }) => {\n    // Simulate a request that takes less than 10 seconds\n    await page.evaluate(() => {\n      return new Promise((resolve) => setTimeout(resolve, 5000));\n    });\n\n    const errorMessage = page.getByText('Request timed out. Please try again.');\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 138,
+  "completion_tokens": 227,
+  "latency_s": 3.24,
+  "timestamp": "2026-06-19T16:49:54.808921"
+}

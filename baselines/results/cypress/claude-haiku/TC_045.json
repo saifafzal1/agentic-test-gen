@@ -1,0 +1,13 @@
+{
+  "id": "TC_045",
+  "category": "navigation",
+  "complexity": "medium",
+  "user_story": "As a user, I want internal links to open in the same tab.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Internal Links Navigation', () => {\n  beforeEach(() => {\n    cy.visit('http://localhost:3000');\n  });\n\n  it('should open internal links in the same tab', () => {\n    cy.get('a[href*=\"/about\"]').first().then(($link) => {\n      const href = $link.attr('href');\n      expect($link).not.to.have.attr('target', '_blank');\n      expect($link).not.to.have.attr('target', '_new');\n    });\n\n    cy.get('a[href*=\"/about\"]').first().click();\n    cy.url().should('include', '/about');\n    cy.go('back');\n  });\n\n  it('should navigate through multiple internal links without opening new tabs', () => {\n    cy.get('a[href*=\"/services\"]').first().click();\n    cy.url().should('include', '/services');\n\n    cy.get('a[href*=\"/contact\"]').first().click();\n    cy.url().should('include', '/contact');\n\n    cy.get('a[href*=\"/\"]').first().click();\n    cy.url().should('not.include', '/contact');\n  });\n\n  it('should not open external links in the same tab', () => {\n    cy.get('a[href^=\"http\"]').first().then(($link) => {\n      const href = $link.attr('href');\n      if (!href.includes(Cypress.config().baseUrl)) {\n        expect($link).to.have.attr('target', '_blank');\n      }\n    });\n  });\n\n  it('should handle relative internal links correctly', () => {\n    cy.get('a[href^=\"/\"]').each(($link) => {\n      const href = $link.attr('href');\n      expect(href).to.match(/^\\//);\n      expect($link).not.to.have.attr('target', '_blank');\n    });\n  });\n\n  it('should maintain page state when navigating internal links', () => {\n    cy.get('input[type=\"text\"]').first().type('test data');\n    cy.get('a[href*=\"/about\"]').first().click();\n    cy.url().should('include', '/about');\n    cy.go('back');\n    cy.get('input[type=\"text\"]').first().should('have.value', 'test data');\n  });\n\n  it('should handle internal links with hash fragments in the same tab', () => {\n    cy.get('a[href*=\"#\"]').first().then(($link) => {\n      const href = $link.attr('href');\n      if (href.startsWith('#') || href.includes('/#')) {\n        expect($link).not.to.have.attr('target', '_blank');\n      }\n    });\n\n    cy.get('a[href*=\"#section\"]').first().click({ force: true });\n    cy.url().should('include', '#section');\n  });\n});",
+  "prompt_tokens": 118,
+  "completion_tokens": 705,
+  "latency_s": 5.21,
+  "timestamp": "2026-06-19T17:09:30.473275"
+}

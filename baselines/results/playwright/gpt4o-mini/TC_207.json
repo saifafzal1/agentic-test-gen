@@ -1,0 +1,13 @@
+{
+  "id": "TC_207",
+  "category": "accessibility",
+  "complexity": "medium",
+  "user_story": "As a user, I want colour contrast to meet WCAG 2.1 AA standards.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Accessibility - Colour Contrast', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('Check text color contrast against background', async ({ page }) => {\n    const textElement = page.getByText('Sample Text'); // Replace with actual text\n    const backgroundColor = await page.evaluate(element => {\n      return window.getComputedStyle(element).backgroundColor;\n    }, textElement);\n\n    const textColor = await page.evaluate(element => {\n      return window.getComputedStyle(element).color;\n    }, textElement);\n\n    const contrastRatio = calculateContrastRatio(textColor, backgroundColor);\n    expect(contrastRatio).toBeGreaterThanOrEqual(4.5); // AA standard for normal text\n  });\n\n  test('Check button color contrast', async ({ page }) => {\n    const buttonElement = page.getByRole('button', { name: 'Submit' }); // Replace with actual button name\n    const backgroundColor = await page.evaluate(element => {\n      return window.getComputedStyle(element).backgroundColor;\n    }, buttonElement);\n\n    const textColor = await page.evaluate(element => {\n      return window.getComputedStyle(element).color;\n    }, buttonElement);\n\n    const contrastRatio = calculateContrastRatio(textColor, backgroundColor);\n    expect(contrastRatio).toBeGreaterThanOrEqual(3.0); // AA standard for large text\n  });\n});\n\nfunction calculateContrastRatio(foregroundColor: string, backgroundColor: string): number {\n  // Implement contrast ratio calculation logic here\n  return 4.5; // Placeholder value\n}",
+  "prompt_tokens": 135,
+  "completion_tokens": 353,
+  "latency_s": 5.32,
+  "timestamp": "2026-06-19T16:57:34.394090"
+}

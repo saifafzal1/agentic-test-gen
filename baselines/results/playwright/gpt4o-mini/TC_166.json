@@ -1,0 +1,13 @@
+{
+  "id": "TC_166",
+  "category": "table_list",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a badge count of selected rows.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table List Badge Count', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should display badge count when rows are selected', async ({ page }) => {\n    const firstRowCheckbox = page.getByRole('checkbox', { name: 'Select Row 1' });\n    const secondRowCheckbox = page.getByRole('checkbox', { name: 'Select Row 2' });\n    const badgeCount = page.getByText('Selected Rows:');\n\n    await firstRowCheckbox.check();\n    await secondRowCheckbox.check();\n\n    await expect(badgeCount).toHaveText('Selected Rows: 2');\n  });\n\n  test('should update badge count when a row is deselected', async ({ page }) => {\n    const firstRowCheckbox = page.getByRole('checkbox', { name: 'Select Row 1' });\n    const badgeCount = page.getByText('Selected Rows:');\n\n    await firstRowCheckbox.check();\n    await expect(badgeCount).toHaveText('Selected Rows: 1');\n\n    await firstRowCheckbox.uncheck();\n    await expect(badgeCount).toHaveText('Selected Rows: 0');\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 263,
+  "latency_s": 4.01,
+  "timestamp": "2026-06-19T16:54:43.166926"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_033",
+  "category": "form_validation",
+  "complexity": "medium",
+  "user_story": "As a user, I want the submit button to be disabled until all required fields are filled.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Form Validation', () => {\n    beforeEach(() => {\n        cy.visit('/form-page'); // Replace with the actual URL of the form page\n    });\n\n    it('should enable the submit button when all required fields are filled', () => {\n        cy.get('input[name=\"firstName\"]').type('John');\n        cy.get('input[name=\"lastName\"]').type('Doe');\n        cy.get('input[name=\"email\"]').type('john.doe@example.com');\n        cy.get('input[name=\"password\"]').type('Password123');\n        \n        cy.get('button[type=\"submit\"]').should('not.be.disabled');\n    });\n\n    it('should keep the submit button disabled when required fields are empty', () => {\n        cy.get('input[name=\"firstName\"]').type('John');\n        cy.get('input[name=\"lastName\"]').clear(); // Clearing last name to simulate edge case\n        cy.get('input[name=\"email\"]').type('john.doe@example.com');\n        cy.get('input[name=\"password\"]').type('Password123');\n        \n        cy.get('button[type=\"submit\"]').should('be.disabled');\n    });\n});",
+  "prompt_tokens": 113,
+  "completion_tokens": 231,
+  "latency_s": 3.3,
+  "timestamp": "2026-06-19T16:27:14.728248"
+}

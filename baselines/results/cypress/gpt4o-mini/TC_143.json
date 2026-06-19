@@ -1,0 +1,13 @@
+{
+  "id": "TC_143",
+  "category": "modal_dialog",
+  "complexity": "simple",
+  "user_story": "As a user, I want a lightbox to open when clicking an image in a gallery.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Image Gallery Lightbox', () => {\n    beforeEach(() => {\n        cy.visit('/gallery'); // Replace with the actual URL of the gallery page\n    });\n\n    it('should open lightbox when an image is clicked', () => {\n        cy.get('.gallery-image').first().click(); // Adjust selector as needed\n        cy.get('.lightbox').should('be.visible'); // Adjust selector for lightbox\n        cy.get('.lightbox img').should('have.attr', 'src').and('include', 'expected-image-src'); // Replace with expected image src\n    });\n\n    it('should close lightbox when close button is clicked', () => {\n        cy.get('.gallery-image').first().click();\n        cy.get('.lightbox .close-button').click(); // Adjust selector for close button\n        cy.get('.lightbox').should('not.be.visible');\n    });\n});",
+  "prompt_tokens": 113,
+  "completion_tokens": 183,
+  "latency_s": 2.34,
+  "timestamp": "2026-06-19T16:34:39.117380"
+}

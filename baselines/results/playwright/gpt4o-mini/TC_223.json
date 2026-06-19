@@ -1,0 +1,13 @@
+{
+  "id": "TC_223",
+  "category": "accessibility",
+  "complexity": "complex",
+  "user_story": "As a user, I want the document language to be declared in the HTML tag.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Document Language Declaration', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://yourwebsite.com'); // Replace with your website URL\n  });\n\n  test('should have the correct language declared in the HTML tag', async ({ page }) => {\n    const htmlTag = await page.locator('html').evaluate(node => node.outerHTML);\n    expect(htmlTag).toMatch(/<html lang=\"en\">/); // Replace 'en' with the expected language code\n  });\n\n  test('should be accessible with screen readers', async ({ page }) => {\n    const langAttribute = await page.locator('html').getAttribute('lang');\n    expect(langAttribute).toBe('en'); // Replace 'en' with the expected language code\n\n    // Additional accessibility check can be added here\n    const accessibilityCheck = await page.evaluate(() => {\n      // Simulate a screen reader check or use an accessibility library\n      return true; // Placeholder for actual accessibility check\n    });\n    expect(accessibilityCheck).toBe(true);\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 235,
+  "latency_s": 2.6,
+  "timestamp": "2026-06-19T16:58:40.353650"
+}

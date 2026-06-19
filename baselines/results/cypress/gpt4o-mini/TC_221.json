@@ -1,0 +1,13 @@
+{
+  "id": "TC_221",
+  "category": "accessibility",
+  "complexity": "simple",
+  "user_story": "As a user, I want form autocomplete attributes to be set correctly.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Form Autocomplete Attributes', () => {\n    beforeEach(() => {\n        cy.visit('/form-page'); // Replace with the actual URL of the form page\n    });\n\n    it('should have correct autocomplete attribute for email input', () => {\n        cy.get('input[type=\"email\"]')\n            .should('have.attr', 'autocomplete', 'email');\n    });\n\n    it('should have correct autocomplete attribute for username input', () => {\n        cy.get('input[name=\"username\"]')\n            .should('have.attr', 'autocomplete', 'username');\n    });\n});",
+  "prompt_tokens": 107,
+  "completion_tokens": 117,
+  "latency_s": 1.76,
+  "timestamp": "2026-06-19T16:38:59.972379"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_087",
+  "category": "crud_operations",
+  "complexity": "medium",
+  "user_story": "As a user, I want to comment on a record.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Comment on a record', () => {\n    const recordId = '12345'; // Example record ID\n    const commentText = 'This is a test comment.';\n    const emptyCommentText = '';\n\n    beforeEach(() => {\n        cy.visit(`/records/${recordId}`);\n    });\n\n    it('should allow the user to add a comment to a record', () => {\n        cy.get('textarea[name=\"comment\"]').type(commentText);\n        cy.get('button[type=\"submit\"]').click();\n        \n        cy.get('.comments-list').should('contain', commentText);\n        cy.get('textarea[name=\"comment\"]').should('be.empty');\n    });\n\n    it('should not allow the user to submit an empty comment', () => {\n        cy.get('textarea[name=\"comment\"]').type(emptyCommentText);\n        cy.get('button[type=\"submit\"]').click();\n        \n        cy.get('.error-message').should('contain', 'Comment cannot be empty');\n        cy.get('.comments-list').should('not.contain', emptyCommentText);\n    });\n});",
+  "prompt_tokens": 106,
+  "completion_tokens": 213,
+  "latency_s": 2.86,
+  "timestamp": "2026-06-19T16:30:56.634173"
+}

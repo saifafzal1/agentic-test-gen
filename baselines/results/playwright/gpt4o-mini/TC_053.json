@@ -1,0 +1,13 @@
+{
+  "id": "TC_053",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want keyboard arrow keys to navigate dropdown menu items.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dropdown Menu Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should navigate dropdown items using keyboard arrow keys', async ({ page }) => {\n    await page.getByRole('button', { name: 'Dropdown' }).click(); // Replace with actual dropdown button name\n    await expect(page.getByRole('menu')).toBeVisible();\n\n    await page.keyboard.press('ArrowDown');\n    await expect(page.getByRole('menuitem', { name: 'Item 1' })).toHaveFocus();\n\n    await page.keyboard.press('ArrowDown');\n    await expect(page.getByRole('menuitem', { name: 'Item 2' })).toHaveFocus();\n  });\n\n  test('should select dropdown item using Enter key', async ({ page }) => {\n    await page.getByRole('button', { name: 'Dropdown' }).click(); // Replace with actual dropdown button name\n    await page.keyboard.press('ArrowDown');\n    await page.keyboard.press('Enter');\n\n    await expect(page.getByRole('button', { name: 'Dropdown' })).toHaveText('Item 1'); // Replace with expected selected item\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 272,
+  "latency_s": 3.61,
+  "timestamp": "2026-06-19T16:46:59.403634"
+}

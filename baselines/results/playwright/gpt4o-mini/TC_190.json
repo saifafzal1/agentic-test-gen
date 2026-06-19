@@ -1,0 +1,13 @@
+{
+  "id": "TC_190",
+  "category": "search_filter",
+  "complexity": "complex",
+  "user_story": "As a user, I want to clear all applied filters with a single button.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Filter Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search'); // Replace with the actual URL of the search page\n  });\n\n  test('should apply filters correctly', async ({ page }) => {\n    await page.getByLabel('Category').selectOption('Electronics');\n    await page.getByLabel('Brand').selectOption('Brand A');\n    await page.getByRole('button', { name: 'Apply Filters' }).click();\n\n    const filterSummary = await page.getByRole('heading', { name: 'Applied Filters' });\n    await expect(filterSummary).toBeVisible();\n    await expect(filterSummary).toContainText('Electronics');\n    await expect(filterSummary).toContainText('Brand A');\n  });\n\n  test('should clear all applied filters', async ({ page }) => {\n    await page.getByLabel('Category').selectOption('Electronics');\n    await page.getByLabel('Brand').selectOption('Brand A');\n    await page.getByRole('button', { name: 'Apply Filters' }).click();\n\n    await page.getByRole('button', { name: 'Clear All Filters' }).click();\n\n    const filterSummary = await page.getByRole('heading', { name: 'Applied Filters' });\n    await expect(filterSummary).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 294,
+  "latency_s": 3.92,
+  "timestamp": "2026-06-19T16:56:23.689703"
+}
