@@ -1,14 +1,36 @@
+# Python
 .venv/
 __pycache__/
 *.pyc
 *.pyo
-.DS_Store
-*.bin
-*.safetensors
-*.pt
-*.ckpt
-results/checkpoints/
 .env
-*.env
-wandb/
+
+# Model weights (too large for git — use HF Hub instead)
+fine_tuning/gemma-base-model/
+fine_tuning/gemma-finetuned*/
+fine_tuning/gemma4-base-model/
+fine_tuning/phi3-base-model/
+
+# LoRA adapter outputs — uploaded to HuggingFace Hub separately
+fine_tuning/gemma4-cypress/
+fine_tuning/gemma4-playwright/
+fine_tuning/phi3-cypress/
+fine_tuning/phi3-playwright/
+
+# Training logs
+fine_tuning/*.log
+
+# Logs
+*.log
+
+# Presentation & viva artifacts (not part of research codebase)
+*.pptx
+make_viva_pptx.js
+render_workflow*.js
+workflow*_slide.js
+
+# macOS
+.DS_Store
+
+# Jupyter
 .ipynb_checkpoints/
