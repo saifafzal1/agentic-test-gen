@@ -1,0 +1,13 @@
+{
+  "id": "TC_098",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a user, I want an error boundary to catch UI crashes and show a fallback screen.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Error Boundary Tests', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/'); // Replace with the actual URL of the application\n  });\n\n  test('should display fallback screen on UI crash', async ({ page }) => {\n    // Simulate a UI crash\n    await page.evaluate(() => {\n      throw new Error('Simulated UI crash');\n    });\n\n    // Check for the presence of the fallback screen\n    const fallbackScreen = page.getByText('Something went wrong. Please try again later.');\n    await expect(fallbackScreen).toBeVisible();\n  });\n\n  test('should not show fallback screen when UI is functioning', async ({ page }) => {\n    // Interact with the UI to ensure it's functioning\n    await page.getByRole('button', { name: 'Load Data' }).click();\n\n    // Check that the fallback screen is not visible\n    const fallbackScreen = page.getByText('Something went wrong. Please try again later.');\n    await expect(fallbackScreen).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 232,
+  "latency_s": 3.13,
+  "timestamp": "2026-06-19T16:50:13.533385"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_099",
+  "category": "error_states",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see an out-of-stock message when adding an unavailable item to cart.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Out of Stock Message', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should display out-of-stock message when adding unavailable item to cart', async ({ page }) => {\n    await page.getByText('Unavailable Item').click(); // Replace with the actual item name\n    await page.getByRole('button', { name: 'Add to Cart' }).click();\n    \n    const outOfStockMessage = await page.getByText('This item is currently out of stock.');\n    await expect(outOfStockMessage).toBeVisible();\n  });\n\n  test('should not allow adding out-of-stock item to cart', async ({ page }) => {\n    await page.getByText('Unavailable Item').click(); // Replace with the actual item name\n    await page.getByRole('button', { name: 'Add to Cart' }).click();\n    \n    const cartCount = await page.getByRole('button', { name: 'Cart' }).getByText(/items/i);\n    await expect(cartCount).toHaveText('0'); // Assuming the cart should show 0 items\n  });\n});",
+  "prompt_tokens": 138,
+  "completion_tokens": 263,
+  "latency_s": 5.26,
+  "timestamp": "2026-06-19T16:50:19.106180"
+}

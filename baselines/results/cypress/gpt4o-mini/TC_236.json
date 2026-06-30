@@ -1,0 +1,13 @@
+{
+  "id": "TC_236",
+  "category": "responsive",
+  "complexity": "simple",
+  "user_story": "As a user, I want the homepage hero section to display differently on mobile.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Homepage Hero Section', () => {\n    beforeEach(() => {\n        cy.visit('/');\n    });\n\n    it('should display the hero section correctly on mobile', () => {\n        cy.viewport('iphone-6'); // Set viewport to mobile size\n        cy.get('.hero-section').should('be.visible');\n        cy.get('.hero-title').should('have.css', 'font-size', '24px'); // Example check for font size\n        cy.get('.hero-image').should('have.attr', 'src').and('include', 'mobile-hero-image.jpg'); // Check for mobile image\n    });\n\n    it('should not display the desktop hero image on mobile', () => {\n        cy.viewport('iphone-6'); // Set viewport to mobile size\n        cy.get('.hero-image').should('not.have.attr', 'src', 'desktop-hero-image.jpg'); // Ensure desktop image is not displayed\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 189,
+  "latency_s": 3.69,
+  "timestamp": "2026-06-19T16:39:47.457481"
+}

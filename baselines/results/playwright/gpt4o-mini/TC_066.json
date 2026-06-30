@@ -1,0 +1,13 @@
+{
+  "id": "TC_066",
+  "category": "api_response_handling",
+  "complexity": "medium",
+  "user_story": "As a user, I want the app to handle 403 errors by showing an access denied page.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Access Denied Page Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/protected-resource');\n  });\n\n  test('should display access denied page on 403 error', async ({ page }) => {\n    await page.route('**/protected-resource', (route) => {\n      route.fulfill({\n        status: 403,\n        contentType: 'text/html',\n        body: '<h1>Access Denied</h1><p>You do not have permission to view this resource.</p>',\n      });\n    });\n\n    await page.reload();\n\n    const accessDeniedHeading = await page.getByRole('heading', { name: /Access Denied/i });\n    const accessDeniedMessage = await page.getByText(/You do not have permission to view this resource./i);\n\n    await expect(accessDeniedHeading).toBeVisible();\n    await expect(accessDeniedMessage).toBeVisible();\n  });\n\n  test('should not show access denied page on successful response', async ({ page }) => {\n    await page.route('**/protected-resource', (route) => {\n      route.fulfill({\n        status: 200,\n        contentType: 'text/html',\n        body: '<h1>Protected Resource</h1><p>Welcome to the protected resource.</p>',\n      });\n    });\n\n    await page.reload();\n\n    const protectedResourceHeading = await page.getByRole('heading', { name: /Protected Resource/i });\n    const protectedResourceMessage = await page.getByText(/Welcome to the protected resource./i);\n\n    await expect(protectedResourceHeading).toBeVisible();\n    await expect(protectedResourceMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 139,
+  "completion_tokens": 358,
+  "latency_s": 6.78,
+  "timestamp": "2026-06-19T16:47:58.770565"
+}

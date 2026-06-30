@@ -1,0 +1,13 @@
+{
+  "id": "TC_083",
+  "category": "crud_operations",
+  "complexity": "simple",
+  "user_story": "As a user, I want to assign a category to a record via a dropdown.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Assign Category to Record', () => {\n    beforeEach(() => {\n        cy.visit('/records'); // Adjust the URL to the actual records page\n    });\n\n    it('should assign a category to a record successfully', () => {\n        cy.get('.record-item').first().click(); // Click on the first record\n        cy.get('.category-dropdown').select('Category 1'); // Select a category from the dropdown\n        cy.get('.save-button').click(); // Click the save button\n        cy.get('.notification').should('contain', 'Category assigned successfully'); // Verify success message\n    });\n\n    it('should show an error when no category is selected', () => {\n        cy.get('.record-item').first().click(); // Click on the first record\n        cy.get('.save-button').click(); // Click the save button without selecting a category\n        cy.get('.error-message').should('contain', 'Please select a category'); // Verify error message\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 203,
+  "latency_s": 3.21,
+  "timestamp": "2026-06-19T16:30:40.866675"
+}

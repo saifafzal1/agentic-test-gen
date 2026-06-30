@@ -1,0 +1,13 @@
+{
+  "id": "TC_156",
+  "category": "table_list",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see row numbers in the first column.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Table Row Numbers', () => {\n    beforeEach(() => {\n        cy.visit('/table-list'); // Adjust the URL to match your application\n    });\n\n    it('should display row numbers in the first column', () => {\n        cy.get('table tbody tr').each((row, index) => {\n            cy.wrap(row).find('td:first').should('have.text', (index + 1).toString());\n        });\n    });\n\n    it('should not display row numbers if the table is empty', () => {\n        cy.get('table tbody').should('be.empty');\n        cy.get('table tbody tr').should('have.length', 0);\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 140,
+  "latency_s": 3.06,
+  "timestamp": "2026-06-19T16:35:23.148948"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_273",
+  "category": "notifications",
+  "complexity": "medium",
+  "user_story": "As a user, I want to manage my notification preferences in settings.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Notification Preferences Management', () => {\n    beforeEach(() => {\n        cy.visit('/settings/notifications');\n        cy.login('testuser', 'password'); // Assuming a login function is available\n    });\n\n    it('should successfully update notification preferences', () => {\n        cy.get('input[name=\"emailNotifications\"]').check();\n        cy.get('input[name=\"smsNotifications\"]').uncheck();\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.get('.notification-success').should('be.visible').and('contain', 'Preferences updated successfully');\n        cy.get('input[name=\"emailNotifications\"]').should('be.checked');\n        cy.get('input[name=\"smsNotifications\"]').should('not.be.checked');\n    });\n\n    it('should show an error message when trying to save invalid preferences', () => {\n        cy.get('input[name=\"emailNotifications\"]').check();\n        cy.get('input[name=\"smsNotifications\"]').uncheck();\n        cy.get('input[name=\"emailNotifications\"]').clear(); // Assuming this field is required\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.get('.notification-error').should('be.visible').and('contain', 'Email notifications are required');\n    });\n});",
+  "prompt_tokens": 107,
+  "completion_tokens": 243,
+  "latency_s": 3.14,
+  "timestamp": "2026-06-19T16:42:16.513616"
+}

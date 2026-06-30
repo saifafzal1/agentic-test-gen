@@ -1,0 +1,13 @@
+{
+  "id": "TC_254",
+  "category": "payment_flow",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an itemised receipt after checkout.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Checkout Receipt', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com');\n    // Assume user is already logged in and has items in the cart\n    await page.getByRole('button', { name: /checkout/i }).click();\n  });\n\n  test('should display itemised receipt after checkout', async ({ page }) => {\n    await page.getByRole('button', { name: /confirm payment/i }).click();\n    const receiptTitle = await page.getByText(/receipt/i);\n    await expect(receiptTitle).toBeVisible();\n  });\n\n  test('should list all purchased items in the receipt', async ({ page }) => {\n    await page.getByRole('button', { name: /confirm payment/i }).click();\n    const itemList = await page.getByRole('list', { name: /purchased items/i });\n    await expect(itemList).toBeVisible();\n    const items = await itemList.locator('li');\n    await expect(items).toHaveCount(3); // Assuming 3 items were purchased\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 242,
+  "latency_s": 5.2,
+  "timestamp": "2026-06-19T17:01:10.252512"
+}

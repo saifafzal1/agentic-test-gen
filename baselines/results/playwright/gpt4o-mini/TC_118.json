@@ -1,0 +1,13 @@
+{
+  "id": "TC_118",
+  "category": "async_await",
+  "complexity": "complex",
+  "user_story": "As a user, I want sequential async steps in a checkout flow to complete in order.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Checkout Flow', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com');\n  });\n\n  test('should complete the checkout flow in order', async ({ page }) => {\n    await page.getByRole('button', { name: 'Start Checkout' }).click();\n    await expect(page.getByText('Shipping Information')).toBeVisible();\n\n    await page.getByLabel('Full Name').fill('John Doe');\n    await page.getByLabel('Address').fill('123 Main St');\n    await page.getByRole('button', { name: 'Continue to Payment' }).click();\n    \n    await expect(page.getByText('Payment Information')).toBeVisible();\n    await page.getByLabel('Credit Card Number').fill('4111111111111111');\n    await page.getByLabel('Expiration Date').fill('12/25');\n    await page.getByRole('button', { name: 'Complete Order' }).click();\n\n    await expect(page.getByText('Thank you for your order!')).toBeVisible();\n  });\n\n  test('should show error for incomplete shipping information', async ({ page }) => {\n    await page.getByRole('button', { name: 'Start Checkout' }).click();\n    await expect(page.getByText('Shipping Information')).toBeVisible();\n\n    await page.getByLabel('Full Name').fill(''); // Leave full name empty\n    await page.getByRole('button', { name: 'Continue to Payment' }).click();\n\n    await expect(page.getByText('Please fill out this field.')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 348,
+  "latency_s": 5.83,
+  "timestamp": "2026-06-19T16:51:43.500741"
+}

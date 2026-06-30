@@ -1,0 +1,13 @@
+{
+  "id": "TC_061",
+  "category": "api_response_handling",
+  "complexity": "complex",
+  "user_story": "As a user, I want optimistic UI updates when liking a post.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Optimistic UI Updates for Liking a Post', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/posts');\n  });\n\n  test('should optimistically update the like count when a post is liked', async ({ page }) => {\n    const post = await page.getByText('Post Title 1');\n    const likeButton = await post.getByRole('button', { name: 'Like' });\n\n    await expect(likeButton).toHaveText('Like');\n    await likeButton.click();\n\n    await expect(likeButton).toHaveText('Liked');\n    await expect(post.getByText('1 Like')).toBeVisible();\n  });\n\n  test('should revert the like count if the like action fails', async ({ page }) => {\n    const post = await page.getByText('Post Title 2');\n    const likeButton = await post.getByRole('button', { name: 'Like' });\n\n    await likeButton.click();\n\n    // Simulate API failure\n    await page.route('**/like-post', route => {\n      route.fulfill({ status: 500 });\n    });\n\n    await likeButton.click();\n\n    await expect(likeButton).toHaveText('Like');\n    await expect(post.getByText('0 Likes')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 283,
+  "latency_s": 4.09,
+  "timestamp": "2026-06-19T16:47:31.224561"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_206",
+  "category": "accessibility",
+  "complexity": "simple",
+  "user_story": "As a user, I want focus indicators to be visible on all interactive elements.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Accessibility Focus Indicators', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should display focus indicators on buttons', () => {\n        cy.get('button').first().focus().should('have.css', 'outline-style', 'auto');\n    });\n\n    it('should display focus indicators on links', () => {\n        cy.get('a').first().focus().should('have.css', 'outline-style', 'auto');\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 107,
+  "latency_s": 1.67,
+  "timestamp": "2026-06-19T16:38:00.204245"
+}

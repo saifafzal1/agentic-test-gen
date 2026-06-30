@@ -1,0 +1,13 @@
+{
+  "id": "TC_165",
+  "category": "table_list",
+  "complexity": "medium",
+  "user_story": "As a user, I want to print a filtered table view.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Filtered Table View Printing', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-view');\n  });\n\n  test('should filter the table and print the results', async ({ page }) => {\n    await page.getByLabel('Filter by name').fill('John Doe');\n    await page.getByRole('button', { name: 'Apply Filter' }).click();\n    \n    const filteredRow = await page.getByText('John Doe');\n    await expect(filteredRow).toBeVisible();\n  });\n\n  test('should print the filtered table', async ({ page }) => {\n    await page.getByLabel('Filter by name').fill('Jane Smith');\n    await page.getByRole('button', { name: 'Apply Filter' }).click();\n    \n    await page.getByRole('button', { name: 'Print' }).click();\n    \n    const printDialog = await page.getByText('Print Preview');\n    await expect(printDialog).toBeVisible();\n  });\n});",
+  "prompt_tokens": 130,
+  "completion_tokens": 220,
+  "latency_s": 6.29,
+  "timestamp": "2026-06-19T16:54:38.856718"
+}

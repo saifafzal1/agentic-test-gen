@@ -1,0 +1,13 @@
+{
+  "id": "TC_120",
+  "category": "async_await",
+  "complexity": "medium",
+  "user_story": "As a user, I want a WebSocket connection to update the UI in real-time.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('WebSocket Connection Tests', () => {\n  let page: any;\n\n  test.beforeEach(async ({ browser }) => {\n    page = await browser.newPage();\n    await page.goto('http://localhost:3000'); // Replace with your app's URL\n  });\n\n  test('should display initial data from WebSocket', async () => {\n    const initialData = await page.locator('text=Initial Data').innerText();\n    expect(initialData).toBe('Expected Initial Data'); // Replace with expected initial data\n  });\n\n  test('should update UI in real-time when new data is received', async () => {\n    const updatedDataLocator = page.getByRole('status'); // Replace with appropriate role or locator\n    await page.waitForTimeout(5000); // Wait for WebSocket to send updates\n\n    const updatedData = await updatedDataLocator.innerText();\n    expect(updatedData).toBe('Expected Updated Data'); // Replace with expected updated data\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 216,
+  "latency_s": 2.43,
+  "timestamp": "2026-06-19T16:51:49.295877"
+}

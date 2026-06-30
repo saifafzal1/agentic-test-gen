@@ -1,0 +1,13 @@
+{
+  "id": "TC_046",
+  "category": "navigation",
+  "complexity": "complex",
+  "user_story": "As a user, I want external links to open in a new tab.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('External Links Navigation', () => {\n    beforeEach(() => {\n        cy.visit('https://example.com'); // Replace with the actual URL of the application\n    });\n\n    it('should open external links in a new tab', () => {\n        cy.get('a.external-link') // Replace with the actual selector for external links\n            .should('have.attr', 'target', '_blank')\n            .and('have.attr', 'rel', 'noopener noreferrer');\n    });\n\n    it('should not navigate to the external link in the same tab', () => {\n        cy.get('a.external-link') // Replace with the actual selector for external links\n            .invoke('removeAttr', 'target') // Temporarily remove target to test navigation\n            .click();\n        \n        cy.url().should('not.eq', 'https://external-link.com'); // Replace with the actual external link\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 185,
+  "latency_s": 2.69,
+  "timestamp": "2026-06-19T16:28:01.250022"
+}

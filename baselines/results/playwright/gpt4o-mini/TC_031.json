@@ -1,0 +1,13 @@
+{
+  "id": "TC_031",
+  "category": "form_validation",
+  "complexity": "complex",
+  "user_story": "As a user, I want file upload to reject files larger than 5MB.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload'); // Replace with the actual URL of the upload page\n  });\n\n  test('should reject files larger than 5MB', async ({ page }) => {\n    const fileInput = page.getByLabel('Upload File'); // Replace with the actual label of the file input\n    const largeFilePath = 'path/to/large/file.txt'; // Replace with the actual path to a file larger than 5MB\n\n    await fileInput.setInputFiles(largeFilePath);\n    await page.getByRole('button', { name: 'Submit' }).click(); // Replace with the actual button role and name\n\n    const errorMessage = await page.getByText('File size exceeds 5MB limit'); // Replace with the actual error message\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should accept files smaller than or equal to 5MB', async ({ page }) => {\n    const fileInput = page.getByLabel('Upload File'); // Replace with the actual label of the file input\n    const smallFilePath = 'path/to/small/file.txt'; // Replace with the actual path to a file smaller than or equal to 5MB\n\n    await fileInput.setInputFiles(smallFilePath);\n    await page.getByRole('button', { name: 'Submit' }).click(); // Replace with the actual button role and name\n\n    const successMessage = await page.getByText('File uploaded successfully'); // Replace with the actual success message\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 355,
+  "latency_s": 6.81,
+  "timestamp": "2026-06-19T16:45:34.733024"
+}

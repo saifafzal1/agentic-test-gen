@@ -1,0 +1,13 @@
+{
+  "id": "TC_138",
+  "category": "modal_dialog",
+  "complexity": "medium",
+  "user_story": "As a user, I want a modal to be responsive on mobile screen sizes.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Responsive Modal Test', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n        cy.get('.open-modal-button').click(); // Adjust selector to open the modal\n    });\n\n    it('should display the modal correctly on mobile screen sizes', () => {\n        cy.viewport('iphone-6'); // Set viewport to mobile size\n        cy.get('.modal').should('be.visible');\n        cy.get('.modal').should('have.css', 'width').and('match', /100%/);\n        cy.get('.modal-content').should('have.css', 'padding').and('match', /16px/);\n    });\n\n    it('should close the modal when the close button is clicked', () => {\n        cy.viewport('iphone-6'); // Set viewport to mobile size\n        cy.get('.close-modal-button').click(); // Adjust selector for close button\n        cy.get('.modal').should('not.be.visible');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 205,
+  "latency_s": 2.82,
+  "timestamp": "2026-06-19T16:34:25.528856"
+}

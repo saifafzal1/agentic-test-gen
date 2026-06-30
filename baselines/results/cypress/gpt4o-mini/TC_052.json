@@ -1,0 +1,13 @@
+{
+  "id": "TC_052",
+  "category": "navigation",
+  "complexity": "complex",
+  "user_story": "As a user, I want a sticky header that stays visible when scrolling.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Sticky Header', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should display the header at the top of the page when scrolling down', () => {\n        cy.get('header').should('be.visible'); // Ensure header is visible initially\n        cy.scrollTo(0, 500); // Scroll down the page\n        cy.get('header').should('have.class', 'sticky'); // Check if header has sticky class\n        cy.get('header').should('be.visible'); // Ensure header is still visible\n    });\n\n    it('should not lose visibility when scrolling back up', () => {\n        cy.get('header').should('be.visible'); // Ensure header is visible initially\n        cy.scrollTo(0, 500); // Scroll down the page\n        cy.scrollTo(0, 0); // Scroll back to the top\n        cy.get('header').should('have.class', 'sticky'); // Check if header still has sticky class\n        cy.get('header').should('be.visible'); // Ensure header is still visible\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 237,
+  "latency_s": 3.43,
+  "timestamp": "2026-06-19T16:28:27.480574"
+}

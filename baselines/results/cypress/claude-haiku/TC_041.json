@@ -1,0 +1,13 @@
+{
+  "id": "TC_041",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want a 404 page to appear for invalid URLs.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('404 Page Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/', { failOnStatusCode: false });\n  });\n\n  it('should display 404 page when navigating to invalid URL', () => {\n    cy.visit('/invalid-page-that-does-not-exist', { failOnStatusCode: false });\n    cy.get('h1').should('contain', '404');\n    cy.get('body').should('contain', 'Page Not Found');\n  });\n\n  it('should display 404 page for deeply nested invalid routes', () => {\n    cy.visit('/some/deeply/nested/invalid/route', { failOnStatusCode: false });\n    cy.get('h1').should('contain', '404');\n  });\n\n  it('should have a link to return to home page from 404', () => {\n    cy.visit('/nonexistent', { failOnStatusCode: false });\n    cy.get('a[href=\"/\"]').should('be.visible');\n    cy.get('a[href=\"/\"]').click();\n    cy.url().should('eq', Cypress.config().baseUrl + '/');\n  });\n\n  it('should return 404 status code for invalid URL', () => {\n    cy.request({ url: '/invalid-url', failOnStatusCode: false }).then((response) => {\n      expect(response.status).to.equal(404);\n    });\n  });\n\n  it('should handle special characters in invalid URL', () => {\n    cy.visit('/page-with-@#$%', { failOnStatusCode: false });\n    cy.get('h1').should('contain', '404');\n  });\n});",
+  "prompt_tokens": 120,
+  "completion_tokens": 400,
+  "latency_s": 3.05,
+  "timestamp": "2026-06-19T17:09:02.600285"
+}

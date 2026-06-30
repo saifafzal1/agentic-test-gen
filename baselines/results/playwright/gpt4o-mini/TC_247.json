@@ -1,0 +1,13 @@
+{
+  "id": "TC_247",
+  "category": "payment_flow",
+  "complexity": "complex",
+  "user_story": "As a user, I want to apply a promo code and see the discounted total.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Payment Flow - Apply Promo Code', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/checkout');\n  });\n\n  test('should apply promo code and show discounted total', async ({ page }) => {\n    await page.getByLabel('Promo Code').fill('PROMO123');\n    await page.getByRole('button', { name: 'Apply' }).click();\n    \n    const discountedTotal = await page.getByText('Total: $80.00'); // Assuming original total was $100.00\n    await expect(discountedTotal).toBeVisible();\n  });\n\n  test('should show error message for invalid promo code', async ({ page }) => {\n    await page.getByLabel('Promo Code').fill('INVALIDCODE');\n    await page.getByRole('button', { name: 'Apply' }).click();\n    \n    const errorMessage = await page.getByText('Invalid promo code. Please try again.');\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 228,
+  "latency_s": 3.54,
+  "timestamp": "2026-06-19T17:00:36.064589"
+}

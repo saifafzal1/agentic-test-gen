@@ -1,0 +1,13 @@
+{
+  "id": "TC_070",
+  "category": "api_response_handling",
+  "complexity": "complex",
+  "user_story": "As a user, I want a toast notification when a background sync completes.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Background Sync Notification', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-application-url.com');\n  });\n\n  test('should display toast notification on background sync completion', async ({ page }) => {\n    // Trigger the background sync\n    await page.click(getByRole('button', { name: /start sync/i }));\n\n    // Wait for the background sync to complete\n    await page.waitForResponse(response => response.url().includes('/sync-endpoint') && response.status() === 200);\n\n    // Assert that the toast notification is visible\n    const toast = page.getByRole('alert', { name: /sync completed successfully/i });\n    await expect(toast).toBeVisible();\n  });\n\n  test('should not display toast notification if sync fails', async ({ page }) => {\n    // Trigger the background sync with a failure scenario\n    await page.click(getByRole('button', { name: /start sync with error/i }));\n\n    // Wait for the background sync to complete\n    await page.waitForResponse(response => response.url().includes('/sync-endpoint') && response.status() === 500);\n\n    // Assert that the toast notification is not visible\n    const toast = page.getByRole('alert', { name: /sync completed successfully/i });\n    await expect(toast).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 296,
+  "latency_s": 4.67,
+  "timestamp": "2026-06-19T16:48:14.589097"
+}

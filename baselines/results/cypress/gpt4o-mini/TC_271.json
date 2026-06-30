@@ -1,0 +1,13 @@
+{
+  "id": "TC_271",
+  "category": "notifications",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a snackbar message after copying text to clipboard.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Snackbar Notification after Copying Text', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Adjust the URL to your application's base URL\n    });\n\n    it('should display snackbar message after copying text to clipboard', () => {\n        cy.get('.copy-text-button').click(); // Adjust the selector to your copy button\n        cy.get('.snackbar').should('be.visible').and('contain', 'Text copied to clipboard!');\n    });\n\n    it('should not display snackbar message if copy action fails', () => {\n        // Simulate a failure in copying text\n        cy.intercept('POST', '/copy-text', { statusCode: 500 }).as('copyText');\n        cy.get('.copy-text-button').click();\n        cy.wait('@copyText');\n        cy.get('.snackbar').should('not.exist');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 175,
+  "latency_s": 2.8,
+  "timestamp": "2026-06-19T16:42:08.590406"
+}

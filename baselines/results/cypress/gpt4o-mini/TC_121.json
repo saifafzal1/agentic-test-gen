@@ -1,0 +1,13 @@
+{
+  "id": "TC_121",
+  "category": "async_await",
+  "complexity": "complex",
+  "user_story": "As a user, I want async PDF generation to download when ready.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Async PDF Generation', () => {\n    beforeEach(() => {\n        cy.visit('/pdf-generation-page');\n    });\n\n    it('should download the PDF when generation is complete', () => {\n        cy.intercept('GET', '/api/pdf/generate', { statusCode: 200 }).as('pdfGeneration');\n        cy.get('button#generate-pdf').click();\n        cy.wait('@pdfGeneration');\n        cy.get('a#download-pdf').should('be.visible').click();\n        cy.readFile('cypress/downloads/generated.pdf').should('exist');\n    });\n\n    it('should show an error message if PDF generation fails', () => {\n        cy.intercept('GET', '/api/pdf/generate', { statusCode: 500 }).as('pdfGenerationError');\n        cy.get('button#generate-pdf').click();\n        cy.wait('@pdfGenerationError');\n        cy.get('.error-message').should('be.visible').and('contain', 'PDF generation failed. Please try again.');\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 209,
+  "latency_s": 2.82,
+  "timestamp": "2026-06-19T16:33:20.173792"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_172",
+  "category": "file_upload",
+  "complexity": "complex",
+  "user_story": "As a user, I want to remove a file from the upload queue before submitting.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload Queue', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload');\n  });\n\n  test('should remove a file from the upload queue', async ({ page }) => {\n    // Upload a file\n    const fileInput = page.getByLabel('Upload File');\n    await fileInput.setInputFiles('path/to/file.txt');\n\n    // Verify the file is in the upload queue\n    const uploadedFile = page.getByText('file.txt');\n    await expect(uploadedFile).toBeVisible();\n\n    // Remove the file from the upload queue\n    const removeButton = uploadedFile.getByRole('button', { name: 'Remove' });\n    await removeButton.click();\n\n    // Verify the file is no longer in the upload queue\n    await expect(uploadedFile).not.toBeVisible();\n  });\n\n  test('should not submit if the upload queue is empty', async ({ page }) => {\n    // Attempt to submit without uploading a file\n    const submitButton = page.getByRole('button', { name: 'Submit' });\n    await submitButton.click();\n\n    // Verify that an error message is displayed\n    const errorMessage = page.getByText('No files to upload');\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 281,
+  "latency_s": 4.03,
+  "timestamp": "2026-06-19T16:55:00.418150"
+}

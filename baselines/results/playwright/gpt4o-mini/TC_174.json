@@ -1,0 +1,13 @@
+{
+  "id": "TC_174",
+  "category": "file_upload",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see an error if a file exceeds the maximum size limit.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload');\n  });\n\n  test('should display error for file exceeding maximum size limit', async ({ page }) => {\n    const filePath = 'path/to/large/file.txt'; // Replace with a path to a file that exceeds the size limit\n    await page.setInputFiles(getByLabel('File Upload'), filePath);\n    await page.click(getByRole('button', { name: 'Upload' }));\n    \n    const errorMessage = await page.getByText('File size exceeds the maximum limit.');\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should not display error for valid file size', async ({ page }) => {\n    const filePath = 'path/to/valid/file.txt'; // Replace with a path to a file that is within the size limit\n    await page.setInputFiles(getByLabel('File Upload'), filePath);\n    await page.click(getByRole('button', { name: 'Upload' }));\n    \n    const successMessage = await page.getByText('File uploaded successfully.');\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 260,
+  "latency_s": 3.29,
+  "timestamp": "2026-06-19T16:55:08.614582"
+}

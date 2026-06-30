@@ -1,0 +1,13 @@
+{
+  "id": "TC_092",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a user, I want an error to clear when I correct the invalid input.",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "```typescript\nimport { test, expect } from '@playwright/test';\n\ntest.describe('Error clearing on input correction', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('data:text/html,<html><body><form><input id=\"email\" type=\"email\" placeholder=\"Enter email\" /><span id=\"error\" style=\"color: red; display: none;\">Invalid email format</span><button type=\"submit\">Submit</button></form><script>const input = document.getElementById(\"email\"); const error = document.getElementById(\"error\"); input.addEventListener(\"blur\", () => { if (input.value && !input.value.includes(\"@\")) { error.style.display = \"block\"; } }); input.addEventListener(\"input\", () => { if (input.value.includes(\"@\")) { error.style.display = \"none\"; } }); </script></body></html>');\n  });\n\n  test('should display error when invalid input is entered', async ({ page }) => {\n    const emailInput = page.getByPlaceholder('Enter email');\n    const errorMessage = page.getByText('Invalid email format');\n\n    await emailInput.fill('invalidemail');\n    await emailInput.blur();\n\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should clear error when input is corrected', async ({ page }) => {\n    const emailInput = page.getByPlaceholder('Enter email');\n    const errorMessage = page.getByText('Invalid email format');\n\n    await emailInput.fill('invalidemail');\n    await emailInput.blur();\n    await expect(errorMessage).toBeVisible();\n\n    await emailInput.fill('valid@email.com');\n    await expect(errorMessage).toBeHidden();\n  });\n\n  test('should not show error for valid input from start', async ({ page }) => {\n    const emailInput = page.getByPlaceholder('Enter email');\n    const errorMessage = page.getByText('Invalid email format');\n\n    await emailInput.fill('correct@email.com');\n    await emailInput.blur();\n\n    await expect(errorMessage).toBeHidden();\n  });\n});\n```",
+  "prompt_tokens": 145,
+  "completion_tokens": 511,
+  "latency_s": 3.9,
+  "timestamp": "2026-06-19T17:48:26.349614"
+}

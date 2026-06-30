@@ -1,0 +1,13 @@
+{
+  "id": "TC_101",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a user, I want the app to recover gracefully after a JavaScript error.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('JavaScript Error Recovery', () => {\n  beforeEach(() => {\n    cy.visit('http://localhost:3000');\n  });\n\n  it('should display error boundary UI when JavaScript error occurs', () => {\n    cy.window().then((win) => {\n      cy.stub(win.console, 'error');\n    });\n\n    cy.get('[data-testid=\"trigger-error-btn\"]').click();\n\n    cy.get('[data-testid=\"error-boundary\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Something went wrong');\n    cy.get('[data-testid=\"error-details\"]').should('be.visible');\n  });\n\n  it('should allow user to recover from error state by clicking reset button', () => {\n    cy.get('[data-testid=\"trigger-error-btn\"]').click();\n\n    cy.get('[data-testid=\"error-boundary\"]').should('be.visible');\n\n    cy.get('[data-testid=\"reset-error-btn\"]').click();\n\n    cy.get('[data-testid=\"error-boundary\"]').should('not.exist');\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n  });\n\n  it('should maintain app functionality after error recovery', () => {\n    cy.get('[data-testid=\"trigger-error-btn\"]').click();\n    cy.get('[data-testid=\"reset-error-btn\"]').click();\n\n    cy.get('[data-testid=\"input-field\"]').type('test input');\n    cy.get('[data-testid=\"submit-btn\"]').click();\n\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n  });\n\n  it('should handle multiple consecutive errors gracefully', () => {\n    cy.get('[data-testid=\"trigger-error-btn\"]').click();\n    cy.get('[data-testid=\"error-boundary\"]').should('be.visible');\n\n    cy.get('[data-testid=\"reset-error-btn\"]').click();\n    cy.get('[data-testid=\"error-boundary\"]').should('not.exist');\n\n    cy.get('[data-testid=\"trigger-error-btn\"]').click();\n    cy.get('[data-testid=\"error-boundary\"]').should('be.visible');\n\n    cy.get('[data-testid=\"reset-error-btn\"]').click();\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n  });\n\n  it('should log error information for debugging when error occurs', () => {\n    cy.window().then((win) => {\n      cy.stub(win.console, 'error').as('consoleError');\n    });\n\n    cy.get('[data-testid=\"trigger-error-btn\"]').click();\n\n    cy.get('@consoleError').should('have.been.called');\n    cy.get('[data-testid=\"error-boundary\"]').should('be.visible');\n  });\n});",
+  "prompt_tokens": 122,
+  "completion_tokens": 726,
+  "latency_s": 4.2,
+  "timestamp": "2026-06-19T17:15:51.632918"
+}

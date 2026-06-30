@@ -1,0 +1,13 @@
+{
+  "id": "TC_225",
+  "category": "accessibility",
+  "complexity": "medium",
+  "user_story": "As a user, I want the date picker to be fully operable via keyboard alone.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Date Picker Keyboard Accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should open date picker with keyboard', async ({ page }) => {\n    await page.getByRole('textbox', { name: /date/i }).focus();\n    await page.keyboard.press('Enter');\n    const datePicker = page.getByRole('dialog', { name: /select date/i });\n    await expect(datePicker).toBeVisible();\n  });\n\n  test('should navigate and select date using keyboard', async ({ page }) => {\n    await page.getByRole('textbox', { name: /date/i }).focus();\n    await page.keyboard.press('Enter');\n    const datePicker = page.getByRole('dialog', { name: /select date/i });\n    await expect(datePicker).toBeVisible();\n\n    await page.keyboard.press('ArrowRight');\n    await page.keyboard.press('ArrowRight');\n    await page.keyboard.press('Enter'); // Assuming the second date is selected\n    await expect(page.getByRole('textbox', { name: /date/i })).toHaveValue('2023-10-15'); // Replace with the expected date\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 271,
+  "latency_s": 4.24,
+  "timestamp": "2026-06-19T16:58:49.947086"
+}

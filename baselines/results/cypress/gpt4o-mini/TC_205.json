@@ -1,0 +1,13 @@
+{
+  "id": "TC_205",
+  "category": "accessibility",
+  "complexity": "complex",
+  "user_story": "As a keyboard user, I want to navigate all interactive elements using Tab.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Keyboard Navigation Accessibility', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should navigate through all interactive elements using Tab key', () => {\n        cy.get('body').tab(); // Focus on the first interactive element\n        cy.focused().should('have.attr', 'tabindex'); // Check if the first element is focused\n\n        cy.get('body').tab(); // Move to the next interactive element\n        cy.focused().should('have.attr', 'tabindex'); // Check if the next element is focused\n\n        // Repeat for as many interactive elements as necessary\n        // Example for a button\n        cy.get('button').first().should('be.visible').focus();\n        cy.focused().should('have.text', 'Expected Button Text'); // Replace with actual button text\n    });\n\n    it('should loop back to the first interactive element after the last one', () => {\n        const interactiveElementsCount = 5; // Replace with the actual count of interactive elements\n\n        for (let i = 0; i < interactiveElementsCount; i++) {\n            cy.get('body').tab(); // Tab through each interactive element\n        }\n\n        cy.focused().should('have.attr', 'tabindex'); // Check if the last element is focused\n        cy.get('body').tab(); // Tab again to loop back to the first element\n        cy.focused().should('have.attr', 'tabindex'); // Check if the first element is focused again\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 325,
+  "latency_s": 3.98,
+  "timestamp": "2026-06-19T16:37:58.224344"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_143",
+  "category": "modal_dialog",
+  "complexity": "simple",
+  "user_story": "As a user, I want a lightbox to open when clicking an image in a gallery.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Image Gallery Lightbox', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/gallery');\n  });\n\n  test('should open lightbox when an image is clicked', async ({ page }) => {\n    const image = page.getByRole('img', { name: 'Gallery Image 1' });\n    await image.click();\n\n    const lightbox = page.getByRole('dialog', { name: 'Image Lightbox' });\n    await expect(lightbox).toBeVisible();\n  });\n\n  test('should close lightbox when close button is clicked', async ({ page }) => {\n    const image = page.getByRole('img', { name: 'Gallery Image 1' });\n    await image.click();\n\n    const closeButton = page.getByRole('button', { name: 'Close' });\n    await closeButton.click();\n\n    const lightbox = page.getByRole('dialog', { name: 'Image Lightbox' });\n    await expect(lightbox).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 229,
+  "latency_s": 3.14,
+  "timestamp": "2026-06-19T16:53:15.556214"
+}

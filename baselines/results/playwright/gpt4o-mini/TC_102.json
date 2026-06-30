@@ -1,0 +1,13 @@
+{
+  "id": "TC_102",
+  "category": "error_states",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see an error if I submit a form with a future date in a past-date field.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Submission with Past-Date Field', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form-page'); // Replace with the actual form page URL\n  });\n\n  test('should show an error when a future date is submitted', async ({ page }) => {\n    await page.fill(getByLabel('Date Field'), '12/31/2025'); // Replace with the actual label for the date field\n    await page.click(getByRole('button', { name: 'Submit' })); // Replace with the actual button name\n    const errorMessage = await page.getByText('Please enter a valid past date.'); // Replace with the actual error message\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should not show an error when a past date is submitted', async ({ page }) => {\n    await page.fill(getByLabel('Date Field'), '01/01/2020'); // Replace with the actual label for the date field\n    await page.click(getByRole('button', { name: 'Submit' })); // Replace with the actual button name\n    const errorMessage = page.getByText('Please enter a valid past date.'); // Replace with the actual error message\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 142,
+  "completion_tokens": 286,
+  "latency_s": 4.33,
+  "timestamp": "2026-06-19T16:50:31.465675"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_046",
+  "category": "navigation",
+  "complexity": "complex",
+  "user_story": "As a user, I want external links to open in a new tab.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('External Links Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com');\n  });\n\n  test('should open external link in a new tab', async ({ page }) => {\n    const externalLink = page.getByRole('link', { name: 'External Site' });\n    await externalLink.click();\n\n    const [newPage] = await Promise.all([\n      page.waitForEvent('popup'),\n      externalLink.click(),\n    ]);\n\n    expect(newPage.url()).toBe('https://externalsite.com');\n  });\n\n  test('should not navigate away from the original page', async ({ page }) => {\n    const originalPageUrl = page.url();\n    const externalLink = page.getByRole('link', { name: 'External Site' });\n    \n    await externalLink.click();\n    \n    expect(page.url()).toBe(originalPageUrl);\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 201,
+  "latency_s": 4.44,
+  "timestamp": "2026-06-19T16:46:34.517224"
+}

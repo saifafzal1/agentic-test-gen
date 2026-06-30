@@ -1,0 +1,13 @@
+{
+  "id": "TC_071",
+  "category": "api_response_handling",
+  "complexity": "simple",
+  "user_story": "As a user, I want a conflict error message when saving a stale record.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Conflict Error Handling', () => {\n    beforeEach(() => {\n        cy.intercept('POST', '/api/records', {\n            statusCode: 409,\n            body: { message: 'Conflict: Record is stale and cannot be saved.' },\n        }).as('saveRecord');\n        cy.visit('/records'); // Adjust the URL to your application's records page\n    });\n\n    it('should display a conflict error message when saving a stale record', () => {\n        cy.get('input[name=\"recordName\"]').type('Stale Record');\n        cy.get('button[type=\"submit\"]').click();\n        cy.wait('@saveRecord');\n        cy.get('.error-message').should('be.visible').and('contain', 'Conflict: Record is stale and cannot be saved.');\n    });\n\n    it('should not display the error message when saving a valid record', () => {\n        cy.intercept('POST', '/api/records', {\n            statusCode: 200,\n            body: { message: 'Record saved successfully.' },\n        }).as('saveValidRecord');\n\n        cy.get('input[name=\"recordName\"]').type('Valid Record');\n        cy.get('button[type=\"submit\"]').click();\n        cy.wait('@saveValidRecord');\n        cy.get('.error-message').should('not.exist');\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 266,
+  "latency_s": 3.49,
+  "timestamp": "2026-06-19T16:29:48.334050"
+}

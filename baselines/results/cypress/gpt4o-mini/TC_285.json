@@ -1,0 +1,13 @@
+{
+  "id": "TC_285",
+  "category": "user_profile",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see a public profile page with my shared information.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Public Profile Page', () => {\n    beforeEach(() => {\n        cy.visit('/profile/public'); // Adjust the URL as necessary\n    });\n\n    it('should display the user\\'s shared information correctly', () => {\n        cy.get('.profile-name').should('contain', 'John Doe'); // Replace with actual user name\n        cy.get('.profile-bio').should('contain', 'This is my bio.'); // Replace with actual bio\n        cy.get('.profile-email').should('contain', 'john.doe@example.com'); // Replace with actual email\n        cy.get('.profile-phone').should('contain', '123-456-7890'); // Replace with actual phone number\n    });\n\n    it('should handle the case when no information is shared', () => {\n        cy.get('.profile-name').should('not.exist');\n        cy.get('.profile-bio').should('not.exist');\n        cy.get('.profile-email').should('not.exist');\n        cy.get('.profile-phone').should('not.exist');\n        cy.get('.no-info-message').should('be.visible').and('contain', 'No information shared yet.');\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 237,
+  "latency_s": 4.26,
+  "timestamp": "2026-06-19T16:42:56.507870"
+}

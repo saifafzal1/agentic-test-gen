@@ -1,0 +1,13 @@
+{
+  "id": "TC_078",
+  "category": "crud_operations",
+  "complexity": "medium",
+  "user_story": "As a user, I want to duplicate an existing record with one click.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('CRUD Operations - Duplicate Record', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should duplicate an existing record successfully', async ({ page }) => {\n    // Locate and click the duplicate button for the first record\n    await page.getByRole('button', { name: 'Duplicate' }).first().click();\n\n    // Verify that a success message is displayed\n    const successMessage = await page.getByText('Record duplicated successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify that the new record appears in the list\n    const newRecord = await page.getByText('New Record Name'); // Adjust the text as necessary\n    await expect(newRecord).toBeVisible();\n  });\n\n  test('should not duplicate if no record is selected', async ({ page }) => {\n    // Attempt to click the duplicate button without selecting a record\n    await page.getByRole('button', { name: 'Duplicate' }).click();\n\n    // Verify that an error message is displayed\n    const errorMessage = await page.getByText('No record selected for duplication');\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 262,
+  "latency_s": 3.73,
+  "timestamp": "2026-06-19T16:48:51.034699"
+}

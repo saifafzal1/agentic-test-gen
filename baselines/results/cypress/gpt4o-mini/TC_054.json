@@ -1,0 +1,13 @@
+{
+  "id": "TC_054",
+  "category": "navigation",
+  "complexity": "medium",
+  "user_story": "As a user, I want the page title to update when navigating between sections.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Page Title Update on Navigation', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Adjust the URL to your application's root\n    });\n\n    it('should update the page title when navigating to the About section', () => {\n        cy.get('nav').contains('About').click(); // Adjust the selector to match your navigation\n        cy.title().should('eq', 'About - Your Application Name'); // Adjust the expected title\n    });\n\n    it('should not change the page title when navigating to the same section', () => {\n        cy.get('nav').contains('Home').click(); // Navigate to Home\n        cy.title().should('eq', 'Home - Your Application Name'); // Adjust the expected title\n        cy.get('nav').contains('Home').click(); // Click Home again\n        cy.title().should('eq', 'Home - Your Application Name'); // Title should remain the same\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 194,
+  "latency_s": 6.25,
+  "timestamp": "2026-06-19T16:28:38.343857"
+}

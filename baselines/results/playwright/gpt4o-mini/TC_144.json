@@ -1,0 +1,13 @@
+{
+  "id": "TC_144",
+  "category": "modal_dialog",
+  "complexity": "medium",
+  "user_story": "As a user, I want a modal with tabbed content to remember the active tab.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal with tabbed content', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('http://your-application-url.com');\n    await page.getByRole('button', { name: 'Open Modal' }).click();\n  });\n\n  test('should remember the active tab after closing and reopening the modal', async ({ page }) => {\n    await page.getByRole('tab', { name: 'Tab 1' }).click();\n    await expect(page.getByRole('tab', { name: 'Tab 1' })).toHaveAttribute('aria-selected', 'true');\n    await expect(page.getByRole('tab', { name: 'Tab 2' })).toHaveAttribute('aria-selected', 'false');\n\n    await page.getByRole('button', { name: 'Close Modal' }).click();\n    await page.getByRole('button', { name: 'Open Modal' }).click();\n\n    await expect(page.getByRole('tab', { name: 'Tab 1' })).toHaveAttribute('aria-selected', 'true');\n  });\n\n  test('should switch to another tab and remember it', async ({ page }) => {\n    await page.getByRole('tab', { name: 'Tab 2' }).click();\n    await expect(page.getByRole('tab', { name: 'Tab 2' })).toHaveAttribute('aria-selected', 'true');\n    await expect(page.getByRole('tab', { name: 'Tab 1' })).toHaveAttribute('aria-selected', 'false');\n\n    await page.getByRole('button', { name: 'Close Modal' }).click();\n    await page.getByRole('button', { name: 'Open Modal' }).click();\n\n    await expect(page.getByRole('tab', { name: 'Tab 2' })).toHaveAttribute('aria-selected', 'true');\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 402,
+  "latency_s": 5.36,
+  "timestamp": "2026-06-19T16:53:21.229564"
+}

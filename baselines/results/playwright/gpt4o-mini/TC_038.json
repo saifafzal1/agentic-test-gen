@@ -1,0 +1,13 @@
+{
+  "id": "TC_038",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want to navigate to the home page by clicking the logo.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Home Page Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should navigate to home page by clicking the logo', async ({ page }) => {\n    await page.getByRole('img', { name: 'Logo' }).click(); // Replace 'Logo' with the actual alt text of the logo\n    await expect(page).toHaveURL('https://example.com/home'); // Replace with the actual home page URL\n  });\n\n  test('should display the home page content after navigation', async ({ page }) => {\n    await page.getByRole('img', { name: 'Logo' }).click(); // Replace 'Logo' with the actual alt text of the logo\n    await expect(page.getByText('Welcome to the Home Page')).toBeVisible(); // Replace with actual text on the home page\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 209,
+  "latency_s": 2.39,
+  "timestamp": "2026-06-19T16:46:05.613296"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_290",
+  "category": "user_profile",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a confirmation message after updating my profile.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('User Profile Update', () => {\n    beforeEach(() => {\n        cy.visit('/profile');\n        cy.login(); // Assuming there's a custom command for login\n    });\n\n    it('should display a confirmation message after successful profile update', () => {\n        cy.get('input[name=\"username\"]').clear().type('newUsername');\n        cy.get('input[name=\"email\"]').clear().type('newemail@example.com');\n        cy.get('button[type=\"submit\"]').click();\n        \n        cy.get('.confirmation-message').should('be.visible').and('contain', 'Profile updated successfully');\n    });\n\n    it('should display an error message when the profile update fails', () => {\n        cy.intercept('POST', '/api/profile/update', {\n            statusCode: 400,\n            body: { message: 'Update failed. Please try again.' }\n        }).as('updateProfile');\n\n        cy.get('input[name=\"username\"]').clear().type(''); // Invalid input\n        cy.get('button[type=\"submit\"]').click();\n        \n        cy.wait('@updateProfile');\n        cy.get('.error-message').should('be.visible').and('contain', 'Update failed. Please try again.');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 244,
+  "latency_s": 3.98,
+  "timestamp": "2026-06-19T16:43:19.795075"
+}

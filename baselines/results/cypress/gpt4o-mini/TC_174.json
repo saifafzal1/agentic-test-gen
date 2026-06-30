@@ -1,0 +1,13 @@
+{
+  "id": "TC_174",
+  "category": "file_upload",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see an error if a file exceeds the maximum size limit.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('File Upload Error Handling', () => {\n    const maxFileSize = 2 * 1024 * 1024; // 2 MB\n    const validFilePath = 'cypress/fixtures/valid-file.txt'; // A valid file under 2MB\n    const oversizedFilePath = 'cypress/fixtures/oversized-file.txt'; // A file over 2MB\n\n    beforeEach(() => {\n        cy.visit('/upload'); // Replace with the actual upload page URL\n    });\n\n    it('should upload a valid file and not show an error', () => {\n        cy.get('input[type=\"file\"]').attachFile(validFilePath);\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.error-message').should('not.exist');\n        cy.get('.success-message').should('be.visible').and('contain', 'File uploaded successfully');\n    });\n\n    it('should show an error when the file exceeds the maximum size limit', () => {\n        cy.get('input[type=\"file\"]').attachFile(oversizedFilePath);\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.error-message').should('be.visible').and('contain', 'File size exceeds the maximum limit of 2MB');\n    });\n});",
+  "prompt_tokens": 113,
+  "completion_tokens": 261,
+  "latency_s": 3.65,
+  "timestamp": "2026-06-19T16:36:14.716749"
+}

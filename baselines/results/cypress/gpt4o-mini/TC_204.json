@@ -1,0 +1,13 @@
+{
+  "id": "TC_204",
+  "category": "accessibility",
+  "complexity": "medium",
+  "user_story": "As a screen reader user, I want all images to have descriptive alt text.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Accessibility Tests for Images', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should have descriptive alt text for all images', () => {\n        cy.get('img').each(($img) => {\n            const altText = $img.attr('alt');\n            expect(altText).to.not.be.empty;\n            expect(altText).to.not.equal('undefined');\n        });\n    });\n\n    it('should not have images with empty alt text', () => {\n        cy.get('img[alt=\"\"]').should('have.length', 0);\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 133,
+  "latency_s": 1.84,
+  "timestamp": "2026-06-19T16:37:53.938128"
+}

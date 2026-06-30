@@ -1,0 +1,13 @@
+{
+  "id": "TC_268",
+  "category": "notifications",
+  "complexity": "complex",
+  "user_story": "As a user, I want to filter notifications by type (info, warning, error).",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Notification Filtering', () => {\n    beforeEach(() => {\n        cy.visit('/notifications');\n    });\n\n    it('should filter notifications by type - info', () => {\n        cy.get('[data-testid=\"filter-info\"]').click();\n        cy.get('[data-testid=\"notification\"]').each(($el) => {\n            cy.wrap($el).should('have.class', 'info');\n        });\n    });\n\n    it('should display no notifications when filtering by a non-existent type', () => {\n        cy.get('[data-testid=\"filter-nonexistent\"]').click();\n        cy.get('[data-testid=\"notification\"]').should('have.length', 0);\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 133,
+  "latency_s": 3.31,
+  "timestamp": "2026-06-19T16:41:58.958303"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_223",
+  "category": "accessibility",
+  "complexity": "complex",
+  "user_story": "As a user, I want the document language to be declared in the HTML tag.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Document Language Declaration', () => {\n    beforeEach(() => {\n        cy.visit('your-website-url'); // Replace with the actual URL of the application\n    });\n\n    it('should have the correct language declared in the HTML tag', () => {\n        cy.get('html').should('have.attr', 'lang', 'en'); // Replace 'en' with the expected language code\n    });\n\n    it('should not have an empty language attribute in the HTML tag', () => {\n        cy.get('html').should('not.have.attr', 'lang', '');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 120,
+  "latency_s": 3.34,
+  "timestamp": "2026-06-19T16:39:03.613834"
+}

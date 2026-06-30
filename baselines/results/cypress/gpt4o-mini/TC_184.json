@@ -1,0 +1,13 @@
+{
+  "id": "TC_184",
+  "category": "file_upload",
+  "complexity": "complex",
+  "user_story": "As a user, I want to set a title and description for each uploaded file.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('File Upload with Title and Description', () => {\n    beforeEach(() => {\n        cy.visit('/file-upload'); // Adjust the URL to your application's file upload page\n    });\n\n    it('should successfully upload a file with a title and description', () => {\n        const fileName = 'example.pdf'; // Ensure this file exists in the fixtures\n        const title = 'Test File';\n        const description = 'This is a test file for upload.';\n\n        cy.get('input[type=\"file\"]').attachFile(fileName);\n        cy.get('input[name=\"title\"]').type(title);\n        cy.get('textarea[name=\"description\"]').type(description);\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.get('.success-message').should('contain', 'File uploaded successfully');\n        cy.get('.uploaded-file-title').should('contain', title);\n        cy.get('.uploaded-file-description').should('contain', description);\n    });\n\n    it('should show an error when title is missing', () => {\n        const fileName = 'example.pdf'; // Ensure this file exists in the fixtures\n        const description = 'This is a test file for upload without a title.';\n\n        cy.get('input[type=\"file\"]').attachFile(fileName);\n        cy.get('textarea[name=\"description\"]').type(description);\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.get('.error-message').should('contain', 'Title is required');\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 296,
+  "latency_s": 3.39,
+  "timestamp": "2026-06-19T16:36:48.756343"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_013",
+  "category": "authentication",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see my username pre-filled if I previously logged in.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Username Pre-fill on Login', () => {\n    beforeEach(() => {\n        cy.visit('/login');\n        // Simulate a previous login by setting a cookie or local storage\n        cy.setCookie('session_id', '123456'); // Example of setting a session cookie\n        cy.setLocalStorage('username', 'testUser'); // Example of setting a username in local storage\n    });\n\n    it('should pre-fill the username field with the previously logged in username', () => {\n        cy.get('input[name=\"username\"]').should('have.value', 'testUser');\n    });\n\n    it('should not pre-fill the username field if no previous login exists', () => {\n        // Clear the local storage to simulate no previous login\n        cy.clearLocalStorage();\n        cy.visit('/login');\n        cy.get('input[name=\"username\"]').should('have.value', '');\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 182,
+  "latency_s": 2.73,
+  "timestamp": "2026-06-19T16:26:04.191627"
+}

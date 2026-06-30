@@ -1,0 +1,13 @@
+{
+  "id": "TC_164",
+  "category": "table_list",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see column sort direction indicated by an arrow icon.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Column Sort Direction Arrow Icon', () => {\n  beforeEach(() => {\n    cy.visit('http://localhost:3000');\n    cy.get('table').should('be.visible');\n  });\n\n  it('should display ascending arrow icon when column is sorted ascending', () => {\n    cy.get('table thead th').first().click();\n    cy.get('table thead th').first().within(() => {\n      cy.get('[data-testid=\"sort-arrow\"]').should('be.visible');\n      cy.get('[data-testid=\"sort-arrow\"]').should('have.class', 'ascending');\n    });\n  });\n\n  it('should display descending arrow icon when column is sorted descending', () => {\n    cy.get('table thead th').first().click();\n    cy.get('table thead th').first().click();\n    cy.get('table thead th').first().within(() => {\n      cy.get('[data-testid=\"sort-arrow\"]').should('be.visible');\n      cy.get('[data-testid=\"sort-arrow\"]').should('have.class', 'descending');\n    });\n  });\n\n  it('should remove arrow icon when sort is cleared', () => {\n    cy.get('table thead th').first().click();\n    cy.get('table thead th').first().click();\n    cy.get('table thead th').first().click();\n    cy.get('table thead th').first().within(() => {\n      cy.get('[data-testid=\"sort-arrow\"]').should('not.exist');\n    });\n  });\n\n  it('should update arrow icon when switching sort to different column', () => {\n    cy.get('table thead th').first().click();\n    cy.get('table thead th').first().within(() => {\n      cy.get('[data-testid=\"sort-arrow\"]').should('have.class', 'ascending');\n    });\n    \n    cy.get('table thead th').eq(1).click();\n    cy.get('table thead th').first().within(() => {\n      cy.get('[data-testid=\"sort-arrow\"]').should('not.exist');\n    });\n    cy.get('table thead th').eq(1).within(() => {\n      cy.get('[data-testid=\"sort-arrow\"]').should('be.visible');\n      cy.get('[data-testid=\"sort-arrow\"]').should('have.class', 'ascending');\n    });\n  });\n\n  it('should display correct arrow icon for multiple column headers', () => {\n    cy.get('table thead th').each(($header) => {\n      cy.wrap($header).within(() => {\n        cy.get('[data-testid=\"sort-arrow\"]').should('not.exist');\n      });\n    });\n  });\n});",
+  "prompt_tokens": 122,
+  "completion_tokens": 662,
+  "latency_s": 3.89,
+  "timestamp": "2026-06-19T17:22:29.267991"
+}

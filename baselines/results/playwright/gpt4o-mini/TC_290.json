@@ -1,0 +1,13 @@
+{
+  "id": "TC_290",
+  "category": "user_profile",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a confirmation message after updating my profile.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Profile Update', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/profile');\n  });\n\n  test('should display confirmation message after updating profile', async ({ page }) => {\n    await page.getByLabel('Name').fill('John Doe');\n    await page.getByLabel('Email').fill('john.doe@example.com');\n    await page.getByRole('button', { name: 'Update Profile' }).click();\n    \n    const confirmationMessage = await page.getByText('Profile updated successfully!');\n    await expect(confirmationMessage).toBeVisible();\n  });\n\n  test('should not display confirmation message if update fails', async ({ page }) => {\n    await page.getByLabel('Name').fill('');\n    await page.getByRole('button', { name: 'Update Profile' }).click();\n    \n    const errorMessage = await page.getByText('Please fill out this field.');\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 216,
+  "latency_s": 4.1,
+  "timestamp": "2026-06-19T17:04:21.369451"
+}

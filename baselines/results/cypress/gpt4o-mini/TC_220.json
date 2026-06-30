@@ -1,0 +1,13 @@
+{
+  "id": "TC_220",
+  "category": "accessibility",
+  "complexity": "complex",
+  "user_story": "As a user, I want the app to respect the prefers-reduced-motion setting.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Accessibility: Prefers Reduced Motion', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the app\n    });\n\n    it('should respect prefers-reduced-motion setting when enabled', () => {\n        cy.setPrefersReducedMotion(true);\n        cy.reload();\n        cy.get('body').should('have.class', 'reduced-motion'); // Assuming the app adds a class for reduced motion\n        cy.get('.animated-element').should('not.have.css', 'animation'); // Check that animations are disabled\n    });\n\n    it('should not apply reduced motion when setting is disabled', () => {\n        cy.setPrefersReducedMotion(false);\n        cy.reload();\n        cy.get('body').should('not.have.class', 'reduced-motion'); // Check that the class is not present\n        cy.get('.animated-element').should('have.css', 'animation'); // Check that animations are enabled\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 196,
+  "latency_s": 2.41,
+  "timestamp": "2026-06-19T16:38:57.899495"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_064",
+  "category": "api_response_handling",
+  "complexity": "complex",
+  "user_story": "As a user, I want search results to update as I type, debounced by 300ms.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Search Functionality', () => {\n    beforeEach(() => {\n        cy.visit('/search'); // Adjust the URL to your application's search page\n    });\n\n    it('should update search results as user types (happy path)', () => {\n        cy.get('input[name=\"search\"]').type('Cypress');\n        cy.wait(300); // Wait for debounce time\n        cy.get('.search-results').should('be.visible');\n        cy.get('.search-results').children().should('have.length.greaterThan', 0);\n        cy.get('.search-results').contains('Cypress');\n    });\n\n    it('should not update search results if input is cleared (edge case)', () => {\n        cy.get('input[name=\"search\"]').type('Cypress');\n        cy.wait(300); // Wait for debounce time\n        cy.get('input[name=\"search\"]').clear();\n        cy.wait(300); // Wait for debounce time\n        cy.get('.search-results').should('not.exist');\n    });\n});",
+  "prompt_tokens": 117,
+  "completion_tokens": 205,
+  "latency_s": 2.81,
+  "timestamp": "2026-06-19T16:29:18.216617"
+}

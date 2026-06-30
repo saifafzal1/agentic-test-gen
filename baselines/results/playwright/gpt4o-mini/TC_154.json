@@ -1,0 +1,13 @@
+{
+  "id": "TC_154",
+  "category": "table_list",
+  "complexity": "complex",
+  "user_story": "As a user, I want the table to show a loading state while data is fetching.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Loading State', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should display loading state while fetching data', async ({ page }) => {\n    // Trigger data fetching\n    await page.getByRole('button', { name: 'Fetch Data' }).click();\n\n    // Expect loading indicator to be visible\n    const loadingIndicator = page.getByText('Loading...');\n    await expect(loadingIndicator).toBeVisible();\n\n    // Wait for data to load\n    await page.waitForResponse(response => response.url().includes('/api/data') && response.status() === 200);\n\n    // Expect loading indicator to be hidden after data is fetched\n    await expect(loadingIndicator).toBeHidden();\n  });\n\n  test('should display data in the table after loading', async ({ page }) => {\n    // Trigger data fetching\n    await page.getByRole('button', { name: 'Fetch Data' }).click();\n\n    // Wait for data to load\n    await page.waitForResponse(response => response.url().includes('/api/data') && response.status() === 200);\n\n    // Expect table to show data\n    const tableRow = page.getByRole('row', { name: 'Sample Data Row' });\n    await expect(tableRow).toBeVisible();\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 291,
+  "latency_s": 4.74,
+  "timestamp": "2026-06-19T16:53:58.242643"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_205",
+  "category": "accessibility",
+  "complexity": "complex",
+  "user_story": "As a keyboard user, I want to navigate all interactive elements using Tab.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Keyboard Navigation Accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should navigate to the first interactive element using Tab', async ({ page }) => {\n    await page.keyboard.press('Tab');\n    const firstInteractiveElement = await page.getByRole('button', { name: /submit/i });\n    await expect(firstInteractiveElement).toBeFocused();\n  });\n\n  test('should navigate through all interactive elements using Tab', async ({ page }) => {\n    const interactiveElements = await page.locator('button, [href], input, select, textarea').count();\n    \n    for (let i = 0; i < interactiveElements; i++) {\n      await page.keyboard.press('Tab');\n      const focusedElement = await page.evaluate(() => document.activeElement);\n      expect(focusedElement).toBeTruthy();\n    }\n    \n    await page.keyboard.press('Tab'); // Move to the last element\n    const lastInteractiveElement = await page.getByRole('button', { name: /cancel/i });\n    await expect(lastInteractiveElement).toBeFocused();\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 256,
+  "latency_s": 6.16,
+  "timestamp": "2026-06-19T16:57:24.632302"
+}

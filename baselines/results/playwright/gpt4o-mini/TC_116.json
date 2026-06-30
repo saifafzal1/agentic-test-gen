@@ -1,0 +1,13 @@
+{
+  "id": "TC_116",
+  "category": "async_await",
+  "complexity": "simple",
+  "user_story": "As a user, I want an async validation check that verifies username availability.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Username Availability Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/signup');\n  });\n\n  test('should show available message for a unique username', async ({ page }) => {\n    await page.getByLabel('Username').fill('uniqueUsername123');\n    await page.getByLabel('Username').blur();\n    await expect(page.getByText('Username is available')).toBeVisible();\n  });\n\n  test('should show taken message for an existing username', async ({ page }) => {\n    await page.getByLabel('Username').fill('existingUsername');\n    await page.getByLabel('Username').blur();\n    await expect(page.getByText('Username is already taken')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 170,
+  "latency_s": 3.17,
+  "timestamp": "2026-06-19T16:51:32.991450"
+}

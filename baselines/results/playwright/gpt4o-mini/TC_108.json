@@ -1,0 +1,13 @@
+{
+  "id": "TC_108",
+  "category": "error_states",
+  "complexity": "medium",
+  "user_story": "As a user, I want a clear error when a payment card is declined.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Payment Card Decline Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/payment');\n  });\n\n  test('should display error message when payment card is declined', async ({ page }) => {\n    await page.fill('input[name=\"cardNumber\"]', '4000 0000 0000 0002'); // Example declined card number\n    await page.fill('input[name=\"expiryDate\"]', '12/25');\n    await page.fill('input[name=\"cvv\"]', '123');\n    await page.click('button[type=\"submit\"]');\n\n    const errorMessage = await page.getByRole('alert');\n    await expect(errorMessage).toHaveText('Your payment was declined. Please check your card details or use a different card.');\n  });\n\n  test('should not display error message for successful payment', async ({ page }) => {\n    await page.fill('input[name=\"cardNumber\"]', '4111 1111 1111 1111'); // Example valid card number\n    await page.fill('input[name=\"expiryDate\"]', '12/25');\n    await page.fill('input[name=\"cvv\"]', '123');\n    await page.click('button[type=\"submit\"]');\n\n    const successMessage = await page.getByText('Payment successful!');\n    await expect(successMessage).toBeVisible();\n    const errorMessage = await page.getByRole('alert');\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 321,
+  "latency_s": 4.49,
+  "timestamp": "2026-06-19T16:50:58.295685"
+}

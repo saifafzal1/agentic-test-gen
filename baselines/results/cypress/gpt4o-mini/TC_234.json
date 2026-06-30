@@ -1,0 +1,13 @@
+{
+  "id": "TC_234",
+  "category": "responsive",
+  "complexity": "medium",
+  "user_story": "As a user, I want sticky footer navigation on mobile.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Sticky Footer Navigation on Mobile', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n        cy.viewport('iphone-6'); // Set viewport to mobile size\n    });\n\n    it('should display sticky footer navigation on mobile', () => {\n        cy.get('footer').should('be.visible'); // Ensure footer is visible\n        cy.get('footer').should('have.class', 'sticky-footer'); // Check for sticky class\n    });\n\n    it('should remain visible when scrolling down', () => {\n        cy.scrollTo(0, 500); // Scroll down the page\n        cy.get('footer').should('be.visible'); // Footer should still be visible\n    });\n});",
+  "prompt_tokens": 105,
+  "completion_tokens": 153,
+  "latency_s": 2.62,
+  "timestamp": "2026-06-19T16:39:39.611825"
+}

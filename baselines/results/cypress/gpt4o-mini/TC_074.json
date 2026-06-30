@@ -1,0 +1,13 @@
+{
+  "id": "TC_074",
+  "category": "crud_operations",
+  "complexity": "simple",
+  "user_story": "As a user, I want to edit an existing task by clicking an Edit button.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Edit Task Functionality', () => {\n    beforeEach(() => {\n        cy.visit('/tasks'); // Adjust the URL to your application's task page\n        cy.get('.task').first().as('firstTask'); // Assuming tasks have a class of 'task'\n    });\n\n    it('should edit an existing task successfully', () => {\n        cy.get('@firstTask').find('.edit-button').click(); // Assuming edit button has a class of 'edit-button'\n        cy.get('.task-edit-input').clear().type('Updated Task Name'); // Assuming input has a class of 'task-edit-input'\n        cy.get('.save-button').click(); // Assuming save button has a class of 'save-button'\n        \n        cy.get('@firstTask').should('contain', 'Updated Task Name'); // Verify the task name is updated\n    });\n\n    it('should show an error message when editing with an empty name', () => {\n        cy.get('@firstTask').find('.edit-button').click();\n        cy.get('.task-edit-input').clear(); // Clear the input\n        cy.get('.save-button').click();\n        \n        cy.get('.error-message').should('be.visible').and('contain', 'Task name cannot be empty'); // Verify error message\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 260,
+  "latency_s": 4.28,
+  "timestamp": "2026-06-19T16:30:01.760007"
+}

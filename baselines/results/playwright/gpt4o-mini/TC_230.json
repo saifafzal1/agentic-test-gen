@@ -1,0 +1,13 @@
+{
+  "id": "TC_230",
+  "category": "responsive",
+  "complexity": "simple",
+  "user_story": "As a user, I want the font size to be readable on a small screen without zooming.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Responsive Font Size', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://yourwebsite.com');\n  });\n\n  test('should display readable font size on small screens', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 667 }); // iPhone 6/7/8 size\n    const fontSize = await page.locator('body').evaluate(el => window.getComputedStyle(el).fontSize);\n    expect(parseFloat(fontSize)).toBeGreaterThan(16); // Assuming 16px is the minimum readable size\n  });\n\n  test('should not require zooming to read text', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 667 });\n    const textElement = page.getByText('Some important text');\n    await expect(textElement).toBeVisible();\n    const boundingBox = await textElement.boundingBox();\n    expect(boundingBox).not.toBeNull();\n    expect(boundingBox!.width).toBeGreaterThan(0);\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 241,
+  "latency_s": 3.74,
+  "timestamp": "2026-06-19T16:59:10.655653"
+}

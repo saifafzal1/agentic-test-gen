@@ -1,0 +1,13 @@
+{
+  "id": "TC_073",
+  "category": "crud_operations",
+  "complexity": "complex",
+  "user_story": "As a user, I want to create a new task by filling out a form and clicking Save.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Task Creation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/tasks/new');\n  });\n\n  test('should display the task creation form', async ({ page }) => {\n    const formTitle = await page.getByRole('heading', { name: /create new task/i });\n    await expect(formTitle).toBeVisible();\n    \n    const taskNameInput = await page.getByLabel('Task Name');\n    await expect(taskNameInput).toBeVisible();\n    \n    const taskDescriptionInput = await page.getByLabel('Description');\n    await expect(taskDescriptionInput).toBeVisible();\n    \n    const saveButton = await page.getByRole('button', { name: /save/i });\n    await expect(saveButton).toBeVisible();\n  });\n\n  test('should create a new task successfully', async ({ page }) => {\n    await page.getByLabel('Task Name').fill('New Task');\n    await page.getByLabel('Description').fill('This is a new task description.');\n    await page.getByRole('button', { name: /save/i }).click();\n\n    const successMessage = await page.getByText(/task created successfully/i);\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 137,
+  "completion_tokens": 271,
+  "latency_s": 4.01,
+  "timestamp": "2026-06-19T16:48:27.097677"
+}

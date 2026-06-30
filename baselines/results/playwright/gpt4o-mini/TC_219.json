@@ -1,0 +1,13 @@
+{
+  "id": "TC_219",
+  "category": "accessibility",
+  "complexity": "medium",
+  "user_story": "As a user, I want videos to have captions.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Video Captions Accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/videos');\n  });\n\n  test('should display captions when video is played', async ({ page }) => {\n    const video = page.getByRole('video');\n    await video.click();\n    \n    const captions = page.getByText('Caption text for the video');\n    await expect(captions).toBeVisible();\n  });\n\n  test('should toggle captions on and off', async ({ page }) => {\n    const video = page.getByRole('video');\n    await video.click();\n\n    const toggleCaptionsButton = page.getByRole('button', { name: 'Toggle Captions' });\n    await toggleCaptionsButton.click();\n    \n    const captions = page.getByText('Caption text for the video');\n    await expect(captions).not.toBeVisible();\n\n    await toggleCaptionsButton.click();\n    await expect(captions).toBeVisible();\n  });\n});",
+  "prompt_tokens": 127,
+  "completion_tokens": 221,
+  "latency_s": 3.42,
+  "timestamp": "2026-06-19T16:58:27.758623"
+}

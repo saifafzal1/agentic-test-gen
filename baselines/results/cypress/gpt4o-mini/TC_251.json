@@ -1,0 +1,13 @@
+{
+  "id": "TC_251",
+  "category": "payment_flow",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an order summary before confirming payment.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Order Summary', () => {\n    beforeEach(() => {\n        cy.visit('/checkout');\n        cy.get('#add-to-cart-button').click();\n        cy.get('#proceed-to-checkout-button').click();\n    });\n\n    it('should display the order summary before confirming payment (happy path)', () => {\n        cy.get('#order-summary').should('be.visible');\n        cy.get('#order-summary .item-name').should('contain', 'Product Name');\n        cy.get('#order-summary .item-price').should('contain', '$99.99');\n        cy.get('#total-amount').should('contain', '$99.99');\n        cy.get('#confirm-payment-button').should('be.enabled');\n    });\n\n    it('should not display the order summary if no items are in the cart (edge case)', () => {\n        cy.visit('/checkout');\n        cy.get('#order-summary').should('not.exist');\n        cy.get('#confirm-payment-button').should('be.disabled');\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 202,
+  "latency_s": 2.47,
+  "timestamp": "2026-06-19T16:40:40.651810"
+}

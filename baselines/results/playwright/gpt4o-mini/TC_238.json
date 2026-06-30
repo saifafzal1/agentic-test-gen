@@ -1,0 +1,13 @@
+{
+  "id": "TC_238",
+  "category": "responsive",
+  "complexity": "complex",
+  "user_story": "As a user, I want the search bar to expand on focus on mobile.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Bar Expansion on Focus', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://yourwebsite.com');\n    await page.setViewportSize({ width: 375, height: 812 }); // Mobile viewport\n  });\n\n  test('should expand search bar on focus', async ({ page }) => {\n    const searchBar = page.getByRole('textbox', { name: /search/i });\n    await searchBar.focus();\n    const expandedSearchBar = page.getByRole('textbox', { name: /search/i }).evaluate(el => el.style.width);\n    expect(expandedSearchBar).toBe('100%'); // Assuming the expanded width is 100%\n  });\n\n  test('should collapse search bar on blur', async ({ page }) => {\n    const searchBar = page.getByRole('textbox', { name: /search/i });\n    await searchBar.focus();\n    await searchBar.blur();\n    const collapsedSearchBar = page.getByRole('textbox', { name: /search/i }).evaluate(el => el.style.width);\n    expect(collapsedSearchBar).toBe('50px'); // Assuming the collapsed width is 50px\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 260,
+  "latency_s": 5.84,
+  "timestamp": "2026-06-19T16:59:48.761404"
+}

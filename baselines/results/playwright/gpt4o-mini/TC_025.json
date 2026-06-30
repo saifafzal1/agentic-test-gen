@@ -1,0 +1,13 @@
+{
+  "id": "TC_025",
+  "category": "form_validation",
+  "complexity": "complex",
+  "user_story": "As a user, I want a date picker to prevent selecting past dates for future bookings.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Date Picker Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/booking'); // Replace with the actual URL of the booking page\n  });\n\n  test('should not allow selecting past dates', async ({ page }) => {\n    const today = new Date();\n    const pastDate = new Date(today);\n    pastDate.setDate(today.getDate() - 1);\n    const formattedPastDate = pastDate.toISOString().split('T')[0];\n\n    await page.getByLabel('Select Date').fill(formattedPastDate);\n    const errorMessage = await page.getByText('Please select a valid date.').isVisible();\n    \n    expect(errorMessage).toBeTruthy();\n  });\n\n  test('should allow selecting today or future dates', async ({ page }) => {\n    const today = new Date();\n    const formattedToday = today.toISOString().split('T')[0];\n\n    await page.getByLabel('Select Date').fill(formattedToday);\n    const errorMessage = await page.getByText('Please select a valid date.').isVisible();\n    \n    expect(errorMessage).toBeFalsy();\n    \n    const futureDate = new Date(today);\n    futureDate.setDate(today.getDate() + 1);\n    const formattedFutureDate = futureDate.toISOString().split('T')[0];\n\n    await page.getByLabel('Select Date').fill(formattedFutureDate);\n    const futureErrorMessage = await page.getByText('Please select a valid date.').isVisible();\n    \n    expect(futureErrorMessage).toBeFalsy();\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 341,
+  "latency_s": 4.67,
+  "timestamp": "2026-06-19T16:45:08.135659"
+}

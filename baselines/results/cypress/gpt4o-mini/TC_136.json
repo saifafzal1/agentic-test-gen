@@ -1,0 +1,13 @@
+{
+  "id": "TC_136",
+  "category": "modal_dialog",
+  "complexity": "complex",
+  "user_story": "As a user, I want modal content to scroll independently when it overflows.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Modal Content Scroll', () => {\n    beforeEach(() => {\n        cy.visit('/modal-page'); // Replace with the actual URL of the page containing the modal\n        cy.get('.open-modal-button').click(); // Adjust selector to match the button that opens the modal\n    });\n\n    it('should allow scrolling within the modal when content overflows', () => {\n        cy.get('.modal-content') // Adjust selector to match the modal content\n            .should('be.visible')\n            .then(($modal) => {\n                const initialScrollTop = $modal[0].scrollTop;\n                cy.get('.modal-content').scrollTo(0, 500); // Scroll down within the modal\n                cy.get('.modal-content').then(($modalAfterScroll) => {\n                    const afterScrollTop = $modalAfterScroll[0].scrollTop;\n                    expect(afterScrollTop).to.be.greaterThan(initialScrollTop);\n                });\n            });\n    });\n\n    it('should not scroll the background when scrolling within the modal', () => {\n        cy.get('body').then(($body) => {\n            const initialBodyScrollTop = $body[0].scrollTop;\n            cy.get('.modal-content').scrollTo(0, 500); // Scroll down within the modal\n            cy.get('body').then(($bodyAfterScroll) => {\n                const afterBodyScrollTop = $bodyAfterScroll[0].scrollTop;\n                expect(afterBodyScrollTop).to.equal(initialBodyScrollTop);\n            });\n        });\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 313,
+  "latency_s": 4.64,
+  "timestamp": "2026-06-19T16:34:19.613460"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_038",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want to navigate to the home page by clicking the logo.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Home Page Navigation', () => {\n    beforeEach(() => {\n        cy.visit('http://example.com'); // Replace with the actual URL of the application\n    });\n\n    it('should navigate to the home page when the logo is clicked', () => {\n        cy.get('.logo').click(); // Replace with the actual selector for the logo\n        cy.url().should('eq', 'http://example.com/home'); // Replace with the actual home page URL\n        cy.get('h1').should('contain', 'Welcome to the Home Page'); // Replace with actual content on the home page\n    });\n\n    it('should not navigate to the home page if the logo is not clickable', () => {\n        cy.get('.non-clickable-logo').should('not.exist'); // Replace with a selector that should not exist\n        cy.get('.logo').click(); // Attempt to click the logo\n        cy.url().should('not.eq', 'http://example.com/home'); // Ensure it does not navigate\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 211,
+  "latency_s": 4.79,
+  "timestamp": "2026-06-19T16:27:36.444413"
+}

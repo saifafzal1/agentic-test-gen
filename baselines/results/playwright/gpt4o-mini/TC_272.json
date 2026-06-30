@@ -1,0 +1,13 @@
+{
+  "id": "TC_272",
+  "category": "notifications",
+  "complexity": "simple",
+  "user_story": "As a user, I want in-app notifications to update in real-time without refresh.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('In-App Notifications', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should display new notifications in real-time', async ({ page }) => {\n    // Assume user is logged in and notifications are enabled\n    await page.click(getByRole('button', { name: /login/i })); // Login action\n    await page.fill(getByLabel('Username'), 'testuser');\n    await page.fill(getByLabel('Password'), 'password');\n    await page.click(getByRole('button', { name: /submit/i }));\n\n    // Wait for the notifications section to be visible\n    await expect(page.getByRole('region', { name: /notifications/i })).toBeVisible();\n\n    // Simulate receiving a new notification\n    await page.evaluate(() => {\n      const event = new Event('newNotification');\n      document.dispatchEvent(event);\n    });\n\n    // Check if the new notification appears\n    await expect(page.getByText(/you have a new message/i)).toBeVisible();\n  });\n\n  test('should not show duplicate notifications', async ({ page }) => {\n    await page.click(getByRole('button', { name: /login/i }));\n    await page.fill(getByLabel('Username'), 'testuser');\n    await page.fill(getByLabel('Password'), 'password');\n    await page.click(getByRole('button', { name: /submit/i }));\n\n    await expect(page.getByRole('region', { name: /notifications/i })).toBeVisible();\n\n    // Simulate receiving the same notification twice\n    await page.evaluate(() => {\n      const event = new Event('newNotification');\n      document.dispatchEvent(event);\n      document.dispatchEvent(event);\n    });\n\n    // Check if the notification appears only once\n    const notifications = await page.locator(getByText(/you have a new message/i)).count();\n    expect(notifications).toBe(1);\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 424,
+  "latency_s": 6.09,
+  "timestamp": "2026-06-19T17:03:07.075669"
+}

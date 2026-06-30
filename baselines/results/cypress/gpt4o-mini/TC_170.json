@@ -1,0 +1,13 @@
+{
+  "id": "TC_170",
+  "category": "file_upload",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a progress bar for each file being uploaded.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('File Upload Progress Bar', () => {\n    beforeEach(() => {\n        cy.visit('/upload'); // Adjust the URL to your application's upload page\n    });\n\n    it('should display a progress bar for each file being uploaded', () => {\n        const fileName = 'example-file.txt'; // Replace with an actual file name\n        cy.fixture(fileName).as('fileToUpload');\n\n        cy.get('input[type=\"file\"]').attachFile(this.fileToUpload); // Assuming you have a file input\n        cy.get('.upload-button').click(); // Assuming there's a button to start the upload\n\n        cy.get('.progress-bar').should('be.visible'); // Check if the progress bar is visible\n        cy.get('.progress-bar').should('have.class', 'uploading'); // Check if the progress bar has the correct class\n    });\n\n    it('should not display a progress bar if no file is selected', () => {\n        cy.get('.upload-button').click(); // Attempt to upload without selecting a file\n\n        cy.get('.progress-bar').should('not.exist'); // Ensure the progress bar does not exist\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 234,
+  "latency_s": 2.87,
+  "timestamp": "2026-06-19T16:36:00.857728"
+}

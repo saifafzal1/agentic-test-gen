@@ -1,0 +1,13 @@
+{
+  "id": "TC_249",
+  "category": "payment_flow",
+  "complexity": "medium",
+  "user_story": "As a user, I want to save my card details for future purchases.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Payment Flow - Save Card Details', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/payment');\n  });\n\n  test('should display save card option', async ({ page }) => {\n    const saveCardCheckbox = page.getByLabel('Save my card details for future purchases');\n    await expect(saveCardCheckbox).toBeVisible();\n  });\n\n  test('should save card details when checkbox is selected', async ({ page }) => {\n    await page.fill('input[name=\"cardNumber\"]', '4111111111111111');\n    await page.fill('input[name=\"expiryDate\"]', '12/25');\n    await page.fill('input[name=\"cvv\"]', '123');\n    \n    const saveCardCheckbox = page.getByLabel('Save my card details for future purchases');\n    await saveCardCheckbox.check();\n    \n    await page.click('button[type=\"submit\"]');\n    \n    const successMessage = page.getByText('Your card details have been saved successfully.');\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 236,
+  "latency_s": 4.17,
+  "timestamp": "2026-06-19T17:00:44.343806"
+}

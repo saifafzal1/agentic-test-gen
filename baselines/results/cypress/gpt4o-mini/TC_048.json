@@ -1,0 +1,13 @@
+{
+  "id": "TC_048",
+  "category": "navigation",
+  "complexity": "medium",
+  "user_story": "As a user, I want breadcrumbs to show my current location in the site hierarchy.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Breadcrumb Navigation', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Adjust the URL to the base of your application\n    });\n\n    it('should display the correct breadcrumb for the homepage', () => {\n        cy.get('.breadcrumb').should('exist');\n        cy.get('.breadcrumb').should('contain', 'Home');\n    });\n\n    it('should update the breadcrumb when navigating to a subpage', () => {\n        cy.get('a[href=\"/subpage\"]').click(); // Adjust the selector to match your subpage link\n        cy.get('.breadcrumb').should('exist');\n        cy.get('.breadcrumb').should('contain', 'Home');\n        cy.get('.breadcrumb').should('contain', 'Subpage'); // Adjust to match the subpage name\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 161,
+  "latency_s": 2.42,
+  "timestamp": "2026-06-19T16:28:09.795229"
+}

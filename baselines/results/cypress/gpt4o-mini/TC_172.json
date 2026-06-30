@@ -1,0 +1,13 @@
+{
+  "id": "TC_172",
+  "category": "file_upload",
+  "complexity": "complex",
+  "user_story": "As a user, I want to remove a file from the upload queue before submitting.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('File Upload Queue', () => {\n    beforeEach(() => {\n        cy.visit('/upload'); // Replace with the actual URL of the upload page\n    });\n\n    it('should remove a file from the upload queue before submitting', () => {\n        const fileName = 'example-file.txt';\n        cy.get('input[type=\"file\"]').attachFile(fileName); // Assuming you have a file upload input\n        cy.get('.upload-queue').should('contain', fileName); // Check if the file is in the queue\n\n        cy.get('.remove-file-button').first().click(); // Assuming there's a button to remove the first file\n        cy.get('.upload-queue').should('not.contain', fileName); // Verify the file is removed\n    });\n\n    it('should not allow submission if the upload queue is empty', () => {\n        cy.get('.submit-button').click(); // Attempt to submit without files\n        cy.get('.error-message').should('be.visible').and('contain', 'Upload queue is empty'); // Check for error message\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 222,
+  "latency_s": 3.22,
+  "timestamp": "2026-06-19T16:36:07.771787"
+}

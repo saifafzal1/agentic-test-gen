@@ -1,0 +1,13 @@
+{
+  "id": "TC_022",
+  "category": "form_validation",
+  "complexity": "complex",
+  "user_story": "As a user, I want currency fields to format with commas and two decimal places.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Currency Field Formatting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should format currency input with commas and two decimal places', async ({ page }) => {\n    const currencyInput = page.getByLabel('Currency Amount'); // Replace with the actual label\n\n    await currencyInput.fill('1000');\n    await currencyInput.blur(); // Trigger formatting\n\n    const formattedValue = await currencyInput.inputValue();\n    expect(formattedValue).toBe('1,000.00');\n  });\n\n  test('should update formatting when input is changed', async ({ page }) => {\n    const currencyInput = page.getByLabel('Currency Amount'); // Replace with the actual label\n\n    await currencyInput.fill('25000.5');\n    await currencyInput.blur(); // Trigger formatting\n\n    const formattedValue = await currencyInput.inputValue();\n    expect(formattedValue).toBe('25,000.50');\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 225,
+  "latency_s": 3.41,
+  "timestamp": "2026-06-19T16:44:52.441538"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_107",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error if image dimensions are too small for upload.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Image Upload Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload');\n  });\n\n  test('should display error for small image dimensions', async ({ page }) => {\n    const filePath = 'path/to/small-image.jpg'; // Replace with the path to a small image\n    await page.setInputFiles(getByLabel('Upload Image'), filePath);\n    await page.click(getByRole('button', { name: 'Submit' }));\n    \n    const errorMessage = await page.getByText('Image dimensions are too small. Please upload a larger image.');\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should not display error for valid image dimensions', async ({ page }) => {\n    const filePath = 'path/to/valid-image.jpg'; // Replace with the path to a valid image\n    await page.setInputFiles(getByLabel('Upload Image'), filePath);\n    await page.click(getByRole('button', { name: 'Submit' }));\n    \n    const errorMessage = await page.getByText('Image dimensions are too small. Please upload a larger image.');\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 263,
+  "latency_s": 3.99,
+  "timestamp": "2026-06-19T16:50:53.503728"
+}

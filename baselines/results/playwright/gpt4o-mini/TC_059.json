@@ -1,0 +1,13 @@
+{
+  "id": "TC_059",
+  "category": "api_response_handling",
+  "complexity": "simple",
+  "user_story": "As a user, I want data to refresh automatically after a mutation.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Data Refresh After Mutation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should display updated data after mutation', async ({ page }) => {\n    await page.getByRole('button', { name: 'Trigger Mutation' }).click();\n    await page.waitForResponse(response => response.url().includes('/api/mutate') && response.status() === 200);\n    \n    const updatedData = await page.getByText('Updated Data'); // Replace with the actual text to verify\n    await expect(updatedData).toBeVisible();\n  });\n\n  test('should refresh data automatically after mutation', async ({ page }) => {\n    await page.getByRole('button', { name: 'Trigger Mutation' }).click();\n    await page.waitForResponse(response => response.url().includes('/api/mutate') && response.status() === 200);\n    \n    await page.waitForTimeout(5000); // Wait for automatic refresh\n    const refreshedData = await page.getByText('Refreshed Data'); // Replace with the actual text to verify\n    await expect(refreshedData).toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 265,
+  "latency_s": 3.47,
+  "timestamp": "2026-06-19T16:47:22.334872"
+}

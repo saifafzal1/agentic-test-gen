@@ -1,0 +1,13 @@
+{
+  "id": "TC_224",
+  "category": "accessibility",
+  "complexity": "simple",
+  "user_story": "As a user, I want interactive toast notifications to be announced by screen readers.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Interactive Toast Notifications Accessibility', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should announce toast notification to screen readers', () => {\n        // Trigger the toast notification\n        cy.get('button#show-toast').click(); // Replace with the actual selector for the button that shows the toast\n\n        // Check if the toast notification is visible\n        cy.get('.toast-notification') // Replace with the actual selector for the toast notification\n            .should('be.visible')\n            .and('have.attr', 'role', 'alert'); // Ensure it has the correct role for screen readers\n\n        // Verify the announcement text\n        cy.get('.toast-notification')\n            .invoke('text')\n            .then((text) => {\n                expect(text).to.include('Your action was successful!'); // Replace with the actual expected text\n            });\n    });\n\n    it('should not announce when toast notification is not present', () => {\n        // Ensure no toast notification is visible\n        cy.get('.toast-notification').should('not.exist');\n\n        // Simulate a screen reader check (this is a conceptual check, actual implementation may vary)\n        cy.window().then((win) => {\n            const screenReaderAnnouncement = win.document.querySelector('.toast-notification');\n            expect(screenReaderAnnouncement).to.be.null; // Ensure no announcement is made\n        });\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 298,
+  "latency_s": 3.73,
+  "timestamp": "2026-06-19T16:39:07.648638"
+}

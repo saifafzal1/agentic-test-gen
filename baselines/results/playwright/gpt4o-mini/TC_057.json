@@ -1,0 +1,13 @@
+{
+  "id": "TC_057",
+  "category": "api_response_handling",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see a loading skeleton while API data is fetching.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Loading Skeleton Display', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-application-url.com');\n  });\n\n  test('should display loading skeleton while fetching data', async ({ page }) => {\n    await page.click(getByRole('button', { name: /fetch data/i }));\n    const skeleton = page.getByText(/loading.../i);\n    await expect(skeleton).toBeVisible();\n  });\n\n  test('should hide loading skeleton after data is fetched', async ({ page }) => {\n    await page.click(getByRole('button', { name: /fetch data/i }));\n    const skeleton = page.getByText(/loading.../i);\n    await expect(skeleton).toBeVisible();\n    \n    // Simulate API response delay\n    await page.waitForTimeout(2000);\n    \n    const dataElement = page.getByText(/data loaded/i);\n    await expect(skeleton).toBeHidden();\n    await expect(dataElement).toBeVisible();\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 225,
+  "latency_s": 4.55,
+  "timestamp": "2026-06-19T16:47:14.227143"
+}

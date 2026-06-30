@@ -1,0 +1,13 @@
+{
+  "id": "TC_086",
+  "category": "crud_operations",
+  "complexity": "simple",
+  "user_story": "As a user, I want to mark a record as favourite.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Mark Record as Favourite', () => {\n    beforeEach(() => {\n        cy.visit('/records'); // Adjust the URL to your application's records page\n    });\n\n    it('should successfully mark a record as favourite', () => {\n        cy.get('.record').first().within(() => {\n            cy.get('.favourite-button').click();\n        });\n        cy.get('.notification').should('contain', 'Record marked as favourite');\n        cy.get('.record').first().should('have.class', 'favourite');\n    });\n\n    it('should not allow marking a record as favourite if already marked', () => {\n        cy.get('.record').first().within(() => {\n            cy.get('.favourite-button').click(); // Mark as favourite\n            cy.get('.favourite-button').click(); // Attempt to mark again\n        });\n        cy.get('.notification').should('contain', 'Record is already marked as favourite');\n        cy.get('.record').first().should('have.class', 'favourite');\n    });\n});",
+  "prompt_tokens": 107,
+  "completion_tokens": 208,
+  "latency_s": 3.4,
+  "timestamp": "2026-06-19T16:30:53.466456"
+}

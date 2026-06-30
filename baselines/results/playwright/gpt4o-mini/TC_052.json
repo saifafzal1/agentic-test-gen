@@ -1,0 +1,13 @@
+{
+  "id": "TC_052",
+  "category": "navigation",
+  "complexity": "complex",
+  "user_story": "As a user, I want a sticky header that stays visible when scrolling.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Sticky Header Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('header should be visible on page load', async ({ page }) => {\n    const header = page.getByRole('banner');\n    await expect(header).toBeVisible();\n  });\n\n  test('header should remain visible when scrolling down', async ({ page }) => {\n    const header = page.getByRole('banner');\n    await page.mouse.wheel(0, 500); // Scroll down\n    await expect(header).toBeVisible();\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 146,
+  "latency_s": 2.58,
+  "timestamp": "2026-06-19T16:46:55.484550"
+}

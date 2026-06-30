@@ -1,0 +1,13 @@
+{
+  "id": "TC_289",
+  "category": "user_profile",
+  "complexity": "complex",
+  "user_story": "As a user, I want to set my language preference in profile settings.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Profile Language Preference', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/profile');\n    await page.getByRole('button', { name: 'Edit Profile' }).click();\n  });\n\n  test('should display current language preference', async ({ page }) => {\n    const currentLanguage = await page.getByLabel('Language Preference').inputValue();\n    expect(currentLanguage).toBe('English'); // Assuming English is the default\n  });\n\n  test('should allow user to change language preference', async ({ page }) => {\n    await page.getByLabel('Language Preference').selectOption('Spanish');\n    await page.getByRole('button', { name: 'Save Changes' }).click();\n    \n    const successMessage = await page.getByText('Profile updated successfully').isVisible();\n    expect(successMessage).toBe(true);\n\n    const updatedLanguage = await page.getByLabel('Language Preference').inputValue();\n    expect(updatedLanguage).toBe('Spanish');\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 221,
+  "latency_s": 3.79,
+  "timestamp": "2026-06-19T17:04:16.963146"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_203",
+  "category": "search_filter",
+  "complexity": "simple",
+  "user_story": "As a user, I want to filter a list by multiple statuses simultaneously.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Filter list by multiple statuses', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should filter the list by selected statuses', async ({ page }) => {\n    await page.getByLabel('Status').check('Active');\n    await page.getByLabel('Status').check('Pending');\n    await page.getByRole('button', { name: 'Apply Filters' }).click();\n\n    const filteredItems = await page.getByRole('listitem').all();\n    expect(filteredItems.length).toBeGreaterThan(0);\n\n    for (const item of filteredItems) {\n      const status = await item.getByRole('status').innerText();\n      expect(['Active', 'Pending']).toContain(status);\n    }\n  });\n\n  test('should clear filters and show all items', async ({ page }) => {\n    await page.getByLabel('Status').check('Active');\n    await page.getByLabel('Status').check('Pending');\n    await page.getByRole('button', { name: 'Apply Filters' }).click();\n\n    await page.getByRole('button', { name: 'Clear Filters' }).click();\n\n    const allItems = await page.getByRole('listitem').all();\n    expect(allItems.length).toBeGreaterThan(0);\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 298,
+  "latency_s": 4.49,
+  "timestamp": "2026-06-19T16:57:13.871016"
+}

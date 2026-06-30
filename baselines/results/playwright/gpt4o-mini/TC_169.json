@@ -1,0 +1,13 @@
+{
+  "id": "TC_169",
+  "category": "file_upload",
+  "complexity": "complex",
+  "user_story": "As a user, I want to upload multiple files at once.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload'); // Replace with the actual URL of the upload page\n  });\n\n  test('should allow user to upload multiple files', async ({ page }) => {\n    const fileInput = page.getByLabel('Upload Files'); // Replace with the actual label of the file input\n    await fileInput.setInputFiles(['file1.txt', 'file2.txt', 'file3.txt']); // Replace with actual file paths\n\n    const uploadButton = page.getByRole('button', { name: 'Upload' }); // Replace with the actual button name\n    await uploadButton.click();\n\n    const successMessage = page.getByText('Files uploaded successfully'); // Replace with the actual success message\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should show error for unsupported file types', async ({ page }) => {\n    const fileInput = page.getByLabel('Upload Files'); // Replace with the actual label of the file input\n    await fileInput.setInputFiles(['unsupported_file.exe']); // Replace with an unsupported file type\n\n    const uploadButton = page.getByRole('button', { name: 'Upload' }); // Replace with the actual button name\n    await uploadButton.click();\n\n    const errorMessage = page.getByText('Unsupported file type'); // Replace with the actual error message\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 130,
+  "completion_tokens": 319,
+  "latency_s": 4.04,
+  "timestamp": "2026-06-19T16:54:47.509604"
+}

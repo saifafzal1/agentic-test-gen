@@ -1,0 +1,13 @@
+{
+  "id": "TC_101",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a user, I want the app to recover gracefully after a JavaScript error.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Error Recovery', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-app-url.com');\n  });\n\n  test('should display an error message when a JavaScript error occurs', async ({ page }) => {\n    await page.evaluate(() => {\n      throw new Error('Test JavaScript error');\n    });\n\n    const errorMessage = await page.getByText('An unexpected error occurred. Please try again later.');\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should allow the user to retry after an error', async ({ page }) => {\n    await page.evaluate(() => {\n      throw new Error('Test JavaScript error');\n    });\n\n    const retryButton = await page.getByRole('button', { name: 'Retry' });\n    await expect(retryButton).toBeVisible();\n    await retryButton.click();\n\n    const successMessage = await page.getByText('Operation successful!');\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 220,
+  "latency_s": 2.92,
+  "timestamp": "2026-06-19T16:50:26.825344"
+}

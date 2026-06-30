@@ -1,0 +1,13 @@
+{
+  "id": "TC_162",
+  "category": "table_list",
+  "complexity": "medium",
+  "user_story": "As a user, I want a virtual scroll list to handle 10,000 rows without lag.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Virtual Scroll List Performance', () => {\n    beforeEach(() => {\n        cy.visit('/virtual-scroll-list'); // Adjust the URL to your application's route\n    });\n\n    it('should display the first 20 rows without lag', () => {\n        cy.get('.virtual-scroll-list') // Adjust the selector to your virtual scroll list\n            .should('be.visible')\n            .find('.row') // Adjust the selector to your row elements\n            .should('have.length', 20); // Assuming the first 20 rows are rendered initially\n\n        cy.get('.virtual-scroll-list').scrollTo('bottom'); // Scroll to load more rows\n        cy.wait(1000); // Wait for rows to load\n\n        cy.get('.virtual-scroll-list')\n            .find('.row')\n            .should('have.length.greaterThan', 20); // Ensure more rows are loaded\n    });\n\n    it('should handle scrolling to the bottom without performance issues', () => {\n        cy.get('.virtual-scroll-list').scrollTo('bottom'); // Scroll to the bottom\n        cy.wait(1000); // Wait for rows to load\n\n        cy.get('.virtual-scroll-list')\n            .find('.row')\n            .should('have.length.greaterThan', 9800); // Ensure that nearly all rows are rendered\n    });\n});",
+  "prompt_tokens": 114,
+  "completion_tokens": 271,
+  "latency_s": 4.74,
+  "timestamp": "2026-06-19T16:35:43.271311"
+}

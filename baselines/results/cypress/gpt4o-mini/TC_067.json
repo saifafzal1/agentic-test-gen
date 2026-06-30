@@ -1,0 +1,13 @@
+{
+  "id": "TC_067",
+  "category": "api_response_handling",
+  "complexity": "complex",
+  "user_story": "As a user, I want polling to stop when I navigate away from the page.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Polling functionality', () => {\n    beforeEach(() => {\n        cy.visit('/your-page-url'); // Replace with the actual URL of the page\n    });\n\n    it('should stop polling when navigating away from the page', () => {\n        // Start the polling\n        cy.intercept('GET', '/api/polling-endpoint').as('pollingRequest');\n        cy.wait('@pollingRequest').its('response.statusCode').should('eq', 200);\n\n        // Navigate away from the page\n        cy.get('a#navigate-away').click(); // Replace with the actual selector for navigation\n\n        // Verify that polling has stopped\n        cy.wait(1000); // Wait for a moment to ensure polling would have occurred\n        cy.get('@pollingRequest').should('not.exist');\n    });\n\n    it('should continue polling when staying on the page', () => {\n        // Start the polling\n        cy.intercept('GET', '/api/polling-endpoint').as('pollingRequest');\n        cy.wait('@pollingRequest').its('response.statusCode').should('eq', 200);\n\n        // Verify that polling continues\n        cy.wait(5000); // Wait for a duration to allow multiple polling requests\n        cy.get('@pollingRequest').should('have.length.greaterThan', 1);\n    });\n});",
+  "prompt_tokens": 113,
+  "completion_tokens": 278,
+  "latency_s": 4.36,
+  "timestamp": "2026-06-19T16:29:30.850960"
+}

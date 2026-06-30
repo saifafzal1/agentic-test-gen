@@ -1,0 +1,13 @@
+{
+  "id": "TC_215",
+  "category": "accessibility",
+  "complexity": "simple",
+  "user_story": "As a user, I want the reading order of the page to match the visual order.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Accessibility - Reading Order', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should match the visual order of elements', async ({ page }) => {\n    const heading = await page.getByRole('heading', { name: 'Page Title' });\n    const paragraph = await page.getByText('This is a sample paragraph.');\n    const button = await page.getByRole('button', { name: 'Submit' });\n\n    const readingOrder = [heading, paragraph, button];\n    const visualOrder = await Promise.all(readingOrder.map(async (element) => {\n      return await element.evaluate(el => el.getBoundingClientRect().top);\n    }));\n\n    const sortedVisualOrder = [...visualOrder].sort((a, b) => a - b);\n    expect(visualOrder).toEqual(sortedVisualOrder);\n  });\n\n  test('should have elements in correct reading order', async ({ page }) => {\n    const elements = [\n      await page.getByRole('heading', { name: 'Page Title' }),\n      await page.getByText('This is a sample paragraph.'),\n      await page.getByRole('button', { name: 'Submit' })\n    ];\n\n    const readingOrder = await Promise.all(elements.map(async (element) => {\n      return await element.evaluate(el => el.textContent);\n    }));\n\n    const expectedOrder = ['Page Title', 'This is a sample paragraph.', 'Submit'];\n    expect(readingOrder).toEqual(expectedOrder);\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 339,
+  "latency_s": 6.41,
+  "timestamp": "2026-06-19T16:58:08.104567"
+}

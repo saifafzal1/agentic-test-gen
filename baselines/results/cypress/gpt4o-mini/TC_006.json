@@ -1,0 +1,13 @@
+{
+  "id": "TC_006",
+  "category": "authentication",
+  "complexity": "medium",
+  "user_story": "As a user, I want to be prevented from submitting the login form with empty fields.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Login Form Validation', () => {\n    beforeEach(() => {\n        cy.visit('/login');\n    });\n\n    it('should not allow submission with empty fields', () => {\n        cy.get('form').submit();\n        cy.get('.error-message').should('contain', 'Please fill out this field');\n    });\n\n    it('should show error messages for both fields when submitted empty', () => {\n        cy.get('input[name=\"username\"]').should('be.empty');\n        cy.get('input[name=\"password\"]').should('be.empty');\n        cy.get('form').submit();\n        cy.get('input[name=\"username\"] + .error-message').should('contain', 'Please fill out this field');\n        cy.get('input[name=\"password\"] + .error-message').should('contain', 'Please fill out this field');\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 171,
+  "latency_s": 3.42,
+  "timestamp": "2026-06-19T16:25:35.303281"
+}

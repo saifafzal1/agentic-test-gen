@@ -1,0 +1,13 @@
+{
+  "id": "TC_113",
+  "category": "async_await",
+  "complexity": "simple",
+  "user_story": "As a user, I want a background job to notify me via a toast when it completes.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Background Job Notification', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-application-url.com');\n  });\n\n  test('should display toast notification when background job completes', async ({ page }) => {\n    await page.getByRole('button', { name: 'Start Background Job' }).click();\n    await page.waitForTimeout(5000); // Wait for the background job to complete\n    const toast = page.getByText('Background job completed successfully');\n    await expect(toast).toBeVisible();\n  });\n\n  test('should not display toast notification if job fails', async ({ page }) => {\n    await page.getByRole('button', { name: 'Start Background Job with Error' }).click();\n    await page.waitForTimeout(5000); // Wait for the background job to complete\n    const toast = page.getByText('Background job failed');\n    await expect(toast).toBeVisible();\n  });\n});",
+  "prompt_tokens": 137,
+  "completion_tokens": 215,
+  "latency_s": 3.04,
+  "timestamp": "2026-06-19T16:51:18.876774"
+}

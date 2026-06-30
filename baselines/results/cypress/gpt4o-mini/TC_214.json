@@ -1,0 +1,13 @@
+{
+  "id": "TC_214",
+  "category": "accessibility",
+  "complexity": "complex",
+  "user_story": "As a user, I want skip navigation links to be the first focusable element.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Skip Navigation Links Accessibility', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should have skip navigation links as the first focusable element', () => {\n        cy.get('a.skip-navigation') // Adjust the selector based on the actual implementation\n            .first()\n            .should('be.visible')\n            .focus()\n            .then(($link) => {\n                expect($link).to.have.attr('href').and.not.be.empty;\n                cy.focused().should('equal', $link[0]);\n            });\n    });\n\n    it('should not allow other elements to be focused before skip navigation links', () => {\n        cy.get('body').tab(); // Simulate tabbing through focusable elements\n        cy.focused().should('have.class', 'skip-navigation'); // Ensure the first focusable element is the skip link\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 192,
+  "latency_s": 3.18,
+  "timestamp": "2026-06-19T16:38:35.715499"
+}

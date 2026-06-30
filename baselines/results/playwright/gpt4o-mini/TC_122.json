@@ -1,0 +1,13 @@
+{
+  "id": "TC_122",
+  "category": "async_await",
+  "complexity": "simple",
+  "user_story": "As a user, I want an async operation to be cancellable via an Abort button.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async Operation Cancellation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('http://localhost:3000'); // Replace with your app's URL\n  });\n\n  test('should start async operation', async ({ page }) => {\n    await page.getByRole('button', { name: 'Start Async Operation' }).click();\n    const status = await page.getByText('Operation in progress...');\n    await expect(status).toBeVisible();\n  });\n\n  test('should cancel async operation', async ({ page }) => {\n    await page.getByRole('button', { name: 'Start Async Operation' }).click();\n    await page.getByRole('button', { name: 'Abort' }).click();\n    const status = await page.getByText('Operation cancelled');\n    await expect(status).toBeVisible();\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 190,
+  "latency_s": 2.75,
+  "timestamp": "2026-06-19T16:51:55.817613"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_249",
+  "category": "payment_flow",
+  "complexity": "medium",
+  "user_story": "As a user, I want to save my card details for future purchases.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Save Card Details', () => {\n    beforeEach(() => {\n        cy.visit('/payment'); // Replace with the actual URL of the payment page\n    });\n\n    it('should save card details successfully', () => {\n        cy.get('input[name=\"cardNumber\"]').type('4111111111111111'); // Example Visa card number\n        cy.get('input[name=\"expiryDate\"]').type('12/25');\n        cy.get('input[name=\"cvv\"]').type('123');\n        cy.get('input[name=\"cardHolderName\"]').type('John Doe');\n        cy.get('input[name=\"saveCard\"]').check(); // Assuming there's a checkbox to save card details\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.url().should('include', '/confirmation'); // Check if redirected to confirmation page\n        cy.contains('Your card details have been saved successfully').should('be.visible');\n    });\n\n    it('should show an error for invalid card number', () => {\n        cy.get('input[name=\"cardNumber\"]').type('1234567812345678'); // Invalid card number\n        cy.get('input[name=\"expiryDate\"]').type('12/25');\n        cy.get('input[name=\"cvv\"]').type('123');\n        cy.get('input[name=\"cardHolderName\"]').type('John Doe');\n        cy.get('input[name=\"saveCard\"]').check();\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.contains('Invalid card number').should('be.visible'); // Check for error message\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 318,
+  "latency_s": 5.02,
+  "timestamp": "2026-06-19T16:40:34.447566"
+}

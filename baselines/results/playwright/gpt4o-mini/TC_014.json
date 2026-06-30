@@ -1,0 +1,13 @@
+{
+  "id": "TC_014",
+  "category": "authentication",
+  "complexity": "simple",
+  "user_story": "As a user, I want the login form to be accessible via keyboard navigation.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Form Accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should focus on the username input when tabbed to', async ({ page }) => {\n    await page.keyboard.press('Tab');\n    const usernameInput = page.getByLabel('Username');\n    await expect(usernameInput).toBeFocused();\n  });\n\n  test('should focus on the password input when tabbed to after username', async ({ page }) => {\n    await page.keyboard.press('Tab'); // Focus on username\n    await page.keyboard.press('Tab'); // Focus on password\n    const passwordInput = page.getByLabel('Password');\n    await expect(passwordInput).toBeFocused();\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 166,
+  "latency_s": 2.86,
+  "timestamp": "2026-06-19T16:44:17.536628"
+}

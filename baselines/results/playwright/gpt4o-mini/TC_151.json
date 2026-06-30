@@ -1,0 +1,13 @@
+{
+  "id": "TC_151",
+  "category": "table_list",
+  "complexity": "complex",
+  "user_story": "As a user, I want to freeze the first column when scrolling horizontally.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Column Freezing', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/table'); // Replace with the actual URL\n  });\n\n  test('should freeze the first column when scrolling horizontally', async ({ page }) => {\n    const table = page.getByRole('table');\n    const firstColumn = table.locator('tr td:first-child');\n\n    await expect(firstColumn).toBeVisible();\n\n    await page.evaluate(() => {\n      window.scrollBy(500, 0); // Simulate horizontal scroll\n    });\n\n    await expect(firstColumn).toBeVisible(); // First column should still be visible\n  });\n\n  test('should allow scrolling without affecting the first column', async ({ page }) => {\n    const firstColumn = page.getByRole('columnheader', { name: 'First Column' }); // Adjust based on actual header name\n\n    await page.evaluate(() => {\n      window.scrollBy(500, 0); // Simulate horizontal scroll\n    });\n\n    await expect(firstColumn).toBeVisible(); // First column header should still be visible\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 245,
+  "latency_s": 3.37,
+  "timestamp": "2026-06-19T16:53:45.721393"
+}

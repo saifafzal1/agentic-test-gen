@@ -1,0 +1,13 @@
+{
+  "id": "TC_032",
+  "category": "form_validation",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a preview of an uploaded image before submitting.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Image Upload Preview', () => {\n    beforeEach(() => {\n        cy.visit('/upload'); // Replace with the actual URL of the upload page\n    });\n\n    it('should display a preview of the uploaded image', () => {\n        const fileName = 'test-image.jpg'; // Replace with a valid image file name in the fixtures folder\n        cy.fixture(fileName).then(fileContent => {\n            cy.get('input[type=\"file\"]').attachFile(fileName);\n            cy.get('.image-preview') // Replace with the actual selector for the image preview\n                .should('be.visible')\n                .and('have.attr', 'src')\n                .and('include', fileName);\n        });\n    });\n\n    it('should not display a preview if no image is uploaded', () => {\n        cy.get('.image-preview') // Replace with the actual selector for the image preview\n            .should('not.exist');\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 190,
+  "latency_s": 2.44,
+  "timestamp": "2026-06-19T16:27:11.125037"
+}

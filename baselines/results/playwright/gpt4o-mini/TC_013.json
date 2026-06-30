@@ -1,0 +1,13 @@
+{
+  "id": "TC_013",
+  "category": "authentication",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see my username pre-filled if I previously logged in.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Authentication', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should pre-fill username if previously logged in', async ({ page }) => {\n    // Simulate a previous login\n    await page.fill('input[name=\"username\"]', 'testuser');\n    await page.fill('input[name=\"password\"]', 'password123');\n    await page.click('button[type=\"submit\"]');\n    \n    // Log out to test the pre-fill functionality\n    await page.click(getByRole('button', { name: /logout/i }));\n\n    // Navigate back to login page\n    await page.goto('/login');\n\n    // Check if the username is pre-filled\n    const usernameInput = page.getByLabel('Username');\n    await expect(usernameInput).toHaveValue('testuser');\n  });\n\n  test('should not pre-fill username if not previously logged in', async ({ page }) => {\n    // Navigate to login page without logging in\n    await page.goto('/login');\n\n    // Check if the username input is empty\n    const usernameInput = page.getByLabel('Username');\n    await expect(usernameInput).toHaveValue('');\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 260,
+  "latency_s": 4.15,
+  "timestamp": "2026-06-19T16:44:14.365728"
+}

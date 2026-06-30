@@ -1,0 +1,13 @@
+{
+  "id": "TC_270",
+  "category": "notifications",
+  "complexity": "medium",
+  "user_story": "As a user, I want unread notifications to be visually distinct from read ones.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Notification Visual Distinction', () => {\n    beforeEach(() => {\n        cy.visit('/notifications');\n    });\n\n    it('should display unread notifications with a bold font', () => {\n        cy.get('.notification').each(($notification) => {\n            const isRead = $notification.hasClass('read');\n            if (!isRead) {\n                expect($notification).to.have.css('font-weight', 'bold');\n            }\n        });\n    });\n\n    it('should display read notifications with normal font weight', () => {\n        cy.get('.notification').each(($notification) => {\n            const isRead = $notification.hasClass('read');\n            if (isRead) {\n                expect($notification).to.have.css('font-weight', 'normal');\n            }\n        });\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 159,
+  "latency_s": 3.03,
+  "timestamp": "2026-06-19T16:42:05.484501"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_160",
+  "category": "table_list",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a summary row at the bottom of a numeric column.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Summary Row', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/table'); // Replace with the actual URL\n  });\n\n  test('should display a summary row at the bottom of the numeric column', async ({ page }) => {\n    const summaryRow = await page.getByRole('row', { name: /summary/i });\n    expect(await summaryRow.isVisible()).toBe(true);\n\n    const numericColumn = await page.getByRole('columnheader', { name: /numeric column/i });\n    const summaryValue = await summaryRow.getByRole('cell', { name: /total/i });\n    \n    expect(await summaryValue.innerText()).toBe('100'); // Replace with expected total value\n  });\n\n  test('should have correct values in the summary row', async ({ page }) => {\n    const summaryRow = await page.getByRole('row', { name: /summary/i });\n    const averageValue = await summaryRow.getByRole('cell', { name: /average/i });\n\n    expect(await averageValue.innerText()).toBe('50'); // Replace with expected average value\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 254,
+  "latency_s": 3.72,
+  "timestamp": "2026-06-19T16:54:22.381580"
+}

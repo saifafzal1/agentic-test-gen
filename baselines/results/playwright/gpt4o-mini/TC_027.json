@@ -1,0 +1,13 @@
+{
+  "id": "TC_027",
+  "category": "form_validation",
+  "complexity": "medium",
+  "user_story": "As a user, I want the ZIP code field to auto-format as I type.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('ZIP Code Auto-Formatting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should format ZIP code correctly on input', async ({ page }) => {\n    const zipCodeInput = page.getByLabel('ZIP Code');\n\n    await zipCodeInput.fill('123456789');\n    await expect(zipCodeInput).toHaveValue('12345-6789');\n  });\n\n  test('should not format invalid ZIP code', async ({ page }) => {\n    const zipCodeInput = page.getByLabel('ZIP Code');\n\n    await zipCodeInput.fill('1234');\n    await expect(zipCodeInput).toHaveValue('1234');\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 171,
+  "latency_s": 2.54,
+  "timestamp": "2026-06-19T16:45:14.476814"
+}

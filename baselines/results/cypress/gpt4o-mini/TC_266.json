@@ -1,0 +1,13 @@
+{
+  "id": "TC_266",
+  "category": "notifications",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an empty state when I have no notifications.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Notifications Empty State', () => {\n    beforeEach(() => {\n        cy.visit('/notifications');\n    });\n\n    it('should display an empty state message when there are no notifications', () => {\n        cy.intercept('GET', '/api/notifications', []).as('getNotifications');\n        cy.wait('@getNotifications');\n        cy.get('.empty-state').should('be.visible');\n        cy.get('.empty-state').contains('You have no notifications');\n    });\n\n    it('should not display any notification items when there are no notifications', () => {\n        cy.intercept('GET', '/api/notifications', []).as('getNotifications');\n        cy.wait('@getNotifications');\n        cy.get('.notification-item').should('not.exist');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 152,
+  "latency_s": 1.93,
+  "timestamp": "2026-06-19T16:41:51.213505"
+}

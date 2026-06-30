@@ -1,0 +1,13 @@
+{
+  "id": "TC_123",
+  "category": "async_await",
+  "complexity": "medium",
+  "user_story": "As a user, I want async errors to surface a retry option.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should display retry option on async error', async ({ page }) => {\n    await page.click(getByRole('button', { name: 'Trigger Async Action' }));\n    \n    const errorMessage = await page.getByText('An error occurred. Please try again.');\n    await expect(errorMessage).toBeVisible();\n\n    const retryButton = await page.getByRole('button', { name: 'Retry' });\n    await expect(retryButton).toBeVisible();\n  });\n\n  test('should retry async action when retry option is clicked', async ({ page }) => {\n    await page.click(getByRole('button', { name: 'Trigger Async Action' }));\n    \n    const retryButton = await page.getByRole('button', { name: 'Retry' });\n    await expect(retryButton).toBeVisible();\n    \n    await retryButton.click();\n    \n    const successMessage = await page.getByText('Action completed successfully.');\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 256,
+  "latency_s": 8.52,
+  "timestamp": "2026-06-19T16:52:04.649309"
+}

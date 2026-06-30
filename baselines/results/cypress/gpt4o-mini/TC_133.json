@@ -1,0 +1,13 @@
+{
+  "id": "TC_133",
+  "category": "modal_dialog",
+  "complexity": "complex",
+  "user_story": "As a user, I want to submit a form inside a modal and see success feedback.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Modal Form Submission', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Adjust the URL to your application\n        cy.get('.open-modal-button').click(); // Adjust selector to open the modal\n    });\n\n    it('should submit the form successfully and display success feedback', () => {\n        cy.get('input[name=\"username\"]').type('testuser');\n        cy.get('input[name=\"email\"]').type('testuser@example.com');\n        cy.get('textarea[name=\"message\"]').type('This is a test message.');\n        cy.get('.submit-button').click(); // Adjust selector for the submit button\n\n        cy.get('.success-message').should('be.visible').and('contain', 'Form submitted successfully!');\n    });\n\n    it('should show an error message when submitting the form with empty fields', () => {\n        cy.get('.submit-button').click(); // Attempt to submit without filling the form\n\n        cy.get('.error-message').should('be.visible').and('contain', 'Please fill out this field.');\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 214,
+  "latency_s": 3.15,
+  "timestamp": "2026-06-19T16:34:08.022144"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_266",
+  "category": "notifications",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an empty state when I have no notifications.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notifications', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should display empty state when there are no notifications', async ({ page }) => {\n    await expect(page.getByText('You have no notifications')).toBeVisible();\n  });\n\n  test('should not display any notification items', async ({ page }) => {\n    const notificationItems = page.locator('.notification-item');\n    await expect(notificationItems).toHaveCount(0);\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 120,
+  "latency_s": 2.15,
+  "timestamp": "2026-06-19T17:02:15.101030"
+}

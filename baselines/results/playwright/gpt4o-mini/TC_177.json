@@ -1,0 +1,13 @@
+{
+  "id": "TC_177",
+  "category": "file_upload",
+  "complexity": "medium",
+  "user_story": "As a user, I want to download a previously uploaded file.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload and Download', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload');\n  });\n\n  test('should upload a file successfully', async ({ page }) => {\n    const filePath = 'path/to/your/file.txt';\n    await page.getByLabel('Upload File').setInputFiles(filePath);\n    await page.getByRole('button', { name: 'Upload' }).click();\n    await expect(page.getByText('File uploaded successfully')).toBeVisible();\n  });\n\n  test('should download the previously uploaded file', async ({ page }) => {\n    await page.goto('/downloads');\n    await page.getByRole('link', { name: 'Download file.txt' }).click();\n    const [download] = await Promise.all([\n      page.waitForEvent('download'),\n      page.getByRole('link', { name: 'Download file.txt' }).click(),\n    ]);\n    const path = await download.path();\n    expect(path).toBeTruthy();\n  });\n});",
+  "prompt_tokens": 130,
+  "completion_tokens": 223,
+  "latency_s": 3.98,
+  "timestamp": "2026-06-19T16:55:29.907834"
+}

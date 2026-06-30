@@ -1,0 +1,13 @@
+{
+  "id": "TC_226",
+  "category": "responsive",
+  "complexity": "complex",
+  "user_story": "As a mobile user, I want the navigation to collapse into a hamburger menu.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mobile Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n    await page.setViewportSize({ width: 375, height: 812 }); // Set viewport to mobile size\n  });\n\n  test('should display hamburger menu on mobile', async ({ page }) => {\n    const hamburgerMenu = page.getByRole('button', { name: /menu/i });\n    await expect(hamburgerMenu).toBeVisible();\n  });\n\n  test('should open the navigation menu when hamburger is clicked', async ({ page }) => {\n    const hamburgerMenu = page.getByRole('button', { name: /menu/i });\n    await hamburgerMenu.click();\n    \n    const navMenu = page.getByRole('navigation');\n    await expect(navMenu).toBeVisible();\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 193,
+  "latency_s": 2.65,
+  "timestamp": "2026-06-19T16:58:52.896765"
+}

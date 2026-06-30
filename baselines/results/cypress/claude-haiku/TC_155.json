@@ -1,0 +1,13 @@
+{
+  "id": "TC_155",
+  "category": "table_list",
+  "complexity": "simple",
+  "user_story": "As a user, I want an empty state illustration when a table has no data.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Empty State Illustration for Table with No Data', () => {\n  beforeEach(() => {\n    cy.visit('/table');\n    cy.intercept('GET', '**/api/data', { statusCode: 200, body: [] }).as('emptyData');\n  });\n\n  it('should display empty state illustration when table has no data', () => {\n    cy.wait('@emptyData');\n    cy.get('[data-testid=\"table-container\"]').should('be.visible');\n    cy.get('[data-testid=\"empty-state-illustration\"]').should('be.visible');\n    cy.get('[data-testid=\"empty-state-title\"]').should('contain', 'No Data Available');\n    cy.get('[data-testid=\"empty-state-description\"]').should('be.visible');\n    cy.get('[data-testid=\"table-body\"] tr').should('have.length', 0);\n  });\n\n  it('should hide empty state illustration when table has data', () => {\n    cy.intercept('GET', '**/api/data', {\n      statusCode: 200,\n      body: [\n        { id: 1, name: 'Item 1', status: 'Active' },\n        { id: 2, name: 'Item 2', status: 'Inactive' }\n      ]\n    }).as('dataLoaded');\n    \n    cy.reload();\n    cy.wait('@dataLoaded');\n    cy.get('[data-testid=\"empty-state-illustration\"]').should('not.exist');\n    cy.get('[data-testid=\"table-body\"] tr').should('have.length', 2);\n  });\n\n  it('should display empty state when all data is filtered out', () => {\n    cy.intercept('GET', '**/api/data?search=nonexistent', {\n      statusCode: 200,\n      body: []\n    }).as('filteredEmpty');\n    \n    cy.get('[data-testid=\"search-input\"]').type('nonexistent');\n    cy.wait('@filteredEmpty');\n    cy.get('[data-testid=\"empty-state-illustration\"]').should('be.visible');\n    cy.get('[data-testid=\"empty-state-title\"]').should('contain', 'No Results Found');\n  });\n\n  it('should verify empty state illustration is properly styled', () => {\n    cy.wait('@emptyData');\n    cy.get('[data-testid=\"empty-state-illustration\"]')\n      .should('be.visible')\n      .and('have.css', 'display', 'flex')\n      .and('have.css', 'justify-content', 'center')\n      .and('have.css', 'align-items', 'center');\n    \n    cy.get('[data-testid=\"empty-state-icon\"]')\n      .should('be.visible')\n      .and('have.attr', 'src')\n      .and('include', 'empty-state');\n  });\n});",
+  "prompt_tokens": 122,
+  "completion_tokens": 719,
+  "latency_s": 4.13,
+  "timestamp": "2026-06-19T17:21:47.625374"
+}

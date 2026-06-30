@@ -1,0 +1,13 @@
+{
+  "id": "TC_209",
+  "category": "accessibility",
+  "complexity": "simple",
+  "user_story": "As a user, I want error messages to be announced by screen readers.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Accessibility Error Messages', () => {\n    beforeEach(() => {\n        cy.visit('/your-page-url'); // Replace with the actual page URL\n    });\n\n    it('should announce error messages to screen readers', () => {\n        cy.get('input[name=\"username\"]').type('invalidUser');\n        cy.get('input[name=\"password\"]').type('wrongPassword');\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.get('.error-message') // Replace with the actual selector for error messages\n            .should('be.visible')\n            .invoke('attr', 'aria-live')\n            .should('equal', 'assertive');\n\n        cy.get('.error-message')\n            .should('contain', 'Invalid username or password'); // Replace with actual error message\n    });\n\n    it('should not announce error messages when there are no errors', () => {\n        cy.get('input[name=\"username\"]').type('validUser');\n        cy.get('input[name=\"password\"]').type('correctPassword');\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.get('.error-message') // Replace with the actual selector for error messages\n            .should('not.exist');\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 241,
+  "latency_s": 4.74,
+  "timestamp": "2026-06-19T16:38:20.008845"
+}

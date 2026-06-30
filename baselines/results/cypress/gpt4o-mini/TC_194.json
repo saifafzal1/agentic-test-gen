@@ -1,0 +1,13 @@
+{
+  "id": "TC_194",
+  "category": "search_filter",
+  "complexity": "simple",
+  "user_story": "As a user, I want faceted search to update results without a full page reload.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Faceted Search Functionality', () => {\n    beforeEach(() => {\n        cy.visit('/search'); // Adjust the URL to your application's search page\n    });\n\n    it('should update results when a facet is selected', () => {\n        cy.get('.facet-category').first().click(); // Click on the first facet category\n        cy.get('.search-results').should('exist'); // Ensure search results are displayed\n        cy.get('.search-results').children().should('have.length.greaterThan', 0); // Check that results are returned\n    });\n\n    it('should not display results when no facets are selected', () => {\n        cy.get('.search-results').should('exist'); // Ensure search results area is present\n        cy.get('.search-results').children().should('have.length', 0); // Check that no results are returned\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 179,
+  "latency_s": 2.58,
+  "timestamp": "2026-06-19T16:37:24.671168"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_176",
+  "category": "file_upload",
+  "complexity": "simple",
+  "user_story": "As a user, I want to retry a failed upload without re-selecting the file.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload Retry Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload'); // Replace with the actual upload page URL\n  });\n\n  test('should upload a file successfully', async ({ page }) => {\n    const filePath = 'path/to/valid/file.txt'; // Replace with the actual file path\n    await page.getByLabel('File Upload').setInputFiles(filePath);\n    await page.getByRole('button', { name: 'Upload' }).click();\n    await expect(page.getByText('Upload successful')).toBeVisible();\n  });\n\n  test('should retry a failed upload without re-selecting the file', async ({ page }) => {\n    const filePath = 'path/to/invalid/file.txt'; // Replace with the actual invalid file path\n    await page.getByLabel('File Upload').setInputFiles(filePath);\n    await page.getByRole('button', { name: 'Upload' }).click();\n    await expect(page.getByText('Upload failed')).toBeVisible();\n\n    await page.getByRole('button', { name: 'Retry' }).click();\n    await expect(page.getByText('Upload successful')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 267,
+  "latency_s": 13.37,
+  "timestamp": "2026-06-19T16:55:25.626856"
+}

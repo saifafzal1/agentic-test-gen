@@ -1,0 +1,13 @@
+{
+  "id": "TC_122",
+  "category": "async_await",
+  "complexity": "simple",
+  "user_story": "As a user, I want an async operation to be cancellable via an Abort button.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Async Operation Cancellation', () => {\n    beforeEach(() => {\n        cy.visit('/your-page-url'); // Replace with your actual page URL\n    });\n\n    it('should complete the async operation when not cancelled', () => {\n        cy.get('#start-async-operation').click(); // Replace with the actual button ID\n        cy.get('#async-operation-status').should('contain', 'In Progress'); // Check if the operation is in progress\n        cy.wait(5000); // Wait for the operation to complete\n        cy.get('#async-operation-status').should('contain', 'Completed'); // Check if the operation is completed\n    });\n\n    it('should cancel the async operation when the Abort button is clicked', () => {\n        cy.get('#start-async-operation').click(); // Start the async operation\n        cy.get('#abort-button').click(); // Click the Abort button\n        cy.get('#async-operation-status').should('contain', 'Cancelled'); // Check if the operation is cancelled\n    });\n});",
+  "prompt_tokens": 113,
+  "completion_tokens": 208,
+  "latency_s": 3.01,
+  "timestamp": "2026-06-19T16:33:23.486713"
+}

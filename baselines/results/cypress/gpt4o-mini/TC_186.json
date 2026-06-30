@@ -1,0 +1,13 @@
+{
+  "id": "TC_186",
+  "category": "search_filter",
+  "complexity": "medium",
+  "user_story": "As a user, I want to search for products by keyword and see instant results.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Product Search Functionality', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Visit the homepage or search page\n    });\n\n    it('should display search results when a valid keyword is entered', () => {\n        cy.get('input[name=\"search\"]').type('laptop'); // Type a valid keyword\n        cy.get('button[type=\"submit\"]').click(); // Click the search button\n        cy.get('.search-results').should('be.visible'); // Check if search results are visible\n        cy.get('.search-results').children().should('have.length.greaterThan', 0); // Ensure there are results\n        cy.get('.search-results').contains('laptop'); // Verify that results contain the keyword\n    });\n\n    it('should show no results message when an invalid keyword is entered', () => {\n        cy.get('input[name=\"search\"]').type('xyzabc'); // Type an invalid keyword\n        cy.get('button[type=\"submit\"]').click(); // Click the search button\n        cy.get('.no-results').should('be.visible'); // Check if no results message is visible\n        cy.get('.no-results').contains('No products found'); // Verify the no results message\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 252,
+  "latency_s": 3.43,
+  "timestamp": "2026-06-19T16:36:57.066445"
+}

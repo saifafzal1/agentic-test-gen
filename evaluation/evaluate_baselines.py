@@ -23,7 +23,7 @@ from pathlib import Path
 from collections import defaultdict
 
 # ── Args ──────────────────────────────────────────────────────────────────────
-MODELS     = ["gpt4o-mini", "claude-haiku", "gemini-flash"]
+MODELS     = ["gpt4o-mini", "claude-haiku", "gemini3-flash-lite"]
 FRAMEWORKS = ["cypress", "playwright"]
 
 parser = argparse.ArgumentParser()

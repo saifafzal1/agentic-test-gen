@@ -1,0 +1,13 @@
+{
+  "id": "TC_034",
+  "category": "form_validation",
+  "complexity": "complex",
+  "user_story": "As a user, I want the form to auto-save as a draft every 30 seconds.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Form Auto-Save Functionality', () => {\n    beforeEach(() => {\n        cy.visit('/form-page'); // Replace with the actual URL of the form page\n    });\n\n    it('should auto-save the form as a draft every 30 seconds', () => {\n        cy.get('input[name=\"title\"]').type('Test Draft Title');\n        cy.get('textarea[name=\"description\"]').type('This is a test description.');\n\n        cy.wait(30000); // Wait for 30 seconds to allow auto-save\n\n        cy.get('.draft-notification').should('be.visible').and('contain', 'Draft saved successfully');\n        cy.get('.draft-title').should('contain', 'Test Draft Title');\n        cy.get('.draft-description').should('contain', 'This is a test description.');\n    });\n\n    it('should not auto-save if the form is empty', () => {\n        cy.get('input[name=\"title\"]').clear();\n        cy.get('textarea[name=\"description\"]').clear();\n\n        cy.wait(30000); // Wait for 30 seconds to allow auto-save\n\n        cy.get('.draft-notification').should('not.exist');\n    });\n});",
+  "prompt_tokens": 113,
+  "completion_tokens": 237,
+  "latency_s": 3.4,
+  "timestamp": "2026-06-19T16:27:18.434570"
+}

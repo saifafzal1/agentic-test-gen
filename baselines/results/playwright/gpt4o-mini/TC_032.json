@@ -1,0 +1,13 @@
+{
+  "id": "TC_032",
+  "category": "form_validation",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a preview of an uploaded image before submitting.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Image Upload Preview', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload'); // Replace with the actual URL of the upload page\n  });\n\n  test('should display image preview after upload', async ({ page }) => {\n    const filePath = 'path/to/image.jpg'; // Replace with the actual image path\n    await page.getByLabel('Upload Image').setInputFiles(filePath);\n    \n    const preview = page.getByRole('img', { name: /image preview/i });\n    await expect(preview).toBeVisible();\n    await expect(preview).toHaveAttribute('src', /image.jpg$/); // Adjust based on the expected src\n  });\n\n  test('should not display image preview if no image is uploaded', async ({ page }) => {\n    const preview = page.getByRole('img', { name: /image preview/i });\n    await expect(preview).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 213,
+  "latency_s": 3.2,
+  "timestamp": "2026-06-19T16:45:38.240265"
+}

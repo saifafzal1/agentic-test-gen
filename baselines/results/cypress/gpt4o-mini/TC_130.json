@@ -1,0 +1,13 @@
+{
+  "id": "TC_130",
+  "category": "modal_dialog",
+  "complexity": "complex",
+  "user_story": "As a user, I want to close a modal by clicking the backdrop.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Modal Dialog', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL where the modal can be triggered\n        cy.get('.open-modal-button').click(); // Replace with the actual selector to open the modal\n    });\n\n    it('should close the modal when clicking on the backdrop (happy path)', () => {\n        cy.get('.modal-backdrop').click(); // Replace with the actual selector for the backdrop\n        cy.get('.modal').should('not.exist'); // Replace with the actual selector for the modal\n    });\n\n    it('should not close the modal when clicking inside the modal', () => {\n        cy.get('.modal-content').click(); // Replace with the actual selector for the modal content\n        cy.get('.modal').should('exist'); // Ensure the modal is still present\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 175,
+  "latency_s": 3.14,
+  "timestamp": "2026-06-19T16:33:57.294605"
+}

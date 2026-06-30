@@ -1,0 +1,13 @@
+{
+  "id": "TC_153",
+  "category": "table_list",
+  "complexity": "medium",
+  "user_story": "As a user, I want column visibility to be toggled from a settings menu.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Column Visibility Toggle', () => {\n    beforeEach(() => {\n        cy.visit('/settings'); // Adjust the URL to match your application\n    });\n\n    it('should toggle column visibility on happy path', () => {\n        cy.get('.settings-menu').click();\n        cy.get('.column-toggle').contains('Column A').click(); // Assuming 'Column A' is the column to toggle\n        cy.get('.table').should('not.contain', 'Column A'); // Verify that Column A is hidden\n        cy.get('.settings-menu').click();\n        cy.get('.column-toggle').contains('Column A').click(); // Toggle back to show\n        cy.get('.table').should('contain', 'Column A'); // Verify that Column A is visible\n    });\n\n    it('should not toggle non-existent column', () => {\n        cy.get('.settings-menu').click();\n        cy.get('.column-toggle').contains('Non-existent Column').click(); // Attempt to toggle a non-existent column\n        cy.get('.notification').should('contain', 'Column not found'); // Verify that an error message is shown\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 231,
+  "latency_s": 3.84,
+  "timestamp": "2026-06-19T16:35:11.612969"
+}

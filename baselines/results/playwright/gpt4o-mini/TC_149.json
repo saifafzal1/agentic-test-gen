@@ -1,0 +1,13 @@
+{
+  "id": "TC_149",
+  "category": "table_list",
+  "complexity": "simple",
+  "user_story": "As a user, I want to select all rows with a header checkbox.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Row Selection', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('http://your-application-url.com');\n  });\n\n  test('should select all rows when header checkbox is checked', async ({ page }) => {\n    const headerCheckbox = page.getByRole('checkbox', { name: /select all/i });\n    await headerCheckbox.check();\n    \n    const selectedRows = await page.getByRole('row', { selected: true }).count();\n    const totalRows = await page.getByRole('row').count();\n\n    expect(selectedRows).toBe(totalRows);\n  });\n\n  test('should deselect all rows when header checkbox is unchecked', async ({ page }) => {\n    const headerCheckbox = page.getByRole('checkbox', { name: /select all/i });\n    await headerCheckbox.check();\n    await headerCheckbox.uncheck();\n    \n    const selectedRows = await page.getByRole('row', { selected: true }).count();\n\n    expect(selectedRows).toBe(0);\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 227,
+  "latency_s": 2.86,
+  "timestamp": "2026-06-19T16:53:42.041941"
+}

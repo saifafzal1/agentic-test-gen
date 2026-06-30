@@ -1,0 +1,13 @@
+{
+  "id": "TC_265",
+  "category": "notifications",
+  "complexity": "complex",
+  "user_story": "As a user, I want to click a notification to navigate to the related content.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Notification Click Navigation', () => {\n    beforeEach(() => {\n        cy.visit('/notifications'); // Adjust the URL as necessary\n    });\n\n    it('should navigate to the related content when a notification is clicked', () => {\n        cy.get('.notification') // Adjust the selector as necessary\n            .first()\n            .click();\n\n        cy.url().should('include', '/related-content'); // Adjust the URL as necessary\n        cy.get('.related-content-title').should('be.visible'); // Adjust the selector as necessary\n    });\n\n    it('should not navigate if the notification is disabled', () => {\n        cy.get('.notification.disabled') // Adjust the selector as necessary\n            .first()\n            .click();\n\n        cy.url().should('not.include', '/related-content'); // Adjust the URL as necessary\n        cy.get('.notification').should('have.class', 'disabled'); // Adjust the selector as necessary\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 191,
+  "latency_s": 3.52,
+  "timestamp": "2026-06-19T16:41:48.980850"
+}

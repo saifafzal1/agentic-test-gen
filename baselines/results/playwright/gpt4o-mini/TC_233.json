@@ -1,0 +1,13 @@
+{
+  "id": "TC_233",
+  "category": "responsive",
+  "complexity": "simple",
+  "user_story": "As a mobile user, I want modals to be full-screen on small viewports.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Full-screen modals on small viewports', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-website-url.com');\n    await page.setViewportSize({ width: 375, height: 667 }); // Simulate small viewport\n  });\n\n  test('should display modal in full-screen on small viewport', async ({ page }) => {\n    await page.getByText('Open Modal').click();\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n    await expect(modal).toHaveCSS('width', '100%');\n    await expect(modal).toHaveCSS('height', '100%');\n  });\n\n  test('should close the modal when the close button is clicked', async ({ page }) => {\n    await page.getByText('Open Modal').click();\n    const closeButton = page.getByLabel('Close');\n    await closeButton.click();\n    const modal = page.getByRole('dialog');\n    await expect(modal).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 236,
+  "latency_s": 4.22,
+  "timestamp": "2026-06-19T16:59:24.800674"
+}

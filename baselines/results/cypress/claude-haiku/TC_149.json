@@ -1,0 +1,13 @@
+{
+  "id": "TC_149",
+  "category": "table_list",
+  "complexity": "simple",
+  "user_story": "As a user, I want to select all rows with a header checkbox.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Table Select All Rows with Header Checkbox', () => {\n  beforeEach(() => {\n    cy.visit('/table');\n    cy.get('table').should('be.visible');\n  });\n\n  it('should select all rows when header checkbox is clicked', () => {\n    // Get the header checkbox\n    cy.get('thead input[type=\"checkbox\"]').should('exist').click();\n\n    // Verify all row checkboxes are checked\n    cy.get('tbody input[type=\"checkbox\"]').each(($checkbox) => {\n      cy.wrap($checkbox).should('be.checked');\n    });\n\n    // Verify header checkbox is also checked\n    cy.get('thead input[type=\"checkbox\"]').should('be.checked');\n  });\n\n  it('should deselect all rows when header checkbox is clicked again', () => {\n    // First, select all rows\n    cy.get('thead input[type=\"checkbox\"]').click();\n    cy.get('tbody input[type=\"checkbox\"]').should('be.checked');\n\n    // Click header checkbox again to deselect all\n    cy.get('thead input[type=\"checkbox\"]').click();\n\n    // Verify all row checkboxes are unchecked\n    cy.get('tbody input[type=\"checkbox\"]').each(($checkbox) => {\n      cy.wrap($checkbox).should('not.be.checked');\n    });\n\n    // Verify header checkbox is also unchecked\n    cy.get('thead input[type=\"checkbox\"]').should('not.be.checked');\n  });\n\n  it('should handle table with no rows gracefully', () => {\n    // Navigate to empty table\n    cy.visit('/table-empty');\n\n    // Header checkbox should still be visible and clickable\n    cy.get('thead input[type=\"checkbox\"]').should('exist').click();\n\n    // Verify header checkbox is checked\n    cy.get('thead input[type=\"checkbox\"]').should('be.checked');\n\n    // Verify no row checkboxes exist\n    cy.get('tbody input[type=\"checkbox\"]').should('not.exist');\n  });\n\n  it('should update header checkbox state when individual rows are manually selected', () => {\n    // Manually select first row\n    cy.get('tbody input[type=\"checkbox\"]').first().click();\n\n    // Header checkbox should remain unchecked (not all rows selected)\n    cy.get('thead input[type=\"checkbox\"]').should('not.be.checked');\n\n    // Select all remaining rows\n    cy.get('tbody input[type=\"checkbox\"]').each(($checkbox) => {\n      cy.wrap($checkbox).should('not.be.checked').click();\n    });\n\n    // Now header checkbox should be checked\n    cy.get('thead input[type=\"checkbox\"]').should('be.checked');\n  });\n});",
+  "prompt_tokens": 120,
+  "completion_tokens": 655,
+  "latency_s": 4.1,
+  "timestamp": "2026-06-19T17:21:16.578694"
+}

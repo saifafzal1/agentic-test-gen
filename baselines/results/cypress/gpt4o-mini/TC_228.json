@@ -1,0 +1,13 @@
+{
+  "id": "TC_228",
+  "category": "responsive",
+  "complexity": "medium",
+  "user_story": "As a tablet user, I want the layout to switch to a two-column grid.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Tablet Layout Switch', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n        cy.viewport('ipad-2'); // Set viewport to tablet size\n    });\n\n    it('should display the layout in a two-column grid on tablet', () => {\n        cy.get('.container') // Replace with the actual container class or ID\n            .should('have.class', 'two-column-grid'); // Check for the two-column grid class\n    });\n\n    it('should not display a single-column layout on tablet', () => {\n        cy.get('.container') // Replace with the actual container class or ID\n            .should('not.have.class', 'single-column'); // Ensure single-column class is not present\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 160,
+  "latency_s": 2.52,
+  "timestamp": "2026-06-19T16:39:20.597437"
+}

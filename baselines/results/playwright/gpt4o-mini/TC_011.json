@@ -1,0 +1,13 @@
+{
+  "id": "TC_011",
+  "category": "authentication",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a password strength indicator when setting a new password.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Password Strength Indicator', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/register'); // Adjust the URL to your registration page\n  });\n\n  test('should display password strength indicator when entering a password', async ({ page }) => {\n    await page.fill('input[name=\"password\"]', 'weakpass');\n    const strengthIndicator = await page.getByText('Weak');\n    await expect(strengthIndicator).toBeVisible();\n  });\n\n  test('should update password strength indicator for a strong password', async ({ page }) => {\n    await page.fill('input[name=\"password\"]', 'Str0ngP@ssw0rd!');\n    const strengthIndicator = await page.getByText('Strong');\n    await expect(strengthIndicator).toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 178,
+  "latency_s": 2.41,
+  "timestamp": "2026-06-19T16:44:05.193884"
+}

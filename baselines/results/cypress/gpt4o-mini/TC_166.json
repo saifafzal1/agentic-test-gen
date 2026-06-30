@@ -1,0 +1,13 @@
+{
+  "id": "TC_166",
+  "category": "table_list",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a badge count of selected rows.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Badge Count of Selected Rows', () => {\n    beforeEach(() => {\n        cy.visit('/table-list'); // Adjust the URL to your application's route\n    });\n\n    it('should display the correct badge count when rows are selected', () => {\n        // Select multiple rows\n        cy.get('.table-row').first().check(); // Assuming check() is used for selecting rows\n        cy.get('.table-row').eq(1).check();\n        \n        // Verify the badge count\n        cy.get('.badge-count').should('contain', '2'); // Assuming the badge count element has this class\n    });\n\n    it('should display zero when no rows are selected', () => {\n        // Ensure no rows are selected\n        cy.get('.table-row').uncheck({ force: true }); // Uncheck all rows if any are checked\n        \n        // Verify the badge count\n        cy.get('.badge-count').should('contain', '0');\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 197,
+  "latency_s": 2.68,
+  "timestamp": "2026-06-19T16:35:53.886555"
+}

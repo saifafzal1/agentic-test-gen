@@ -1,0 +1,13 @@
+{
+  "id": "TC_230",
+  "category": "responsive",
+  "complexity": "simple",
+  "user_story": "As a user, I want the font size to be readable on a small screen without zooming.",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "```typescript\nimport { test, expect } from '@playwright/test';\n\ntest.describe('Font Size Readability on Small Screens', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n    await page.setViewportSize({ width: 375, height: 667 });\n  });\n\n  test('should display readable font size for main heading on small screen', async ({ page }) => {\n    const heading = page.getByRole('heading', { level: 1 });\n    const fontSize = await heading.evaluate((el) => {\n      return window.getComputedStyle(el).fontSize;\n    });\n    \n    const fontSizeValue = parseFloat(fontSize);\n    expect(fontSizeValue).toBeGreaterThanOrEqual(16);\n  });\n\n  test('should display readable font size for body text on small screen', async ({ page }) => {\n    const bodyText = page.getByText(/content|text|paragraph/i).first();\n    const fontSize = await bodyText.evaluate((el) => {\n      return window.getComputedStyle(el).fontSize;\n    });\n    \n    const fontSizeValue = parseFloat(fontSize);\n    expect(fontSizeValue).toBeGreaterThanOrEqual(14);\n  });\n\n  test('should not require zoom to read text on small screen', async ({ page }) => {\n    const mainContent = page.getByRole('main');\n    const isVisible = await mainContent.isVisible();\n    expect(isVisible).toBe(true);\n    \n    const boundingBox = await mainContent.boundingBox();\n    expect(boundingBox).not.toBeNull();\n    if (boundingBox) {\n      expect(boundingBox.width).toBeLessThanOrEqual(375);\n    }\n  });\n\n  test('should maintain readable line height on small screen', async ({ page }) => {\n    const paragraph = page.getByRole('paragraph').first();\n    const lineHeight = await paragraph.evaluate((el) => {\n      return window.getComputedStyle(el).lineHeight;\n    });\n    \n    const lineHeightValue = parseFloat(lineHeight);\n    expect(lineHeightValue).toBeGreaterThanOrEqual(16);\n  });\n});\n```",
+  "prompt_tokens": 146,
+  "completion_tokens": 547,
+  "latency_s": 4.42,
+  "timestamp": "2026-06-19T18:06:42.772283"
+}

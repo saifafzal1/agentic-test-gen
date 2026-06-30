@@ -1,0 +1,13 @@
+{
+  "id": "TC_104",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a user, I want error messages to be screen-reader accessible.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Error Messages Accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should display error message for required field', async ({ page }) => {\n    await page.getByLabel('Username').fill(''); // Assuming there's a label for the username field\n    await page.getByRole('button', { name: 'Submit' }).click(); // Assuming there's a submit button\n\n    const errorMessage = await page.getByText('This field is required.'); // Replace with actual error message\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).toHaveAttribute('role', 'alert'); // Ensure it's accessible\n  });\n\n  test('should display error message for invalid email', async ({ page }) => {\n    await page.getByLabel('Email').fill('invalid-email'); // Assuming there's a label for the email field\n    await page.getByRole('button', { name: 'Submit' }).click(); // Assuming there's a submit button\n\n    const errorMessage = await page.getByText('Please enter a valid email address.'); // Replace with actual error message\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).toHaveAttribute('role', 'alert'); // Ensure it's accessible\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 296,
+  "latency_s": 3.96,
+  "timestamp": "2026-06-19T16:50:40.797305"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_231",
+  "category": "responsive",
+  "complexity": "medium",
+  "user_story": "As a mobile user, I want horizontal scrolling to be disabled on the main layout.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Main Layout Horizontal Scrolling', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Adjust the URL to your application's main layout\n    });\n\n    it('should not allow horizontal scrolling on the main layout', () => {\n        cy.get('body').should('have.css', 'overflow-x', 'hidden');\n    });\n\n    it('should not allow horizontal scrolling when resizing the window', () => {\n        cy.viewport(500, 800); // Set viewport to a mobile size\n        cy.get('body').should('have.css', 'overflow-x', 'hidden');\n        \n        cy.viewport(1200, 800); // Set viewport to a larger size\n        cy.get('body').should('have.css', 'overflow-x', 'hidden');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 161,
+  "latency_s": 2.05,
+  "timestamp": "2026-06-19T16:39:29.071782"
+}

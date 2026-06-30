@@ -1,0 +1,13 @@
+{
+  "id": "TC_092",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a user, I want an error to clear when I correct the invalid input.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Error clearing on input correction', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should display an error message for invalid input', async ({ page }) => {\n    await page.getByLabel('Input Field').fill('invalid input');\n    await page.getByRole('button', { name: 'Submit' }).click();\n    const errorMessage = await page.getByText('Invalid input, please correct it.');\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should clear the error message when input is corrected', async ({ page }) => {\n    await page.getByLabel('Input Field').fill('invalid input');\n    await page.getByRole('button', { name: 'Submit' }).click();\n    await expect(page.getByText('Invalid input, please correct it.')).toBeVisible();\n\n    await page.getByLabel('Input Field').fill('valid input');\n    await page.getByRole('button', { name: 'Submit' }).click();\n    await expect(page.getByText('Invalid input, please correct it.')).toBeHidden();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 262,
+  "latency_s": 6.94,
+  "timestamp": "2026-06-19T16:49:51.261909"
+}

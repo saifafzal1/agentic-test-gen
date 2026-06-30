@@ -1,0 +1,13 @@
+{
+  "id": "TC_247",
+  "category": "payment_flow",
+  "complexity": "complex",
+  "user_story": "As a user, I want to apply a promo code and see the discounted total.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Promo Code Application', () => {\n    beforeEach(() => {\n        cy.visit('/checkout');\n    });\n\n    it('should apply a valid promo code and display the discounted total', () => {\n        cy.get('#promo-code-input').type('SAVE20');\n        cy.get('#apply-promo-button').click();\n        cy.get('#discount-message').should('contain', 'Promo code applied successfully');\n        cy.get('#total-amount').should('contain', '$80.00'); // Assuming original total was $100.00\n    });\n\n    it('should show an error message for an invalid promo code', () => {\n        cy.get('#promo-code-input').type('INVALIDCODE');\n        cy.get('#apply-promo-button').click();\n        cy.get('#discount-message').should('contain', 'Invalid promo code');\n        cy.get('#total-amount').should('contain', '$100.00'); // Original total remains unchanged\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 194,
+  "latency_s": 2.79,
+  "timestamp": "2026-06-19T16:40:25.285965"
+}

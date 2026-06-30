@@ -1,0 +1,13 @@
+{
+  "id": "TC_215",
+  "category": "accessibility",
+  "complexity": "simple",
+  "user_story": "As a user, I want the reading order of the page to match the visual order.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Accessibility - Reading Order', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the page to test\n    });\n\n    it('should have the reading order match the visual order', () => {\n        const expectedOrder = [\n            'header', // Replace with actual selectors or text\n            'main-content',\n            'sidebar',\n            'footer'\n        ];\n\n        cy.get('body').then(($body) => {\n            const readingOrder = $body.find('*').toArray().map(el => el.innerText.trim()).filter(text => text);\n            expect(readingOrder).to.deep.equal(expectedOrder);\n        });\n    });\n\n    it('should handle missing elements gracefully', () => {\n        const expectedOrder = [\n            'header',\n            'footer'\n        ];\n\n        cy.get('body').then(($body) => {\n            const readingOrder = $body.find('*').toArray().map(el => el.innerText.trim()).filter(text => text);\n            expect(readingOrder).to.deep.equal(expectedOrder);\n        });\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 221,
+  "latency_s": 3.26,
+  "timestamp": "2026-06-19T16:38:39.282440"
+}

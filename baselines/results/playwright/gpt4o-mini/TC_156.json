@@ -1,0 +1,13 @@
+{
+  "id": "TC_156",
+  "category": "table_list",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see row numbers in the first column.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Row Numbers', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/your-table-page-url');\n  });\n\n  test('should display row numbers in the first column', async ({ page }) => {\n    const rows = await page.locator('table tbody tr').count();\n    for (let i = 0; i < rows; i++) {\n      const rowNumber = await page.locator(`table tbody tr:nth-child(${i + 1}) td:first-child`).innerText();\n      expect(rowNumber).toBe((i + 1).toString());\n    }\n  });\n\n  test('should have correct row numbers after adding a new row', async ({ page }) => {\n    await page.getByRole('button', { name: 'Add Row' }).click();\n    const rows = await page.locator('table tbody tr').count();\n    for (let i = 0; i < rows; i++) {\n      const rowNumber = await page.locator(`table tbody tr:nth-child(${i + 1}) td:first-child`).innerText();\n      expect(rowNumber).toBe((i + 1).toString());\n    }\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 260,
+  "latency_s": 3.57,
+  "timestamp": "2026-06-19T16:54:06.976720"
+}

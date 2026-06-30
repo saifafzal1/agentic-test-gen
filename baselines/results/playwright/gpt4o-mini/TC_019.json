@@ -1,0 +1,13 @@
+{
+  "id": "TC_019",
+  "category": "form_validation",
+  "complexity": "complex",
+  "user_story": "As a user, I want the phone number field to accept only numeric input.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Phone Number Field Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/form'); // Replace with the actual URL of the form\n  });\n\n  test('should accept numeric input', async ({ page }) => {\n    const phoneInput = page.getByLabel('Phone Number'); // Replace with the actual label of the phone number field\n    await phoneInput.fill('1234567890');\n    await expect(phoneInput).toHaveValue('1234567890');\n  });\n\n  test('should not accept non-numeric input', async ({ page }) => {\n    const phoneInput = page.getByLabel('Phone Number'); // Replace with the actual label of the phone number field\n    await phoneInput.fill('abc123');\n    await expect(phoneInput).toHaveValue(''); // Assuming the field clears on invalid input\n    await expect(phoneInput).toHaveAttribute('aria-invalid', 'true'); // Assuming aria-invalid is set for invalid input\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 223,
+  "latency_s": 2.84,
+  "timestamp": "2026-06-19T16:44:41.139936"
+}

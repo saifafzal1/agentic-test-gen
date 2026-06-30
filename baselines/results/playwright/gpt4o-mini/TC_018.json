@@ -1,0 +1,13 @@
+{
+  "id": "TC_018",
+  "category": "form_validation",
+  "complexity": "medium",
+  "user_story": "As a user, I want required fields to be highlighted if I submit an empty form.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/form'); // Replace with the actual URL of the form\n  });\n\n  test('should highlight required fields when submitting an empty form', async ({ page }) => {\n    await page.getByRole('button', { name: 'Submit' }).click();\n    \n    const requiredField1 = page.getByLabel('Field Label 1'); // Replace with actual label\n    const requiredField2 = page.getByLabel('Field Label 2'); // Replace with actual label\n\n    await expect(requiredField1).toHaveCSS('border-color', 'rgb(255, 0, 0)'); // Assuming red indicates required\n    await expect(requiredField2).toHaveCSS('border-color', 'rgb(255, 0, 0)');\n  });\n\n  test('should not highlight fields if they are filled', async ({ page }) => {\n    await page.getByLabel('Field Label 1').fill('Some input'); // Replace with actual label\n    await page.getByLabel('Field Label 2').fill('Another input'); // Replace with actual label\n    await page.getByRole('button', { name: 'Submit' }).click();\n\n    const requiredField1 = page.getByLabel('Field Label 1');\n    const requiredField2 = page.getByLabel('Field Label 2');\n\n    await expect(requiredField1).not.toHaveCSS('border-color', 'rgb(255, 0, 0)');\n    await expect(requiredField2).not.toHaveCSS('border-color', 'rgb(255, 0, 0)');\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 364,
+  "latency_s": 4.15,
+  "timestamp": "2026-06-19T16:44:37.992645"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_210",
+  "category": "accessibility",
+  "complexity": "medium",
+  "user_story": "As a user, I want ARIA landmarks to define page regions.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('ARIA Landmarks Accessibility Tests', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should have a main landmark region', () => {\n        cy.get('main').should('exist');\n        cy.get('main').should('have.attr', 'role', 'main');\n    });\n\n    it('should have a navigation landmark region', () => {\n        cy.get('nav').should('exist');\n        cy.get('nav').should('have.attr', 'role', 'navigation');\n    });\n\n    it('should not have multiple main landmarks', () => {\n        cy.get('main').should('have.length', 1);\n    });\n\n    it('should have a complementary landmark region', () => {\n        cy.get('aside').should('exist');\n        cy.get('aside').should('have.attr', 'role', 'complementary');\n    });\n});",
+  "prompt_tokens": 107,
+  "completion_tokens": 192,
+  "latency_s": 3.02,
+  "timestamp": "2026-06-19T16:38:23.342662"
+}

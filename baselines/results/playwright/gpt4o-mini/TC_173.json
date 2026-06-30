@@ -1,0 +1,13 @@
+{
+  "id": "TC_173",
+  "category": "file_upload",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error if I upload a file type that's not allowed.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload'); // Replace with the actual URL of the upload page\n  });\n\n  test('should show error for unsupported file type', async ({ page }) => {\n    const filePath = 'path/to/unsupported-file.txt'; // Replace with an actual unsupported file path\n    await page.setInputFiles(getByLabel('File Upload'), filePath);\n    await page.click(getByRole('button', { name: 'Upload' }));\n    \n    const errorMessage = await page.getByText('Unsupported file type. Please upload a valid file.'); // Replace with the actual error message\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should not show error for supported file type', async ({ page }) => {\n    const filePath = 'path/to/supported-file.jpg'; // Replace with an actual supported file path\n    await page.setInputFiles(getByLabel('File Upload'), filePath);\n    await page.click(getByRole('button', { name: 'Upload' }));\n    \n    const successMessage = await page.getByText('File uploaded successfully.'); // Replace with the actual success message\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 137,
+  "completion_tokens": 279,
+  "latency_s": 4.3,
+  "timestamp": "2026-06-19T16:55:05.022169"
+}

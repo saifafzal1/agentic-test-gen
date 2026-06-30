@@ -1,0 +1,13 @@
+{
+  "id": "TC_193",
+  "category": "search_filter",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a 'No results' message when no items match my search.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Search Filter', () => {\n    beforeEach(() => {\n        cy.visit('/search'); // Adjust the URL to your application's search page\n    });\n\n    it('should display results when items match the search', () => {\n        cy.get('input[name=\"search\"]').type('valid search term'); // Replace with an actual search term\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.results').should('be.visible');\n        cy.get('.results').should('not.contain', 'No results');\n    });\n\n    it('should display a \"No results\" message when no items match the search', () => {\n        cy.get('input[name=\"search\"]').type('invalid search term'); // Replace with a term that yields no results\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.no-results-message').should('be.visible').and('contain', 'No results');\n    });\n});",
+  "prompt_tokens": 115,
+  "completion_tokens": 191,
+  "latency_s": 2.71,
+  "timestamp": "2026-06-19T16:37:21.786260"
+}

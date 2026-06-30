@@ -1,0 +1,13 @@
+{
+  "id": "TC_227",
+  "category": "responsive",
+  "complexity": "simple",
+  "user_story": "As a mobile user, I want touch targets to be large enough to tap easily.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Touch Targets Accessibility', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should have touch targets larger than 48x48 pixels', () => {\n        cy.get('button, a, input[type=\"button\"], input[type=\"submit\"]').each(($el) => {\n            const width = $el.width();\n            const height = $el.height();\n            expect(width).to.be.greaterThan(48);\n            expect(height).to.be.greaterThan(48);\n        });\n    });\n\n    it('should not have any touch targets smaller than 48x48 pixels', () => {\n        cy.get('button, a, input[type=\"button\"], input[type=\"submit\"]').each(($el) => {\n            const width = $el.width();\n            const height = $el.height();\n            expect(width).to.be.greaterThan(0).and.to.be.lessThan(48).or.to.be.greaterThan(48);\n            expect(height).to.be.greaterThan(0).and.to.be.lessThan(48).or.to.be.greaterThan(48);\n        });\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 241,
+  "latency_s": 3.96,
+  "timestamp": "2026-06-19T16:39:17.772949"
+}

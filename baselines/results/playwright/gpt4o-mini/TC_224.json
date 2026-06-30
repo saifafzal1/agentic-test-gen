@@ -1,0 +1,13 @@
+{
+  "id": "TC_224",
+  "category": "accessibility",
+  "complexity": "simple",
+  "user_story": "As a user, I want interactive toast notifications to be announced by screen readers.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Interactive Toast Notifications Accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-application-url.com');\n  });\n\n  test('should announce toast notification to screen readers', async ({ page }) => {\n    // Trigger the toast notification\n    await page.getByRole('button', { name: 'Show Toast' }).click();\n\n    // Assert that the toast notification is visible\n    const toast = page.getByRole('alert');\n    await expect(toast).toBeVisible();\n\n    // Check if the toast notification text is announced\n    const toastText = await toast.innerText();\n    await expect(page).toHaveAccessibleName(toastText);\n  });\n\n  test('should allow interaction with the toast notification', async ({ page }) => {\n    // Trigger the toast notification\n    await page.getByRole('button', { name: 'Show Toast' }).click();\n\n    // Assert that the toast notification is visible\n    const toast = page.getByRole('alert');\n    await expect(toast).toBeVisible();\n\n    // Interact with the toast notification\n    await page.getByRole('button', { name: 'Undo' }).click();\n\n    // Assert that the action was successful\n    const confirmationMessage = page.getByText('Action undone');\n    await expect(confirmationMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 295,
+  "latency_s": 4.75,
+  "timestamp": "2026-06-19T16:58:45.405060"
+}

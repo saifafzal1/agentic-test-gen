@@ -1,0 +1,13 @@
+{
+  "id": "TC_197",
+  "category": "search_filter",
+  "complexity": "simple",
+  "user_story": "As a user, I want the search input to be focused when I press '/' on the keyboard.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Input Focus', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-website-url.com'); // Replace with your actual URL\n  });\n\n  test('should focus on search input when \"/\" is pressed', async ({ page }) => {\n    await page.keyboard.press('/');\n    const searchInput = page.getByRole('textbox', { name: /search/i });\n    await expect(searchInput).toBeFocused();\n  });\n\n  test('should remain focused on search input after typing', async ({ page }) => {\n    await page.keyboard.press('/');\n    const searchInput = page.getByRole('textbox', { name: /search/i });\n    await expect(searchInput).toBeFocused();\n    await searchInput.fill('test search');\n    await expect(searchInput).toHaveValue('test search');\n  });\n});",
+  "prompt_tokens": 137,
+  "completion_tokens": 188,
+  "latency_s": 2.82,
+  "timestamp": "2026-06-19T16:56:50.489208"
+}

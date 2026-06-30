@@ -1,0 +1,13 @@
+{
+  "id": "TC_221",
+  "category": "accessibility",
+  "complexity": "simple",
+  "user_story": "As a user, I want form autocomplete attributes to be set correctly.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Autocomplete Attributes', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/form'); // Replace with the actual URL of the form\n  });\n\n  test('should have autocomplete attribute set for username field', async ({ page }) => {\n    const usernameInput = page.getByLabel('Username');\n    await expect(usernameInput).toHaveAttribute('autocomplete', 'username');\n  });\n\n  test('should have autocomplete attribute set for email field', async ({ page }) => {\n    const emailInput = page.getByLabel('Email');\n    await expect(emailInput).toHaveAttribute('autocomplete', 'email');\n  });\n});",
+  "prompt_tokens": 130,
+  "completion_tokens": 151,
+  "latency_s": 4.1,
+  "timestamp": "2026-06-19T16:58:37.446545"
+}

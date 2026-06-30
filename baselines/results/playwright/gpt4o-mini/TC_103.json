@@ -1,0 +1,13 @@
+{
+  "id": "TC_103",
+  "category": "error_states",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a session expired message when my token times out.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Session Expiration', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n    // Simulate user login or token generation here\n  });\n\n  test('should display session expired message after token timeout', async ({ page }) => {\n    // Simulate waiting for the token to expire\n    await page.waitForTimeout(60000); // Adjust timeout as necessary\n\n    // Check for session expired message\n    const message = await page.getByText('Your session has expired. Please log in again.');\n    await expect(message).toBeVisible();\n  });\n\n  test('should redirect to login page after session expiration', async ({ page }) => {\n    // Simulate waiting for the token to expire\n    await page.waitForTimeout(60000); // Adjust timeout as necessary\n\n    // Check if redirected to login page\n    await expect(page).toHaveURL('https://example.com/login'); // Replace with the actual login URL\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 226,
+  "latency_s": 4.76,
+  "timestamp": "2026-06-19T16:50:36.527918"
+}

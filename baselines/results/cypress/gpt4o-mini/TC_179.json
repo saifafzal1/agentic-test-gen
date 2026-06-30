@@ -1,0 +1,13 @@
+{
+  "id": "TC_179",
+  "category": "file_upload",
+  "complexity": "simple",
+  "user_story": "As a user, I want an uploaded PDF to display in an inline viewer.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('PDF Upload and Display', () => {\n    beforeEach(() => {\n        cy.visit('/upload'); // Adjust the URL to your application's upload page\n    });\n\n    it('should successfully upload a PDF and display it in the inline viewer', () => {\n        const filePath = 'path/to/your/file.pdf'; // Adjust the file path to your test PDF\n\n        cy.get('input[type=\"file\"]').attachFile(filePath);\n        cy.get('button[type=\"submit\"]').click(); // Adjust the selector to your upload button\n\n        cy.get('.pdf-viewer') // Adjust the selector to your PDF viewer\n            .should('be.visible')\n            .and('contain', 'PDF Loaded'); // Adjust based on your viewer's content\n    });\n\n    it('should show an error message when a non-PDF file is uploaded', () => {\n        const filePath = 'path/to/your/file.txt'; // Adjust the file path to a non-PDF file\n\n        cy.get('input[type=\"file\"]').attachFile(filePath);\n        cy.get('button[type=\"submit\"]').click(); // Adjust the selector to your upload button\n\n        cy.get('.error-message') // Adjust the selector to your error message\n            .should('be.visible')\n            .and('contain', 'Invalid file type. Please upload a PDF.'); // Adjust based on your error message\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 285,
+  "latency_s": 3.12,
+  "timestamp": "2026-06-19T16:36:31.107402"
+}

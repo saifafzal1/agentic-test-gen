@@ -1,0 +1,13 @@
+{
+  "id": "TC_211",
+  "category": "accessibility",
+  "complexity": "complex",
+  "user_story": "As a user, I want dynamic content updates to be announced by screen readers.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dynamic Content Updates Accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should announce dynamic content updates to screen readers', async ({ page }) => {\n    await page.click(getByRole('button', { name: /load content/i }));\n    const dynamicContent = await page.getByRole('alert');\n\n    await expect(dynamicContent).toBeVisible();\n    await expect(dynamicContent).toHaveText(/new content loaded/i);\n  });\n\n  test('should not announce static content to screen readers', async ({ page }) => {\n    const staticContent = await page.getByText(/static content/i);\n    \n    await expect(staticContent).toBeVisible();\n    await expect(staticContent).not.toHaveAttribute('aria-live', 'assertive');\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 193,
+  "latency_s": 3.8,
+  "timestamp": "2026-06-19T16:57:50.750301"
+}

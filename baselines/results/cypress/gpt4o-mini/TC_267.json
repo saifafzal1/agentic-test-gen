@@ -1,0 +1,13 @@
+{
+  "id": "TC_267",
+  "category": "notifications",
+  "complexity": "medium",
+  "user_story": "As a user, I want to receive a browser push notification for urgent alerts.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Browser Push Notifications', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Visit the application home page\n        cy.request('POST', '/api/notifications/subscribe', { userId: 'testUser' }); // Subscribe to notifications\n    });\n\n    it('should display a push notification for urgent alerts', () => {\n        cy.intercept('POST', '/api/notifications/send', {\n            statusCode: 200,\n            body: { message: 'Urgent alert: System maintenance scheduled.' }\n        }).as('sendNotification');\n\n        cy.request('POST', '/api/notifications/send', { type: 'urgent', message: 'Urgent alert: System maintenance scheduled.' });\n\n        cy.wait('@sendNotification');\n\n        cy.window().then((win) => {\n            const notification = new win.Notification('Urgent alert: System maintenance scheduled.');\n            expect(notification).to.exist;\n            expect(notification.title).to.equal('Urgent alert: System maintenance scheduled.');\n        });\n    });\n\n    it('should not display a push notification for non-urgent alerts', () => {\n        cy.intercept('POST', '/api/notifications/send', {\n            statusCode: 200,\n            body: { message: 'Regular update: All systems operational.' }\n        }).as('sendNotification');\n\n        cy.request('POST', '/api/notifications/send', { type: 'regular', message: 'Regular update: All systems operational.' });\n\n        cy.wait('@sendNotification');\n\n        cy.window().then((win) => {\n            const notification = new win.Notification('Regular update: All systems operational.');\n            expect(notification).to.not.exist; // Expect no notification to be displayed\n        });\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 348,
+  "latency_s": 3.81,
+  "timestamp": "2026-06-19T16:41:55.335893"
+}

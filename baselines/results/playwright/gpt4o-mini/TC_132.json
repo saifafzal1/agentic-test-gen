@@ -1,0 +1,13 @@
+{
+  "id": "TC_132",
+  "category": "modal_dialog",
+  "complexity": "medium",
+  "user_story": "As a user, I want a modal to open with an animation.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Dialog Animation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-website-url.com');\n  });\n\n  test('should open modal with animation when button is clicked', async ({ page }) => {\n    await page.getByRole('button', { name: /open modal/i }).click();\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n    await expect(modal).toHaveCSS('animation', /fade-in/);\n  });\n\n  test('should close modal when close button is clicked', async ({ page }) => {\n    await page.getByRole('button', { name: /open modal/i }).click();\n    const modal = page.getByRole('dialog');\n    await page.getByRole('button', { name: /close/i }).click();\n    await expect(modal).toBeHidden();\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 204,
+  "latency_s": 2.62,
+  "timestamp": "2026-06-19T16:52:38.011090"
+}

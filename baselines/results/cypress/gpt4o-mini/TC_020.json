@@ -1,0 +1,13 @@
+{
+  "id": "TC_020",
+  "category": "form_validation",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a confirmation password mismatch error in real-time.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Password Confirmation Validation', () => {\n    beforeEach(() => {\n        cy.visit('/signup'); // Adjust the URL to your signup page\n    });\n\n    it('should show no error when passwords match', () => {\n        cy.get('input[name=\"password\"]').type('Password123!');\n        cy.get('input[name=\"confirmPassword\"]').type('Password123!');\n        cy.get('input[name=\"confirmPassword\"]').blur(); // Trigger validation\n        cy.get('.error-message').should('not.exist'); // Adjust selector for error message\n    });\n\n    it('should show an error when passwords do not match', () => {\n        cy.get('input[name=\"password\"]').type('Password123!');\n        cy.get('input[name=\"confirmPassword\"]').type('DifferentPassword!');\n        cy.get('input[name=\"confirmPassword\"]').blur(); // Trigger validation\n        cy.get('.error-message').should('contain', 'Passwords do not match'); // Adjust selector and message\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 199,
+  "latency_s": 3.43,
+  "timestamp": "2026-06-19T16:26:27.913730"
+}

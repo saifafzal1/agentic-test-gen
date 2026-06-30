@@ -1,0 +1,13 @@
+{
+  "id": "TC_030",
+  "category": "form_validation",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see a dropdown of matching options when typing in a search field.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Search Dropdown Functionality', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should display matching options when typing in the search field', () => {\n        cy.get('input[name=\"search\"]').type('test'); // Replace with the actual selector for the search input\n        cy.get('.dropdown-options') // Replace with the actual selector for the dropdown\n            .should('be.visible')\n            .and('contain', 'test option 1') // Replace with expected option\n            .and('contain', 'test option 2'); // Replace with expected option\n    });\n\n    it('should not display any options when the search field is empty', () => {\n        cy.get('input[name=\"search\"]').clear(); // Clear the search input\n        cy.get('.dropdown-options') // Replace with the actual selector for the dropdown\n            .should('not.exist');\n    });\n});",
+  "prompt_tokens": 114,
+  "completion_tokens": 198,
+  "latency_s": 2.84,
+  "timestamp": "2026-06-19T16:27:04.591189"
+}

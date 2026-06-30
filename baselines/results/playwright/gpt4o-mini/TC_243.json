@@ -1,0 +1,13 @@
+{
+  "id": "TC_243",
+  "category": "responsive",
+  "complexity": "medium",
+  "user_story": "As a user, I want the video player to resize proportionally on tablet viewports.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Video Player Responsiveness', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n    await page.setViewportSize({ width: 768, height: 1024 }); // Tablet viewport size\n  });\n\n  test('should resize video player proportionally', async ({ page }) => {\n    const videoPlayer = page.getByRole('video');\n    const initialWidth = await videoPlayer.evaluate(el => el.clientWidth);\n    const initialHeight = await videoPlayer.evaluate(el => el.clientHeight);\n\n    await page.setViewportSize({ width: 1024, height: 768 }); // Change to a different tablet size\n    await page.waitForTimeout(1000); // Wait for resize to take effect\n\n    const newWidth = await videoPlayer.evaluate(el => el.clientWidth);\n    const newHeight = await videoPlayer.evaluate(el => el.clientHeight);\n\n    expect(newWidth / newHeight).toBeCloseTo(initialWidth / initialHeight, 2);\n  });\n\n  test('should maintain aspect ratio on orientation change', async ({ page }) => {\n    const videoPlayer = page.getByRole('video');\n    const initialWidth = await videoPlayer.evaluate(el => el.clientWidth);\n    const initialHeight = await videoPlayer.evaluate(el => el.clientHeight);\n\n    await page.setViewportSize({ width: 768, height: 1024 }); // Portrait orientation\n    await page.waitForTimeout(1000); // Wait for resize to take effect\n\n    const portraitWidth = await videoPlayer.evaluate(el => el.clientWidth);\n    const portraitHeight = await videoPlayer.evaluate(el => el.clientHeight);\n\n    expect(portraitWidth / portraitHeight).toBeCloseTo(initialWidth / initialHeight, 2);\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 385,
+  "latency_s": 5.01,
+  "timestamp": "2026-06-19T17:00:08.633796"
+}

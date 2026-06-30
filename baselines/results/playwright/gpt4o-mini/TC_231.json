@@ -1,0 +1,13 @@
+{
+  "id": "TC_231",
+  "category": "responsive",
+  "complexity": "medium",
+  "user_story": "As a mobile user, I want horizontal scrolling to be disabled on the main layout.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Main Layout Horizontal Scrolling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://yourwebsite.com'); // Replace with your actual URL\n  });\n\n  test('should not allow horizontal scrolling on mobile', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 812 }); // Set mobile viewport\n    const body = await page.getByRole('document');\n    const overflowX = await body.evaluate(el => getComputedStyle(el).overflowX);\n    expect(overflowX).toBe('hidden');\n  });\n\n  test('should display content correctly without horizontal scrolling', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 812 }); // Set mobile viewport\n    const content = await page.getByText('Expected Content'); // Replace with actual content\n    await expect(content).toBeVisible();\n    const contentBoundingBox = await content.boundingBox();\n    expect(contentBoundingBox).not.toBeNull();\n    expect(contentBoundingBox!.width).toBeLessThanOrEqual(375); // Ensure content fits within viewport\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 252,
+  "latency_s": 4.71,
+  "timestamp": "2026-06-19T16:59:15.671494"
+}

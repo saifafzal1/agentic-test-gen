@@ -1,0 +1,13 @@
+{
+  "id": "TC_138",
+  "category": "modal_dialog",
+  "complexity": "medium",
+  "user_story": "As a user, I want a modal to be responsive on mobile screen sizes.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Responsiveness', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-website-url.com');\n    await page.getByRole('button', { name: 'Open Modal' }).click();\n  });\n\n  test('should display modal correctly on mobile screen size', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 667 }); // iPhone 8 size\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n    await expect(modal).toHaveCSS('max-width', '100%');\n    await expect(modal).toHaveCSS('width', '100%');\n  });\n\n  test('should close modal when close button is clicked', async ({ page }) => {\n    await page.getByRole('button', { name: 'Close' }).click();\n    const modal = page.getByRole('dialog');\n    await expect(modal).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 225,
+  "latency_s": 3.25,
+  "timestamp": "2026-06-19T16:53:01.536071"
+}

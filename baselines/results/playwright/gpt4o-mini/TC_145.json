@@ -1,0 +1,13 @@
+{
+  "id": "TC_145",
+  "category": "modal_dialog",
+  "complexity": "complex",
+  "user_story": "As a user, I want a cookie consent banner to disappear after accepting.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Cookie Consent Banner', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should display the cookie consent banner on page load', async ({ page }) => {\n    const banner = page.getByRole('dialog', { name: /cookie consent/i });\n    await expect(banner).toBeVisible();\n  });\n\n  test('should disappear after accepting the cookie consent', async ({ page }) => {\n    const acceptButton = page.getByRole('button', { name: /accept/i });\n    await acceptButton.click();\n    \n    const banner = page.getByRole('dialog', { name: /cookie consent/i });\n    await expect(banner).toBeHidden();\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 176,
+  "latency_s": 2.68,
+  "timestamp": "2026-06-19T16:53:24.215871"
+}

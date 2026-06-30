@@ -1,0 +1,13 @@
+{
+  "id": "TC_173",
+  "category": "file_upload",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error if I upload a file type that's not allowed.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('File Upload Error Handling', () => {\n    beforeEach(() => {\n        cy.visit('/upload'); // Replace with the actual URL of the upload page\n    });\n\n    it('should display an error message for disallowed file type', () => {\n        const fileName = 'test.txt'; // Replace with a disallowed file type\n        cy.get('input[type=\"file\"]').attachFile(fileName);\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.error-message').should('be.visible').and('contain', 'File type not allowed');\n    });\n\n    it('should not display an error message for allowed file type', () => {\n        const fileName = 'test.pdf'; // Replace with an allowed file type\n        cy.get('input[type=\"file\"]').attachFile(fileName);\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.error-message').should('not.exist');\n    });\n});",
+  "prompt_tokens": 114,
+  "completion_tokens": 193,
+  "latency_s": 2.69,
+  "timestamp": "2026-06-19T16:36:10.760249"
+}

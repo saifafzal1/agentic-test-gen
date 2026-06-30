@@ -1,0 +1,13 @@
+{
+  "id": "TC_108",
+  "category": "error_states",
+  "complexity": "medium",
+  "user_story": "As a user, I want a clear error when a payment card is declined.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Payment Card Decline Error Handling', () => {\n    beforeEach(() => {\n        cy.visit('/payment'); // Adjust the URL to your payment page\n    });\n\n    it('should display an error message when the payment card is declined (happy path)', () => {\n        cy.get('input[name=\"cardNumber\"]').type('4000 0000 0000 0002'); // Example declined card number\n        cy.get('input[name=\"expiryDate\"]').type('12/25');\n        cy.get('input[name=\"cvv\"]').type('123');\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.get('.error-message').should('be.visible')\n            .and('contain', 'Your payment was declined. Please check your card details or use a different card.');\n    });\n\n    it('should not display an error message when the payment is successful (edge case)', () => {\n        cy.get('input[name=\"cardNumber\"]').type('4242 4242 4242 4242'); // Example successful card number\n        cy.get('input[name=\"expiryDate\"]').type('12/25');\n        cy.get('input[name=\"cvv\"]').type('123');\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.get('.error-message').should('not.exist');\n        cy.get('.success-message').should('be.visible')\n            .and('contain', 'Payment successful! Thank you for your purchase.');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 299,
+  "latency_s": 3.98,
+  "timestamp": "2026-06-19T16:32:24.053448"
+}

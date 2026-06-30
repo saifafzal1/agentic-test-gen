@@ -1,0 +1,13 @@
+{
+  "id": "TC_048",
+  "category": "navigation",
+  "complexity": "medium",
+  "user_story": "As a user, I want breadcrumbs to show my current location in the site hierarchy.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Breadcrumb Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should display breadcrumbs on the homepage', async ({ page }) => {\n    const breadcrumb = page.getByRole('navigation', { name: /breadcrumb/i });\n    await expect(breadcrumb).toBeVisible();\n    await expect(breadcrumb).toContainText('Home');\n  });\n\n  test('should update breadcrumbs when navigating to a subpage', async ({ page }) => {\n    await page.getByText('About Us').click(); // Replace with the actual link text\n    const breadcrumb = page.getByRole('navigation', { name: /breadcrumb/i });\n    await expect(breadcrumb).toBeVisible();\n    await expect(breadcrumb).toContainText('Home');\n    await expect(breadcrumb).toContainText('About Us');\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 203,
+  "latency_s": 3.78,
+  "timestamp": "2026-06-19T16:46:42.020301"
+}

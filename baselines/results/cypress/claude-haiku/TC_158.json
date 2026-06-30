@@ -1,0 +1,13 @@
+{
+  "id": "TC_158",
+  "category": "table_list",
+  "complexity": "simple",
+  "user_story": "As a user, I want to highlight a row on hover.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Table Row Highlight on Hover', () => {\n  beforeEach(() => {\n    cy.visit('/');\n    cy.get('table').should('be.visible');\n  });\n\n  it('should highlight a row when hovering over it', () => {\n    cy.get('table tbody tr').first().as('firstRow');\n    \n    cy.get('@firstRow').should('not.have.class', 'highlighted');\n    \n    cy.get('@firstRow').trigger('mouseenter');\n    \n    cy.get('@firstRow').should('have.class', 'highlighted');\n    cy.get('@firstRow').should('have.css', 'background-color').and('not.equal', 'rgba(0, 0, 0, 0)');\n  });\n\n  it('should remove highlight when mouse leaves the row', () => {\n    cy.get('table tbody tr').first().as('firstRow');\n    \n    cy.get('@firstRow').trigger('mouseenter');\n    cy.get('@firstRow').should('have.class', 'highlighted');\n    \n    cy.get('@firstRow').trigger('mouseleave');\n    cy.get('@firstRow').should('not.have.class', 'highlighted');\n  });\n\n  it('should highlight only the hovered row and not affect other rows', () => {\n    cy.get('table tbody tr').eq(0).as('firstRow');\n    cy.get('table tbody tr').eq(1).as('secondRow');\n    \n    cy.get('@firstRow').trigger('mouseenter');\n    \n    cy.get('@firstRow').should('have.class', 'highlighted');\n    cy.get('@secondRow').should('not.have.class', 'highlighted');\n    \n    cy.get('@firstRow').trigger('mouseleave');\n    cy.get('@secondRow').trigger('mouseenter');\n    \n    cy.get('@firstRow').should('not.have.class', 'highlighted');\n    cy.get('@secondRow').should('have.class', 'highlighted');\n  });\n\n  it('should handle rapid hover transitions between rows', () => {\n    cy.get('table tbody tr').eq(0).as('firstRow');\n    cy.get('table tbody tr').eq(1).as('secondRow');\n    cy.get('table tbody tr').eq(2).as('thirdRow');\n    \n    cy.get('@firstRow').trigger('mouseenter');\n    cy.get('@firstRow').should('have.class', 'highlighted');\n    \n    cy.get('@secondRow').trigger('mouseenter');\n    cy.get('@firstRow').should('not.have.class', 'highlighted');\n    cy.get('@secondRow').should('have.class', 'highlighted');\n    \n    cy.get('@thirdRow').trigger('mouseenter');\n    cy.get('@secondRow').should('not.have.class', 'highlighted');\n    cy.get('@thirdRow').should('have.class', 'highlighted');\n  });\n});",
+  "prompt_tokens": 118,
+  "completion_tokens": 716,
+  "latency_s": 4.14,
+  "timestamp": "2026-06-19T17:22:02.619171"
+}

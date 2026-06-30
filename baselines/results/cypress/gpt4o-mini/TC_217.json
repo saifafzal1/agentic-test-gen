@@ -1,0 +1,13 @@
+{
+  "id": "TC_217",
+  "category": "accessibility",
+  "complexity": "complex",
+  "user_story": "As a user, I want loading states to be communicated to assistive technology.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Loading States Accessibility', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should announce loading state to assistive technology when loading starts', () => {\n        cy.get('#load-button').click(); // Replace with the actual selector for the loading trigger\n        cy.get('#loading-indicator', { timeout: 10000 }).should('be.visible'); // Wait for loading indicator\n\n        cy.get('#loading-indicator').should('have.attr', 'aria-live', 'assertive'); // Check aria-live attribute\n        cy.get('#loading-indicator').should('contain', 'Loading...'); // Check loading message\n    });\n\n    it('should remove loading state announcement when loading completes', () => {\n        cy.get('#load-button').click(); // Replace with the actual selector for the loading trigger\n        cy.get('#loading-indicator', { timeout: 10000 }).should('be.visible'); // Wait for loading indicator\n\n        cy.get('#loading-indicator').should('contain', 'Loading...'); // Check loading message\n\n        // Simulate loading completion\n        cy.intercept('GET', '/api/data', { fixture: 'data.json' }).as('getData'); // Replace with actual API call\n        cy.wait('@getData');\n\n        cy.get('#loading-indicator').should('not.exist'); // Ensure loading indicator is removed\n        cy.get('#content').should('be.visible'); // Check that the content is visible after loading\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 317,
+  "latency_s": 4.6,
+  "timestamp": "2026-06-19T16:38:49.034700"
+}

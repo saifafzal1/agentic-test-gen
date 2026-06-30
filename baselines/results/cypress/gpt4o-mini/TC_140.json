@@ -1,0 +1,13 @@
+{
+  "id": "TC_140",
+  "category": "modal_dialog",
+  "complexity": "simple",
+  "user_story": "As a user, I want a popover to toggle on button click.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Popover Toggle', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should display the popover when the button is clicked', () => {\n        cy.get('.toggle-button').click(); // Replace with the actual selector for the button\n        cy.get('.popover').should('be.visible'); // Replace with the actual selector for the popover\n    });\n\n    it('should hide the popover when the button is clicked again', () => {\n        cy.get('.toggle-button').click(); // Open the popover\n        cy.get('.toggle-button').click(); // Close the popover\n        cy.get('.popover').should('not.be.visible'); // Check that the popover is hidden\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 163,
+  "latency_s": 2.16,
+  "timestamp": "2026-06-19T16:34:27.998840"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_188",
+  "category": "search_filter",
+  "complexity": "simple",
+  "user_story": "As a user, I want to sort search results by relevance, price, or date.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Results Sorting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/search');\n  });\n\n  test('should sort search results by relevance', async ({ page }) => {\n    await page.getByRole('button', { name: /sort by/i }).click();\n    await page.getByText('Relevance').click();\n    \n    const firstResult = await page.getByRole('article').nth(0).innerText();\n    const secondResult = await page.getByRole('article').nth(1).innerText();\n    \n    expect(firstResult).toBeGreaterThan(secondResult); // Assuming relevance can be compared this way\n  });\n\n  test('should sort search results by price', async ({ page }) => {\n    await page.getByRole('button', { name: /sort by/i }).click();\n    await page.getByText('Price').click();\n    \n    const firstPrice = await page.getByRole('article').nth(0).getByLabel('Price').innerText();\n    const secondPrice = await page.getByRole('article').nth(1).getByLabel('Price').innerText();\n    \n    expect(parseFloat(firstPrice.replace('$', ''))).toBeLessThan(parseFloat(secondPrice.replace('$', '')));\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 285,
+  "latency_s": 4.45,
+  "timestamp": "2026-06-19T16:56:16.338051"
+}

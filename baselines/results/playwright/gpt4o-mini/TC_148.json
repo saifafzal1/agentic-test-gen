@@ -1,0 +1,13 @@
+{
+  "id": "TC_148",
+  "category": "table_list",
+  "complexity": "complex",
+  "user_story": "As a user, I want to filter table rows by typing in a search input.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Row Filtering', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/table'); // Replace with the actual URL\n  });\n\n  test('should display filtered results when typing in the search input', async ({ page }) => {\n    const searchInput = page.getByLabel('Search'); // Replace with the actual label of the search input\n    await searchInput.fill('Test Item'); // Replace with the actual search term\n\n    const filteredRow = page.getByText('Test Item'); // Replace with the actual text of the expected row\n    await expect(filteredRow).toBeVisible();\n  });\n\n  test('should show no results for non-matching search term', async ({ page }) => {\n    const searchInput = page.getByLabel('Search'); // Replace with the actual label of the search input\n    await searchInput.fill('Non-existing Item'); // Replace with a term that does not exist\n\n    const noResultsMessage = page.getByText('No results found'); // Replace with the actual no results message\n    await expect(noResultsMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 249,
+  "latency_s": 4.4,
+  "timestamp": "2026-06-19T16:53:38.878931"
+}

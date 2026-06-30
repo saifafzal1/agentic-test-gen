@@ -1,0 +1,13 @@
+{
+  "id": "TC_240",
+  "category": "responsive",
+  "complexity": "medium",
+  "user_story": "As a user, I want the checkout form to stack vertically on mobile screens.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Checkout Form Responsiveness', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/checkout');\n    await page.setViewportSize({ width: 375, height: 812 }); // Mobile screen size\n  });\n\n  test('should display checkout form stacked vertically on mobile', async ({ page }) => {\n    const form = await page.getByRole('form', { name: /checkout/i });\n    const inputs = await form.locator('input');\n\n    for (let i = 0; i < await inputs.count(); i++) {\n      const input = inputs.nth(i);\n      await expect(input).toHaveCSS('display', 'block');\n      await expect(input).toHaveCSS('width', '100%');\n    }\n  });\n\n  test('should have a submit button at the bottom of the form', async ({ page }) => {\n    const submitButton = await page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeVisible();\n    await expect(submitButton).toHaveCSS('margin-top', '16px'); // Example margin for spacing\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 256,
+  "latency_s": 3.99,
+  "timestamp": "2026-06-19T16:59:58.756051"
+}

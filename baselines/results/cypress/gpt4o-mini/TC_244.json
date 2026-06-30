@@ -1,0 +1,13 @@
+{
+  "id": "TC_244",
+  "category": "payment_flow",
+  "complexity": "complex",
+  "user_story": "As a user, I want to enter my card details and complete a purchase successfully.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Payment Flow', () => {\n    beforeEach(() => {\n        cy.visit('/checkout');\n    });\n\n    it('should complete a purchase successfully with valid card details', () => {\n        cy.get('input[name=\"cardNumber\"]').type('4111111111111111');\n        cy.get('input[name=\"expiryDate\"]').type('12/25');\n        cy.get('input[name=\"cvv\"]').type('123');\n        cy.get('button[type=\"submit\"]').click();\n        \n        cy.url().should('include', '/confirmation');\n        cy.get('.confirmation-message').should('contain', 'Thank you for your purchase!');\n    });\n\n    it('should show an error message for invalid card details', () => {\n        cy.get('input[name=\"cardNumber\"]').type('1234567812345678');\n        cy.get('input[name=\"expiryDate\"]').type('12/25');\n        cy.get('input[name=\"cvv\"]').type('123');\n        cy.get('button[type=\"submit\"]').click();\n        \n        cy.get('.error-message').should('be.visible').and('contain', 'Invalid card details');\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 231,
+  "latency_s": 3.19,
+  "timestamp": "2026-06-19T16:40:14.225476"
+}

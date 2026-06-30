@@ -1,0 +1,13 @@
+{
+  "id": "TC_279",
+  "category": "user_profile",
+  "complexity": "medium",
+  "user_story": "As a user, I want to change my email address with a confirmation step.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Change Email Address', () => {\n    beforeEach(() => {\n        cy.visit('/user_profile');\n        cy.login('testuser@example.com', 'password123'); // Assuming a login function exists\n    });\n\n    it('should successfully change the email address with confirmation', () => {\n        cy.get('input[name=\"email\"]').clear().type('newemail@example.com');\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.confirmation-modal').should('be.visible');\n        cy.get('.confirmation-modal button.confirm').click();\n        cy.get('.success-message').should('contain', 'Email address changed successfully');\n        cy.get('input[name=\"email\"]').should('have.value', 'newemail@example.com');\n    });\n\n    it('should show an error when the email address is invalid', () => {\n        cy.get('input[name=\"email\"]').clear().type('invalid-email');\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.error-message').should('be.visible').and('contain', 'Please enter a valid email address');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 221,
+  "latency_s": 2.96,
+  "timestamp": "2026-06-19T16:42:34.528264"
+}

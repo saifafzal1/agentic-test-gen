@@ -1,0 +1,13 @@
+{
+  "id": "TC_182",
+  "category": "file_upload",
+  "complexity": "simple",
+  "user_story": "As a user, I want to paste an image from the clipboard into the upload area.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Image Upload from Clipboard', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-application-url.com');\n  });\n\n  test('should allow pasting an image into the upload area', async ({ page }) => {\n    const uploadArea = page.getByRole('textbox', { name: /upload area/i });\n\n    await uploadArea.focus();\n    await page.evaluate(() => {\n      const img = new Image();\n      img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...'; // Base64 image data\n      const clipboardData = new ClipboardEvent('').clipboardData || new DataTransfer();\n      clipboardData.setData('text/html', `<img src=\"${img.src}\">`);\n      return clipboardData;\n    });\n\n    await page.keyboard.press('Control+V');\n\n    const uploadedImage = page.getByRole('img', { name: /uploaded image/i });\n    await expect(uploadedImage).toBeVisible();\n  });\n\n  test('should display an error message when pasting a non-image', async ({ page }) => {\n    const uploadArea = page.getByRole('textbox', { name: /upload area/i });\n\n    await uploadArea.focus();\n    await page.evaluate(() => {\n      const clipboardData = new ClipboardEvent('').clipboardData || new DataTransfer();\n      clipboardData.setData('text/plain', 'This is not an image');\n      return clipboardData;\n    });\n\n    await page.keyboard.press('Control+V');\n\n    const errorMessage = page.getByText(/invalid file type/i);\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 355,
+  "latency_s": 5.06,
+  "timestamp": "2026-06-19T16:55:47.524211"
+}

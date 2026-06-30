@@ -1,0 +1,13 @@
+{
+  "id": "TC_283",
+  "category": "user_profile",
+  "complexity": "complex",
+  "user_story": "As a user, I want to set my timezone in profile settings.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('User Profile - Timezone Settings', () => {\n    beforeEach(() => {\n        cy.visit('/profile/settings');\n        cy.login(); // Assuming there's a custom command for login\n    });\n\n    it('should successfully update the timezone to a valid option', () => {\n        cy.get('select[name=\"timezone\"]').select('GMT+0:00');\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.notification').should('contain', 'Timezone updated successfully');\n        cy.get('select[name=\"timezone\"]').should('have.value', 'GMT+0:00');\n    });\n\n    it('should show an error when selecting an invalid timezone', () => {\n        cy.get('select[name=\"timezone\"]').select('Invalid/Timezone');\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.error-message').should('contain', 'Please select a valid timezone');\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 185,
+  "latency_s": 4.61,
+  "timestamp": "2026-06-19T16:42:48.741079"
+}

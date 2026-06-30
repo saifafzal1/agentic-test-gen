@@ -1,0 +1,13 @@
+{
+  "id": "TC_288",
+  "category": "user_profile",
+  "complexity": "medium",
+  "user_story": "As a user, I want to export my personal data as a JSON file.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('User Profile Data Export', () => {\n    beforeEach(() => {\n        cy.visit('/user-profile');\n        cy.login('testuser', 'password123'); // Assuming a login function exists\n    });\n\n    it('should successfully export personal data as a JSON file', () => {\n        cy.get('button#export-data').click();\n        cy.wait(2000); // Wait for the export to complete\n        cy.readFile('cypress/downloads/user-data.json').should('exist');\n        cy.readFile('cypress/downloads/user-data.json').then((data) => {\n            expect(data).to.have.property('name', 'Test User');\n            expect(data).to.have.property('email', 'testuser@example.com');\n        });\n    });\n\n    it('should handle export failure gracefully', () => {\n        cy.intercept('GET', '/api/export-data', { statusCode: 500 }).as('exportDataFailure');\n        cy.get('button#export-data').click();\n        cy.wait('@exportDataFailure');\n        cy.get('.error-message').should('be.visible').and('contain', 'Failed to export data. Please try again later.');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 241,
+  "latency_s": 4.26,
+  "timestamp": "2026-06-19T16:43:09.200975"
+}

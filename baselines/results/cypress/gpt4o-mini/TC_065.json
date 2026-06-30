@@ -1,0 +1,13 @@
+{
+  "id": "TC_065",
+  "category": "api_response_handling",
+  "complexity": "simple",
+  "user_story": "As a user, I want the app to handle 401 errors by redirecting to login.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('API Response Handling for 401 Errors', () => {\n    beforeEach(() => {\n        cy.visit('/protected-route'); // Visit a route that requires authentication\n    });\n\n    it('should redirect to login on 401 error', () => {\n        // Mocking a 401 error response\n        cy.intercept('GET', '/api/protected-resource', {\n            statusCode: 401,\n            body: { message: 'Unauthorized' }\n        }).as('getProtectedResource');\n\n        cy.wait('@getProtectedResource');\n\n        // Assert that the user is redirected to the login page\n        cy.url().should('include', '/login');\n        cy.get('h1').should('contain', 'Login'); // Assuming there's a heading on the login page\n    });\n\n    it('should not redirect if the response is successful', () => {\n        // Mocking a successful response\n        cy.intercept('GET', '/api/protected-resource', {\n            statusCode: 200,\n            body: { data: 'Protected data' }\n        }).as('getProtectedResource');\n\n        cy.wait('@getProtectedResource');\n\n        // Assert that the user remains on the protected route\n        cy.url().should('include', '/protected-route');\n        cy.get('.data-display').should('contain', 'Protected data'); // Assuming there's an element displaying the data\n    });\n});",
+  "prompt_tokens": 115,
+  "completion_tokens": 280,
+  "latency_s": 4.18,
+  "timestamp": "2026-06-19T16:29:22.700452"
+}

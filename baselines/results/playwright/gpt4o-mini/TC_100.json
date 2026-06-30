@@ -1,0 +1,13 @@
+{
+  "id": "TC_100",
+  "category": "error_states",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a rate-limit error if I submit a form too many times.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Rate Limit Error Handling', () => {\n  const formUrl = 'https://example.com/form';\n\n  test.beforeEach(async ({ page }) => {\n    await page.goto(formUrl);\n  });\n\n  test('should display rate limit error after multiple submissions', async ({ page }) => {\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    const inputField = page.getByLabel('Input Field');\n\n    for (let i = 0; i < 5; i++) {\n      await inputField.fill('Test input');\n      await submitButton.click();\n      await page.waitForTimeout(100); // Simulate a slight delay between submissions\n    }\n\n    const errorMessage = page.getByText(/rate limit exceeded/i);\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should not show rate limit error on first submission', async ({ page }) => {\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    const inputField = page.getByLabel('Input Field');\n\n    await inputField.fill('First submission');\n    await submitButton.click();\n\n    const errorMessage = page.getByText(/rate limit exceeded/i);\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 138,
+  "completion_tokens": 278,
+  "latency_s": 4.19,
+  "timestamp": "2026-06-19T16:50:23.605123"
+}

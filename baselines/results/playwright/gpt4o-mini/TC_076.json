@@ -1,0 +1,13 @@
+{
+  "id": "TC_076",
+  "category": "crud_operations",
+  "complexity": "complex",
+  "user_story": "As a user, I want to view the details of a single item by clicking on it.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Item Details View', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/items');\n  });\n\n  test('should navigate to item details when an item is clicked', async ({ page }) => {\n    const itemName = 'Sample Item';\n    await page.getByText(itemName).click();\n    await expect(page.getByRole('heading', { name: itemName })).toBeVisible();\n  });\n\n  test('should display correct item details', async ({ page }) => {\n    const itemName = 'Sample Item';\n    await page.getByText(itemName).click();\n    await expect(page.getByLabel('Description')).toHaveText('This is a sample item description.');\n    await expect(page.getByLabel('Price')).toHaveText('$19.99');\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 184,
+  "latency_s": 3.91,
+  "timestamp": "2026-06-19T16:48:41.607962"
+}

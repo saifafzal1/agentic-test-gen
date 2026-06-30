@@ -1,0 +1,13 @@
+{
+  "id": "TC_044",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want clicking a notification to navigate to the relevant content.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Notification Navigation', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Visit the home page or relevant starting point\n    });\n\n    it('should navigate to the relevant content when a notification is clicked', () => {\n        cy.get('.notification') // Adjust the selector based on the actual notification element\n            .first() // Assuming we want to click the first notification\n            .click();\n\n        cy.url().should('include', '/relevant-content'); // Adjust the URL based on the expected navigation\n        cy.get('h1').should('contain', 'Relevant Content Title'); // Adjust based on the expected content\n    });\n\n    it('should not navigate if the notification is disabled', () => {\n        cy.get('.notification.disabled') // Assuming there's a class for disabled notifications\n            .first()\n            .click();\n\n        cy.url().should('not.include', '/relevant-content'); // Ensure the URL does not change\n        cy.get('h1').should('not.contain', 'Relevant Content Title'); // Ensure the content does not change\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 223,
+  "latency_s": 2.93,
+  "timestamp": "2026-06-19T16:27:55.291802"
+}

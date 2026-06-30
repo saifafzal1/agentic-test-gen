@@ -1,0 +1,13 @@
+{
+  "id": "TC_146",
+  "category": "modal_dialog",
+  "complexity": "simple",
+  "user_story": "As a user, I want an onboarding tour modal to advance through steps.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Onboarding Tour Modal', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n        cy.get('.onboarding-tour-button').click(); // Trigger the onboarding tour modal\n    });\n\n    it('should display the onboarding tour modal with the first step', () => {\n        cy.get('.onboarding-tour-modal').should('be.visible');\n        cy.get('.onboarding-tour-step').first().should('contain.text', 'Welcome to the onboarding tour!');\n    });\n\n    it('should advance to the next step when the next button is clicked', () => {\n        cy.get('.onboarding-tour-next-button').click();\n        cy.get('.onboarding-tour-step').eq(1).should('contain.text', 'Here is how to use the application.');\n    });\n\n    it('should not advance if the next button is disabled', () => {\n        cy.get('.onboarding-tour-next-button').should('be.disabled');\n        cy.get('.onboarding-tour-next-button').click();\n        cy.get('.onboarding-tour-step').first().should('contain.text', 'Welcome to the onboarding tour!'); // Ensure it stays on the first step\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 246,
+  "latency_s": 3.98,
+  "timestamp": "2026-06-19T16:34:49.723108"
+}

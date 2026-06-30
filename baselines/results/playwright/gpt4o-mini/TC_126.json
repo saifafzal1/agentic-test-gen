@@ -1,0 +1,13 @@
+{
+  "id": "TC_126",
+  "category": "async_await",
+  "complexity": "medium",
+  "user_story": "As a user, I want animated transitions between async page loads.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async Page Load Transitions', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com');\n  });\n\n  test('should display loading animation during async page load', async ({ page }) => {\n    await page.click(getByText('Load New Content'));\n    const loadingAnimation = page.getByRole('status', { name: /loading/i });\n    await expect(loadingAnimation).toBeVisible();\n    await expect(loadingAnimation).toBeHidden({ timeout: 5000 });\n  });\n\n  test('should display new content after loading animation', async ({ page }) => {\n    await page.click(getByText('Load New Content'));\n    const newContent = page.getByText('New Content Loaded');\n    await expect(newContent).toBeVisible();\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 181,
+  "latency_s": 3.13,
+  "timestamp": "2026-06-19T16:52:14.976277"
+}

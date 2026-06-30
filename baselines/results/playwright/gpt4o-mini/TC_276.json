@@ -1,0 +1,13 @@
+{
+  "id": "TC_276",
+  "category": "user_profile",
+  "complexity": "medium",
+  "user_story": "As a user, I want to update my display name and see it reflected across the app.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Profile - Update Display Name', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/user-profile');\n    await page.getByRole('button', { name: 'Login' }).click();\n    await page.getByLabel('Username').fill('testuser');\n    await page.getByLabel('Password').fill('password123');\n    await page.getByRole('button', { name: 'Submit' }).click();\n  });\n\n  test('should update display name successfully', async ({ page }) => {\n    await page.getByLabel('Display Name').fill('New Display Name');\n    await page.getByRole('button', { name: 'Save Changes' }).click();\n    \n    const successMessage = await page.getByText('Display name updated successfully');\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should reflect updated display name across the app', async ({ page }) => {\n    await page.getByLabel('Display Name').fill('Another Display Name');\n    await page.getByRole('button', { name: 'Save Changes' }).click();\n    \n    await page.goto('/home');\n    const updatedDisplayName = await page.getByText('Another Display Name');\n    await expect(updatedDisplayName).toBeVisible();\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 279,
+  "latency_s": 4.16,
+  "timestamp": "2026-06-19T17:03:25.157600"
+}

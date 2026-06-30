@@ -1,0 +1,13 @@
+{
+  "id": "TC_026",
+  "category": "form_validation",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see inline validation as I type in the email field.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Email Field Inline Validation', () => {\n  beforeEach(() => {\n    cy.visit('/');\n    cy.get('input[type=\"email\"]').as('emailInput');\n  });\n\n  it('should display validation error message for invalid email format', () => {\n    cy.get('@emailInput').type('invalidemail');\n    cy.get('@emailInput').blur();\n    cy.get('[data-testid=\"email-error\"]').should('be.visible').and('contain', 'Please enter a valid email');\n  });\n\n  it('should display success state for valid email format', () => {\n    cy.get('@emailInput').type('user@example.com');\n    cy.get('@emailInput').blur();\n    cy.get('[data-testid=\"email-error\"]').should('not.exist');\n    cy.get('@emailInput').should('have.css', 'border-color', 'rgb(34, 197, 94)');\n  });\n\n  it('should show validation error while typing incomplete email', () => {\n    cy.get('@emailInput').type('user@');\n    cy.get('[data-testid=\"email-error\"]').should('be.visible');\n  });\n\n  it('should clear validation error when user corrects the email', () => {\n    cy.get('@emailInput').type('invalid');\n    cy.get('[data-testid=\"email-error\"]').should('be.visible');\n    cy.get('@emailInput').clear().type('valid@email.com');\n    cy.get('[data-testid=\"email-error\"]').should('not.exist');\n  });\n\n  it('should handle edge case with special characters in email', () => {\n    cy.get('@emailInput').type('user+tag@example.co.uk');\n    cy.get('@emailInput').blur();\n    cy.get('[data-testid=\"email-error\"]').should('not.exist');\n  });\n\n  it('should display error for email with spaces', () => {\n    cy.get('@emailInput').type('user @example.com');\n    cy.get('@emailInput').blur();\n    cy.get('[data-testid=\"email-error\"]').should('be.visible').and('contain', 'valid email');\n  });\n\n  it('should validate empty email field on blur', () => {\n    cy.get('@emailInput').focus().blur();\n    cy.get('[data-testid=\"email-error\"]').should('be.visible').and('contain', 'Email is required');\n  });\n});",
+  "prompt_tokens": 123,
+  "completion_tokens": 602,
+  "latency_s": 10.01,
+  "timestamp": "2026-06-19T17:07:21.321842"
+}

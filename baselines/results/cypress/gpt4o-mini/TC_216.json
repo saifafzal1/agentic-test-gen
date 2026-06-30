@@ -1,0 +1,13 @@
+{
+  "id": "TC_216",
+  "category": "accessibility",
+  "complexity": "medium",
+  "user_story": "As a user, I want modals to announce their title when opened.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Modal Accessibility Tests', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n        cy.get('button.open-modal').click(); // Replace with the actual selector to open the modal\n    });\n\n    it('should announce the modal title when opened', () => {\n        const modalTitle = 'Expected Modal Title'; // Replace with the actual title of the modal\n        cy.get('.modal') // Replace with the actual selector for the modal\n            .should('be.visible')\n            .find('.modal-title') // Replace with the actual selector for the title\n            .should('have.text', modalTitle)\n            .then(() => {\n                cy.window().then((win) => {\n                    const announcement = win.document.querySelector('.sr-only'); // Replace with the actual selector for the announcement\n                    expect(announcement).to.exist;\n                    expect(announcement.textContent).to.include(modalTitle);\n                });\n            });\n    });\n\n    it('should not announce the modal title if the modal is not opened', () => {\n        cy.get('.modal') // Replace with the actual selector for the modal\n            .should('not.exist')\n            .then(() => {\n                cy.window().then((win) => {\n                    const announcement = win.document.querySelector('.sr-only'); // Replace with the actual selector for the announcement\n                    expect(announcement).to.not.exist;\n                });\n            });\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 298,
+  "latency_s": 4.54,
+  "timestamp": "2026-06-19T16:38:44.125297"
+}

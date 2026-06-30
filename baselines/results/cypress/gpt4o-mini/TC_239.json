@@ -1,0 +1,13 @@
+{
+  "id": "TC_239",
+  "category": "responsive",
+  "complexity": "simple",
+  "user_story": "As a user, I want the app to look correct in landscape orientation on mobile.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Mobile Landscape Orientation', () => {\n    beforeEach(() => {\n        cy.viewport('iphone-6+'); // Set viewport to iPhone 6 Plus\n        cy.visit('/'); // Visit the app's homepage\n    });\n\n    it('should display the app correctly in landscape orientation', () => {\n        cy.viewport(736, 414); // Set viewport to landscape mode\n        cy.get('body').should('have.class', 'landscape'); // Check for landscape class\n        cy.get('.header').should('be.visible'); // Check if header is visible\n        cy.get('.main-content').should('be.visible'); // Check if main content is visible\n        cy.get('.footer').should('be.visible'); // Check if footer is visible\n    });\n\n    it('should maintain layout integrity in landscape orientation', () => {\n        cy.viewport(736, 414); // Set viewport to landscape mode\n        cy.get('.main-content').should('have.css', 'flex-direction', 'row'); // Check layout direction\n        cy.get('.sidebar').should('be.visible'); // Ensure sidebar is visible\n        cy.get('.sidebar').should('have.css', 'width').and('match', /[0-9]+px/); // Check sidebar width\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 264,
+  "latency_s": 3.25,
+  "timestamp": "2026-06-19T16:39:58.248966"
+}

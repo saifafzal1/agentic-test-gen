@@ -1,0 +1,13 @@
+{
+  "id": "TC_044",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want clicking a notification to navigate to the relevant content.",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "```typescript\nimport { test, expect } from '@playwright/test';\n\ntest.describe('Notification Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('http://localhost:3000');\n  });\n\n  test('should navigate to relevant content when clicking a notification', async ({ page }) => {\n    // Wait for notification to appear\n    const notification = page.getByRole('button', { name: /new message/i });\n    await notification.waitFor({ state: 'visible' });\n    \n    // Click the notification\n    await notification.click();\n    \n    // Verify navigation to the relevant content\n    await expect(page).toHaveURL(/.*messages.*/);\n    await expect(page.getByRole('heading', { name: /messages/i })).toBeVisible();\n  });\n\n  test('should navigate to correct content for different notification types', async ({ page }) => {\n    // Trigger a notification\n    const triggerButton = page.getByRole('button', { name: /trigger notification/i });\n    await triggerButton.click();\n    \n    // Wait for notification to appear\n    const notification = page.getByRole('alert');\n    await notification.waitFor({ state: 'visible' });\n    \n    // Click notification to navigate\n    await notification.click();\n    \n    // Verify we navigated to the correct page\n    const currentUrl = page.url();\n    expect(currentUrl).toMatch(/localhost:3000/);\n  });\n\n  test('should display notification content before navigation', async ({ page }) => {\n    // Wait for notification element\n    const notification = page.getByRole('button', { name: /notification/i });\n    await notification.waitFor({ state: 'visible' });\n    \n    // Verify notification text is visible\n    const notificationText = page.getByText(/click to view/i);\n    await expect(notificationText).toBeVisible();\n    \n    // Click and verify navigation occurs\n    await notification.click();\n    await page.waitForLoadState('networkidle');\n    \n    // Verify we're on a new page\n    expect(page.url()).not.toBe('http://localhost:3000');\n  });\n});\n```",
+  "prompt_tokens": 142,
+  "completion_tokens": 531,
+  "latency_s": 3.74,
+  "timestamp": "2026-06-19T17:42:15.568731"
+}

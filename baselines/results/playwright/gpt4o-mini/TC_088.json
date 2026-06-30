@@ -1,0 +1,13 @@
+{
+  "id": "TC_088",
+  "category": "crud_operations",
+  "complexity": "complex",
+  "user_story": "As a user, I want to mention another user in a comment using @.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User mention in comments', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n    await page.fill('input[name=\"username\"]', 'testuser'); // Replace with actual selector\n    await page.fill('input[name=\"password\"]', 'password'); // Replace with actual selector\n    await page.click('button[type=\"submit\"]'); // Replace with actual selector\n    await expect(page).toHaveURL('https://example.com/dashboard'); // Replace with actual URL\n  });\n\n  test('should mention another user in a comment', async ({ page }) => {\n    await page.click(getByRole('button', { name: /add comment/i }));\n    await page.fill(getByLabel('Comment'), 'Hello @anotheruser!'); // Replace with actual label\n    await page.click(getByRole('button', { name: /submit/i }));\n    \n    const comment = await page.locator(getByText('Hello @anotheruser!'));\n    await expect(comment).toBeVisible();\n  });\n\n  test('should display mentioned user in comment', async ({ page }) => {\n    await page.click(getByRole('button', { name: /view comments/i }));\n    const mentionedUser = await page.locator(getByText('@anotheruser'));\n    await expect(mentionedUser).toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 300,
+  "latency_s": 4.19,
+  "timestamp": "2026-06-19T16:49:29.152918"
+}

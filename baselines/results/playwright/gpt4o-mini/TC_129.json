@@ -1,0 +1,13 @@
+{
+  "id": "TC_129",
+  "category": "modal_dialog",
+  "complexity": "medium",
+  "user_story": "As a user, I want to close a modal by pressing the Escape key.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Dialog', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n    await page.getByRole('button', { name: 'Open Modal' }).click(); // Adjust the button name as necessary\n  });\n\n  test('should close the modal when Escape key is pressed', async ({ page }) => {\n    await expect(page.getByRole('dialog')).toBeVisible();\n    await page.keyboard.press('Escape');\n    await expect(page.getByRole('dialog')).not.toBeVisible();\n  });\n\n  test('should remain open when clicking outside the modal', async ({ page }) => {\n    await expect(page.getByRole('dialog')).toBeVisible();\n    await page.click('body'); // Click outside the modal\n    await expect(page.getByRole('dialog')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 197,
+  "latency_s": 3.36,
+  "timestamp": "2026-06-19T16:52:27.544032"
+}

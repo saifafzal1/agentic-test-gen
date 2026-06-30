@@ -1,0 +1,13 @@
+{
+  "id": "TC_250",
+  "category": "payment_flow",
+  "complexity": "complex",
+  "user_story": "As a user, I want to select PayPal as my payment method.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Payment Flow', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/checkout');\n  });\n\n  test('should display PayPal as a payment option', async ({ page }) => {\n    const paypalOption = await page.getByText('PayPal');\n    await expect(paypalOption).toBeVisible();\n  });\n\n  test('should select PayPal as the payment method', async ({ page }) => {\n    await page.getByText('PayPal').click();\n    const selectedPaymentMethod = await page.getByRole('button', { name: 'Continue to PayPal' });\n    await expect(selectedPaymentMethod).toBeVisible();\n    await selectedPaymentMethod.click();\n    \n    const paypalLoginPage = await page.url();\n    expect(paypalLoginPage).toContain('paypal.com');\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 189,
+  "latency_s": 4.0,
+  "timestamp": "2026-06-19T17:00:48.649524"
+}

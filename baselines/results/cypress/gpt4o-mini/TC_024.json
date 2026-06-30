@@ -1,0 +1,13 @@
+{
+  "id": "TC_024",
+  "category": "form_validation",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see a character count on a textarea limited to 500 characters.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Character Count Validation on Textarea', () => {\n    beforeEach(() => {\n        cy.visit('/your-form-page-url'); // Replace with your actual form page URL\n    });\n\n    it('should display the correct character count when typing within the limit', () => {\n        const inputText = 'This is a test input that is under the character limit.';\n        cy.get('textarea#your-textarea-id') // Replace with your actual textarea selector\n            .type(inputText)\n            .should('have.value', inputText);\n        cy.get('#character-count') // Replace with your actual character count element selector\n            .should('contain.text', inputText.length);\n    });\n\n    it('should not allow more than 500 characters and display the correct character count', () => {\n        const inputText = 'A'.repeat(501); // 501 characters\n        cy.get('textarea#your-textarea-id') // Replace with your actual textarea selector\n            .type(inputText)\n            .should('have.value', inputText.substring(0, 500)); // Ensure it only takes 500 characters\n        cy.get('#character-count') // Replace with your actual character count element selector\n            .should('contain.text', 500);\n    });\n});",
+  "prompt_tokens": 114,
+  "completion_tokens": 257,
+  "latency_s": 4.78,
+  "timestamp": "2026-06-19T16:26:42.293475"
+}

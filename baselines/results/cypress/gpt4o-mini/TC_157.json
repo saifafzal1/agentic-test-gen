@@ -1,0 +1,13 @@
+{
+  "id": "TC_157",
+  "category": "table_list",
+  "complexity": "complex",
+  "user_story": "As a user, I want to right-click a row to see a context menu.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Context Menu on Table Row', () => {\n    beforeEach(() => {\n        cy.visit('/table-list'); // Adjust the URL to your application\n    });\n\n    it('should display context menu on right-clicking a row', () => {\n        cy.get('table tbody tr').first().rightclick(); // Right-click on the first row\n        cy.get('.context-menu').should('be.visible'); // Check if context menu is visible\n        cy.get('.context-menu').contains('Edit').should('exist'); // Check for 'Edit' option\n        cy.get('.context-menu').contains('Delete').should('exist'); // Check for 'Delete' option\n    });\n\n    it('should not display context menu when right-clicking outside a row', () => {\n        cy.get('body').rightclick(); // Right-click on the body\n        cy.get('.context-menu').should('not.exist'); // Ensure context menu does not appear\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 198,
+  "latency_s": 3.06,
+  "timestamp": "2026-06-19T16:35:26.508800"
+}

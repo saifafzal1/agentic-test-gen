@@ -1,0 +1,13 @@
+{
+  "id": "TC_277",
+  "category": "user_profile",
+  "complexity": "complex",
+  "user_story": "As a user, I want to upload a profile picture and see the preview.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Profile Picture Upload', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/user-profile');\n  });\n\n  test('should allow user to upload a profile picture', async ({ page }) => {\n    const filePath = 'path/to/profile-picture.jpg';\n    await page.getByLabel('Upload Profile Picture').setInputFiles(filePath);\n    await expect(page.getByText('Profile picture uploaded successfully')).toBeVisible();\n  });\n\n  test('should display the uploaded profile picture preview', async ({ page }) => {\n    const filePath = 'path/to/profile-picture.jpg';\n    await page.getByLabel('Upload Profile Picture').setInputFiles(filePath);\n    await expect(page.getByRole('img', { name: 'Profile Picture Preview' })).toHaveAttribute('src', /profile-picture.jpg/);\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 189,
+  "latency_s": 4.13,
+  "timestamp": "2026-06-19T17:03:29.599778"
+}

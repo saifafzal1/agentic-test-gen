@@ -1,0 +1,13 @@
+{
+  "id": "TC_248",
+  "category": "payment_flow",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error when I enter an expired promo code.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Promo Code Validation', () => {\n    beforeEach(() => {\n        cy.visit('/checkout'); // Adjust the URL to your checkout page\n    });\n\n    it('should display an error message for an expired promo code', () => {\n        cy.get('input[name=\"promoCode\"]').type('EXPIRED2023'); // Replace with the actual expired promo code\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.error-message').should('be.visible').and('contain', 'This promo code has expired.'); // Adjust the selector and message as needed\n    });\n\n    it('should not display an error message for a valid promo code', () => {\n        cy.get('input[name=\"promoCode\"]').type('VALID2023'); // Replace with the actual valid promo code\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.error-message').should('not.exist'); // Ensure no error message is displayed\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 198,
+  "latency_s": 3.53,
+  "timestamp": "2026-06-19T16:40:29.121135"
+}

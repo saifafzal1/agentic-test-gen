@@ -1,0 +1,13 @@
+{
+  "id": "TC_250",
+  "category": "payment_flow",
+  "complexity": "complex",
+  "user_story": "As a user, I want to select PayPal as my payment method.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Payment Flow - Select PayPal as Payment Method', () => {\n    beforeEach(() => {\n        cy.visit('/checkout'); // Adjust the URL to your checkout page\n    });\n\n    it('should successfully select PayPal as the payment method', () => {\n        cy.get('select[name=\"paymentMethod\"]').select('PayPal');\n        cy.get('button[type=\"submit\"]').click();\n        cy.url().should('include', '/payment-confirmation'); // Adjust the URL to your payment confirmation page\n        cy.contains('Payment Method: PayPal').should('be.visible');\n    });\n\n    it('should show an error when PayPal is not available', () => {\n        cy.intercept('GET', '/api/payment-methods', {\n            statusCode: 200,\n            body: { methods: [] } // Simulate no payment methods available\n        }).as('getPaymentMethods');\n\n        cy.reload();\n        cy.wait('@getPaymentMethods');\n        \n        cy.get('select[name=\"paymentMethod\"]').should('not.exist');\n        cy.contains('No payment methods available').should('be.visible');\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 227,
+  "latency_s": 3.12,
+  "timestamp": "2026-06-19T16:40:37.873384"
+}

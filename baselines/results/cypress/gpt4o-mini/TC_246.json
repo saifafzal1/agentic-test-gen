@@ -1,0 +1,13 @@
+{
+  "id": "TC_246",
+  "category": "payment_flow",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see an error when my card is declined.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Payment Flow - Card Declined Error', () => {\n    beforeEach(() => {\n        cy.visit('/payment'); // Adjust the URL to your payment page\n    });\n\n    it('should display an error message when the card is declined (happy path)', () => {\n        cy.get('input[name=\"cardNumber\"]').type('4000 0000 0000 0002'); // Example of a test card that simulates decline\n        cy.get('input[name=\"expiryDate\"]').type('12/25');\n        cy.get('input[name=\"cvv\"]').type('123');\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.get('.error-message').should('be.visible').and('contain', 'Your card was declined. Please try another payment method.');\n    });\n\n    it('should not proceed with payment when card is declined (edge case)', () => {\n        cy.get('input[name=\"cardNumber\"]').type('4000 0000 0000 0002'); // Example of a test card that simulates decline\n        cy.get('input[name=\"expiryDate\"]').type('12/25');\n        cy.get('input[name=\"cvv\"]').type('123');\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.url().should('include', '/payment'); // Ensure we remain on the payment page\n        cy.get('.error-message').should('be.visible');\n        cy.get('button[type=\"confirm\"]').should('not.exist'); // Confirm button should not be present\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 314,
+  "latency_s": 4.65,
+  "timestamp": "2026-06-19T16:40:22.187656"
+}

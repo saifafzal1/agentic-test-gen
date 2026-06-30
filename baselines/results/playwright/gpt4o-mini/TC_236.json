@@ -1,0 +1,13 @@
+{
+  "id": "TC_236",
+  "category": "responsive",
+  "complexity": "simple",
+  "user_story": "As a user, I want the homepage hero section to display differently on mobile.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Homepage Hero Section Responsiveness', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com');\n  });\n\n  test('should display hero section correctly on mobile', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 812 }); // iPhone X size\n    const heroSection = page.getByRole('banner');\n    await expect(heroSection).toBeVisible();\n    await expect(heroSection).toHaveCSS('flex-direction', 'column');\n    await expect(heroSection).toHaveCSS('text-align', 'center');\n  });\n\n  test('should display hero section correctly on desktop', async ({ page }) => {\n    await page.setViewportSize({ width: 1280, height: 720 }); // Desktop size\n    const heroSection = page.getByRole('banner');\n    await expect(heroSection).toBeVisible();\n    await expect(heroSection).toHaveCSS('flex-direction', 'row');\n    await expect(heroSection).toHaveCSS('text-align', 'left');\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 238,
+  "latency_s": 4.51,
+  "timestamp": "2026-06-19T16:59:37.863740"
+}
