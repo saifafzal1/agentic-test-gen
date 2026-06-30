@@ -71,7 +71,7 @@ def main():
                         help=f"Max correction iterations (default {DEFAULT_MAX_ITERS})")
     parser.add_argument("--threshold",  type=float, default=DEFAULT_THRESHOLD,
                         help=f"Accept threshold 0–1 (default {DEFAULT_THRESHOLD})")
-    parser.add_argument("--max-tokens", type=int,   default=512)
+    parser.add_argument("--max-tokens", type=int,   default=256)
     parser.add_argument("--limit",      type=int,   default=None,
                         help="Process only first N records (for smoke testing)")
     parser.add_argument("--api-url",    default="http://localhost:8000")

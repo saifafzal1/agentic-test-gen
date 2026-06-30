@@ -18,10 +18,11 @@ from typing import Optional
 
 from .scorer import score, QualityScore
 
-API_BASE          = "http://localhost:8000"
-DEFAULT_THRESHOLD = 0.60
-DEFAULT_MAX_ITERS = 3
-DEFAULT_MAX_TOKENS = 512
+API_BASE           = "http://localhost:8000"
+DEFAULT_THRESHOLD  = 0.60
+DEFAULT_MAX_ITERS  = 3
+DEFAULT_MAX_TOKENS = 256    # reduced from 512 — faster on MPS, still sufficient for test scripts
+API_TIMEOUT        = 600    # 10 min — MPS inference is slow (~2–4 min per request)
 
 
 @dataclass
@@ -78,7 +79,7 @@ def _generate(
             "complexity":     complexity,
             "max_new_tokens": max_new_tokens,
         },
-        timeout=120,
+        timeout=API_TIMEOUT,
     )
     resp.raise_for_status()
     data = resp.json()
