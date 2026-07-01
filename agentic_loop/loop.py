@@ -24,7 +24,7 @@ from .scorer import score, QualityScore
 API_BASE           = "http://localhost:8000"
 DEFAULT_THRESHOLD  = 0.60
 DEFAULT_MAX_ITERS  = 3
-DEFAULT_MAX_TOKENS = 512    # MPS inference is ~15s/record at this length — acceptable for batch
+DEFAULT_MAX_TOKENS = 1024   # 512 caused truncation (unclosed braces); 1024 allows complete scripts
 API_TIMEOUT        = 600    # 10 min — MPS inference is slow (~2–4 min per request)
 
 

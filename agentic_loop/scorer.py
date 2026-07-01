@@ -25,6 +25,24 @@ _PW_BLOCK   = re.compile(r'\btest\(')
 TARGET_DENSITY = 2.0   # minimum assertions per test block
 
 
+def _is_complete(script: str) -> bool:
+    """Check script is not truncated — braces, parens, and brackets must balance."""
+    counts = {"{": 0, "(": 0, "[": 0}
+    closes = {"}": "{", ")": "(", "]": "["}
+    in_str, str_char = False, ""
+    for ch in script:
+        if in_str:
+            if ch == str_char:
+                in_str = False
+        elif ch in ('"', "'", "`"):
+            in_str, str_char = True, ch
+        elif ch in counts:
+            counts[ch] += 1
+        elif ch in closes:
+            counts[closes[ch]] -= 1
+    return all(v == 0 for v in counts.values())
+
+
 @dataclass
 class QualityScore:
     total:            float        # composite 0–1
@@ -72,14 +90,17 @@ def score(script: str, framework: str, exemplar: str = "") -> QualityScore:
         assert_re   = _PW_ASSERT
         block_re    = _PW_BLOCK
 
-    # 1. Syntax score
+    # 1. Syntax score — keyword presence + completeness (balanced braces)
     missing          = [kw for kw in required if kw not in script]
     present_required = len(required) - len(missing)
     present_rec      = sum(1 for kw in recommended if kw in script)
-    syntax_score = (
+    keyword_score = (
         0.7 * (present_required / len(required)) +
         0.3 * (present_rec      / len(recommended))
     )
+    # Truncated scripts have unbalanced braces — penalise heavily so BMAD retries
+    complete     = _is_complete(script)
+    syntax_score = keyword_score if complete else keyword_score * 0.2
 
     # 2. Assertion density score
     assertions    = len(assert_re.findall(script))
@@ -95,6 +116,12 @@ def score(script: str, framework: str, exemplar: str = "") -> QualityScore:
 
     # Build human-readable feedback for the retry prompt
     issues = []
+    if not complete:
+        issues.append(
+            "Script was truncated — braces/parens are unbalanced. "
+            "Write the COMPLETE script including all closing braces and the final }); "
+            "do not stop mid-block."
+        )
     if missing:
         issues.append(f"Missing required elements: {', '.join(missing)}")
     if assert_score < 0.7:
@@ -102,7 +129,7 @@ def score(script: str, framework: str, exemplar: str = "") -> QualityScore:
         issues.append(
             f"Insufficient assertions — found {assertions} in {blocks} block(s), need at least {need}"
         )
-    if syntax_score < 0.6:
+    if complete and syntax_score < 0.6:
         issues.append("Incomplete script structure — ensure describe/beforeEach/it blocks are present")
     feedback = "; ".join(issues) if issues else "Script meets quality threshold."
 
