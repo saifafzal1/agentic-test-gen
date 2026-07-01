@@ -16,6 +16,9 @@ import requests
 from dataclasses import dataclass, field
 from typing import Optional
 
+API_RETRY_ATTEMPTS = 3
+API_RETRY_WAIT     = 10   # seconds between retries after a connection error
+
 from .scorer import score, QualityScore
 
 API_BASE           = "http://localhost:8000"
@@ -69,21 +72,32 @@ def _generate(
         f"[CORRECTION REQUIRED — previous attempt was rejected. "
         f"Please fix the following issues: {feedback}]"
     )
-    resp = requests.post(
-        f"{api_base}/generate-test",
-        json={
-            "user_story":     story,
-            "framework":      framework,
-            "model_key":      model_key,
-            "category":       category,
-            "complexity":     complexity,
-            "max_new_tokens": max_new_tokens,
-        },
-        timeout=API_TIMEOUT,
-    )
-    resp.raise_for_status()
-    data = resp.json()
-    return data["script"], data["latency_s"]
+    payload = {
+        "user_story":     story,
+        "framework":      framework,
+        "model_key":      model_key,
+        "category":       category,
+        "complexity":     complexity,
+        "max_new_tokens": max_new_tokens,
+    }
+    # Retry on connection errors (API OOM crash / restart)
+    for attempt in range(1, API_RETRY_ATTEMPTS + 1):
+        try:
+            resp = requests.post(
+                f"{api_base}/generate-test",
+                json=payload,
+                timeout=API_TIMEOUT,
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            return data["script"], data["latency_s"]
+        except (requests.exceptions.ConnectionError,
+                requests.exceptions.RemoteDisconnected) as exc:
+            if attempt == API_RETRY_ATTEMPTS:
+                raise
+            print(f"\n  ⚠️  API connection lost (attempt {attempt}/{API_RETRY_ATTEMPTS}). "
+                  f"Retrying in {API_RETRY_WAIT}s — restart the API if it keeps failing...")
+            time.sleep(API_RETRY_WAIT)
 
 
 # ── Main loop ─────────────────────────────────────────────────────────────────

@@ -97,16 +97,32 @@ def main():
     out_dir = RESULTS_DIR / args.model / args.framework
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    # ── Resume: skip already-completed records ────────────────────────────────
+    completed = {p.stem for p in out_dir.glob("TC_*.json")}
+    if completed:
+        print(f"\n  Resuming — {len(completed)} records already done, skipping.")
+
     print(f"\n{'='*60}")
     print(f"  BMAD Loop  |  model={args.model}  framework={args.framework}")
     print(f"  Records={len(records)}  threshold={args.threshold}  max_iters={args.max_iters}")
     print(f"{'='*60}")
 
+    # Reload existing results for summary
     all_results = []
+    for p in sorted(out_dir.glob("TC_*.json")):
+        with open(p) as f:
+            all_results.append(json.load(f))
+
     t_wall = time.time()
 
     for idx, record in enumerate(records, 1):
         tc_id  = record["id"]
+
+        # Skip if already done
+        if tc_id in completed:
+            print(f"  [{idx:3d}/{len(records)}] {tc_id}  ⏭️   (already done)")
+            continue
+
         result = bmad_run(
             tc_id      = tc_id,
             user_story = record["user_story"],
