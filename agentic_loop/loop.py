@@ -1,0 +1,180 @@
+"""
+BMAD Agentic Correction Loop
+=============================
+Build → Measure → Assess → Decide
+
+For each user story:
+  Build  — call the model in-process to generate a test script
+  Measure — score the script (syntax + assertion density + ROUGE-L)
+  Assess  — is the score >= threshold?
+  Decide  — accept and return  OR  inject targeted feedback and regenerate
+
+Returns the best-scoring script seen across all iterations.
+
+Phase 6 rebuild: generation happens via a direct function call into
+generator.py — no HTTP server, no port, no network layer. See generator.py's
+module docstring for why that architecture was dropped.
+"""
+from dataclasses import dataclass, field
+from typing import Optional
+
+from . import generator
+from .scorer import score, QualityScore
+
+DEFAULT_THRESHOLD  = 0.60
+DEFAULT_MAX_ITERS  = 3
+DEFAULT_MAX_TOKENS = 1024   # 512 caused truncation (unclosed braces); 1024 allows complete scripts
+
+# When a script comes back truncated (unbalanced braces), asking the model to
+# "write the complete script" again is pointless if it's actually hitting the
+# token ceiling — it will truncate at the same point every time. Escalate the
+# token budget instead so the retry has room to finish.
+TRUNCATION_TOKEN_BUMP = 512
+MAX_TOKENS_CEILING    = 2048
+
+
+@dataclass
+class IterationResult:
+    iteration:    int
+    script:       str
+    score:        QualityScore
+    latency_s:    float
+    feedback_used: str = ""
+
+
+@dataclass
+class LoopResult:
+    tc_id:           str
+    framework:       str
+    model_key:       str
+    accepted:        bool
+    iterations:      int
+    best_score:      float
+    final_script:    str
+    history:         list = field(default_factory=list)
+    total_latency_s: float = 0.0
+
+
+# ── Build step ────────────────────────────────────────────────────────────────
+
+def _generate(
+    user_story:     str,
+    framework:      str,
+    model_key:      str,
+    category:       str,
+    complexity:     str,
+    feedback:       str = "",
+    max_new_tokens: int = DEFAULT_MAX_TOKENS,
+) -> tuple:
+    """
+    In-process generation call. When feedback is non-empty the previous
+    issues are appended to the user story so the model has explicit
+    correction guidance.
+    """
+    story = user_story if not feedback else (
+        f"{user_story}\n\n"
+        f"[CORRECTION REQUIRED — previous attempt was rejected. "
+        f"Please fix the following issues: {feedback}]"
+    )
+    return generator.generate(
+        model_key      = model_key,
+        framework      = framework,
+        user_story     = story,
+        category       = category,
+        complexity     = complexity,
+        max_new_tokens = max_new_tokens,
+    )
+
+
+# ── Main loop ─────────────────────────────────────────────────────────────────
+
+def run(
+    tc_id:      str,
+    user_story: str,
+    framework:  str,
+    model_key:  str   = "phi3",
+    category:   str   = "functional",
+    complexity: str   = "medium",
+    exemplar:   str   = "",
+    threshold:  float = DEFAULT_THRESHOLD,
+    max_iters:  int   = DEFAULT_MAX_ITERS,
+    max_tokens: int   = DEFAULT_MAX_TOKENS,
+) -> LoopResult:
+    """
+    Run the BMAD loop for a single user story.
+
+    Args:
+        tc_id:      Record identifier (e.g. 'TC_001')
+        user_story: Natural-language requirement
+        framework:  'cypress' or 'playwright'
+        model_key:  'phi3' or 'gemma4'
+        exemplar:   Ground-truth script for ROUGE-L scoring (optional)
+        threshold:  Minimum composite score to accept (default 0.60)
+        max_iters:  Maximum generation attempts (default 3)
+
+    Returns:
+        LoopResult with accepted flag, best script, and full iteration history
+    """
+    best:          Optional[IterationResult] = None
+    history:       list[IterationResult]    = []
+    feedback:      str                      = ""
+    total_latency: float                    = 0.0
+    current_max_tokens: int                 = max_tokens
+
+    for i in range(1, max_iters + 1):
+        script, elapsed = _generate(
+            user_story, framework, model_key,
+            category, complexity, feedback, current_max_tokens,
+        )
+        total_latency += elapsed
+
+        q = score(script, framework, exemplar)
+
+        iteration = IterationResult(
+            iteration    = i,
+            script       = script,
+            score        = q,
+            latency_s    = elapsed,
+            feedback_used = feedback,
+        )
+        history.append(iteration)
+
+        # Track best seen
+        if best is None or q.total > best.score.total:
+            best = iteration
+
+        # Assess — accept if threshold met
+        if q.total >= threshold:
+            return LoopResult(
+                tc_id          = tc_id,
+                framework      = framework,
+                model_key      = model_key,
+                accepted       = True,
+                iterations     = i,
+                best_score     = best.score.total,
+                final_script   = best.script,
+                history        = history,
+                total_latency_s = round(total_latency, 3),
+            )
+
+        # Decide — prepare targeted feedback for next Build step
+        feedback = q.feedback
+
+        # If the failure was truncation, re-asking for "the complete script"
+        # at the same token budget just reproduces the same cutoff — raise
+        # the ceiling instead so the next attempt has room to finish.
+        if not q.complete:
+            current_max_tokens = min(current_max_tokens + TRUNCATION_TOKEN_BUMP, MAX_TOKENS_CEILING)
+
+    # Exhausted iterations — return best candidate found
+    return LoopResult(
+        tc_id          = tc_id,
+        framework      = framework,
+        model_key      = model_key,
+        accepted       = False,
+        iterations     = max_iters,
+        best_score     = best.score.total if best else 0.0,
+        final_script   = best.script      if best else "",
+        history        = history,
+        total_latency_s = round(total_latency, 3),
+    )
