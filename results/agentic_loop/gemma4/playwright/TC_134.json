@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_134",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8213,
+  "total_latency_s": 72.021,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Alert Dialog Blocking Page Interaction', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/alert-dialog');\n  });\n\n  test('should block interaction with page behind alert dialog', async ({ page }) => {\n    // Open the alert dialog\n    const openButton = page.getByRole('button', { name: /open alert/i });\n    await openButton.click();\n\n    // Verify alert dialog is visible\n    const alertDialog = page.getByRole('dialog', { name: /alert/i });\n    await expect(alertDialog).toBeVisible();\n\n    // Verify overlay is visible\n    const overlay = page.locator('[data-testid=\"overlay\"]');\n    await expect(overlay).toBeVisible();\n\n    // Verify alert dialog content is visible\n    const alertMessage = page.getByText(/this is an alert/i);\n    await expect(alertMessage).toBeVisible();\n\n    // Attempt to interact with page behind alert dialog\n    const closeButton = page.getByRole('button', { name: /close/i });\n    const pageContent = page.getByText(/page content/i);\n\n    // Verify close button is not clickable when alert is open\n    await expect(closeButton).not.toBeEnabled();\n\n    // Verify page content is not visible or interactive\n    await expect(pageContent).not.toBeVisible();\n\n    // Close the alert dialog\n    await closeButton.click();\n\n    // Verify alert dialog is no longer visible\n    await expect(alertDialog).not.toBeVisible();\n  });\n\n  test('should allow interaction with page behind alert dialog after closing it', async ({ page }) => {\n    // Open the alert dialog\n    const openButton = page.getByRole('button', { name: /open alert/i });\n    await openButton.click();\n\n    // Verify alert dialog is visible\n    const alertDialog = page.getByRole('dialog', { name: /alert/i });\n    await expect(alertDialog).toBeVisible();\n\n    // Attempt to interact with page behind alert dialog (should fail)\n    const pageContent = page.getByText(/page content/i);\n    await expect(pageContent).not.toBeVisible();\n\n    // Close the alert dialog\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n\n    // Verify alert dialog is closed\n    await expect(alertDialog).not.toBeVisible();\n\n    // Verify page content is now visible and interactive\n    await expect(pageContent).toBeVisible();\n\n    // Verify page content can be interacted with\n    const pageButton = page.getByRole('button', { name: /page button/i });\n    await expect(pageButton).toBeEnabled();\n    await pageButton.click();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8213,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5042,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.021,
+      "feedback_used": ""
+    }
+  ]
+}

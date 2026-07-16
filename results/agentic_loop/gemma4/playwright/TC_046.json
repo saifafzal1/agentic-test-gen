@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_046",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7762,
+  "total_latency_s": 71.391,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('External Links Open in New Tab', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/page-with-external-links');\n  });\n\n  test('should open external links in a new tab', async ({ page }) => {\n    // Verify the page is loaded\n    await expect(page.getByRole('heading', { name: /page content/i })).toBeVisible();\n\n    // Get the external link button using getByRole\n    const externalLinkButton = page.getByRole('button', { name: /visit external site/i });\n    await expect(externalLinkButton).toBeVisible();\n\n    // Intercept the navigation to verify it opens in a new tab\n    await page.waitForEvent('navigation');\n    \n    // Click the external link button\n    await externalLinkButton.click();\n\n    // Verify the new tab is open\n    const newTab = page.context().pages().find((p) => p.url().includes('external-site.com'));\n    expect(newTab).toBeDefined();\n    \n    // Verify the original page is still open\n    const originalPage = page.context().pages().find((p) => p.url().includes('/page-with-external-links'));\n    expect(originalPage).toBeDefined();\n    \n    // Verify the original page content is still visible\n    await expect(page.getByRole('heading', { name: /page content/i })).toBeVisible();\n    \n    // Verify the external link content is visible in the new tab\n    await expect(newTab.getByRole('heading', { name: /external site title/i })).toBeVisible();\n  });\n\n  test('should handle multiple external links and close new tab when navigating back', async ({ page }) => {\n    // Verify the page is loaded\n    await expect(page.getByRole('heading', { name: /page content/i })).toBeVisible();\n\n    // Get the first external link button using getByRole\n    const firstExternalLinkButton = page.getByRole('button', { name: /visit external site/i });\n    await expect(firstExternalLinkButton).toBeVisible();\n\n    // Click the first external link button\n    await firstExternalLinkButton.click();\n\n    // Verify the first new tab is open\n    const firstNewTab = page.context().pages().find((p) => p.url().includes('external-site.com'));\n    expect(firstNewTab).toBeDefined();\n    \n    // Get the second external link button using getByRole\n    const secondExternalLinkButton = page.getByRole('button', { name: /visit another external site/i });\n    await expect(secondExternalLinkButton).toBeVisible();\n\n    // Click the second external link button\n    await secondExternalLinkButton.click();\n\n    // Verify the second new tab is open\n    const secondNewTab = page.context().pages().find((p) => p.url().includes('another-external-site.com'));\n    expect(secondNewTab).toBeDefined();\n    \n    // Verify both new tabs are open\n    const allNewTabs = page.context().pages().filter((p) => p.url().includes('external-site.com') || p.url().includes('another-external-site.com'));\n    expect(allNewTabs.length).toBe(2);\n    \n    // Navigate back to the original page\n    await page.goBack();\n    \n    // Verify the original page is still visible\n    await expect(page.getByRole('heading', { name: /page content/i })).toBeVisible();\n    \n    // Verify the original page URL is correct\n    await expect(page).toHaveURL(/.*page-with-external-links/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7762,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3539,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.391,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_146",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.735,
+  "total_latency_s": 635.708,
+  "final_script": "describe('Onboarding Tour Modal', () => {\n  beforeEach(() => {\n    cy.visit('/onboarding');\n  });\n\n  it('should navigate through onboarding tour steps successfully', () => {\n    // Open the onboarding tour modal\n    cy.get('[data-testid=\"onboarding-modal-trigger\"]').click();\n    cy.get('[data-testid=\"onboarding-modal\"]').should('be.visible');\n\n    // Verify initial step is displayed\n    cy.get('[data-testid=\"onboarding-step-1\"]').should('be.visible');\n    cy.get('[data-testid=\"step-1-title\"]').should('contain', 'Welcome to Our App');\n\n    // Verify step content is displayed\n    cy.get('[data-testid=\"step-1-content\"]').should('be.visible');\n    cy.get('[data-testid=\"step-1-content\"]').should('contain', 'This is the first step of the onboarding tour.');\n\n    // Click the next button to advance to the next step\n    cy.get('[data-testid=\"onboarding-next-button\"]').click();\n\n    // Verify second step is now visible\n    cy.get('[data-testid=\"onboarding-step-2\"]').should('be.visible');\n    cy.get('[data-testid=\"step-2-title\"]').should('contain', 'Create Account');\n\n    // Verify step content is displayed\n    cy.get('[data-testid=\"step-2-content\"]').should('be.visible');\n    cy.get('[data-testid=\"step-2-content\"]').should('contain', 'Enter your email and password to create an account.');\n\n    // Click the next button to advance to the final step\n    cy.get('[data-testid=\"onboarding-next-button\"]').click();\n\n    // Verify final step is visible\n    cy.get('[data-testid=\"onboarding-step-3\"]').should('be.visible');\n    cy.get('[data-testid=\"step-3-title\"]').should('contain', 'Complete Onboarding');\n\n    // Verify step content is displayed\n    cy.get('[data-testid=\"step-3-content\"]').should('be.visible');\n    cy.get('[data-testid=\"step-3-content\"]').should('contain', 'Complete your profile to finish the onboarding process.');\n\n    // Verify close button is visible\n    cy.get('[data-testid=\"onboarding-close-button\"]').should('be.visible');\n\n    // Close the modal\n    cy.get('[data-testid=\"onboarding-close-button\"]').click();\n\n    // Verify modal is closed\n    cy.get('[data-testid=\"onboarding-modal\"]').should('not.exist');\n  });\n\n  it('should handle edge case when user clicks next button before all steps are visible', () => {\n    // Open the onboarding tour modal\n    cy.get('[data-testid=\"onboarding-modal-trigger\"]').click();\n    cy.get('[data-testid=\"onboarding-modal\"]').should('be.visible');\n\n    // Verify initial step is displayed\n    cy.get('[data-testid=\"onboarding-step-1\"]').should('be.visible');\n\n    // Click the next button before step 2 is visible\n    cy.get('[data-testid=\"onboarding-next-button\"]').click();\n\n    // Verify step 2 is not visible (should be skipped)\n    cy.get('[data-testid=\"onboarding-step-2\"]').should('not.exist');\n\n    // Verify step 3 is still visible\n    cy.get('[data-testid=\"onboarding-step-3\"]').should('be.visible');\n\n    // Verify step content is displayed\n    cy.get('[data-testid=\"step-3-content\"]').should('be.visible');\n\n    // Verify close button is still visible\n    cy.get('[data-testid=\"onboarding-close-button\"]').should('be.visible');\n\n    // Close the modal\n    cy.get('[data-testid=\"onboarding-close-button\"]').click();\n\n    // Verify modal is closed\n    cy.get('[data-testid=\"onboarding-modal\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4501,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.2738,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 315.729,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.735,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3165,
+        "missing_keywords": [],
+        "assertion_count": 22,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 319.979,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

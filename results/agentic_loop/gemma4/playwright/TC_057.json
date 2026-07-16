@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_057",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.811,
+  "total_latency_s": 118.378,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Loading Skeleton - API Data Fetching', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display loading skeleton while API data is fetching', async ({ page }) => {\n    // Intercept the API call\n    await page.route('**/api/dashboard/data', (route) => {\n      route.abort('blockedbyclient');\n    });\n\n    // Verify loading skeleton is visible\n    const loadingSkeleton = page.getByTestId('loading-skeleton');\n    await expect(loadingSkeleton).toBeVisible();\n\n    // Verify data content is not yet visible\n    const dataContent = page.getByTestId('dashboard-data');\n    await expect(dataContent).not.toBeVisible();\n\n    // Verify loading indicator is visible\n    const loadingIndicator = page.getByTestId('loading-indicator');\n    await expect(loadingIndicator).toBeVisible();\n\n    // Wait for API response\n    await page.waitForTimeout(1000);\n\n    // Verify loading skeleton is removed\n    await expect(loadingSkeleton).not.toBeVisible();\n\n    // Verify data content is now visible\n    await expect(dataContent).toBeVisible();\n\n    // Verify data is displayed\n    const welcomeMessage = page.getByText('Welcome Back');\n    await expect(welcomeMessage).toBeVisible();\n  });\n\n  test('should handle API error and display error message instead of skeleton', async ({ page }) => {\n    // Intercept the API call and return an error\n    await page.route('**/api/dashboard/data', (route) => {\n      route.abort('failed');\n    });\n\n    // Verify loading skeleton is displayed initially\n    const loadingSkeleton = page.getByTestId('loading-skeleton');\n    await expect(loadingSkeleton).toBeVisible();\n\n    // Wait for API error\n    await page.waitForTimeout(1000);\n\n    // Verify loading skeleton is removed\n    await expect(loadingSkeleton).not.toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByTestId('error-message');\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).toContainText('Failed to load data');\n\n    // Verify data content is not visible\n    const dataContent = page.getByTestId('dashboard-data');\n    await expect(dataContent).not.toBeVisible();\n\n    // Verify retry button is available\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.811,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4701,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 118.378,
+      "feedback_used": ""
+    }
+  ]
+}

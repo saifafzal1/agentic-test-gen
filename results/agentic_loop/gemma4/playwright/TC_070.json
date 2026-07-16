@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_070",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8072,
+  "total_latency_s": 72.749,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Background Sync Toast Notification', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/sync-status');\n  });\n\n  test('should display toast notification when background sync completes successfully', async ({ page }) => {\n    // Intercept the background sync completion API call\n    await page.route('**/api/sync/complete', (route) => {\n      route.continue();\n    });\n\n    // Click the sync button to initiate background sync\n    const syncButton = page.getByRole('button', { name: /sync/i });\n    await syncButton.click();\n\n    // Wait for the sync process to start\n    await page.waitForTimeout(500);\n\n    // Verify sync status is 'in progress'\n    const statusText = page.getByText(/in progress/i);\n    await expect(statusText).toBeVisible();\n\n    // Wait for the sync to complete\n    await page.waitForTimeout(1000);\n\n    // Verify sync status is 'complete'\n    const completeStatusText = page.getByText(/complete/i);\n    await expect(completeStatusText).toBeVisible();\n\n    // Verify toast notification appears\n    const toastNotification = page.getByText(/background sync completed successfully/i);\n    await expect(toastNotification).toBeVisible();\n\n    // Verify toast has success styling\n    const toastElement = page.locator('[data-testid=\"toast-notification\"]');\n    await expect(toastElement).toHaveClass(/toast-success/);\n\n    // Verify toast has a close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify toast can be dismissed\n    await closeButton.click();\n    await expect(toastNotification).not.toBeVisible();\n  });\n\n  test('should handle background sync failure and display error toast', async ({ page }) => {\n    // Intercept the background sync completion API call and simulate failure\n    await page.route('**/api/sync/complete', (route) => {\n      route.abort('failed');\n    });\n\n    // Click the sync button to initiate background sync\n    const syncButton = page.getByRole('button', { name: /sync/i });\n    await syncButton.click();\n\n    // Wait for the sync process to start\n    await page.waitForTimeout(500);\n\n    // Verify sync status is 'in progress'\n    const statusText = page.getByText(/in progress/i);\n    await expect(statusText).toBeVisible();\n\n    // Wait for the sync to fail\n    await page.waitForTimeout(1500);\n\n    // Verify sync status is 'failed'\n    const failedStatusText = page.getByText(/failed/i);\n    await expect(failedStatusText).toBeVisible();\n\n    // Verify error toast notification appears\n    const errorToast = page.getByText(/background sync failed/i);\n    await expect(errorToast).toBeVisible();\n\n    // Verify error toast has error styling\n    const toastElement = page.locator('[data-testid=\"toast-notification\"]');\n    await expect(toastElement).toHaveClass(/toast-error/);\n\n    // Verify error toast has a retry button\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify retry button is enabled\n    await expect(retryButton).toBeEnabled();\n\n    // Verify error toast can be dismissed\n    await retryButton.click();\n    await expect(errorToast).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8072,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4573,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.749,
+      "feedback_used": ""
+    }
+  ]
+}

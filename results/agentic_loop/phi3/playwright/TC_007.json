@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_007",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.4922,
+  "total_latency_s": 772.15,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Remember Me Authentication Feature', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should remember user credentials when \"Remember Me\" is checked and persist login across sessions', async ({ page }) => {\n    // Verify login page is visible\n    const loginForm = page.getByRole('form');\n    await expect(loginForm).toBeVisible();\n\n    // Verify \"Remember Me\" checkbox is visible and disabled by default\n    const rememberMeCheckbox = page.getByLabel('Remember Me');\n    await expect(rememberMeCheckbox).toBeVisible();\n    await expect(rememberMeCheckbox).toBeDisabled();\n\n    // Verify login button is visible\n    const loginButton = page.getByRole('button', { name: /sign in/i });\n    await expect(loginButton).toBeVisible();\n\n    // Verify login form has email and password fields\n    const emailInput = page.getByLabel('Email address');\n    const passwordInput = page.getByLabel('Password');\n    await expect(emailInput).toBeVisible();\n    await expect(passwordInput).toBeVisible();\n\n    // Verify login form has error messages\n    const errorMessage = page.getByText('Please enter a valid email and password');\n    await expect(errorMessage).toBeVisible();\n\n    // Fill in valid credentials\n    await emailInput.fill('user@example.com');\n    await passwordInput.fill('SecurePassword123');\n\n    // Click login button\n    await loginButton.click();\n\n    // Verify login success message appears\n    const successMessage = page.getByText('Logged in successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify user is redirected to home page\n    const homePage = page.getByText('Home');\n    await expect(homePage).toBeVisible();\n\n    // Verify \"Remember Me\" checkbox is now enabled\n    await expect(rememberMeCheckbox).toBeEnabled();\n\n    // Verify user is logged in across sessions\n    await page.reload();\n    await expect(homePage).toBeVisible();\n\n    // Verify \"Remember Me\" checkbox is still enabled\n    await expect(rememberMeCheckbox).toBeEnabled();\n\n    // Verify user is logged in after browser restart\n    await page.reload();\n    await expect(homePage).toBeVisible();\n\n    // Verify \"Remember Me\" checkbox is still enabled\n    await expect(rememberMeCheckbox).toBeEnabled();\n  });\n\n  test('should not remember user credentials when \"Remember Me\" is unchecked', async ({ page }) => {\n    // Verify login page is visible\n    const loginForm = page.getByRole('form');\n    await expect(loginForm).toBeVisible();\n\n    // Verify \"Remember Me\" checkbox is visible and enabled by default\n    const rememberMeCheckbox = page.getByLabel('Remember Me');\n    await expect(rememberMeCheckbox).toBeVisible();\n    await expect(rememberMeCheckbox).toBeEnabled();\n\n    // Verify login button is visible\n    const loginButton = page.getByRole('button', { name: /sign in/i });\n    await expect(loginButton).toBeVisible();\n\n    // Verify login form has email and password fields\n    const emailInput = page.getByLabel('Email address');\n    const passwordInput = page.getByLabel('Password');\n    await expect(emailInput).toBeVisible();\n    await expect(passwordInput).toBeVisible();\n\n    // Verify login form has error messages\n    const errorMessage = page.getByText('Please enter a valid email and password');\n    await expect(errorMessage).toBeVisible();\n\n    // Fill in valid credentials\n    await emailInput.fill('user@example.com');\n    await passwordInput.fill('SecurePassword123');\n\n    // Click login button\n    await loginButton.click();\n\n    // Verify login success message appears\n    const successMessage = page.getByText('Logged in successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify user is redirected to home page\n    const homePage = page.getBy",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4922,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.374,
+        "missing_keywords": [],
+        "assertion_count": 22,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 57.923,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4597,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.2656,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 319.958,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.4487,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.2289,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 394.269,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_142",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8009,
+  "total_latency_s": 122.241,
+  "final_script": "describe('Modal Dialog Focus Return Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/modal-dialog');\n  });\n\n  it('should return focus to trigger button after modal closes', () => {\n    // Intercept modal close API\n    cy.intercept('POST', '/api/modal/close').as('modalClose');\n\n    // Open modal\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Verify modal is open\n    cy.get('[data-testid=\"modal-title\"]').should('contain', 'Modal Title');\n    cy.get('[data-testid=\"modal-content\"]').should('be.visible');\n\n    // Verify focus is on modal content\n    cy.get('[data-testid=\"modal-content\"]').should('have.focus');\n\n    // Close modal\n    cy.get('[data-testid=\"modal-close-btn\"]').click();\n\n    // Wait for modal close API\n    cy.wait('@modalClose');\n\n    // Verify modal is closed\n    cy.get('[data-testid=\"modal-dialog\"]').should('not.exist');\n\n    // Verify focus is back on trigger button\n    cy.get('[data-testid=\"open-modal-btn\"]').should('have.focus');\n  });\n\n  it('should handle focus return when modal is closed programmatically', () => {\n    // Open modal\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Verify modal is open\n    cy.get('[data-testid=\"modal-title\"]').should('contain', 'Modal Title');\n    cy.get('[data-testid=\"modal-content\"]').should('be.visible');\n\n    // Verify focus is on modal content\n    cy.get('[data-testid=\"modal-content\"]').should('have.focus');\n\n    // Close modal programmatically\n    cy.get('[data-testid=\"modal-dialog\"]').then((modal) => {\n      modal.find('[data-testid=\"modal-close-btn\"]').click();\n    });\n\n    // Wait for modal close API\n    cy.wait('@modalClose');\n\n    // Verify modal is closed\n    cy.get('[data-testid=\"modal-dialog\"]').should('not.exist');\n\n    // Verify focus is back on trigger button\n    cy.get('[data-testid=\"open-modal-btn\"]').should('have.focus');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8009,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5363,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 122.241,
+      "feedback_used": ""
+    }
+  ]
+}

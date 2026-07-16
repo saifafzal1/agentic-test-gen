@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_117",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7317,
+  "total_latency_s": 280.3,
+  "final_script": "describe('Search Result Race Conditions', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should display only the latest search result when multiple requests are made concurrently', () => {\n    // First search request\n    cy.get('[data-testid=\"search-input\"]').type('async programming');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for first search result to load\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"search-result-item\"]').should('contain', 'Async Programming');\n\n    // Second search request\n    cy.get('[data-testid=\"search-input\"]').type('async programming');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for second search result to load\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n\n    // Verify only the latest result is displayed\n    cy.get('[data-testid=\"search-result-item\"]').should('contain', 'Async Programming');\n    cy.get('[data-testid=\"search-result-item\"]').should('have.length.greaterThan', 1);\n  });\n\n  it('should handle race conditions gracefully when search input is cleared during a request', () => {\n    // First search request\n    cy.get('[data-testid=\"search-input\"]').type('async programming');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for first search result to load\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"search-result-item\"]').should('contain', 'Async Programming');\n\n    // Clear search input\n    cy.get('[data-testid=\"search-input\"]').clear();\n\n    // Second search request\n    cy.get('[data-testid=\"search-input\"]').type('async programming');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for second search result to load\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n\n    // Verify only the latest result is displayed\n    cy.get('[data-testid=\"search-result-item\"]').should('contain', 'Async Programming');\n    cy.get('[data-testid=\"search-result-item\"]').should('have.length.greaterThan', 1);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7317,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3058,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 280.3,
+      "feedback_used": ""
+    }
+  ]
+}

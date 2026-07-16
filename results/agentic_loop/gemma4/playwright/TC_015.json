@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_015",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.828,
+  "total_latency_s": 71.294,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login with Email or Username', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should successfully log in with email address', async ({ page }) => {\n    // Verify login form is visible\n    const loginForm = page.getByRole('form', { name: /login/i });\n    await expect(loginForm).toBeVisible();\n\n    // Locate email input using getByLabel\n    const emailInput = page.getByLabel(/email or username/i);\n    await emailInput.fill('user@example.com');\n\n    // Locate password input using getByLabel\n    const passwordInput = page.getByLabel(/password/i);\n    await passwordInput.fill('SecurePassword123');\n\n    // Locate login button using getByRole\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await loginButton.click();\n\n    // Wait for navigation to dashboard\n    await page.waitForURL(/.*\\/dashboard/);\n\n    // Verify user is logged in\n    const welcomeMessage = page.getByText(/welcome/i);\n    await expect(welcomeMessage).toBeVisible();\n\n    // Verify user profile icon is visible\n    const profileIcon = page.getByRole('button', { name: /profile/i });\n    await expect(profileIcon).toBeVisible();\n  });\n\n  test('should successfully log in with username', async ({ page }) => {\n    // Verify login form is visible\n    const loginForm = page.getByRole('form', { name: /login/i });\n    await expect(loginForm).toBeVisible();\n\n    // Locate username input using getByLabel\n    const usernameInput = page.getByLabel(/email or username/i);\n    await usernameInput.fill('johndoe123');\n\n    // Locate password input using getByLabel\n    const passwordInput = page.getByLabel(/password/i);\n    await passwordInput.fill('SecurePassword123');\n\n    // Locate login button using getByRole\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await loginButton.click();\n\n    // Wait for navigation to dashboard\n    await page.waitForURL(/.*\\/dashboard/);\n\n    // Verify user is logged in\n    const welcomeMessage = page.getByText(/welcome/i);\n    await expect(welcomeMessage).toBeVisible();\n\n    // Verify user profile icon is visible\n    const profileIcon = page.getByRole('button', { name: /profile/i });\n    await expect(profileIcon).toBeVisible();\n  });\n\n  test('should display error message when login fails with invalid credentials', async ({ page }) => {\n    // Locate email input using getByLabel\n    const emailInput = page.getByLabel(/email or username/i);\n    await emailInput.fill('invaliduser@example.com');\n\n    // Locate password input using getByLabel\n    const passwordInput = page.getByLabel(/password/i);\n    await passwordInput.fill('wrongpassword');\n\n    // Locate login button using getByRole\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await loginButton.click();\n\n    // Wait for error message to appear\n    const errorMessage = page.getByText(/invalid credentials|email or username not found/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify user is still on login page\n    await expect(page).toHaveURL(/.*\\/login/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.828,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4267,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.294,
+      "feedback_used": ""
+    }
+  ]
+}

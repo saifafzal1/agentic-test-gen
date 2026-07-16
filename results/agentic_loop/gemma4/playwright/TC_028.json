@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_028",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8446,
+  "total_latency_s": 71.038,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Submission Success Feedback', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should display success feedback after valid form submission', async ({ page }) => {\n    // Locate and fill name input using getByLabel\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('John Doe');\n\n    // Locate and fill email input using getByLabel\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('john.doe@example.com');\n\n    // Locate and fill message textarea using getByLabel\n    const messageInput = page.getByLabel('Message');\n    await messageInput.fill('This is a test message.');\n\n    // Locate and click submit button using getByRole\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Wait for success message to appear\n    const successMessage = page.getByText(/form submitted successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify success message has correct styling\n    await expect(successMessage).toHaveClass(/success-message/);\n\n    // Verify form fields are cleared\n    await expect(nameInput).toHaveValue('');\n    await expect(emailInput).toHaveValue('');\n    await expect(messageInput).toHaveValue('');\n\n    // Verify success icon is visible\n    const successIcon = page.getByRole('img', { name: /success/i });\n    await expect(successIcon).toBeVisible();\n  });\n\n  test('should not display success feedback when form is invalid', async ({ page }) => {\n    // Locate and fill name input with invalid data\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('John');\n\n    // Locate and fill email input with invalid format\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('invalid-email');\n\n    // Locate and fill message textarea with empty value\n    const messageInput = page.getByLabel('Message');\n    await messageInput.fill('');\n\n    // Locate and click submit button using getByRole\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Wait for error message to appear\n    const errorMessage = page.getByText(/please correct the errors/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify success message does not appear\n    const successMessage = page.getByText(/form submitted successfully/i);\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify error message has correct styling\n    await expect(errorMessage).toHaveClass(/error-message/);\n\n    // Verify form fields still contain invalid data\n    await expect(nameInput).toHaveValue('John');\n    await expect(emailInput).toHaveValue('invalid-email');\n    await expect(messageInput).toHaveValue('');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8446,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.482,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.038,
+      "feedback_used": ""
+    }
+  ]
+}

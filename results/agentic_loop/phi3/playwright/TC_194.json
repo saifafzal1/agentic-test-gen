@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_194",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7963,
+  "total_latency_s": 918.861,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Faceted Search - Real-time Results Update', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should update search results in real-time as user filters by category', async ({ page }) => {\n    // Verify initial search results are displayed\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n\n    // Verify initial result count\n    const resultCount = page.getByText(/10 results/i);\n    await expect(resultCount).toBeVisible();\n\n    // Verify initial result items\n    const resultItems = page.locator('[data-testid=\"search-result-item\"]');\n    await expect(resultItems).toHaveCount(10);\n\n    // Apply category filter using getByRole\n    const categoryFilter = page.getByRole('button', { name: /filter by category/i });\n    await categoryFilter.click();\n\n    // Verify category filter appears\n    await expect(categoryFilter).toBeVisible();\n\n    // Verify category options are displayed\n    const categoryOptions = page.locator('[data-testid=\"category-option\"]');\n    await expect(categoryOptions).toHaveCount(3);\n\n    // Select a category using getByRole\n    const categoryOption = page.getByRole('option', { name: /books/i });\n    await categoryOption.click();\n\n    // Verify category filter is applied\n    await expect(categoryFilter).toContainText('books');\n\n    // Verify results are filtered by category\n    await expect(resultItems).toHaveCount(5);\n\n    // Verify category name is displayed\n    const categoryName = page.getByText(/books/i);\n    await expect(categoryName).toBeVisible();\n\n    // Verify results are still visible\n    await expect(resultsContainer).toBeVisible();\n\n    // Verify search results are updated in real-time\n    await page.waitForTimeout(100);\n    await expect(resultItems).toHaveCount(5);\n\n    // Verify category filter is still active\n    await expect(categoryFilter).toBeVisible();\n\n    // Verify category options are still displayed\n    await expect(categoryOptions).toHaveCount(3);\n\n    // Verify category name is still displayed\n    await expect(categoryName).toBeVisible();\n\n    // Verify results are still visible\n    await expect(resultsContainer).toBeVisible();\n  });\n\n  test('should handle empty search results gracefully when no items match filters', async ({ page }) => {\n    // Apply multiple filters using getByRole\n    const categoryFilter = page.getByRole('button', { name: /filter by category/i });\n    await categoryFilter.click();\n\n    const categoryOption = page.getByRole('option', { name: /books/i });\n    await categoryOption.click();\n\n    const priceRangeFilter = page.getByRole('button', { name: /price range/i });\n    await priceRangeFilter.click();\n\n    const priceRangeOption = page.getByRole('option', { name: /$100-$200/i });\n    await priceRangeOption.click();\n\n    // Verify no results are displayed\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n\n    const resultCount = page.getByText(/0 results/i);\n    await expect(resultCount).toBeVisible();\n\n    // Verify no result items are displayed\n    const resultItems = page.locator('[data-testid=\"search-result-item\"]');\n    await expect(resultItems).not.toHaveCount(1);\n\n    // Verify category and price range filters are still visible\n    await expect(categoryFilter).toBeVisible();\n    await expect(priceRangeFilter).toBeVisible();\n\n    // Verify category options are still displayed\n    await expect(categoryOptions).toHaveCount(3);\n\n    // Verify category name is still displayed\n    const categoryName = page.getByText(/books/i);\n    await expect(categoryName).toBeVisible();\n\n    // Verify results container is still visible\n    await expect(resultsContainer).toBeVisible();\n\n    // Verify no results are displayed\n    await expect(resultItems).not.toHaveCount(1);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5132,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4441,
+        "missing_keywords": [],
+        "assertion_count": 23,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 353.932,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7963,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4211,
+        "missing_keywords": [],
+        "assertion_count": 23,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 564.929,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

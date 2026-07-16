@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_040",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.798,
+  "total_latency_s": 466.039,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Footer Navigation Links', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should navigate to correct page when footer link is clicked', async ({ page }) => {\n    // Verify footer is visible\n    const footer = page.getByRole('region', { name: /footer/i });\n    await expect(footer).toBeVisible();\n\n    // Verify all footer links are present\n    const navLinks = page.locator('[data-testid=\"footer-nav-link\"]');\n    await expect(navLinks).toHaveCount(5);\n\n    // Verify home link is visible and has correct href\n    const homeLink = page.getByRole('link', { name: /home/i });\n    await expect(homeLink).toBeVisible();\n    await expect(homeLink).toHaveAttribute('href', '/');\n\n    // Verify about link is visible and has correct href\n    const aboutLink = page.getByRole('link', { name: /about/i });\n    await expect(aboutLink).toBeVisible();\n    await expect(aboutLink).toHaveAttribute('href', '/about');\n\n    // Verify contact link is visible and has correct href\n    const contactLink = page.getByRole('link', { name: /contact/i });\n    await expect(contactLink).toBeVisible();\n    await expect(contactLink).toHaveAttribute('href', '/contact');\n\n    // Verify services link is visible and has correct href\n    const servicesLink = page.getByRole('link', { name: /services/i });\n    await expect(servicesLink).toBeVisible();\n    await expect(servicesLink).toHaveAttribute('href', '/services');\n\n    // Verify pricing link is visible and has correct href\n    const pricingLink = page.getByRole('link', { name: /pricing/i });\n    await expect(pricingLink).toBeVisible();\n    await expect(pricingLink).toHaveAttribute('href', '/pricing');\n\n    // Verify contact link is visible and has correct href\n    const contactLink = page.getByRole('link', { name: /contact/i });\n    await expect(contactLink).toBeVisible();\n    await expect(contactLink).toHaveAttribute('href', '/contact');\n\n    // Click home link and verify navigation\n    await homeLink.click();\n    await expect(page).toHaveURL(/^\\/home$/);\n\n    // Click about link and verify navigation\n    await aboutLink.click();\n    await expect(page).toHaveURL(/^\\/about$/);\n\n    // Click contact link and verify navigation\n    await contactLink.click();\n    await expect(page).toHaveURL(/^\\/contact$/);\n\n    // Click services link and verify navigation\n    await servicesLink.click();\n    await expect(page).toHaveURL(/^\\/services$/);\n\n    // Click pricing link and verify navigation\n    await pricingLink.click();\n    await expect(page).toHaveURL(/^\\/pricing$/);\n  });\n\n  test('should handle invalid footer links and display error message', async ({ page }) => {\n    // Verify footer is visible\n    const footer = page.getByRole('region', { name: /footer/i });\n    await expect(footer).toBeVisible();\n\n    // Verify all footer links are present\n    const navLinks = page.locator('[data-testid=\"footer-nav-link\"]');\n    await expect(navLinks).toHaveCount(5);\n\n    // Click invalid link (e.g., /invalid-page)\n    const invalidLink = page.getByRole('link', { name: /invalid/i });\n    await expect(invalidLink).toBeVisible();\n    await invalidLink.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/page not found/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify navigation is not redirected\n    await expect(page).toHaveURL(/^\\/invalid-page$/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.798,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4268,
+        "missing_keywords": [],
+        "assertion_count": 24,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 466.039,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_114",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7621,
+  "total_latency_s": 72.363,
+  "final_script": "describe('Lazy-Loaded Components - Smooth Appearance', () => {\n  beforeEach(() => {\n    cy.visit('/lazy-load-demo');\n  });\n\n  it('should load lazy components smoothly without layout shift', () => {\n    // Verify initial page loads without lazy components\n    cy.get('[data-testid=\"initial-content\"]').should('be.visible');\n    cy.get('[data-testid=\"lazy-component-placeholder\"]').should('be.visible');\n    cy.get('[data-testid=\"lazy-component-placeholder\"]').should('contain', 'Loading...');\n\n    // Scroll to trigger lazy loading\n    cy.get('body').scrollTo('bottom');\n\n    // Wait for lazy component to load\n    cy.get('[data-testid=\"lazy-component\"]').should('be.visible');\n    cy.get('[data-testid=\"lazy-component\"]').should('not.have.class', 'loading');\n    cy.get('[data-testid=\"lazy-component\"]').should('contain', 'Loaded Content');\n\n    // Verify no layout shift occurred\n    cy.get('[data-testid=\"initial-content\"]').should('have.height', 100);\n    cy.get('[data-testid=\"lazy-component\"]').should('have.height', 200);\n    cy.get('[data-testid=\"initial-content\"]').should('have.width', 1000);\n    cy.get('[data-testid=\"lazy-component\"]').should('have.width', 1000);\n\n    // Verify smooth transition animation\n    cy.get('[data-testid=\"lazy-component\"]').should('have.class', 'fade-in');\n    cy.get('[data-testid=\"lazy-component\"]').should('have.css', 'opacity', '1');\n  });\n\n  it('should handle failed lazy component loading gracefully', () => {\n    // Intercept the API call for the lazy component and simulate failure\n    cy.intercept('GET', '/api/lazy-component-data', {\n      statusCode: 500,\n      body: { error: 'Server error' }\n    }).as('lazyComponentLoad');\n\n    // Scroll to trigger lazy loading\n    cy.get('body').scrollTo('bottom');\n\n    // Wait for the failed load attempt\n    cy.wait('@lazyComponentLoad');\n\n    // Verify error state is displayed instead of component\n    cy.get('[data-testid=\"lazy-component-placeholder\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Failed to load');\n\n    // Verify fallback UI is shown\n    cy.get('[data-testid=\"fallback-ui\"]').should('be.visible');\n    cy.get('[data-testid=\"fallback-ui\"]').should('contain', 'Try refreshing');\n\n    // Verify no layout shift occurred due to failed load\n    cy.get('[data-testid=\"initial-content\"]').should('have.height', 100);\n    cy.get('[data-testid=\"error-message\"]').should('have.height', 50);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7621,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4069,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.363,
+      "feedback_used": ""
+    }
+  ]
+}

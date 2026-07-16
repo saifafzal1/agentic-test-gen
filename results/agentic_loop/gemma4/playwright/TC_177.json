@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_177",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8485,
+  "total_latency_s": 72.473,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Download Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/files');\n  });\n\n  test('should successfully download a previously uploaded file', async ({ page }) => {\n    // Intercept the download request\n    await page.route('**/api/files/download/*', (route) => {\n      route.continue();\n    });\n\n    // Upload a file first\n    const fileInput = page.getByLabel('Upload file');\n    await fileInput.setInputFiles('playwright/fixtures/sample.pdf');\n    const uploadButton = page.getByRole('button', { name: 'Upload' });\n    await uploadButton.click();\n\n    // Wait for upload confirmation\n    const successMessage = page.getByText('File uploaded successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify file appears in list\n    const fileItem = page.getByText('sample.pdf');\n    await expect(fileItem).toBeVisible();\n\n    // Click download button\n    const downloadButton = page.getByRole('button', { name: 'Download' });\n    await downloadButton.click();\n\n    // Verify download prompt appears\n    const downloadPrompt = page.getByText('Download sample.pdf');\n    await expect(downloadPrompt).toBeVisible();\n\n    // Verify download link is active\n    const downloadLink = page.getByRole('link', { name: 'Download sample.pdf' });\n    await expect(downloadLink).toBeEnabled();\n  });\n\n  test('should handle download failure when file is not found', async ({ page }) => {\n    // Intercept the download request and simulate 404 error\n    await page.route('**/api/files/download/*', (route) => {\n      route.abort('failed');\n    });\n\n    // Navigate to file list\n    await page.goto('/files');\n\n    // Verify file list is visible\n    const fileList = page.getByRole('region', { name: 'File List' });\n    await expect(fileList).toBeVisible();\n\n    // Attempt to download a non-existent file\n    const downloadButton = page.getByRole('button', { name: 'Download' });\n    await downloadButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('File not found');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify download prompt does not appear\n    const downloadPrompt = page.getByText('Download');\n    await expect(downloadPrompt).not.toBeVisible();\n\n    // Verify download button is disabled after error\n    await expect(downloadButton).toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8485,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.495,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.473,
+      "feedback_used": ""
+    }
+  ]
+}

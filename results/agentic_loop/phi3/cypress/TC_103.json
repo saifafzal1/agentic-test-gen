@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_103",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7383,
+  "total_latency_s": 439.453,
+  "final_script": "describe('Session Expired Message', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should display session expired message when token times out', () => {\n    // Setup: Intercept the API call to get user data\n    cy.intercept('GET', '/api/user/data').as('getUserData');\n\n    // First, verify the page loads successfully\n    cy.get('[data-testid=\"dashboard-header\"]').should('be.visible');\n\n    // Verify initial user data is displayed\n    cy.wait('@getUserData').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n      cy.get('[data-testid=\"user-name\"]').should('contain', 'John Doe');\n    });\n\n    // Simulate token expiration by clearing session storage\n    cy.window().then((win) => {\n      win.sessionStorage.clear();\n    });\n\n    // Verify session expired message appears\n    cy.get('[data-testid=\"session-expired-message\"]').should('be.visible');\n    cy.get('[data-testid=\"session-expired-message\"]').should('contain', 'Your session has expired');\n\n    // Verify login button is visible for re-authentication\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n\n    // Verify error state styles are applied\n    cy.get('[data-testid=\"session-expired-message\"]').should('have.css', 'color', 'red');\n\n    // Verify user is redirected to login page\n    cy.url().should('include', '/login');\n  });\n\n  it('should not display session expired message when token is still valid', () => {\n    // Setup: Intercept the API call to get user data\n    cy.intercept('GET', '/api/user/data').as('getUserData');\n\n    // Verify page loads successfully\n    cy.get('[data-testid=\"dashboard-header\"]').should('be.visible');\n\n    // Verify initial user data is displayed\n    cy.wait('@getUserData').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n      cy.get('[data-testid=\"user-name\"]').should('contain', 'Jane Smith');\n    });\n\n    // Simulate token renewal by setting a valid session token\n    cy.window().then((win) => {\n      win.sessionStorage.setItem('token', 'valid-token-value');\n    });\n\n    // Verify session expired message is not displayed\n    cy.get('[data-testid=\"session-expired-message\"]').should('not.exist');\n\n    // Verify user can still interact with the page\n    cy.get('[data-testid=\"dashboard-header\"]').should('be.visible');\n    cy.get('[data-testid=\"user-name\"]').should('contain', 'Jane Smith');\n\n    // Verify no error state styles are applied\n    cy.get('[data-testid=\"session-expired-message\"]').should('not.have.css', 'color', 'red');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7383,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3275,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 439.453,
+      "feedback_used": ""
+    }
+  ]
+}

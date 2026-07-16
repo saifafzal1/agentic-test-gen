@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_047",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7729,
+  "total_latency_s": 71.713,
+  "final_script": "describe('Skip to Content Link Accessibility', () => {\n  beforeEach(() => {\n    cy.visit('/accessibility-test');\n  });\n\n  it('should display skip to content link and navigate to main content', () => {\n    // Verify skip to content link is visible\n    cy.get('[data-testid=\"skip-to-content\"]').should('be.visible');\n    cy.get('[data-testid=\"skip-to-content\"]').should('contain', 'Skip to main content');\n\n    // Verify link has correct href\n    cy.get('[data-testid=\"skip-to-content\"]').should('have.attr', 'href', '#main-content');\n\n    // Click the skip to content link\n    cy.get('[data-testid=\"skip-to-content\"]').click();\n\n    // Verify page scrolls to main content section\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n    cy.window().then((win) => {\n      expect(win.scrollY).to.be.greaterThan(0);\n    });\n\n    // Verify main content is now in viewport\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n  });\n\n  it('should hide skip to content link after first click and maintain focus', () => {\n    // Verify skip to content link is visible before first click\n    cy.get('[data-testid=\"skip-to-content\"]').should('be.visible');\n\n    // Click the skip to content link\n    cy.get('[data-testid=\"skip-to-content\"]').click();\n\n    // Verify skip to content link is hidden after first click\n    cy.get('[data-testid=\"skip-to-content\"]').should('not.exist');\n\n    // Verify main content is still accessible and visible\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n\n    // Verify focus is on main content\n    cy.get('[data-testid=\"main-content\"]').should('have.focus');\n\n    // Verify skip to content link does not reappear on subsequent clicks\n    cy.get('[data-testid=\"skip-to-content\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7729,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4431,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.713,
+      "feedback_used": ""
+    }
+  ]
+}

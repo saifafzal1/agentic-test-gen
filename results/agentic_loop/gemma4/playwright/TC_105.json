@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_105",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8636,
+  "total_latency_s": 193.626,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Unsaved Form Navigation Warning', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should display warning and prevent navigation when form is unsaved', async ({ page }) => {\n    // Fill form fields\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('John Doe');\n\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('john@example.com');\n\n    // Click save button to mark as saved\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await saveButton.click();\n\n    // Verify form is saved\n    const savedMessage = page.getByText('Form saved successfully');\n    await expect(savedMessage).toBeVisible();\n\n    // Clear form to make it unsaved again\n    await nameInput.clear();\n    await emailInput.clear();\n\n    // Verify form is now unsaved\n    const unsavedIndicator = page.getByText('Unsaved changes');\n    await expect(unsavedIndicator).toBeVisible();\n\n    // Attempt to navigate away\n    const navigateButton = page.getByRole('button', { name: /navigate/i });\n    await navigateButton.click();\n\n    // Verify warning modal appears\n    const warningModal = page.locator('[data-testid=\"unsaved-warning-modal\"]');\n    await expect(warningModal).toBeVisible();\n\n    const warningMessage = page.getByText('You have unsaved changes');\n    await expect(warningMessage).toBeVisible();\n\n    // Verify warning button is visible\n    const warningConfirmButton = page.getByRole('button', { name: /leave/i });\n    await expect(warningConfirmButton).toBeVisible();\n\n    // Verify cancel button is visible\n    const warningCancelButton = page.getByRole('button', { name: /cancel/i });\n    await expect(warningCancelButton).toBeVisible();\n\n    // Click cancel to stay on form\n    await warningCancelButton.click();\n\n    // Verify warning modal is closed\n    await expect(warningModal).not.toBeVisible();\n\n    // Verify form data is still present\n    await expect(nameInput).toHaveValue('John Doe');\n    await expect(emailInput).toHaveValue('john@example.com');\n  });\n\n  test('should allow navigation when form is saved', async ({ page }) => {\n    // Fill form fields\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('Jane Smith');\n\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('jane@example.com');\n\n    // Click save button\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await saveButton.click();\n\n    // Verify form is saved\n    const savedMessage = page.getByText('Form saved successfully');\n    await expect(savedMessage).toBeVisible();\n\n    // Attempt to navigate away\n    const navigateButton = page.getByRole('button', { name: /navigate/i });\n    await navigateButton.click();\n\n    // Verify warning modal does not appear\n    const warningModal = page.locator('[data-testid=\"unsaved-warning-modal\"]');\n    await expect(warningModal).not.toBeVisible();\n\n    // Verify navigation proceeds\n    await expect(page).toHaveURL(/.*\\/dashboard/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.551,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.57,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 76.537,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8636,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5455,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 117.089,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

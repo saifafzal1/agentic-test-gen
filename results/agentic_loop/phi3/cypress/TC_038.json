@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_038",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7745,
+  "total_latency_s": 23.421,
+  "final_script": "describe('Home Page Navigation via Logo', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should navigate to home page when logo is clicked', () => {\n    // Verify logo is visible\n    cy.get('[data-testid=\"logo\"]').should('be.visible');\n    cy.get('[data-testid=\"logo\"]').should('contain', 'Company Name');\n\n    // Click the logo\n    cy.get('[data-testid=\"logo\"]').click();\n\n    // Verify navigation to home page\n    cy.url().should('include', '/');\n    cy.get('[data-testid=\"home-title\"]').should('be.visible');\n    cy.get('[data-testid=\"home-title\"]').should('contain', 'Welcome to Company Name');\n\n    // Verify home page content is displayed\n    cy.get('[data-testid=\"welcome-message\"]').should('be.visible');\n    cy.get('[data-testid=\"welcome-message\"]').should('contain', 'Welcome to our website');\n  });\n\n  it('should handle logo click when already on home page', () => {\n    // Navigate to home page\n    cy.visit('/');\n\n    // Verify we are on home page\n    cy.url().should('include', '/');\n\n    // Click the logo\n    cy.get('[data-testid=\"logo\"]').click();\n\n    // Verify navigation does not change\n    cy.url().should('include', '/');\n\n    // Verify home page content remains unchanged\n    cy.get('[data-testid=\"home-title\"]').should('be.visible');\n    cy.get('[data-testid=\"home-title\"]').should('contain', 'Welcome to Company Name');\n\n    // Verify no navigation history is created\n    cy.get('[data-testid=\"nav-history\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7745,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4483,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 23.421,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_053",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7776,
+  "total_latency_s": 71.281,
+  "final_script": "describe('Dropdown Menu Keyboard Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/dropdown-menu');\n  });\n\n  it('should navigate dropdown menu items using arrow keys', () => {\n    // Open the dropdown menu\n    cy.get('[data-testid=\"dropdown-button\"]').click();\n    \n    // Verify dropdown is visible\n    cy.get('[data-testid=\"dropdown-menu\"]').should('be.visible');\n    \n    // Navigate to first item using down arrow\n    cy.get('[data-testid=\"dropdown-menu\"]').type('{downarrow}');\n    cy.get('[data-testid=\"dropdown-item-1\"]').should('have.class', 'active');\n    \n    // Navigate to second item using down arrow\n    cy.get('[data-testid=\"dropdown-menu\"]').type('{downarrow}');\n    cy.get('[data-testid=\"dropdown-item-2\"]').should('have.class', 'active');\n    \n    // Navigate to third item using down arrow\n    cy.get('[data-testid=\"dropdown-menu\"]').type('{downarrow}');\n    cy.get('[data-testid=\"dropdown-item-3\"]').should('have.class', 'active');\n    \n    // Navigate to first item using up arrow\n    cy.get('[data-testid=\"dropdown-menu\"]').type('{uparrow}');\n    cy.get('[data-testid=\"dropdown-item-2\"]').should('have.class', 'active');\n    \n    // Navigate to first item using up arrow\n    cy.get('[data-testid=\"dropdown-menu\"]').type('{uparrow}');\n    cy.get('[data-testid=\"dropdown-item-1\"]').should('have.class', 'active');\n    \n    // Press Enter to select the active item\n    cy.get('[data-testid=\"dropdown-menu\"]').type('{enter}');\n    cy.get('[data-testid=\"dropdown-menu\"]').should('not.exist');\n    cy.get('[data-testid=\"dropdown-button\"]').should('be.visible');\n  });\n\n  it('should handle keyboard navigation with edge cases', () => {\n    // Open the dropdown menu\n    cy.get('[data-testid=\"dropdown-button\"]').click();\n    \n    // Navigate to last item using down arrow\n    cy.get('[data-testid=\"dropdown-menu\"]').type('{downarrow}{downarrow}{downarrow}');\n    cy.get('[data-testid=\"dropdown-item-3\"]').should('have.class', 'active');\n    \n    // Navigate past last item (should wrap to first)\n    cy.get('[data-testid=\"dropdown-menu\"]').type('{downarrow}');\n    cy.get('[data-testid=\"dropdown-item-1\"]').should('have.class', 'active');\n    \n    // Navigate to first item using up arrow\n    cy.get('[data-testid=\"dropdown-menu\"]').type('{uparrow}');\n    cy.get('[data-testid=\"dropdown-item-3\"]').should('have.class', 'active');\n    \n    // Navigate past first item (should wrap to last)\n    cy.get('[data-testid=\"dropdown-menu\"]').type('{uparrow}');\n    cy.get('[data-testid=\"dropdown-item-3\"]').should('have.class', 'active');\n    \n    // Press Escape to close dropdown\n    cy.get('[data-testid=\"dropdown-menu\"]').type('{escape}');\n    cy.get('[data-testid=\"dropdown-menu\"]').should('not.exist');\n    \n    // Verify dropdown button is still visible\n    cy.get('[data-testid=\"dropdown-button\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7776,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4586,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.281,
+      "feedback_used": ""
+    }
+  ]
+}

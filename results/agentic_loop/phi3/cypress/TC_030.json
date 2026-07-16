@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_030",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7153,
+  "total_latency_s": 46.834,
+  "final_script": "describe('Search Field Dropdown Matching Options', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should display matching options as user types in search field', () => {\n    // Setup: intercept the API call for search\n    cy.intercept('GET', '/api/search*', (req) => {\n      req.reply((res) => {\n        res.body = {\n          results: [\n            { id: 1, name: 'Apple' },\n            { id: 2, name: 'Banana' },\n            { id: 3, name: 'Cherry' },\n            { id: 4, name: 'Date' },\n            { id: 5, name: 'Elderberry' },\n          ]\n        };\n      });\n    }).as('searchResults');\n\n    // Verify search input is visible\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n\n    // Type in search field to trigger dropdown\n    cy.get('[data-testid=\"search-input\"]').type('a');\n\n    // Wait for API call\n    cy.wait('@searchResults');\n\n    // Verify dropdown appears\n    cy.get('[data-testid=\"search-dropdown\"]').should('be.visible');\n\n    // Verify first matching option is displayed\n    cy.get('[data-testid=\"search-dropdown\"]').should('contain', 'Apple');\n\n    // Verify dropdown contains all matching options\n    cy.get('[data-testid=\"search-dropdown\"]').should('contain', 'Banana');\n    cy.get('[data-testid=\"search-dropdown\"]').should('contain', 'Cherry');\n    cy.get('[data-testid=\"search-dropdown\"]').should('contain', 'Date');\n    cy.get('[data-testid=\"search-dropdown\"]').should('contain', 'Elderberry');\n\n    // Verify dropdown has correct number of options\n    cy.get('[data-testid=\"search-dropdown\"]').should('have.length', 5);\n\n    // Verify dropdown is not empty when no matches\n    cy.get('[data-testid=\"search-input\"]').type('zzz');\n    cy.wait('@searchResults');\n    cy.get('[data-testid=\"search-dropdown\"]').should('contain', 'No results found');\n\n    // Verify dropdown is empty when no matches\n    cy.get('[data-testid=\"search-dropdown\"]').should('not.exist');\n  });\n\n  it('should handle empty search input and display no results message', () => {\n    // Verify search input is visible\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n\n    // Clear search input\n    cy.get('[data-testid=\"search-input\"]').clear();\n\n    // Verify no results message is displayed\n    cy.get('[data-testid=\"no-results-message\"]').should('be.visible');\n\n    // Verify no results message contains expected text\n    cy.get('[data-testid=\"no-results-message\"]').should('contain', 'No results found');\n\n    // Verify search dropdown is not visible\n    cy.get('[data-testid=\"search-dropdown\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7153,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2508,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 46.834,
+      "feedback_used": ""
+    }
+  ]
+}

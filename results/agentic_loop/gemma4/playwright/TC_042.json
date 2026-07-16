@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_042",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8177,
+  "total_latency_s": 180.426,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Tab Navigation with URL Hash Update', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/page-with-tabs');\n  });\n\n  test('should update URL hash when clicking a tab', async ({ page }) => {\n    // Verify initial URL does not have a hash\n    await expect(page).toHaveURL('/page-with-tabs');\n\n    // Click the first tab using getByRole\n    const tab1 = page.getByRole('tab', { name: 'Tab 1' });\n    await tab1.click();\n\n    // Verify URL hash is updated to #tab-1\n    await expect(page).toHaveURL(/#tab-1/);\n\n    // Verify tab content is visible\n    const tabContent = page.getByText('Content for Tab 1');\n    await expect(tabContent).toBeVisible();\n\n    // Click the second tab using getByRole\n    const tab2 = page.getByRole('tab', { name: 'Tab 2' });\n    await tab2.click();\n\n    // Verify URL hash is updated to #tab-2\n    await expect(page).toHaveURL(/#tab-2/);\n\n    // Verify tab content is visible\n    const tabContent2 = page.getByText('Content for Tab 2');\n    await expect(tabContent2).toBeVisible();\n\n    // Click the third tab using getByRole\n    const tab3 = page.getByRole('tab', { name: 'Tab 3' });\n    await tab3.click();\n\n    // Verify URL hash is updated to #tab-3\n    await expect(page).toHaveURL(/#tab-3/);\n\n    // Verify tab content is visible\n    const tabContent3 = page.getByText('Content for Tab 3');\n    await expect(tabContent3).toBeVisible();\n  });\n\n  test('should navigate to a specific tab using URL hash and update content', async ({ page }) => {\n    // Navigate directly to the second tab using URL hash\n    await page.goto('/page-with-tabs#tab-2');\n\n    // Verify URL hash is set to #tab-2\n    await expect(page).toHaveURL(/#tab-2/);\n\n    // Verify tab content is visible\n    const tabContent = page.getByText('Content for Tab 2');\n    await expect(tabContent).toBeVisible();\n\n    // Verify tab button is active\n    const tabButton = page.getByRole('tab', { name: 'Tab 2' });\n    await expect(tabButton).toHaveAttribute('aria-selected', 'true');\n\n    // Click the first tab using getByRole\n    const tab1 = page.getByRole('tab', { name: 'Tab 1' });\n    await tab1.click();\n\n    // Verify URL hash is updated to #tab-1\n    await expect(page).toHaveURL(/#tab-1/);\n\n    // Verify tab content is visible\n    const tabContent1 = page.getByText('Content for Tab 1');\n    await expect(tabContent1).toBeVisible();\n\n    // Verify tab button is active\n    await expect(tab1).toHaveAttribute('aria-selected', 'true');\n\n    // Click the third tab using getByRole\n    const tab3 = page.getByRole('tab', { name: 'Tab 3' });\n    await tab3.click();\n\n    // Verify URL hash is updated to #tab-3\n    await expect(page).toHaveURL(/#tab-3/);\n\n    // Verify tab content is visible\n    const tabContent3 = page.getByText('Content for Tab 3');\n    await expect(tabContent3).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4958,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.406,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 71.627,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8177,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4922,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 108.799,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

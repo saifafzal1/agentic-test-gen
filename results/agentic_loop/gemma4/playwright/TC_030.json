@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_030",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8166,
+  "total_latency_s": 71.106,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Field Dropdown - Matching Options', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should display matching options dropdown when user types in search field', async ({ page }) => {\n    // Locate search input using getByLabel\n    const searchInput = page.getByLabel('Search');\n    await expect(searchInput).toBeVisible();\n\n    // Type a partial search term\n    await searchInput.fill('apple');\n\n    // Wait for dropdown to appear\n    await page.waitForSelector('[data-testid=\"search-dropdown\"]');\n    const dropdown = page.locator('[data-testid=\"search-dropdown\"]');\n    await expect(dropdown).toBeVisible();\n\n    // Verify dropdown contains matching options\n    const options = page.locator('[data-testid=\"search-option\"]');\n    await expect(options).toHaveCount(2);\n\n    // Verify option text\n    const firstOption = page.locator('[data-testid=\"search-option\"]').first();\n    await expect(firstOption).toContainText('Apple');\n\n    const secondOption = page.locator('[data-testid=\"search-option\"]').nth(1);\n    await expect(secondOption).toContainText('Apple Pie');\n\n    // Select the first option\n    await firstOption.click();\n\n    // Verify search input is populated with selected value\n    await expect(searchInput).toHaveValue('Apple');\n  });\n\n  test('should not display dropdown when search term does not match any options', async ({ page }) => {\n    // Locate search input using getByLabel\n    const searchInput = page.getByLabel('Search');\n    await expect(searchInput).toBeVisible();\n\n    // Type a non-existent search term\n    await searchInput.fill('xyz123');\n\n    // Wait briefly and verify dropdown does not appear\n    await page.waitForTimeout(100);\n    const dropdown = page.locator('[data-testid=\"search-dropdown\"]');\n    await expect(dropdown).not.toBeVisible();\n\n    // Verify search input is empty or unchanged\n    await expect(searchInput).toHaveValue('xyz123');\n\n    // Clear the search input\n    await searchInput.clear();\n\n    // Verify dropdown remains hidden\n    await expect(dropdown).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8166,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4886,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.106,
+      "feedback_used": ""
+    }
+  ]
+}

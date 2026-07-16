@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_144",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.837,
+  "total_latency_s": 72.211,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal with Tabbed Content - Active Tab Persistence', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/modal-tabs');\n  });\n\n  test('should remember the active tab when modal is closed and reopened', async ({ page }) => {\n    // Open the modal\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modal = page.locator('[data-testid=\"modal-dialog\"]');\n    await expect(modal).toBeVisible();\n\n    // Verify tab content is visible\n    const tabContent = page.locator('[data-testid=\"tab-content\"]');\n    await expect(tabContent).toBeVisible();\n\n    // Click on the first tab\n    const tab1 = page.getByRole('tab', { name: /tab 1/i });\n    await tab1.click();\n\n    // Verify tab 1 content is visible\n    const tab1Content = page.locator('[data-testid=\"tab-content-1\"]');\n    await expect(tab1Content).toBeVisible();\n\n    // Close the modal\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n\n    // Verify modal is closed\n    await expect(modal).not.toBeVisible();\n\n    // Reopen the modal\n    await openButton.click();\n\n    // Verify modal is visible again\n    await expect(modal).toBeVisible();\n\n    // Verify tab 1 is still active\n    await expect(tab1).toHaveAttribute('aria-selected', 'true');\n    await expect(tab1Content).toBeVisible();\n\n    // Verify other tabs are not active\n    const tab2 = page.getByRole('tab', { name: /tab 2/i });\n    await expect(tab2).not.toHaveAttribute('aria-selected', 'true');\n    const tab3 = page.getByRole('tab', { name: /tab 3/i });\n    await expect(tab3).not.toHaveAttribute('aria-selected', 'true');\n  });\n\n  test('should switch to the correct tab when modal is reopened after closing', async ({ page }) => {\n    // Open the modal\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Click on the second tab\n    const tab2 = page.getByRole('tab', { name: /tab 2/i });\n    await tab2.click();\n\n    // Verify tab 2 content is visible\n    const tab2Content = page.locator('[data-testid=\"tab-content-2\"]');\n    await expect(tab2Content).toBeVisible();\n\n    // Close the modal\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n\n    // Reopen the modal\n    await openButton.click();\n\n    // Verify tab 2 is still active\n    await expect(tab2).toHaveAttribute('aria-selected', 'true');\n    await expect(tab2Content).toBeVisible();\n\n    // Verify tab 1 and tab 3 are not active\n    const tab1 = page.getByRole('tab', { name: /tab 1/i });\n    await expect(tab1).not.toHaveAttribute('aria-selected', 'true');\n    const tab3 = page.getByRole('tab', { name: /tab 3/i });\n    await expect(tab3).not.toHaveAttribute('aria-selected', 'true');\n\n    // Click on the third tab\n    const tab3 = page.getByRole('tab', { name: /tab 3/i });\n    await tab3.click();\n\n    // Verify tab 3 content is visible\n    const tab3Content = page.locator('[data-testid=\"tab-content-3\"]');\n    await expect(tab3Content).toBeVisible();\n\n    // Close the modal\n    await closeButton.click();\n\n    // Reopen the modal\n    await openButton.click();\n\n    // Verify tab 3 is still active\n    await expect(tab3).toHaveAttribute('aria-selected', 'true');\n    await expect(tab3Content).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.837,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5567,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.211,
+      "feedback_used": ""
+    }
+  ]
+}

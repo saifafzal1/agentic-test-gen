@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_125",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.793,
+  "total_latency_s": 31.372,
+  "final_script": "describe('Async State Preservation During Browser Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/async-state-test');\n  });\n\n  it('should preserve async state when navigating back to the same page', () => {\n    // Setup: Load the page with async data\n    cy.intercept('GET', '/api/async-data').as('fetchAsyncData');\n    cy.wait('@fetchAsyncData');\n\n    // Verify async data is loaded\n    cy.get('[data-testid=\"async-data-value\"]').should('be.visible');\n    cy.get('[data-testid=\"async-data-value\"]').should('contain', 'Loading...');\n\n    // Navigate to another page\n    cy.visit('/another-page');\n\n    // Verify navigation works\n    cy.url().should('include', '/another-page');\n\n    // Navigate back to the async state page\n    cy.visit('/async-state-test');\n\n    // Verify async state is still preserved\n    cy.get('[data-testid=\"async-data-value\"]').should('be.visible');\n    cy.get('[data-testid=\"async-data-value\"]').should('contain', 'Loaded');\n  });\n\n  it('should preserve async state when navigating to a different page and then back', () => {\n    // Setup: Load the page with async data\n    cy.intercept('GET', '/api/async-data').as('fetchAsyncData');\n    cy.wait('@fetchAsyncData');\n\n    // Verify async data is loaded\n    cy.get('[data-testid=\"async-data-value\"]').should('be.visible');\n    cy.get('[data-testid=\"async-data-value\"]').should('contain', 'Loading...');\n\n    // Navigate to a different page\n    cy.visit('/contact');\n\n    // Verify navigation works\n    cy.url().should('include', '/contact');\n\n    // Navigate back to the async state page\n    cy.visit('/async-state-test');\n\n    // Verify async state is still preserved\n    cy.get('[data-testid=\"async-data-value\"]').should('be.visible');\n    cy.get('[data-testid=\"async-data-value\"]').should('contain', 'Loaded');\n\n    // Verify async data is still present after multiple navigations\n    cy.get('[data-testid=\"async-data-value\"]').should('contain', 'Loaded');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.793,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5099,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 31.372,
+      "feedback_used": ""
+    }
+  ]
+}

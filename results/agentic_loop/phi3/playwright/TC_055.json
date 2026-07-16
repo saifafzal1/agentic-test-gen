@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_055",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7923,
+  "total_latency_s": 49.21,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Pagination Controls - Load Correct Page of Results', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should load the correct page of results when user clicks on pagination controls', async ({ page }) => {\n    // Verify initial page is loaded\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n\n    // Verify initial page number is displayed\n    const pageNumber = page.getByRole('heading', { name: /page 1/i });\n    await expect(pageNumber).toBeVisible();\n\n    // Verify initial results are displayed\n    const resultItem = page.getByRole('listitem', { name: /item 1/i });\n    await expect(resultItem).toBeVisible();\n\n    // Click on page 2 button\n    const page2Button = page.getByRole('button', { name: /page 2/i });\n    await page2Button.click();\n\n    // Wait for page to load\n    await page.waitForLoadState('networkidle');\n\n    // Verify page number has changed to 2\n    const pageNumber2 = page.getByRole('heading', { name: /page 2/i });\n    await expect(pageNumber2).toBeVisible();\n\n    // Verify results are updated\n    const resultItem2 = page.getByRole('listitem', { name: /item 2/i });\n    await expect(resultItem2).toBeVisible();\n\n    // Verify page 2 button is disabled\n    await expect(page2Button).toBeDisabled();\n\n    // Click on page 3 button\n    const page3Button = page.getByRole('button', { name: /page 3/i });\n    await page3Button.click();\n\n    // Wait for page to load\n    await page.waitForLoadState('networkidle');\n\n    // Verify page number has changed to 3\n    const pageNumber3 = page.getByRole('heading', { name: /page 3/i });\n    await expect(pageNumber3).toBeVisible();\n\n    // Verify results are updated\n    const resultItem3 = page.getByRole('listitem', { name: /item 3/i });\n    await expect(resultItem3).toBeVisible();\n\n    // Verify page 3 button is disabled\n    await expect(page3Button).toBeDisabled();\n  });\n\n  test('should handle edge case when user clicks on disabled pagination button', async ({ page }) => {\n    // Verify initial page is loaded\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n\n    // Verify initial page number is displayed\n    const pageNumber = page.getByRole('heading', { name: /page 1/i });\n    await expect(pageNumber).toBeVisible();\n\n    // Verify initial results are displayed\n    const resultItem = page.getByRole('listitem', { name: /item 1/i });\n    await expect(resultItem).toBeVisible();\n\n    // Click on page 5 button (disabled)\n    const page5Button = page.getByRole('button', { name: /page 5/i });\n    await page5Button.click();\n\n    // Verify page number does not change\n    const pageNumber5 = page.getByRole('heading', { name: /page 5/i });\n    await expect(pageNumber5).not.toBeVisible();\n\n    // Verify page 5 button is still disabled\n    await expect(page5Button).toBeDisabled();\n\n    // Verify no error message is displayed\n    const errorMessage = page.getByText(/page not available/i);\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7923,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4076,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 49.21,
+      "feedback_used": ""
+    }
+  ]
+}

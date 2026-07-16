@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_140",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8381,
+  "total_latency_s": 35.718,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Popover Toggle on Button Click', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/popover-toggle');\n  });\n\n  test('should toggle popover visibility on button click', async ({ page }) => {\n    // Verify popover is not visible initially\n    const popover = page.getByRole('dialog');\n    await expect(popover).not.toBeVisible();\n\n    // Verify button is visible and enabled\n    const toggleButton = page.getByRole('button', { name: /toggle popover/i });\n    await expect(toggleButton).toBeVisible();\n\n    // Click the toggle button to open the popover\n    await toggleButton.click();\n\n    // Verify popover is now visible\n    await expect(popover).toBeVisible();\n\n    // Verify popover content is displayed\n    const popoverContent = page.getByText(/popover content/i);\n    await expect(popoverContent).toBeVisible();\n\n    // Verify close button is visible\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Click the close button to close the popover\n    await closeButton.click();\n\n    // Verify popover is hidden again\n    await expect(popover).not.toBeVisible();\n  });\n\n  test('should handle multiple clicks and maintain state', async ({ page }) => {\n    // Verify popover is not visible initially\n    const popover = page.getByRole('dialog');\n    await expect(popover).not.toBeVisible();\n\n    // Verify button is visible and enabled\n    const toggleButton = page.getByRole('button', { name: /toggle popover/i });\n    await expect(toggleButton).toBeVisible();\n\n    // Click the toggle button to open the popover\n    await toggleButton.click();\n    await expect(popover).toBeVisible();\n\n    // Click the toggle button again to close the popover\n    await toggleButton.click();\n    await expect(popover).not.toBeVisible();\n\n    // Click the toggle button a third time to open the popover\n    await toggleButton.click();\n    await expect(popover).toBeVisible();\n\n    // Verify popover content is still displayed\n    const popoverContent = page.getByText(/popover content/i);\n    await expect(popoverContent).toBeVisible();\n\n    // Verify close button is still visible\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Click the close button to close the popover\n    await closeButton.click();\n\n    // Verify popover is hidden again\n    await expect(popover).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8381,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5603,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 35.718,
+      "feedback_used": ""
+    }
+  ]
+}

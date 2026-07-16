@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_124",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8007,
+  "total_latency_s": 72.088,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Long-Running Task Persistence Across Page Refreshes', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/tasks');\n  });\n\n  test('should persist long-running task state across page refresh', async ({ page }) => {\n    // Start a long-running task\n    const startButton = page.getByRole('button', { name: /start task/i });\n    await startButton.click();\n\n    // Verify task is in progress\n    const taskStatus = page.getByText(/in progress/i);\n    await expect(taskStatus).toBeVisible();\n\n    // Verify task has a unique ID\n    const taskId = page.getByText(/task id:/i).first().textContent();\n    expect(taskId).toBeDefined();\n\n    // Verify progress bar is visible\n    const progressBar = page.getByRole('progressbar');\n    await expect(progressBar).toBeVisible();\n\n    // Simulate page refresh\n    await page.reload();\n\n    // Verify task status persists after refresh\n    await expect(taskStatus).toBeVisible();\n    await expect(page.getByText(/task id:/i).first()).toBeVisible();\n\n    // Verify progress bar is still visible and has a value\n    await expect(progressBar).toBeVisible();\n    const progressValue = await progressBar.evaluate((el) => el.value);\n    expect(progressValue).toBeGreaterThan(0);\n\n    // Verify task is still in progress\n    await expect(page.getByText(/in progress/i)).toBeVisible();\n\n    // Verify task has a completion button\n    const completeButton = page.getByRole('button', { name: /complete task/i });\n    await expect(completeButton).toBeVisible();\n\n    // Complete the task\n    await completeButton.click();\n\n    // Verify task is completed\n    await expect(page.getByText(/task completed/i)).toBeVisible();\n    await expect(page.getByText(/in progress/i)).not.toBeVisible();\n  });\n\n  test('should handle task interruption and resume after page refresh', async ({ page }) => {\n    // Start a long-running task\n    const startButton = page.getByRole('button', { name: /start task/i });\n    await startButton.click();\n\n    // Verify task is in progress\n    const taskStatus = page.getByText(/in progress/i);\n    await expect(taskStatus).toBeVisible();\n\n    // Verify task has a unique ID\n    const taskId = page.getByText(/task id:/i).first().textContent();\n    expect(taskId).toBeDefined();\n\n    // Simulate page refresh\n    await page.reload();\n\n    // Verify task status persists after refresh\n    await expect(taskStatus).toBeVisible();\n    await expect(page.getByText(/task id:/i).first()).toBeVisible();\n\n    // Verify progress bar is visible and has a value\n    const progressBar = page.getByRole('progressbar');\n    await expect(progressBar).toBeVisible();\n    const progressValue = await progressBar.evaluate((el) => el.value);\n    expect(progressValue).toBeGreaterThan(0);\n\n    // Verify task is still in progress\n    await expect(page.getByText(/in progress/i)).toBeVisible();\n\n    // Verify resume button is available\n    const resumeButton = page.getByRole('button', { name: /resume task/i });\n    await expect(resumeButton).toBeVisible();\n\n    // Click resume button\n    await resumeButton.click();\n\n    // Verify task is still in progress\n    await expect(taskStatus).toBeVisible();\n\n    // Verify progress bar value increases\n    await page.waitForTimeout(500);\n    const updatedProgressValue = await progressBar.evaluate((el) => el.value);\n    expect(updatedProgressValue).toBeGreaterThan(progressValue);\n\n    // Verify task is completed\n    await page.waitForTimeout(1000);\n    await expect(page.getByText(/task completed/i)).toBeVisible();\n    await expect(page.getByText(/in progress/i)).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8007,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4358,
+        "missing_keywords": [],
+        "assertion_count": 23,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.088,
+      "feedback_used": ""
+    }
+  ]
+}

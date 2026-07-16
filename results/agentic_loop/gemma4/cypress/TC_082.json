@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_082",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7635,
+  "total_latency_s": 72.534,
+  "final_script": "describe('List Item Reordering by Drag and Drop', () => {\n  beforeEach(() => {\n    cy.visit('/list-items');\n  });\n\n  it('should successfully reorder list items by dragging and dropping', () => {\n    // Verify initial list order\n    cy.get('[data-testid=\"list-item-1\"]').should('contain', 'First Item');\n    cy.get('[data-testid=\"list-item-2\"]').should('contain', 'Second Item');\n    cy.get('[data-testid=\"list-item-3\"]').should('contain', 'Third Item');\n\n    // Drag the first item to the end\n    cy.get('[data-testid=\"list-item-1\"]').trigger('mousedown', { button: 0 });\n    cy.get('[data-testid=\"list-item-1\"]').trigger('mousemove', { clientX: 500, clientY: 500 });\n    cy.get('[data-testid=\"list-item-1\"]').trigger('mouseup', { force: true });\n\n    // Verify the new order\n    cy.get('[data-testid=\"list-item-1\"]').should('contain', 'First Item');\n    cy.get('[data-testid=\"list-item-2\"]').should('contain', 'Second Item');\n    cy.get('[data-testid=\"list-item-3\"]').should('contain', 'Third Item');\n    cy.get('[data-testid=\"list-item-1\"]').should('have.attr', 'data-order', '3');\n    cy.get('[data-testid=\"list-item-2\"]').should('have.attr', 'data-order', '1');\n    cy.get('[data-testid=\"list-item-3\"]').should('have.attr', 'data-order', '2');\n\n    // Verify API call for reordering\n    cy.intercept('POST', '/api/list-items/reorder').as('reorderItems');\n    cy.get('[data-testid=\"list-item-1\"]').trigger('mousedown', { button: 0 });\n    cy.get('[data-testid=\"list-item-1\"]').trigger('mousemove', { clientX: 500, clientY: 500 });\n    cy.get('[data-testid=\"list-item-1\"]').trigger('mouseup', { force: true });\n    cy.wait('@reorderItems');\n\n    // Verify success message\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'List reordered successfully');\n  });\n\n  it('should handle drag and drop with empty list or invalid items', () => {\n    // Navigate to an empty list\n    cy.visit('/list-items/empty');\n\n    // Verify empty state message\n    cy.get('[data-testid=\"empty-state-message\"]').should('be.visible').should('contain', 'No items in this list');\n\n    // Attempt to drag an item (should not exist)\n    cy.get('[data-testid=\"list-item-1\"]').should('not.exist');\n\n    // Verify no reorder API call is made\n    cy.intercept('POST', '/api/list-items/reorder').as('reorderItems');\n    cy.get('[data-testid=\"list-item-1\"]').trigger('mousedown', { button: 0 });\n    cy.get('[data-testid=\"list-item-1\"]').trigger('mousemove', { clientX: 500, clientY: 500 });\n    cy.get('[data-testid=\"list-item-1\"]').trigger('mouseup', { force: true });\n\n    cy.wait(100); // Wait for potential async operations\n    cy.get('[data-testid=\"empty-state-message\"]').should('be.visible');\n\n    // Verify no error message appears\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7635,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4116,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.534,
+      "feedback_used": ""
+    }
+  ]
+}

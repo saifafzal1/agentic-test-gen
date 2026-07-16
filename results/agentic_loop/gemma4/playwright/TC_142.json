@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_142",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8925,
+  "total_latency_s": 80.553,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Dialog - Focus Management on Close', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/modal-dialog');\n  });\n\n  test('should move focus back to trigger button when modal closes via close button', async ({ page }) => {\n    // Open modal by clicking trigger button\n    const triggerButton = page.getByRole('button', { name: /open modal/i });\n    await triggerButton.click();\n\n    // Verify modal is visible\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n\n    // Verify focus is on modal trigger button\n    await expect(triggerButton).toBeFocused();\n\n    // Close modal using close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n\n    // Verify modal is no longer visible\n    await expect(modal).not.toBeVisible();\n\n    // Verify focus is returned to trigger button\n    await expect(triggerButton).toBeFocused();\n  });\n\n  test('should move focus back to trigger button when modal closes via escape key', async ({ page }) => {\n    // Open modal by clicking trigger button\n    const triggerButton = page.getByRole('button', { name: /open modal/i });\n    await triggerButton.click();\n\n    // Verify modal is visible\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n\n    // Verify focus is on modal trigger button\n    await expect(triggerButton).toBeFocused();\n\n    // Close modal using escape key\n    await page.keyboard.press('Escape');\n\n    // Verify modal is no longer visible\n    await expect(modal).not.toBeVisible();\n\n    // Verify focus is returned to trigger button\n    await expect(triggerButton).toBeFocused();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8925,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.7416,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 80.553,
+      "feedback_used": ""
+    }
+  ]
+}

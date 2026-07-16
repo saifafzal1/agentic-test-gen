@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_165",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7446,
+  "total_latency_s": 50.438,
+  "final_script": "describe('Print Filtered Table View', () => {\n  beforeEach(() => {\n    cy.visit('/table-view');\n  });\n\n  it('should print a filtered table view with valid filters', () => {\n    // Setup: Apply filters to table\n    cy.get('[data-testid=\"filter-input-name\"]').type('John');\n    cy.get('[data-testid=\"filter-input-age\"]').type('30');\n    cy.get('[data-testid=\"apply-filters-btn\"]').click();\n\n    // Verify filters are applied\n    cy.get('[data-testid=\"filter-status\"]').should('contain', 'Active');\n    cy.get('[data-testid=\"filter-status\"]').should('contain', 'Inactive');\n\n    // Verify table is filtered\n    cy.get('[data-testid=\"table-row\"]').should('have.length', 2);\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', 'John');\n    cy.get('[data-testid=\"table-row\"]').last().should('contain', 'Jane');\n\n    // Verify table headers are visible\n    cy.get('[data-testid=\"table-header-name\"]').should('be.visible');\n    cy.get('[data-testid=\"table-header-age\"]').should('be.visible');\n\n    // Verify table data is correct\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', 'John');\n    cy.get('[data-testid=\"table-row\"]').last().should('contain', 'Jane');\n\n    // Print button should be visible\n    cy.get('[data-testid=\"print-btn\"]').should('be.visible');\n\n    // Click print button\n    cy.get('[data-testid=\"print-btn\"]').click();\n\n    // Verify print dialog appears\n    cy.get('[data-testid=\"print-dialog\"]').should('be.visible');\n\n    // Verify print button is disabled in dialog\n    cy.get('[data-testid=\"print-btn\"]').should('be.disabled');\n\n    // Close print dialog\n    cy.get('[data-testid=\"print-dialog-close-btn\"]').click();\n\n    // Verify print dialog is closed\n    cy.get('[data-testid=\"print-dialog\"]').should('not.exist');\n  });\n\n  it('should handle empty table view after applying filters', () => {\n    // Setup: Apply filters to table\n    cy.get('[data-testid=\"filter-input-name\"]').type('');\n    cy.get('[data-testid=\"filter-input-age\"]').type('');\n    cy.get('[data-testid=\"apply-filters-btn\"]').click();\n\n    // Verify table is empty\n    cy.get('[data-testid=\"table-row\"]').should('not.exist');\n\n    // Verify no rows are displayed\n    cy.get('[data-testid=\"no-results-message\"]').should('be.visible');\n\n    // Verify print button is still visible\n    cy.get('[data-testid=\"print-btn\"]').should('be.visible');\n\n    // Click print button\n    cy.get('[data-testid=\"print-btn\"]').click();\n\n    // Verify print dialog appears\n    cy.get('[data-testid=\"print-dialog\"]').should('be.visible');\n\n    // Verify print button is disabled in dialog\n    cy.get('[data-testid=\"print-btn\"]').should('be.disabled');\n\n    // Close print dialog\n    cy.get('[data-testid=\"print-dialog-close-btn\"]').click();\n\n    // Verify print dialog is closed\n    cy.get('[data-testid=\"print-dialog\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7446,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3487,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 50.438,
+      "feedback_used": ""
+    }
+  ]
+}

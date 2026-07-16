@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_061",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7786,
+  "total_latency_s": 780.229,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Optimistic UI Updates on Like Button', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/posts');\n  });\n\n  test('should display optimistic like count and update on successful API call', async ({ page }) => {\n    // Intercept the API call for liking a post\n    await page.route('**/api/posts/1/like', (route) => {\n      route.continue();\n    });\n\n    // Get the like button using getByRole\n    const likeButton = page.getByRole('button', { name: /like this post/i });\n    await expect(likeButton).toBeVisible();\n\n    // Get the like count using getByRole\n    const likeCount = page.getByRole('heading', { name: /likes: 0/i });\n    await expect(likeCount).toBeVisible();\n\n    // Get the like button using getByRole\n    const likeButton = page.getByRole('button', { name: /like this post/i });\n    await likeButton.click();\n\n    // Verify optimistic UI is displayed\n    await expect(likeCount).toContainText('likes: 1');\n    await expect(likeButton).toBeDisabled();\n\n    // Verify like button is disabled after successful API call\n    await expect(likeButton).toBeDisabled();\n\n    // Verify like count is updated on the page\n    const likeCount = page.getByRole('heading', { name: /likes: 1/i });\n    await expect(likeCount).toBeVisible();\n\n    // Verify like count is displayed\n    await expect(likeCount).toContainText('likes: 1');\n\n    // Verify like button is enabled after successful API call\n    await expect(likeButton).not.toBeDisabled();\n\n    // Verify like button is clickable again\n    await expect(likeButton).toBeEnabled();\n\n    // Verify like count is incremented on second click\n    await likeButton.click();\n    await expect(likeCount).toContainText('likes: 2');\n\n    // Verify like button is still clickable\n    await expect(likeButton).toBeEnabled();\n  });\n\n  test('should revert optimistic UI on failed API call', async ({ page }) => {\n    // Intercept the API call for liking a post with error\n    await page.route('**/api/posts/1/like', (route) => {\n      route.abort('failed');\n    });\n\n    // Get the like button using getByRole\n    const likeButton = page.getByRole('button', { name: /like this post/i });\n    await expect(likeButton).toBeVisible();\n\n    // Get the like count using getByRole\n    const likeCount = page.getByRole('heading', { name: /likes: 0/i });\n    await expect(likeCount).toBeVisible();\n\n    // Get the like button using getByRole\n    const likeButton = page.getByRole('button', { name: /like this post/i });\n    await likeButton.click();\n\n    // Verify optimistic UI is displayed\n    await expect(likeCount).toContainText('likes: 1');\n    await expect(likeButton).toBeDisabled();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/failed to like post/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify like button is still disabled\n    await expect(likeButton).toBeDisabled();\n\n    // Verify like count is not incremented\n    const likeCount = page.getByRole('heading', { name: /likes: 1/i });\n    await expect(likeCount).toContainText('likes: 1');\n\n    // Verify error message is still visible\n    await expect(errorMessage).toBeVisible();\n\n    // Verify like button is still clickable\n    await expect(likeButton).toBeEnabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4779,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3464,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 425.38,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7786,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3619,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 354.849,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

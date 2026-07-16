@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_197",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8168,
+  "total_latency_s": 206.387,
+  "final_script": "describe('Search Input Focus on / Key Press', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should focus search input when / is pressed on keyboard', () => {\n    // Verify search input is visible and not focused\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n    cy.get('[data-testid=\"search-input\"]').should('not.have.focus');\n\n    // Press / key\n    cy.get('[data-testid=\"search-input\"]').type('/');\n\n    // Verify search input is now focused\n    cy.get('[data-testid=\"search-input\"]').should('have.focus');\n\n    // Verify search input contains /\n    cy.get('[data-testid=\"search-input\"]').should('contain', '/');\n  });\n\n  it('should not focus search input when / is pressed outside of search field', () => {\n    // Verify search input is visible and not focused\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n    cy.get('[data-testid=\"search-input\"]').should('not.have.focus');\n\n    // Press / key outside of search field\n    cy.get('[data-testid=\"nav-bar\"]').type('/');\n\n    // Verify search input is still not focused\n    cy.get('[data-testid=\"search-input\"]').should('not.have.focus');\n\n    // Verify search input still contains /\n    cy.get('[data-testid=\"search-input\"]').should('contain', '/');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8168,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5892,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 206.387,
+      "feedback_used": ""
+    }
+  ]
+}

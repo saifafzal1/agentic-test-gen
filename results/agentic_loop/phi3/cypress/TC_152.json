@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_152",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7551,
+  "total_latency_s": 47.828,
+  "final_script": "describe('Nested Row Expansion in Table List', () => {\n  beforeEach(() => {\n    cy.visit('/table-list');\n  });\n\n  it('should expand a row to show nested details and collapse it back', () => {\n    // Verify table is visible\n    cy.get('[data-testid=\"table-container\"]').should('be.visible');\n\n    // Get the first row\n    cy.get('[data-testid=\"table-row-1\"]').should('be.visible');\n\n    // Verify initial state: no expanded details\n    cy.get('[data-testid=\"nested-details-1\"]').should('not.exist');\n\n    // Click the expand button\n    cy.get('[data-testid=\"expand-row-1\"]').click();\n\n    // Verify nested details are now visible\n    cy.get('[data-testid=\"nested-details-1\"]').should('be.visible');\n\n    // Verify nested content is displayed\n    cy.get('[data-testid=\"nested-detail-1-name\"]').should('contain', 'John Doe');\n    cy.get('[data-testid=\"nested-detail-1-email\"]').should('contain', 'john.doe@example.com');\n\n    // Click the expand button again to collapse\n    cy.get('[data-testid=\"expand-row-1\"]').click();\n\n    // Verify nested details are hidden\n    cy.get('[data-testid=\"nested-details-1\"]').should('not.exist');\n\n    // Verify row is still visible\n    cy.get('[data-testid=\"table-row-1\"]').should('be.visible');\n  });\n\n  it('should handle expanding multiple rows and collapse all at once', () => {\n    // Get multiple rows\n    cy.get('[data-testid=\"table-row-1\"]').should('be.visible');\n    cy.get('[data-testid=\"table-row-2\"]').should('be.visible');\n\n    // Expand first row\n    cy.get('[data-testid=\"expand-row-1\"]').click();\n    cy.get('[data-testid=\"nested-details-1\"]').should('be.visible');\n\n    // Expand second row\n    cy.get('[data-testid=\"expand-row-2\"]').click();\n    cy.get('[data-testid=\"nested-details-2\"]').should('be.visible');\n\n    // Verify both rows are expanded\n    cy.get('[data-testid=\"nested-details-1\"]').should('be.visible');\n    cy.get('[data-testid=\"nested-details-2\"]').should('be.visible');\n\n    // Click the collapse button on the first row\n    cy.get('[data-testid=\"collapse-row-1\"]').click();\n\n    // Verify first row is collapsed\n    cy.get('[data-testid=\"nested-details-1\"]').should('not.exist');\n\n    // Verify second row is still expanded\n    cy.get('[data-testid=\"nested-details-2\"]').should('be.visible');\n\n    // Click the collapse button on the second row\n    cy.get('[data-testid=\"collapse-row-2\"]').click();\n\n    // Verify both rows are collapsed\n    cy.get('[data-testid=\"nested-details-1\"]').should('not.exist');\n    cy.get('[data-testid=\"nested-details-2\"]').should('not.exist');\n\n    // Verify table rows are still visible\n    cy.get('[data-testid=\"table-row-1\"]').should('be.visible');\n    cy.get('[data-testid=\"table-row-2\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7551,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3838,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 47.828,
+      "feedback_used": ""
+    }
+  ]
+}

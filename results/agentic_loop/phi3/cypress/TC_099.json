@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_099",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7351,
+  "total_latency_s": 39.902,
+  "final_script": "describe('Out-of-Stock Message on Cart Addition', () => {\n  beforeEach(() => {\n    cy.visit('/cart');\n  });\n\n  it('should display out-of-stock message when adding an unavailable item to cart', () => {\n    // Intercept the API call to get product details\n    cy.intercept('GET', '/api/products/12345').as('getProduct');\n    cy.get('[data-testid=\"add-to-cart-button\"]').click();\n\n    // Wait for the product API call\n    cy.wait('@getProduct');\n\n    // Verify the product details are displayed\n    cy.get('[data-testid=\"product-name\"]').should('contain', 'Out of Stock Item');\n    cy.get('[data-testid=\"product-price\"]').should('contain', '$99.99');\n\n    // Verify the out-of-stock message is visible\n    cy.get('[data-testid=\"out-of-stock-message\"]').should('be.visible');\n    cy.get('[data-testid=\"out-of-stock-message\"]').should('contain', 'This item is currently out of stock');\n\n    // Verify the add to cart button is disabled\n    cy.get('[data-testid=\"add-to-cart-button\"]').should('be.disabled');\n\n    // Verify the cart count does not increment\n    cy.get('[data-testid=\"cart-count\"]').should('contain', '0');\n  });\n\n  it('should handle multiple out-of-stock items gracefully', () => {\n    // Intercept multiple API calls for different out-of-stock products\n    cy.intercept('GET', '/api/products/12345').as('getProduct1');\n    cy.intercept('GET', '/api/products/67890').as('getProduct2');\n\n    // Add the first out-of-stock item\n    cy.get('[data-testid=\"add-to-cart-button\"]').click();\n    cy.wait('@getProduct1');\n    cy.get('[data-testid=\"out-of-stock-message\"]').should('be.visible');\n    cy.get('[data-testid=\"out-of-stock-message\"]').should('contain', 'This item is currently out of stock');\n\n    // Add the second out-of-stock item\n    cy.get('[data-testid=\"add-to-cart-button\"]').click();\n    cy.wait('@getProduct2');\n\n    // Verify both out-of-stock messages are visible\n    cy.get('[data-testid=\"out-of-stock-message\"]').should('have.length.greaterThan', 1);\n\n    // Verify the cart count remains at 0\n    cy.get('[data-testid=\"cart-count\"]').should('contain', '0');\n\n    // Verify the add to cart button is still disabled\n    cy.get('[data-testid=\"add-to-cart-button\"]').should('be.disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7351,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3169,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 39.902,
+      "feedback_used": ""
+    }
+  ]
+}

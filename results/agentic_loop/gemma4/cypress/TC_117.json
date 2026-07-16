@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_117",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7408,
+  "total_latency_s": 72.091,
+  "final_script": "describe('Search Race Condition Handling', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should display only the latest search result when multiple requests are in flight', () => {\n    // Intercept the search API endpoint\n    cy.intercept('GET', '/api/search*').as('searchRequest');\n\n    // First search request (slower)\n    cy.get('[data-testid=\"search-input\"]').type('apple');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Second search request (faster)\n    cy.get('[data-testid=\"search-input\"]').clear().type('banana');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for both requests to complete\n    cy.wait('@searchRequest', { timeout: 10000 });\n\n    // Verify that only the result from the second (latest) request is displayed\n    cy.get('[data-testid=\"search-results-container\"]').should('be.visible');\n    cy.get('[data-testid=\"search-result-item\"]').should('contain', 'banana');\n    cy.get('[data-testid=\"search-result-item\"]').should('not.contain', 'apple');\n  });\n\n  it('should handle rapid search requests and display the correct result', () => {\n    // Intercept the search API endpoint\n    cy.intercept('GET', '/api/search*').as('searchRequest');\n\n    // Rapidly type and search\n    cy.get('[data-testid=\"search-input\"]').type('a');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    cy.get('[data-testid=\"search-input\"]').clear().type('b');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    cy.get('[data-testid=\"search-input\"]').clear().type('c');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for the last request to complete\n    cy.wait('@searchRequest', { timeout: 10000 });\n\n    // Verify that only the result from the last search ('c') is shown\n    cy.get('[data-testid=\"search-results-container\"]').should('be.visible');\n    cy.get('[data-testid=\"search-result-item\"]').should('contain', 'c');\n    cy.get('[data-testid=\"search-result-item\"]').should('not.contain', 'a');\n    cy.get('[data-testid=\"search-result-item\"]').should('not.contain', 'b');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7408,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3358,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.091,
+      "feedback_used": ""
+    }
+  ]
+}

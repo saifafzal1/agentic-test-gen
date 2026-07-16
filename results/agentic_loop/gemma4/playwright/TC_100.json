@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_100",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7691,
+  "total_latency_s": 76.96,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Rate Limit Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should display rate limit error when form is submitted too many times', async ({ page }) => {\n    // First submission - should succeed\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n    const successMessage = page.getByText(/success/i);\n    await expect(successMessage).toBeVisible();\n\n    // Second submission - should succeed\n    await submitButton.click();\n    await expect(successMessage).toBeVisible();\n\n    // Third submission - should trigger rate limit error\n    await submitButton.click();\n    const rateLimitError = page.getByText(/too many requests/i);\n    await expect(rateLimitError).toBeVisible();\n\n    // Verify error details\n    const errorDetails = page.getByText(/please wait/i);\n    await expect(errorDetails).toBeVisible();\n\n    // Verify form is disabled during rate limit\n    await expect(submitButton).toBeDisabled();\n\n    // Verify error message has correct styling\n    const errorContainer = page.locator('[data-testid=\"rate-limit-error\"]');\n    await expect(errorContainer).toHaveClass(/error-message/);\n  });\n\n  test('should clear rate limit error and allow resubmission after waiting', async ({ page }) => {\n    // First submission - should succeed\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n    const successMessage = page.getByText(/success/i);\n    await expect(successMessage).toBeVisible();\n\n    // Second submission - should trigger rate limit error\n    await submitButton.click();\n    const rateLimitError = page.getByText(/too many requests/i);\n    await expect(rateLimitError).toBeVisible();\n\n    // Verify form is disabled\n    await expect(submitButton).toBeDisabled();\n\n    // Wait for rate limit window to expire\n    await page.waitForTimeout(5000);\n\n    // Verify error message is cleared\n    await expect(rateLimitError).not.toBeVisible();\n\n    // Verify form is re-enabled\n    await expect(submitButton).not.toBeDisabled();\n\n    // Third submission - should succeed after waiting\n    await submitButton.click();\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7691,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3302,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 76.96,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_158",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7942,
+  "total_latency_s": 861.869,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Row Highlight on Hover', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should highlight a row when hovering over it', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify table headers are visible\n    const headers = page.getByRole('rowheader');\n    await expect(headers).toBeVisible();\n\n    // Verify first row is visible\n    const firstRow = page.getByRole('row', { name: /row 1/i });\n    await expect(firstRow).toBeVisible();\n\n    // Verify first cell is visible\n    const firstCell = page.getByRole('cell', { name: /cell 1/i });\n    await expect(firstCell).toBeVisible();\n\n    // Verify row is not highlighted initially\n    const rowStyles = page.getByRole('row', { name: /row 1/i }).evaluate((el) => {\n      const style = getComputedStyle(el);\n      return style.backgroundColor;\n    });\n    await expect(rowStyles).not.toBe('rgb(255, 255, 255)');\n\n    // Hover over the first row\n    await firstRow.hover();\n\n    // Verify row is highlighted\n    const highlightedRowStyles = page.getByRole('row', { name: /row 1/i }).evaluate((el) => {\n      const style = getComputedStyle(el);\n      return style.backgroundColor;\n    });\n    await expect(highlightedRowStyles).toBe('rgb(255, 255, 255)');\n\n    // Verify first cell is highlighted\n    const highlightedFirstCell = page.getByRole('cell', { name: /cell 1/i });\n    await expect(highlightedFirstCell).toHaveClass(/highlight/);\n\n    // Verify hover state is active\n    const hoverState = page.getByRole('row', { name: /row 1/i }).evaluate((el) => {\n      const style = getComputedStyle(el);\n      return style.hoverState;\n    });\n    await expect(hoverState).toBe('hovered');\n\n    // Verify row is not highlighted when not hovered\n    await expect(page.getByRole('row', { name: /row 1/i })).not.toHaveClass(/highlight/);\n  });\n\n  test('should unhighlight a row when hovering off', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify table headers are visible\n    const headers = page.getByRole('rowheader');\n    await expect(headers).toBeVisible();\n\n    // Verify first row is visible\n    const firstRow = page.getByRole('row', { name: /row 1/i });\n    await expect(firstRow).toBeVisible();\n\n    // Verify first cell is visible\n    const firstCell = page.getByRole('cell', { name: /cell 1/i });\n    await expect(firstCell).toBeVisible();\n\n    // Hover over the first row\n    await firstRow.hover();\n\n    // Verify row is highlighted\n    const highlightedRowStyles = page.getByRole('row', { name: /row 1/i }).evaluate((el) => {\n      const style = getComputedStyle(el);\n      return style.backgroundColor;\n    });\n    await expect(highlightedRowStyles).toBe('rgb(255, 255, 255)');\n\n    // Verify first cell is highlighted\n    const highlightedFirstCell = page.getByRole('cell', { name: /cell 1/i });\n    await expect(highlightedFirstCell).toHaveClass(/highlight/);\n\n    // Verify hover state is active\n    const hoverState = page.getByRole('row', { name: /row 1/i }).evaluate((el) => {\n      const style = getComputedStyle(el);\n      return style.hoverState;\n    });\n    await expect(hoverState).toBe('hovered');\n\n    // Hover off the first row\n    await firstRow.unhover();\n\n    // Verify row is unhighlighted\n    await expect(page.getByRole('row', { name: /row 1/i })).not.toHaveClass(/highlight/);\n\n    // Verify hover state is not active\n    const hoverState = page.getByRole('row', { name: /row 1/i }).evaluate((el) => {\n      const style = getComputedStyle(el);\n      return style.hoverState;\n    });\n    await expect(hoverState).not.toBe('hovered');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4983,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4144,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 371.403,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7942,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.414,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 490.466,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

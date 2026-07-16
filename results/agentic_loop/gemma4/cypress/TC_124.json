@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_124",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.76,
+  "total_latency_s": 72.443,
+  "final_script": "describe('Long-Running Task Persistence Across Page Refreshes', () => {\n  beforeEach(() => {\n    cy.visit('/tasks');\n  });\n\n  it('should persist long-running task state across page refresh', () => {\n    // Start a long-running task\n    cy.get('[data-testid=\"start-task-button\"]').click();\n    cy.intercept('POST', '/api/tasks/start').as('startTask');\n    cy.wait('@startTask');\n\n    // Verify task is initiated and in progress\n    cy.get('[data-testid=\"task-status\"]').should('contain', 'In Progress');\n    cy.get('[data-testid=\"task-progress-bar\"]').should('be.visible');\n\n    // Simulate page refresh\n    cy.reload();\n\n    // Verify task state is still persisted after refresh\n    cy.get('[data-testid=\"task-status\"]').should('contain', 'In Progress');\n    cy.get('[data-testid=\"task-progress-bar\"]').should('be.visible');\n    cy.get('[data-testid=\"task-progress-bar\"]').should('have.attr', 'style', 'width: 50%');\n\n    // Verify task details are still visible\n    cy.get('[data-testid=\"task-name\"]').should('contain', 'Data Processing');\n    cy.get('[data-testid=\"task-id\"]').should('be.visible');\n\n    // Verify task can be interacted with\n    cy.get('[data-testid=\"cancel-task-button\"]').should('be.visible');\n    cy.get('[data-testid=\"cancel-task-button\"]').click();\n    cy.intercept('POST', '/api/tasks/cancel').as('cancelTask');\n    cy.wait('@cancelTask');\n\n    // Verify task is cancelled\n    cy.get('[data-testid=\"task-status\"]').should('contain', 'Cancelled');\n    cy.get('[data-testid=\"task-progress-bar\"]').should('not.exist');\n  });\n\n  it('should handle task cancellation and persistence across page refresh', () => {\n    // Start a long-running task\n    cy.get('[data-testid=\"start-task-button\"]').click();\n    cy.intercept('POST', '/api/tasks/start').as('startTask');\n    cy.wait('@startTask');\n\n    // Verify task is in progress\n    cy.get('[data-testid=\"task-status\"]').should('contain', 'In Progress');\n\n    // Cancel the task\n    cy.get('[data-testid=\"cancel-task-button\"]').click();\n    cy.intercept('POST', '/api/tasks/cancel').as('cancelTask');\n    cy.wait('@cancelTask');\n\n    // Verify task is cancelled\n    cy.get('[data-testid=\"task-status\"]').should('contain', 'Cancelled');\n    cy.get('[data-testid=\"task-progress-bar\"]').should('not.exist');\n\n    // Refresh the page\n    cy.reload();\n\n    // Verify task state is persisted as cancelled\n    cy.get('[data-testid=\"task-status\"]').should('contain', 'Cancelled');\n    cy.get('[data-testid=\"task-name\"]').should('contain', 'Data Processing');\n\n    // Verify task cannot be restarted if already cancelled\n    cy.get('[data-testid=\"start-task-button\"]').should('be.disabled');\n    cy.get('[data-testid=\"task-status\"]').should('contain', 'Cancelled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.76,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.443,
+      "feedback_used": ""
+    }
+  ]
+}

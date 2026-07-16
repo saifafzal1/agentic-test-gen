@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_104",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.762,
+  "total_latency_s": 51.641,
+  "final_script": "describe('Error Message Accessibility for Screen Readers', () => {\n  beforeEach(() => {\n    cy.visit('/error-page');\n  });\n\n  it('should display error message with proper ARIA attributes for screen reader accessibility', () => {\n    // Intercept the API call that triggers the error\n    cy.intercept('POST', '/api/validate-form').as('validateForm');\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Trigger the error state\n    cy.wait('@validateForm').then((interception) => {\n      expect(interception.response.statusCode).to.equal(400);\n    });\n\n    // Verify error message is visible\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n\n    // Verify error message has correct ARIA attributes\n    cy.get('[data-testid=\"error-message\"]').should('have.attr', 'aria-live', 'polite');\n    cy.get('[data-testid=\"error-message\"]').should('have.attr', 'aria-atomic', 'true');\n    cy.get('[data-testid=\"error-message\"]').should('have.attr', 'aria-describedby', 'error-details');\n\n    // Verify error message contains descriptive text\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Validation failed');\n\n    // Verify error details are accessible\n    cy.get('[data-testid=\"error-details\"]').should('be.visible');\n    cy.get('[data-testid=\"error-details\"]').should('contain', 'Field X is required');\n\n    // Verify screen reader announces error message\n    cy.get('[data-testid=\"error-message\"]').should('have.attr', 'aria-live', 'polite');\n    cy.get('[data-testid=\"error-message\"]').should('be.announced');\n  });\n\n  it('should handle multiple error messages without overlapping screen reader content', () => {\n    // Intercept the API call that triggers multiple errors\n    cy.intercept('POST', '/api/validate-form').as('validateForm');\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Trigger the error state with multiple validation errors\n    cy.wait('@validateForm').then((interception) => {\n      expect(interception.response.statusCode).to.equal(400);\n    });\n\n    // Verify multiple error messages are displayed\n    cy.get('[data-testid=\"error-message-1\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message-2\"]').should('be.visible');\n\n    // Verify error messages do not overlap and are announced in sequence\n    cy.get('[data-testid=\"error-message-1\"]').should('have.attr', 'aria-live', 'polite');\n    cy.get('[data-testid=\"error-message-2\"]').should('have.attr', 'aria-live', 'polite');\n\n    // Verify error messages are announced in a logical order\n    cy.get('[data-testid=\"error-message-1\"]').should('be.announced');\n    cy.get('[data-testid=\"error-message-2\"]').should('be.announced');\n\n    // Verify error details are accessible and announced separately\n    cy.get('[data-testid=\"error-details-1\"]').should('be.visible');\n    cy.get('[data-testid=\"error-details-2\"]').should('be.visible');\n\n    // Verify error messages are not announced again after first announcement\n    cy.get('[data-testid=\"error-message-1\"]').should('not.be.announced');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.762,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4067,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 51.641,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_046",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.751,
+  "total_latency_s": 235.771,
+  "final_script": "describe('External Links Open in New Tab', () => {\n  beforeEach(() => {\n    cy.visit('/external-links');\n  });\n\n  it('should open external links in a new tab', () => {\n    // Verify the external link is visible and has the correct href\n    cy.get('[data-testid=\"external-link-1\"]').should('be.visible');\n    cy.get('[data-testid=\"external-link-1\"]').should('have.attr', 'href', 'https://example.com');\n\n    // Verify the link has the target=\"_blank\" attribute\n    cy.get('[data-testid=\"external-link-1\"]').should('have.attr', 'target', '_blank');\n\n    // Verify the link text is correct\n    cy.get('[data-testid=\"external-link-1\"]').should('contain', 'Example Domain');\n\n    // Verify the link opens in a new tab\n    cy.get('[data-testid=\"external-link-1\"]').click();\n    cy.get('[data-testid=\"new-tab-indicator\"]').should('be.visible');\n    cy.get('[data-testid=\"new-tab-indicator\"]').should('contain', 'New Tab');\n\n    // Verify the original page is still visible\n    cy.url().should('include', '/external-links');\n  });\n\n  it('should handle multiple external links and open all in new tabs', () => {\n    // Verify multiple external links are present\n    cy.get('[data-testid=\"external-link-2\"]').should('be.visible');\n    cy.get('[data-testid=\"external-link-3\"]').should('be.visible');\n\n    // Verify all links have the target=\"_blank\" attribute\n    cy.get('[data-testid=\"external-link-2\"]').should('have.attr', 'target', '_blank');\n    cy.get('[data-testid=\"external-link-3\"]').should('have.attr', 'target', '_blank');\n\n    // Verify all links open in new tabs\n    cy.get('[data-testid=\"external-link-2\"]').click();\n    cy.get('[data-testid=\"new-tab-indicator\"]').should('be.visible');\n    cy.get('[data-testid=\"external-link-2\"]').should('have.attr', 'target', '_blank');\n\n    cy.get('[data-testid=\"external-link-3\"]').click();\n    cy.get('[data-testid=\"new-tab-indicator\"]').should('be.visible');\n    cy.get('[data-testid=\"external-link-3\"]').should('have.attr', 'target', '_blank');\n\n    // Verify the original page is still visible\n    cy.url().should('include', '/external-links');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.751,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3699,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 235.771,
+      "feedback_used": ""
+    }
+  ]
+}

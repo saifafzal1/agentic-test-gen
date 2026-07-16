@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_153",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8317,
+  "total_latency_s": 182.65,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Column Visibility Toggle', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should toggle column visibility from settings menu', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify initial columns are visible\n    const nameCol = page.getByRole('columnheader', { name: 'Name' });\n    const emailCol = page.getByRole('columnheader', { name: 'Email' });\n    const phoneCol = page.getByRole('columnheader', { name: 'Phone' });\n    await expect(nameCol).toBeVisible();\n    await expect(emailCol).toBeVisible();\n    await expect(phoneCol).toBeVisible();\n\n    // Open settings menu\n    const settingsButton = page.getByRole('button', { name: 'Settings' });\n    await settingsButton.click();\n\n    // Verify settings menu is open\n    const settingsMenu = page.getByRole('menu');\n    await expect(settingsMenu).toBeVisible();\n\n    // Toggle Phone column visibility\n    const phoneToggle = page.getByRole('checkbox', { name: 'Phone' });\n    await phoneToggle.click();\n\n    // Verify Phone column is hidden\n    await expect(phoneCol).not.toBeVisible();\n\n    // Verify other columns are still visible\n    await expect(nameCol).toBeVisible();\n    await expect(emailCol).toBeVisible();\n\n    // Close settings menu\n    const closeButton = page.getByRole('button', { name: 'Close' });\n    await closeButton.click();\n\n    // Verify settings menu is closed\n    await expect(settingsMenu).not.toBeVisible();\n\n    // Verify Phone column is still hidden\n    await expect(phoneCol).not.toBeVisible();\n  });\n\n  test('should restore column visibility when toggling back', async ({ page }) => {\n    // Open settings menu\n    const settingsButton = page.getByRole('button', { name: 'Settings' });\n    await settingsButton.click();\n\n    // Toggle Phone column visibility to hide it\n    const phoneToggle = page.getByRole('checkbox', { name: 'Phone' });\n    await phoneToggle.click();\n\n    // Verify Phone column is hidden\n    const phoneCol = page.getByRole('columnheader', { name: 'Phone' });\n    await expect(phoneCol).not.toBeVisible();\n\n    // Close settings menu\n    const closeButton = page.getByRole('button', { name: 'Close' });\n    await closeButton.click();\n\n    // Reopen settings menu\n    await settingsButton.click();\n\n    // Toggle Phone column visibility back to show it\n    await phoneToggle.click();\n\n    // Verify Phone column is visible again\n    await expect(phoneCol).toBeVisible();\n\n    // Close settings menu\n    await closeButton.click();\n\n    // Verify settings menu is closed\n    await expect(page.getByRole('menu')).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5418,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.5593,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.312,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8317,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5391,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 110.338,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

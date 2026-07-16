@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_069",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7908,
+  "total_latency_s": 72.946,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('API Response Caching', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should cache API responses and load dashboard instantly on repeat visits', async ({ page }) => {\n    // First visit: intercept API call and wait for response\n    await page.route('**/api/dashboard/data', (route) => {\n      route.continue();\n    });\n\n    // Verify initial load\n    const dashboardTitle = page.getByRole('heading', { name: /dashboard/i });\n    await expect(dashboardTitle).toBeVisible();\n\n    const dataContainer = page.getByTestId('data-container');\n    await expect(dataContainer).toBeVisible();\n\n    // Verify data is loaded\n    const dataItem = page.getByText('Data loaded successfully');\n    await expect(dataItem).toBeVisible();\n\n    // Second visit: clear cache and reload page\n    await page.route('**/api/dashboard/data', (route) => {\n      route.abort('failed');\n    });\n\n    await page.reload();\n\n    // Verify cached data is displayed instantly\n    await expect(dataItem).toBeVisible();\n    await expect(dataContainer).toBeVisible();\n    \n    // Verify no loading spinner is visible\n    const loadingSpinner = page.getByTestId('loading-spinner');\n    await expect(loadingSpinner).not.toBeVisible();\n  });\n\n  test('should display cache unavailable message when API is down', async ({ page }) => {\n    // Intercept API call and abort it\n    await page.route('**/api/dashboard/data', (route) => {\n      route.abort('failed');\n    });\n\n    // Verify initial load attempt\n    const dashboardTitle = page.getByRole('heading', { name: /dashboard/i });\n    await expect(dashboardTitle).toBeVisible();\n\n    // Verify cache unavailable message is displayed\n    const cacheUnavailableMessage = page.getByText('Cache unavailable');\n    await expect(cacheUnavailableMessage).toBeVisible();\n\n    // Verify fallback UI is shown\n    const fallbackData = page.getByText('Fallback data');\n    await expect(fallbackData).toBeVisible();\n\n    // Verify no loading spinner is visible\n    const loadingSpinner = page.getByTestId('loading-spinner');\n    await expect(loadingSpinner).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7908,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4026,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.946,
+      "feedback_used": ""
+    }
+  ]
+}

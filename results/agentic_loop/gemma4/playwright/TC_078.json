@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_078",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8383,
+  "total_latency_s": 74.891,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Duplicate Record Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should successfully duplicate an existing record with one click', async ({ page }) => {\n    // Verify record list is visible\n    const recordList = page.getByRole('region', { name: /record list/i });\n    await expect(recordList).toBeVisible();\n\n    // Locate and click the duplicate button on the first record\n    const firstRecord = page.getByRole('row', { name: /record 1/i });\n    await expect(firstRecord).toBeVisible();\n\n    const duplicateButton = page.getByRole('button', { name: /duplicate/i });\n    await expect(duplicateButton).toBeVisible();\n    await duplicateButton.click();\n\n    // Wait for duplication modal to appear\n    const modal = page.getByRole('dialog', { name: /duplicate record/i });\n    await expect(modal).toBeVisible();\n\n    // Verify modal contains correct record details\n    const recordNameInput = page.getByLabel(/record name/i);\n    await expect(recordNameInput).toHaveValue('Record 1');\n\n    // Verify duplicate button in modal is visible\n    const modalDuplicateButton = page.getByRole('button', { name: /duplicate/i });\n    await expect(modalDuplicateButton).toBeVisible();\n\n    // Click duplicate button in modal\n    await modalDuplicateButton.click();\n\n    // Wait for success notification\n    const successMessage = page.getByText(/record duplicated successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify new record appears in list\n    const newRecord = page.getByRole('row', { name: /record 1 copy/i });\n    await expect(newRecord).toBeVisible();\n  });\n\n  test('should handle duplicate record duplication with validation error', async ({ page }) => {\n    // Locate and click the duplicate button on the second record\n    const secondRecord = page.getByRole('row', { name: /record 2/i });\n    await expect(secondRecord).toBeVisible();\n\n    const duplicateButton = page.getByRole('button', { name: /duplicate/i });\n    await duplicateButton.click();\n\n    // Wait for duplication modal to appear\n    const modal = page.getByRole('dialog', { name: /duplicate record/i });\n    await expect(modal).toBeVisible();\n\n    // Clear the record name input\n    const recordNameInput = page.getByLabel(/record name/i);\n    await recordNameInput.clear();\n\n    // Attempt to duplicate with empty name\n    const modalDuplicateButton = page.getByRole('button', { name: /duplicate/i });\n    await modalDuplicateButton.click();\n\n    // Verify validation error message appears\n    const errorMessage = page.getByText(/record name is required/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify modal is still open\n    await expect(modal).toBeVisible();\n\n    // Verify original record is still present\n    const originalRecord = page.getByRole('row', { name: /record 2/i });\n    await expect(originalRecord).toBeVisible();\n\n    // Verify no new record was created\n    const newRecord = page.getByRole('row', { name: /record 2 copy/i });\n    await expect(newRecord).not.toBeVisible();\n\n    // Close modal using cancel button\n    const modalCancelButton = page.getByRole('button', { name: /cancel/i });\n    await modalCancelButton.click();\n    await expect(modal).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8383,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4611,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 74.891,
+      "feedback_used": ""
+    }
+  ]
+}

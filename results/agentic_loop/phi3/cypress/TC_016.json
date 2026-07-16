@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_016",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7854,
+  "total_latency_s": 1009.589,
+  "final_script": "describe('Login Form CAPTCHA After Failed Attempts', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should display CAPTCHA after 3 consecutive failed login attempts', () => {\n    // First failed attempt\n    cy.get('[data-testid=\"email-input\"]').type('invalid-email@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('wrongpassword');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.get('[data-testid=\"login-error-message\"]').should('be.visible').should('contain', 'Invalid credentials');\n\n    // Second failed attempt\n    cy.get('[data-testid=\"email-input\"]').type('invalid-email@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('wrongpassword');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.get('[data-testid=\"login-error-message\"]').should('be.visible').should('contain', 'Invalid credentials');\n\n    // Third failed attempt\n    cy.get('[data-testid=\"email-input\"]').type('invalid-email@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('wrongpassword');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Verify CAPTCHA is displayed\n    cy.get('[data-testid=\"captcha-container\"]').should('be.visible');\n    cy.get('[data-testid=\"captcha-image\"]').should('contain', 'Verify you are human');\n    cy.get('[data-testid=\"captcha-input\"]').should('be.visible');\n\n    // Verify CAPTCHA input is enabled\n    cy.get('[data-testid=\"captcha-input\"]').should('not.be.disabled');\n\n    // Verify CAPTCHA verification button is visible\n    cy.get('[data-testid=\"captcha-verify-button\"]').should('be.visible');\n\n    // Verify CAPTCHA verification button is disabled\n    cy.get('[data-testid=\"captcha-verify-button\"]').should('be.disabled');\n\n    // Verify login button is still visible but disabled\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n    cy.get('[data-testid=\"login-button\"]').should('be.disabled');\n  });\n\n  it('should not display CAPTCHA after successful login or after resetting failed attempts', () => {\n    // Reset failed attempts\n    cy.get('[data-testid=\"reset-failed-attempts-button\"]').click();\n    cy.get('[data-testid=\"reset-failed-attempts-success-message\"]').should('be.visible').should('contain', 'Failed attempts reset');\n\n    // Verify CAPTCHA is no longer visible\n    cy.get('[data-testid=\"captcha-container\"]').should('not.exist');\n\n    // Verify login button is enabled\n    cy.get('[data-testid=\"login-button\"]').should('be.enabled');\n\n    // Attempt successful login\n    cy.get('[data-testid=\"email-input\"]').type('valid-email@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('correctpassword');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Verify login success message appears\n    cy.get('[data-testid=\"login-success-message\"]').should('be.visible').should('contain', 'Login successful');\n\n    // Verify CAPTCHA is still not visible after successful login\n    cy.get('[data-testid=\"captcha-container\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5196,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.5054,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 454.891,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7854,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4846,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 554.698,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

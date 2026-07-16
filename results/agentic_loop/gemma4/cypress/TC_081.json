@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_081",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7423,
+  "total_latency_s": 73.453,
+  "final_script": "describe('Inline Table Row Editing', () => {\n  beforeEach(() => {\n    cy.visit('/table-view');\n  });\n\n  it('should allow inline editing of a table row without opening a modal', () => {\n    // Verify table is visible and contains data\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n    cy.get('[data-testid=\"table-row\"]').first().should('be.visible');\n    cy.get('[data-testid=\"table-cell\"]').first().should('contain', 'John Doe');\n\n    // Click edit button to enter inline editing mode\n    cy.get('[data-testid=\"edit-button\"]').first().click();\n    cy.get('[data-testid=\"table-cell\"]').first().should('have.attr', 'contenteditable', 'true');\n    cy.get('[data-testid=\"table-cell\"]').first().should('contain', 'John Doe');\n\n    // Type new value into the editable cell\n    cy.get('[data-testid=\"table-cell\"]').first().type('Jane Doe');\n    cy.get('[data-testid=\"table-cell\"]').first().should('have.value', 'Jane Doe');\n\n    // Click save button to commit changes\n    cy.get('[data-testid=\"save-button\"]').first().click();\n    cy.get('[data-testid=\"table-cell\"]').first().should('not.have.attr', 'contenteditable', 'true');\n    cy.get('[data-testid=\"table-cell\"]').first().should('contain', 'Jane Doe');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Row updated successfully');\n  });\n\n  it('should handle empty or invalid input during inline editing and prevent save', () => {\n    // Verify table is visible\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n\n    // Click edit button\n    cy.get('[data-testid=\"edit-button\"]').first().click();\n    cy.get('[data-testid=\"table-cell\"]').first().should('have.attr', 'contenteditable', 'true');\n\n    // Clear the cell content\n    cy.get('[data-testid=\"table-cell\"]').first().clear();\n    cy.get('[data-testid=\"table-cell\"]').first().should('have.value', '');\n\n    // Attempt to save with empty input\n    cy.get('[data-testid=\"save-button\"]').first().click();\n    \n    // Verify error message appears instead of success\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Input cannot be empty');\n    \n    // Verify cell is still in edit mode\n    cy.get('[data-testid=\"table-cell\"]').first().should('have.attr', 'contenteditable', 'true');\n    \n    // Type valid input and save successfully\n    cy.get('[data-testid=\"table-cell\"]').first().type('Valid Name');\n    cy.get('[data-testid=\"save-button\"]').first().click();\n    cy.get('[data-testid=\"table-cell\"]').first().should('not.have.attr', 'contenteditable', 'true');\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7423,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3411,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.453,
+      "feedback_used": ""
+    }
+  ]
+}

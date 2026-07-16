@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_175",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8303,
+  "total_latency_s": 72.699,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload - File Name and Size Display', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should display file name and size after selecting a file', async ({ page }) => {\n    // Setup: intercept the file upload API\n    await page.route('**/api/files/upload', (route) => {\n      route.abort('blockedbyclient');\n    });\n\n    // Locate and click the file input using getByLabel\n    const fileInput = page.getByLabel('Select a file');\n    await fileInput.click();\n\n    // Setup: intercept the file upload API\n    await page.route('**/api/files/upload', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the file upload response\n    await page.route('**/api/files/upload', (route) => {\n      route.fulfill({\n        status: 200,\n        contentType: 'application/json',\n        body: JSON.stringify({\n          success: true,\n          fileName: 'document.pdf',\n          fileSize: 12549,\n          mimeType: 'application/pdf'\n        }),\n      });\n    });\n\n    // Wait for the file input to be ready\n    await page.waitForTimeout(100);\n\n    // Verify file name and size are displayed\n    const fileNameDisplay = page.getByText('document.pdf');\n    await expect(fileNameDisplay).toBeVisible();\n\n    const fileSizeDisplay = page.getByText('12.5 KB');\n    await expect(fileSizeDisplay).toBeVisible();\n\n    // Verify the file size is formatted correctly\n    const sizeText = await fileSizeDisplay.textContent();\n    expect(sizeText).toContain('12.5 KB');\n\n    // Verify the file name is displayed in the file list\n    const fileList = page.getByRole('list');\n    await expect(fileList).toContainText('document.pdf');\n  });\n\n  test('should handle file selection with error and not display file details', async ({ page }) => {\n    // Setup: intercept the file upload API and return an error\n    await page.route('**/api/files/upload', (route) => {\n      route.fulfill({\n        status: 500,\n        contentType: 'application/json',\n        body: JSON.stringify({\n          success: false,\n          error: 'Server error during upload'\n        }),\n      });\n    });\n\n    // Locate and click the file input using getByLabel\n    const fileInput = page.getByLabel('Select a file');\n    await fileInput.click();\n\n    // Setup: intercept the file upload response\n    await page.route('**/api/files/upload', (route) => {\n      route.fulfill({\n        status: 500,\n        contentType: 'application/json',\n        body: JSON.stringify({\n          success: false,\n          error: 'Server error during upload'\n        }),\n      });\n    });\n\n    // Wait for the file upload to complete\n    await page.waitForTimeout(500);\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('Server error during upload');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify file name and size are NOT displayed\n    const fileNameDisplay = page.getByText('document.pdf');\n    await expect(fileNameDisplay).not.toBeVisible();\n\n    const fileSizeDisplay = page.getByText('12.5 KB');\n    await expect(fileSizeDisplay).not.toBeVisible();\n\n    // Verify the file list is empty\n    const fileList = page.getByRole('list');\n    await expect(fileList).not.toContainText('document.pdf');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8303,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4344,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.699,
+      "feedback_used": ""
+    }
+  ]
+}

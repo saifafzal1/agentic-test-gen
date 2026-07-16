@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_072",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8228,
+  "total_latency_s": 72.109,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Download on Export Button Click', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/export');\n  });\n\n  test('should download file when export button is clicked', async ({ page }) => {\n    // Setup download interception\n    await page.route('**/api/export', (route) => {\n      route.abort();\n    });\n\n    // Setup download listener\n    const downloadPromise = page.waitForEvent('download');\n    \n    // Click export button using getByRole\n    const exportButton = page.getByRole('button', { name: /export/i });\n    await expect(exportButton).toBeVisible();\n    await exportButton.click();\n\n    // Wait for download to complete\n    const download = await downloadPromise;\n    \n    // Verify download file exists\n    const fileName = download.suggestedFilename();\n    expect(fileName).toContain('export');\n    \n    // Verify download is available\n    const downloadUrl = download.url();\n    expect(downloadUrl).toBeDefined();\n    \n    // Verify download progress indicator appears\n    const downloadIndicator = page.getByText(/downloading/i);\n    await expect(downloadIndicator).toBeVisible();\n    \n    // Verify success message appears\n    const successMessage = page.getByText(/export successful/i);\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should handle API error and display error message when export fails', async ({ page }) => {\n    // Setup API error interception\n    await page.route('**/api/export', (route) => {\n      route.abort();\n    });\n\n    // Setup download listener (should not trigger)\n    const downloadPromise = page.waitForEvent('download', { timeout: 5000 });\n    \n    // Click export button using getByRole\n    const exportButton = page.getByRole('button', { name: /export/i });\n    await expect(exportButton).toBeVisible();\n    await exportButton.click();\n\n    // Wait for error message to appear\n    const errorMessage = page.getByText(/export failed/i);\n    await expect(errorMessage).toBeVisible();\n    \n    // Verify error details are displayed\n    const errorDetails = page.getByText(/please try again/i);\n    await expect(errorDetails).toBeVisible();\n    \n    // Verify download indicator does not appear\n    const downloadIndicator = page.getByText(/downloading/i);\n    await expect(downloadIndicator).not.toBeVisible();\n    \n    // Verify export button is still enabled for retry\n    await expect(exportButton).toBeEnabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8228,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5092,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.109,
+      "feedback_used": ""
+    }
+  ]
+}

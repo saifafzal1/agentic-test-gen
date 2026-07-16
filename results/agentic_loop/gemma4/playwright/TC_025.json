@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_025",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8139,
+  "total_latency_s": 70.98,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Date Picker - Past Date Prevention', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/booking');\n  });\n\n  test('should prevent selecting past dates and only allow future dates', async ({ page }) => {\n    // Get the date picker input using getByLabel\n    const dateInput = page.getByLabel('Booking Date');\n    await expect(dateInput).toBeVisible();\n\n    // Click the date input to open the calendar\n    await dateInput.click();\n\n    // Get the calendar container using getByRole\n    const calendar = page.getByRole('dialog', { name: /calendar/i });\n    await expect(calendar).toBeVisible();\n\n    // Get the calendar grid using getByRole\n    const calendarGrid = page.getByRole('grid');\n    await expect(calendarGrid).toBeVisible();\n\n    // Get the first day of the month (should be a past date)\n    const firstDay = page.getByText('1');\n    await expect(firstDay).toBeVisible();\n\n    // Attempt to click the first day (past date)\n    await firstDay.click();\n\n    // Verify the date input does not update\n    await expect(dateInput).toHaveValue('');\n\n    // Get the last day of the month (should be a future date)\n    const lastDay = page.getByText('31');\n    await expect(lastDay).toBeVisible();\n\n    // Click the last day (future date)\n    await lastDay.click();\n\n    // Verify the date input updates to the future date\n    await expect(dateInput).toHaveValue('2024-12-31');\n\n    // Verify the date is highlighted\n    const selectedDate = page.getByText('31');\n    await expect(selectedDate).toHaveClass(/selected-date/);\n\n    // Verify the calendar closes\n    await expect(calendar).not.toBeVisible();\n  });\n\n  test('should display error message when attempting to submit with past date', async ({ page }) => {\n    // Get the date picker input using getByLabel\n    const dateInput = page.getByLabel('Booking Date');\n    await expect(dateInput).toBeVisible();\n\n    // Click the date input to open the calendar\n    await dateInput.click();\n\n    // Get the calendar grid using getByRole\n    const calendarGrid = page.getByRole('grid');\n    await expect(calendarGrid).toBeVisible();\n\n    // Get the first day of the month (past date)\n    const firstDay = page.getByText('1');\n    await firstDay.click();\n\n    // Verify the date input updates to the past date\n    await expect(dateInput).toHaveValue('2024-10-01');\n\n    // Close the calendar\n    await page.getByRole('button', { name: /close/i }).click();\n\n    // Get the submit button using getByRole\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeVisible();\n\n    // Attempt to submit the form\n    await submitButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/past date/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify date input still contains the past date\n    await expect(dateInput).toHaveValue('2022-01-01');\n\n    // Verify form is not submitted\n    await expect(page).not.toHaveURL(/success/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8139,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3798,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 70.98,
+      "feedback_used": ""
+    }
+  ]
+}

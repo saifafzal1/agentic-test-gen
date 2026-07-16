@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_014",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7517,
+  "total_latency_s": 75.327,
+  "final_script": "describe('Login Form Keyboard Navigation Accessibility', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should navigate through login form fields using keyboard arrows', () => {\n    // Focus on the username input field\n    cy.get('[data-testid=\"username-input\"]').focus();\n    \n    // Verify username input has focus\n    cy.get('[data-testid=\"username-input\"]').should('have.focus');\n    \n    // Press Tab to move to password input\n    cy.get(':focus').type('{tab}');\n    cy.get('[data-testid=\"password-input\"]').should('have.focus');\n    \n    // Press Tab to move to remember me checkbox\n    cy.get('[data-testid=\"password-input\"]').type('{tab}');\n    cy.get('[data-testid=\"remember-me-checkbox\"]').should('have.focus');\n    \n    // Press Tab to move to submit button\n    cy.get('[data-testid=\"remember-me-checkbox\"]').type('{tab}');\n    cy.get('[data-testid=\"login-button\"]').should('have.focus');\n    \n    // Verify submit button is focusable\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n    \n    // Press Enter to submit the form\n    cy.get('[data-testid=\"login-button\"]').type('{enter}');\n    \n    // Verify form submission was attempted\n    cy.get('[data-testid=\"login-button\"]').should('be.disabled', { timeout: 1000 });\n    cy.get('[data-testid=\"login-button\"]').should('have.attr', 'disabled');\n  });\n\n  it('should handle focus management when tabbing out of login form', () => {\n    // Focus on username input\n    cy.get('[data-testid=\"username-input\"]').focus();\n    \n    // Press Tab to move to password input\n    cy.get(':focus').type('{tab}');\n    cy.get('[data-testid=\"password-input\"]').should('have.focus');\n    \n    // Press Tab to move to remember me checkbox\n    cy.get('[data-testid=\"password-input\"]').type('{tab}');\n    cy.get('[data-testid=\"remember-me-checkbox\"]').should('have.focus');\n    \n    // Press Tab to move to submit button\n    cy.get('[data-testid=\"remember-me-checkbox\"]').type('{tab}');\n    cy.get('[data-testid=\"login-button\"]').should('have.focus');\n    \n    // Press Tab to wrap focus back to username input\n    cy.get('[data-testid=\"login-button\"]').type('{tab}');\n    cy.get('[data-testid=\"username-input\"]').should('have.focus');\n    \n    // Press Shift + Tab to move backwards\n    cy.get('[data-testid=\"username-input\"]').type('{shift}{tab}');\n    cy.get('[data-testid=\"login-button\"]').should('have.focus');\n    \n    // Verify focus is correctly managed and not lost\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7517,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3725,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 75.327,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_095",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8346,
+  "total_latency_s": 42.64,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload - Unsupported File Type Error', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should display error message when uploading unsupported file type', async ({ page }) => {\n    // Intercept the file upload API call\n    await page.route('**/api/upload', (route) => {\n      route.abort('unsupported file type');\n    });\n\n    // Set up file input using getByLabel\n    const fileInput = page.getByLabel('Upload file');\n    await expect(fileInput).toBeVisible();\n\n    // Set up file input using getByRole\n    const fileInputRole = page.getByRole('button', { name: /upload file/i });\n    await expect(fileInputRole).toBeVisible();\n\n    // Set up file input using getByText\n    const fileInputText = page.getByText('Select file');\n    await expect(fileInputText).toBeVisible();\n\n    // Set up error message using getByText\n    const errorMessage = page.getByText('Unsupported file type');\n    await expect(errorMessage).toBeVisible();\n\n    // Set up success message using getByText\n    const successMessage = page.getByText('File uploaded successfully');\n    await expect(successMessage).not.toBeVisible();\n\n    // Set up file input to upload a .txt file\n    await fileInput.setInputFiles('fixtures/unsupported-file.txt');\n\n    // Verify error message is displayed\n    await expect(errorMessage).toBeVisible();\n\n    // Verify success message is not displayed\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify file input is still visible\n    await expect(fileInput).toBeVisible();\n  });\n\n  test('should not display error message when uploading supported file type', async ({ page }) => {\n    // Intercept the file upload API call\n    await page.route('**/api/upload', (route) => {\n      route.continue();\n    });\n\n    // Set up file input using getByLabel\n    const fileInput = page.getByLabel('Upload file');\n    await expect(fileInput).toBeVisible();\n\n    // Set up file input using getByRole\n    const fileInputRole = page.getByRole('button', { name: /upload file/i });\n    await expect(fileInputRole).toBeVisible();\n\n    // Set up file input using getByText\n    const fileInputText = page.getByText('Select file');\n    await expect(fileInputText).toBeVisible();\n\n    // Set up success message using getByText\n    const successMessage = page.getByText('File uploaded successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Set up file input to upload a supported .pdf file\n    await fileInput.setInputFiles('fixtures/supported-file.pdf');\n\n    // Verify error message is not displayed\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify success message is displayed\n    await expect(successMessage).toBeVisible();\n\n    // Verify file input is still visible\n    await expect(fileInput).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8346,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4486,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 42.64,
+      "feedback_used": ""
+    }
+  ]
+}

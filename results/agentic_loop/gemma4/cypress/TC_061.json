@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_061",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7727,
+  "total_latency_s": 71.246,
+  "final_script": "describe('Optimistic UI Updates for Post Likes', () => {\n  beforeEach(() => {\n    cy.visit('/posts');\n  });\n\n  it('should optimistically update UI when liking a post and handle API success', () => {\n    // Intercept the initial post fetch\n    cy.intercept('GET', '/api/posts').as('getPosts');\n    cy.wait('@getPosts');\n\n    // Verify initial state: like button is not filled\n    cy.get('[data-testid=\"like-button\"]').should('not.have.attr', 'liked');\n    cy.get('[data-testid=\"like-count\"]').should('contain', '10');\n\n    // Intercept the like API call\n    cy.intercept('POST', '/api/posts/*/like', {\n      statusCode: 200,\n      body: { success: true, postId: '123', newLikeCount: 11 }\n    }).as('likePost');\n\n    // Click the like button\n    cy.get('[data-testid=\"like-button\"]').click();\n\n    // Verify optimistic update: UI updates immediately before API response\n    cy.get('[data-testid=\"like-button\"]').should('have.attr', 'liked');\n    cy.get('[data-testid=\"like-count\"]').should('contain', '11');\n\n    // Wait for API response\n    cy.wait('@likePost');\n\n    // Verify final state matches API response\n    cy.get('[data-testid=\"like-button\"]').should('have.attr', 'liked');\n    cy.get('[data-testid=\"like-count\"]').should('contain', '11');\n  });\n\n  it('should revert optimistic UI update when API call fails', () => {\n    // Intercept the initial post fetch\n    cy.intercept('GET', '/api/posts').as('getPosts');\n    cy.wait('@getPosts');\n\n    // Verify initial state\n    cy.get('[data-testid=\"like-button\"]').should('not.have.attr', 'liked');\n    cy.get('[data-testid=\"like-count\"]').should('contain', '10');\n\n    // Intercept the like API call with failure\n    cy.intercept('POST', '/api/posts/*/like', {\n      statusCode: 500,\n      body: { success: false, error: 'Server error' }\n    }).as('likePostFailed');\n\n    // Click the like button\n    cy.get('[data-testid=\"like-button\"]').click();\n\n    // Verify optimistic update occurs immediately\n    cy.get('[data-testid=\"like-button\"]').should('have.attr', 'liked');\n    cy.get('[data-testid=\"like-count\"]').should('contain', '11');\n\n    // Wait for failed API response\n    cy.wait('@likePostFailed');\n\n    // Verify UI reverts to original state after failure\n    cy.get('[data-testid=\"like-button\"]').should('not. have.attr', 'liked');\n    cy.get('[data-testid=\"like-count\"]').should('contain', '10');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Failed to like post');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7727,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4422,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.246,
+      "feedback_used": ""
+    }
+  ]
+}

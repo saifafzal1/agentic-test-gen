@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_071",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7539,
+  "total_latency_s": 142.011,
+  "final_script": "describe('Conflict Error Message on Stale Record Save', () => {\n  beforeEach(() => {\n    cy.visit('/records/new');\n  });\n\n  it('should display conflict error message when saving a stale record', () => {\n    // Intercept the API call to get a stale record\n    cy.intercept('POST', '/api/records/save', {\n      statusCode: 200,\n      body: {\n        id: 123,\n        data: {\n          name: 'John Doe',\n          email: 'john@example.com',\n          status: 'active'\n        },\n        message: 'Record saved successfully'\n      }\n    }).as('saveRecord');\n\n    // Fill in the form with stale data\n    cy.get('[data-testid=\"record-name-input\"]').type('John Doe');\n    cy.get('[data-testid=\"record-email-input\"]').type('john@example.com');\n    cy.get('[data-testid=\"record-status-select\"]').select('active');\n\n    // Attempt to save the stale record\n    cy.get('[data-testid=\"save-button\"]').click();\n\n    // Verify conflict error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Conflict');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Record has been modified by another user');\n\n    // Verify success message does not appear\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n\n    // Verify form is still visible\n    cy.get('[data-testid=\"record-form\"]').should('be.visible');\n  });\n\n  it('should handle conflict error gracefully and allow retry', () => {\n    // Intercept the API call to get a stale record\n    cy.intercept('POST', '/api/records/save', {\n      statusCode: 409,\n      body: {\n        error: 'Conflict',\n        message: 'Record has been modified by another user'\n      }\n    }).as('saveRecordConflict');\n\n    // Fill in the form with stale data\n    cy.get('[data-testid=\"record-name-input\"]').type('Jane Smith');\n    cy.get('[data-testid=\"record-email-input\"]').type('jane@example.com');\n    cy.get('[data-testid=\"record-status-select\"]').select('active');\n\n    // Attempt to save the stale record\n    cy.get('[data-testid=\"save-button\"]').click();\n\n    // Verify conflict error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Conflict');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n\n    // Click retry button\n    cy.get('[data-testid=\"retry-button\"]').click();\n\n    // Verify error message disappears\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n\n    // Verify form is still visible\n    cy.get('[data-testid=\"record-form\"]').should('be.visible');\n\n    // Verify save button is now enabled\n    cy.get('[data-testid=\"save-button\"]').should('be.enabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7539,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3795,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 142.011,
+      "feedback_used": ""
+    }
+  ]
+}

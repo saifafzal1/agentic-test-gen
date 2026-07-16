@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_102",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8547,
+  "total_latency_s": 377.657,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Submission with Future Date in Past-Date Field', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should display error when future date is entered in past-date field', async ({ page }) => {\n    // Locate and fill future date in past-date field using getByLabel\n    const pastDateInput = page.getByLabel('Past Date');\n    await pastDateInput.fill('2023-12-31');\n\n    // Locate and fill other required fields using getByLabel\n    const nameInput = page.getByLabel('Name');\n    await nameInput.fill('John Doe');\n\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('john.doe@example.com');\n\n    // Locate and click submit button using getByRole\n    const submitButton = page.getByRole('button', { name: 'Submit' });\n    await submitButton.click();\n\n    // Verify error message appears using getByRole\n    const errorMessage = page.getByText('Date cannot be in the future');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify form is still visible\n    const formContainer = page.getByRole('region', { name: 'Form' });\n    await expect(formContainer).toBeVisible();\n\n    // Verify form fields are still editable\n    await expect(pastDateInput).toBeEditable();\n    await expect(nameInput).toBeEditable();\n    await expect(emailInput).toBeEditable();\n  });\n\n  test('should successfully submit form when past date is entered in past-date field', async ({ page }) => {\n    // Locate and fill future date in past-date field using getByLabel\n    const pastDateInput = page.getByLabel('Past Date');\n    await pastDateInput.fill('2023-01-01');\n\n    // Locate and fill other required fields using getByLabel\n    const nameInput = page.getByLabel('Name');\n    await nameInput.fill('Jane Smith');\n\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('jane.smith@example.com');\n\n    // Locate and click submit button using getByRole\n    const submitButton = page.getByRole('button', { name: 'Submit' });\n    await submitButton.click();\n\n    // Verify success message appears using getByText\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify form is still visible\n    const formContainer = page.getByRole('region', { name: 'Form' });\n    await expect(formContainer).toBeVisible();\n\n    // Verify form fields are no longer editable\n    await expect(pastDateInput).not.toBeEditable();\n    await expect(nameInput).not.toBeEditable();\n    await expect(emailInput).not.toBeEditable();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8547,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5157,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 377.657,
+      "feedback_used": ""
+    }
+  ]
+}

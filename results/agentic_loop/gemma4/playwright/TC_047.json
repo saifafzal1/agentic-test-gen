@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_047",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8278,
+  "total_latency_s": 71.508,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Skip to Content Link', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/page');\n  });\n\n  test('should display skip to content link and navigate to main content when clicked', async ({ page }) => {\n    // Verify skip to content link is visible\n    const skipLink = page.getByRole('link', { name: /skip to main content/i });\n    await expect(skipLink).toBeVisible();\n\n    // Verify main content is not visible initially\n    const mainContent = page.locator('[data-testid=\"main-content\"]');\n    await expect(mainContent).not.toBeVisible();\n\n    // Click the skip to content link\n    await skipLink.click();\n\n    // Verify main content is now visible\n    await expect(mainContent).toBeVisible();\n\n    // Verify page has scrolled to main content\n    const mainContentBox = page.locator('[data-testid=\"main-content\"]');\n    const mainContentBoundingBox = await mainContentBox.boundingBox();\n    expect(mainContentBoundingBox).not.toBeNull();\n    expect(mainContentBoundingBox.y).toBeGreaterThan(0);\n  });\n\n  test('should not display skip to content link when on the homepage', async ({ page }) => {\n    // Navigate to homepage\n    await page.goto('/');\n\n    // Verify skip to content link does not exist on homepage\n    const skipLink = page.getByRole('link', { name: /skip to main content/i });\n    await expect(skipLink).not.toBeVisible();\n\n    // Verify main content is visible on homepage\n    const mainContent = page.locator('[data-testid=\"main-content\"]');\n    await expect(mainContent).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8278,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5261,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.508,
+      "feedback_used": ""
+    }
+  ]
+}

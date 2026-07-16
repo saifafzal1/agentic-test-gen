@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_056",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7768,
+  "total_latency_s": 29.57,
+  "final_script": "describe('Page Number Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should navigate to the specified page using page number input', () => {\n    // Verify initial page is displayed\n    cy.get('[data-testid=\"page-number-input\"]').should('be.visible');\n    cy.get('[data-testid=\"page-number-input\"]').type('5');\n    cy.get('[data-testid=\"go-button\"]').click();\n\n    // Verify navigation to page 5\n    cy.get('[data-testid=\"page-number-input\"]').should('contain', '5');\n    cy.get('[data-testid=\"current-page-number\"]').should('contain', '5');\n    cy.get('[data-testid=\"page-content\"]').should('contain', 'Page 5 content');\n\n    // Verify pagination controls are visible\n    cy.get('[data-testid=\"pagination-controls\"]').should('be.visible');\n    cy.get('[data-testid=\"previous-page\"]').should('be.visible');\n    cy.get('[data-testid=\"next-page\"]').should('be.visible');\n  });\n\n  it('should handle invalid page number input and show error message', () => {\n    // Verify initial page is displayed\n    cy.get('[data-testid=\"page-number-input\"]').should('be.visible');\n\n    // Attempt to navigate to a non-existent page (e.g., page 0)\n    cy.get('[data-testid=\"page-number-input\"]').type('0');\n    cy.get('[data-testid=\"go-button\"]').click();\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Page number out of range');\n\n    // Verify pagination controls are still visible\n    cy.get('[data-testid=\"pagination-controls\"]').should('be.visible');\n\n    // Verify navigation is not performed\n    cy.get('[data-testid=\"current-page-number\"]').should('contain', '1');\n    cy.get('[data-testid=\"page-content\"]').should('contain', 'Page 1 content');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7768,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4561,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 29.57,
+      "feedback_used": ""
+    }
+  ]
+}

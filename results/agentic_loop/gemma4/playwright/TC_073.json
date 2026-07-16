@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_073",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.875,
+  "total_latency_s": 72.328,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Task Creation Form', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/tasks');\n  });\n\n  test('should successfully create a new task with valid form data', async ({ page }) => {\n    // Verify task list is visible\n    const taskList = page.getByRole('region', { name: /task list/i });\n    await expect(taskList).toBeVisible();\n\n    // Click the 'Create Task' button using getByRole\n    const createButton = page.getByRole('button', { name: /create task/i });\n    await createButton.click();\n\n    // Verify task form is visible\n    const taskForm = page.getByRole('form', { name: /new task/i });\n    await expect(taskForm).toBeVisible();\n\n    // Fill in task title using getByLabel\n    const titleInput = page.getByLabel(/task title/i);\n    await titleInput.fill('Implement user authentication');\n\n    // Fill in description using getByLabel\n    const descriptionInput = page.getByLabel(/description/i);\n    await descriptionInput.fill('Set up JWT token generation and validation.');\n\n    // Select priority using getByRole\n    const prioritySelect = page.getByRole('combobox', { name: /priority/i });\n    await prioritySelect.selectOption('High');\n\n    // Select due date using getByLabel\n    const dueDateInput = page.getByLabel(/due date/i);\n    await dueDateInput.fill('2024-12-31');\n\n    // Click the 'Save' button using getByRole\n    const saveButton = page.getByRole('button', { name: /save task/i });\n    await saveButton.click();\n\n    // Wait for API response and form to clear\n    await page.waitForResponse(response => \n      response.url().includes('/api/tasks') && response.status() === 201\n    );\n\n    // Verify success message appears\n    const successMessage = page.getByText(/task created successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify task appears in the list\n    const taskItem = page.getByText('Implement user authentication');\n    await expect(taskItem).toBeVisible();\n  });\n\n  test('should display validation errors when submitting an empty task form', async ({ page }) => {\n    // Click the 'Create Task' button using getByRole\n    const createButton = page.getByRole('button', { name: /create task/i });\n    await createButton.click();\n\n    // Verify task form is visible\n    const taskForm = page.getByRole('form', { name: /new task/i });\n    await expect(taskForm).toBeVisible();\n\n    // Attempt to submit the form without filling any fields\n    const saveButton = page.getByRole('button', { name: /save task/i });\n    await saveButton.click();\n\n    // Wait briefly for validation to run\n    await page.waitForTimeout(100);\n\n    // Verify validation error messages appear for all required fields\n    const titleError = page.getByText(/task title is required/i);\n    await expect(titleError).toBeVisible();\n\n    const descriptionError = page.getByText(/description is required/i);\n    await expect(descriptionError).toBeVisible();\n\n    const priorityError = page.getByText(/priority is required/i);\n    await expect(priorityError).toBeVisible();\n\n    // Verify task list remains unchanged\n    const taskList = page.getByRole('region', { name: /task list/i });\n    await expect(taskList).toBeVisible();\n    \n    // Verify no success message is displayed\n    const successMessage = page.getByText(/task created successfully/i);\n    await expect(successMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.875,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5834,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.328,
+      "feedback_used": ""
+    }
+  ]
+}

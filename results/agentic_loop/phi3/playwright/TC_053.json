@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_053",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7823,
+  "total_latency_s": 361.122,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dropdown Menu Keyboard Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dropdown-menu');\n  });\n\n  test('should navigate dropdown items using keyboard arrow keys', async ({ page }) => {\n    // Verify dropdown is visible\n    const dropdown = page.getByRole('button', { name: /dropdown/i });\n    await expect(dropdown).toBeVisible();\n\n    // Verify initial dropdown item is visible\n    const firstItem = page.getByRole('option', { name: /first item/i });\n    await expect(firstItem).toBeVisible();\n\n    // Verify dropdown menu is open\n    const menu = page.locator('[data-testid=\"dropdown-menu\"]');\n    await expect(menu).toBeVisible();\n\n    // Verify dropdown menu has correct number of items\n    const itemCount = page.locator('[data-testid=\"dropdown-item\"]').count();\n    expect(itemCount).toBeGreaterThan(0);\n\n    // Navigate to the last item using right arrow key\n    const rightArrow = page.getByRole('keyboard-region', { name: /arrow key/i });\n    await rightArrow.press('ArrowRight');\n\n    // Verify last item is now selected\n    const lastItem = page.getByRole('option', { name: /last item/i });\n    await expect(lastItem).toBeSelected();\n\n    // Verify dropdown menu is still open\n    await expect(menu).toBeVisible();\n\n    // Navigate to the first item using left arrow key\n    await rightArrow.press('ArrowLeft');\n\n    // Verify first item is now selected\n    await expect(firstItem).toBeSelected();\n\n    // Verify dropdown menu is still open\n    await expect(menu).toBeVisible();\n\n    // Navigate to the second item using down arrow key\n    await rightArrow.press('ArrowDown');\n\n    // Verify second item is now selected\n    const secondItem = page.getByRole('option', { name: /second item/i });\n    await expect(secondItem).toBeSelected();\n\n    // Verify dropdown menu is still open\n    await expect(menu).toBeVisible();\n\n    // Navigate to the third item using up arrow key\n    await rightArrow.press('ArrowUp');\n\n    // Verify third item is now selected\n    const thirdItem = page.getByRole('option', { name: /third item/i });\n    await expect(thirdItem).toBeSelected();\n\n    // Verify dropdown menu is still open\n    await expect(menu).toBeVisible();\n\n    // Navigate to the first item again using left arrow key\n    await rightArrow.press('ArrowLeft');\n\n    // Verify first item is now selected again\n    await expect(firstItem).toBeSelected();\n\n    // Verify dropdown menu is still open\n    await expect(menu).toBeVisible();\n  });\n\n  test('should close dropdown when pressing escape key', async ({ page }) => {\n    // Open dropdown by clicking the button\n    const dropdownButton = page.getByRole('button', { name: /dropdown/i });\n    await dropdownButton.click();\n\n    // Verify dropdown menu is open\n    const menu = page.locator('[data-testid=\"dropdown-menu\"]');\n    await expect(menu).toBeVisible();\n\n    // Verify dropdown menu has items\n    const itemCount = page.locator('[data-testid=\"dropdown-item\"]').count();\n    expect(itemCount).toBeGreaterThan(0);\n\n    // Press escape key to close dropdown\n    const escapeKey = page.getByRole('keyboard-region', { name: /escape key/i });\n    await escapeKey.press('Escape');\n\n    // Verify dropdown menu is no longer visible\n    await expect(menu).not.toBeVisible();\n\n    // Verify dropdown button is now visible\n    await expect(dropdownButton).toBeVisible();\n\n    // Verify dropdown menu has no items\n    const itemCountAfterClose = page.locator('[data-testid=\"dropdown-item\"]').count();\n    expect(itemCountAfterClose).toBe(0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4846,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3688,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 53.935,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7823,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3745,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 307.187,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

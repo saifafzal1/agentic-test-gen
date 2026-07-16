@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_048",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8357,
+  "total_latency_s": 71.376,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Breadcrumbs Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/products/electronics/phones');\n  });\n\n  test('should display breadcrumbs showing current location in site hierarchy', async ({ page }) => {\n    // Verify breadcrumbs container is visible\n    const breadcrumbs = page.getByRole('navigation', { name: /breadcrumbs/i });\n    await expect(breadcrumbs).toBeVisible();\n\n    // Verify breadcrumb links exist and contain correct text\n    const homeLink = page.getByRole('link', { name: /home/i });\n    await expect(homeLink).toBeVisible();\n    await expect(homeLink).toHaveAttribute('href', '/');\n\n    const productsLink = page.getByRole('link', { name: /products/i });\n    await expect(productsLink).toBeVisible();\n    await expect(productsLink).toHaveAttribute('href', '/products');\n\n    const electronicsLink = page.getByRole('link', { name: /electronics/i });\n    await expect(electronicsLink).toBeVisible();\n    await expect(electronicsLink).toHaveAttribute('href', '/products/electronics');\n\n    const phonesCurrentPage = page.getByText(/phones/i);\n    await expect(phonesCurrentPage).toBeVisible();\n    await expect(phonesCurrentPage).not.toHaveAttribute('href');\n\n    // Verify breadcrumb structure using getByRole\n    const breadcrumbItems = page.getByRole('link').filter({ hasText: /home|products|electronics|phones/i });\n    const itemCount = await breadcrumbItems.count();\n    expect(itemCount).toBe(4);\n  });\n\n  test('should handle breadcrumbs when navigating to a root page', async ({ page }) => {\n    // Navigate to root page\n    await page.goto('/');\n\n    // Verify breadcrumbs container is visible\n    const breadcrumbs = page.getByRole('navigation', { name: /breadcrumbs/i });\n    await expect(breadcrumbs).toBeVisible();\n\n    // Verify home link is present and active\n    const homeLink = page.getByRole('link', { name: /home/i });\n    await expect(homeLink).toBeVisible();\n    await expect(homeLink).toHaveAttribute('href', '/');\n\n    // Verify no other breadcrumb links exist\n    const otherLinks = page.getByRole('link').filter({ hasText: /products|electronics|phones/i });\n    const linkCount = await otherLinks.count();\n    expect(linkCount).toBe(0);\n\n    // Verify current page text is displayed without link\n    const currentPageText = page.getByText(/home/i);\n    await expect(currentPageText).toBeVisible();\n    await expect(currentPageText).not.toHaveAttribute('href');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8357,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5523,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.376,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_048",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8055,
+  "total_latency_s": 607.721,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Breadcrumb Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should display breadcrumbs correctly for top-level navigation', async ({ page }) => {\n    // Navigate to the home page\n    await page.getByRole('main', { name: /home/i }).click();\n    \n    // Verify breadcrumbs are visible\n    const breadcrumbs = page.getByRole('breadcrumb');\n    await expect(breadcrumbs).toBeVisible();\n    \n    // Verify breadcrumb items are present\n    const homeBreadcrumb = page.getByRole('link', { name: /home/i });\n    await expect(homeBreadcrumb).toBeVisible();\n    \n    const aboutBreadcrumb = page.getByRole('link', { name: /about/i });\n    await expect(aboutBreadcrumb).toBeVisible();\n    \n    const contactBreadcrumb = page.getByRole('link', { name: /contact/i });\n    await expect(contactBreadcrumb).toBeVisible();\n    \n    // Verify breadcrumb text is correct\n    await expect(homeBreadcrumb).toContainText('Home');\n    await expect(aboutBreadcrumb).toContainText('About');\n    await expect(contactBreadcrumb).toContainText('Contact');\n    \n    // Verify breadcrumb links are functional\n    await expect(homeBreadcrumb).toHaveAttribute('href', '/');\n    await expect(aboutBreadcrumb).toHaveAttribute('href', '/about');\n    await expect(contactBreadcrumb).toHaveAttribute('href', '/contact');\n  });\n\n  test('should update breadcrumbs when navigating deeper into the site hierarchy', async ({ page }) => {\n    // Navigate to the home page\n    await page.getByRole('main', { name: /home/i }).click();\n    \n    // Navigate to the about page\n    const aboutLink = page.getByRole('link', { name: /about/i });\n    await aboutLink.click();\n    \n    // Verify breadcrumbs update to reflect current location\n    const breadcrumbs = page.getByRole('breadcrumb');\n    await expect(breadcrumbs).toBeVisible();\n    \n    const homeBreadcrumb = page.getByRole('link', { name: /home/i });\n    await expect(homeBreadcrumb).toBeVisible();\n    \n    const aboutBreadcrumb = page.getByRole('link', { name: /about/i });\n    await expect(aboutBreadcrumb).toBeVisible();\n    \n    // Verify breadcrumb text is correct\n    await expect(homeBreadcrumb).toContainText('Home');\n    await expect(aboutBreadcrumb).toContainText('About');\n    \n    // Verify breadcrumb links are functional\n    await expect(homeBreadcrumb).toHaveAttribute('href', '/');\n    await expect(aboutBreadcrumb).toHaveAttribute('href', '/about');\n    \n    // Navigate to a sub-page\n    const servicesLink = page.getByRole('link', { name: /services/i });\n    await servicesLink.click();\n    \n    // Verify breadcrumbs update to include sub-page\n    const servicesBreadcrumb = page.getByRole('link', { name: /services/i });\n    await expect(servicesBreadcrumb).toBeVisible();\n    \n    // Verify breadcrumb text includes sub-page\n    await expect(aboutBreadcrumb).toContainText('About');\n    await expect(servicesBreadcrumb).toContainText('Services');\n    \n    // Verify breadcrumb links are functional\n    await expect(aboutBreadcrumb).toHaveAttribute('href', '/about');\n    await expect(servicesBreadcrumb).toHaveAttribute('href', '/services');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8055,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4516,
+        "missing_keywords": [],
+        "assertion_count": 22,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 607.721,
+      "feedback_used": ""
+    }
+  ]
+}

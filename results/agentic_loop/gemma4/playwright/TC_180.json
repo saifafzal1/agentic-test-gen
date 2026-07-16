@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_180",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8793,
+  "total_latency_s": 184.257,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload Button Disabled During Upload', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should disable upload button while file is uploading', async ({ page }) => {\n    // Setup: intercept the upload API call\n    await page.route('**/api/upload', (route) => {\n      route.abort('blockedbyclient');\n    });\n\n    // Get the file input using getByLabel\n    const fileInput = page.getByLabel('Select file');\n    await expect(fileInput).toBeVisible();\n\n    // Select a file\n    await fileInput.setInputFiles('playwright/fixtures/test-file.pdf');\n\n    // Get the upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await expect(uploadButton).toBeVisible();\n\n    // Verify button is enabled before upload\n    await expect(uploadButton).not.toBeDisabled();\n\n    // Click the upload button\n    await uploadButton.click();\n\n    // Verify button is disabled during upload\n    await expect(uploadButton).toBeDisabled();\n\n    // Wait for the upload to complete (mocked response)\n    await page.route('**/api/upload', (route) => {\n      route.continue();\n    });\n\n    // Wait for the upload to finish\n    await page.waitForTimeout(1000);\n\n    // Verify button is enabled after upload\n    await expect(uploadButton).not.toBeDisabled();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/file uploaded successfully/i);\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should re-enable upload button after upload fails', async ({ page }) => {\n    // Setup: intercept the upload API call and simulate failure\n    await page.route('**/api/upload', (route) => {\n      route.abort('failed');\n    });\n\n    // Get the file input using getByLabel\n    const fileInput = page.getByLabel('Select file');\n    await expect(fileInput).toBeVisible();\n\n    // Select a file\n    await fileInput.setInputFiles('playwright/fixtures/test-file.pdf');\n\n    // Get the upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await expect(uploadButton).toBeVisible();\n\n    // Verify button is enabled before upload\n    await expect(uploadButton).not.toBeDisabled();\n\n    // Click the upload button\n    await uploadButton.click();\n\n    // Verify button is disabled during upload\n    await expect(uploadButton).toBeDisabled();\n\n    // Wait for the upload to fail\n    await page.waitForTimeout(1500);\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/upload failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify button is re-enabled after failure\n    await expect(uploadButton).not.toBeDisabled();\n\n    // Verify error icon is visible\n    const errorIcon = page.getByRole('img', { name: /error/i });\n    await expect(errorIcon).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4902,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3674,
+        "missing_keywords": [],
+        "assertion_count": 3,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.71,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8793,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5978,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 111.547,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

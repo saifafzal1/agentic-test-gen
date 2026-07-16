@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_067",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7454,
+  "total_latency_s": 635.315,
+  "final_script": "describe('Polling Stopping on Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/polling-page');\n  });\n\n  it('should stop polling when user navigates away from the page', () => {\n    // Setup: Start polling\n    cy.intercept('GET', '/api/data', (req) => {\n      req.reply((res) => {\n        res.delay(1000);\n        res.send({\n          statusCode: 200,\n          body: {\n            data: 'Polling data',\n            timestamp: Date.now()\n          }\n        });\n      });\n    }).as('getPollingData');\n\n    // Verify polling is active\n    cy.get('[data-testid=\"polling-status\"]').should('be.visible');\n    cy.get('[data-testid=\"polling-status\"]').should('contain', 'Polling...');\n\n    // Verify polling interval is set\n    cy.get('[data-testid=\"polling-interval\"]').should('be.visible');\n    cy.get('[data-testid=\"polling-interval\"]').should('contain', '1000ms');\n\n    // Verify polling is working\n    cy.wait('@getPollingData');\n    cy.get('[data-testid=\"polling-status\"]').should('contain', 'Polling...');\n\n    // Navigate away from the page\n    cy.get('[data-testid=\"nav-link\"]').click();\n\n    // Verify polling stops\n    cy.get('[data-testid=\"polling-status\"]').should('not.exist');\n    cy.get('[data-testid=\"polling-interval\"]').should('not.exist');\n\n    // Verify no polling requests are made\n    cy.intercept('GET', '/api/data', {\n      statusCode: 200,\n      body: {\n        data: 'No polling data',\n        timestamp: Date.now()\n      }\n    }).as('getPollingDataAfterNavigation');\n\n    cy.wait('@getPollingDataAfterNavigation');\n    cy.get('[data-testid=\"polling-status\"]').should('not.exist');\n  });\n\n  it('should handle edge case where polling is interrupted by navigation', () => {\n    // Setup: Start polling\n    cy.intercept('GET', '/api/data', (req) => {\n      req.reply((res) => {\n        res.delay(500);\n        res.send({\n          statusCode: 200,\n          body: {\n            data: 'Polling data',\n            timestamp: Date.now()\n          }\n        });\n      });\n    }).as('getPollingData');\n\n    // Verify polling is active\n    cy.get('[data-testid=\"polling-status\"]').should('be.visible');\n    cy.get('[data-testid=\"polling-status\"]').should('contain', 'Polling...');\n\n    // Verify polling interval is set\n    cy.get('[data-testid=\"polling-interval\"]').should('be.visible');\n    cy.get('[data-testid=\"polling-interval\"]').should('contain', '1000ms');\n\n    // Verify polling is working\n    cy.wait('@getPollingData');\n    cy.get('[data-testid=\"polling-status\"]').should('contain', 'Polling...');\n\n    // Navigate away from the page\n    cy.get('[data-testid=\"nav-link\"]').click();\n\n    // Verify polling stops immediately\n    cy.get('[data-testid=\"polling-status\"]').should('not.exist');\n    cy.get('[data-testid=\"polling-interval\"]').should('not.exist');\n\n    // Verify no polling requests are made\n    cy.intercept('GET', '/api/data', {\n      statusCode: 200,\n      body: {\n        data: 'No polling data',\n        timestamp: Date.now()\n      }\n    }).as('getPollingDataAfterNavigation');\n\n    cy.wait('@getPollingDataAfterNavigation');\n    cy.get('[data-testid=\"polling-status\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4756,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3587,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 314.494,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7454,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3514,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 320.821,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

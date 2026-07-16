@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_133",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7913,
+  "total_latency_s": 43.151,
+  "final_script": "describe('Modal Form Submission with Success Feedback', () => {\n  beforeEach(() => {\n    cy.visit('/form-modal');\n  });\n\n  it('should submit form inside modal and display success feedback', () => {\n    // Intercept the API call\n    cy.intercept('POST', '/api/form-submit').as('formSubmit');\n\n    // Open modal\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n    cy.get('[data-testid=\"modal-container\"]').should('be.visible');\n\n    // Fill form fields\n    cy.get('[data-testid=\"name-input\"]').type('John Doe');\n    cy.get('[data-testid=\"email-input\"]').type('john.doe@example.com');\n    cy.get('[data-testid=\"message-textarea\"]').type('This is a test message');\n\n    // Verify form is visible and fields are filled\n    cy.get('[data-testid=\"name-input\"]').should('have.value', 'John Doe');\n    cy.get('[data-testid=\"email-input\"]').should('have.value', 'john.doe@example.com');\n    cy.get('[data-testid=\"message-textarea\"]').should('have.value', 'This is a test message');\n\n    // Submit form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@formSubmit');\n\n    // Verify success feedback is displayed\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Form submitted successfully');\n\n    // Verify modal is closed\n    cy.get('[data-testid=\"modal-container\"]').should('not.exist');\n  });\n\n  it('should handle form submission failure and display error feedback', () => {\n    // Intercept the API call with a failure response\n    cy.intercept('POST', '/api/form-submit', {\n      statusCode: 500,\n      body: { error: 'Internal server error' }\n    }).as('formSubmitFailure');\n\n    // Open modal\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n    cy.get('[data-testid=\"modal-container\"]').should('be.visible');\n\n    // Fill form fields\n    cy.get('[data-testid=\"name-input\"]').type('Jane Smith');\n    cy.get('[data-testid=\"email-input\"]').type('jane.smith@example.com');\n    cy.get('[data-testid=\"message-textarea\"]').type('Please process my request');\n\n    // Submit form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@formSubmitFailure');\n\n    // Verify error feedback is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Failed to submit form');\n\n    // Verify modal is still open\n    cy.get('[data-testid=\"modal-container\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7913,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5043,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 43.151,
+      "feedback_used": ""
+    }
+  ]
+}

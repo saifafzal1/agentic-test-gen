@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_165",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7947,
+  "total_latency_s": 72.465,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Print Filtered Table View', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should print a filtered table view with correct data', async ({ page }) => {\n    // Filter the table by entering a search term\n    const searchInput = page.getByPlaceholder('Search table...');\n    await searchInput.fill('active');\n\n    // Wait for the table to update with filtered results\n    await page.waitForResponse(response => \n      response.url().includes('/api/table/data') && response.status() === 200\n    );\n\n    // Verify the table displays filtered results\n    const tableBody = page.getByRole('row', { name: /active/i });\n    await expect(tableBody).toBeVisible();\n\n    // Verify the table has at least one row\n    const rows = page.getByRole('row');\n    const rowCount = await rows.count();\n    expect(rowCount).toBeGreaterThan(0);\n\n    // Click the print button\n    const printButton = page.getByRole('button', { name: /print table/i });\n    await printButton.click();\n\n    // Wait for the print dialog to appear\n    await page.waitForTimeout(500);\n\n    // Verify the print dialog is visible\n    const printDialog = page.locator('[data-testid=\"print-dialog\"]');\n    await expect(printDialog).toBeVisible();\n\n    // Verify the print preview shows the filtered data\n    const printPreview = page.locator('[data-testid=\"print-preview\"]');\n    await expect(printPreview).toContainText('active');\n    await expect(printPreview).toContainText('filtered results');\n\n    // Verify the print button is disabled after printing\n    await expect(printButton).toBeDisabled();\n  });\n\n  test('should handle empty filter results and print gracefully', async ({ page }) => {\n    // Filter the table with a non-existent term\n    const searchInput = page.getByPlaceholder('Search table...');\n    await searchInput.fill('nonexistentterm123');\n\n    // Wait for the table to update\n    await page.waitForResponse(response => \n      response.url().includes('/api/table/data') && response.status() === 200\n    );\n\n    // Verify the table shows no results\n    const tableBody = page.getByRole('row');\n    const rowCount = await tableBody.count();\n    expect(rowCount).toBe(0);\n\n    // Verify the no results message is displayed\n    const noResultsMessage = page.getByText('No results found');\n    await expect(noResultsMessage).toBeVisible();\n\n    // Click the print button\n    const printButton = page.getByRole('button', { name: /print table/i });\n    await printButton.click();\n\n    // Wait for the print dialog to appear\n    await page.waitForTimeout(500);\n\n    // Verify the print dialog is visible\n    const printDialog = page.locator('[data-testid=\"print-dialog\"]');\n    await expect(printDialog).toBeVisible();\n\n    // Verify the print preview shows the no results message\n    const printPreview = page.locator('[data-testid=\"print-preview\"]');\n    await expect(printPreview).toContainText('No results found');\n\n    // Verify the print button is re-enabled after handling empty results\n    await expect(printButton).not.toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7947,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4156,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.465,
+      "feedback_used": ""
+    }
+  ]
+}

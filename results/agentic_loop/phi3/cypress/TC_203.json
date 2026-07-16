@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_203",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7501,
+  "total_latency_s": 411.162,
+  "final_script": "describe('Filter List by Multiple Statuses', () => {\n  beforeEach(() => {\n    cy.visit('/list');\n  });\n\n  it('should filter list by multiple statuses simultaneously and display matching items', () => {\n    // Setup: Load initial list with multiple items\n    cy.get('[data-testid=\"list-item\"]').should('have.length.greaterThan', 0);\n\n    // Intercept API call to get list items\n    cy.intercept('GET', '/api/items').as('getItems');\n    cy.wait('@getItems');\n\n    // Verify initial list is displayed\n    cy.get('[data-testid=\"list-item\"]').should('have.length.greaterThan', 0);\n\n    // Click filter button\n    cy.get('[data-testid=\"filter-button\"]').click();\n\n    // Verify filter dropdown appears\n    cy.get('[data-testid=\"filter-dropdown\"]').should('be.visible');\n\n    // Select multiple statuses from dropdown\n    cy.get('[data-testid=\"filter-dropdown\"]').select('Completed');\n    cy.get('[data-testid=\"filter-dropdown\"]').select('In Progress');\n\n    // Verify filter is applied\n    cy.get('[data-testid=\"filter-dropdown\"]').should('contain', 'Completed');\n    cy.get('[data-testid=\"filter-dropdown\"]').should('contain', 'In Progress');\n\n    // Verify filtered items are displayed\n    cy.get('[data-testid=\"list-item\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"list-item\"]').should('contain', 'Completed');\n    cy.get('[data-testid=\"list-item\"]').should('contain', 'In Progress');\n\n    // Verify no items are displayed for excluded statuses\n    cy.get('[data-testid=\"list-item\"]').should('not.contain', 'Cancelled');\n\n    // Verify filter button is still visible\n    cy.get('[data-testid=\"filter-button\"]').should('be.visible');\n  });\n\n  it('should handle edge case where no items match the filter criteria', () => {\n    // Setup: Load initial list with no matching items\n    cy.intercept('GET', '/api/items').as('getItems');\n    cy.wait('@getItems');\n\n    // Verify initial list is displayed\n    cy.get('[data-testid=\"list-item\"]').should('have.length.greaterThan', 0);\n\n    // Click filter button\n    cy.get('[data-testid=\"filter-button\"]').click();\n\n    // Verify filter dropdown appears\n    cy.get('[data-testid=\"filter-dropdown\"]').should('be.visible');\n\n    // Select multiple statuses from dropdown\n    cy.get('[data-testid=\"filter-dropdown\"]').select('Completed');\n    cy.get('[data-testid=\"filter-dropdown\"]').select('In Progress');\n\n    // Verify filter is applied\n    cy.get('[data-testid=\"filter-dropdown\"]').should('contain', 'Completed');\n    cy.get('[data-testid=\"filter-dropdown\"]').should('contain', 'In Progress');\n\n    // Verify no items are displayed\n    cy.get('[data-testid=\"list-item\"]').should('have.length.equal', 0);\n\n    // Verify filter button still exists\n    cy.get('[data-testid=\"filter-button\"]').should('be.visible');\n\n    // Verify no error message is displayed\n    cy.get('[data-testid=\"no-results-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7501,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3671,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 411.162,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_044",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.819,
+  "total_latency_s": 71.479,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should navigate to relevant content when clicking a notification', async ({ page }) => {\n    // Verify notifications page is loaded\n    const notificationsList = page.getByRole('list', { name: /notifications/i });\n    await expect(notificationsList).toBeVisible();\n\n    // Verify notification items are visible\n    const notificationItems = page.getByRole('listitem');\n    await expect(notificationItems).toHaveCount(3);\n\n    // Click on a notification to navigate to the relevant content\n    const firstNotification = page.getByRole('listitem').first();\n    await firstNotification.click();\n\n    // Verify navigation to the content page\n    await expect(page).toHaveURL(/.*\\/content\\/123/);\n    await expect(page.getByRole('heading', { name: /notification content/i })).toBeVisible();\n\n    // Verify notification details are displayed\n    const notificationTitle = page.getByText('New feature released');\n    await expect(notificationTitle).toBeVisible();\n  });\n\n  test('should handle notification with no associated content gracefully', async ({ page }) => {\n    // Verify notifications page is loaded\n    const notificationsList = page.getByRole('list', { name: /notifications/i });\n    await expect(notificationsList).toBeVisible();\n\n    // Click on a notification that has no associated content\n    const noContentNotification = page.getByRole('listitem', { name: /no content/i });\n    await noContentNotification.click();\n\n    // Verify user is on the notifications page\n    await expect(page).toHaveURL(/.*\\/notifications/);\n    await expect(page.getByRole('heading', { name: /notifications/i })).toBeVisible();\n\n    // Verify a message is displayed when no content is available\n    const noContentMessage = page.getByText(/no content available/i);\n    await expect(noContentMessage).toBeVisible();\n\n    // Verify the notification is still visible\n    await expect(noContentNotification).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.819,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4966,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.479,
+      "feedback_used": ""
+    }
+  ]
+}

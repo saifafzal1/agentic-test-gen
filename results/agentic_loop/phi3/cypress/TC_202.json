@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_202",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7799,
+  "total_latency_s": 384.777,
+  "final_script": "describe('Search Result Snippets with Highlighted Terms', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should display search terms highlighted in result snippets', () => {\n    // Intercept the search API call\n    cy.intercept('GET', '/api/search*', (req) => {\n      expect(req.url).to.include('/api/search');\n      expect(req.body.query).to.equal('Cypress');\n    }).as('searchRequest');\n\n    // Perform search\n    cy.get('[data-testid=\"search-input\"]').type('Cypress');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for search results to load\n    cy.wait('@searchRequest');\n\n    // Verify search results are displayed\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"search-result-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify highlighted terms are present in the first result snippet\n    cy.get('[data-testid=\"search-result-item\"]').first().should('contain', '<mark class=\"highlight\">Cypress</mark>');\n\n    // Verify highlighted term is styled correctly\n    cy.get('[data-testid=\"search-result-item\"]').first().should('have.css', 'mark.color', 'rgba(255, 0, 0, 0.5)');\n\n    // Verify other search terms are also highlighted\n    cy.get('[data-testid=\"search-result-item\"]').first().should('contain', '<mark class=\"highlight\">automation</mark>');\n\n    // Verify highlighted terms are not present in non-matching results\n    cy.get('[data-testid=\"search-result-item\"]').last().should('not.contain', '<mark class=\"highlight\">Cypress</mark>');\n  });\n\n  it('should handle empty search term and display no results', () => {\n    // Intercept the search API call\n    cy.intercept('GET', '/api/search*', (req) => {\n      expect(req.url).to.include('/api/search');\n      expect(req.body.query).to.equal('');\n    }).as('emptySearchRequest');\n\n    // Perform empty search\n    cy.get('[data-testid=\"search-input\"]').clear().type('');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for empty search results\n    cy.wait('@emptySearchRequest');\n\n    // Verify no results are displayed\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"search-result-item\"]').should('have.length', 0);\n\n    // Verify empty state message is displayed\n    cy.get('[data-testid=\"empty-state-message\"]').should('be.visible');\n    cy.get('[data-testid=\"empty-state-message\"]').should('contain', 'No results found');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7799,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4663,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 384.777,
+      "feedback_used": ""
+    }
+  ]
+}

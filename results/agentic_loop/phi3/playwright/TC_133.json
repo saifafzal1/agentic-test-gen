@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_133",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8957,
+  "total_latency_s": 305.271,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Submission in Modal Dialog', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form-modal');\n  });\n\n  test('should submit form inside modal and display success feedback', async ({ page }) => {\n    // Open modal using getByRole\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modal = page.locator('[data-testid=\"modal-dialog\"]');\n    await expect(modal).toBeVisible();\n\n    // Fill form fields using getByLabel\n    const nameInput = page.getByLabel('Name');\n    await nameInput.fill('John Doe');\n\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('john.doe@example.com');\n\n    const messageInput = page.getByLabel('Message');\n    await messageInput.fill('This is a test message');\n\n    // Verify all form fields are filled\n    await expect(nameInput).toHaveValue('John Doe');\n    await expect(emailInput).toHaveValue('john.doe@example.com');\n    await expect(messageInput).toHaveValue('This is a test message');\n\n    // Submit form using getByRole\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify success feedback appears\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify modal closes\n    await expect(modal).not.toBeVisible();\n  });\n\n  test('should handle empty form submission and display error feedback', async ({ page }) => {\n    // Open modal using getByRole\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modal = page.locator('[data-testid=\"modal-dialog\"]');\n    await expect(modal).toBeVisible();\n\n    // Fill form fields using getByLabel\n    const nameInput = page.getByLabel('Name');\n    await nameInput.fill('');\n\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('');\n\n    const messageInput = page.getByLabel('Message');\n    await messageInput.fill('');\n\n    // Submit form using getByRole\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify error feedback appears\n    const errorMessage = page.getByText('All fields are required');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify modal still exists\n    await expect(modal).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8957,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.6524,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 305.271,
+      "feedback_used": ""
+    }
+  ]
+}

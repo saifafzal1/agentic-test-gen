@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_144",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8282,
+  "total_latency_s": 785.187,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal with Tabbed Content - Active Tab Persistence', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/modal-tabbed-content');\n  });\n\n  test('should remember and display the active tab when reopening the modal', async ({ page }) => {\n    // Open the modal\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n    \n    // Verify modal is visible\n    const modal = page.locator('[data-testid=\"modal-dialog\"]');\n    await expect(modal).toBeVisible();\n    \n    // Verify first tab is active\n    const firstTab = page.getByRole('tab', { name: /tab 1/i });\n    await expect(firstTab).toBeVisible();\n    \n    // Verify content of first tab is displayed\n    const firstTabContent = page.getByRole('region', { name: /tab 1 content/i });\n    await expect(firstTabContent).toBeVisible();\n    \n    // Close the modal\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n    \n    // Verify modal is closed\n    await expect(modal).not.toBeVisible();\n    \n    // Reopen the modal\n    await openButton.click();\n    \n    // Verify modal is visible again\n    await expect(modal).toBeVisible();\n    \n    // Verify first tab is still active\n    await expect(firstTab).toBeVisible();\n    \n    // Verify content of first tab is still displayed\n    await expect(firstTabContent).toBeVisible();\n  });\n\n  test('should remember and display the active tab when switching between tabs', async ({ page }) => {\n    // Open the modal\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n    \n    // Verify modal is visible\n    const modal = page.locator('[data-testid=\"modal-dialog\"]');\n    await expect(modal).toBeVisible();\n    \n    // Verify first tab is active\n    const firstTab = page.getByRole('tab', { name: /tab 1/i });\n    await expect(firstTab).toBeVisible();\n    \n    // Verify content of first tab is displayed\n    const firstTabContent = page.getByRole('region', { name: /tab 1 content/i });\n    await expect(firstTabContent).toBeVisible();\n    \n    // Switch to second tab\n    const secondTab = page.getByRole('tab', { name: /tab 2/i });\n    await secondTab.click();\n    \n    // Verify second tab is now active\n    await expect(secondTab).toBeVisible();\n    \n    // Verify content of second tab is displayed\n    const secondTabContent = page.getByRole('region', { name: /tab 2 content/i });\n    await expect(secondTabContent).toBeVisible();\n    \n    // Switch back to first tab\n    await firstTab.click();\n    \n    // Verify first tab is active again\n    await expect(firstTab).toBeVisible();\n    \n    // Verify content of first tab is still displayed\n    await expect(firstTabContent).toBeVisible();\n    \n    // Close the modal\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n    \n    // Verify modal is closed\n    await expect(modal).not.toBeVisible();\n    \n    // Reopen the modal\n    await openButton.click();\n    \n    // Verify modal is visible again\n    await expect(modal).toBeVisible();\n    \n    // Verify first tab is active\n    await expect(firstTab).toBeVisible();\n    \n    // Verify content of first tab is still displayed\n    await expect(firstTabContent).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8282,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5274,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 785.187,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_006",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8858,
+  "total_latency_s": 79.348,
+  "final_script": "describe('Login Form Validation - Empty Fields', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should prevent form submission when email and password fields are empty', () => {\n    // Verify login form is visible\n    cy.get('[data-testid=\"login-form\"]').should('be.visible');\n    cy.get('[data-testid=\"email-input\"]').should('be.visible');\n    cy.get('[data-testid=\"password-input\"]').should('be.visible');\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n\n    // Attempt to submit the form without entering any data\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Verify error messages appear for both fields\n    cy.get('[data-testid=\"email-error\"]').should('be.visible').should('contain', 'Email is required');\n    cy.get('[data-testid=\"password-error\"]').should('be.visible').should('contain', 'Password is required');\n\n    // Verify form was not submitted (no redirect or API call)\n    cy.url().should('include', '/login');\n    cy.get('[data-testid=\"login-form\"]').should('be.visible');\n  });\n\n  it('should prevent form submission when only email field is filled and password is empty', () => {\n    // Fill only the email field\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n\n    // Attempt to submit the form\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Verify password error message appears\n    cy.get('[data-testid=\"password-error\"]').should('be.visible').should('contain', 'Password is required');\n\n    // Verify email error does not appear (or is cleared)\n    cy.get('[data-testid=\"email-error\"]').should('not.exist');\n\n    // Verify form was not submitted\n    cy.url().should('include', '/login');\n    cy.get('[data-testid=\"login-form\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8858,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.8194,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.348,
+      "feedback_used": ""
+    }
+  ]
+}

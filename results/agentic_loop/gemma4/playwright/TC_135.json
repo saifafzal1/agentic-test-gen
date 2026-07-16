@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_135",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8507,
+  "total_latency_s": 72.093,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Drawer/Slide-in Panel from Right', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/drawer-panel');\n  });\n\n  test('should open drawer panel from right when button is clicked', async ({ page }) => {\n    // Verify drawer is initially closed\n    const drawer = page.getByRole('region', { name: /drawer panel/i });\n    await expect(drawer).not.toBeVisible();\n\n    // Click the open button using getByRole\n    const openButton = page.getByRole('button', { name: /open drawer/i });\n    await expect(openButton).toBeVisible();\n    await openButton.click();\n\n    // Verify drawer is now visible\n    await expect(drawer).toBeVisible();\n\n    // Verify drawer has correct width and position\n    const drawerBoundingBox = await drawer.boundingBox();\n    expect(drawerBoundingBox.width).toBeGreaterThan(300);\n    expect(drawerBoundingBox.x).toBeGreaterThan(page.viewportSize().width - 500);\n\n    // Verify drawer content is visible\n    const drawerTitle = page.getByText(/drawer panel/i);\n    await expect(drawerTitle).toBeVisible();\n\n    // Verify close button is visible and clickable\n    const closeButton = page.getByRole('button', { name: /close drawer/i });\n    await expect(closeButton).toBeVisible();\n    await expect(closeButton).not.toBeDisabled();\n\n    // Verify drawer is positioned on the right side\n    const drawerRightEdge = await drawer.evaluate((el) => el.getBoundingClientRect().right);\n    const viewportRightEdge = page.viewportSize().width;\n    expect(drawerRightEdge).toBeCloseTo(viewportRightEdge);\n  });\n\n  test('should close drawer panel when close button is clicked or ESC is pressed', async ({ page }) => {\n    // Open the drawer panel\n    const openButton = page.getByRole('button', { name: /open drawer/i });\n    await openButton.click();\n\n    const drawer = page.getByRole('region', { name: /drawer panel/i });\n    await expect(drawer).toBeVisible();\n\n    // Close the drawer using the close button\n    const closeButton = page.getByRole('button', { name: /close drawer/i });\n    await closeButton.click();\n\n    // Verify drawer is closed\n    await expect(drawer).not.toBeVisible();\n\n    // Verify open button is still visible and functional\n    await expect(openButton).toBeVisible();\n\n    // Close the drawer using ESC key\n    await page.keyboard.press('Escape');\n    await expect(drawer).not.toBeVisible();\n\n    // Verify drawer is not visible after ESC\n    const drawerBoundingBox = await drawer.boundingBox();\n    expect(drawerBoundingBox).toBeNull();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8507,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.6022,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.093,
+      "feedback_used": ""
+    }
+  ]
+}

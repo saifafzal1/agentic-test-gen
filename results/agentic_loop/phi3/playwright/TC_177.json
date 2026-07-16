@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_177",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8113,
+  "total_latency_s": 511.81,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Download Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should successfully download a previously uploaded file', async ({ page }) => {\n    // Upload a file using getByLabel\n    const uploadButton = page.getByRole('button', { name: /upload file/i });\n    await uploadButton.click();\n\n    const fileInput = page.getByLabel(/choose file/i);\n    await fileInput.setInputFiles('fixtures/sample-document.pdf');\n\n    const uploadButton = page.getByRole('button', { name: /upload file/i });\n    await uploadButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/file uploaded successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Navigate to download page\n    const downloadButton = page.getByRole('button', { name: /download file/i });\n    await downloadButton.click();\n\n    // Verify download dialog appears\n    const downloadDialog = page.getByRole('dialog', { name: /download file/i });\n    await expect(downloadDialog).toBeVisible();\n\n    // Verify file name is displayed\n    const fileName = page.getByText(/sample-document.pdf/i);\n    await expect(fileName).toBeVisible();\n\n    // Verify download button is enabled\n    const downloadButton = page.getByRole('button', { name: /download/i });\n    await expect(downloadButton).toBeEnabled();\n\n    // Click download button\n    await downloadButton.click();\n\n    // Verify file is downloaded\n    const downloadSuccess = page.getByText(/file downloaded/i);\n    await expect(downloadSuccess).toBeVisible();\n\n    // Verify file exists in downloads directory\n    const downloadsDir = page.locator('[data-testid=\"downloads-directory\"]');\n    await expect(downloadsDir).toBeVisible();\n\n    const filePath = page.locator('[data-testid=\"downloaded-file-path\"]');\n    await expect(filePath).toContainText('sample-document.pdf');\n\n    // Verify file is accessible\n    const fileContent = page.locator('[data-testid=\"downloaded-file-content\"]');\n    await expect(fileContent).toBeVisible();\n  });\n\n  test('should handle failed download due to network error', async ({ page }) => {\n    // Upload a file using getByLabel\n    const uploadButton = page.getByRole('button', { name: /upload file/i });\n    await uploadButton.click();\n\n    const fileInput = page.getByLabel(/choose file/i);\n    await fileInput.setInputFiles('fixtures/sample-document.pdf');\n\n    const uploadButton = page.getByRole('button', { name: /upload file/i });\n    await uploadButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/file uploaded successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Navigate to download page\n    const downloadButton = page.getByRole('button', { name: /download file/i });\n    await downloadButton.click();\n\n    // Verify download dialog appears\n    const downloadDialog = page.getByRole('dialog', { name: /download file/i });\n    await expect(downloadDialog).toBeVisible();\n\n    // Mock network error\n    await page.route('**/api/download/sample-document.pdf', (route) => {\n      route.abort('Failed to download file');\n    });\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/download failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify retry button is visible\n    const retryButton = page.getByRole('button', { name: /retry download/i });\n    await expect(retryButton).toBeVisible();\n\n    // Click retry button\n    await retryButton.click();\n\n    // Verify download dialog reappears\n    await expect(downloadDialog).toBeVisible();\n\n    // Verify file name is still displayed\n    const fileName = page.getByText(/sample-document.pdf/i);\n    await expect(fileName).toBeVisible();\n\n    // Verify download button is now enabled\n    const downloadButton = page.getByRole('button', { name: /download/i });\n    await expect(downloadButton).toBeEnabled();\n\n    // Click download button\n    await downloadButton.click();\n\n    // Verify file is downloaded\n    const downloadSuccess = page.getByText(/file downloaded/i);\n    await expect(downloadSuccess).toBeVisible();\n\n    // Verify file exists in downloads directory\n    const downloadsDir = page.locator('[data-testid=\"downloads-directory\"]');\n    await expect(downloadsDir).toBeVisible();\n\n    const filePath = page.locator('[data-testid=\"downloaded-file-path\"]');\n    await expect(filePath).toContainText('sample-document.pdf');\n\n    // Verify file is accessible\n    const fileContent = page.locator('[data-testid=\"downloaded-file-content\"]');\n    await expect(fileContent).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5063,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4211,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 54.816,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8113,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3709,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 456.994,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

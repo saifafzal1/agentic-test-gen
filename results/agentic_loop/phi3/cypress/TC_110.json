@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_110",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.771,
+  "total_latency_s": 39.789,
+  "final_script": "describe('Async Data Fetching - Non-blocking Initial Page Render', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should render initial page without blocking and display data after async fetch', () => {\n    // Verify initial page is visible\n    cy.get('[data-testid=\"page-title\"]').should('be.visible');\n    cy.get('[data-testid=\"dashboard-header\"]').should('be.visible');\n\n    // Verify initial content is loaded\n    cy.get('[data-testid=\"dashboard-stats\"]').should('be.visible');\n    cy.get('[data-testid=\"dashboard-stats\"]').should('contain', 'Loading');\n\n    // Wait for async data fetch\n    cy.intercept('GET', '/api/dashboard/stats').as('fetchStats');\n    cy.wait('@fetchStats');\n\n    // Verify async data is displayed\n    cy.get('[data-testid=\"dashboard-stats\"]').should('contain', 'Data loaded');\n    cy.get('[data-testid=\"dashboard-stats\"]').should('contain', 'Total Users');\n    cy.get('[data-testid=\"dashboard-stats\"]').should('contain', 'Active Users');\n\n    // Verify other non-blocking elements are visible\n    cy.get('[data-testid=\"dashboard-nav\"]').should('be.visible');\n    cy.get('[data-testid=\"dashboard-charts\"]').should('be.visible');\n  });\n\n  it('should handle error during async data fetch and display error state', () => {\n    // Verify initial page is visible\n    cy.get('[data-testid=\"page-title\"]').should('be.visible');\n\n    // Intercept with error response\n    cy.intercept('GET', '/api/dashboard/stats', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' }\n    }).as('fetchStatsError');\n\n    // Wait for error response\n    cy.wait('@fetchStatsError');\n\n    // Verify error state is displayed\n    cy.get('[data-testid=\"dashboard-stats\"]').should('be.visible');\n    cy.get('[data-testid=\"dashboard-stats\"]').should('contain', 'Error loading data');\n\n    // Verify error message is shown\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Failed to load dashboard stats');\n\n    // Verify user can retry or navigate away\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n    cy.get('[data-testid=\"retry-button\"]').click();\n\n    // Wait for retry\n    cy.intercept('GET', '/api/dashboard/stats').as('fetchStatsRetry');\n    cy.wait('@fetchStatsRetry');\n\n    // Verify data is now loaded\n    cy.get('[data-testid=\"dashboard-stats\"]').should('contain', 'Data loaded');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.771,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4367,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 39.789,
+      "feedback_used": ""
+    }
+  ]
+}

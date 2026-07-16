@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_145",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7937,
+  "total_latency_s": 300.992,
+  "final_script": "describe('Cookie Consent Banner - Disappearance After Acceptance', () => {\n  beforeEach(() => {\n    cy.visit('/cookie-consent');\n  });\n\n  it('should hide the cookie consent banner after user accepts', () => {\n    // Verify the banner is visible initially\n    cy.get('[data-testid=\"cookie-consent-banner\"]').should('be.visible');\n    cy.get('[data-testid=\"cookie-consent-accept-button\"]').should('be.visible');\n\n    // Intercept the consent API call\n    cy.intercept('POST', '/api/consent/accept').as('acceptConsent');\n\n    // Click the accept button\n    cy.get('[data-testid=\"cookie-consent-accept-button\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@acceptConsent');\n\n    // Verify the banner is hidden\n    cy.get('[data-testid=\"cookie-consent-banner\"]').should('not.exist');\n\n    // Verify the consent was recorded\n    cy.get('[data-testid=\"consent-status-indicator\"]').should('contain', 'Consent Granted');\n\n    // Verify the user can interact with the page\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n  });\n\n  it('should not hide the banner if user declines or closes it', () => {\n    // Verify the banner is visible\n    cy.get('[data-testid=\"cookie-consent-banner\"]').should('be.visible');\n\n    // Intercept the decline API call\n    cy.intercept('POST', '/api/consent/decline').as('declineConsent');\n\n    // Click the decline button\n    cy.get('[data-testid=\"cookie-consent-decline-button\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@declineConsent');\n\n    // Verify the banner remains visible\n    cy.get('[data-testid=\"cookie-consent-banner\"]').should('be.visible');\n\n    // Verify the consent was not recorded\n    cy.get('[data-testid=\"consent-status-indicator\"]').should('contain', 'Consent Declined');\n\n    // Verify the user can interact with the page\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7937,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5122,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 300.992,
+      "feedback_used": ""
+    }
+  ]
+}

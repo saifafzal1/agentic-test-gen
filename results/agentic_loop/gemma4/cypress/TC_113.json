@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_113",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7897,
+  "total_latency_s": 72.399,
+  "final_script": "describe('Background Job Notification Toast', () => {\n  beforeEach(() => {\n    cy.visit('/jobs');\n  });\n\n  it('should display toast notification when background job completes successfully', () => {\n    // Intercept the API call for job completion\n    cy.intercept('POST', '/api/jobs/complete').as('jobComplete');\n\n    // Click the button to start the background job\n    cy.get('[data-testid=\"start-job-button\"]').click();\n\n    // Verify job started\n    cy.get('[data-testid=\"job-status\"]').should('contain', 'Processing');\n\n    // Wait for the job completion API call\n    cy.wait('@jobComplete');\n\n    // Verify job status updated\n    cy.get('[data-testid=\"job-status\"]').should('contain', 'Completed');\n\n    // Verify toast notification appears\n    cy.get('[data-testid=\"toast-notification\"]')\n      .should('be.visible')\n      .should('contain', 'Job completed successfully');\n\n    // Verify toast has success styling\n    cy.get('[data-testid=\"toast-notification\"]')\n      .should('have.class', 'toast-success');\n\n    // Verify toast auto-hides after a delay\n    cy.get('[data-testid=\"toast-notification\"]')\n      .should('be.visible');\n    cy.get('[data-testid=\"toast-notification\"]')\n      .then(($toast) => {\n        const toastTimeout = parseInt($toast.attr('data-timeout') || 5000);\n        cy.wait(toastTimeout + 500);\n      });\n    cy.get('[data-testid=\"toast-notification\"]').should('not.exist');\n  });\n\n  it('should display error toast when background job fails', () => {\n    // Intercept the API call and mock a failure response\n    cy.intercept('POST', '/api/jobs/complete', {\n      statusCode: 500,\n      body: { error: 'Internal server error' }\n    }).as('jobFailed');\n\n    // Click the button to start the background job\n    cy.get('[data-testid=\"start-job-button\"]').click();\n\n    // Verify job started\n    cy.get('[data-testid=\"job-status\"]').should('contain', 'Processing');\n\n    // Wait for the job completion API call\n    cy.wait('@jobFailed');\n\n    // Verify job status updated to failed\n    cy.get('[data-testid=\"job-status\"]').should('contain', 'Failed');\n\n    // Verify error toast notification appears\n    cy.get('[data-testid=\"toast-notification\"]')\n      .should('be.visible')\n      .should('contain', 'Job failed');\n\n    // Verify toast has error styling\n    cy.get('[data-testid=\"toast-notification\"]')\n      .should('have.class', 'toast-error');\n\n    // Verify error details are shown in toast\n    cy.get('[data-testid=\"toast-notification\"]')\n      .should('contain', 'Internal server error');\n\n    // Verify toast does not auto-hide on error\n    cy.get('[data-testid=\"toast-notification\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7897,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4988,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.399,
+      "feedback_used": ""
+    }
+  ]
+}

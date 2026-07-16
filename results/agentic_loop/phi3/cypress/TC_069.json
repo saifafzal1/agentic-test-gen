@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_069",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7409,
+  "total_latency_s": 689.73,
+  "final_script": "describe('API Response Caching', () => {\n  beforeEach(() => {\n    cy.visit('/api/data');\n  });\n\n  it('should cache API response and return instant data on repeat visits', () => {\n    // First request - should hit API and cache response\n    cy.intercept('GET', '/api/data').as('firstRequest');\n    cy.wait('@firstRequest');\n    cy.get('[data-testid=\"api-response-content\"]').should('be.visible');\n    cy.get('[data-testid=\"api-response-content\"]').should('contain', 'Data loaded');\n\n    // Verify cache is set\n    cy.window().then((win) => {\n      expect(win.localStorage.getItem('api-data-cache')).to.not.be.null;\n    });\n\n    // Second request - should hit cache instead of API\n    cy.intercept('GET', '/api/data').as('secondRequest');\n    cy.wait('@secondRequest');\n    cy.get('[data-testid=\"api-response-content\"]').should('be.visible');\n    cy.get('[data-testid=\"api-response-content\"]').should('contain', 'Data loaded');\n\n    // Verify cache is still set\n    cy.window().then((win) => {\n      expect(win.localStorage.getItem('api-data-cache')).to.not.be.null;\n    });\n\n    // Clear cache\n    cy.window().then((win) => {\n      win.localStorage.removeItem('api-data-cache');\n    });\n\n    // Third request - should hit API again\n    cy.intercept('GET', '/api/data').as('thirdRequest');\n    cy.wait('@thirdRequest');\n    cy.get('[data-testid=\"api-response-content\"]').should('be.visible');\n    cy.get('[data-testid=\"api-response-content\"]').should('contain', 'Data loaded');\n\n    // Verify cache is cleared\n    cy.window().then((win) => {\n      expect(win.localStorage.getItem('api-data-cache')).to.be.null;\n    });\n  });\n\n  it('should handle cache expiration and refresh data', () => {\n    // First request - cache data\n    cy.intercept('GET', '/api/data', {\n      statusCode: 200,\n      body: {\n        data: 'Initial data',\n        expires: '2023-04-01T00:00:00Z'\n      }\n    }).as('firstRequest');\n    cy.wait('@firstRequest');\n    cy.get('[data-testid=\"api-response-content\"]').should('be.visible');\n    cy.get('[data-testid=\"api-response-content\"]').should('contain', 'Initial data');\n\n    // Wait for cache expiration\n    cy.window().then((win) => {\n      const cacheExpiry = new Date(win.localStorage.getItem('api-data-cache')).getTime();\n      const currentTime = new Date().getTime();\n      expect(currentTime - cacheExpiry).to.be.greaterThan(60000); // 1 minute\n    });\n\n    // Second request - should hit API and refresh data\n    cy.intercept('GET', '/api/data', {\n      statusCode: 200,\n      body: {\n        data: 'Updated data',\n        expires: '2023-04-02T00:00:00Z'\n      }\n    }).as('refreshRequest');\n    cy.wait('@refreshRequest');\n    cy.get('[data-testid=\"api-response-content\"]').should('be.visible');\n    cy.get('[data-testid=\"api-response-content\"]').should('contain', 'Updated data');\n\n    // Verify cache is still set but expired\n    cy.window().then((win) => {\n      expect(win.localStorage.getItem('api-data-cache')).to.not.be.null;\n      const cacheExpiry = new Date(win.localStorage.getItem('api-data-cache')).getTime();\n      expect(currentTime - cacheExpiry).to.be.greaterThan(60000);\n    });\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4602,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3074,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 334.833,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7409,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3363,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 354.897,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

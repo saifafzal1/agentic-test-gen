@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_032",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8603,
+  "total_latency_s": 39.702,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Image Preview Before Submission', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload-form');\n  });\n\n  test('should display image preview when user uploads an image file', async ({ page }) => {\n    // Intercept the file upload API\n    await page.route('**/api/upload', (route) => {\n      route.continue();\n    });\n\n    // Locate and upload file using getByLabel\n    const fileInput = page.getByLabel('Upload Image');\n    await fileInput.setInputFiles('tests/fixtures/sample-image.jpg');\n\n    // Wait for preview to appear\n    const previewContainer = page.getByRole('region', { name: /preview/i });\n    await expect(previewContainer).toBeVisible();\n\n    // Verify preview image is displayed\n    const previewImage = page.getByRole('img', { name: /sample-image/i });\n    await expect(previewImage).toBeVisible();\n\n    // Verify preview image has correct dimensions\n    const previewWidth = await previewImage.evaluate((el) => el.clientWidth);\n    const previewHeight = await previewImage.evaluate((el) => el.clientHeight);\n    expect(previewWidth).toBeGreaterThan(100);\n    expect(previewHeight).toBeGreaterThan(100);\n\n    // Verify preview image has correct source\n    const previewSrc = await previewImage.evaluate((el) => el.src);\n    expect(previewSrc).toContain('sample-image.jpg');\n\n    // Verify preview image has correct alt text\n    const previewAlt = await previewImage.evaluate((el) => el.alt);\n    expect(previewAlt).toBe('Sample Image');\n\n    // Verify preview container has correct title\n    const previewTitle = await previewContainer.getByText(/preview/i);\n    await expect(previewTitle).toBeVisible();\n  });\n\n  test('should display error message when uploading an invalid file type', async ({ page }) => {\n    // Intercept the file upload API\n    await page.route('**/api/upload', (route) => {\n      route.abort('Failed to upload');\n    });\n\n    // Locate and upload invalid file using getByLabel\n    const fileInput = page.getByLabel('Upload Image');\n    await fileInput.setInputFiles('tests/fixtures/invalid-file.txt');\n\n    // Wait for error message to appear\n    const errorMessage = page.getByText(/Only image files are allowed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message is displayed\n    const errorContainer = page.getByRole('region', { name: /error/i });\n    await expect(errorContainer).toBeVisible();\n\n    // Verify error message contains correct text\n    await expect(errorMessage).toContainText('Only image files are allowed');\n\n    // Verify preview container is not visible\n    const previewContainer = page.getByRole('region', { name: /preview/i });\n    await expect(previewContainer).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8603,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5343,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 39.702,
+      "feedback_used": ""
+    }
+  ]
+}

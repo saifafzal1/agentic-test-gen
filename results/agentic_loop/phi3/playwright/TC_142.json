@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_142",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8665,
+  "total_latency_s": 107.44,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Dialog Focus Restoration', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/modal-dialog');\n  });\n\n  test('should restore focus to trigger button after modal closes', async ({ page }) => {\n    // Open modal by clicking trigger button\n    const triggerButton = page.getByRole('button', { name: /open modal/i });\n    await triggerButton.click();\n\n    // Verify modal is visible\n    const modal = page.locator('[data-testid=\"modal-dialog\"]');\n    await expect(modal).toBeVisible();\n\n    // Verify modal content is visible\n    const modalContent = page.getByRole('region', { name: /modal content/i });\n    await expect(modalContent).toBeVisible();\n\n    // Verify close button is visible and enabled\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify trigger button is not focused\n    await expect(triggerButton).not.toBeFocused();\n\n    // Close modal by clicking close button\n    await closeButton.click();\n\n    // Verify modal is closed\n    await expect(modal).not.toBeVisible();\n\n    // Verify focus is restored to trigger button\n    await expect(triggerButton).toBeFocused();\n\n    // Verify modal button is now disabled\n    await expect(closeButton).toBeDisabled();\n  });\n\n  test('should handle focus restoration when modal is closed programmatically', async ({ page }) => {\n    // Open modal by clicking trigger button\n    const triggerButton = page.getByRole('button', { name: /open modal/i });\n    await triggerButton.click();\n\n    // Verify modal is visible\n    const modal = page.locator('[data-testid=\"modal-dialog\"]');\n    await expect(modal).toBeVisible();\n\n    // Verify modal content is visible\n    const modalContent = page.getByRole('region', { name: /modal content/i });\n    await expect(modalContent).toBeVisible();\n\n    // Verify close button is visible and enabled\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify trigger button is not focused\n    await expect(triggerButton).not.toBeFocused();\n\n    // Close modal programmatically\n    const closePromise = page.waitForResponse(response => response.url().includes('/api/modal/close'));\n    await closePromise;\n\n    // Verify modal is closed\n    await expect(modal).not.toBeVisible();\n\n    // Verify focus is restored to trigger button\n    await expect(triggerButton).toBeFocused();\n\n    // Verify close button is now disabled\n    await expect(closeButton).toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8665,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.655,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 107.44,
+      "feedback_used": ""
+    }
+  ]
+}

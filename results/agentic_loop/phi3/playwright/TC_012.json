@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_012",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7797,
+  "total_latency_s": 54.611,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Session Expiration After 30 Minutes of Inactivity', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should expire session after 30 minutes of inactivity and redirect to login', async ({ page }) => {\n    // Verify initial session is active\n    const sessionInfo = page.getByRole('status', { name: /session active/i });\n    await expect(sessionInfo).toBeVisible();\n\n    // Verify user is logged in\n    const userName = page.getByRole('heading', { name: /Welcome, John Doe/i });\n    await expect(userName).toBeVisible();\n\n    // Verify dashboard is visible\n    const dashboard = page.getByRole('region', { name: /dashboard/i });\n    await expect(dashboard).toBeVisible();\n\n    // Wait for 30 minutes of inactivity\n    await page.waitForTimeout(180000);\n\n    // Verify session expired message appears\n    const expiredMessage = page.getByText(/session expired/i);\n    await expect(expiredMessage).toBeVisible();\n\n    // Verify user is redirected to login page\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await expect(loginButton).toBeVisible();\n\n    // Verify login page is visible\n    const loginPage = page.getByRole('region', { name: /login/i });\n    await expect(loginPage).toBeVisible();\n\n    // Verify session expiration message is visible\n    const expirationInfo = page.getByText(/session expired after 30 minutes/i);\n    await expect(expirationInfo).toBeVisible();\n  });\n\n  test('should not expire session if user is active', async ({ page }) => {\n    // Verify initial session is active\n    const sessionInfo = page.getByRole('status', { name: /session active/i });\n    await expect(sessionInfo).toBeVisible();\n\n    // Verify user is logged in\n    const userName = page.getByRole('heading', { name: /Welcome, John Doe/i });\n    await expect(userName).toBeVisible();\n\n    // Verify dashboard is visible\n    const dashboard = page.getByRole('region', { name: /dashboard/i });\n    await expect(dashboard).toBeVisible();\n\n    // Verify user performs an action to keep session alive\n    const activeButton = page.getByRole('button', { name: /perform action/i });\n    await expect(activeButton).toBeVisible();\n    await activeButton.click();\n\n    // Verify session is still active\n    const sessionInfo = page.getByRole('status', { name: /session active/i });\n    await expect(sessionInfo).toBeVisible();\n\n    // Verify user is still logged in\n    const userName = page.getByRole('heading', { name: /Welcome, John Doe/i });\n    await expect(userName).toBeVisible();\n\n    // Verify dashboard is still visible\n    const dashboard = page.getByRole('region', { name: /dashboard/i });\n    await expect(dashboard).toBeVisible();\n\n    // Verify session does not expire\n    const expiredMessage = page.getByText(/session expired/i);\n    await expect(expiredMessage).not.toBeVisible();\n\n    // Verify session expiration message is not displayed\n    const expirationInfo = page.getByText(/session expired after 30 minutes/i);\n    await expect(expirationInfo).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7797,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3656,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 54.611,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_072",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7998,
+  "total_latency_s": 41.861,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Download on Export Button Click', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/export-page');\n  });\n\n  test('should trigger file download when export button is clicked', async ({ page }) => {\n    // Verify export button is visible and enabled\n    const exportButton = page.getByRole('button', { name: /export/i });\n    await expect(exportButton).toBeVisible();\n    await expect(exportButton).toBeEnabled();\n\n    // Verify download dialog is not visible initially\n    const downloadDialog = page.getByRole('dialog', { name: /download file/i });\n    await expect(downloadDialog).not.toBeVisible();\n\n    // Click export button to trigger download\n    await exportButton.click();\n\n    // Wait for download dialog to appear\n    await page.waitForTimeout(500);\n\n    // Verify download dialog is visible\n    await expect(downloadDialog).toBeVisible();\n\n    // Verify download dialog contains file name\n    const fileName = page.getByText(/exported-data.csv/i);\n    await expect(fileName).toBeVisible();\n\n    // Verify download button is present\n    const downloadButton = page.getByRole('button', { name: /download/i });\n    await expect(downloadButton).toBeVisible();\n\n    // Verify download button is enabled\n    await expect(downloadButton).toBeEnabled();\n\n    // Verify file download starts\n    await expect(downloadButton).toHaveAttribute('aria-label', 'Download file');\n  });\n\n  test('should handle failed file download and display error message', async ({ page }) => {\n    // Mock API response to simulate failed download\n    await page.route('**/api/export', (route) => {\n      route.abort('Failed to download file');\n    });\n\n    // Verify export button is visible and enabled\n    const exportButton = page.getByRole('button', { name: /export/i });\n    await expect(exportButton).toBeVisible();\n    await expect(exportButton).toBeEnabled();\n\n    // Click export button to trigger download\n    await exportButton.click();\n\n    // Wait for download dialog to appear\n    await page.waitForTimeout(500);\n\n    // Verify download dialog is visible\n    const downloadDialog = page.getByRole('dialog', { name: /download file/i });\n    await expect(downloadDialog).toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/failed to download file/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify download button is disabled\n    const downloadButton = page.getByRole('button', { name: /download/i });\n    await expect(downloadButton).toBeDisabled();\n\n    // Verify download dialog has cancel button\n    const cancelButton = page.getByRole('button', { name: /cancel/i });\n    await expect(cancelButton).toBeVisible();\n\n    // Verify download dialog has retry button\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7998,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4326,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 41.861,
+      "feedback_used": ""
+    }
+  ]
+}

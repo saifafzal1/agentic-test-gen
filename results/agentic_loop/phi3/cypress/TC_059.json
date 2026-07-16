@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_059",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7544,
+  "total_latency_s": 50.959,
+  "final_script": "describe('Data Refresh After Mutation', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should automatically refresh data after successful mutation', () => {\n    // Intercept the initial API call\n    cy.intercept('GET', '/api/data').as('initialData');\n    cy.wait('@initialData');\n\n    // Verify initial data is displayed\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n    cy.get('[data-testid=\"data-row\"]').should('have.length.greaterThan', 0);\n\n    // Perform mutation (e.g., update a record)\n    cy.get('[data-testid=\"update-button\"]').click();\n    cy.get('[data-testid=\"update-form\"]').within(() => {\n      cy.get('[data-testid=\"name-input\"]').type('New Name');\n      cy.get('[data-testid=\"email-input\"]').type('newemail@example.com');\n      cy.get('[data-testid=\"submit-button\"]').click();\n    });\n\n    // Verify mutation was successful\n    cy.get('[data-testid=\"mutation-success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"mutation-success-message\"]').should('contain', 'Record updated successfully');\n\n    // Wait for data refresh\n    cy.intercept('GET', '/api/data').as('refreshData');\n    cy.wait('@refreshData');\n\n    // Verify data is refreshed\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n    cy.get('[data-testid=\"data-row\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"data-row\"]').first().should('contain', 'New Name');\n\n    // Verify success message is cleared\n    cy.get('[data-testid=\"mutation-success-message\"]').should('not.exist');\n  });\n\n  it('should handle failed mutation and display error without refreshing data', () => {\n    // Intercept the initial API call\n    cy.intercept('GET', '/api/data').as('initialData');\n    cy.wait('@initialData');\n\n    // Verify initial data is displayed\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n    cy.get('[data-testid=\"data-row\"]').should('have.length.greaterThan', 0);\n\n    // Perform mutation with invalid data\n    cy.get('[data-testid=\"update-button\"]').click();\n    cy.get('[data-testid=\"update-form\"]').within(() => {\n      cy.get('[data-testid=\"name-input\"]').type('Invalid Name');\n      cy.get('[data-testid=\"email-input\"]').type('invalid-email');\n      cy.get('[data-testid=\"submit-button\"]').click();\n    });\n\n    // Verify mutation was attempted\n    cy.get('[data-testid=\"mutation-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"mutation-error-message\"]').should('contain', 'Validation failed');\n\n    // Verify data is still displayed\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n    cy.get('[data-testid=\"data-row\"]').should('have.length.greaterThan', 0);\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"mutation-error-message\"]').should('contain', 'Validation failed');\n\n    // Verify success message is not displayed\n    cy.get('[data-testid=\"mutation-success-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7544,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3812,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 50.959,
+      "feedback_used": ""
+    }
+  ]
+}

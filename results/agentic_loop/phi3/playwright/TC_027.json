@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_027",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.4701,
+  "total_latency_s": 1034.229,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('ZIP Code Auto-Formatting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should auto-format ZIP code as user types', async ({ page }) => {\n    // Verify ZIP code input field exists\n    const zipInput = page.getByLabel('ZIP Code');\n    await expect(zipInput).toBeVisible();\n\n    // Verify ZIP code input is empty initially\n    await expect(zipInput).toHaveValue('');\n\n    // Type the first digit of a valid ZIP code\n    await zipInput.fill('1');\n    await expect(zipInput).toHaveValue('1');\n\n    // Type the second digit\n    await zipInput.fill('2');\n    await expect(zipInput).toHaveValue('12');\n\n    // Type the third digit\n    await zipInput.fill('3');\n    await expect(zipInput).toHaveValue('123');\n\n    // Type the fourth digit\n    await zipInput.fill('4');\n    await expect(zipInput).toHaveValue('1234');\n\n    // Verify auto-formatting works for partial ZIP codes\n    await zipInput.fill('5');\n    await expect(zipInput).toHaveValue('12345');\n\n    // Verify auto-formatting works for ZIP codes with dashes\n    await zipInput.fill('12345');\n    await expect(zipInput).toHaveValue('12345');\n\n    // Verify auto-formatting works for ZIP codes with spaces\n    await zipInput.fill('12345');\n    await expect(zipInput).toHaveValue('12345');\n\n    // Verify auto-formatting works for ZIP codes with hyphens\n    await zipInput.fill('123-45');\n    await expect(zipInput).toHaveValue('123-45');\n\n    // Verify auto-formatting works for ZIP codes with mixed characters\n    await zipInput.fill('123-456');\n    await expect(zipInput).toHaveValue('123-456');\n\n    // Verify auto-formatting works for ZIP codes with leading zeros\n    await zipInput.fill('01234');\n    await expect(zipInput).toHaveValue('01234');\n\n    // Verify auto-formatting works for ZIP codes with non-numeric characters\n    await zipInput.fill('12345A');\n    await expect(zipInput).toHaveValue('12345A');\n\n    // Verify auto-formatting works for ZIP codes with special characters\n    await zipInput.fill('12345!');\n    await expect(zipInput).toHaveValue('12345!');\n\n    // Verify auto-formatting works for ZIP codes with uppercase letters\n    await zipInput.fill('12345');\n    await expect(zipInput).toHaveValue('12345');\n\n    // Verify auto-formatting works for ZIP codes with lowercase letters\n    await zipInput.fill('12345');\n    await expect(zipInput).toHaveValue('12345');\n\n    // Verify auto-formatting works for ZIP codes with mixed case\n    await zipInput.fill('12345');\n    await expect(zipInput).toHaveValue('12345');\n\n    // Verify auto-formatting works for ZIP codes with leading zeros\n    await zipInput.fill('01234');\n    await expect(zipInput).toHaveValue('01234');\n\n    // Verify auto-formatting works for ZIP codes with non-numeric characters\n    await zipInput.fill('12345A');\n    await expect(zipInput).toHaveValue('12345A');\n\n    // Verify auto-formatting works for ZIP codes with special characters\n    await zipInput.fill('12345!');\n    await expect(zipInput).toHaveValue('12345!');\n\n    // Verify auto-formatting works for ZIP codes with uppercase letters\n    await zipInput.fill",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4701,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3204,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 53.524,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4552,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.2705,
+        "missing_keywords": [],
+        "assertion_count": 27,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 470.743,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.4419,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.2262,
+        "missing_keywords": [],
+        "assertion_count": 35,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 509.962,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

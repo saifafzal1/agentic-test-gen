@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_171",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7514,
+  "total_latency_s": 34.329,
+  "final_script": "describe('Cancel In-Progress Upload', () => {\n  beforeEach(() => {\n    cy.visit('/upload');\n  });\n\n  it('should successfully cancel an in-progress upload', () => {\n    // Intercept the upload API call\n    cy.intercept('POST', '/api/uploads/start').as('uploadStart');\n    // Trigger the upload button\n    cy.get('[data-testid=\"upload-button\"]').click();\n    cy.wait('@uploadStart');\n\n    // Verify upload is in progress\n    cy.get('[data-testid=\"upload-progress-bar\"]').should('be.visible');\n    cy.get('[data-testid=\"upload-progress-percentage\"]').should('contain', '50%');\n\n    // Click cancel button\n    cy.get('[data-testid=\"cancel-upload-button\"]').click();\n\n    // Verify cancel button is disabled after click\n    cy.get('[data-testid=\"cancel-upload-button\"]').should('be.disabled');\n\n    // Verify upload was canceled\n    cy.get('[data-testid=\"upload-status\"]').should('contain', 'Upload canceled');\n    cy.get('[data-testid=\"upload-status\"]').should('not.contain', 'In progress');\n\n    // Verify no upload data is sent\n    cy.intercept('POST', '/api/uploads/start').as('uploadStart');\n    cy.wait('@uploadStart');\n    cy.get('@uploadStart').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n  });\n\n  it('should not allow canceling an already completed upload', () => {\n    // Trigger the upload button\n    cy.get('[data-testid=\"upload-button\"]').click();\n    cy.wait('@uploadStart');\n\n    // Verify upload is in progress\n    cy.get('[data-testid=\"upload-progress-bar\"]').should('be.visible');\n\n    // Click cancel button\n    cy.get('[data-testid=\"cancel-upload-button\"]').click();\n\n    // Verify cancel button is disabled\n    cy.get('[data-testid=\"cancel-upload-button\"]').should('be.disabled');\n\n    // Verify upload was not canceled (status should remain unchanged)\n    cy.get('[data-testid=\"upload-status\"]').should('contain', 'In progress');\n\n    // Verify no error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n\n    // Verify upload was completed successfully\n    cy.get('[data-testid=\"upload-status\"]').should('contain', 'Upload completed');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7514,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3713,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 34.329,
+      "feedback_used": ""
+    }
+  ]
+}

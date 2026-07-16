@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_057",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7521,
+  "total_latency_s": 409.549,
+  "final_script": "describe('Loading Skeleton During API Data Fetch', () => {\n  beforeEach(() => {\n    cy.visit('/data-fetch');\n  });\n\n  it('should display loading skeleton while API data is being fetched', () => {\n    // Intercept the API call\n    cy.intercept('GET', '/api/data').as('fetchData');\n\n    // Verify loading skeleton is visible\n    cy.get('[data-testid=\"loading-skeleton\"]').should('be.visible');\n    cy.get('[data-testid=\"loading-skeleton\"]').should('contain', 'Loading...');\n\n    // Click the button to trigger API call\n    cy.get('[data-testid=\"fetch-data-button\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@fetchData');\n\n    // Verify loading skeleton is hidden\n    cy.get('[data-testid=\"loading-skeleton\"]').should('not.exist');\n\n    // Verify data is displayed\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n    cy.get('[data-testid=\"data-row\"]').should('have.length.greaterThan', 0);\n  });\n\n  it('should handle API failure and display error message while loading skeleton', () => {\n    // Intercept the API call with a 500 error\n    cy.intercept('GET', '/api/data', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' }\n    }).as('fetchDataError');\n\n    // Verify loading skeleton is visible\n    cy.get('[data-testid=\"loading-skeleton\"]').should('be.visible');\n\n    // Click the button to trigger API call\n    cy.get('[data-testid=\"fetch-data-button\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@fetchDataError');\n\n    // Verify loading skeleton is still visible\n    cy.get('[data-testid=\"loading-skeleton\"]').should('be.visible');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Failed to load data');\n\n    // Verify data table is not displayed\n    cy.get('[data-testid=\"data-table\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7521,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3736,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 409.549,
+      "feedback_used": ""
+    }
+  ]
+}

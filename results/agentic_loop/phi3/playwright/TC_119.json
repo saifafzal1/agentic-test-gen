@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_119",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7733,
+  "total_latency_s": 446.601,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Countdown Timer Interval Update', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/timer');\n  });\n\n  test('should update countdown timer every second using interval', async ({ page }) => {\n    // Verify initial countdown value\n    const countdownDisplay = page.getByRole('heading', { name: /countdown/i });\n    await expect(countdownDisplay).toBeVisible();\n    const initialCountdownValue = page.getByText(/10 seconds/i);\n    await expect(initialCountdownValue).toBeVisible();\n\n    // Verify interval is set up\n    const intervalElement = page.getByRole('heading', { name: /interval/i });\n    await expect(intervalElement).toBeVisible();\n\n    // Verify timer starts\n    const startButton = page.getByRole('button', { name: /start/i });\n    await expect(startButton).toBeVisible();\n    await startButton.click();\n\n    // Wait for interval to trigger first update\n    await page.waitForTimeout(1000);\n\n    // Verify countdown value has decreased\n    const updatedCountdownValue = page.getByText(/9 seconds/i);\n    await expect(updatedCountdownValue).toBeVisible();\n\n    // Verify interval is still active\n    await expect(intervalElement).toBeVisible();\n\n    // Wait for another second\n    await page.waitForTimeout(1000);\n\n    // Verify countdown value has decreased again\n    const updatedCountdownValue2 = page.getByText(/8 seconds/i);\n    await expect(updatedCountdownValue2).toBeVisible();\n\n    // Verify interval is still active\n    await expect(intervalElement).toBeVisible();\n\n    // Wait for final second\n    await page.waitForTimeout(1000);\n\n    // Verify countdown reaches 0\n    const finalCountdownValue = page.getByText(/0 seconds/i);\n    await expect(finalCountdownValue).toBeVisible();\n\n    // Verify interval is still active\n    await expect(intervalElement).toBeVisible();\n\n    // Verify timer has stopped\n    const stopButton = page.getByRole('button', { name: /stop/i });\n    await expect(stopButton).toBeVisible();\n\n    // Verify countdown display is empty\n    const emptyCountdownDisplay = page.getByRole('heading', { name: /countdown/i });\n    await expect(emptyCountdownDisplay).toBeVisible();\n\n    // Verify countdown value is empty\n    const emptyCountdownValue = page.getByText(/0 seconds/i);\n    await expect(emptyCountdownValue).not.toBeVisible();\n\n    // Verify stop button is visible\n    await expect(stopButton).toBeVisible();\n  });\n\n  test('should handle interval reset and continue countdown', async ({ page }) => {\n    // Verify initial countdown value\n    const countdownDisplay = page.getByRole('heading', { name: /countdown/i });\n    await expect(countdownDisplay).toBeVisible();\n    const initialCountdownValue = page.getByText(/10 seconds/i);\n    await expect(initialCountdownValue).toBeVisible();\n\n    // Verify interval is set up\n    const intervalElement = page.getByRole('heading', { name: /interval/i });\n    await expect(intervalElement).toBeVisible();\n\n    // Verify timer starts\n    const startButton = page.getByRole('button', { name: /start/i });\n    await expect(startButton).toBeVisible();\n    await startButton.click();\n\n    // Wait for interval to trigger first update\n    await page.waitForTimeout(1000);\n\n    // Verify countdown value has decreased\n    const updatedCountdownValue = page.getByText(/9 seconds/i);\n    await expect(updatedCountdownValue).toBeVisible();\n\n    // Verify interval is still active\n    await expect(intervalElement).toBeVisible();\n\n    // Wait for another second\n    await page.waitForTimeout(1000);\n\n    // Verify countdown value has decreased again\n    const updatedCountdownValue2 = page.getByText(/8 seconds/i);\n    await expect(updatedCountdownValue2).toBeVisible();\n\n    // Verify interval is still active\n    await expect(intervalElement).toBeVisible();\n\n    // Wait for final second\n    await page.waitForTimeout(1000);\n\n    // Verify countdown reaches 0\n    const finalCountdownValue = page.getByText(/0 seconds/i);\n    await expect(finalCountdownValue).toBeVisible();\n\n    // Verify interval is still active\n    await expect(intervalElement).toBeVisible();\n\n    // Verify timer has stopped\n    const stopButton = page.getByRole('button', { name: /stop/i });\n    await expect(stopButton).toBeVisible();\n\n    // Verify countdown display is empty\n    const emptyCountdownDisplay = page.getByRole('heading', { name: /countdown/i });\n    await expect(emptyCountdownDisplay).toBeVisible();\n\n    // Verify countdown value is empty\n    const emptyCountdownValue = page.getByText(/0 seconds/i);\n    await expect(emptyCountdownValue).not.toBeVisible();\n\n    // Verify stop button is visible\n    await expect(stopButton).toBeVisible();\n\n    // Verify interval is still active\n    await expect(intervalElement).toBeVisible();\n\n    // Verify reset button is visible\n    const resetButton = page.getByRole('button', { name: /reset/i });\n    await expect(resetButton).toBeVisible();\n\n    // Verify countdown starts again after reset\n    await resetButton.click();\n\n    // Wait for interval to trigger first update\n    await page.waitForTimeout(1000);\n\n    // Verify countdown value has decreased\n    const updatedCountdownValue3 = page.getByText(/9 seconds/i);\n    await expect(updatedCountdownValue3).toBeVisible();\n\n    // Verify interval is still active\n    await expect(intervalElement).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.486,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3735,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 54.124,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7733,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3442,
+        "missing_keywords": [],
+        "assertion_count": 32,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 392.477,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

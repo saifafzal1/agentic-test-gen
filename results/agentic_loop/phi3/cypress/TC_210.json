@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_210",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7463,
+  "total_latency_s": 44.26,
+  "final_script": "describe('ARIA Landmarks for Page Regions', () => {\n  beforeEach(() => {\n    cy.visit('/landmarks-test');\n  });\n\n  it('should correctly apply ARIA landmarks to page regions', () => {\n    // Verify main navigation landmark is present\n    cy.get('[data-testid=\"main-navigation\"]').should('be.visible');\n    cy.get('[data-testid=\"main-navigation\"]').should('have.attr', 'aria-label', 'Main navigation');\n\n    // Verify main content landmark is present\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n    cy.get('[data-testid=\"main-content\"]').should('have.attr', 'aria-label', 'Main content');\n\n    // Verify footer landmark is present\n    cy.get('[data-testid=\"footer\"]').should('be.visible');\n    cy.get('[data-testid=\"footer\"]').should('have.attr', 'aria-label', 'Footer');\n\n    // Verify sidebar landmark is present\n    cy.get('[data-testid=\"sidebar\"]').should('be.visible');\n    cy.get('[data-testid=\"sidebar\"]').should('have.attr', 'aria-label', 'Sidebar');\n\n    // Verify search landmark is present\n    cy.get('[data-testid=\"search-bar\"]').should('be.visible');\n    cy.get('[data-testid=\"search-bar\"]').should('have.attr', 'aria-label', 'Search');\n\n    // Verify modal landmark is present\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-dialog\"]').should('have.attr', 'aria-label', 'Modal dialog');\n\n    // Verify error state landmark is present\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('have.attr', 'aria-live', 'polite');\n  });\n\n  it('should handle ARIA landmarks when page content is dynamically loaded', () => {\n    // Verify main navigation landmark is present before content loads\n    cy.get('[data-testid=\"main-navigation\"]').should('be.visible');\n\n    // Load content dynamically\n    cy.intercept('GET', '/api/content').as('loadContent');\n    cy.wait('@loadContent');\n\n    // Verify main content landmark is still present after content loads\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n\n    // Verify footer landmark is still present after content loads\n    cy.get('[data-testid=\"footer\"]').should('be.visible');\n\n    // Verify sidebar landmark is still present after content loads\n    cy.get('[data-testid=\"sidebar\"]').should('be.visible');\n\n    // Verify search landmark is still present after content loads\n    cy.get('[data-testid=\"search-bar\"]').should('be.visible');\n\n    // Verify modal landmark is still present after content loads\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Verify error state landmark is still present after content loads\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7463,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3545,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 44.26,
+      "feedback_used": ""
+    }
+  ]
+}

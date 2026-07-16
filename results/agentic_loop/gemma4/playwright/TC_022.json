@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_022",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8434,
+  "total_latency_s": 71.058,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Currency Field Formatting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/currency-form');\n  });\n\n  test('should format currency input with commas and two decimal places', async ({ page }) => {\n    // Locate and fill currency input using getByLabel\n    const currencyInput = page.getByLabel('Currency Amount');\n    await currencyInput.fill('1234567.9');\n\n    // Verify input value is formatted with commas and two decimal places\n    await expect(currencyInput).toHaveValue('1,234,567.90');\n\n    // Verify formatted value is displayed in read-only field\n    const formattedDisplay = page.getByText('Formatted Value');\n    await expect(formattedDisplay).toBeVisible();\n    await expect(formattedDisplay).toContainText('1,238,567.90');\n\n    // Verify currency symbol is displayed\n    const currencySymbol = page.getByText('$');\n    await expect(currencySymbol).toBeVisible();\n\n    // Verify submit button is enabled\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeEnabled();\n\n    // Submit the form\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should handle negative currency values and zero with correct formatting', async ({ page }) => {\n    // Locate and fill currency input with negative value\n    const currencyInput = page.getByLabel('Currency Amount');\n    await currencyInput.fill('-549.5');\n\n    // Verify negative value is formatted with commas and two decimal places\n    await expect(currencyInput).toHaveValue('-589.50');\n\n    // Verify formatted value is displayed\n    const formattedDisplay = page.getByText('Formatted Value');\n    await expect(formattedDisplay).toContainText('-589.50');\n\n    // Verify currency symbol is displayed\n    const currencySymbol = page.getByText('$');\n    await expect(currencySymbol).toBeVisible();\n\n    // Locate and fill currency input with zero\n    await currencyInput.fill('0');\n\n    // Verify zero value is formatted correctly\n    await expect(currencyInput).toHaveValue('0.00');\n\n    // Verify formatted value is updated\n    await expect(formattedDisplay).toContainText('0.00');\n\n    // Verify submit button is enabled\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeEnabled();\n\n    // Submit the form\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8434,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4781,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.058,
+      "feedback_used": ""
+    }
+  ]
+}

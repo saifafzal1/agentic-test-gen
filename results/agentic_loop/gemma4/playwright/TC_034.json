@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_034",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8124,
+  "total_latency_s": 71.106,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Auto-Save as Draft', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should auto-save form as draft every 30 seconds when user makes changes', async ({ page }) => {\n    // Verify form is visible\n    const form = page.getByRole('form');\n    await expect(form).toBeVisible();\n\n    // Verify draft status is not initially set\n    const draftStatus = page.getByText('Draft');\n    await expect(draftStatus).not.toBeVisible();\n\n    // Get form fields using getByLabel\n    const nameField = page.getByLabel('Full Name');\n    const emailField = page.getByLabel('Email Address');\n    const messageField = page.getByLabel('Message');\n\n    // Type in form fields\n    await nameField.fill('John Doe');\n    await emailField.fill('john@example.com');\n    await messageField.fill('This is a test message for auto-save.');\n\n    // Wait for the first auto-save to occur (should be within 30 seconds)\n    await page.waitForTimeout(35000);\n\n    // Verify draft status appears\n    await expect(draftStatus).toBeVisible();\n    await expect(draftStatus).toContainText('Draft');\n\n    // Verify save message appears\n    const saveMessage = page.getByText('Draft saved successfully');\n    await expect(saveMessage).toBeVisible();\n\n    // Verify draft status persists after another change\n    await messageField.fill('This is an updated test message.');\n    await page.waitForTimeout(35000);\n    await expect(draftStatus).toBeVisible();\n    await expect(draftStatus).toContainText('Draft');\n    await expect(saveMessage).toBeVisible();\n  });\n\n  test('should not auto-save when form is empty or user does not interact with fields', async ({ page }) => {\n    // Verify form is visible\n    const form = page.getByRole('form');\n    await expect(form).toBeVisible();\n\n    // Verify draft status is not visible when form is empty\n    const draftStatus = page.getByText('Draft');\n    await expect(draftStatus).not.toBeVisible();\n\n    // Verify save message is not visible when form is empty\n    const saveMessage = page.getByText('Draft saved successfully');\n    await expect(saveMessage).not.toBeVisible();\n\n    // Wait for the auto-save interval (should not trigger)\n    await page.waitForTimeout(35000);\n\n    // Verify draft status is still not visible\n    await expect(draftStatus).not.toBeVisible();\n\n    // Verify save message is still not visible\n    await expect(saveMessage).not.toBeVisible();\n\n    // Verify form fields are empty\n    const nameField = page.getByLabel('Full Name');\n    const emailField = page.getByLabel('Email Address');\n    const messageField = page.getByLabel('Message');\n    await expect(nameField).toHaveValue('');\n    await expect(emailField).toHaveValue('');\n    await expect(messageField).toHaveValue('');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8124,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3746,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.106,
+      "feedback_used": ""
+    }
+  ]
+}

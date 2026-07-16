@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_115",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8255,
+  "total_latency_s": 72.038,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Debounced Search Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should trigger search API only after 300ms pause in typing', async ({ page }) => {\n    // Setup API interception\n    await page.route('**/api/search?q=*', (route) => {\n      route.continue();\n    });\n\n    // Get search input using getByLabel\n    const searchInput = page.getByLabel('Search');\n    await expect(searchInput).toBeVisible();\n\n    // Get search button using getByRole\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await expect(searchButton).toBeVisible();\n\n    // Get results container using getByRole\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n\n    // Intercept and count API calls\n    let apiCallCount = 0;\n    await page.route('**/api/search?q=*', (route) => {\n      apiCallCount++;\n      route.continue();\n    });\n\n    // Type first character\n    await searchInput.fill('a');\n    await expect(apiCallCount).toBe(0);\n\n    // Wait for debounce period (less than 300ms)\n    await page.waitForTimeout(100);\n\n    // Type second character\n    await searchInput.fill('ap');\n    await expect(apiCallCount).toBe(0);\n\n    // Wait for debounce period (less than 300ms)\n    await page.waitForTimeout(100);\n\n    // Type third character\n    await searchInput.fill('app');\n    await expect(apiCallCount).toBe(0);\n\n    // Wait for debounce period (less than 300ms)\n    await page.waitForTimeout(100);\n\n    // Type fourth character\n    await searchInput.fill('appl');\n    await expect(apiCallCount).toBe(0);\n\n    // Wait for debounce period (less than 300ms)\n    await page.waitForTimeout(100);\n\n    // Type fifth character\n    await searchInput.fill('apple');\n    await expect(apiCallCount).toBe(0);\n\n    // Wait for debounce period (more than 300ms)\n    await page.waitForTimeout(350);\n\n    // Verify API was called exactly once\n    expect(apiCallCount).toBe(1);\n\n    // Verify search results are displayed\n    await expect(resultsContainer).toContainText('apple');\n    await expect(resultsContainer).toContainText('Apple Inc.');\n  });\n\n  test('should not trigger search API if input is cleared before debounce period', async ({ page }) => {\n    // Setup API interception\n    await page.route('**/api/search?q=*', (route) => {\n      route.continue();\n    });\n\n    // Get search input using getByLabel\n    const searchInput = page.getByLabel('Search');\n    await expect(searchInput).toBeVisible();\n\n    // Get search button using getByRole\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await expect(searchButton).toBeVisible();\n\n    // Intercept and count API calls\n    let apiCallCount = 0;\n    await page.route('**/api/search?q=*', (route) => {\n      apiCallCount++;\n      route.continue();\n    });\n\n    // Type first character\n    await searchInput.fill('a');\n    await expect(apiCallCount).toBe(0);\n\n    // Wait for debounce period (less than 300ms)\n    await page.waitForTimeout(100);\n\n    // Clear the input\n    await searchInput.clear();\n    await expect(apiCallCount).toBe(0);\n\n    // Wait for debounce period (more than 300ms)\n    await page.waitForTimeout(350);\n\n    // Verify API was never called\n    expect(apiCallCount).toBe(0);\n\n    // Verify results container is empty\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n    await expect(resultsContainer).not.toContainText('results');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8255,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4183,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.038,
+      "feedback_used": ""
+    }
+  ]
+}

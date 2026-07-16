@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_031",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7283,
+  "total_latency_s": 38.176,
+  "final_script": "describe('File Upload - Maximum File Size Limit', () => {\n  beforeEach(() => {\n    cy.visit('/file-upload');\n  });\n\n  it('should reject file upload when file size exceeds 5MB', () => {\n    // Create a large file (e.g., 10MB)\n    cy.fixture('large-file.zip', {\n      binary: true,\n      size: 10 * 1024 * 1024\n    }).then((file) => {\n      cy.get('[data-testid=\"file-input\"]').selectFile(file, { force: true });\n    });\n\n    // Intercept the file upload API call\n    cy.intercept('POST', '/api/upload', {\n      statusCode: 413,\n      body: {\n        error: 'File size exceeds maximum limit of 5MB'\n      }\n    }).as('fileUploadError');\n\n    // Attempt to submit the form\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for the error response\n    cy.wait('@fileUploadError');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'File size exceeds maximum limit');\n\n    // Verify file input is cleared\n    cy.get('[data-testid=\"file-input\"]').should('have.value', '');\n\n    // Verify retry button is visible\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n  });\n\n  it('should accept file upload when file size is within 5MB limit', () => {\n    // Create a small file (e.g., 2MB)\n    cy.fixture('small-file.pdf', {\n      binary: true,\n      size: 2 * 1024 * 1024\n    }).then((file) => {\n      cy.get('[data-testid=\"file-input\"]').selectFile(file, { force: true });\n    });\n\n    // Intercept the file upload API call\n    cy.intercept('POST', '/api/upload', {\n      statusCode: 200,\n      body: {\n        message: 'File uploaded successfully'\n      }\n    }).as('fileUploadSuccess');\n\n    // Attempt to submit the form\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for the success response\n    cy.wait('@fileUploadSuccess');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'File uploaded successfully');\n\n    // Verify file input is cleared\n    cy.get('[data-testid=\"file-input\"]').should('have.value', '');\n\n    // Verify retry button is not visible\n    cy.get('[data-testid=\"retry-button\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7283,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2943,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 38.176,
+      "feedback_used": ""
+    }
+  ]
+}

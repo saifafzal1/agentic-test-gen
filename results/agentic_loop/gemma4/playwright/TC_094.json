@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_094",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.504,
+  "total_latency_s": 371.672,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Permissions Error - Editing Another User\\'s Content', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display permissions error when attempting to edit another user\\'s content', async ({ page }) => {\n    // Setup: Log in as user with limited permissions\n    await page.goto('/login');\n    const usernameInput = page.getByLabel('Username');\n    await usernameInput.fill('limitedUser');\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('password123');\n    const loginButton = page.getByRole('button', { name: /sign in/i });\n    await loginButton.click();\n\n    // Navigate to another user's profile\n    await page.goto('/users/johnDoe');\n    const profileName = page.getByRole('heading', { name: /john doe/i });\n    await expect(profileName).toBeVisible();\n\n    // Attempt to edit the user's profile\n    const editButton = page.getByRole('button', { name: /edit profile/i });\n    await expect(editButton).toBeVisible();\n    await editButton.click();\n\n    // Verify edit form is visible\n    const editForm = page.getByRole('form');\n    await expect(editForm).toBeVisible();\n\n    // Attempt to submit the edit form\n    const saveButton = page.getByRole('button', { name: /save changes/i });\n    await saveButton.click();\n\n    // Verify permissions error message is displayed\n    const errorMessage = page.getByText(/permission denied/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error details\n    const errorDetails = page.getByText(/you do not have permission to edit this content/i);\n    await expect(errorDetails).toBeVisible();\n\n    // Verify edit form is still visible but disabled\n    await expect(editForm).toBeVisible();\n    const nameInput = page.getByLabel('Name');\n    await expect(nameInput).toBeDisabled();\n  });\n\n  test('should allow editing own content and prevent editing others\\' content', async ({ page }) => {\n    // Setup: Log in as user with full permissions\n    await page.goto('/login');\n    const usernameInput = page.getByLabel('Username');\n    await usernameInput.fill('adminUser');\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('password123');\n    const loginButton = page.getByRole('button', { name: /sign in/i });\n    await loginButton.click();\n\n    // Navigate to own profile\n    await page.goto('/users/adminUser');\n    const profileName = page.getByRole('heading', { name: /admin user/i });\n    await expect(profileName).toBeVisible();\n\n    // Attempt to edit own profile\n    const editButton = page.getByRole('button', { name: /edit profile/i });\n    await expect(editButton).toBeVisible();\n    await editButton.click();\n\n    // Verify edit form is visible and enabled\n    const editForm = page.getByRole('form');\n    await expect(editForm).toBeVisible();\n    const nameInput = page.getByLabel('Name');\n    await expect(nameInput).not.toBeDisabled();\n\n    // Update own profile\n    await nameInput.fill('Admin User Updated');\n    const saveButton = page.getByRole('button', { name: /save changes/i });\n    await saveButton.click();\n\n    // Verify success message\n    const successMessage = page.getByText(/profile updated successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Navigate to another user's profile\n    await page.goto('/users/johnDoe');\n    const johnDoeProfileName = page.getByRole('heading', { name: /john doe/i });\n    await expect(johnDoeProfileName).toBeVisible();\n\n    // Attempt to edit another user's profile\n    const johnDoeEditButton = page.getByRole('button', { name: /edit profile/i });\n    await expect(johnDoeEditButton).toBeVisible();\n    await johnDoeEditButton.click();\n\n    // Verify permissions error is displayed\n    const errorMessage = page.getByText(/permission denied/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify edit form is disabled\n    const johnDoeNameInput = page.getByLabel('Name');\n    await",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.504,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4132,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 77.466,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.5,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 118.493,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.5,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 175.713,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

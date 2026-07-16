@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_066",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8145,
+  "total_latency_s": 71.723,
+  "final_script": "describe('403 Error Handling - Access Denied Page', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should display access denied page when API returns 403 error', () => {\n    cy.intercept('GET', '/api/user/profile', {\n      statusCode: 403,\n      body: { error: 'Forbidden', message: 'Access denied' }\n    }).as('forbiddenRequest');\n\n    cy.get('[data-testid=\"load-profile-button\"]').click();\n    cy.wait('@forbiddenRequest');\n\n    cy.get('[data-testid=\"access-denied-page\"]').should('be.visible');\n    cy.get('[data-testid=\"access-denied-title\"]').should('contain', 'Access Denied');\n    cy.get('[data-testid=\"access-denied-message\"]').should('contain', 'Forbidden');\n    cy.get('[data-testid=\"access-denied-description\"]').should('contain', 'You do not have permission to access this resource');\n    cy.get('[data-testid=\"back-to-dashboard-button\"]').should('be.visible');\n    cy.get('[data-testid=\"back-to-dashboard-button\"]').click();\n    cy.url().should('include', '/dashboard');\n  });\n\n  it('should handle multiple 403 errors and display error state', () => {\n    cy.intercept('GET', '/api/user/settings', {\n      statusCode: 403,\n      body: { error: 'Forbidden', message: 'Access denied' }\n    }).as('settingsForbidden');\n\n    cy.get('[data-testid=\"load-settings-button\"]').click();\n    cy.wait('@settingsForbidden');\n\n    cy.get('[data-testid=\"access-denied-page\"]').should('be.visible');\n    cy.get('[data-testid=\"error-code\"]').should('contain', '43');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Forbidden');\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n    cy.get('[data-testid=\"retry-button\"]').click();\n    cy.intercept('GET', '/api/user/settings', {\n      statusCode: 200,\n      body: { settings: { theme: 'dark', notifications: true } }\n    }).as('settingsSuccess');\n    cy.wait('@settingsSuccess');\n    cy.get('[data-testid=\"access-denied-page\"]').should('not.exist');\n    cy.get('[data-testid=\"settings-page\"]').should('be.visible');\n    cy.get('[data-testid=\"settings-title\"]').should('contain', 'Settings');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8145,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5818,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.723,
+      "feedback_used": ""
+    }
+  ]
+}

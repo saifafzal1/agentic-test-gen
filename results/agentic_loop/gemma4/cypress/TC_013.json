@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_013",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7649,
+  "total_latency_s": 75.479,
+  "final_script": "describe('Username Pre-fill on Login', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should pre-fill username if previously logged in', () => {\n    // Intercept login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n\n    // Navigate to login page\n    cy.get('[data-testid=\"username-input\"]').should('be.visible');\n    cy.get('[data-testid=\"password-input\"]').should('be.visible');\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n\n    // Verify username input is empty initially\n    cy.get('[data-testid=\"username-input\"]').should('have.value', '');\n\n    // Simulate user logging in with stored credentials\n    cy.get('[data-testid=\"username-input\"]').type('testuser@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('SecurePassword123!');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for login API call\n    cy.wait('@loginRequest');\n\n    // Verify successful login\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"welcome-message\"]').should('be.visible');\n    cy.get('[data-testid=\"welcome-message\"]').should('contain', 'Welcome, testuser@example.com');\n\n    // Verify username was pre-filled\n    cy.get('[data-testid=\"username-input\"]').should('have.value', 'testuser@example.com');\n  });\n\n  it('should not pre-fill username if no previous login exists', () => {\n    // Clear any local storage or cookies to simulate first-time user\n    cy.clearCookies();\n    cy.clearLocalStorage();\n\n    // Navigate to login page\n    cy.visit('/login');\n\n    // Verify username input is empty\n    cy.get('[data-testid=\"username-input\"]').should('have.value', '');\n\n    // Verify password input is empty\n    cy.get('[data-testid=\"password-input\"]').should('have.value', '');\n\n    // Attempt to log in with valid credentials\n    cy.get('[data-testid=\"username-input\"]').type('newuser@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('SecurePassword123!');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n    cy.wait('@loginRequest');\n\n    // Verify successful login\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"welcome-message\"]').should('be.visible');\n    cy.get('[data-testid=\"welcome-message\"]').should('contain', 'Welcome');\n\n    // Verify username was not pre-filled\n    cy.get('[data-testid=\"username-input\"]').should('have.value', 'newuser@example.com');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7649,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4164,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 75.479,
+      "feedback_used": ""
+    }
+  ]
+}

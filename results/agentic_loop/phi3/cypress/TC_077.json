@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_077",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7625,
+  "total_latency_s": 343.256,
+  "final_script": "describe('Bulk Delete List Items', () => {\n  beforeEach(() => {\n    cy.visit('/list-items');\n  });\n\n  it('should successfully bulk-delete selected items from a list', () => {\n    // Verify initial list is displayed\n    cy.get('[data-testid=\"item-list\"]').should('be.visible');\n    cy.get('[data-testid=\"item-list\"]').should('contain', 'Item 1');\n    cy.get('[data-testid=\"item-list\"]').should('contain', 'Item 2');\n    cy.get('[data-testid=\"item-list\"]').should('contain', 'Item 3');\n\n    // Select multiple items by clicking checkboxes\n    cy.get('[data-testid=\"item-checkbox-1\"]').click();\n    cy.get('[data-testid=\"item-checkbox-2\"]').click();\n    cy.get('[data-testid=\"item-checkbox-3\"]').click();\n\n    // Verify selection is highlighted\n    cy.get('[data-testid=\"item-checkbox-1\"]').should('be.checked');\n    cy.get('[data-testid=\"item-checkbox-2\"]').should('be.checked');\n    cy.get('[data-testid=\"item-checkbox-3\"]').should('be.checked');\n\n    // Click bulk delete button\n    cy.get('[data-testid=\"bulk-delete-btn\"]').click();\n\n    // Verify confirmation modal appears\n    cy.get('[data-testid=\"confirm-delete-modal\"]').should('be.visible');\n    cy.get('[data-testid=\"confirm-delete-modal\"]').should('contain', 'Are you sure you want to delete?');\n\n    // Click confirm button\n    cy.get('[data-testid=\"confirm-delete-btn\"]').click();\n\n    // Verify items are removed from the list\n    cy.get('[data-testid=\"item-list\"]').should('not.contain', 'Item 1');\n    cy.get('[data-testid=\"item-list\"]').should('not.contain', 'Item 2');\n    cy.get('[data-testid=\"item-list\"]').should('not.contain', 'Item 3');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Items deleted successfully');\n\n    // Verify list is now empty\n    cy.get('[data-testid=\"item-list\"]').should('be.empty');\n  });\n\n  it('should handle bulk delete with no selected items', () => {\n    // Verify initial list is displayed\n    cy.get('[data-testid=\"item-list\"]').should('be.visible');\n    cy.get('[data-testid=\"item-list\"]').should('contain', 'Item 1');\n    cy.get('[data-testid=\"item-list\"]').should('contain', 'Item 2');\n\n    // Click bulk delete button\n    cy.get('[data-testid=\"bulk-delete-btn\"]').click();\n\n    // Verify confirmation modal appears\n    cy.get('[data-testid=\"confirm-delete-modal\"]').should('be.visible');\n    cy.get('[data-testid=\"confirm-delete-modal\"]').should('contain', 'No items selected');\n\n    // Click cancel button\n    cy.get('[data-testid=\"cancel-delete-btn\"]').click();\n\n    // Verify list remains unchanged\n    cy.get('[data-testid=\"item-list\"]').should('contain', 'Item 1');\n    cy.get('[data-testid=\"item-list\"]').should('contain', 'Item 2');\n\n    // Verify success message is not displayed\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7625,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4084,
+        "missing_keywords": [],
+        "assertion_count": 23,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 343.256,
+      "feedback_used": ""
+    }
+  ]
+}

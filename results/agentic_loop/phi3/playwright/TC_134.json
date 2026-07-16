@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_134",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8195,
+  "total_latency_s": 306.599,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Alert Dialog Interaction Blocking', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should block interaction with page when alert dialog is open', async ({ page }) => {\n    // Open alert dialog\n    const alertButton = page.getByRole('button', { name: /open alert/i });\n    await alertButton.click();\n\n    // Verify alert dialog is visible\n    const alertDialog = page.locator('[data-testid=\"alert-dialog\"]');\n    await expect(alertDialog).toBeVisible();\n\n    // Verify interaction is blocked\n    const dashboardButton = page.getByRole('button', { name: /dashboard/i });\n    await expect(dashboardButton).not.toBeEnabled();\n\n    // Verify alert dialog is blocking\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeDisabled();\n\n    // Verify alert dialog is still visible\n    await expect(alertDialog).toBeVisible();\n\n    // Verify alert dialog has correct content\n    const alertMessage = page.getByText(/error/i);\n    await expect(alertMessage).toBeVisible();\n\n    // Verify close button is present and clickable\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Close alert dialog\n    await closeButton.click();\n\n    // Verify page interaction is restored\n    await expect(dashboardButton).toBeEnabled();\n    await expect(mainContent).not.toBeDisabled();\n\n    // Verify alert dialog is no longer visible\n    await expect(alertDialog).not.toBeVisible();\n  });\n\n  test('should allow interaction with page when alert dialog is closed', async ({ page }) => {\n    // Open alert dialog\n    const alertButton = page.getByRole('button', { name: /open alert/i });\n    await alertButton.click();\n\n    // Verify alert dialog is visible\n    const alertDialog = page.locator('[data-testid=\"alert-dialog\"]');\n    await expect(alertDialog).toBeVisible();\n\n    // Verify interaction is blocked\n    const dashboardButton = page.getByRole('button', { name: /dashboard/i });\n    await expect(dashboardButton).not.toBeEnabled();\n\n    // Verify alert dialog is blocking\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeDisabled();\n\n    // Verify alert dialog is still visible\n    await expect(alertDialog).toBeVisible();\n\n    // Verify alert dialog has correct content\n    const alertMessage = page.getByText(/error/i);\n    await expect(alertMessage).toBeVisible();\n\n    // Close alert dialog\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n\n    // Verify page interaction is restored\n    await expect(dashboardButton).toBeEnabled();\n    await expect(mainContent).not.toBeDisabled();\n\n    // Verify alert dialog is no longer visible\n    await expect(alertDialog).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8195,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4983,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 306.599,
+      "feedback_used": ""
+    }
+  ]
+}

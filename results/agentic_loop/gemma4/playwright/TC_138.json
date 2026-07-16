@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_138",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8336,
+  "total_latency_s": 72.154,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Dialog Responsiveness on Mobile Screens', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/modal-dialog');\n  });\n\n  test('should display modal correctly and be responsive on mobile screen sizes', async ({ page }) => {\n    // Set viewport to mobile size\n    await page.setViewportSize({ width: 375, height: 860 });\n\n    // Open modal by clicking the button\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modalContainer = page.locator('[data-testid=\"modal-container\"]');\n    await expect(modalContainer).toBeVisible();\n\n    // Verify modal title is visible\n    const modalTitle = page.getByRole('heading', { name: /modal title/i });\n    await expect(modalTitle).toBeVisible();\n\n    // Verify modal content is visible\n    const modalContent = page.locator('[data-testid=\"modal-content\"]');\n    await expect(modalContent).toBeVisible();\n\n    // Verify close button is visible and accessible\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify modal has correct mobile styling (e.g, full width)\n    const modalWrapper = page.locator('[data-testid=\"modal-wrapper\"]');\n    const isFullWidth = await modalWrapper.evaluate((el) => window.getComputedStyle(el).width === '100%');\n    expect(isFullWidth).toBe(true);\n\n    // Verify modal has correct mobile padding\n    const modalPadding = await modalWrapper.evaluate((el) => window.getComputedStyle(el).padding);\n    expect(modalPadding).toContain('1rem');\n  });\n\n  test('should handle modal responsiveness when resizing from desktop to mobile', async ({ page }) => {\n    // Set viewport to desktop size\n    await page.setViewportSize({ width: 1200, height: 900 });\n\n    // Open modal\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible on desktop\n    const modalContainer = page.locator('[data-testid=\"modal-container\"]');\n    await expect(modalContainer).toBeVisible();\n\n    // Verify modal has desktop styling (e.g., max-width)\n    const modalWrapper = page.locator('[data-testid=\"modal-wrapper\"]');\n    const isMaxWidthed = await modalWrapper.evaluate((el)) => window.getComputedStyle(el).maxWidth === '600px';\n    expect(isMaxWidthed).toBe(true);\n\n    // Resize viewport to mobile size\n    await page.setViewportSize({ width: 375, height: 860 });\n\n    // Verify modal is still visible after resize\n    await expect(modalContainer).toBeVisible();\n\n    // Verify modal has responsive mobile styling (full width)\n    const isMobileWidth = await modalWrapper.evaluate((el)) => window.getComputedStyle(el).width === '100%';\n    expect(isMobileWidth).toBe(true);\n\n    // Verify modal content is still accessible and readable\n    const modalTitle = page.getByRole('heading', { name: /modal title/i });\n    await expect(modalTitle).toBeVisible();\n\n    // Verify close button is still functional\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n    await expect(modalContainer).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8336,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5452,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.154,
+      "feedback_used": ""
+    }
+  ]
+}

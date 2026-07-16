@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_108",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8038,
+  "total_latency_s": 309.248,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Payment Card Declined Error State', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should display clear error message when payment card is declined', async ({ page }) => {\n    // Setup: intercept the payment API call\n    await page.route('**/api/payment/process', (route) => {\n      route.abort('payment declined');\n    });\n\n    // Intercept the payment form submission\n    await page.route('**/api/payment/submit', (route) => {\n      route.abort('payment declined');\n    });\n\n    // Verify the payment form is visible\n    const paymentForm = page.getByRole('form', { name: /enter payment details/i });\n    await expect(paymentForm).toBeVisible();\n\n    // Fill in valid payment details\n    const cardNumberInput = page.getByLabel(/card number/i);\n    await cardNumberInput.fill('4111111111111111');\n\n    const expiryDateInput = page.getByLabel(/expiry date/i);\n    await expiryDateInput.fill('12/25');\n\n    const cvvInput = page.getByLabel(/cvv/i);\n    await cvvInput.fill('123');\n\n    // Submit the payment form\n    const submitButton = page.getByRole('button', { name: /submit payment/i });\n    await submitButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/payment declined/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error state is active\n    const errorState = page.getByTestId('error-state');\n    await expect(errorState).toBeVisible();\n\n    // Verify success message is not visible\n    const successMessage = page.getByText(/payment successful/i);\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify payment form is still visible\n    await expect(paymentForm).toBeVisible();\n  });\n\n  test('should handle multiple declined attempts and show retry option', async ({ page }) => {\n    // Setup: intercept the payment API call multiple times\n    let retryCount = 0;\n    await page.route('**/api/payment/process', (route) => {\n      if (retryCount < 2) {\n        retryCount++;\n        route.abort('payment declined');\n      } else {\n        route.continue();\n      }\n    });\n\n    // Intercept the payment form submission\n    await page.route('**/api/payment/submit', (route) => {\n      if (retryCount < 2) {\n        retryCount++;\n        route.abort('payment declined');\n      } else {\n        route.continue();\n      }\n    });\n\n    // Verify the payment form is visible\n    const paymentForm = page.getByRole('form', { name: /enter payment details/i });\n    await expect(paymentForm).toBeVisible();\n\n    // Fill in valid payment details\n    const cardNumberInput = page.getByLabel(/card number/i);\n    await cardNumberInput.fill('4111111111111111');\n\n    const expiryDateInput = page.getByLabel(/expiry date/i);\n    await expiryDateInput.fill('12/25');\n\n    const cvvInput = page.getByLabel(/cvv/i);\n    await cvvInput.fill('123');\n\n    // Submit the payment form\n    const submitButton = page.getByRole('button', { name: /submit payment/i });\n    await submitButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/payment declined/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error state is active\n    const errorState = page.getByTestId('error-state');\n    await expect(errorState).toBeVisible();\n\n    // Verify retry button is visible\n    const retryButton = page.getByRole('button', { name: /retry payment/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify success message is not visible\n    const successMessage = page.getByText(/payment successful/i);\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify payment form is still visible\n    await expect(paymentForm).toBeVisible();\n\n    // Verify retry button is clickable\n    await expect(retryButton).toBeEnabled();\n\n    // Click retry button\n    await retryButton.click();\n\n    // Verify error message is cleared\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify error state is no longer active\n    await expect(errorState).not.toBeVisible();\n\n    // Verify success message is still not visible\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify payment form is still visible\n    await expect(paymentForm).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4934,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.378,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 54.196,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8038,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3462,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 255.052,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

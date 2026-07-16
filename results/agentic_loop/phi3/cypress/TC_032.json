@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_032",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7753,
+  "total_latency_s": 496.307,
+  "final_script": "describe('Image Preview Before Submission', () => {\n  beforeEach(() => {\n    cy.visit('/upload-form');\n  });\n\n  it('should display image preview when user uploads an image file', () => {\n    // Intercept the file upload API\n    cy.intercept('POST', '/api/upload/image', {\n      statusCode: 200,\n      body: {\n        url: 'https://example.com/uploads/preview.jpg',\n        filename: 'preview.jpg',\n        size: 102456,\n        mimeType: 'image/jpeg'\n      }\n    }).as('uploadImage');\n\n    // Find and upload image file\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/test-image.jpg', { force: true });\n\n    // Verify preview appears\n    cy.get('[data-testid=\"preview-image\"]').should('be.visible');\n    cy.get('[data-testid=\"preview-image\"]').should('contain', 'test-image.jpg');\n\n    // Verify preview image is displayed\n    cy.get('[data-testid=\"preview-image\"]').should('have.attr', 'src');\n    cy.get('[data-testid=\"preview-image\"]').should('have.attr', 'alt', 'Test Image');\n\n    // Verify file upload API was called\n    cy.wait('@uploadImage');\n\n    // Verify form is still visible\n    cy.get('[data-testid=\"upload-form\"]').should('be.visible');\n\n    // Verify submit button is enabled\n    cy.get('[data-testid=\"submit-button\"]').should('be.enabled');\n  });\n\n  it('should not display preview when no file is selected', () => {\n    // Intercept the file upload API\n    cy.intercept('POST', '/api/upload/image', {\n      statusCode: 200,\n      body: {\n        url: 'https://example.com/uploads/preview.jpg',\n        filename: 'preview.jpg',\n        size: 102456,\n        mimeType: 'image/jpeg'\n      }\n    }).as('uploadImage');\n\n    // Attempt to submit without selecting a file\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify preview does not appear\n    cy.get('[data-testid=\"preview-image\"]').should('not.exist');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please select an image file to upload');\n\n    // Verify form is still visible\n    cy.get('[data-testid=\"upload-form\"]').should('be.visible');\n\n    // Verify submit button is disabled\n    cy.get('[data-testid=\"submit-button\"]').should('be.disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7753,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4509,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 496.307,
+      "feedback_used": ""
+    }
+  ]
+}

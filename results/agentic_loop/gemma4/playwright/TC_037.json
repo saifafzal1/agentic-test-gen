@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_037",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8707,
+  "total_latency_s": 71.389,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Submission Confirmation Email', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/contact-form');\n  });\n\n  test('should display confirmation email after successful form submission', async ({ page }) => {\n    // Locate and fill name input using getByLabel\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('John Doe');\n\n    // Locate and fill email input using getByLabel\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('john.doe@example.com');\n\n    // Locate and fill message textarea using getByLabel\n    const messageInput = page.getByLabel('Message');\n    await messageInput.fill('This is a test message.');\n\n    // Locate and click submit button using getByRole\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Wait for confirmation message to appear\n    const confirmationMessage = page.getByText('Thank you for your message. A confirmation email has been sent.');\n    await expect(confirmationMessage).toBeVisible();\n\n    // Verify success state\n    await expect(page).toHaveURL(/.*success/);\n\n    // Verify confirmation email was sent\n    const emailSentIndicator = page.getByText('Confirmation email sent');\n    await expect(emailSentIndicator).toBeVisible();\n  });\n\n  test('should handle form submission with validation errors and not send confirmation email', async ({ page }) => {\n    // Locate and fill name input using getByLabel\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('Jane Doe');\n\n    // Locate and fill email input with invalid format using getByLabel\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('invalid-email');\n\n    // Locate and fill message textarea using getByLabel\n    const messageInput = page.getByLabel('Message');\n    await messageInput.fill('This is a test message.');\n\n    // Locate and click submit button using getByRole\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify validation error message appears\n    const emailError = page.getByText('Please enter a valid email address');\n    await expect(emailError).toBeVisible();\n\n    // Verify confirmation message does not appear\n    const confirmationMessage = page.getByText('Thank you for your message. A confirmation email has been sent.');\n    await expect(confirmationMessage).not.toBeVisible();\n\n    // Verify form is still visible\n    await expect(page).toHaveURL(/.*contact-form/);\n\n    // Verify email sent indicator does not appear\n    const emailSentIndicator = page.getByText('Confirmation email sent');\n    await expect(emailSentIndicator).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8707,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5691,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.389,
+      "feedback_used": ""
+    }
+  ]
+}

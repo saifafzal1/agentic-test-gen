@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_105",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7937,
+  "total_latency_s": 72.55,
+  "final_script": "describe('Unsaved Form Navigation Warning', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n  });\n\n  it('should display warning when user attempts to navigate away from unsaved form', () => {\n    // Fill in form fields\n    cy.get('[data-testid=\"name-input\"]').type('John Doe');\n    cy.get('[data-testid=\"email-input\"]').type('john@example.com');\n    cy.get('[data-testid=\"message-textarea\"]').type('This is a test message');\n\n    // Verify form is unsaved\n    cy.get('[data-testid=\"save-button\"]').should('be.visible');\n    cy.get('[data-testid=\"unsaved-indicator\"]').should('contain', 'Unsaved');\n\n    // Attempt to navigate away\n    cy.get('[data-testid=\"nav-link-dashboard\"]').click();\n\n    // Verify warning modal appears\n    cy.get('[data-testid=\"unsaved-warning-modal\"]').should('be.visible');\n    cy.get('[data-testid=\"warning-title\"]').should('contain', 'Unsaved Changes');\n    cy.get('[data-testid=\"warning-message\"]').should('contain', 'You have unsaved changes');\n\n    // Verify warning modal contains confirm and cancel buttons\n    cy.get('[data-testid=\"warning-confirm-button\"]').should('be.visible');\n    cy.get('[data-testid=\"warning-cancel-button\"]').should('be.visible');\n\n    // User cancels navigation\n    cy.get('[data-testid=\"warning-cancel-button\"]').click();\n\n    // Verify user remains on the form page\n    cy.url().should('include', '/form');\n    cy.get('[data-testid=\"unsaved-indicator\"]').should('contain', 'Unsaved');\n  });\n\n  it('should allow navigation when form is saved', () => {\n    // Fill in form fields\n    cy.get('[data-testid=\"name-input\"]').type('Jane Smith');\n    cy.get('[data-testid=\"email-input\"]').type('jane@example.com');\n    cy.get('[data-testid=\"message-textarea\"]').type('This is a saved message');\n\n    // Save the form\n    cy.get('[data-testid=\"save-button\"]').click();\n    cy.get('[data-testid=\"save-success-message\"]').should('be.visible');\n\n    // Verify form is saved\n    cy.get('[data-testid=\"unsaved-indicator\"]').should('not.exist');\n\n    // Attempt to navigate away\n    cy.get('[data-testid=\"nav-link-dashboard\"]').click();\n\n    // Verify warning modal does NOT appear\n    cy.get('[data-testid=\"unsaved-warning-modal\"]').should('not.exist');\n\n    // Verify user navigates to dashboard\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"dashboard-header\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7937,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5125,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.55,
+      "feedback_used": ""
+    }
+  ]
+}

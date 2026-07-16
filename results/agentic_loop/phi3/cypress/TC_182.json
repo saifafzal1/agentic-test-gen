@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_182",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7259,
+  "total_latency_s": 279.819,
+  "final_script": "describe('Paste Image from Clipboard into Upload Area', () => {\n  beforeEach(() => {\n    cy.visit('/upload');\n  });\n\n  it('should successfully paste an image from the clipboard into the upload area', () => {\n    // Intercept the paste event\n    cy.intercept('POST', '/api/uploads/paste').as('pasteUpload');\n\n    // Get the upload button\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Paste an image from the clipboard\n    cy.get('[data-testid=\"paste-area\"]').type('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA...');\n\n    // Verify the paste area contains the image data\n    cy.get('[data-testid=\"paste-area\"]').should('contain', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA...');\n\n    // Verify the upload button is still visible\n    cy.get('[data-testid=\"upload-button\"]').should('be.visible');\n\n    // Click the upload button to initiate the upload\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for the upload API call\n    cy.wait('@pasteUpload');\n\n    // Verify upload was successful\n    cy.get('[data-testid=\"upload-success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"upload-success-message\"]').should('contain', 'Image uploaded successfully');\n  });\n\n  it('should handle pasting an invalid image format and display error message', () => {\n    // Intercept the paste event\n    cy.intercept('POST', '/api/uploads/paste').as('pasteUpload');\n\n    // Get the upload button\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Paste an invalid image format\n    cy.get('[data-testid=\"paste-area\"]').type('invalid/image/format');\n\n    // Verify the paste area contains the invalid data\n    cy.get('[data-testid=\"paste-area\"]').should('contain', 'invalid/image/format');\n\n    // Verify the upload button is still visible\n    cy.get('[data-testid=\"upload-button\"]').should('be.visible');\n\n    // Click the upload button\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for the upload API call\n    cy.wait('@pasteUpload');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"upload-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"upload-error-message\"]').should('contain', 'Invalid image format');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7259,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2865,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 279.819,
+      "feedback_used": ""
+    }
+  ]
+}

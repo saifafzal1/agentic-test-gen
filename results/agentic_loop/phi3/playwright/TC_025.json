@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_025",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7982,
+  "total_latency_s": 542.336,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Date Picker - Future Booking Restriction', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/booking-form');\n  });\n\n  test('should prevent selection of past dates for future bookings', async ({ page }) => {\n    // Set up: Mock API response to return future date\n    await page.route('**/api/booking/date', (route) => {\n      route.abort('API call failed');\n    });\n\n    // Intercept and return future date\n    await page.route('**/api/booking/date', (route) => {\n      route.continue();\n      route.abort('Future date');\n    });\n\n    // Verify date picker is visible\n    const datePicker = page.getByRole('combobox', { name: /select booking date/i });\n    await expect(datePicker).toBeVisible();\n\n    // Verify initial date is today\n    const today = new Date();\n    const todayDate = page.getByText(today.toLocaleDateString());\n    await expect(todayDate).toBeVisible();\n\n    // Verify past date is disabled\n    const pastDate = new Date(today.setDate(today.getDate() - 1));\n    const pastDateText = page.getByText(pastDate.toLocaleDateString());\n    await expect(pastDateText).not.toBeVisible();\n\n    // Verify past date is not selectable\n    const pastDateSelect = page.getByRole('button', { name: /select/i });\n    await expect(pastDateSelect).not.toBeVisible();\n\n    // Verify future date is selectable\n    const futureDate = new Date(today.setDate(today.getDate() + 1));\n    const futureDateText = page.getByText(futureDate.toLocaleDateString());\n    await expect(futureDateText).toBeVisible();\n\n    // Verify future date is enabled\n    const futureDateSelect = page.getByRole('button', { name: /select/i });\n    await expect(futureDateSelect).toBeVisible();\n\n    // Verify date picker value is set to future date\n    const dateValue = page.getByRole('heading', { name: /select booking date/i });\n    await expect(dateValue).toContainText(futureDate.toLocaleDateString());\n\n    // Verify booking form is submitted with future date\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeVisible();\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/booking successful/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify error message does not appear\n    const errorMessage = page.getByText(/invalid date/i);\n    await expect(errorMessage).not.toBeVisible();\n  });\n\n  test('should allow selection of past dates for historical bookings', async ({ page }) => {\n    // Set up: Mock API response to return past date\n    await page.route('**/api/booking/date', (route) => {\n      route.continue();\n    });\n\n    // Intercept and return past date\n    await page.route('**/api/booking/date', (route) => {\n      route.abort('Past date');\n    });\n\n    // Verify date picker is visible\n    const datePicker = page.getByRole('combobox', { name: /select booking date/i });\n    await expect(datePicker).toBeVisible();\n\n    // Verify past date is selectable\n    const pastDate = new Date(Date.now() - 1000 * 60 * 60 * 24);\n    const pastDateText = page.getByText(pastDate.toLocaleDateString());\n    await expect(pastDateText).toBeVisible();\n\n    // Verify past date is selectable\n    const pastDateSelect = page.getByRole('button', { name: /select/i });\n    await expect(pastDateSelect).toBeVisible();\n\n    // Verify past date is selected\n    await pastDateSelect.click();\n\n    // Verify date picker value is set to past date\n    const dateValue = page.getByRole('heading', { name: /select booking date/i });\n    await expect(dateValue).toContainText(pastDate.toLocaleDateString());\n\n    // Verify booking form is submitted with past date\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeVisible();\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/booking successful/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify error message does not appear\n    const errorMessage = page.getByText(/invalid date/i);\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.495,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3834,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 55.873,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7982,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4272,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 486.463,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

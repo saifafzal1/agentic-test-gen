@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_074",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.821,
+  "total_latency_s": 673.491,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Task Edit Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/tasks');\n  });\n\n  test('should successfully edit an existing task by clicking Edit button', async ({ page }) => {\n    // Verify initial task list is displayed\n    const taskList = page.getByRole('region', { name: /tasks/i });\n    await expect(taskList).toBeVisible();\n\n    // Verify Edit button is present for the first task\n    const editButton = page.getByRole('button', { name: /edit/i });\n    await expect(editButton).toBeVisible();\n\n    // Click Edit button on the first task\n    await editButton.click();\n\n    // Verify edit form is visible\n    const editForm = page.getByRole('dialog', { name: /edit task/i });\n    await expect(editForm).toBeVisible();\n\n    // Verify task title input is present and has initial value\n    const taskTitleInput = page.getByLabel(/task title/i);\n    await expect(taskTitleInput).toBeVisible();\n    await expect(taskTitleInput).toHaveValue('Initial Task Title');\n\n    // Verify task description input is present\n    const taskDescriptionInput = page.getByLabel(/task description/i);\n    await expect(taskDescriptionInput).toBeVisible();\n\n    // Verify save button is present\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await expect(saveButton).toBeVisible();\n\n    // Verify update button is present\n    const updateButton = page.getByRole('button', { name: /update/i });\n    await expect(updateButton).toBeVisible();\n\n    // Verify delete button is present\n    const deleteButton = page.getByRole('button', { name: /delete/i });\n    await expect(deleteButton).toBeVisible();\n\n    // Verify edit form is closed\n    await expect(editForm).not.toBeVisible();\n\n    // Verify task list is still displayed\n    await expect(taskList).toBeVisible();\n\n    // Verify task title input has updated value\n    await expect(taskTitleInput).toHaveValue('Updated Task Title');\n\n    // Verify task description input has updated value\n    await expect(taskDescriptionInput).toHaveValue('Updated Task Description');\n\n    // Verify save button is now disabled\n    await expect(saveButton).toBeDisabled();\n\n    // Verify update button is now enabled\n    await expect(updateButton).toBeEnabled();\n\n    // Verify delete button is now enabled\n    await expect(deleteButton).toBeEnabled();\n\n    // Click save button\n    await saveButton.click();\n\n    // Verify success message is displayed\n    const successMessage = page.getByText(/task updated successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify task list is updated with new values\n    const taskItem = page.getByText(/updated task title/i);\n    await expect(taskItem).toBeVisible();\n\n    // Verify edit form is closed\n    await expect(editForm).not.toBeVisible();\n  });\n\n  test('should handle empty task title and description gracefully', async ({ page }) => {\n    // Verify initial task list is displayed\n    const taskList = page.getByRole('region', { name: /tasks/i });\n    await expect(taskList).toBeVisible();\n\n    // Click Edit button on the first task\n    const editButton = page.getByRole('button', { name: /edit/i });\n    await editButton.click();\n\n    // Verify edit form is visible\n    const editForm = page.getByRole('dialog', { name: /edit task/i });\n    await expect(editForm).toBeVisible();\n\n    // Verify task title input is present\n    const taskTitleInput = page.getByLabel(/task title/i);\n    await expect(taskTitleInput).toBeVisible();\n\n    // Verify task description input is present\n    const taskDescriptionInput = page.getByLabel(/task description/i);\n    await expect(taskDescriptionInput).toBeVisible();\n\n    // Verify save button is present\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await expect(saveButton).toBeVisible();\n\n    // Verify update button is present\n    const updateButton = page.getByRole('button', { name: /update/i });\n    await expect(updateButton).toBeVisible();\n\n    // Verify delete button is present\n    const deleteButton = page.getByRole('button', { name: /delete/i });\n    await expect(deleteButton).toBeVisible();\n\n    // Verify edit form is closed\n    await expect(editForm).not.toBeVisible();\n\n    // Verify task list is still displayed\n    await expect(taskList).toBeVisible();\n\n    // Verify task title input is empty\n    await expect(taskTitleInput).toHaveValue('');\n\n    // Verify task description input is empty\n    await expect(taskDescriptionInput).toHaveValue('');\n\n    // Verify save button is now enabled\n    await expect(saveButton).toBeEnabled();\n\n    // Verify update button is now enabled\n    await expect(updateButton).toBeEnabled();\n\n    // Verify delete button is now enabled\n    await expect(deleteButton).toBeEnabled();\n\n    // Click save button\n    await saveButton.click();\n\n    // Verify success message is displayed\n    const successMessage = page.getByText(/task updated successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify task list is updated with empty values\n    const taskItem = page.getByText(/empty task title/i);\n    await expect(taskItem).toBeVisible();\n\n    // Verify edit form is closed\n    await expect(editForm).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5205,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4683,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 341.163,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.821,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4033,
+        "missing_keywords": [],
+        "assertion_count": 36,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 332.328,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

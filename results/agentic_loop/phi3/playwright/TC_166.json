@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_166",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7907,
+  "total_latency_s": 53.505,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Row Badge Count Display', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should display correct badge count for selected rows', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify table headers are present\n    const headers = page.getByRole('heading', { name: /row/i });\n    await expect(headers).toBeVisible();\n\n    // Verify first row is visible\n    const firstRow = page.getByRole('row', { name: /row 1/i });\n    await expect(firstRow).toBeVisible();\n\n    // Verify badge count is not visible initially\n    const badgeCount = page.getByRole('status', { name: /selected/i });\n    await expect(badgeCount).not.toBeVisible();\n\n    // Select the first row using getByRole\n    const selectButton = page.getByRole('button', { name: /select/i });\n    await selectButton.click();\n\n    // Verify badge count is now visible\n    await expect(badgeCount).toBeVisible();\n\n    // Verify badge count text is correct\n    const badgeText = page.getByText(/1 selected/i);\n    await expect(badgeText).toBeVisible();\n\n    // Verify badge count is updated when selecting another row\n    const secondRow = page.getByRole('row', { name: /row 2/i });\n    await secondRow.click();\n\n    // Verify badge count is updated\n    await expect(badgeText).toContainText(/2 selected/i);\n\n    // Verify badge count is removed when deselecting a row\n    const deselectButton = page.getByRole('button', { name: /deselect/i });\n    await deselectButton.click();\n\n    // Verify badge count is removed\n    await expect(badgeText).not.toBeVisible();\n\n    // Verify badge count is restored when deselecting all rows\n    const deselectAllButton = page.getByRole('button', { name: /deselect all/i });\n    await deselectAllButton.click();\n\n    // Verify badge count is restored\n    await expect(badgeText).toBeVisible();\n    await expect(badgeText).toContainText(/1 selected/i);\n  });\n\n  test('should handle edge case: no rows selected', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify no badge count is displayed initially\n    const badgeCount = page.getByRole('status', { name: /selected/i });\n    await expect(badgeCount).not.toBeVisible();\n\n    // Verify badge count is displayed when selecting a row\n    const firstRow = page.getByRole('row', { name: /row 1/i });\n    await firstRow.click();\n\n    // Verify badge count is displayed\n    await expect(badgeCount).toBeVisible();\n\n    // Verify badge count text is correct\n    const badgeText = page.getByText(/1 selected/i);\n    await expect(badgeText).toBeVisible();\n\n    // Verify badge count is not displayed when deselecting all rows\n    const deselectAllButton = page.getByRole('button', { name: /deselect all/i });\n    await deselectAllButton.click();\n\n    // Verify badge count is removed\n    await expect(badgeText).not.toBeVisible();\n\n    // Verify badge count is restored when selecting a row again\n    await firstRow.click();\n\n    // Verify badge count is restored\n    await expect(badgeText).toBeVisible();\n    await expect(badgeText).toContainText(/1 selected/i);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7907,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4025,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 53.505,
+      "feedback_used": ""
+    }
+  ]
+}

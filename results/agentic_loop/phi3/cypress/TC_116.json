@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_116",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7793,
+  "total_latency_s": 31.581,
+  "final_script": "describe('Username Availability Async Validation', () => {\n  beforeEach(() => {\n    cy.visit('/register');\n  });\n\n  it('should display success message when username is available', () => {\n    cy.get('[data-testid=\"username-input\"]').type('testuser123');\n    cy.get('[data-testid=\"validate-button\"]').click();\n    cy.intercept('POST', '/api/validate-username').as('validateUsername');\n    cy.wait('@validateUsername');\n\n    cy.get('[data-testid=\"validation-status\"]')\n      .should('contain', 'Username is available');\n    cy.get('[data-testid=\"success-message\"]')\n      .should('be.visible')\n      .should('contain', 'Username successfully registered');\n    cy.get('[data-testid=\"username-input\"]').should('have.value', 'testuser123');\n  });\n\n  it('should display error message when username is already taken', () => {\n    cy.get('[data-testid=\"username-input\"]').type('existinguser');\n    cy.get('[data-testid=\"validate-button\"]').click();\n    cy.intercept('POST', '/api/validate-username').as('validateUsername');\n    cy.wait('@validateUsername');\n\n    cy.get('[data-testid=\"validation-status\"]')\n      .should('contain', 'Username is taken');\n    cy.get('[data-testid=\"error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Username is already in use');\n    cy.get('[data-testid=\"username-input\"]').should('have.value', 'existinguser');\n  });\n\n  it('should clear input when validation fails', () => {\n    cy.get('[data-testid=\"username-input\"]').type('invalidusername');\n    cy.get('[data-testid=\"validate-button\"]').click();\n    cy.intercept('POST', '/api/validate-username').as('validateUsername');\n    cy.wait('@validateUsername');\n\n    cy.get('[data-testid=\"validation-status\"]')\n      .should('contain', 'Username is invalid');\n    cy.get('[data-testid=\"error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Username must be at least 6 characters long');\n    cy.get('[data-testid=\"username-input\"]').should('have.value', 'invalidusername');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7793,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4645,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 31.581,
+      "feedback_used": ""
+    }
+  ]
+}

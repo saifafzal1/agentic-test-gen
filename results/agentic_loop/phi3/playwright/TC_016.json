@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_016",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8521,
+  "total_latency_s": 451.445,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Form CAPTCHA After Failed Attempts', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should display CAPTCHA after 3 failed login attempts', async ({ page }) => {\n    // First failed attempt\n    await page.route('**/api/auth/login', async (route) => {\n      await route.abort('failed');\n    });\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('user@example.com');\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('wrongpassword');\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Second failed attempt\n    await page.route('**/api/auth/login', async (route) => {\n      await route.abort('failed');\n    });\n    await emailInput.fill('user@example.com');\n    await passwordInput.fill('wrongpassword');\n    await submitButton.click();\n\n    // Third failed attempt\n    await page.route('**/api/auth/login', async (route) => {\n      await route.abort('failed');\n    });\n    await emailInput.fill('user@example.com');\n    await passwordInput.fill('wrongpassword');\n    await submitButton.click();\n\n    // Verify CAPTCHA is displayed\n    const captchaContainer = page.getByRole('region', { name: /captcha/i });\n    await expect(captchaContainer).toBeVisible();\n\n    const captchaImage = page.getByRole('img', { name: /captcha/i });\n    await expect(captchaImage).toBeVisible();\n\n    const captchaInput = page.getByLabel('Enter Captcha');\n    await expect(captchaInput).toBeVisible();\n\n    // Verify CAPTCHA input is enabled\n    await expect(captchaInput).toBeEnabled();\n\n    // Verify login button is disabled\n    const loginButton = page.getByRole('button', { name: /submit/i });\n    await expect(loginButton).toBeDisabled();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/too many failed attempts/i);\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should not display CAPTCHA after successful login', async ({ page }) => {\n    // First failed attempt\n    await page.route('**/api/auth/login', async (route) => {\n      await route.abort('failed');\n    });\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('user@example.com');\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('correctpassword');\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify CAPTCHA is not displayed\n    const captchaContainer = page.getByRole('region', { name: /captcha/i });\n    await expect(captchaContainer).not.toBeVisible();\n\n    // Verify login button is enabled\n    const loginButton = page.getByRole('button', { name: /submit/i });\n    await expect(loginButton).toBeEnabled();\n\n    // Verify success message is displayed\n    const successMessage = page.getByText(/login successful/i);\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8521,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5069,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 451.445,
+      "feedback_used": ""
+    }
+  ]
+}

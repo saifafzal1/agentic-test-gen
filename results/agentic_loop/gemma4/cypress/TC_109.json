@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_109",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8197,
+  "total_latency_s": 72.603,
+  "final_script": "describe('Async Login Spinner Visibility', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should display spinner while async login request is in progress', () => {\n    // Intercept the login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n\n    // Fill in login form\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('SecurePassword123');\n\n    // Click login button\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for the login request to be sent\n    cy.wait('@loginRequest');\n\n    // Verify spinner is visible\n    cy.get('[data-testid=\"login-spinner\"]').should('be.visible');\n    cy.get('[data-testid=\"login-spinner\"]').should('contain', 'Logging in...');\n\n    // Verify login button is disabled during request\n    cy.get('[data-testid=\"login-button\"]').should('be.disabled');\n\n    // Verify error message is not visible yet\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n\n    // Verify spinner is still visible after a short delay\n    cy.get('[data-testid=\"login-spinner\"]').should('be.visible');\n  });\n\n  it('should hide spinner and show error message when login fails', () => {\n    // Intercept login API call and mock a failed response\n    cy.intercept('POST', '/api/auth/login', {\n      statusCode: 401,\n      body: { error: 'Invalid credentials' }\n    }).as('loginRequest');\n\n    // Fill in login form with invalid credentials\n    cy.get('[data-testid=\"email-input\"]').type('wrong@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('wrongpassword');\n\n    // Click login button\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for the login request\n    cy.wait('@loginRequest');\n\n    // Verify spinner was visible during request\n    cy.get('[data-testid=\"login-spinner\"]').should('be.visible');\n\n    // Verify spinner is hidden after response\n    cy.get('[data-testid=\"login-spinner\"]').should('not.exist');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid credentials');\n\n    // Verify login button is re-enabled\n    cy.get('[data-testid=\"login-button\"]').should('not.be.disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8197,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.599,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.603,
+      "feedback_used": ""
+    }
+  ]
+}

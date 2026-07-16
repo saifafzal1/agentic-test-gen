@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_102",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7634,
+  "total_latency_s": 72.252,
+  "final_script": "describe('Past Date Field Validation - Future Date Submission', () => {\n  beforeEach(() => {\n    cy.visit('/form/submission');\n  });\n\n  it('should display error when submitting form with future date in past date field', () => {\n    // Intercept the form submission API\n    cy.intercept('POST', '/api/form/submit').as('formSubmit');\n\n    // Fill in form with a future date\n    cy.get('[data-testid=\"past-date-input\"]').type('2090-10-20');\n    cy.get('[data-testid=\"name-input\"]').type('John Doe');\n    cy.get('[data-testid=\"email-input\"]').type('john@example.com');\n\n    // Submit the form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@formSubmit');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"past-date-error\"]').should('be.visible');\n    cy.get('[data-testid=\"past-date-error\"]').should('contain', 'Date must be in the past');\n\n    // Verify form was not submitted successfully\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n    cy.get('[data-testid=\"form-container\"]').should('be.visible');\n  });\n\n  it('should allow form submission when past date is provided', () => {\n    // Intercept the form submission API\n    cy.intercept('POST', '/api/form/submit').as('formSubmit');\n\n    // Fill in form with a past date\n    cy.get('[data-testid=\"past-date-input\"]').type('2023-01-15');\n    cy.get('[data-testid=\"name-input\"]').type('Jane Doe');\n    cy.get('[data-testid=\"email-input\"]').type('jane@example.com');\n\n    // Submit the form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@formSubmit');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Form submitted successfully');\n\n    // Verify error message does not exist\n    cy.get('[data-testid=\"past-date-error\"]').should('not.exist');\n\n    // Verify form is cleared or redirected\n    cy.get('[data-testid=\"form-container\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7634,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4112,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.252,
+      "feedback_used": ""
+    }
+  ]
+}

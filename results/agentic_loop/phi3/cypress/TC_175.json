@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_175",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7508,
+  "total_latency_s": 119.834,
+  "final_script": "describe('File Upload - File Name and Size Display', () => {\n  beforeEach(() => {\n    cy.visit('/file-upload');\n  });\n\n  it('should display file name and size when a file is selected', () => {\n    // Intercept the file upload API call\n    cy.intercept('POST', '/api/upload', {\n      statusCode: 200,\n      body: {\n        fileId: '12345',\n        fileName: 'example.pdf',\n        fileSize: '2MB',\n        status: 'success'\n      }\n    }).as('uploadFile');\n\n    // Find the file input and select a file\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/sample.pdf', { force: true });\n\n    // Verify file name and size are displayed\n    cy.get('[data-testid=\"file-name-display\"]').should('be.visible');\n    cy.get('[data-testid=\"file-name-display\"]').should('contain', 'example.pdf');\n\n    cy.get('[data-testid=\"file-size-display\"]').should('be.visible');\n    cy.get('[data-testid=\"file-size-display\"]').should('contain', '2MB');\n\n    // Verify file upload API was called\n    cy.wait('@uploadFile');\n  });\n\n  it('should handle empty file selection and display appropriate message', () => {\n    // Intercept the file upload API call\n    cy.intercept('POST', '/api/upload', {\n      statusCode: 200,\n      body: {\n        fileId: '67890',\n        fileName: 'empty.txt',\n        fileSize: '0B',\n        status: 'error'\n      }\n    }).as('uploadFile');\n\n    // Find the file input and clear it\n    cy.get('[data-testid=\"file-input\"]').clear();\n\n    // Verify file name and size are not displayed\n    cy.get('[data-testid=\"file-name-display\"]').should('not.exist');\n    cy.get('[data-testid=\"file-size-display\"]').should('not.exist');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"file-upload-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"file-upload-error-message\"]').should('contain', 'Please select a file');\n\n    // Verify file upload API was not called\n    cy.wait('@uploadFile').then((interception) => {\n      expect(interception.response.statusCode).to.equal(400);\n    });\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7508,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3694,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 119.834,
+      "feedback_used": ""
+    }
+  ]
+}

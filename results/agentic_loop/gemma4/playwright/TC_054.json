@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_054",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8035,
+  "total_latency_s": 71.458,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Page Title Update on Section Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should update page title when navigating between sections', async ({ page }) => {\n    // Verify initial page title\n    await expect(page).toHaveTitle('Home');\n\n    // Click on 'About' section link\n    const aboutLink = page.getByRole('link', { name: 'About' });\n    await aboutLink.click();\n\n    // Verify page title updates to 'About Us'\n    await expect(page).toHaveTitle('About Us');\n\n    // Click on 'Contact' section link\n    const contactLink = page.getByRole('link', { name: 'Contact' });\n    await contactLink.click();\n\n    // Verify page title updates to 'Contact Us'\n    await expect(page).toHaveTitle('Contact Us');\n\n    // Click on 'Home' section link again\n    await aboutLink.click();\n    await contactLink.click();\n    await aboutLink.click();\n    await contactLink.click();\n    await aboutLink.click();\n\n    // Verify page title returns to 'Home'\n    await expect(page).toHaveTitle('Home');\n  });\n\n  test('should handle navigation to non-existent section gracefully', async ({ page }) => {\n    // Verify initial page title\n    await expect(page).toHaveTitle('Home');\n\n    // Attempt to navigate to a non-existent section\n    const invalidLink = page.getByRole('link', { name: 'Invalid Section' });\n    \n    // Verify invalid link does not exist\n    const linkExists = await invalidLink.isVisible();\n    expect(linkExists).toBe(false);\n\n    // Verify page title remains unchanged\n    await expect(page).toHaveTitle('Home');\n\n    // Verify error message is not displayed\n    const errorMessage = page.getByText('Section not found');\n    const isErrorVisible = await errorMessage.isVisible();\n    expect(isErrorVisible).toBe(false);\n\n    // Navigate to a valid section\n    const aboutLink = page.getByRole('link', { name: 'About' });\n    await aboutLink.click();\n\n    // Verify page title updates to 'About Us'\n    await expect(page).toHaveTitle('About Us');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8035,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4448,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.458,
+      "feedback_used": ""
+    }
+  ]
+}

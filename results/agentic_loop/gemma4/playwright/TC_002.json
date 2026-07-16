@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_002",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8816,
+  "total_latency_s": 70.814,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Incorrect Password Error Message', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should display error message when entering incorrect password', async ({ page }) => {\n    // Verify email input is visible\n    const emailInput = page.getByLabel('Email Address');\n    await expect(emailInput).toBeVisible();\n\n    // Enter valid email\n    await emailInput.fill('user@example.com');\n\n    // Enter incorrect password\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('wrongpassword123');\n\n    // Click login button\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await loginButton.click();\n\n    // Wait for error message to appear\n    await page.waitForTimeout(500);\n\n    // Verify error message is visible\n    const errorMessage = page.getByText('Incorrect password');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message contains specific text\n    await expect(errorMessage).toContainText('Incorrect password');\n\n    // Verify login button is still visible\n    await expect(loginButton).toBeVisible();\n  });\n\n  test('should clear error message when correcting password', async ({ page }) => {\n    // Enter valid email\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('user@example.com');\n\n    // Enter incorrect password\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('wrongpassword123');\n\n    // Click login button to trigger error\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await loginButton.click();\n\n    // Verify error message is visible\n    const errorMessage = page.getByText('Incorrect password');\n    await expect(errorMessage).toBeVisible();\n\n    // Correct the password\n    await passwordInput.fill('correctpassword123');\n\n    // Click login button again\n    await loginButton.click();\n\n    // Wait for error message to clear\n    await page.waitForTimeout(500);\n\n    // Verify error message is no longer visible\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify login button is still visible\n    await expect(loginButton).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8816,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.6052,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 70.814,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_127",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8384,
+  "total_latency_s": 342.45,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async Form Submission - Submit Button Disabling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should disable submit button while form is being submitted asynchronously', async ({ page }) => {\n    // Intercept the API call\n    await page.route('**/api/form-submit', (route) => {\n      route.abort('API call failed');\n    });\n\n    // Get the submit button by role\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeVisible();\n\n    // Get the form input by label\n    const nameInput = page.getByLabel(/name/i);\n    await expect(nameInput).toBeVisible();\n\n    // Get the email input by label\n    const emailInput = page.getByLabel(/email/i);\n    await expect(emailInput).toBeVisible();\n\n    // Fill in the form fields\n    await nameInput.fill('John Doe');\n    await emailInput.fill('john@example.com');\n\n    // Click the submit button\n    await submitButton.click();\n\n    // Verify the button is disabled\n    await expect(submitButton).toBeDisabled();\n\n    // Verify the loading state is visible\n    const loadingIndicator = page.getByText(/submitting.../i);\n    await expect(loadingIndicator).toBeVisible();\n\n    // Verify the form is still visible\n    const formContainer = page.locator('[data-testid=\"form-container\"]');\n    await expect(formContainer).toBeVisible();\n\n    // Verify the error message is displayed\n    const errorMessage = page.getByText(/submission failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the form is still editable\n    await expect(nameInput).toBeEditable();\n    await expect(emailInput).toBeEditable();\n  });\n\n  test('should re-enable submit button after successful async form submission', async ({ page }) => {\n    // Mock successful API response\n    await page.route('**/api/form-submit', (route) => {\n      route.continue();\n    });\n\n    // Get the submit button by role\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeVisible();\n\n    // Get the form input by label\n    const nameInput = page.getByLabel(/name/i);\n    await expect(nameInput).toBeVisible();\n\n    // Get the email input by label\n    const emailInput = page.getByLabel(/email/i);\n    await expect(emailInput).toBeVisible();\n\n    // Fill in the form fields\n    await nameInput.fill('Jane Smith');\n    await emailInput.fill('jane@example.com');\n\n    // Click the submit button\n    await submitButton.click();\n\n    // Verify the button is now enabled\n    await expect(submitButton).not.toBeDisabled();\n\n    // Verify the loading state is gone\n    const loadingIndicator = page.getByText(/submitting.../i);\n    await expect(loadingIndicator).not.toBeVisible();\n\n    // Verify the success message is displayed\n    const successMessage = page.getByText(/form submitted successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify the form is still editable\n    await expect(nameInput).toBeEditable();\n    await expect(emailInput).toBeEditable();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8384,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4613,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 342.45,
+      "feedback_used": ""
+    }
+  ]
+}

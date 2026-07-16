@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_068",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7976,
+  "total_latency_s": 72.902,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Live Data Timestamp Display', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/live-data');\n  });\n\n  test('should display last updated timestamp when live data is available', async ({ page }) => {\n    // Wait for live data to load\n    await page.waitForResponse(response => \n      response.url().includes('/api/live-data') && response.status() === 200\n    );\n\n    // Verify data container is visible\n    const dataContainer = page.getByRole('region', { name: /live data/i });\n    await expect(dataContainer).toBeVisible();\n\n    // Verify timestamp element exists and is visible\n    const timestampElement = page.getByText(/last updated/i);\n    await expect(timestampElement).toBeVisible();\n\n    // Verify timestamp contains a valid date format\n    const timestampText = await timestampElement.textContent();\n    expect(timestampText).toMatch(/last updated.*[0-9]{1,2} [a--zA-Z]{3,9} [0-9]{4}/);\n\n    // Verify timestamp is not empty\n    expect(timestampText).not.toBe('');\n  });\n\n  test('should display \"No data available\" message when live data fails to load', async ({ page }) => {\n    // Intercept the API call and return an error\n    await page.route('**/api/live-data', route => {\n      route.abort('failed');\n    });\n\n    // Wait for the failed request\n    await page.waitForTimeout(500);\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/no data available/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify timestamp element does not exist\n    const timestampElement = page.getByText(/last updated/i);\n    await expect(timestampElement).not.toBeVisible();\n\n    // Verify data container shows error state\n    const dataContainer = page.getByRole('region', { name: /live data/i });\n    await expect(dataContainer).toContainText('No data available');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7976,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4254,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.902,
+      "feedback_used": ""
+    }
+  ]
+}

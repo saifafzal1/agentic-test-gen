@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_070",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8091,
+  "total_latency_s": 322.445,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Background Sync Toast Notification', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/sync-page');\n  });\n\n  test('should display toast notification when background sync completes successfully', async ({ page }) => {\n    // Setup: intercept the API call for background sync\n    await page.route('**/api/sync/background', (route) => {\n      route.continue();\n    });\n\n    // Verify toast container exists\n    const toastContainer = page.getByRole('status');\n    await expect(toastContainer).toBeVisible();\n\n    // Verify toast message contains success text\n    const successToast = page.getByText('Background sync completed successfully');\n    await expect(successToast).toBeVisible();\n\n    // Verify toast has success icon\n    const successIcon = page.getByRole('img', { name: /success/i });\n    await expect(successIcon).toBeVisible();\n\n    // Verify toast has close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify toast is dismissible\n    await closeButton.click();\n    await expect(toastContainer).not.toBeVisible();\n  });\n\n  test('should display error toast notification when background sync fails', async ({ page }) => {\n    // Setup: intercept the API call for background sync with error response\n    await page.route('**/api/sync/background', (route) => {\n      route.abort('failed');\n    });\n\n    // Verify toast container exists\n    const toastContainer = page.getByRole('status');\n    await expect(toastContainer).toBeVisible();\n\n    // Verify toast message contains error text\n    const errorToast = page.getByText('Background sync failed');\n    await expect(errorToast).toBeVisible();\n\n    // Verify toast has error icon\n    const errorIcon = page.getByRole('img', { name: /error/i });\n    await expect(errorIcon).toBeVisible();\n\n    // Verify toast has close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify toast is dismissible\n    await closeButton.click();\n    await expect(toastContainer).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8091,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4635,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 322.445,
+      "feedback_used": ""
+    }
+  ]
+}

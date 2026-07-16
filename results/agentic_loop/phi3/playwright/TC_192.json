@@ -1,0 +1,61 @@
+{
+  "tc_id": "TC_192",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.5035,
+  "total_latency_s": 1192.828,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Suggestions Highlighting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should highlight matching part of search term in suggestions', async ({ page }) => {\n    // Set up API interception for search suggestions\n    await page.route('**/api/search-suggestions', (route) => {\n      route.continue();\n    });\n\n    // Set up API interception for search results\n    await page.route('**/api/search-results', (route) => {\n      route.continue();\n    });\n\n    // Set up API interception for search API\n    await page.route('**/api/search', (route) => {\n      route.continue();\n    });\n\n    // Type a search term with partial match\n    const searchInput = page.getByPlaceholder('Search...');\n    await searchInput.fill('playwright');\n\n    // Wait for suggestions to appear\n    const suggestionsList = page.getByRole('listbox');\n    await expect(suggestionsList).toBeVisible();\n\n    // Verify suggestions are displayed\n    const suggestionItems = page.locator('[data-testid=\"suggestion-item\"]');\n    await expect(suggestionItems).toHaveCount(3);\n\n    // Verify the first suggestion is highlighted\n    const firstSuggestion = page.getByText('Playwright Test Script');\n    await expect(firstSuggestion).toBeVisible();\n    await expect(firstSuggestion).toHaveAttribute('data-highlight', 'playwright');\n\n    // Verify the second suggestion is highlighted\n    const secondSuggestion = page.getByText('Playwright Playwright');\n    await expect(secondSuggestion).toBeVisible();\n    await expect(secondSuggestion).toHaveAttribute('data-highlight', 'playwright');\n\n    // Verify the third suggestion is highlighted\n    const thirdSuggestion = page.getByText('Playwright Playwright Playwright');\n    await expect(thirdSuggestion).toBeVisible();\n    await expect(thirdSuggestion).toHaveAttribute('data-highlight', 'playwright');\n\n    // Verify the search input has the correct value\n    const searchInputValue = page.getByLabel('Search');\n    await expect(searchInputValue).toHaveValue('playwright');\n\n    // Verify the search results are displayed\n    const searchResults = page.getByRole('region', { name: /search results/i });\n    await expect(searchResults).toBeVisible();\n\n    // Verify the first result is highlighted\n    const firstResult = page.getByText('Playwright Test Script');\n    await expect(firstResult).toBeVisible();\n    await expect(firstResult).toHaveAttribute('data-highlight', 'playwright');\n\n    // Verify the second result is highlighted\n    const secondResult = page.getByText('Playwright Playwright');\n    await expect(secondResult).toBeVisible();\n    await expect(secondResult).toHaveAttribute('data-highlight', 'playwright');\n\n    // Verify the third result is highlighted\n    const thirdResult = page.getByText('Playwright Playwright Playwright');\n    await expect(thirdResult).toBeVisible();\n    await expect(thirdResult).toHaveAttribute('data-highlight', 'playwright');\n\n    // Verify the search results list is visible\n    await expect(searchResults).toBeVisible();\n  });\n\n  test('should handle empty search term and display no suggestions', async ({ page }) => {\n    // Set up API interception for search suggestions\n    await page.route('**/api/search-suggestions', (route) => {\n      route.continue();\n    });\n\n    // Set up API interception for search results\n    await page.route('**/api/search-results', (route) => {\n      route.continue();\n    });\n\n    // Set up API interception for search API\n    await page.route('**/api/search', (route) => {\n      route.continue();\n    });\n\n    // Type an empty search term\n    const searchInput = page.getByPlaceholder('Search...');\n    await searchInput.",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5035,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4117,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 59.337,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.1046,
+        "syntax": 0.1,
+        "assertion": 0.0,
+        "rouge_l": 0.2155,
+        "missing_keywords": [
+          "expect("
+        ],
+        "assertion_count": 0,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2",
+        "complete": false
+      },
+      "latency_s": 556.921,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.091,
+        "syntax": 0.1,
+        "assertion": 0.0,
+        "rouge_l": 0.17,
+        "missing_keywords": [
+          "expect("
+        ],
+        "assertion_count": 0,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2",
+        "complete": false
+      },
+      "latency_s": 576.57,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2"
+    }
+  ]
+}

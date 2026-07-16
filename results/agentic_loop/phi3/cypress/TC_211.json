@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_211",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7283,
+  "total_latency_s": 330.781,
+  "final_script": "describe('Dynamic Content Accessibility Announcements', () => {\n  beforeEach(() => {\n    cy.visit('/dynamic-content');\n  });\n\n  it('should announce dynamic content updates for screen readers', () => {\n    // Intercept the API call to fetch dynamic content\n    cy.intercept('GET', '/api/dynamic-content').as('getDynamicContent');\n\n    // Verify initial state\n    cy.get('[data-testid=\"content-container\"]').should('be.visible');\n    cy.get('[data-testid=\"content-container\"]').should('contain', 'Initial content');\n\n    // Trigger the API call\n    cy.wait('@getDynamicContent');\n\n    // Verify screen reader announcement\n    cy.get('[data-testid=\"screen-reader-announcer\"]').should('be.visible');\n    cy.get('[data-testid=\"screen-reader-announcer\"]').should('contain', 'Dynamic content updated');\n\n    // Verify content has been updated\n    cy.get('[data-testid=\"content-container\"]').should('contain', 'Updated content');\n\n    // Verify announcement is clear and descriptive\n    cy.get('[data-testid=\"screen-reader-announcer\"]').should('have.css', 'opacity', '1');\n    cy.get('[data-testid=\"screen-reader-announcer\"]').should('contain', 'Content has been refreshed');\n  });\n\n  it('should handle multiple dynamic content updates without repetitive announcements', () => {\n    // Intercept the API call to fetch dynamic content\n    cy.intercept('GET', '/api/dynamic-content').as('getDynamicContent');\n\n    // Trigger the first API call\n    cy.wait('@getDynamicContent');\n    cy.get('[data-testid=\"screen-reader-announcer\"]').should('contain', 'Dynamic content updated');\n\n    // Trigger the second API call\n    cy.wait('@getDynamicContent');\n\n    // Verify screen reader announces only once\n    cy.get('[data-testid=\"screen-reader-announcer\"]').should('contain', 'Dynamic content updated');\n\n    // Verify content has been updated twice\n    cy.get('[data-testid=\"content-container\"]').should('contain', 'Updated content');\n    cy.get('[data-testid=\"content-container\"]').should('contain', 'Second update');\n\n    // Verify announcement is clear and descriptive\n    cy.get('[data-testid=\"screen-reader-announcer\"]').should('have.css', 'opacity', '1');\n    cy.get('[data-testid=\"screen-reader-announcer\"]').should('contain', 'Content has been refreshed twice');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7283,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2944,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 330.781,
+      "feedback_used": ""
+    }
+  ]
+}

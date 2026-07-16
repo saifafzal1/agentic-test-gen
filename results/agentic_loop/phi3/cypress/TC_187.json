@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_187",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7542,
+  "total_latency_s": 417.308,
+  "final_script": "describe('Search Filter by Category - Category: search_filter', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should filter search results by category using checkboxes - happy path', () => {\n    // Intercept the search API call\n    cy.intercept('GET', '/api/search*').as('searchResults');\n\n    // Perform initial search\n    cy.get('[data-testid=\"search-input\"]').type('laptop');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for search results to load\n    cy.wait('@searchResults');\n\n    // Verify initial results are displayed\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n\n    // Click on the 'Electronics' category checkbox\n    cy.get('[data-testid=\"category-checkbox-electronics\"]').click();\n\n    // Wait for filter to apply\n    cy.wait('@searchResults');\n\n    // Verify Electronics category is now filtered\n    cy.get('[data-testid=\"result-item\"]').should('have.class', 'electronics-filtered');\n\n    // Verify other categories are not displayed\n    cy.get('[data-testid=\"result-item\"]').should('not.have.class', 'books-filtered');\n    cy.get('[data-testid=\"result-item\"]').should('not.have.class', 'clothing-filtered');\n\n    // Verify search results count is updated\n    cy.get('[data-testid=\"search-results-count\"]').should('contain', '3 results');\n  });\n\n  it('should handle multiple category filters - edge case', () => {\n    // Intercept the search API call\n    cy.intercept('GET', '/api/search*').as('searchResults');\n\n    // Perform initial search\n    cy.get('[data-testid=\"search-input\"]').type('laptop');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for search results to load\n    cy.wait('@searchResults');\n\n    // Verify initial results are displayed\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n\n    // Click on 'Electronics' category checkbox\n    cy.get('[data-testid=\"category-checkbox-electronics\"]').click();\n\n    // Wait for filter to apply\n    cy.wait('@searchResults');\n\n    // Click on 'Books' category checkbox\n    cy.get('[data-testid=\"category-checkbox-books\"]').click();\n\n    // Wait for filter to apply\n    cy.wait('@searchResults');\n\n    // Verify both categories are now filtered\n    cy.get('[data-testid=\"result-item\"]').should('have.class', 'electronics-filtered');\n    cy.get('[data-testid=\"result-item\"]').should('have.class', 'books-filtered');\n\n    // Verify search results count is updated\n    cy.get('[data-testid=\"search-results-count\"]').should('contain', '2 results');\n\n    // Verify no results are displayed for unselected categories\n    cy.get('[data-testid=\"result-item\"]').should('not.have.class', 'clothing-filtered');\n\n    // Verify filter UI updates to show selected categories\n    cy.get('[data-testid=\"filter-panel\"]').should('be.visible');\n    cy.get('[data-testid=\"filter-panel\"]').should('contain', 'Electronics');\n    cy.get('[data-testid=\"filter-panel\"]').should('contain', 'Books');\n\n    // Verify filter panel is still responsive\n    cy.get('[data-testid=\"filter-panel\"]').click();\n    cy.get('[data-testid=\"filter-panel\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4935,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.4185,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 56.081,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7542,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3807,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 361.227,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

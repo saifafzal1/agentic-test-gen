@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_092",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7665,
+  "total_latency_s": 41.82,
+  "final_script": "describe('Error State - Invalid Input Correction', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n  });\n\n  it('should clear error state when user corrects invalid input', () => {\n    // Intercept the API call to validate the input\n    cy.intercept('POST', '/api/validate-input', {\n      statusCode: 400,\n      body: { error: 'Input must be a valid email address' }\n    }).as('validateInput');\n\n    // Fill in the form with invalid email\n    cy.get('[data-testid=\"email-input\"]').type('invalid-email');\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Input must be a valid email address');\n\n    // Wait for API validation\n    cy.wait('@validateInput');\n\n    // Clear the invalid input\n    cy.get('[data-testid=\"email-input\"]').clear();\n\n    // Type in a valid email\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n\n    // Submit the form again\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify error message is gone\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Form submitted successfully');\n  });\n\n  it('should not clear error state when user submits with invalid input', () => {\n    // Intercept the API call to validate the input\n    cy.intercept('POST', '/api/validate-input', {\n      statusCode: 400,\n      body: { error: 'Input must be a valid email address' }\n    }).as('validateInput');\n\n    // Fill in the form with invalid email\n    cy.get('[data-testid=\"email-input\"]').type('invalid-email');\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Input must be a valid email address');\n\n    // Wait for API validation\n    cy.wait('@validateInput');\n\n    // Attempt to clear the input\n    cy.get('[data-testid=\"email-input\"]').clear();\n\n    // Submit the form again with the same invalid input\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify error message persists\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Input must be a valid email address');\n\n    // Verify success message does not appear\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7665,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4216,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 41.82,
+      "feedback_used": ""
+    }
+  ]
+}

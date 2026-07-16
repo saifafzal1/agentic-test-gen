@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_034",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8362,
+  "total_latency_s": 375.433,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Auto-Save Form Draft Feature', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should auto-save form as draft every 30 seconds', async ({ page }) => {\n    // Verify initial form state\n    const nameInput = page.getByLabel('Full Name');\n    await expect(nameInput).toBeVisible();\n    const emailInput = page.getByLabel('Email Address');\n    await expect(emailInput).toBeVisible();\n    const messageInput = page.getByLabel('Message');\n    await expect(messageInput).toBeVisible();\n\n    // Fill in form fields\n    await nameInput.fill('John Doe');\n    await emailInput.fill('john.doe@example.com');\n    await messageInput.fill('This is a test message');\n\n    // Verify initial save state\n    const saveButton = page.getByRole('button', { name: /save draft/i });\n    await expect(saveButton).toBeVisible();\n    await expect(saveButton).toBeDisabled();\n\n    // Wait for auto-save interval\n    await page.waitForTimeout(30000);\n\n    // Verify draft is saved\n    const draftId = page.getByText('Draft saved');\n    await expect(draftId).toBeVisible();\n\n    // Verify save button is now enabled\n    await expect(saveButton).toBeEnabled();\n\n    // Click save button to confirm draft\n    await saveButton.click();\n\n    // Verify success message\n    const successMessage = page.getByText('Form saved as draft');\n    await expect(successMessage).toBeVisible();\n\n    // Verify form fields are still visible\n    await expect(nameInput).toBeVisible();\n    await expect(emailInput).toBeVisible();\n    await expect(messageInput).toBeVisible();\n\n    // Verify draft ID is displayed\n    await expect(draftId).toBeVisible();\n  });\n\n  test('should not auto-save when form is empty', async ({ page }) => {\n    // Verify initial form state\n    const nameInput = page.getByLabel('Full Name');\n    await expect(nameInput).toBeVisible();\n    const emailInput = page.getByLabel('Email Address');\n    await expect(emailInput).toBeVisible();\n    const messageInput = page.getByLabel('Message');\n    await expect(messageInput).toBeVisible();\n\n    // Verify save button is disabled initially\n    const saveButton = page.getByRole('button', { name: /save draft/i });\n    await expect(saveButton).toBeDisabled();\n\n    // Wait for auto-save interval\n    await page.waitForTimeout(30000);\n\n    // Verify save button is still disabled\n    await expect(saveButton).toBeDisabled();\n\n    // Verify no draft is saved\n    const draftId = page.getByText('Draft saved');\n    await expect(draftId).not.toBeVisible();\n\n    // Verify success message is not displayed\n    const successMessage = page.getByText('Form saved as draft');\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify form fields are still visible\n    await expect(nameInput).toBeVisible();\n    await expect(emailInput).toBeVisible();\n    await expect(messageInput).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8362,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4538,
+        "missing_keywords": [],
+        "assertion_count": 22,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 375.433,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_146",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7684,
+  "total_latency_s": 72.337,
+  "final_script": "describe('Onboarding Tour Modal - Step Advancement', () => {\n  beforeEach(() => {\n    cy.visit('/onboarding');\n  });\n\n  it('should advance through onboarding tour steps using next button', () => {\n    // Verify modal is visible\n    cy.get('[data-testid=\"onboarding-modal\"]').should('be.visible');\n    \n    // Verify first step is displayed\n    cy.get('[data-testid=\"onboarding-step-1-title\"]').should('contain', 'Welcome to the App');\n    cy.get('[data-testid=\"onboarding-step-1-description\"]').should('be.visible');\n    \n    // Click next button to advance to step 2\n    cy.get('[data-testid=\"onboarding-next-button\"]').click();\n    \n    // Verify step 2 is displayed\n    cy.get('[data-testid=\"onboarding-step-2-title\"]').should('be.visible');\n    cy.get('[data-testid=\"onboarding-step-2-description\"]').should('contain', 'Explore the dashboard');\n    \n    // Click next button to advance to step 3\n    cy.get('[data-testid=\"onboarding-next-button\"]').click();\n    \n    // Verify step 3 is displayed\n    cy.get('[data-testid=\"onboarding-step-3-title\"]').should('be.visible');\n    cy.get('[data-testid=\"onboarding-step-3-description\"]').should('contain', 'Customize your profile');\n    \n    // Click finish button to complete tour\n    cy.get('[data-testid=\"onboarding-finish-button\"]').click();\n    \n    // Verify modal is closed\n    cy.get('[data-testid=\"onboarding-modal\"]').should('not.exist');\n    \n    // Verify user is redirected to dashboard\n    cy.url().should('include', '/dashboard');\n  });\n\n  it('should handle edge case of clicking next button when on last step', () => {\n    // Open onboarding modal\n    cy.get('[data-testid=\"onboarding-modal\"]').should('be.visible');\n    \n    // Advance to last step (step 3)\n    cy.get('[data-testid=\"onboarding-next-button\"]').click();\n    cy.get('[data-testid=\"onboarding-step-2-title\"]').should('be.visible');\n    cy.get('[data-testid=\"onboarding-next-button\"]').click();\n    cy.get('[data-testid=\"onboarding-step-3-title\"]').should('be.visible');\n    \n    // Verify finish button is visible on last step\n    cy.get('[data-testid=\"onboarding-finish-button\"]').should('be.visible');\n    \n    // Verify next button is disabled or hidden on last step\n    cy.get('[data-testid=\"onboarding-next-button\"]').should('be.disabled');\n    \n    // Attempt to click disabled next button (should not advance)\n    cy.get('[data-testid=\"onboarding-next-button\"]').click({ force: true });\n    \n    // Verify still on step 3\n    cy.get('[data-testid=\"onboarding-step-3-title\"]').should('be.visible');\n    \n    // Click finish button\n    cy.get('[data-testid=\"onboarding-finish-button\"]').click();\n    \n    // Verify modal is closed\n    cy.get('[data-testid=\"onboarding-modal\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7684,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4278,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.337,
+      "feedback_used": ""
+    }
+  ]
+}

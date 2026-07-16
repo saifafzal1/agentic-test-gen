@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_119",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7579,
+  "total_latency_s": 72.408,
+  "final_script": "describe('Countdown Timer Interval Update', () => {\n  beforeEach(() => {\n    cy.visit('/countdown');\n  });\n\n  it('should update countdown timer every second', () => {\n    // Verify initial countdown value is displayed\n    cy.get('[data-testid=\"countdown-timer\"]').should('contain', '10');\n    cy.get('[data-testid=\"timer-label\"]').should('contain', 'seconds');\n\n    // Wait for the first second to pass\n    cy.wait(1100);\n\n    // Verify timer has decremented by one\n    cy.get('[data-testid=\"countdown-timer\"]').should('contain', '9');\n\n    // Wait for another second\n    cy.wait(1050);\n\n    // Verify timer has decremented again\n    cy.get('[data-testid=\"countdown-timer\"]').should('contain', '8');\n\n    // Verify timer label remains visible\n    cy.get('[data-testid=\"timer-label\"]').should('be.visible');\n  });\n\n  it('should handle interval reset when timer reaches zero', () => {\n    // Set initial countdown to 3\n    cy.get('[data-testid=\"countdown-input\"]').clear().type('3');\n    cy.get('[data-testid=\"start-button\"]').click();\n\n    // Wait for first second\n    cy.wait(1100);\n    cy.get('[data-testid=\"countdown-timer\"]').should('contain', '2');\n\n    // Wait for second second\n    cy.wait(1050);\n    cy.get('[data-testid=\"countdown-timer\"]').should('contain', '1');\n\n    // Wait for third second (timer reaches zero)\n    cy.wait(1050);\n    cy.get('[data-testid=\"countdown-timer\"]').should('contain', '0');\n\n    // Verify timer is reset and ready to restart\n    cy.get('[data-testid=\"countdown-timer\"]').should('contain', '0');\n    cy.get('[data-testid=\"start-button\"]').should('be.visible');\n    cy.get('[data-testid=\"reset-button\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7579,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3931,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.408,
+      "feedback_used": ""
+    }
+  ]
+}

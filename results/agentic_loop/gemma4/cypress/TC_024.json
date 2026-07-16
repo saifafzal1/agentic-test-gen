@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_024",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7254,
+  "total_latency_s": 71.287,
+  "final_script": "describe('Character Count on Textarea', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n  });\n\n  it('should display character count and limit input to 500 characters', () => {\n    // Verify textarea and character count element are visible\n    cy.get('[data-testid=\"textarea-input\"]').should('be.visible');\n    cy.get('[data-testid=\"char-count\"]').should('be.visible');\n    cy.get('[data-testid=\"char-count\"]').should('contain', '0/500');\n\n    // Type less than 500 characters\n    cy.get('[data-testid=\"textarea-input\"]').type('This is a test message');\n    cy.get('[data-testid=\"char-count\"]').should('contain', '21/500');\n\n    // Type exactly 500 characters\n    const longText = 'a'.repeat(479);\n    cy.get('[data-testid=\"textarea-input\"]').type(longText);\n    cy.get('[data-testid=\"char-count\"]').should('contain', '500/500');\n\n    // Attempt to type one more character (should be blocked)\n    cy.get('[data-testid=\"textarea-input\"]').type('a');\n    cy.get('[data-testid=\"textarea-input\"]').should('have.value', 'a'.repeat(500));\n    cy.get('[data-testid=\"char-count\"]').should('contain', '500/500');\n\n    // Verify submit button is enabled\n    cy.get('[data-testid=\"submit-button\"]').should('not.be.disabled');\n  });\n\n  it('should handle empty textarea and display correct count', () => {\n    // Verify textarea is empty\n    cy.get('[data-testid=\"textarea-input\"]').should('have.value', '');\n    cy.get('[data-testid=\"char-count\"]').should('contain', '0/500');\n\n    // Clear existing text\n    cy.get('[data-testid=\"textarea-input\"]').clear();\n    cy.get('[data-testid=\"char-count\"]').should('contain', '0/500');\n\n    // Type a short message\n    cy.get('[data-testid=\"textarea-input\"]').type('Hello');\n    cy.get('[data-testid=\"char-count\"]').should('contain', '5/500');\n\n    // Verify submit button is disabled when textarea is empty\n    cy.get('[data-testid=\"submit-button\"]').should('be.disabled');\n\n    // Type a message that is exactly 1 character\n    cy.get('[data-testid=\"textarea-input\"]').clear();\n    cy.get('[data-testid=\"textarea-input\"]').type('a');\n    cy.get('[data-testid=\"char-count\"]').should('contain', '1/500');\n    cy.get('[data-testid=\"submit-button\"]').should('not.be.disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7254,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2846,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.287,
+      "feedback_used": ""
+    }
+  ]
+}

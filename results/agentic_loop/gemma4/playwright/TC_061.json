@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_061",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7922,
+  "total_latency_s": 1449.069,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Optimistic UI Updates for Liking a Post', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/posts');\n  });\n\n  test('should optimistically update like count and heart icon before API response', async ({ page }) => {\n    // Setup: intercept the initial GET request\n    await page.route('**/api/posts/*', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the POST request and delay response\n    await page.route('**/api/posts/*/like', (route) => {\n      setTimeout(() => {\n        route.abort('timedout');\n      }, 1000);\n    });\n\n    // Get the first post using getByRole\n    const postContainer = page.getByRole('region', { name: /post/i });\n    await expect(postContainer).toBeVisible();\n\n    // Get the like button using getByRole\n    const likeButton = page.getByRole('button', { name: /like/i });\n    await expect(likeButton).toBeVisible();\n\n    // Get the like count using getByText\n    const likeCount = page.getByText(/10/);\n    await expect(likeCount).toBeVisible();\n\n    // Get the heart icon using getByRole\n    const heartIcon = page.getByRole('img', { name: /heart/i });\n    await expect(heartIcon).not.toHaveClass(/liked/);\n\n    // Click the like button\n    await likeButton.click();\n\n    // Verify optimistic update immediately\n    await expect(likeCount).toHaveText(/11/);\n    await expect(heartIcon).toHaveClass(/liked/);\n\n    // Verify loading state appears\n    const loadingIndicator = page.getByRole('status', { name: /loading/i });\n    await expect(loadingIndicator).toBeVisible();\n\n    // Wait for API response\n    await page.waitForTimeout(1100);\n\n    // Verify optimistic update persists after API response\n    await expect(likeCount).toHaveText(/11/);\n    await expect(heartIcon).toHaveClass(/liked/);\n\n    // Verify loading state disappears\n    await expect(loadingIndicator).not.toBeVisible();\n  });\n\n  test('should revert optimistic update if API request fails', async ({ page }) => {\n    // Setup: intercept the initial GET request\n    await page.route('**/api/posts/*', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the POST request and return error\n    await page.route('**/api/posts/*/like', (route) => {\n      route.abort('failed');\n    });\n\n    // Get the first post using getByRole\n    const postContainer = page.getByRole('region', { name: /post/i });\n    await expect(postContainer).toBeVisible();\n\n    // Get the like button using getByRole\n    const likeButton = page.getByRole('button', { name: /like/i });\n    await expect(likeButton).toBeVisible();\n\n    // Get the like count using getByText\n    const likeCount = page.getByText(/10/);\n    await expect(likeCount).toBeVisible();\n\n    // Get the heart icon using getByRole\n    const heartIcon = page.getByRole('img', { name: /heart/i });\n    await expect(heartIcon).not.toHaveClass(/liked/);\n\n    // Click the like button\n    await likeButton.click();\n\n    // Verify optimistic update immediately\n    await expect(likeCount).toHaveText(/11/);\n    await expect(heartIcon).toHaveClass(/liked/);\n\n    // Verify loading state appears\n    const loadingIndicator = page.getByRole('status', { name: /loading/i });\n    await expect(loadingIndicator).toBeVisible();\n\n    // Wait for API response\n    await page.waitForTimeout(1100);\n\n    // Verify optimistic update is reverted\n    await expect(likeCount).toHaveText(/10/);\n    await expect(heartIcon).not.toHaveClass(/liked/);\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/failed to like post/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify loading state disappears\n    await expect(loadingIndicator).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7922,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4074,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 1449.069,
+      "feedback_used": ""
+    }
+  ]
+}

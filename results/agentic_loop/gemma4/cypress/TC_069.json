@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_069",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7492,
+  "total_latency_s": 73.608,
+  "final_script": "describe('API Response Caching', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should cache API responses for instant repeat visits', () => {\n    // First visit - API call should be made\n    cy.intercept('GET', '/api/data').as('firstRequest');\n    cy.get('[data-testid=\"load-data-button\"]').click();\n    cy.wait('@firstRequest');\n    cy.get('[data-testid=\"data-content\"]').should('be.visible');\n    cy.get('[data-testid=\"data-content\"]').should('contain', 'Data loaded successfully');\n\n    // Second visit - API call should be skipped due to cache\n    cy.reload();\n    cy.get('[data-testid=\"load-data-button\"]').click();\n    cy.get('[data-testid=\"data-content\"]').should('be.visible');\n    cy.get('[data-testid=\"data-content\"]').should('contain', 'Data loaded successfully');\n\n    // Verify no network request was made on second visit\n    cy.get('@firstRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n    cy.get('[data-testid=\"cache-status\"]').should('contain', 'Cached');\n  });\n\n  it('should invalidate cache when data is updated', () => {\n    // First visit - API call and cache\n    cy.intercept('GET', '/api/data').as('firstRequest');\n    cy.get('[data-testid=\"load-data-button\"]').click();\n    cy.wait('@firstRequest');\n    cy.get('[data-testid=\"data-content\"]').should('contain', 'Data loaded successfully');\n\n    // Update data via API\n    cy.intercept('PUT', '/api/data').as('updateData');\n    cy.get('[data-testid=\"edit-data-button\"]').click();\n    cy.get('[data-testid=\"data-input\"]').clear().type('Updated data');\n    cy.get('[data-testid=\"save-button\"]').click();\n    cy.wait('@updateData');\n\n    // Verify cache is invalidated and new data is fetched\n    cy.reload();\n    cy.get('[data-testid=\"load-data-button\"]').click();\n    cy.intercept('GET', '/api/data').as('refetchRequest');\n    cy.wait('@refetchRequest');\n    cy.get('[data-testid=\"data-content\"]').should('contain', 'Updated data');\n    cy.get('[data-testid=\"cache-status\"]').should('contain', 'Refreshed');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7492,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3641,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.608,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_057",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.753,
+  "total_latency_s": 71.199,
+  "final_script": "describe('Loading Skeleton Display During API Fetch', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should display loading skeleton while API data is fetching', () => {\n    // Intercept the API call\n    cy.intercept('GET', '/api/user-data').as('fetchUserData');\n\n    // Trigger the data fetch\n    cy.get('[data-testid=\"load-button\"]').click();\n\n    // Verify loading skeleton is visible\n    cy.get('[data-testid=\"loading-skeleton\"]').should('be.visible');\n    cy.get('[data-testid=\"skeleton-card\"]').should('be.visible');\n    cy.get('[data-testid=\"skeleton-text\"]').should('be.visible');\n\n    // Verify actual data is not yet visible\n    cy.get('[data-testid=\"user-name\"]').should('not.exist');\n    cy.get('[data-testid=\"user-email\"]').should('not.exist');\n\n    // Wait for the API response\n    cy.wait('@fetchUserData');\n\n    // Verify loading skeleton is hidden after data loads\n    cy.get('[data-testid=\"loading-skeleton\"]').should('not.exist');\n\n    // Verify actual data is now visible\n    cy.get('[data-testid=\"user-name\"]').should('be.visible');\n    cy.get('[data-testid=\"user-email\"]').should('be.visible');\n  });\n\n  it('should handle API error and display error message instead of skeleton', () => {\n    // Intercept the API call and simulate an error\n    cy.intercept('GET', '/api/user-data', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' }\n    }).as('fetchUserDataError');\n\n    // Trigger the data fetch\n    cy.get('[data-testid=\"load-button\"]').click();\n\n    // Verify loading skeleton is briefly visible\n    cy.get('[data-testid=\"loading-skeleton\"]').should('be.visible');\n\n    // Wait for the error response\n    cy.wait('@fetchUserDataError');\n\n    // Verify loading skeleton is hidden\n    cy.get('[data-testid=\"loading-skeleton\"]').should('not.exist');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-text\"]').should('contain', 'Internal Server Error');\n\n    // Verify actual data is not displayed\n    cy.get('[data-testid=\"user-name\"]').should('not.exist');\n    cy.get('[data-testid=\"user-email\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.753,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3768,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.199,
+      "feedback_used": ""
+    }
+  ]
+}

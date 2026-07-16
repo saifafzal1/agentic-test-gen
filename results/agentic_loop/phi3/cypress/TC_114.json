@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_114",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7535,
+  "total_latency_s": 364.526,
+  "final_script": "describe('Lazy-loaded Components - No Layout Shift', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should load lazy-loaded components smoothly without layout shift', () => {\n    // Verify initial state\n    cy.get('[data-testid=\"dashboard-header\"]').should('be.visible');\n    cy.get('[data-testid=\"dashboard-sidebar\"]').should('be.visible');\n    cy.get('[data-testid=\"dashboard-content\"]').should('contain', 'Welcome');\n\n    // Intercept API call for lazy-loaded component\n    cy.intercept('GET', '/api/components/dashboard-chart').as('loadChart');\n\n    // Trigger lazy-load\n    cy.get('[data-testid=\"dashboard-chart-trigger\"]').click();\n\n    // Wait for lazy-load to complete\n    cy.wait('@loadChart');\n\n    // Verify component is now visible without layout shift\n    cy.get('[data-testid=\"dashboard-chart\"]').should('be.visible');\n    cy.get('[data-testid=\"dashboard-chart\"]').should('contain', 'Data');\n\n    // Verify layout remains stable\n    cy.get('[data-testid=\"dashboard-header\"]').should('have.css', 'position', 'static');\n    cy.get('[data-testid=\"dashboard-sidebar\"]').should('have.css', 'position', 'static');\n    cy.get('[data-testid=\"dashboard-content\"]').should('have.css', 'position', 'static');\n\n    // Verify no layout shift\n    cy.get('[data-testid=\"dashboard-chart\"]').should('not.have.css', 'transform');\n    cy.get('[data-testid=\"dashboard-chart\"]').should('not.have.css', 'translateX');\n    cy.get('[data-testid=\"dashboard-chart\"]').should('not.have.css', 'translateY');\n\n    // Verify smooth transition\n    cy.get('[data-testid=\"dashboard-chart\"]').should('have.css', 'opacity', '1');\n    cy.get('[data-testid=\"dashboard-chart\"]').should('not.have.css', 'opacity', '0');\n\n    // Verify no performance issues\n    cy.get('[data-testid=\"dashboard-chart\"]').should('have.css', 'transition', 'all 0.3s ease');\n  });\n\n  it('should handle failed lazy-load without layout shift', () => {\n    // Trigger lazy-load\n    cy.get('[data-testid=\"dashboard-chart-trigger\"]').click();\n\n    // Simulate failed API call\n    cy.intercept('GET', '/api/components/dashboard-chart', {\n      statusCode: 500,\n      body: { error: 'Server error' }\n    }).as('failedLoadChart');\n\n    // Wait for failed load\n    cy.wait('@failedLoadChart');\n\n    // Verify error state is displayed\n    cy.get('[data-testid=\"dashboard-chart-error\"]').should('be.visible');\n    cy.get('[data-testid=\"dashboard-chart-error\"]').should('contain', 'Failed to load');\n\n    // Verify layout remains stable\n    cy.get('[data-testid=\"dashboard-header\"]').should('have.css', 'position', 'static');\n    cy.get('[data-testid=\"dashboard-sidebar\"]').should('have.css', 'position', 'static');\n    cy.get('[data-testid=\"dashboard-content\"]').should('have.css', 'position', 'static');\n\n    // Verify no layout shift\n    cy.get('[data-testid=\"dashboard-chart-error\"]').should('not.have.css', 'transform');\n    cy.get('[data-testid=\"dashboard-chart-error\"]').should('not.have.css', 'translateX');\n    cy.get('[data-testid=\"dashboard-chart-error\"]').should('not.have.css', 'translateY');\n\n    // Verify error message is clear and user-friendly\n    cy.get('[data-testid=\"dashboard-chart-error\"]').should('contain', 'Please try again later');\n\n    // Verify error state is accessible\n    cy.get('[data-testid=\"dashboard-chart-error\"]').should('be.visible');\n    cy.get('[data-testid=\"dashboard-chart-error\"]').should('be.displayed');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4706,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3419,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 55.13,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7535,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3784,
+        "missing_keywords": [],
+        "assertion_count": 25,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 309.396,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

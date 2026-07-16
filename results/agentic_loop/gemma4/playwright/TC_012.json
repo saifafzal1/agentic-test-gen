@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_012",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8235,
+  "total_latency_s": 70.89,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Session Timeout After Inactivity', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('user@example.com');\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('Password123');\n    const loginButton = page.getByRole('button', { name: 'Sign In' });\n    await loginButton.click();\n    await page.waitForURL('/dashboard');\n  });\n\n  test('should log user out after 30 minutes of inactivity', async ({ page }) => {\n    // Intercept the session timeout API call\n    await page.route('**/api/session/timeout', (route) => {\n      route.continue();\n    });\n\n    // Set a timeout to simulate 30 minutes of inactivity\n    await page.waitForTimeout(15000);\n\n    // Verify user is still logged in\n    const welcomeMessage = page.getByText('Welcome Back');\n    await expect(welcomeMessage).toBeVisible();\n\n    // Wait for the session timeout to occur\n    await page.waitForTimeout(15000);\n\n    // Verify user is logged out and redirected to login\n    await expect(page).toHaveURL('/login');\n    const logoutButton = page.getByRole('button', { name: 'Sign Out' });\n    await expect(logoutButton).not.toBeVisible();\n    const welcomeMessageAfterTimeout = page.getByText('Welcome Back');\n    await expect(welcomeMessageAfterTimeout).not.toBeVisible();\n  });\n\n  test('should not log user out when active within the session timeout period', async ({ page }) => {\n    // Intercept the session timeout API call\n    await page.route('**/api/session/timeout', (route) => {\n      route.continue();\n    });\n\n    // Verify user is logged in\n    const welcomeMessage = page.getByText('Welcome Back');\n    await expect(welcomeMessage).toBeVisible();\n\n    // Simulate 15 minutes of inactivity\n    await page.waitForTimeout(90000);\n\n    // Verify user is still logged in\n    await expect(welcomeMessage).toBeVisible();\n\n    // Simulate user activity (e.g., clicking a button)\n    const dashboardButton = page.getByRole('button', { name: 'Dashboard' });\n    await dashboardButton.click();\n\n    // Wait for another 15 minutes\n    await page.waitForTimeout(90000);\n\n    // Verify user is still logged in\n    await expect(welcomeMessage).toBeVisible();\n    await expect(page).toHaveURL('/dashboard');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8235,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4118,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 70.89,
+      "feedback_used": ""
+    }
+  ]
+}

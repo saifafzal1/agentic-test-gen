@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_049",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7298,
+  "total_latency_s": 632.77,
+  "final_script": "describe('Browser Back Button Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should navigate back to previous page without breaking app state', () => {\n    // Navigate to a page with multiple steps\n    cy.get('[data-testid=\"step-1\"]').should('be.visible');\n    cy.get('[data-testid=\"step-2\"]').should('be.visible');\n    cy.get('[data-testid=\"step-3\"]').should('be.visible');\n\n    // Verify app state is intact\n    cy.get('[data-testid=\"step-1\"]').should('contain', 'Step 1');\n    cy.get('[data-testid=\"step-2\"]').should('contain', 'Step 2');\n    cy.get('[data-testid=\"step-3\"]').should('contain', 'Step 3');\n\n    // Navigate back using browser back button\n    cy.get('[data-testid=\"back-button\"]').click();\n\n    // Verify we are back to step 2\n    cy.get('[data-testid=\"step-1\"]').should('not.exist');\n    cy.get('[data-testid=\"step-2\"]').should('be.visible');\n    cy.get('[data-testid=\"step-2\"]').should('contain', 'Step 2');\n\n    // Verify app state is preserved\n    cy.get('[data-testid=\"step-2\"]').should('contain', 'Step 2');\n    cy.get('[data-testid=\"step-3\"]').should('not.exist');\n\n    // Verify navigation history is correct\n    cy.get('[data-testid=\"navigation-history\"]').should('contain', 'Step 3');\n    cy.get('[data-testid=\"navigation-history\"]').should('contain', 'Step 2');\n    cy.get('[data-testid=\"navigation-history\"]').should('contain', 'Step 1');\n  });\n\n  it('should handle edge case where back button navigates to a non-existent page', () => {\n    // Navigate to a page with multiple steps\n    cy.get('[data-testid=\"step-1\"]').should('be.visible');\n    cy.get('[data-testid=\"step-2\"]').should('be.visible');\n    cy.get('[data-testid=\"step-3\"]').should('be.visible');\n\n    // Navigate back twice\n    cy.get('[data-testid=\"back-button\"]').click();\n    cy.get('[data-testid=\"back-button\"]').click();\n\n    // Verify we are back to step 1\n    cy.get('[data-testid=\"step-2\"]').should('not.exist');\n    cy.get('[data-testid=\"step-1\"]').should('be.visible');\n    cy.get('[data-testid=\"step-1\"]').should('contain', 'Step 1');\n\n    // Verify app state is preserved\n    cy.get('[data-testid=\"step-1\"]').should('contain', 'Step 1');\n    cy.get('[data-testid=\"step-2\"]').should('not.exist');\n    cy.get('[data-testid=\"step-3\"]').should('not.exist');\n\n    // Verify navigation history is correct\n    cy.get('[data-testid=\"navigation-history\"]').should('contain', 'Step 3');\n    cy.get('[data-testid=\"navigation-history\"]').should('contain', 'Step 2');\n    cy.get('[data-testid=\"navigation-history\"]').should('contain', 'Step 1');\n\n    // Verify app state is not broken when navigating to non-existent page\n    cy.get('[data-testid=\"step-1\"]').should('be.visible');\n    cy.get('[data-testid=\"step-1\"]').should('contain', 'Step 1');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4785,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3683,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 330.796,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7298,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2994,
+        "missing_keywords": [],
+        "assertion_count": 28,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 301.974,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

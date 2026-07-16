@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_067",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7937,
+  "total_latency_s": 293.09,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Polling Stopping on Navigation Away', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/polling-page');\n  });\n\n  test('should stop polling when user navigates away from the polling page', async ({ page }) => {\n    // Verify polling is active\n    const pollingInterval = page.getByRole('heading', { name: /polling interval/i });\n    await expect(pollingInterval).toBeVisible();\n\n    const pollingStatus = page.getByText(/polling in progress/i);\n    await expect(pollingStatus).toBeVisible();\n\n    // Verify polling data is displayed\n    const pollingData = page.getByText(/data received/i);\n    await expect(pollingData).toBeVisible();\n\n    // Verify polling interval is set\n    const intervalElement = page.getByRole('heading', { name: /polling interval/i });\n    await expect(intervalElement).toBeVisible();\n\n    // Verify polling is active\n    const pollingStatus = page.getByText(/polling in progress/i);\n    await expect(pollingStatus).toBeVisible();\n\n    // Navigate away from the page\n    const navButton = page.getByRole('button', { name: /go back/i });\n    await navButton.click();\n\n    // Wait for navigation to complete\n    await page.waitForLoadState('networkidle');\n\n    // Verify polling has stopped\n    const pollingStatus = page.getByText(/polling in progress/i);\n    await expect(pollingStatus).not.toBeVisible();\n\n    // Verify polling interval is no longer set\n    const intervalElement = page.getByRole('heading', { name: /polling interval/i });\n    await expect(intervalElement).not.toBeVisible();\n\n    // Verify polling data is no longer displayed\n    const pollingData = page.getByText(/data received/i);\n    await expect(pollingData).not.toBeVisible();\n\n    // Verify user is now on the home page\n    const homePageTitle = page.getByRole('heading', { name: /home/i });\n    await expect(homePageTitle).toBeVisible();\n  });\n\n  test('should handle navigation away from polling page with error state', async ({ page }) => {\n    // Set up polling with error state\n    await page.route('**/api/polling', (route) => {\n      route.abort('Polling error');\n    });\n\n    // Verify polling is active\n    const pollingInterval = page.getByRole('heading', { name: /polling interval/i });\n    await expect(pollingInterval).toBeVisible();\n\n    const pollingStatus = page.getByText(/polling in progress/i);\n    await expect(pollingStatus).toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/polling failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Navigate away from the page\n    const navButton = page.getByRole('button', { name: /go back/i });\n    await navButton.click();\n\n    // Wait for navigation to complete\n    await page.waitForLoadState('networkidle');\n\n    // Verify polling has stopped\n    const pollingStatus = page.getByText(/polling in progress/i);\n    await expect(pollingStatus).not.toBeVisible();\n\n    // Verify error message is still visible\n    const errorMessage = page.getByText(/polling failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify user is now on the home page\n    const homePageTitle = page.getByRole('heading', { name: /home/i });\n    await expect(homePageTitle).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7937,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4124,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 293.09,
+      "feedback_used": ""
+    }
+  ]
+}

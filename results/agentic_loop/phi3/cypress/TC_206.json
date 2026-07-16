@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_206",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7214,
+  "total_latency_s": 43.388,
+  "final_script": "describe('Focus Indicators Visibility on Interactive Elements', () => {\n  beforeEach(() => {\n    cy.visit('/interactive-elements');\n  });\n\n  it('should display focus indicators on all interactive elements when tabbing through', () => {\n    // Verify initial state with no focus\n    cy.get('[data-testid=\"button-1\"]').should('not.have.class', 'focus-indicator');\n    cy.get('[data-testid=\"input-field\"]').should('not.have.class', 'focus-indicator');\n    cy.get('[data-testid=\"dropdown-menu\"]').should('not.have.class', 'focus-indicator');\n\n    // Tab through elements\n    cy.get('[data-testid=\"button-1\"]').click();\n    cy.get('[data-testid=\"button-1\"]').should('have.class', 'focus-indicator');\n\n    cy.get('[data-testid=\"input-field\"]').click();\n    cy.get('[data-testid=\"input-field\"]').should('have.class', 'focus-indicator');\n\n    cy.get('[data-testid=\"dropdown-menu\"]').click();\n    cy.get('[data-testid=\"dropdown-menu\"]').should('have.class', 'focus-indicator');\n\n    // Verify focus indicators are visible on all elements\n    cy.get('[data-testid=\"button-1\"]').should('have.class', 'focus-indicator');\n    cy.get('[data-testid=\"input-field\"]').should('have.class', 'focus-indicator');\n    cy.get('[data-testid=\"dropdown-menu\"]').should('have.class', 'focus-indicator');\n  });\n\n  it('should remove focus indicators when element loses focus', () => {\n    // Tab to first interactive element\n    cy.get('[data-testid=\"button-1\"]').click();\n    cy.get('[data-testid=\"button-1\"]').should('have.class', 'focus-indicator');\n\n    // Tab to second interactive element\n    cy.get('[data-testid=\"input-field\"]').click();\n    cy.get('[data-testid=\"input-field\"]').should('have.class', 'focus-indicator');\n\n    // Tab to third interactive element\n    cy.get('[data-testid=\"dropdown-menu\"]').click();\n    cy.get('[data-testid=\"dropdown-menu\"]').should('have.class', 'focus-indicator');\n\n    // Tab back to first element\n    cy.get('[data-testid=\"button-1\"]').click();\n    cy.get('[data-testid=\"button-1\"]').should('have.class', 'focus-indicator');\n\n    // Verify focus indicators are removed when element loses focus\n    cy.get('[data-testid=\"input-field\"]').click();\n    cy.get('[data-testid=\"input-field\"]').should('not.have.class', 'focus-indicator');\n\n    // Verify focus indicator is still visible on first element\n    cy.get('[data-testid=\"button-1\"]').should('have.class', 'focus-indicator');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7214,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2712,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 43.388,
+      "feedback_used": ""
+    }
+  ]
+}

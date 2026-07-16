@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_093",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8215,
+  "total_latency_s": 77.489,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Request Timeout Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/api/requests');\n  });\n\n  test('should display timeout error when request exceeds 10 seconds', async ({ page }) => {\n    // Intercept the request and delay the response\n    await page.route('**/api/long-running-request', (route) => {\n      setTimeout(() => {\n        route.abort('timedout');\n      }, 11000);\n    });\n\n    // Click the button to trigger the request\n    const requestButton = page.getByRole('button', { name: /start request/i });\n    await expect(requestButton).toBeVisible();\n    await requestButton.click();\n\n    // Wait for the timeout error message to appear\n    const errorMessage = page.getByText(/request timed out/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the error state is displayed\n    const errorContainer = page.locator('[data-testid=\"error-container\"]');\n    await expect(errorContainer).toBeVisible();\n\n    // Verify the request status shows as failed\n    const statusIndicator = page.locator('[data-testid=\"request-status\"]');\n    await expect(statusIndicator).toContainText('Failed');\n\n    // Verify the error details are present\n    const errorDetails = page.locator('[data-testid=\"error-details\"]');\n    await expect(errorDetails).toContainText('Timeout');\n  });\n\n  test('should handle successful request and clear timeout error state', async ({ page }) => {\n    // Intercept the request and respond successfully\n    await page.route('**/api/long-running-request', (route) => {\n      setTimeout(() => {\n        route.fulfill({\n          status: 200,\n          body: JSON.stringify({ message: 'Request completed successfully' }),\n        });\n      }, 5000);\n    });\n\n    // Click the button to trigger the request\n    const requestButton = page.getByRole('button', { name: /start request/i });\n    await expect(requestButton).toBeVisible();\n    await requestButton.click();\n\n    // Wait for the success message\n    const successMessage = page.getByText(/request completed successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify the success state is displayed\n    const successContainer = page.locator('[data-testid=\"success-container\"]');\n    await expect(successContainer).toBeVisible();\n\n    // Verify the request status shows as successful\n    const statusIndicator = page.locator('[data-testid=\"request-status\"]');\n    await expect(statusIndicator).toContainText('Success');\n\n    // Verify the error message is not visible\n    const errorMessage = page.getByText(/request timed out/i);\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify the error container is not visible\n    const errorContainer = page.locator('[data-testid=\"error-container\"]');\n    await expect(errorContainer).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8215,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5052,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 77.489,
+      "feedback_used": ""
+    }
+  ]
+}

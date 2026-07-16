@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_132",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8308,
+  "total_latency_s": 71.993,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Dialog Animation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/modal-page');\n  });\n\n  test('should open modal with correct animation when button is clicked', async ({ page }) => {\n    // Verify modal is not visible initially\n    const modal = page.locator('[data-testid=\"modal-dialog\"]');\n    await expect(modal).not.toBeVisible();\n\n    // Click the open modal button using getByRole\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Wait for modal to appear with animation\n    await page.waitForTimeout(500);\n\n    // Verify modal is now visible\n    await expect(modal).toBeVisible();\n\n    // Verify modal title is displayed using getByRole\n    const modalTitle = page.getByRole('heading', { name: /modal title/i });\n    await expect(modalTitle).toBeVisible();\n\n    // Verify modal content is visible using getByText\n    const modalContent = page.getByText(/modal content/i);\n    await expect(modalContent).toBeVisible();\n\n    // Verify close button is available using getByRole\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n  });\n\n  test('should close modal with correct animation when close button is clicked', async ({ page }) => {\n    // Open the modal\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Wait for modal to appear\n    await page.waitForTimeout(500);\n\n    // Verify modal is visible\n    const modal = page.locator('[data-testid=\"modal-dialog\"]');\n    await expect(modal).toBeVisible();\n\n    // Click the close button using getByRole\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n\n    // Wait for modal to close with animation\n    await page.waitForTimeout(500);\n\n    // Verify modal is no longer visible\n    await expect(modal).not.toBeVisible();\n\n    // Verify modal title is no longer visible\n    const modalTitle = page.getByRole('heading', { name: /modal title/i });\n    await expect(modalTitle).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8308,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5359,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.993,
+      "feedback_used": ""
+    }
+  ]
+}

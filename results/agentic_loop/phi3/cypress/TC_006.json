@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_006",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.751,
+  "total_latency_s": 181.872,
+  "final_script": "describe('Login Form Validation - Empty Fields', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should prevent form submission with empty username or password fields', () => {\n    // Intercept the login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n\n    // Attempt to submit with empty username\n    cy.get('[data-testid=\"login-form\"]').should('be.visible');\n    cy.get('[data-testid=\"username-input\"]').type('');\n    cy.get('[data-testid=\"password-input\"]').type('password123');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@loginRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(400);\n      expect(interception.response.body.error).to.include('Username is required');\n    });\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Username is required');\n\n    // Verify form is still visible\n    cy.get('[data-testid=\"login-form\"]').should('be.visible');\n  });\n\n  it('should prevent form submission with empty password field', () => {\n    // Intercept the login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n\n    // Attempt to submit with empty password\n    cy.get('[data-testid=\"login-form\"]').should('be.visible');\n    cy.get('[data-testid=\"username-input\"]').type('user@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@loginRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(400);\n      expect(interception.response.body.error).to.include('Password is required');\n    });\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Password is required');\n\n    // Verify form is still visible\n    cy.get('[data-testid=\"login-form\"]').should('be.visible');\n  });\n\n  it('should prevent form submission with both fields empty', () => {\n    // Intercept the login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n\n    // Attempt to submit with both fields empty\n    cy.get('[data-testid=\"login-form\"]').should('be.visible');\n    cy.get('[data-testid=\"username-input\"]').type('');\n    cy.get('[data-testid=\"password-input\"]').type('');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@loginRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(400);\n      expect(interception.response.body.error).to.include('Username and password are required');\n    });\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Username and password are required');\n\n    // Verify form is still visible\n    cy.get('[data-testid=\"login-form\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.751,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3702,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 181.872,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_018",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8152,
+  "total_latency_s": 417.038,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Validation - Required Field Highlighting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should highlight required fields when submitting an empty form', async ({ page }) => {\n    // Intercept the form submission API\n    await page.route('**/api/form-submit', (route) => {\n      route.abort('API call aborted');\n    });\n\n    // Get the form by role\n    const form = page.getByRole('form');\n    await expect(form).toBeVisible();\n\n    // Get the name input by label\n    const nameInput = page.getByLabel('Name');\n    await expect(nameInput).toBeVisible();\n\n    // Get the email input by label\n    const emailInput = page.getByLabel('Email');\n    await expect(emailInput).toBeVisible();\n\n    // Get the submit button by role\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeVisible();\n\n    // Fill the name field\n    await nameInput.fill('John Doe');\n\n    // Fill the email field\n    await emailInput.fill('john@example.com');\n\n    // Click the submit button\n    await submitButton.click();\n\n    // Verify the form is submitted\n    await expect(page).toHaveURL(/form-submitted/);\n\n    // Verify the success message is displayed\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify the required fields are highlighted\n    const nameError = page.getByText('Name is required');\n    await expect(nameError).toBeVisible();\n\n    const emailError = page.getByText('Email is required');\n    await expect(emailError).toBeVisible();\n\n    // Verify the form is reset after submission\n    await page.waitForLoadState('networkidle');\n    await expect(nameInput).toBeEmpty();\n    await expect(emailInput).toBeEmpty();\n  });\n\n  test('should not highlight required fields when all fields are filled', async ({ page }) => {\n    // Intercept the form submission API\n    await page.route('**/api/form-submit', (route) => {\n      route.abort('API call aborted');\n    });\n\n    // Get the form by role\n    const form = page.getByRole('form');\n    await expect(form).toBeVisible();\n\n    // Get the name input by label\n    const nameInput = page.getByLabel('Name');\n    await expect(nameInput).toBeVisible();\n\n    // Get the email input by label\n    const emailInput = page.getByLabel('Email');\n    await expect(emailInput).toBeVisible();\n\n    // Get the submit button by role\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeVisible();\n\n    // Fill the name field\n    await nameInput.fill('Jane Smith');\n\n    // Fill the email field\n    await emailInput.fill('jane@example.com');\n\n    // Click the submit button\n    await submitButton.click();\n\n    // Verify the form is submitted\n    await expect(page).toHaveURL(/form-submitted/);\n\n    // Verify the success message is displayed\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify the required fields are not highlighted\n    const nameError = page.getByText('Name is required');\n    await expect(nameError).not.toBeVisible();\n\n    const emailError = page.getByText('Email is required');\n    await expect(emailError).not.toBeVisible();\n\n    // Verify the form is reset after submission\n    await page.waitForLoadState('networkidle');\n    await expect(nameInput).toHaveValue('Jane Smith');\n    await expect(emailInput).toHaveValue('jane@example.com');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8152,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3842,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 417.038,
+      "feedback_used": ""
+    }
+  ]
+}

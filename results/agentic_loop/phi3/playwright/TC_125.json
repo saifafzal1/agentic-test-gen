@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_125",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7761,
+  "total_latency_s": 27.56,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async State Preservation During Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/async-state-page');\n  });\n\n  test('should preserve async state when navigating back to the same page', async ({ page }) => {\n    // Set up async state\n    await page.route('**/api/data', async (route) => {\n      await route.abort();\n    });\n\n    // Fetch data\n    const dataPromise = page.waitForResponse('**/api/data');\n    await dataPromise;\n    const data = await page.evaluate(() => JSON.parse(document.body.textContent));\n    expect(data).toBeDefined();\n\n    // Navigate to another page\n    await page.goto('/another-page');\n\n    // Navigate back to async state page\n    await page.goto('/async-state-page');\n\n    // Verify async state is preserved\n    const preservedData = await page.evaluate(() => JSON.parse(document.body.textContent));\n    expect(preservedData).toBeDefined();\n    expect(preservedData).toEqual(data);\n  });\n\n  test('should preserve async state when navigating to a different page and then back', async ({ page }) => {\n    // Set up async state\n    await page.route('**/api/data', async (route) => {\n      await route.abort();\n    });\n\n    // Fetch data\n    const dataPromise = page.waitForResponse('**/api/data');\n    await dataPromise;\n    const data = await page.evaluate(() => JSON.parse(document.body.textContent));\n    expect(data).toBeDefined();\n\n    // Navigate to a different page\n    await page.goto('/dashboard');\n\n    // Navigate back to async state page\n    await page.goto('/async-state-page');\n\n    // Verify async state is preserved\n    const preservedData = await page.evaluate(() => JSON.parse(document.body.textContent));\n    expect(preservedData).toBeDefined();\n    expect(preservedData).toEqual(data);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7761,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4536,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 27.56,
+      "feedback_used": ""
+    }
+  ]
+}

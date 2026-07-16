@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_133",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8568,
+  "total_latency_s": 73.41,
+  "final_script": "describe('Form Submission in Modal Dialog', () => {\n  beforeEach(() => {\n    cy.visit('/form-modal');\n  });\n\n  it('should successfully submit form from modal and display success message', () => {\n    // Open the modal by clicking the trigger button\n    cy.get('[data-testid=\"open-modal-button\"]').click();\n\n    // Verify modal is visible\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Fill in form fields\n    cy.get('[data-testid=\"modal-form-name-input\"]').type('John Doe');\n    cy.get('[data-testid=\"modal-form-email-input\"]').type('john.doe@example.com');\n    cy.get('[data-testid=\"modal-form-message-textarea\"]').type('This is a test message');\n\n    // Intercept the form submission API call\n    cy.intercept('POST', '/api/form/submit').as('formSubmit');\n\n    // Submit the form\n    cy.get('[data-testid=\"modal-submit-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@formSubmit');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Form submitted successfully');\n\n    // Verify modal closes or shows confirmation\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n    cy.get('[data-testid=\"close-modal-button\"]').click();\n    cy.get('[data-testid=\"modal-dialog\"]').should('not.exist');\n  });\n\n  it('should display validation errors when submitting form with empty fields', () => {\n    // Open the modal\n    cy.get('[data-testid=\"open-modal-button\"]').click();\n\n    // Verify modal is visible\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Attempt to submit form without filling any fields\n    cy.get('[data-testid=\"modal-submit-button\"]').click();\n\n    // Verify validation error messages appear\n    cy.get('[data-testid=\"name-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"name-error-message\"]').should('contain', 'Name is required');\n\n    cy.get('[data-testid=\"email-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"email-error-message\"]').should('contain', 'Email is required');\n\n    cy.get('[data-testid=\"message-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"message-error-message\"]').should('contain', 'Message cannot be empty');\n\n    // Verify success message does not appear\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n\n    // Verify form is still open\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Verify form fields still contain initial values (or are cleared if validation fails)\n    cy.get('[data-testid=\"modal-form-name-input\"]').should('have.value', '');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8568,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.7227,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.41,
+      "feedback_used": ""
+    }
+  ]
+}

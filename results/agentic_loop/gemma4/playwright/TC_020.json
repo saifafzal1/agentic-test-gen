@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_020",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8511,
+  "total_latency_s": 71.01,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Password Confirmation Mismatch Error - Real-time Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/signup');\n  });\n\n  test('should display password mismatch error when confirmation password does not match', async ({ page }) => {\n    // Fill in password field\n    const passwordField = page.getByLabel('Password');\n    await passwordField.fill('SecurePassword123');\n\n    // Fill in confirmation password field with different value\n    const confirmPasswordField = page.getByLabel('Confirm Password');\n    await confirmPasswordField.fill('WrongPassword123');\n\n    // Verify error message appears in real-time\n    const errorMessage = page.getByText('Passwords and confirmation passwords do not match');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message is associated with the confirmation password field\n    await expect(confirmPasswordField).toHaveAttribute('data-error', 'true');\n\n    // Verify signup button is disabled\n    const signupButton = page.getByRole('button', { name: /Sign up/i });\n    await expect(signupButton).toBeDisabled();\n\n    // Verify form submission is prevented\n    await signupButton.click();\n    await expect(page).toHaveURL(/.*signup/);\n  });\n\n  test('should clear error message when confirmation password matches password', async ({ page }) => {\n    // Fill in password field\n    const passwordField = page.getByLabel('Password');\n    await passwordField.fill('SecurePassword123');\n\n    // Fill in confirmation password field with mismatching value\n    const confirmPasswordField = page.getByLabel('Confirm Password');\n    await confirmPasswordField.fill('WrongPassword123');\n\n    // Verify error message is visible\n    const errorMessage = page.getByText('Passwords and confirmation passwords do not match');\n    await expect(errorMessage).toBeVisible();\n\n    // Fill in confirmation password field with matching value\n    await confirmPasswordField.fill('SecurePassword123');\n\n    // Verify error message is cleared\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify confirmation password field no longer has error attribute\n    await expect(confirmPasswordField).not.toHaveAttribute('data-error');\n\n    // Verify signup button is enabled\n    const signupButton = page.getByRole('button', { name: /Sign up/i });\n    await expect(signupButton).not.toBeDisabled();\n\n    // Verify form can be submitted\n    await signupButton.click();\n    await expect(page).toHaveURL(/.*success/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8511,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5036,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.01,
+      "feedback_used": ""
+    }
+  ]
+}

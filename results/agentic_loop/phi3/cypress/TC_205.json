@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_205",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7235,
+  "total_latency_s": 427.357,
+  "final_script": "describe('Tab Navigation for Interactive Elements', () => {\n  beforeEach(() => {\n    cy.visit('/interactive-page');\n  });\n\n  it('should navigate through all interactive elements using Tab', () => {\n    // Verify initial state\n    cy.get('[data-testid=\"page-title\"]').should('be.visible');\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Interactive Page');\n\n    // Tab through elements\n    cy.get('[data-testid=\"page-title\"]').tab();\n    cy.get('[data-testid=\"navigation-menu\"]').should('be.visible');\n    cy.get('[data-testid=\"navigation-menu\"]').tab();\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n    cy.get('[data-testid=\"sidebar\"]').should('be.visible');\n    cy.get('[data-testid=\"footer\"]').should('be.visible');\n\n    // Verify navigation order\n    cy.get('[data-testid=\"page-title\"]').should('have.css', 'display', 'block');\n    cy.get('[data-testid=\"navigation-menu\"]').should('have.css', 'display', 'block');\n    cy.get('[data-testid=\"main-content\"]').should('have.css', 'display', 'block');\n    cy.get('[data-testid=\"sidebar\"]').should('have.css', 'display', 'block');\n    cy.get('[data-testid=\"footer\"]').should('have.css', 'display', 'block');\n\n    // Verify focus is on the last element\n    cy.get('[data-testid=\"footer\"]').should('have.focus');\n  });\n\n  it('should handle Tab navigation when elements have no visible focus state', () => {\n    // Navigate to a page with hidden elements\n    cy.visit('/hidden-elements-page');\n\n    // Tab through elements\n    cy.get('[data-testid=\"page-title\"]').tab();\n    cy.get('[data-testid=\"navigation-menu\"]').tab();\n    cy.get('[data-testid=\"main-content\"]').tab();\n    cy.get('[data-testid=\"sidebar\"]').tab();\n\n    // Verify focus is on the last visible element\n    cy.get('[data-testid=\"footer\"]').should('have.focus');\n\n    // Verify hidden elements are not focused\n    cy.get('[data-testid=\"hidden-input\"]').should('not.have.focus');\n    cy.get('[data-testid=\"hidden-button\"]').should('not.have.focus');\n\n    // Verify Tab key presses are handled correctly\n    cy.get('[data-testid=\"page-title\"]').type('{tab}');\n    cy.get('[data-testid=\"navigation-menu\"]').type('{tab}');\n    cy.get('[data-testid=\"main-content\"]').type('{tab}');\n    cy.get('[data-testid=\"sidebar\"]').type('{tab}');\n\n    // Verify focus remains on the last visible element\n    cy.get('[data-testid=\"footer\"]').should('have.focus');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4434,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.2515,
+        "missing_keywords": [],
+        "assertion_count": 27,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 61.523,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7235,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2783,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 365.834,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

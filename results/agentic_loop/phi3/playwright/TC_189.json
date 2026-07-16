@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_189",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8013,
+  "total_latency_s": 46.702,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Filter Results Count', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should display correct number of results for each filter option', async ({ page }) => {\n    // Apply first filter option\n    const filterByCategory = page.getByRole('button', { name: /filter by category/i });\n    await filterByCategory.click();\n\n    const categorySelect = page.getByRole('combobox', { name: /category/i });\n    await categorySelect.setInputValue('books');\n\n    const applyButton = page.getByRole('button', { name: /apply/i });\n    await applyButton.click();\n\n    // Verify results count is displayed\n    const resultsCount = page.getByText(/10 results/i);\n    await expect(resultsCount).toBeVisible();\n\n    // Apply second filter option\n    const filterByAuthor = page.getByRole('button', { name: /filter by author/i });\n    await filterByAuthor.click();\n\n    const authorSelect = page.getByRole('combobox', { name: /author/i });\n    await authorSelect.setInputValue('J.K. Rowling');\n\n    await applyButton.click();\n\n    // Verify updated results count\n    const updatedResultsCount = page.getByText(/5 results/i);\n    await expect(updatedResultsCount).toBeVisible();\n\n    // Apply third filter option\n    const filterByPrice = page.getByRole('button', { name: /filter by price/i });\n    await filterByPrice.click();\n\n    const priceSelect = page.getByRole('combobox', { name: /price/i });\n    await priceSelect.setInputValue('under $10');\n\n    await applyButton.click();\n\n    // Verify final results count\n    const finalResultsCount = page.getByText(/2 results/i);\n    await expect(finalResultsCount).toBeVisible();\n  });\n\n  test('should handle no results scenario', async ({ page }) => {\n    // Apply first filter option\n    const filterByCategory = page.getByRole('button', { name: /filter by category/i });\n    await filterByCategory.click();\n\n    const categorySelect = page.getByRole('combobox', { name: /category/i });\n    await categorySelect.setInputValue('nonexistent category');\n\n    const applyButton = page.getByRole('button', { name: /apply/i });\n    await applyButton.click();\n\n    // Verify no results message is displayed\n    const noResultsMessage = page.getByText(/no results found/i);\n    await expect(noResultsMessage).toBeVisible();\n\n    // Verify results count is not displayed\n    const resultsCount = page.getByText(/10 results/i);\n    await expect(resultsCount).not.toBeVisible();\n\n    // Verify results list is empty\n    const resultsList = page.locator('[data-testid=\"results-list\"]');\n    await expect(resultsList).toHaveCount(0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8013,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4378,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 46.702,
+      "feedback_used": ""
+    }
+  ]
+}

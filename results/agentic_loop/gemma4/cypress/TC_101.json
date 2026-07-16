@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_101",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7513,
+  "total_latency_s": 72.599,
+  "final_script": "describe('JavaScript Error Recovery', () => {\n  beforeEach(() => {\n    cy.visit('/app');\n  });\n\n  it('should recover gracefully after a JavaScript error and display error message', () => {\n    // Intercept the initial page load\n    cy.intercept('GET', '/api/data').as('initialData');\n    cy.wait('@initialData');\n\n    // Trigger the error by clicking a button that calls a faulty function\n    cy.get('[data-testid=\"trigger-error-btn\"]').click();\n\n    // Verify the error state is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'An unexpected error occurred');\n\n    // Verify the app is still functional after error\n    cy.get('[data-testid=\"retry-btn\"]').should('be.visible');\n    cy.get('[data-testid=\"retry-btn\"]').click();\n\n    // Verify the app recovers and data is loaded again\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n    cy.get('[data-testid=\"data-display\"]').should('be.visible');\n    cy.get('[data-testid=\"data-display\"]').should('contain', 'Data loaded successfully');\n  });\n\n  it('should handle multiple consecutive JavaScript errors and prevent infinite loops', () => {\n    // Trigger the first error\n    cy.get('[data-testid=\"trigger-error-btn\"]').click();\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n\n    // Trigger a second error\n    cy.get('[data-testid=\"trigger-error-btn\"]').click();\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n\n    // Verify error counter is tracked\n    cy.get('[data-testid=\"error-count\"]').should('contain', '2');\n\n    // Trigger a third error, which should trigger the max error limit\n    cy.get('[data-testid=\"trigger-error-btn\"]').click();\n\n    // Verify the error state is now in a persistent/disabled mode\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Too many errors. Please refresh');\n\n    // Verify retry button is disabled after max errors\n    cy.get('[data-testid=\"retry-btn\"]').should('be.disabled');\n\n    // Verify user can still navigate away\n    cy.get('[data-testid=\"nav-link-home\"]').click();\n    cy.get('[data-testid=\"nav-link-home\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7513,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.371,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.599,
+      "feedback_used": ""
+    }
+  ]
+}

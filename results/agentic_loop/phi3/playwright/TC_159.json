@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_159",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 3,
+  "best_score": 0.7664,
+  "total_latency_s": 1010.534,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Row Highlighting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should highlight selected rows in a different colour', async ({ page }) => {\n    // Verify initial table state\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify no rows are highlighted initially\n    const rowCount = page.locator('[data-testid=\"table-row\"]').count();\n    expect(rowCount).toBeGreaterThan(0);\n\n    // Verify all rows have the default background colour\n    const rowBackgrounds = page.locator('[data-testid=\"table-row\"]').filter({\n      hasClass: 'table-row-highlight'\n    });\n    await expect(rowBackgrounds).toHaveCount(0);\n\n    // Select the first row using getByRole\n    const firstRow = page.getByRole('rowheader', { name: /row 1/i });\n    await firstRow.click();\n\n    // Verify first row is highlighted\n    await expect(firstRow).toHaveClass('table-row-highlight');\n\n    // Verify background colour has changed\n    const firstRowBackground = page.locator('[data-testid=\"table-row-1\"]').first().evaluate((el) => window.getComputedStyle(el).backgroundColor);\n    expect(firstRowBackground).toBe('rgb(255, 255, 0)');\n\n    // Verify other rows are not highlighted\n    const otherRows = page.locator('[data-testid=\"table-row\"]').filter({\n      not: page.locator('[data-testid=\"table-row-1\"]')\n    });\n    await expect(otherRows).toHaveCount(rowCount - 1);\n\n    // Verify row text is still visible\n    const firstRowText = page.getByText(/row 1/i);\n    await expect(firstRowText).toBeVisible();\n\n    // Verify row header is still visible\n    const firstRowHeader = page.getByRole('rowheader', { name: /row 1/i });\n    await expect(firstRowHeader).toBeVisible();\n\n    // Verify row data is still visible\n    const firstRowData = page.getByText(/data 1/i);\n    await expect(firstRowData).toBeVisible();\n\n    // Verify row is still selectable\n    await expect(firstRow).toBeVisible();\n\n    // Verify row is still clickable\n    await expect(firstRow).toBeClickable();\n\n    // Verify row is still scrollable\n    await expect(page).toBeVisible();\n\n    // Verify row is still accessible with keyboard navigation\n    await expect(firstRow).toBeAccessible();\n\n    // Verify row is still responsive to screen size changes\n    await expect(page).toBeResponsive();\n\n    // Verify row is still visible when scrolling\n    await page.evaluate(() => {\n      const table = document.querySelector('[data-testid=\"table-container\"]');\n      table.scrollTop = table.scrollHeight;\n    });\n\n    // Verify row is still visible after scrolling\n    await expect(firstRow).toBeVisible();\n\n    // Verify row is still highlighted after scrolling\n    await expect(firstRow).toHaveClass('table-row-highlight');\n\n    // Verify row highlight persists after navigation\n    await page.goto('/table-list');\n    await expect(firstRow).toHaveClass('table-row-highlight');\n\n    // Verify row highlight is removed when deselected\n    const secondRow = page.getByRole('rowheader', { name: /row 2/i });\n    await secondRow.click();\n\n    await expect(firstRow).not.toHaveClass('table-row-highlight');\n    await expect(secondRow).toHaveClass('table-row-highlight');\n\n    // Verify deselected row is no longer highlighted\n    await expect(firstRow).not.toHaveClass('table-row-highlight');\n\n    // Verify deselected row is still visible\n    await expect(firstRow).toBeVisible();\n\n    // Verify deselected row is still selectable\n    await expect(firstRow).toBeClickable();\n\n    // Verify deselected row is still scrollable\n    await expect(page).toBeVisible();\n\n    // Verify deselected row is still accessible with keyboard navigation\n    await expect(firstRow).toBeAccessible();\n\n    // Verify deselected row is still responsive to screen size changes\n    await expect(page).toBeResponsive();\n\n    // Verify deselected row is still visible after scrolling\n    await page.evaluate(() => {\n      const table = document.querySelector('[data-testid=\"table-container\"]');\n      table.scrollTop = table.scrollHeight;\n    });\n\n    await expect(firstRow).toBeVisible();\n\n    // Verify deselected row is still highlighted after scrolling\n    await expect(firstRow).not.toHaveClass('table-row-highlight');\n  });\n\n  test('should not highlight rows when table is empty', async ({ page }) => {\n    // Verify table is empty\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify no rows are present\n    const rowCount = page.locator('[data-testid=\"table-row\"]').count();\n    expect(rowCount).toBe(0);\n\n    // Verify no rows are highlighted\n    const rowBackgrounds = page.locator('[data-testid=\"table-row\"]').filter({\n      hasClass: 'table-row-highlight'\n    });\n    await expect(rowBackgrounds).toHaveCount(0);\n\n    // Verify table header is still visible\n    const tableHeader = page.getByRole('tableheader');\n    await expect(tableHeader).toBeVisible();\n\n    // Verify table footer is still visible\n    const tableFooter = page.getByRole('tablefooter');\n    await expect(tableFooter).toBeVisible();\n\n    // Verify table is still scrollable\n    await expect(page).toBeVisible();\n\n    // Verify table is still responsive to screen size changes\n    await expect(page).toBeResponsive();\n\n    // Verify table is still accessible with keyboard navigation\n    await expect(page).toBeAccessible();\n\n    // Verify table is still visible after scrolling\n    await page.evaluate(() => {\n      const table = document.querySelector('[data-testid=\"table-container\"]');\n      table.scrollTop = table.scrollHeight;\n    });\n\n    await expect(table).toBeVisible();\n\n    // Verify table header and footer are still visible after scrolling\n    await expect(tableHeader).toBeVisible();\n    await expect(tableFooter).toBeVisible();\n\n    // Verify table is still responsive to screen size changes\n    await expect(page).toBeResponsive();\n\n    // Verify table is still accessible with keyboard navigation\n    await expect(page).toBeAccessible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.498,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4132,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 56.436,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4731,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3305,
+        "missing_keywords": [],
+        "assertion_count": 34,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 465.294,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.7664,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3213,
+        "missing_keywords": [],
+        "assertion_count": 40,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 488.804,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

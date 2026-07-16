@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_156",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7864,
+  "total_latency_s": 48.056,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Row Numbers - First Column', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table');\n  });\n\n  test('should display row numbers in the first column when enabled', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify row numbers are visible in the first column\n    const rowNumbers = page.getByText(/row \\d+/);\n    await expect(rowNumbers).toBeVisible();\n\n    // Verify row numbers are correctly ordered\n    const firstRowNumber = page.getByText('row 1');\n    const secondRowNumber = page.getByText('row 2');\n    const thirdRowNumber = page.getByText('row 3');\n    await expect(firstRowNumber).toBeVisible();\n    await expect(secondRowNumber).toBeVisible();\n    await expect(thirdRowNumber).toBeVisible();\n\n    // Verify row numbers are clickable and navigate to the corresponding row\n    await expect(firstRowNumber).toBeVisible();\n    await expect(firstRowNumber).toHaveAttribute('data-testid', 'row-number-1');\n    await expect(firstRowNumber).toBeClickable();\n    await firstRowNumber.click();\n    await expect(page).toHaveURL(/table\\.php\\?page=1/);\n\n    await expect(secondRowNumber).toBeVisible();\n    await expect(secondRowNumber).toHaveAttribute('data-testid', 'row-number-2');\n    await expect(secondRowNumber).toBeClickable();\n    await secondRowNumber.click();\n    await expect(page).toHaveURL(/table\\.php\\?page=1&row=2/);\n\n    await expect(thirdRowNumber).toBeVisible();\n    await expect(thirdRowNumber).toHaveAttribute('data-testid', 'row-number-3');\n    await expect(thirdRowNumber).toBeClickable();\n    await thirdRowNumber.click();\n    await expect(page).toHaveURL(/table\\.php\\?page=1&row=3/);\n  });\n\n  test('should not display row numbers when disabled', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify row numbers are not visible\n    const rowNumbers = page.getByText(/row \\d+/);\n    await expect(rowNumbers).not.toBeVisible();\n\n    // Verify row numbers are not clickable\n    const firstRowNumber = page.getByText('row 1');\n    await expect(firstRowNumber).not.toBeClickable();\n\n    // Verify table rows are still accessible\n    const firstRow = page.getByRole('row', { name: /row 1/i });\n    await expect(firstRow).toBeVisible();\n\n    const secondRow = page.getByRole('row', { name: /row 2/i });\n    await expect(secondRow).toBeVisible();\n\n    const thirdRow = page.getByRole('row', { name: /row 3/i });\n    await expect(thirdRow).toBeVisible();\n\n    // Verify table headers are still visible\n    const firstHeader = page.getByRole('columnheader', { name: /Name/i });\n    await expect(firstHeader).toBeVisible();\n\n    const secondHeader = page.getByRole('columnheader', { name: /Age/i });\n    await expect(secondHeader).toBeVisible();\n\n    const thirdHeader = page.getByRole('columnheader', { name: /Email/i });\n    await expect(thirdHeader).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7864,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.388,
+        "missing_keywords": [],
+        "assertion_count": 26,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 48.056,
+      "feedback_used": ""
+    }
+  ]
+}

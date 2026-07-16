@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_112",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8717,
+  "total_latency_s": 71.911,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async Image Upload Progress', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload');\n  });\n\n  test('should display progress percentage during async image upload', async ({ page }) => {\n    // Setup: intercept the upload API endpoint\n    await page.route('**/api/upload', (route) => {\n      route.abort('blockedbyclient');\n    });\n\n    // Get the file input using getByLabel\n    const fileInput = page.getByLabel('Upload Image');\n    await fileInput.setInputFiles('playwright/fixtures/sample-image.jpg');\n\n    // Get the upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await uploadButton.click();\n\n    // Wait for the upload progress to appear\n    const progressBar = page.getByTestId('upload-progress-bar');\n    await expect(progressBar).toBeVisible();\n\n    // Verify initial progress state\n    const progressText = page.getByTestId('progress-percentage');\n    await expect(progressText).toContainText('0%');\n\n    // Wait for progress to update\n    await page.waitForTimeout(500);\n\n    // Verify progress has increased\n    await expect(progressText).toContainText('25%');\n\n    // Wait for more progress\n    await page.waitForTimeout(500);\n\n    // Verify progress has increased again\n    await expect(progressText).toContainText('75%');\n\n    // Wait for upload to complete\n    await page.waitForTimeout(500);\n\n    // Verify progress is 100%\n    await expect(progressText).toContainText('100%');\n\n    // Verify success message appears\n    const successMessage = page.getByTestId('upload-success-message');\n    await expect(successMessage).toBeVisible();\n    await expect(successMessage).toContainText('Upload complete');\n\n    // Verify progress bar is filled\n    await expect(progressBar).toHaveClass(/progress-bar--filled/);\n  });\n\n  test('should handle upload failure and display error message', async ({ page }) => {\n    // Setup: intercept the upload API endpoint and simulate failure\n    await page.route('**/api/upload', (route) => {\n      route.abort('blockedbyclient');\n    });\n\n    // Get the file input using getByLabel\n    const fileInput = page.getByLabel('Upload Image');\n    await fileInput.setInputFiles('playwright/fixtures/sample-image.jpg');\n\n    // Get the upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await uploadButton.click();\n\n    // Wait for progress to appear\n    const progressBar = page.getByTestId('upload-progress-bar');\n    await expect(progressBar).toBeVisible();\n\n    // Wait for progress to update\n    await page.waitForTimeout(500);\n\n    // Verify progress is visible\n    const progressText = page.getByTestId('progress-percentage');\n    await expect(progressText).toContainText('25%');\n\n    // Wait for upload to fail\n    await page.waitForTimeout(500);\n\n    // Verify error message appears\n    const errorMessage = page.getByTestId('upload-error-message');\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).toContainText('Upload failed');\n\n    // Verify progress bar is not filled\n    await expect(progressBar).not.toHaveClass(/progress-bar--filled/);\n\n    // Verify retry button is visible\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify upload button is enabled for retry\n    await expect(uploadButton).toBeEnabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8717,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5723,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.911,
+      "feedback_used": ""
+    }
+  ]
+}

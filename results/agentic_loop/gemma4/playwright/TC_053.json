@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_053",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8173,
+  "total_latency_s": 71.458,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dropdown Menu Keyboard Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dropdown');\n  });\n\n  test('should navigate dropdown items using arrow keys', async ({ page }) => {\n    // Open the dropdown menu\n    const dropdownButton = page.getByRole('button', { name: /open dropdown/i });\n    await dropdownButton.click();\n\n    // Verify dropdown is visible\n    const dropdown = page.locator('[data-testid=\"dropdown-menu\"]');\n    await expect(dropdown).toBeVisible();\n\n    // Navigate to the first item using arrow down\n    const firstItem = page.getByRole('menuitem', { name: /option 1/i });\n    await firstItem.first().press('ArrowDown');\n    await expect(firstItem.first()).toBeVisible();\n\n    // Navigate to the last item using arrow down\n    const lastItem = page.getByRole('menuitem', { name: /option 5/i });\n    await firstItem.first().press('ArrowDown');\n    await firstItem.first().press('ArrowDown');\n    await firstItem.first().press('ArrowDown');\n    await firstItem.first().press('ArrowDown');\n    await expect(lastItem).toBeVisible();\n\n    // Navigate back to the first item using arrow up\n    await lastItem.press('ArrowUp');\n    await expect(firstItem.first()).toBeVisible();\n\n    // Select the first item using Enter\n    await firstItem.first().press('Enter');\n    await expect(page).toHaveURL(/.*selected/);\n  });\n\n  test('should handle keyboard navigation with edge cases', async ({ page }) => {\n    // Open the dropdown menu\n    const dropdownButton = page.getByRole('button', { name: /open dropdown/i });\n    await dropdownButton.click();\n\n    // Verify dropdown is visible\n    const dropdown = page.locator('[data-testid=\"dropdown-menu\"]');\n    await expect(dropdown).toBeVisible();\n\n    // Navigate to the second item using arrow down\n    const secondItem = page.getByRole('menuitem', { name: /option 2/i });\n    await firstItem.first().press('ArrowDown');\n    await expect(secondItem).toBeVisible();\n\n    // Navigate to the first item using arrow up\n    await secondItem.press('ArrowUp');\n    await expect(firstItem.first()).toBeVisible();\n\n    // Navigate to the last item using arrow down\n    await firstItem.first().press('ArrowDown');\n    await firstItem.first().press('ArrowDown');\n    await firstItem.first().press('ArrowDown');\n    await firstItem.first().press('ArrowDown');\n    await expect(lastItem).toBeVisible();\n\n    // Press arrow down when at the last item (should wrap to first)\n    await lastItem.press('ArrowDown');\n    await expect(firstItem.first()).toBeVisible();\n\n    // Press arrow up when at the first item (should wrap to last)\n    await firstItem.first().press('ArrowUp');\n    await expect(lastItem).toBeVisible();\n\n    // Close dropdown using Escape key\n    await page.keyboard.press('Escape');\n    await expect(dropdown).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8173,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.491,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.458,
+      "feedback_used": ""
+    }
+  ]
+}

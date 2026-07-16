@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_132",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8289,
+  "total_latency_s": 35.641,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Dialog Animation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/modal-dialog');\n  });\n\n  test('should open modal with animation when button is clicked', async ({ page }) => {\n    // Verify modal is not visible initially\n    const modal = page.getByRole('dialog');\n    await expect(modal).not.toBeVisible();\n\n    // Get modal button by role\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await expect(openButton).toBeVisible();\n\n    // Click open button to trigger modal\n    await openButton.click();\n\n    // Verify modal is now visible\n    await expect(modal).toBeVisible();\n\n    // Verify modal has animation class\n    const animationClass = page.getByTestId('modal-animation');\n    await expect(animationClass).toBeVisible();\n\n    // Verify modal content is displayed\n    const modalContent = page.getByRole('region', { name: /modal content/i });\n    await expect(modalContent).toBeVisible();\n\n    // Verify close button is present\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify modal is centered\n    const modalCenter = page.getByTestId('modal-center');\n    await expect(modalCenter).toBeVisible();\n  });\n\n  test('should close modal with animation when close button is clicked', async ({ page }) => {\n    // Open modal\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n\n    // Get close button by role\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Click close button to trigger modal closure\n    await closeButton.click();\n\n    // Verify modal is no longer visible\n    await expect(modal).not.toBeVisible();\n\n    // Verify modal animation class is removed\n    const animationClass = page.getByTestId('modal-animation');\n    await expect(animationClass).not.toBeVisible();\n\n    // Verify modal content is no longer displayed\n    const modalContent = page.getByRole('region', { name: /modal content/i });\n    await expect(modalContent).not.toBeVisible();\n\n    // Verify modal is centered\n    const modalCenter = page.getByTestId('modal-center');\n    await expect(modalCenter).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8289,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5298,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 35.641,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_100",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.783,
+  "total_latency_s": 343.582,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Rate-Limit Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should display rate-limit error when submitting form too many times', async ({ page }) => {\n    // Set up API interception for rate-limiting\n    await page.route('**/api/submit-form', (route) => {\n      route.abort('Rate limit exceeded');\n    });\n\n    // First successful submission\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n    await page.waitForURL('**/api/submit-form');\n    const successMessage = page.getByText(/success/i);\n    await expect(successMessage).toBeVisible();\n\n    // Second submission within rate limit window\n    await submitButton.click();\n    await page.waitForURL('**/api/submit-form');\n    const errorMessage = page.getByText(/rate limit exceeded/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Third submission should trigger error\n    await submitButton.click();\n    await page.waitForURL('**/api/submit-form');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message is displayed\n    await expect(errorMessage).toBeVisible();\n\n    // Verify form is still visible\n    const formContainer = page.getByRole('form');\n    await expect(formContainer).toBeVisible();\n\n    // Verify submit button is still enabled\n    await expect(submitButton).toBeEnabled();\n  });\n\n  test('should clear rate-limit error after successful submission', async ({ page }) => {\n    // Set up API interception for rate-limiting\n    await page.route('**/api/submit-form', (route) => {\n      route.abort('Rate limit exceeded');\n    });\n\n    // First submission\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n    await page.waitForURL('**/api/submit-form');\n    const successMessage = page.getByText(/success/i);\n    await expect(successMessage).toBeVisible();\n\n    // Second submission within rate limit window\n    await submitButton.click();\n    await page.waitForURL('**/api/submit-form');\n    const errorMessage = page.getByText(/rate limit exceeded/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Third submission should clear error\n    await submitButton.click();\n    await page.waitForURL('**/api/submit-form');\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify success message is still visible\n    await expect(successMessage).toBeVisible();\n\n    // Verify error message is gone\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify form is still visible\n    const formContainer = page.getByRole('form');\n    await expect(formContainer).toBeVisible();\n\n    // Verify submit button is still enabled\n    await expect(submitButton).toBeEnabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.783,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3765,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 343.582,
+      "feedback_used": ""
+    }
+  ]
+}

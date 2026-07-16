@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_174",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7994,
+  "total_latency_s": 72.502,
+  "final_script": "describe('File Upload - Size Limit Validation', () => {\n  beforeEach(() => {\n    cy.visit('/file-upload');\n  });\n\n  it('should display error when file exceeds maximum size limit', () => {\n    // Setup: intercept the file upload API\n    cy.intercept('POST', '/api/files/upload').as('fileUpload');\n\n    // Create a large file (e.g., 10MB)\n    const largeFile = new File(['a'.repeat(10 * 1024 * 1024)], 'large-file.txt', {\n      type: 'text/plain',\n      lastModified: Date.now(),\n    });\n\n    // Attach the large file to the input\n    cy.get('[data-testid=\"file-input\"]').selectFile(largeFile);\n\n    // Verify file name and size are displayed\n    cy.get('[data-testid=\"file-name-display\"]').should('contain', 'large-file.txt');\n    cy.get('[data-testid=\"file-size-display\"]').should('contain', '10MB');\n\n    // Attempt to upload\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@fileUpload');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'File size exceeds the maximum limit');\n\n    // Verify upload was not successful\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n    cy.get('[data-testid=\"upload-button\"]').should('not.be.disabled');\n  });\n\n  it('should successfully upload file when within size limit', () => {\n    // Setup: intercept the file upload API\n    cy.intercept('POST', '/api/files/upload').as('fileUpload');\n\n    // Create a small file (e.g., 1MB)\n    const smallFile = new File(['a'.repeat(1 * 1024 * 1024)], 'small-file.txt', {\n      type: 'text/plain',\n      lastModified: Date.now(),\n    });\n\n    // Attach the small file to the input\n    cy.get('[data-testid=\"file-input\"]').selectFile(smallFile);\n\n    // Verify file name and size are displayed\n    cy.get('[data-testid=\"file-name-display\"]').should('contain', 'small-file.txt');\n    cy.get('[data-testid=\"file-size-display\"]').should('contain', '1MB');\n\n    // Attempt to upload\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@fileUpload');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'File uploaded successfully');\n\n    // Verify error message does not exist\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n\n    // Verify file is removed from input after successful upload\n    cy.get('[data-testid=\"file-input\"]').should('have.value', '');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7994,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5314,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.502,
+      "feedback_used": ""
+    }
+  ]
+}

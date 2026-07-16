@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_099",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7988,
+  "total_latency_s": 76.306,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Out of Stock Item in Cart', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/products');\n  });\n\n  test('should display out of stock message when adding unavailable item to cart', async ({ page }) => {\n    // Locate and click on the unavailable item\n    const unavailableItem = page.getByRole('button', { name: /unavailable item/i });\n    await unavailableItem.click();\n\n    // Verify item details are visible\n    const itemName = page.getByText('Unavailable Item');\n    await expect(itemName).toBeVisible();\n\n    // Verify out of stock label is present\n    const outOfStockLabel = page.getByText('Out of Stock');\n    await expect(outOfStockLabel).toBeVisible();\n\n    // Attempt to add to cart\n    const addToCartButton = page.getByRole('button', { name: /add to cart/i });\n    await addToCartButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText('This item is currently out of stock');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify cart icon does not update\n    const cartIcon = page.getByRole('button', { name: /cart/i });\n    await expect(cartIcon).toHaveCount(1);\n  });\n\n  test('should allow user to remove out of stock item from cart', async ({ page }) => {\n    // Add an available item to cart\n    const availableItem = page.getByRole('button', { name: /available item/i });\n    await availableItem.click();\n    const addToCartButton = page.getByRole('button', { name: /add to cart/i });\n    await addToCartButton.click();\n\n    // Navigate to cart\n    const cartLink = page.getByRole('link', { name: /cart/i });\n    await cartLink.click();\n\n    // Add out of stock item to cart\n    const unavailableItem = page.getByRole('button', { name: /unavailable item/i });\n    await unavailableItem.click();\n    const addToCartButtonUnavailable = page.getByRole('button', { name: /add to cart/i });\n    await addToCartButtonUnavailable.click();\n\n    // Verify out of stock message is displayed\n    const errorMessage = page.getByText('This item is currently out of stock');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify out of stock item is in cart with warning\n    const cartItem = page.getByText('Unavailable Item');\n    await expect(cartItem).toBeVisible();\n\n    const outOfStockWarning = page.getByText('Out of Stock');\n    await expect(outOfStockWarning).toBeVisible();\n\n    // Remove the out of stock item\n    const removeButton = page.getByRole('button', { name: /remove/i });\n    await removeButton.click();\n\n    // Verify out of stock item is removed from cart\n    await expect(cartItem).not.toBeVisible();\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7988,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4294,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 76.306,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_098",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7711,
+  "total_latency_s": 72.523,
+  "final_script": "describe('Error Boundary - UI Crash Handling', () => {\n  beforeEach(() => {\n    cy.visit('/app');\n  });\n\n  it('should display fallback screen when UI component crashes', () => {\n    // Intercept the API call that triggers the crash\n    cy.intercept('GET', '/api/data').as('getData');\n\n    // Click the button that will trigger the error\n    cy.get('[data-testid=\"trigger-error-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@getData');\n\n    // Verify the error boundary fallback screen is visible\n    cy.get('[data-testid=\"error-fallback-screen\"]').should('be.visible');\n\n    // Verify the error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Something went wrong');\n\n    // Verify the fallback component is rendered instead of the crashed component\n    cy.get('[data-testid=\"error-fallback-component\"]').should('be.visible');\n\n    // Verify the original component is not visible\n    cy.get('[data-testid=\"crashed-component\"]').should('not.exist');\n\n    // Verify the user can navigate away from the error screen\n    cy.get('[data-testid=\"navigate-back-button\"]').should('be.visible');\n    cy.get('[data-testid=\"navigate-back-button\"]').click();\n    cy.get('[data-testid=\"error-fallback-screen\"]').should('not.exist');\n  });\n\n  it('should handle multiple consecutive UI crashes and maintain fallback state', () => {\n    // Trigger the first crash\n    cy.get('[data-testid=\"trigger-error-button\"]').click();\n    cy.get('[data-testid=\"error-fallback-screen\"]').should('be.visible');\n\n    // Trigger a second crash\n    cy.get('[data-testid=\"trigger-error-button\"]').click();\n\n    // Verify the fallback screen remains visible and stable\n    cy.get('[data-testid=\"error-fallback-screen\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Something went wrong');\n\n    // Verify the error count is tracked (optional, but good for robustness)\n    cy.get('[data-testid=\"error-count\"]').should('contain', '2');\n\n    // Verify the user can still interact with the fallback screen\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n    cy.get('[data-testid=\"retry-button\"]').click();\n\n    // Verify the retry button is disabled after multiple attempts (optional)\n    cy.get('[data-testid=\"retry-button\"]').should('be.disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7711,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4371,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.523,
+      "feedback_used": ""
+    }
+  ]
+}

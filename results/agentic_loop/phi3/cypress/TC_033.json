@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_033",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8244,
+  "total_latency_s": 563.356,
+  "final_script": "describe('Submit Button Disabled Until All Required Fields Filled', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n  });\n\n  it('should disable submit button until all required fields are filled', () => {\n    // Intercept the form submission API\n    cy.intercept('POST', '/api/form-submit').as('submitForm');\n\n    // Verify submit button is disabled initially\n    cy.get('[data-testid=\"submit-button\"]').should('be.disabled');\n\n    // Fill in the first required field\n    cy.get('[data-testid=\"first-name-input\"]').type('John');\n\n    // Verify submit button is still disabled\n    cy.get('[data-testid=\"submit-button\"]').should('be.disabled');\n\n    // Fill in the second required field\n    cy.get('[data-testid=\"last-name-input\"]').type('Doe');\n\n    // Verify submit button is still disabled\n    cy.get('[data-testid=\"submit-button\"]').should('be.disabled');\n\n    // Fill in the third required field\n    cy.get('[data-testid=\"email-input\"]').type('john.doe@example.com');\n\n    // Verify submit button is now enabled\n    cy.get('[data-testid=\"submit-button\"]').should('not.be.disabled');\n\n    // Click the submit button\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify form submission API was called\n    cy.wait('@submitForm').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n  });\n\n  it('should re-enable submit button when all required fields are cleared', () => {\n    // Fill in all required fields\n    cy.get('[data-testid=\"first-name-input\"]').type('Jane');\n    cy.get('[data-testid=\"last-name-input\"]').type('Smith');\n    cy.get('[data-testid=\"email-input\"]').type('jane.smith@example.com');\n\n    // Verify submit button is enabled\n    cy.get('[data-testid=\"submit-button\"]').should('not.be.disabled');\n\n    // Clear all fields\n    cy.get('[data-testid=\"first-name-input\"]').clear();\n    cy.get('[data-testid=\"last-name-input\"]').clear();\n    cy.get('[data-testid=\"email-input\"]').clear();\n\n    // Verify submit button is now disabled\n    cy.get('[data-testid=\"submit-button\"]').should('be.disabled');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please fill all required fields');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8244,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.6146,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 563.356,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_029",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8517,
+  "total_latency_s": 71.16,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Data Persistence on Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form-page');\n  });\n\n  test('should persist form data when user navigates away and returns', async ({ page }) => {\n    // Fill form fields using getByLabel\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('John Doe');\n\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('john@example.com');\n\n    const phoneInput = page.getByLabel('Phone Number');\n    await phoneInput.fill('123-444-6769');\n\n    // Verify data is present\n    await expect(nameInput).toHaveValue('John Doe');\n    await expect(emailInput).toHaveValue('john@example.com');\n\n    // Navigate away from the page\n    const navButton = page.getByRole('button', { name: /navigate away/i });\n    await navButton.click();\n\n    // Verify form data is cleared or reset on navigation\n    await expect(nameInput).toHaveValue('');\n    await expect(emailInput).toHaveValue('');\n\n    // Navigate back to the form page\n    await page.goto('/form-page');\n\n    // Verify form data is persisted\n    await expect(nameInput).toHaveValue('John Doe');\n    await expect(emailInput).toHaveValue('john@example.com');\n    await expect(phoneInput).toHaveValue('123-442-6769');\n\n    // Verify form fields are still visible\n    await expect(nameInput).toBeVisible();\n    await expect(emailInput).toBeVisible();\n  });\n\n  test('should handle form data persistence with invalid inputs', async ({ page }) => {\n    // Fill form with invalid data\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('A');\n\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('invalid-email');\n\n    const phoneInput = page.getByLabel('Phone Number');\n    await phoneInput.fill('123');\n\n    // Verify invalid data is present\n    await expect(nameInput).toHaveValue('A');\n    await expect(emailInput).toHaveValue('invalid-email');\n\n    // Navigate away from the page\n    const navButton = page.getByRole('button', { name: /navigate away/i });\n    await navButton.click();\n\n    // Navigate back to the form page\n    await page.goto('/form-page');\n\n    // Verify invalid data is still persisted\n    await expect(nameInput).toHaveValue('A');\n    await expect(emailInput).toHaveValue('invalid-email');\n    await expect(phoneInput).toHaveValue('123');\n\n    // Verify validation error messages are displayed\n    const emailError = page.getByText('Please enter a valid email address');\n    await expect(emailError).toBeVisible();\n\n    const phoneError = page.getByText('Invalid phone number format');\n    await expect(phoneError).toBeVisible();\n\n    // Verify form submission button is disabled\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8517,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5057,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.16,
+      "feedback_used": ""
+    }
+  ]
+}

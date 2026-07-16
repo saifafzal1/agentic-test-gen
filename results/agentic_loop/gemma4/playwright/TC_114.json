@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_114",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7771,
+  "total_latency_s": 71.936,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Lazy-loaded Components - Smooth Appearance', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/lazy-load-demo');\n  });\n\n  test('should load lazy components smoothly without layout shift', async ({ page }) => {\n    // Verify initial page content is visible\n    const header = page.getByRole('banner');\n    await expect(header).toBeVisible();\n\n    // Verify lazy component placeholder is visible\n    const placeholder = page.getByText('Lazy Component Placeholder');\n    await expect(placeholder).toBeVisible();\n\n    // Verify lazy component is not yet visible\n    const lazyComponent = page.getByText('Lazy Component Content');\n    await expect(lazyComponent).not.toBeVisible();\n\n    // Scroll to trigger lazy loading\n    await page.evaluate(() => window.scrollTo(0, 800));\n\n    // Wait for lazy component to load\n    await page.waitForLoadState('networkidle');\n\n    // Verify lazy component is now visible\n    await expect(lazyComponent).toBeVisible();\n\n    // Verify layout shift did not occur by checking element positions\n    const placeholderBox = page.locator('[data-testid=\"placeholder-box\"]');\n    const lazyComponentBox = page.locator('[data-testid=\"lazy-component-box\"]');\n    \n    const placeholderRect = await placeholderBox.boundingBox();\n    const lazyRect = await lazyComponentBox.boundingBox();\n\n    expect(placeholderRect.y).toBeLessThan(lazyRect.y);\n    expect(placeholderRect.height).toBeGreaterThan(0);\n    expect(lazyRect.height).toBeGreaterThan(0);\n\n    // Verify smooth transition animation\n    const transition = page.locator('[data-testid=\"lazy-component-transition\"]');\n    await expect(transition).toBeVisible();\n    \n    // Verify transition class is applied\n    const hasTransitionClass = await transition.evaluate((el) => el.classList.contains('transition-active'));\n    expect(hasTransitionClass).toBe(true);\n  });\n\n  test('should handle multiple lazy components and load them sequentially', async ({ page }) => {\n    // Verify first lazy component placeholder is visible\n    const placeholder1 = page.getByText('Lazy Component Placeholder 1');\n    await expect(placeholder1).toBeVisible();\n\n    // Scroll to trigger first lazy component\n    await page.evaluate(() => window.scrollTo(100, 500));\n    await page.waitForLoadState('networkidle');\n\n    // Verify first lazy component is visible\n    const lazyComponent1 = page.getByText('Lazy Component Content 1');\n    await expect(lazyComponent1).toBeVisible();\n\n    // Scroll further to trigger second lazy component\n    await page.evaluate(() => window.scrollTo(100, 1500));\n    await page.waitForLoadState('networkidle');\n\n    // Verify second lazy component is visible\n    const lazyComponent2 = page.getByText('Lazy Component Content 2');\n    await expect(lazyComponent2).toBeVisible();\n\n    // Verify both components are visible and not overlapping\n    const lazyBox1 = page.locator('[data-testid=\"lazy-component-box-1\"]');\n    const lazyBox2 = page.locator('[data-testid=\"lazy-component-box-2\"]');\n    \n    const rect1 = await lazyBox1.boundingBox();\n    const rect2 = await lazyBox2.boundingBox();\n\n    expect(rect1.y).toBeLessThan(rect2.y);\n    expect(rect1.height).toBeGreaterThan(0);\n    expect(rect2.height).toBeGreaterThan(0);\n\n    // Verify smooth transition for both\n    const transition1 = page.locator('[data-testid=\"lazy-component-transition-1\"]');\n    const transition2 = page.locator('[data-testid=\"lazy-component-transition-2\"]');\n    \n    const hasTransitionClass1 = await transition1.evaluate((el) => el.classList.contains('transition-active'));\n    const hasTransitionClass2 = await transition2.evaluate((el) => el.classList.contains('transition-active'));\n    \n    expect(hasTransitionClass1).toBe(true);\n    expect(hasTransitionClass2).toBe(true);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7771,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3571,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.936,
+      "feedback_used": ""
+    }
+  ]
+}

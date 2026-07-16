@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_157",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8295,
+  "total_latency_s": 73.523,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Row Context Menu', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should display context menu when right-clicking a table row', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify table rows exist\n    const rows = page.getByRole('row');\n    const rowCount = await rows.count();\n    expect(rowCount).toBeGreaterThan(0);\n\n    // Get the first table row\n    const firstRow = page.getByRole('row').first();\n    await expect(firstRow).toBeVisible();\n\n    // Right-click the first table row to open context menu\n    await firstRow.click({ button: 'right' });\n\n    // Verify context menu appears\n    const contextMenu = page.locator('[data-testid=\"context-menu\"]');\n    await expect(contextMenu).toBeVisible();\n\n    // Verify menu items are visible\n    const deleteOption = page.getByRole('menuitem', { name: /delete/i });\n    const editOption = page.getByRole('menuitem', { name: /edit/i });\n    const viewOption = page.getByRole('menuitem', { name: /view/i });\n    await expect(deleteOption).toBeVisible();\n    await expect(editOption).toBeVisible();\n    await expect(viewOption).toBeVisible();\n\n    // Verify context menu has correct position\n    const menuBoundingBox = await contextMenu.boundingBox();\n    const rowBoundingBox = await firstRow.boundingBox();\n    expect(menuBoundingBox.x).toBeGreaterThan(rowBoundingBox.x);\n    expect(menuBoundingBox.y).toBeGreaterThan(rowBoundingBox.y);\n\n    // Click on 'Edit' option\n    await editOption.click();\n\n    // Verify context menu closes\n    await expect(contextMenu).not.toBeVisible();\n\n    // Verify edit modal appears\n    const editModal = page.locator('[data-testid=\"edit-modal\"]');\n    await expect(editModal).toBeVisible();\n  });\n\n  test('should not display context menu when right-clicking outside a table row', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Get the first table row\n    const firstRow = page.getByRole('row').first();\n    await expect(firstRow).toBeVisible();\n\n    // Right-click on the table header (outside a row)\n    const tableHeader = page.getByRole('columnheader').first();\n    await tableHeader.click({ button: 'right' });\n\n    // Verify context menu does not appear\n    const contextMenu = page.locator('[data-testid=\"context-menu\"]');\n    await expect(contextMenu).not.toBeVisible();\n\n    // Right-click on empty space in the table body\n    const tableBody = page.getByRole('rowgroup');\n    const emptySpace = page.locator('[data-testid=\"table-body-empty-space\"]');\n    await emptySpace.click({ button: 'right' });\n\n    // Verify context menu still does not appear\n    await expect(contextMenu).not.toBeVisible();\n\n    // Verify table is still visible\n    await expect(table).toBeVisible();\n\n    // Verify no edit modal is open\n    const editModal = page.locator('[data-testid=\"edit-modal\"]');\n    await expect(editModal).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8295,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5317,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.523,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_112",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8771,
+  "total_latency_s": 584.71,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async Image Upload with Progress Percentage', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload');\n  });\n\n  test('should display upload progress percentage as image uploads', async ({ page }) => {\n    // Intercept the upload API call\n    await page.route('**/api/upload', (route) => {\n      route.continue();\n    });\n\n    // Locate and upload file using getByLabel\n    const fileInput = page.getByLabel('Upload Image');\n    await fileInput.setInputFiles('tests/fixtures/sample-image.jpg');\n\n    // Wait for upload to start\n    const uploadButton = page.getByRole('button', { name: /start upload/i });\n    await expect(uploadButton).toBeVisible();\n    await uploadButton.click();\n\n    // Wait for progress indicator to appear\n    const progressBar = page.getByRole('progressbar');\n    await expect(progressBar).toBeVisible();\n\n    // Verify progress percentage is displayed\n    const progressText = page.getByText('Uploading...');\n    await expect(progressText).toBeVisible();\n\n    // Wait for upload to complete\n    await page.waitForTimeout(500);\n\n    // Verify success message appears\n    const successMessage = page.getByText('Upload successful');\n    await expect(successMessage).toBeVisible();\n\n    // Verify progress bar reaches 100%\n    await expect(progressBar).toHaveValue(100);\n\n    // Verify image preview is displayed\n    const imagePreview = page.getByRole('img', { name: /sample image/i });\n    await expect(imagePreview).toBeVisible();\n  });\n\n  test('should handle failed upload and display error message', async ({ page }) => {\n    // Intercept the upload API call and simulate failure\n    await page.route('**/api/upload', (route) => {\n      route.abort('Failed to upload image');\n    });\n\n    // Locate and upload file using getByLabel\n    const fileInput = page.getByLabel('Upload Image');\n    await fileInput.setInputFiles('tests/fixtures/sample-image.jpg');\n\n    // Wait for upload button to appear\n    const uploadButton = page.getByRole('button', { name: /start upload/i });\n    await expect(uploadButton).toBeVisible();\n\n    // Click upload button\n    await uploadButton.click();\n\n    // Wait for progress indicator to appear\n    const progressBar = page.getByRole('progressbar');\n    await expect(progressBar).toBeVisible();\n\n    // Verify progress percentage is displayed\n    const progressText = page.getByText('Uploading...');\n    await expect(progressText).toBeVisible();\n\n    // Wait for upload to fail\n    await page.waitForTimeout(500);\n\n    // Verify error message appears\n    const errorMessage = page.getByText('Upload failed');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify progress bar does not reach 100%\n    await expect(progressBar).not.toHaveValue(100);\n\n    // Verify retry button is visible\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5272,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4908,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 305.668,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8771,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5903,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 279.042,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

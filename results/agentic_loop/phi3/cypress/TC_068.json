@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_068",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7111,
+  "total_latency_s": 38.409,
+  "final_script": "describe('Live Data Last Updated Timestamp', () => {\n  beforeEach(() => {\n    cy.visit('/live-data');\n  });\n\n  it('should display last updated timestamp for live data', () => {\n    // Verify the live data table is visible\n    cy.get('[data-testid=\"live-data-table\"]').should('be.visible');\n\n    // Verify the last updated timestamp is displayed\n    cy.get('[data-testid=\"last-updated-timestamp\"]').should('be.visible');\n    cy.get('[data-testid=\"last-updated-timestamp\"]').should('contain', 'Last updated');\n\n    // Verify the timestamp format is correct (e.g., YYYY-MM-DD HH:mm:ss)\n    cy.get('[data-testid=\"last-updated-timestamp\"]').should('contain', '2023-04-01');\n\n    // Verify the timestamp is within a reasonable range (e.g., not in the future)\n    cy.get('[data-testid=\"last-updated-timestamp\"]').then((timestamp) => {\n      const now = new Date();\n      const lastUpdated = new Date(timestamp);\n      expect(lastUpdated).to.be.lte(now);\n    });\n\n    // Verify the timestamp is clickable (e.g., opens a modal with more details)\n    cy.get('[data-testid=\"last-updated-timestamp\"]').should('be.visible');\n    cy.get('[data-testid=\"last-updated-timestamp\"]').click();\n    cy.get('[data-testid=\"update-details-modal\"]').should('be.visible');\n  });\n\n  it('should handle edge case when no live data is available', () => {\n    // Verify the live data table is visible\n    cy.get('[data-testid=\"live-data-table\"]').should('be.visible');\n\n    // Verify the last updated timestamp is displayed with a message when no data is available\n    cy.get('[data-testid=\"last-updated-timestamp\"]').should('be.visible');\n    cy.get('[data-testid=\"last-updated-timestamp\"]').should('contain', 'No live data available');\n\n    // Verify the timestamp still displays correctly\n    cy.get('[data-testid=\"last-updated-timestamp\"]').should('contain', '2023-04-01');\n\n    // Verify the timestamp is still within a reasonable range\n    cy.get('[data-testid=\"last-updated-timestamp\"]').then((timestamp) => {\n      const now = new Date();\n      const lastUpdated = new Date(timestamp);\n      expect(lastUpdated).to.be.lte(now);\n    });\n\n    // Verify the timestamp is still clickable\n    cy.get('[data-testid=\"last-updated-timestamp\"]').should('be.visible');\n    cy.get('[data-testid=\"last-updated-timestamp\"]').click();\n    cy.get('[data-testid=\"update-details-modal\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7111,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2369,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 38.409,
+      "feedback_used": ""
+    }
+  ]
+}

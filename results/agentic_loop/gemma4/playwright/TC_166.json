@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_166",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8383,
+  "total_latency_s": 72.766,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Row Selection Badge Count', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should display correct badge count when multiple rows are selected', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Select first row using checkbox\n    const firstCheckbox = page.getByRole('checkbox', { name: /row 1/i });\n    await firstCheckbox.click();\n\n    // Verify badge count shows 1\n    const badge = page.getByRole('status', { name: /selected rows/i });\n    await expect(badge).toContainText('1');\n\n    // Select second row\n    const secondCheckbox = page.getByRole('checkbox', { name: /row 2/i });\n    await secondCheckbox.click();\n\n    // Verify badge count updates to 2\n    await expect(badge).toContainText('2');\n\n    // Select third row\n    const thirdCheckbox = page.getByRole('checkbox', { name: /row 3/i });\n    await thirdCheckbox.click();\n\n    // Verify badge count updates to 3\n    await expect(badge).toContainText('3');\n\n    // Verify selected rows are highlighted\n    const firstRow = page.getByRole('row', { name: /row 1/i });\n    const secondRow = page.getByRole('row', { name: /row 2/i });\n    const thirdRow = page.getByRole('row', { name: /row 3/i });\n    await expect(firstRow).toHaveClass(/selected/);\n    await expect(secondRow).toHaveClass(/selected/);\n    await expect(thirdRow).toHaveClass(/selected/);\n\n    // Verify badge has correct styling\n    await expect(badge).toHaveClass(/badge-active/);\n  });\n\n  test('should reset badge count when selection is cleared', async ({ page }) => {\n    // Select first row\n    const firstCheckbox = page.getByRole('checkbox', { name: /row 1/i });\n    await firstCheckbox.click();\n\n    // Verify badge count shows 1\n    const badge = page.getByRole('status', { name: /selected rows/i });\n    await expect(badge).toContainText('1');\n\n    // Select second row\n    const secondCheckbox = page.getByRole('checkbox', { name: /row 2/i });\n    await secondCheckbox.click();\n\n    // Verify badge count shows 2\n    await expect(badge).toContainText('2');\n\n    // Clear all selections using clear button\n    const clearButton = page.getByRole('button', { name: /clear selection/i });\n    await clearButton.click();\n\n    // Verify badge count resets to 0\n    await expect(badge).toContainText('0');\n\n    // Verify no rows are highlighted\n    const firstRow = page.getByRole('row', { name: /row 1/i });\n    const secondRow = page.getByRole('row', { name: /row 2/i });\n    const thirdRow = page.getByRole('row', { name: /row 3/i });\n    await expect(firstRow).not.toHaveClass(/selected/);\n    await expect(secondRow).not.toHaveClass(/selected/);\n    await expect(thirdRow).not.toHaveClass(/selected/);\n\n    // Verify badge has default styling\n    await expect(badge).not.toHaveClass(/badge-active/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8383,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5611,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.766,
+      "feedback_used": ""
+    }
+  ]
+}

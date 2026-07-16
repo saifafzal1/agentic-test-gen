@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_069",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7797,
+  "total_latency_s": 387.57,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('API Response Caching', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/api/data');\n  });\n\n  test('should cache API response and return instant data on repeat visits', async ({ page }) => {\n    // First request - should hit the API\n    const response = await page.waitForResponse('**/api/data');\n    expect(response.status()).toBe(200);\n    const data = await response.json();\n    expect(data).toBeDefined();\n\n    // Verify data is displayed on the page\n    const dataList = page.getByRole('list');\n    await expect(dataList).toBeVisible();\n    const dataItem = page.getByText('Item 1');\n    await expect(dataItem).toBeVisible();\n\n    // Second request - should use cached response\n    const cachedResponse = await page.waitForResponse('**/api/data');\n    expect(cachedResponse.status()).toBe(200);\n    const cachedData = await cachedResponse.json();\n    expect(cachedData).toBeDefined();\n\n    // Verify cached data is displayed\n    await expect(dataList).toBeVisible();\n    await expect(dataItem).toBeVisible();\n\n    // Third request - should still use cached response\n    const thirdResponse = await page.waitForResponse('**/api/data');\n    expect(thirdResponse.status()).toBe(200);\n    const thirdCachedData = await thirdResponse.json();\n    expect(thirdCachedData).toBeDefined();\n\n    // Verify cached data is displayed\n    await expect(dataList).toBeVisible();\n    await expect(dataItem).toBeVisible();\n  });\n\n  test('should handle cache invalidation and refresh data', async ({ page }) => {\n    // First request - should hit the API\n    const response = await page.waitForResponse('**/api/data');\n    expect(response.status()).toBe(200);\n    const data = await response.json();\n    expect(data).toBeDefined();\n\n    // Verify data is displayed on the page\n    const dataList = page.getByRole('list');\n    await expect(dataList).toBeVisible();\n    const dataItem = page.getByText('Item 1');\n    await expect(dataItem).toBeVisible();\n\n    // Second request - should use cached response\n    const cachedResponse = await page.waitForResponse('**/api/data');\n    expect(cachedResponse.status()).toBe(200);\n    const cachedData = await cachedResponse.json();\n    expect(cachedData).toBeDefined();\n\n    // Verify cached data is displayed\n    await expect(dataList).toBeVisible();\n    await expect(dataItem).toBeVisible();\n\n    // Third request - should use cached response\n    const thirdResponse = await page.waitForResponse('**/api/data');\n    expect(thirdResponse.status()).toBe(200);\n    const thirdCachedData = await thirdResponse.json();\n    expect(thirdCachedData).toBeDefined();\n\n    // Verify cached data is displayed\n    await expect(dataList).toBeVisible();\n    await expect(dataItem).toBeVisible();\n\n    // Clear cache\n    await page.route('**/api/data', route => {\n      route.abort();\n    });\n\n    // Fourth request - should hit the API again\n    const fourthResponse = await page.waitForResponse('**/api/data');\n    expect(fourthResponse.status()).toBe(200);\n    const fourthData = await fourthResponse.json();\n    expect(fourthData).toBeDefined();\n\n    // Verify fresh data is displayed\n    await expect(dataList).toBeVisible();\n    await expect(dataItem).toBeVisible();\n\n    // Verify cache is invalidated\n    const cachedData = await page.evaluate(() => localStorage.getItem('api_data'));\n    expect(cachedData).toBeNull();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7797,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3657,
+        "missing_keywords": [],
+        "assertion_count": 29,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 387.57,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_076",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7727,
+  "total_latency_s": 317.581,
+  "final_script": "describe('View Item Details', () => {\n  beforeEach(() => {\n    cy.visit('/items');\n  });\n\n  it('should successfully display item details when clicking on an item', () => {\n    // Intercept the API call to get item details\n    cy.intercept('GET', '/api/items/123').as('getItemDetails');\n\n    // Verify the item is visible in the list\n    cy.get('[data-testid=\"item-list\"]').should('be.visible');\n    cy.get('[data-testid=\"item-name-123\"]').should('contain', 'Sample Item');\n\n    // Click on the item to view details\n    cy.get('[data-testid=\"item-name-123\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@getItemDetails');\n\n    // Verify the details modal is visible\n    cy.get('[data-testid=\"item-details-modal\"]').should('be.visible');\n\n    // Verify the title is displayed\n    cy.get('[data-testid=\"item-details-title\"]').should('contain', 'Sample Item Details');\n\n    // Verify the description is displayed\n    cy.get('[data-testid=\"item-description\"]').should('be.visible');\n    cy.get('[data-testid=\"item-description\"]').should('contain', 'This is a sample item description');\n\n    // Verify the price is displayed\n    cy.get('[data-testid=\"item-price\"]').should('be.visible');\n    cy.get('[data-testid=\"item-price\"]').should('contain', '$19.99');\n\n    // Verify the image is displayed\n    cy.get('[data-testid=\"item-image\"]').should('be.visible');\n    cy.get('[data-testid=\"item-image\"]').should('have.attr', 'src');\n\n    // Verify the close button is present\n    cy.get('[data-testid=\"item-details-close-btn\"]').should('be.visible');\n\n    // Verify the modal closes when close button is clicked\n    cy.get('[data-testid=\"item-details-close-btn\"]').click();\n    cy.get('[data-testid=\"item-details-modal\"]').should('not.exist');\n  });\n\n  it('should handle empty item list and display error message', () => {\n    // Intercept the API call to get empty item list\n    cy.intercept('GET', '/api/items/empty').as('getEmptyItemList');\n\n    // Verify the item list is empty\n    cy.get('[data-testid=\"item-list\"]').should('be.visible');\n    cy.get('[data-testid=\"item-name-123\"]').should('not.exist');\n\n    // Click on an empty item to trigger the API call\n    cy.get('[data-testid=\"item-list\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@getEmptyItemList');\n\n    // Verify the error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'No items found');\n\n    // Verify the item list still exists\n    cy.get('[data-testid=\"item-list\"]').should('be.visible');\n\n    // Verify the empty state message is displayed\n    cy.get('[data-testid=\"empty-state-message\"]').should('be.visible');\n    cy.get('[data-testid=\"empty-state-message\"]').should('contain', 'No items available');\n\n    // Verify the back button is still functional\n    cy.get('[data-testid=\"back-btn\"]').should('be.visible');\n    cy.get('[data-testid=\"back-btn\"]').click();\n\n    // Verify the item list is restored\n    cy.get('[data-testid=\"item-list\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7727,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4424,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 317.581,
+      "feedback_used": ""
+    }
+  ]
+}

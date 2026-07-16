@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_070",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7836,
+  "total_latency_s": 30.056,
+  "final_script": "describe('Background Sync Toast Notification', () => {\n  beforeEach(() => {\n    cy.visit('/sync-page');\n  });\n\n  it('should display toast notification when background sync completes successfully', () => {\n    // Trigger background sync\n    cy.intercept('POST', '/api/sync/start').as('startSync');\n    cy.get('[data-testid=\"start-sync-button\"]').click();\n    cy.wait('@startSync');\n\n    // Wait for sync to complete\n    cy.intercept('POST', '/api/sync/complete').as('completeSync');\n    cy.wait('@completeSync');\n\n    // Verify toast notification appears\n    cy.get('[data-testid=\"toast-container\"]').should('be.visible');\n    cy.get('[data-testid=\"toast-message\"]').should('contain', 'Background sync completed');\n    cy.get('[data-testid=\"toast-duration\"]').should('contain', '3 seconds');\n\n    // Verify toast is removed after duration\n    cy.get('[data-testid=\"toast-container\"]').should('not.exist');\n  });\n\n  it('should display error toast notification when background sync fails', () => {\n    // Trigger background sync\n    cy.intercept('POST', '/api/sync/start').as('startSync');\n    cy.get('[data-testid=\"start-sync-button\"]').click();\n    cy.wait('@startSync');\n\n    // Simulate sync failure\n    cy.intercept('POST', '/api/sync/complete', {\n      statusCode: 500,\n      body: { error: 'Internal server error' }\n    }).as('failedSync');\n    cy.wait('@failedSync');\n\n    // Verify error toast notification appears\n    cy.get('[data-testid=\"toast-container\"]').should('be.visible');\n    cy.get('[data-testid=\"toast-message\"]').should('contain', 'Background sync failed');\n    cy.get('[data-testid=\"toast-duration\"]').should('contain', '3 seconds');\n\n    // Verify error toast is removed after duration\n    cy.get('[data-testid=\"toast-container\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7836,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4785,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 30.056,
+      "feedback_used": ""
+    }
+  ]
+}

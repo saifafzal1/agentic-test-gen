@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_091",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7646,
+  "total_latency_s": 72.343,
+  "final_script": "describe('Field Validation Error States', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n  });\n\n  it('should display specific validation error for each invalid field when submitting a form', () => {\n    // Attempt to submit form with all fields empty\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify error message for email field\n    cy.get('[data-testid=\"email-error\"]').should('be.visible').should('contain', 'Email is required');\n\n    // Verify error message for password field\n    cy.get('[data-testid=\"password-error\"]').should('be.visible').should('contain', 'Password is required');\n\n    // Verify error message for username field\n    cy.get('[data-testid=\"username-error\"]').should('be.visible').should('contain', 'Username is required');\n\n    // Verify error message for phone field\n    cy.get('[data-testid=\"phone-error\"]').should('be.visible').should('contain', 'Phone number is required');\n\n    // Verify form was not submitted\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n  });\n\n  it('should display specific validation error for each invalid field with incorrect formats', () => {\n    // Fill username with invalid characters\n    cy.get('[data-testid=\"username-input\"]').type('user@invalid');\n\n    // Fill email with invalid format\n    cy.get('[data-testid=\"email-input\"]').type('invalid-email');\n\n    // Fill password with too few characters\n    cy.get('[data-testid=\"password-input\"]').type('short');\n\n    // Fill phone with invalid characters\n    cy.get('[data-testid=\"phone-input\"]').type('abc-def-ghi');\n\n    // Attempt to submit form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify specific error for username format\n    cy.get('[data-testid=\"username-error\"]').should('be.visible').should('contain', 'Username must contain only letters and numbers');\n\n    // Verify specific error for email format\n    cy.get('[data-testid=\"email-error\"]').should('be.visible').should('contain', 'Please enter a valid email address');\n\n    // Verify specific error for password length\n    cy.get('[data-testid=\"password-error\"]').should('be.visible').should('contain', 'Password must be at least 8 characters');\n\n    // Verify specific error for phone format\n    cy.get('[data-testid=\"phone-error\"]').should('be.visible').should('contain', 'Phone number must be in a valid format');\n\n    // Verify form was not submitted\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7646,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4152,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.343,
+      "feedback_used": ""
+    }
+  ]
+}

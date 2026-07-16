@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_036",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.829,
+  "total_latency_s": 107.335,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Multi-Step Form - Back Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/multi-step-form');\n  });\n\n  test('should navigate back to previous step without losing data', async ({ page }) => {\n    // Fill out Step 1\n    const step1Input = page.getByLabel('Full Name');\n    await step1Input.fill('John Doe');\n\n    const step1SubmitButton = page.getByRole('button', { name: /submit/i });\n    await step1SubmitButton.click();\n\n    // Verify Step 2 is displayed\n    const step2Title = page.getByRole('heading', { name: /step 2/i });\n    await expect(step2Title).toBeVisible();\n\n    // Fill out Step 2\n    const step2EmailInput = page.getByLabel('Email Address');\n    await step2EmailInput.fill('john.doe@example.com');\n\n    const step2SubmitButton = page.getByRole('button', { name: /submit/i });\n    await step2SubmitButton.click();\n\n    // Verify Step 3 is displayed\n    const step3Title = page.getByRole('heading', { name: /step 3/i });\n    await expect(step3Title).toBeVisible();\n\n    // Navigate back to Step 2\n    const backButton = page.getByRole('button', { name: /back/i });\n    await backButton.click();\n\n    // Verify Step 2 is still visible\n    await expect(step2Title).toBeVisible();\n\n    // Verify data is preserved\n    await expect(step2EmailInput).toHaveValue('john.doe@example.com');\n\n    // Navigate back to Step 1\n    await backButton.click();\n\n    // Verify Step 1 is visible\n    await expect(step1Title).toBeVisible();\n\n    // Verify data is preserved\n    await expect(step1Input).toHaveValue('John Doe');\n  });\n\n  test('should handle navigation to a non-existent step', async ({ page }) => {\n    // Fill out Step 1\n    const step1Input = page.getByLabel('Full Name');\n    await step1Input.fill('Jane Smith');\n\n    const step1SubmitButton = page.getByRole('button', { name: /submit/i });\n    await step1SubmitButton.click();\n\n    // Verify Step 2 is displayed\n    const step2Title = page.getByRole('heading', { name: /step 2/i });\n    await expect(step2Title).toBeVisible();\n\n    // Navigate to a non-existent step (Step 5)\n    const nonExistentStepButton = page.getByRole('button', { name: /back/i });\n    await nonExistentStepButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/step does not exist/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify navigation is still possible to Step 2\n    const step2BackButton = page.getByRole('button', { name: /back/i });\n    await step2BackButton.click();\n\n    // Verify Step 2 is visible\n    await expect(step2Title).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.829,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.43,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 107.335,
+      "feedback_used": ""
+    }
+  ]
+}

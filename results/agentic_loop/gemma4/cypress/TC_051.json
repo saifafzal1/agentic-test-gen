@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_051",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.775,
+  "total_latency_s": 71.184,
+  "final_script": "describe('Mobile Hamburger Menu Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should open and close the hamburger menu correctly on mobile view', () => {\n    // Intercept API calls to prevent race conditions\n    cy.intercept('GET', '/api/menu-items').as('getMenuItems');\n    cy.wait('@getMenuItems');\n\n    // Set viewport to mobile size\n    cy.viewport('iphone-x');\n\n    // Click the hamburger menu button\n    cy.get('[data-testid=\"hamburger-menu-button\"]').click();\n\n    // Verify menu is visible\n    cy.get('[data-testid=\"mobile-menu\"]').should('be.visible');\n\n    // Verify menu items are displayed\n    cy.get('[data-testid=\"menu-item-home\"]').should('be.visible');\n    cy.get('[data-testid=\"menu-item-about\"]').should('be.visible');\n\n    // Click the close button (or hamburger button again)\n    cy.get('[data-testid=\"close-menu-button\"]').click();\n\n    // Verify menu is closed\n    cy.get('[data-testid=\"mobile-menu\"]').should('not.exist');\n  });\n\n  it('should handle menu open/close with edge cases like multiple clicks and empty state', () => {\n    // Set viewport to mobile size\n    cy.viewport('iphone-12');\n\n    // Open menu\n    cy.get('[data-testid=\"hamburger-menu-button\"]').click();\n    cy.get('[data-testid=\"mobile-menu\"]').should('be.visible');\n\n    // Click close button multiple times - should only close once\n    cy.get('[data-testid=\"close-menu-button\"]').click();\n    cy.get('[data-testid=\"close-menu-button\"]').click();\n    cy.get('[data-testid=\"mobile-menu\"]').should('not.exist');\n\n    // Open menu again\n    cy.get('[data-testid=\"hamburger-menu-button\"]').click();\n    cy.get('[data-testid=\"mobile-menu\"]').should('be.visible');\n\n    // Verify menu items are still present\n    cy.get('[data-testid=\"menu-item-home\"]').should('be.visible');\n\n    // Click on a menu item to navigate\n    cy.get('[data-testid=\"menu-item-about\"]').click();\n\n    // Verify menu closes after navigation\n    cy.get('[data-testid=\"mobile-menu\"]').should('not.exist');\n\n    // Verify navigation occurred\n    cy.url().should('include', '/about');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.775,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4498,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.184,
+      "feedback_used": ""
+    }
+  ]
+}

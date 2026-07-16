@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_156",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.764,
+  "total_latency_s": 72.329,
+  "final_script": "describe('Table Row Numbering', () => {\n  beforeEach(() => {\n    cy.visit('/table');\n  });\n\n  it('should display row numbers in the first column of the table', () => {\n    // Verify table is visible\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n\n    // Verify row numbers are present in the first column\n    cy.get('[data-testid=\"table-row-number\"]').should('be.visible');\n    cy.get('[data-testid=\"table-row-number\"]').should('have.length.greaterThan', 0);\n\n    // Verify row numbers are sequential and start from 1\n    cy.get('[data-testid=\"table-row-number\"]').first().should('contain', '1');\n    cy.get('[data-testid=\"table-row-number\"]').eq(1).should('contain', '2');\n    cy.get('[data-testid=\"table-row-number\"]').eq(2).should('contain', '3');\n\n    // Verify row numbers are in the first column\n    cy.get('[data-testid=\"table-row-number\"]').should('have.css', 'grid-column-start', '1');\n\n    // Verify row numbers are not empty\n    cy.get('[data-testid=\"table-row-number\"]').each(($cell) => {\n      cy.wrap($cell).should('not.have.css', 'display', 'none');\n    });\n  });\n\n  it('should handle edge case with empty table and display no row numbers', () => {\n    // Intercept API call to return empty table data\n    cy.intercept('GET', '/api/table-data', {\n      statusCode: 200,\n      body: {\n        data: [],\n        total: 0\n      }\n    }).as('getEmptyTable');\n\n    // Reload page to trigger empty table state\n    cy.reload();\n    cy.wait('@getEmptyTable');\n\n    // Verify table container is still visible\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n\n    // Verify no row number cells are displayed\n    cy.get('[data-testid=\"table-row-number\"]').should('not.exist');\n\n    // Verify a message indicating empty table is shown\n    cy.get('[data-testid=\"empty-table-message\"]').should('be.visible');\n    cy.get('[data-testid=\"empty-table-message\"]').should('contain', 'No data available');\n\n    // Verify table body is empty\n    cy.get('[data-testid=\"table-body\"]').should('be.visible');\n    cy.get('[data-testid=\"table-body\"]').should('not.contain', 'tr');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.764,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4133,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.329,
+      "feedback_used": ""
+    }
+  ]
+}

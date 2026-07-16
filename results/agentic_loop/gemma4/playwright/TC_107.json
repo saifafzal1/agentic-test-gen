@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_107",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8884,
+  "total_latency_s": 72.003,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Image Upload - Small Dimensions Error', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload');\n  });\n\n  test('should display error when image dimensions are too small for upload', async ({ page }) => {\n    // Setup: intercept the upload API\n    await page.route('**/api/upload', (route) => {\n      route.abort('blockedbyclient');\n    });\n\n    // Locate and interact with file input using getByLabel\n    const fileInput = page.getByLabel('Upload Image');\n    await fileInput.setInputFiles('playwright/fixtures/small-image.png');\n\n    // Locate and click upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await uploadButton.click();\n\n    // Wait for error message to appear\n    await page.waitForTimeout(500);\n\n    // Verify error message is visible and contains expected text\n    const errorMessage = page.getByText(/image dimensions must be at least 100x100 pixels/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message has error styling\n    const errorContainer = page.locator('[data-testid=\"error-message\"]');\n    await expect(errorContainer).toHaveClass(/error-message/);\n\n    // Verify upload button is still enabled\n    await expect(uploadButton).toBeEnabled();\n  });\n\n  test('should allow upload when image dimensions meet minimum requirements', async ({ page }) => {\n    // Setup: intercept the upload API\n    await page.route('**/api/upload', (route) => {\n      route.continue();\n    });\n\n    // Locate and interact with file input using getByLabel\n    const fileInput = page.getByLabel('Upload Image');\n    await fileInput.setInputFiles('playwright/fixtures/large-image.png');\n\n    // Locate and click upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await uploadButton.click();\n\n    // Wait for success response\n    await page.waitForTimeout(500);\n\n    // Verify success message is displayed\n    const successMessage = page.getByText(/image uploaded successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify error message does not exist\n    const errorMessage = page.getByText(/image dimensions must be at least 100x100 pixels/i);\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify success indicator is visible\n    const successIndicator = page.locator('[data-testid=\"success-indicator\"]');\n    await expect(successIndicator).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8884,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.6279,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.003,
+      "feedback_used": ""
+    }
+  ]
+}

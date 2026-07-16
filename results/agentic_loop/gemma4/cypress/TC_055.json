@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_055",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7438,
+  "total_latency_s": 71.206,
+  "final_script": "describe('Pagination Controls - Load Correct Page of Results', () => {\n  beforeEach(() => {\n    cy.visit('/results');\n  });\n\n  it('should load the correct page of results when clicking pagination buttons', () => {\n    // Verify initial state - Page 1\n    cy.get('[data-testid=\"results-list\"]').should('be.visible');\n    cy.get('[data-testid=\"results-item\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"page-indicator\"]').should('contain', 'Page 1');\n\n    // Click next page button\n    cy.get('[data-testid=\"pagination-next-button\"]').click();\n\n    // Verify page 2 loaded\n    cy.get('[data-testid=\"page-indicator\"]').should('contain', 'Page 2');\n    cy.get('[data-testid=\"results-item\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"results-item\"]').first().should('contain', 'Result 11');\n\n    // Click previous page button\n    cy.get('[data-testid=\"pagination-prev-button\"]').click();\n\n    // Verify page 1 loaded again\n    cy.get('[data-testid=\"page-indicator\"]').should('contain', 'Page 1');\n    cy.get('[data-testid=\"results-item\"]').first().should('contain', 'Result 1');\n\n    // Click page 3 button directly\n    cy.get('[data-testid=\"pagination-page-3-button\"]').click();\n\n    // Verify page 3 loaded\n    cy.get('[data-testid=\"page-indicator\"]').should('contain', 'Page 3');\n    cy.get('[data-testid=\"results-item\"]').first().should('contain', 'Result 21');\n  });\n\n  it('should handle edge case of navigating to last page and disabled buttons', () => {\n    // Navigate to last page (Page 5)\n    cy.get('[data-testid=\"pagination-page-5-button\"]').click();\n    cy.get('[data-testid=\"page-indicator\"]').should('contain', 'Page 5');\n\n    // Verify last page results are displayed\n    cy.get('[data-testid=\"results-item\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"results-item\"]').first().should('contain', 'Result 40');\n\n    // Verify next button is disabled on last page\n    cy.get('[data-testid=\"pagination-next-button\"]').should('be.disabled');\n    cy.get('[data-testid=\"pagination-next-button\"]').should('have.attr', 'disabled');\n\n    // Verify previous button is enabled\n    cy.get('[data-testid=\"pagination-prev-button\"]').should('not.be.disabled');\n\n    // Click previous button\n    cy.get('[data-testid=\"pagination-prev-button\"]').click();\n\n    // Verify page 4 loaded\n    cy.get('[data-testid=\"page-indicator\"]').should('contain', 'Page 4');\n    cy.get('[data-testid=\"results-item\"]').first().should('contain', 'Result 29');\n\n    // Verify next button is enabled on page 4\n    cy.get('[data-testid=\"pagination-next-button\"]').should('not.be.disabled');\n    cy.get('[data-testid=\"pagination-next-button\"]').should('not.have.attr', 'disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7438,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3462,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.206,
+      "feedback_used": ""
+    }
+  ]
+}

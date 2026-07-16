@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_115",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7476,
+  "total_latency_s": 72.344,
+  "final_script": "describe('Debounced Search Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should trigger search only after 300ms pause in typing', () => {\n    // Intercept the search API call\n    cy.intercept('GET', '/api/search*').as('searchRequest');\n\n    // Type in the search input field\n    cy.get('[data-testid=\"search-input\"]').type('cypress automation');\n\n    // Wait for the debounce delay (300ms)\n    cy.wait(350);\n\n    // Verify the search API was called\n    cy.wait('@searchRequest');\n\n    // Verify the search results are displayed\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('contain', 'cypress automation');\n  });\n\n  it('should not trigger search during rapid typing', () => {\n    // Intercept the search API call\n    cy.intercept('GET', '/api/search*').as('searchRequest');\n\n    // Type rapidly in the search input field\n    cy.get('[data-testid=\"search-input\"]').type('abc123def4');\n\n    // Wait for a short period (less than debounce time)\n    cy.wait(100);\n\n    // Type more characters\n    cy.get('[data-testid=\"search-input\"]').type('ghi');\n\n    // Wait for another short period\n    cy.wait(150);\n\n    // Verify the search API was NOT called\n    cy.get('@searchRequest').should('not.exist');\n\n    // Verify search results are not displayed\n    cy.get('[data-testid=\"search-results\"]').should('not.exist');\n\n    // Verify the input field still contains the full text\n    cy.get('[data-testid=\"search-input\"]').should('have.value', 'abc123defghi');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7476,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3587,
+        "missing_keywords": [],
+        "assertion_count": 5,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.344,
+      "feedback_used": ""
+    }
+  ]
+}

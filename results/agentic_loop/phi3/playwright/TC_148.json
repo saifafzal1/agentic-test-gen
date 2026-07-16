@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_148",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8114,
+  "total_latency_s": 519.733,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Row Filtering by Search Input', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should filter table rows by typing in search input and display matching results', async ({ page }) => {\n    // Verify initial table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify initial row count\n    const rowCount = page.locator('[data-testid=\"table-row\"]').count();\n    expect(rowCount).toBeGreaterThan(0);\n\n    // Verify search input is visible and has placeholder\n    const searchInput = page.getByLabel('Search');\n    await expect(searchInput).toBeVisible();\n    await expect(searchInput).toContainText('Search');\n\n    // Verify filter button is visible\n    const filterButton = page.getByRole('button', { name: /filter/i });\n    await expect(filterButton).toBeVisible();\n\n    // Verify no results are displayed initially\n    const resultCount = page.locator('[data-testid=\"table-result-count\"]').textContent().trim();\n    expect(resultCount).toBe('0 results');\n\n    // Type a search term\n    await searchInput.fill('test');\n\n    // Verify search input has value\n    await expect(searchInput).toHaveValue('test');\n\n    // Verify filter button is enabled\n    await expect(filterButton).toBeEnabled();\n\n    // Click filter button\n    await filterButton.click();\n\n    // Verify table rows are filtered and result count is updated\n    const filteredRowCount = page.locator('[data-testid=\"table-row\"]').count();\n    expect(filteredRowCount).toBeLessThanOrEqual(10);\n\n    const resultCount = page.locator('[data-testid=\"table-result-count\"]').textContent().trim();\n    expect(resultCount).toBe('1 result');\n\n    // Verify only matching row is visible\n    const matchingRow = page.locator('[data-testid=\"table-row\"]').first();\n    await expect(matchingRow).toBeVisible();\n\n    // Verify row has correct data\n    const rowData = await matchingRow.textContent();\n    expect(rowData).toContain('test');\n\n    // Verify no other rows are visible\n    const nonMatchingRows = page.locator('[data-testid=\"table-row\"]').filter({\n      has: page.locator('[data-testid=\"table-row\"]').first()\n    });\n    await expect(nonMatchingRows).not.toBeVisible();\n\n    // Verify search input is cleared after filter\n    await expect(searchInput).toHaveValue('');\n\n    // Verify result count is reset\n    const resultCount = page.locator('[data-testid=\"table-result-count\"]').textContent().trim();\n    expect(resultCount).toBe('0 results');\n  });\n\n  test('should handle empty search input and display all rows', async ({ page }) => {\n    // Verify initial table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify initial row count\n    const rowCount = page.locator('[data-testid=\"table-row\"]').count();\n    expect(rowCount).toBeGreaterThan(0);\n\n    // Verify search input is visible and has placeholder\n    const searchInput = page.getByLabel('Search');\n    await expect(searchInput).toBeVisible();\n    await expect(searchInput).toContainText('Search');\n\n    // Verify filter button is visible\n    const filterButton = page.getByRole('button', { name: /filter/i });\n    await expect(filterButton).toBeVisible();\n\n    // Verify no results are displayed initially\n    const resultCount = page.locator('[data-testid=\"table-result-count\"]').textContent().trim();\n    expect(resultCount).toBe('0 results');\n\n    // Clear search input\n    await searchInput.fill('');\n\n    // Verify search input is empty\n    await expect(searchInput).toHaveValue('');\n\n    // Verify all rows are visible after clearing search\n    const allRows = page.locator('[data-testid=\"table-row\"]');\n    await expect(allRows).toHaveCount(rowCount);\n\n    // Verify result count is updated to show all rows\n    const resultCount = page.locator('[data-testid=\"table-result-count\"]').textContent().trim();\n    expect(resultCount).toBe('10 results');\n\n    // Verify no filter button is enabled\n    const filterButton = page.getByRole('button', { name: /filter/i });\n    await expect(filterButton).not.toBeEnabled();\n\n    // Verify table rows are visible and have correct data\n    const firstRow = page.locator('[data-testid=\"table-row\"]').first();\n    await expect(firstRow).toBeVisible();\n    const firstRowData = await firstRow.textContent();\n    expect(firstRowData).not.toContain('test');\n\n    // Verify table has correct column headers\n    const headers = page.locator('[data-testid=\"table-header\"]');\n    const headerCount = await headers.count();\n    expect(headerCount).toBe(5);\n\n    // Verify table has correct column names\n    const headerText = await headers.first().textContent();\n    expect(headerText).toBe('ID');\n    expect(headerText).toBe('Name');\n    expect(headerText).toBe('Email');\n    expect(headerText).toBe('Phone');\n    expect(headerText).toBe('Address');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4941,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3804,
+        "missing_keywords": [],
+        "assertion_count": 25,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 54.782,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8114,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3713,
+        "missing_keywords": [],
+        "assertion_count": 33,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 464.951,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

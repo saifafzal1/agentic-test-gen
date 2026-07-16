@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_059",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7821,
+  "total_latency_s": 459.705,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Data Refresh After Mutation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/data-table');\n  });\n\n  test('should automatically refresh data after mutation', async ({ page }) => {\n    // Verify initial data is displayed\n    const tableRows = page.getByRole('row', { name: /item/i });\n    await expect(tableRows).toHaveCount(3);\n\n    // Verify initial data count\n    const dataCount = page.getByText(/3 items/i);\n    await expect(dataCount).toBeVisible();\n\n    // Perform mutation by clicking the edit button on the first row\n    const editButton = page.getByRole('button', { name: /edit/i });\n    await editButton.click();\n\n    // Wait for mutation API to complete\n    await page.waitForResponse(response => \n      response.url().includes('/api/data/mutate') && response.status() === 200\n    );\n\n    // Verify mutation success message\n    const successMessage = page.getByText(/mutation successful/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify data is refreshed\n    const refreshButton = page.getByRole('button', { name: /refresh/i });\n    await refreshButton.click();\n\n    // Wait for data to reload\n    await page.waitForResponse(response => \n      response.url().includes('/api/data/list') && response.status() === 200\n    );\n\n    // Verify new data count\n    const newDataCount = page.getByText(/4 items/i);\n    await expect(newDataCount).toBeVisible();\n\n    // Verify new data is displayed\n    const newTableRows = page.getByRole('row', { name: /item/i });\n    await expect(newTableRows).toHaveCount(4);\n\n    // Verify mutation details are displayed\n    const mutationDetails = page.getByText(/updated item 1/i);\n    await expect(mutationDetails).toBeVisible();\n  });\n\n  test('should handle failed data refresh after mutation', async ({ page }) => {\n    // Verify initial data is displayed\n    const tableRows = page.getByRole('row', { name: /item/i });\n    await expect(tableRows).toHaveCount(3);\n\n    // Verify initial data count\n    const dataCount = page.getByText(/3 items/i);\n    await expect(dataCount).toBeVisible();\n\n    // Perform mutation by clicking the edit button on the first row\n    const editButton = page.getByRole('button', { name: /edit/i });\n    await editButton.click();\n\n    // Simulate failed mutation by intercepting the response\n    await page.route('**/api/data/mutate', route => {\n      route.abort('Failed to mutate data');\n    });\n\n    // Wait for mutation API to complete\n    await page.waitForResponse(response => \n      response.url().includes('/api/data/mutate') && response.status() === 200\n    );\n\n    // Verify error message\n    const errorMessage = page.getByText(/mutation failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify data is not refreshed\n    const refreshButton = page.getByRole('button', { name: /refresh/i });\n    await refreshButton.click();\n\n    // Wait for data to reload\n    await page.waitForResponse(response => \n      response.url().includes('/api/data/list') && response.status() === 200\n    );\n\n    // Verify data count remains the same\n    const dataCount = page.getByText(/3 items/i);\n    await expect(dataCount).toBeVisible();\n\n    // Verify error message is still visible\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7821,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3738,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 459.705,
+      "feedback_used": ""
+    }
+  ]
+}

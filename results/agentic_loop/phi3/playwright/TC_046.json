@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_046",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7921,
+  "total_latency_s": 517.687,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('External Links Open in New Tab', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/external-links');\n  });\n\n  test('should open external links in a new tab with correct target attribute', async ({ page }) => {\n    // Verify external link is visible\n    const externalLink = page.getByRole('link', { name: /external site/i });\n    await expect(externalLink).toBeVisible();\n\n    // Verify link has correct href and target attributes\n    const href = await externalLink.evaluate((el) => el.href);\n    const target = await externalLink.evaluate((el) => el.getAttribute('target'));\n    expect(href).toContain('https://external.com');\n    expect(target).toBe('_blank');\n\n    // Verify link opens in a new tab\n    const newTabCount = await page.evaluate(() => window.open.length);\n    expect(newTabCount).toBe(1);\n\n    // Verify original page remains open\n    const originalPageTitle = await page.title();\n    await expect(originalPageTitle).toContain('External Links');\n\n    // Verify new tab has correct title\n    const newTab = await page.waitForURL(href);\n    const newTabTitle = await newTab.title();\n    expect(newTabTitle).toContain('External Site');\n\n    // Verify navigation back to original page\n    await page.goBack();\n    await expect(originalPageTitle).toContain('External Links');\n  });\n\n  test('should handle multiple external links and open all in new tabs', async ({ page }) => {\n    // Verify multiple external links are present\n    const externalLink1 = page.getByRole('link', { name: /external site 1/i });\n    const externalLink2 = page.getByRole('link', { name: /external site 2/i });\n    await expect(externalLink1).toBeVisible();\n    await expect(externalLink2).toBeVisible();\n\n    // Verify both links have correct href and target attributes\n    const href1 = await externalLink1.evaluate((el) => el.href);\n    const href2 = await externalLink2.evaluate((el) => el.href);\n    const target1 = await externalLink1.evaluate((el) => el.getAttribute('target'));\n    const target2 = await externalLink2.evaluate((el) => el.getAttribute('target'));\n    expect(href1).toContain('https://external1.com');\n    expect(href2).toContain('https://external2.com');\n    expect(target1).toBe('_blank');\n    expect(target2).toBe('_blank');\n\n    // Verify both links open in new tabs\n    const newTabCount = await page.evaluate(() => window.open.length);\n    expect(newTabCount).toBe(2);\n\n    // Verify original page remains open\n    const originalPageTitle = await page.title();\n    await expect(originalPageTitle).toContain('External Links');\n\n    // Verify navigation back to original page\n    await page.goBack();\n    await expect(originalPageTitle).toContain('External Links');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7921,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4069,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 517.687,
+      "feedback_used": ""
+    }
+  ]
+}

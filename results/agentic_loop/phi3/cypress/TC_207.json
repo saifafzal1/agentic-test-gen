@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_207",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7229,
+  "total_latency_s": 771.029,
+  "final_script": "describe('WCAG 2.1 AA Colour Contrast Compliance', () => {\n  beforeEach(() => {\n    cy.visit('/accessibility-checker');\n  });\n\n  it('should pass colour contrast for WCAG 2.1 AA standards', () => {\n    // Intercept the API call to get colour contrast data\n    cy.intercept('GET', '/api/contrast-checker', {\n      statusCode: 200,\n      body: {\n        success: true,\n        message: 'Contrast check passed',\n        details: {\n          foreground: '#FFFFFF',\n          background: '#000000',\n          contrastRatio: '4.51:1',\n          pass: true\n        }\n      }\n    }).as('contrastCheck');\n\n    // Verify the contrast check button is visible\n    cy.get('[data-testid=\"contrast-check-button\"]').should('be.visible');\n\n    // Click the contrast check button\n    cy.get('[data-testid=\"contrast-check-button\"]').click();\n\n    // Wait for the API response\n    cy.wait('@contrastCheck');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Contrast check passed');\n\n    // Verify contrast ratio is displayed\n    cy.get('[data-testid=\"contrast-ratio\"]').should('be.visible');\n    cy.get('[data-testid=\"contrast-ratio\"]').should('contain', '4.51:1');\n\n    // Verify pass/fail badge is displayed\n    cy.get('[data-testid=\"pass-fail-badge\"]').should('be.visible');\n    cy.get('[data-testid=\"pass-fail-badge\"]').should('contain', 'Pass');\n\n    // Verify contrast ratio meets WCAG 2.1 AA standards\n    cy.get('[data-testid=\"contrast-ratio\"]').should('have.value', '4.51:1');\n    cy.get('[data-testid=\"contrast-ratio\"]').should('be.greaterThanOrEqual', '4.5:1');\n  });\n\n  it('should fail colour contrast and display appropriate error message', () => {\n    // Intercept the API call with a failing contrast ratio\n    cy.intercept('GET', '/api/contrast-checker', {\n      statusCode: 200,\n      body: {\n        success: false,\n        message: 'Contrast check failed',\n        details: {\n          foreground: '#FFFFFF',\n          background: '#CCCCCC',\n          contrastRatio: '2.12:1',\n          pass: false\n        }\n      }\n    }).as('contrastCheckFail');\n\n    // Verify the contrast check button is visible\n    cy.get('[data-testid=\"contrast-check-button\"]').should('be.visible');\n\n    // Click the contrast check button\n    cy.get('[data-testid=\"contrast-check-button\"]').click();\n\n    // Wait for the failed API response\n    cy.wait('@contrastCheckFail');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Contrast check failed');\n\n    // Verify contrast ratio is displayed\n    cy.get('[data-testid=\"contrast-ratio\"]').should('be.visible');\n    cy.get('[data-testid=\"contrast-ratio\"]').should('contain', '2.12:1');\n\n    // Verify pass/fail badge is displayed with failure\n    cy.get('[data-testid=\"pass-fail-badge\"]').should('be.visible');\n    cy.get('[data-testid=\"pass-fail-badge\"]').should('contain', 'Fail');\n\n    // Verify contrast ratio does not meet WCAG 2.1 AA standards\n    cy.get('[data-testid=\"contrast-ratio\"]').should('have.value', '2.12:1');\n    cy.get('[data-testid=\"contrast-ratio\"]').should('be.lessThanOrEqual', '4.5:1');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4504,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.2747,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 386.888,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7229,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2764,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 384.141,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

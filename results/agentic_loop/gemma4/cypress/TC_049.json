@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_049",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7524,
+  "total_latency_s": 71.243,
+  "final_script": "describe('Browser Back Button Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should navigate back without losing app state', () => {\n    // Navigate to a detail page\n    cy.get('[data-testid=\"nav-to-profile\"]').click();\n    cy.url().should('include', '/profile');\n\n    // Perform an action on the detail page\n    cy.get('[data-testid=\"edit-profile-btn\"]').click();\n    cy.get('[data-testid=\"profile-form\"]').should('be.visible');\n    cy.get('[data-testid=\"name-input\"]').type('John Doe');\n\n    // Navigate back using browser back button\n    cy.go('back');\n    cy.url().should('include', '/dashboard');\n\n    // Verify app state is preserved\n    cy.get('[data-testid=\"profile-card\"]').should('be.visible');\n    cy.get('[data-testid=\"profile-card\"]').should('contain', 'John Doe');\n\n    // Verify the user is still on the dashboard\n    cy.get('[data-testid=\"dashboard-stats\"]').should('be.visible');\n  });\n\n  it('should handle back button when no previous page exists', () => {\n    // Navigate to a page\n    cy.get('[data-testid=\"nav-to-settings\"]').click();\n    cy.url().should('include', '/settings');\n\n    // Navigate to another page\n    cy.get('[data-testid=\"nav-to-billing\"]').click();\n    cy.url().should('include', '/billing');\n\n    // Navigate back to settings\n    cy.go('back');\n    cy.url().should('include', '/settings');\n\n    // Navigate back to dashboard\n    cy.go('back');\n    cy.url().should('include', '/dashboard');\n\n    // Attempt to navigate back when on the initial page\n    cy.go('back');\n    cy.url().should('eq', '/dashboard');\n\n    // Verify app state is still intact on the initial page\n    cy.get('[data-testid=\"dashboard-stats\"]').should('be.visible');\n    cy.get('[data-testid=\"dashboard-stats\"]').should('contain', 'Total Users');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7524,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3746,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.243,
+      "feedback_used": ""
+    }
+  ]
+}

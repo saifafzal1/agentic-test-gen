@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_097",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8261,
+  "total_latency_s": 76.262,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Registration - Email Already Exists Error', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/register');\n  });\n\n  test('should display error when registering with an already used email', async ({ page }) => {\n    // Setup: Register with a valid email first\n    const emailInput = page.getByLabel('Email');\n    const passwordInput = page.getByLabel('Password');\n    const confirmPasswordInput = page.getByLabel('Confirm Password');\n    const registerButton = page.getByRole('button', { name: /register/i });\n\n    await emailInput.fill('testuser@example.com');\n    await passwordInput.fill('ValidPassword123');\n    await confirmPasswordInput.fill('ValidPassword123');\n    await registerButton.click();\n\n    // Verify successful registration\n    await expect(page.getByText('Registration successful')).toBeVisible();\n    await expect(page).toHaveURL(/.*dashboard/);\n\n    // Navigate back to registration page\n    await page.goto('/register');\n\n    // Attempt to register with the same email again\n    await emailInput.fill('testuser@example.com');\n    await passwordInput.fill('AnotherPassword123');\n    await confirmPasswordInput.fill('AnotherPassword123');\n    await registerButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('This email is already registered');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message is styled correctly (e.g, red text)\n    const errorContainer = page.locator('[data-testid=\"error-message\"]');\n    await expect(errorContainer).toHaveCSS('color', 'rgb(252, 10, 36)');\n\n    // Verify user remains on the registration page\n    await expect(page).toHaveURL(/.*register/);\n  });\n\n  test('should clear error message when user corrects email and resubmits', async ({ page }) => {\n    // Setup: Register with a valid email first\n    const emailInput = page.getByLabel('Email');\n    const passwordInput = page.getByLabel('Password');\n    const confirmPasswordInput = page.getByLabel('Confirm Password');\n    const registerButton = page.getByRole('button', { name: /register/i });\n\n    await emailInput.fill('testuser@example.com');\n    await passwordInput.fill('ValidPassword123');\n    await confirmPasswordInput.fill('ValidPassword123');\n    await registerButton.click();\n\n    // Verify successful registration\n    await expect(page.getByText('Registration successful')).toBeVisible();\n    await expect(page).toHaveURL(/.*dashboard/);\n\n    // Navigate back to registration page\n    await page.goto('/register');\n\n    // Attempt to register with the same email (trigger error)\n    await emailInput.fill('testuser@example.com');\n    await passwordInput.fill('AnotherPassword123');\n    await confirmPasswordInput.fill('AnotherPassword123');\n    await registerButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('This email is already registered');\n    await expect(errorMessage).toBeVisible();\n\n    // Correct the email and resubmit\n    await emailInput.fill('newuser@example.com');\n    await passwordInput.fill('NewPassword123');\n    await confirmPasswordInput.fill('NewPassword123');\n    await registerButton.click();\n\n    // Verify error message is cleared\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify success message is displayed\n    const successMessage = page.getByText('Registration successful');\n    await expect(successMessage).toBeVisible();\n\n    // Verify user is redirected to dashboard\n    await expect(page).toHaveURL(/.*dashboard/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8261,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4203,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 76.262,
+      "feedback_used": ""
+    }
+  ]
+}

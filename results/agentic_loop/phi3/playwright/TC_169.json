@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_169",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8381,
+  "total_latency_s": 48.714,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Multiple File Upload', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should successfully upload multiple files at once', async ({ page }) => {\n    // Intercept the API endpoint for file upload\n    await page.route('**/api/upload', (route) => {\n      route.continue();\n    });\n\n    // Setup upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: /upload files/i });\n    await expect(uploadButton).toBeVisible();\n\n    // Setup file input using getByLabel\n    const fileInput = page.getByLabel(/select files/i);\n    await expect(fileInput).toBeVisible();\n\n    // Upload first file\n    const firstFile = page.waitForResponse(response =>\n      response.url().includes('/api/upload') && response.status() === 200\n    );\n    await fileInput.setInputFiles('fixtures/sample-file1.pdf');\n    await uploadButton.click();\n\n    // Upload second file\n    const secondFile = page.waitForResponse(response =>\n      response.url().includes('/api/upload') && response.status() === 200\n    );\n    await fileInput.setInputFiles('fixtures/sample-file2.pdf');\n    await uploadButton.click();\n\n    // Verify success message\n    const successMessage = page.getByText(/files uploaded successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify file count\n    const fileCount = page.getByText(/2 files/i);\n    await expect(fileCount).toBeVisible();\n\n    // Verify file list\n    const fileList = page.getByText(/sample-file1.pdf|sample-file2.pdf/i);\n    await expect(fileList).toBeVisible();\n\n    // Verify upload button is disabled after upload\n    await expect(uploadButton).toBeDisabled();\n  });\n\n  test('should handle file upload failure and display error message', async ({ page }) => {\n    // Intercept the API endpoint for file upload with error\n    await page.route('**/api/upload', (route) => {\n      route.abort('failed');\n    });\n\n    // Setup upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: /upload files/i });\n    await expect(uploadButton).toBeVisible();\n\n    // Setup file input using getByLabel\n    const fileInput = page.getByLabel(/select files/i);\n    await expect(fileInput).toBeVisible();\n\n    // Upload first file\n    const firstFile = page.waitForResponse(response =>\n      response.url().includes('/api/upload') && response.status() === 200\n    );\n    await fileInput.setInputFiles('fixtures/sample-file1.pdf');\n    await uploadButton.click();\n\n    // Upload second file\n    const secondFile = page.waitForResponse(response =>\n      response.url().includes('/api/upload') && response.status() === 200\n    );\n    await fileInput.setInputFiles('fixtures/sample-file2.pdf');\n    await uploadButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/file upload failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify file list is empty\n    const fileList = page.getByText(/sample-file1.pdf|sample-file2.pdf/i);\n    await expect(fileList).not.toBeVisible();\n\n    // Verify upload button is enabled after error\n    await expect(uploadButton).toBeEnabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8381,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4603,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 48.714,
+      "feedback_used": ""
+    }
+  ]
+}

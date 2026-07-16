@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_038",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8587,
+  "total_latency_s": 71.51,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Navigate to Home Page by Clicking Logo', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should navigate to home page when logo is clicked', async ({ page }) => {\n    // Verify user is on dashboard page\n    const pageTitle = page.getByRole('heading', { name: /dashboard/i });\n    await expect(pageTitle).toBeVisible();\n\n    // Click the logo to navigate to home page\n    const logo = page.getByRole('img', { name: /logo/i });\n    await expect(logo).toBeVisible();\n    await logo.click();\n\n    // Verify navigation to home page\n    const homePageTitle = page.getByRole('heading', { name: /home/i });\n    await expect(homePageTitle).toBeVisible();\n\n    // Verify home page content is displayed\n    const welcomeMessage = page.getByText(/welcome back/i);\n    await expect(welcomeMessage).toBeVisible();\n  });\n\n  test('should handle logo click when logo is not visible', async ({ page }) => {\n    // Intercept the logo element to simulate it not being present\n    await page.route('**/logo', route => route.abort());\n\n    // Verify dashboard page is visible\n    const pageTitle = page.getByRole('heading', { name: /dashboard/i });\n    await expect(pageTitle).toBeVisible();\n\n    // Attempt to click the logo (should not be found)\n    const logo = page.getByRole('img', { name: /logo/i });\n    const isLogoVisible = await logo.isVisible();\n    expect(isLogoVisible).toBeFalsy();\n\n    // Verify user remains on dashboard page\n    const dashboardContent = page.getByText(/dashboard overview/i);\n    await expect(dashboardContent).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8587,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.6292,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.51,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_025",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7457,
+  "total_latency_s": 482.599,
+  "final_script": "describe('Date Picker - Prevent Past Dates for Future Bookings', () => {\n  beforeEach(() => {\n    cy.visit('/bookings');\n  });\n\n  it('should prevent selection of past dates when booking for a future date', () => {\n    // Get the date picker input field\n    cy.get('[data-testid=\"date-picker-input\"]').should('be.visible');\n    \n    // Get the current date\n    cy.get('[data-testid=\"current-date\"]').then((currentDate) => {\n      const currentDateString = currentDate.text().trim();\n      const currentDateObj = cy.dateParser(currentDateString);\n      const currentDate = new Date(currentDateObj);\n    });\n    \n    // Get the future booking date\n    cy.get('[data-testid=\"future-booking-date\"]').should('be.visible');\n    cy.get('[data-testid=\"future-booking-date\"]').click();\n    \n    // Verify the date picker opens\n    cy.get('[data-testid=\"date-picker-popup\"]').should('be.visible');\n    \n    // Select a past date\n    cy.get('[data-testid=\"date-picker-calendar\"]').click();\n    cy.get('[data-testid=\"day-cell-1999\"]').click();\n    \n    // Verify the past date is highlighted\n    cy.get('[data-testid=\"day-cell-1999\"]').should('be.visible');\n    \n    // Verify the date picker does not allow selection\n    cy.get('[data-testid=\"date-picker-input\"]').should('not.have.value');\n    \n    // Verify the error message is displayed\n    cy.get('[data-testid=\"date-picker-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"date-picker-error-message\"]').should('contain', 'Cannot select past dates');\n    \n    // Verify the booking form is still visible\n    cy.get('[data-testid=\"booking-form\"]').should('be.visible');\n  });\n\n  it('should allow selection of future dates when booking for a future date', () => {\n    // Get the current date\n    cy.get('[data-testid=\"current-date\"]').then((currentDate) => {\n      const currentDateString = currentDate.text().trim();\n      const currentDateObj = cy.dateParser(currentDateString);\n      const currentDate = new Date(currentDateObj);\n    });\n    \n    // Get the future booking date\n    cy.get('[data-testid=\"future-booking-date\"]').should('be.visible');\n    cy.get('[data-testid=\"future-booking-date\"]').click();\n    \n    // Verify the date picker opens\n    cy.get('[data-testid=\"date-picker-popup\"]').should('be.visible');\n    \n    // Select a future date\n    cy.get('[data-testid=\"date-picker-calendar\"]').click();\n    cy.get('[data-testid=\"day-cell-2025\"]').click();\n    \n    // Verify the future date is highlighted\n    cy.get('[data-testid=\"day-cell-2025\"]').should('be.visible');\n    \n    // Verify the date is selected\n    cy.get('[data-testid=\"date-picker-input\"]').should('have.value', '2025-01-01');\n    \n    // Verify the error message is not displayed\n    cy.get('[data-testid=\"date-picker-error-message\"]').should('not.exist');\n    \n    // Verify the booking form is still visible\n    cy.get('[data-testid=\"booking-form\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7457,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3525,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 482.599,
+      "feedback_used": ""
+    }
+  ]
+}

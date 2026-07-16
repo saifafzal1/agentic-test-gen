@@ -1,0 +1,44 @@
+{
+  "tc_id": "TC_173",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8643,
+  "total_latency_s": 182.908,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload - Invalid File Type Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should display error message when uploading an unsupported file type', async ({ page }) => {\n    // Locate and click the file input using getByLabel\n    const fileInput = page.getByLabel('Upload File');\n    await fileInput.click();\n\n    // Set up the file input with an unsupported file (e.g., .exe)\n    const fileChooser = await page.waitForFileChooser();\n    await fileChooser.setFiles('fixtures/unsupported.exe');\n\n    // Locate and click the upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await uploadButton.click();\n\n    // Wait for the error message to appear\n    const errorMessage = page.getByText(/unsupported file type/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the error message contains specific details\n    await expect(errorMessage).toContainText('Only PDF and DOCX files are allowed');\n\n    // Verify the upload button is still enabled for retry\n    await expect(uploadButton).toBeEnabled();\n  });\n\n  test('should allow upload of supported file type and clear error message', async ({ page }) => {\n    // Locate and click the file input using getByLabel\n    const fileInput = page.getByLabel('Upload File');\n    await fileInput.click();\n\n    // Set up the file input with a supported file (e.g., .pdf)\n    const fileChooser = await page.waitForFileChooser();\n    await fileChooser.setFiles('fixtures/document.pdf');\n\n    // Locate and click the upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await uploadButton.click();\n\n    // Wait for success message\n    const successMessage = page.getByText(/file uploaded successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify the error message does not exist\n    const errorMessage = page.getByText(/unsupported file type/i);\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify the file name is displayed\n    const fileNameDisplay = page.getByText('document.pdf');\n    await expect(fileNameDisplay).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.1197,
+        "syntax": 0.1,
+        "assertion": 0.0,
+        "rouge_l": 0.2655,
+        "missing_keywords": [
+          "expect("
+        ],
+        "assertion_count": 0,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2",
+        "complete": false
+      },
+      "latency_s": 72.509,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8643,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5475,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 110.399,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2"
+    }
+  ]
+}

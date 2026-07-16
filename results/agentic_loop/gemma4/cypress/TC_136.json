@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_136",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7603,
+  "total_latency_s": 73.294,
+  "final_script": "describe('Modal Content Independent Scrolling', () => {\n  beforeEach(() => {\n    cy.visit('/modal-page');\n  });\n\n  it('should scroll modal content independently when it overflows', () => {\n    // Open the modal\n    cy.get('[data-testid=\"open-modal-button\"]').click();\n    \n    // Verify modal is visible\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n    \n    // Verify modal has scrollable content\n    cy.get('[data-testid=\"modal-content\"]').should('have.height', 'auto');\n    \n    // Verify modal has scrollbar\n    cy.get('[data-testid=\"modal-content\"]').should('have.css', 'overflow-y', 'scroll');\n    \n    // Verify modal has scroll position\n    cy.get('[data-testid=\"modal-content\"]').should('have.css', 'scroll-top', '0px');\n    \n    // Verify modal has scrollbar width\n    cy.get('[data-testid=\"modal-content\"]').should('have.css', 'scrollbar-width', 'auto');\n    \n    // Scroll modal content down\n    cy.get('[data-testid=\"modal-content\"]').scrollTo('bottom');\n    \n    // Verify scroll position has changed\n    cy.get('[data-testid=\"modal-content\"]').should('have.css', 'scroll-top', 'auto');\n    \n    // Verify modal content is now visible at bottom\n    cy.get('[data-testid=\"modal-content\"]').should('be.visible');\n    \n    // Verify modal background is not scrolled\n    cy.get('[data-testid=\"modal-backdrop\"]').should('have.css', 'transform', 'none');\n    \n    // Verify modal backdrop is still visible\n    cy.get('[data-testid=\"modal-backdrop\"]').should('be.visible');\n    \n    // Close modal\n    cy.get('[data-testid=\"close-modal-button\"]').click();\n    \n    // Verify modal is closed\n    cy.get('[data-testid=\"modal-dialog\"]').should('not.exist');\n  });\n\n  it('should not scroll modal backdrop when modal content overflows', () => {\n    // Open the modal\n    cy.get('[data-testid=\"open-modal-button\"]').click();\n    \n    // Verify modal is visible\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n    \n    // Verify modal backdrop is visible\n    cy.get('[data-testid=\"modal-backdrop\"]').should('be.visible');\n    \n    // Scroll modal content to bottom\n    cy.get('[data-testid=\"modal-content\"]').scrollTo('bottom');\n    \n    // Verify modal backdrop scroll position is 0\n    cy.get('[data-testid=\"modal-backdrop\"]').should('have.css', 'transform', 'none');\n    \n    // Verify modal backdrop is not scrolled\n    cy.get('[data-testid=\"modal-backdrop\"]').should('have.css', 'scroll-top', '0px');\n    \n    // Verify modal content is still scrollable\n    cy.get('[data-testid=\"modal-content\"]').should('have.css', 'overflow-y', 'scroll');\n    \n    // Verify modal content is still visible at bottom\n    cy.get('[data-testid=\"modal-content\"]').should('be.visible');\n    \n    // Verify modal backdrop is still in viewport\n    cy.get('[data-testid=\"modal-backdrop\"]').should('be.visible');\n    \n    // Close modal\n    cy.get('[data-testid=\"close-modal-button\"]').click();\n    \n    // Verify modal is closed\n    cy.get('[data-testid=\"modal-dialog\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7603,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.401,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.294,
+      "feedback_used": ""
+    }
+  ]
+}

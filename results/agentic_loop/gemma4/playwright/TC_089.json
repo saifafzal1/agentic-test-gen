@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_089",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8164,
+  "total_latency_s": 77.037,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('500 Server Error Page', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display error page when server returns 500 error', async ({ page }) => {\n    // Intercept the API call and respond with 500\n    await page.route('**/api/data', (route) => {\n      route.abort('failed');\n      route.continue();\n    });\n\n    // Click the button that triggers the API call\n    const loadButton = page.getByRole('button', { name: /load data/i });\n    await loadButton.click();\n\n    // Wait for the error state to be rendered\n    await page.waitForTimeout(500);\n\n    // Verify the error page is visible\n    const errorContainer = page.getByText(/server error/i);\n    await expect(errorContainer).toBeVisible();\n\n    // Verify the error message contains the correct text\n    const errorMessage = page.getByText(/500 internal server error/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the error page has a retry button\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify the main content is not visible\n    const dashboardContent = page.getByText(/dashboard overview/i);\n    await expect(dashboardContent).not.toBeVisible();\n  });\n\n  test('should navigate back to dashboard on retry after 500 error', async ({ page }) => {\n    // Intercept the API call and respond with 501\n    await page.route('**/api/data', (route) => {\n      route.abort('failed');\n      route.continue();\n    });\n\n    // Click the button that triggers the API call\n    const loadButton = page.getByRole('button', { name: /load data/i });\n    await loadButton.click();\n\n    // Wait for the error state to be rendered\n    await page.waitForTimeout(500);\n\n    // Verify the error page is visible\n    const errorContainer = page.getByText(/server error/i);\n    await expect(errorContainer).toBeVisible();\n\n    // Click the retry button\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await retryButton.click();\n\n    // Wait for the retry request\n    await page.waitForTimeout(500);\n\n    // Verify the error page is no longer visible\n    await expect(errorContainer).not.toBeVisible();\n\n    // Verify the dashboard content is visible\n    const dashboardContent = page.getByText(/dashboard overview/i);\n    await expect(dashboardContent).toBeVisible();\n\n    // Verify the data is loaded successfully\n    const dataTable = page.getByRole('region', { name: /data table/i });\n    await expect(dataTable).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8164,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4879,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 77.037,
+      "feedback_used": ""
+    }
+  ]
+}

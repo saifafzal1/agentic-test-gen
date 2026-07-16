@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_110",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8318,
+  "total_latency_s": 71.988,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async Data Fetching - Non-Blocking Initial Render', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should render initial page content while async data is loading in the background', async ({ page }) => {\n    // Verify initial page content is visible before async data loads\n    const welcomeMessage = page.getByRole('heading', { name: /welcome/i });\n    await expect(welcomeMessage).toBeVisible();\n\n    const pageTitle = page.getByRole('heading', { name: /dashboard/i });\n    await expect(pageTitle).toBeVisible();\n\n    // Verify loading indicator is displayed for async data\n    const loadingSpinner = page.getByTestId('loading-spinner');\n    await expect(loadingSpinner).toBeVisible();\n\n    // Verify initial data placeholder is visible\n    const dataPlaceholder = page.getByTestId('data-placeholder');\n    await expect(dataPlaceholder).toBeVisible();\n\n    // Wait for async data to load\n    await page.waitForTimeout(1000);\n\n    // Verify loading indicator is no longer visible\n    await expect(loadingSpinner).not.toBeVisible();\n\n    // Verify async data is now displayed\n    const asyncData = page.getByTestId('async-data');\n    await expect(asyncData).toBeVisible();\n    await expect(asyncData).toContainText('Data loaded successfully');\n\n    // Verify page is fully interactive\n    const refreshButton = page.getByRole('button', { name: /refresh/i });\n    await expect(refreshButton).toBeEnabled();\n  });\n\n  test('should handle async data loading errors gracefully without blocking page render', async ({ page }) => {\n    // Intercept the async data API call and simulate an error\n    await page.route('**/api/data', route => {\n      route.abort('failed');\n    });\n\n    // Verify initial page content is visible\n    const welcomeMessage = page.getByRole('heading', { name: /welcome/i });\n    await expect(welcomeMessage).toBeVisible();\n\n    // Verify loading indicator is displayed\n    const loadingSpinner = page.getByTestId('loading-spinner');\n    await expect(loadingSpinner).toBeVisible();\n\n    // Wait for async data to fail\n    await page.waitForTimeout(1000);\n\n    // Verify loading indicator is no longer visible\n    await expect(loadingSpinner).not.toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByTestId('error-message');\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).toContainText('Failed to load data');\n\n    // Verify page content is still visible and interactive\n    const pageTitle = page.getByRole('heading', { name: /dashboard/i });\n    await expect(pageTitle).toBeVisible();\n\n    const refreshButton = page.getByRole('button', { name: /refresh/i });\n    await expect(refreshButton).toBeEnabled();\n\n    // Verify user can interact with non-async elements\n    const settingsLink = page.getByRole('link', { name: /settings/i });\n    await expect(settingsLink).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8318,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5395,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.988,
+      "feedback_used": ""
+    }
+  ]
+}

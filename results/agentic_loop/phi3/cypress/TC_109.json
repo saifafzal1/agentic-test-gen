@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_109",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8211,
+  "total_latency_s": 280.262,
+  "final_script": "describe('Async Login Spinner Display', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should display spinner while login request is in progress', () => {\n    // Intercept the login API call\n    cy.intercept('POST', '/api/auth/login', {\n      statusCode: 200,\n      body: { token: 'abc123', user: { id: 1, name: 'John Doe' } }\n    }).as('loginRequest');\n\n    // Verify spinner is visible\n    cy.get('[data-testid=\"spinner\"]').should('be.visible');\n    cy.get('[data-testid=\"spinner\"]').should('contain', 'Loading...');\n\n    // Click login button\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@loginRequest');\n\n    // Verify spinner is hidden\n    cy.get('[data-testid=\"spinner\"]').should('not.exist');\n\n    // Verify login success message appears\n    cy.get('[data-testid=\"login-success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"login-success-message\"]').should('contain', 'Login successful');\n\n    // Verify user is redirected to dashboard\n    cy.url().should('include', '/dashboard');\n  });\n\n  it('should not display spinner when login fails', () => {\n    // Intercept the login API call with error response\n    cy.intercept('POST', '/api/auth/login', {\n      statusCode: 401,\n      body: { error: 'Unauthorized' }\n    }).as('loginRequest');\n\n    // Click login button\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@loginRequest');\n\n    // Verify spinner is still visible (should not disappear on error)\n    cy.get('[data-testid=\"spinner\"]').should('be.visible');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"login-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"login-error-message\"]').should('contain', 'Login failed');\n\n    // Verify user is not redirected\n    cy.url().should('include', '/login');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8211,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.6036,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 280.262,
+      "feedback_used": ""
+    }
+  ]
+}

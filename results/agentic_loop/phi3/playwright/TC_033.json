@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_033",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8448,
+  "total_latency_s": 321.585,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Validation - Required Fields', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should disable submit button until all required fields are filled', async ({ page }) => {\n    // Intercept the API call to get form validation rules\n    await page.route('**/api/validation-rules', (route) => {\n      route.continue();\n    });\n\n    // Fill in the first required field\n    const nameInput = page.getByLabel('Name');\n    await nameInput.fill('John Doe');\n\n    // Verify submit button is disabled\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeDisabled();\n\n    // Fill in the second required field\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('john.doe@example.com');\n\n    // Verify submit button is still disabled\n    await expect(submitButton).toBeDisabled();\n\n    // Fill in the third required field\n    const phoneInput = page.getByLabel('Phone Number');\n    await phoneInput.fill('123-456-7890');\n\n    // Verify submit button is now enabled\n    await expect(submitButton).not.toBeDisabled();\n\n    // Click the submit button\n    await submitButton.click();\n\n    // Verify form is submitted successfully\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should display validation error messages when required fields are empty', async ({ page }) => {\n    // Intercept the API call to get form validation rules\n    await page.route('**/api/validation-rules', (route) => {\n      route.continue();\n    });\n\n    // Fill in only the first required field\n    const nameInput = page.getByLabel('Name');\n    await nameInput.fill('Jane Doe');\n\n    // Verify submit button is disabled\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeDisabled();\n\n    // Verify error message is displayed for the missing email field\n    const emailError = page.getByText('Email is required');\n    await expect(emailError).toBeVisible();\n\n    // Verify error message is displayed for the missing phone number field\n    const phoneError = page.getByText('Phone Number is required');\n    await expect(phoneError).toBeVisible();\n\n    // Fill in the email field\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('jane.doe@example.com');\n\n    // Verify submit button is still disabled\n    await expect(submitButton).toBeDisabled();\n\n    // Fill in the phone number field\n    const phoneInput = page.getByLabel('Phone Number');\n    await phoneInput.fill('555-123-4567');\n\n    // Verify submit button is now enabled\n    await expect(submitButton).not.toBeDisabled();\n\n    // Click the submit button\n    await submitButton.click();\n\n    // Verify form is submitted successfully\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8448,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4828,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 321.585,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_078",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7545,
+  "total_latency_s": 106.275,
+  "final_script": "describe('Duplicate Record Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/records');\n    cy.intercept('GET', '/api/records').as('getRecords');\n    cy.intercept('POST', '/api/records/duplicate').as('duplicateRecord');\n  });\n\n  it('should successfully duplicate an existing record with one click', () => {\n    cy.wait('@getRecords');\n    cy.get('[data-testid=\"record-item-1\"]').should('be.visible');\n    cy.get('[data-testid=\"record-title-1\"]').should('contain', 'Original Record');\n    \n    cy.get('[data-testid=\"duplicate-button-1\"]').click();\n    cy.wait('@duplicateRecord');\n    \n    cy.get('[data-testid=\"success-toast\"]').should('be.visible');\n    cy.get('[data-testid=\"success-toast\"]').should('contain', 'Record duplicated successfully');\n    \n    cy.get('[data-testid=\"record-item-2\"]').should('be.visible');\n    cy.get('[data-testid=\"record-title-2\"]').should('contain', 'Original Record Copy');\n    cy.get('[data-testid=\"record-id-2\"]').should('not.equal', '[data-testid=\"record-id-1\"]');\n    \n    cy.get('[data-testid=\"record-item-2\"]').should('have.class', 'duplicated-record');\n  });\n\n  it('should handle duplicate request when record does not exist', () => {\n    cy.intercept('GET', '/api/records', { statusCode: 404, body: { error: 'Record not found' } }).as('getRecordsNotFound');\n    cy.intercept('POST', '/api/records/duplicate', { statusCode: 404, body: { error: 'Record not found' } }).as('duplicateRecordNotFound');\n    \n    cy.visit('/records/999');\n    cy.get('[data-testid=\"record-item-999\"]').should('not.exist');\n    \n    cy.get('[data-testid=\"duplicate-button-999\"]').should('not.exist');\n    \n    cy.get('[data-testid=\"error-toast\"]').should('be.visible');\n    cy.get('[data-testid=\"error-toast\"]').should('contain', 'Record not found');\n    \n    cy.get('[data-testid=\"duplicate-button-999\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7545,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3815,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 106.275,
+      "feedback_used": ""
+    }
+  ]
+}

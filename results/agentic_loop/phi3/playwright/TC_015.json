@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_015",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8013,
+  "total_latency_s": 46.789,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Email/Username Login Interchangeability', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should successfully log in with email or username interchangeably', async ({ page }) => {\n    // Setup: Fill email field with valid email\n    const emailInput = page.getByLabel('Email or Username');\n    await emailInput.fill('user@example.com');\n\n    // Setup: Fill password field with valid password\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('SecurePassword123');\n\n    // Setup: Click login button\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await loginButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Login successful');\n    await expect(successMessage).toBeVisible();\n\n    // Verify user is redirected to dashboard\n    const dashboardLink = page.getByRole('link', { name: /dashboard/i });\n    await expect(dashboardLink).toBeVisible();\n\n    // Verify user is logged in\n    const userNameDisplay = page.getByText('User');\n    await expect(userNameDisplay).toBeVisible();\n\n    // Reset and repeat with username\n    await emailInput.fill('');\n    await passwordInput.fill('');\n\n    // Setup: Fill username field with valid username\n    const usernameInput = page.getByLabel('Email or Username');\n    await usernameInput.fill('john.doe');\n\n    // Setup: Click login button again\n    await loginButton.click();\n\n    // Verify success message appears again\n    await expect(successMessage).toBeVisible();\n\n    // Verify user is redirected to dashboard\n    await expect(dashboardLink).toBeVisible();\n\n    // Verify user is logged in with username\n    await expect(userNameDisplay).toContainText('John Doe');\n  });\n\n  test('should handle invalid email or username and display error messages', async ({ page }) => {\n    // Setup: Fill email field with invalid email\n    const emailInput = page.getByLabel('Email or Username');\n    await emailInput.fill('invalid-email');\n\n    // Setup: Fill password field with valid password\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('SecurePassword123');\n\n    // Setup: Click login button\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await loginButton.click();\n\n    // Verify error message appears for invalid email\n    const errorMessage = page.getByText('Invalid email address');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify login button is still clickable\n    await expect(loginButton).toBeEnabled();\n\n    // Reset and repeat with invalid username\n    await emailInput.fill('');\n    await passwordInput.fill('');\n\n    // Setup: Fill username field with invalid username\n    await usernameInput.fill('invalid-username');\n\n    // Setup: Click login button again\n    await loginButton.click();\n\n    // Verify error message appears for invalid username\n    await expect(errorMessage).toBeVisible();\n\n    // Verify login button is still clickable\n    await expect(loginButton).toBeEnabled();\n\n    // Verify error message is displayed\n    const errorDisplay = page.getByText('Invalid username');\n    await expect(errorDisplay).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8013,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3377,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 46.789,
+      "feedback_used": ""
+    }
+  ]
+}

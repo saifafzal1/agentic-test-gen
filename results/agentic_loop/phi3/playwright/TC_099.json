@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_099",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.798,
+  "total_latency_s": 41.936,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Out-of-Stock Message on Add to Cart', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/products');\n  });\n\n  test('should display out-of-stock message when adding unavailable item to cart', async ({ page }) => {\n    // Verify product page loads\n    const productCard = page.getByRole('region', { name: /product/i });\n    await expect(productCard).toBeVisible();\n\n    // Verify product details are visible\n    const productName = page.getByText(/product name/i);\n    await expect(productName).toBeVisible();\n\n    // Verify add to cart button is visible\n    const addToCartButton = page.getByRole('button', { name: /add to cart/i });\n    await expect(addToCartButton).toBeVisible();\n\n    // Click add to cart button for unavailable item\n    await addToCartButton.click();\n\n    // Verify out-of-stock message appears\n    const outOfStockMessage = page.getByText(/item is out of stock/i);\n    await expect(outOfStockMessage).toBeVisible();\n\n    // Verify cart icon is still visible\n    const cartIcon = page.getByRole('img', { name: /cart/i });\n    await expect(cartIcon).toBeVisible();\n\n    // Verify cart count is updated to 0\n    const cartCount = page.getByText(/cart is empty/i);\n    await expect(cartCount).toBeVisible();\n\n    // Verify product card is still visible\n    await expect(productCard).toBeVisible();\n  });\n\n  test('should not display out-of-stock message when item is available', async ({ page }) => {\n    // Verify product page loads\n    const productCard = page.getByRole('region', { name: /product/i });\n    await expect(productCard).toBeVisible();\n\n    // Verify product details are visible\n    const productName = page.getByText(/product name/i);\n    await expect(productName).toBeVisible();\n\n    // Verify add to cart button is visible\n    const addToCartButton = page.getByRole('button', { name: /add to cart/i });\n    await expect(addToCartButton).toBeVisible();\n\n    // Click add to cart button for available item\n    await addToCartButton.click();\n\n    // Verify out-of-stock message does not appear\n    const outOfStockMessage = page.getByText(/item is out of stock/i);\n    await expect(outOfStockMessage).not.toBeVisible();\n\n    // Verify cart icon is visible\n    const cartIcon = page.getByRole('img', { name: /cart/i });\n    await expect(cartIcon).toBeVisible();\n\n    // Verify cart count is updated\n    const cartCount = page.getByText(/cart is empty/i);\n    await expect(cartCount).not.toBeVisible();\n\n    // Verify product card is still visible\n    await expect(productCard).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.798,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4268,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 41.936,
+      "feedback_used": ""
+    }
+  ]
+}

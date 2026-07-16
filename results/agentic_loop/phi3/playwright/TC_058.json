@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_058",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8154,
+  "total_latency_s": 47.68,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('API Error Banner Display', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display error banner when API call fails', async ({ page }) => {\n    // Setup intercept for failed API call\n    await page.route('**/api/data', (route) => {\n      route.abort('failed');\n    });\n\n    // Verify error banner is not visible initially\n    const errorBanner = page.getByRole('region', { name: /error/i });\n    await expect(errorBanner).not.toBeVisible();\n\n    // Verify error message is not visible initially\n    const errorMessage = page.getByText(/error/i);\n    await expect(errorMessage).not.toBeVisible();\n\n    // Trigger API call\n    const dataButton = page.getByRole('button', { name: /load data/i });\n    await dataButton.click();\n\n    // Wait for error banner to appear\n    await page.waitForTimeout(500);\n\n    // Verify error banner is visible\n    await expect(errorBanner).toBeVisible();\n\n    // Verify error message is visible\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message contains specific error details\n    await expect(errorMessage).toContainText('Failed to load data');\n\n    // Verify error banner has a close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify close button works\n    await closeButton.click();\n\n    // Verify error banner is hidden after close\n    await expect(errorBanner).not.toBeVisible();\n  });\n\n  test('should clear error banner when API call succeeds', async ({ page }) => {\n    // Setup successful API call\n    await page.route('**/api/data', (route) => {\n      route.continue();\n    });\n\n    // Verify error banner is not visible initially\n    const errorBanner = page.getByRole('region', { name: /error/i });\n    await expect(errorBanner).not.toBeVisible();\n\n    // Verify error message is not visible initially\n    const errorMessage = page.getByText(/error/i);\n    await expect(errorMessage).not.toBeVisible();\n\n    // Trigger API call\n    const dataButton = page.getByRole('button', { name: /load data/i });\n    await dataButton.click();\n\n    // Wait for error banner to appear\n    await page.waitForTimeout(500);\n\n    // Verify error banner is visible\n    await expect(errorBanner).toBeVisible();\n\n    // Verify error message is visible\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message contains specific error details\n    await expect(errorMessage).toContainText('Failed to load data');\n\n    // Verify error banner has a close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify close button works\n    await closeButton.click();\n\n    // Verify error banner is hidden after close\n    await expect(errorBanner).not.toBeVisible();\n\n    // Verify error message is gone\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify API call was successful\n    const successMessage = page.getByText(/success/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify success message contains expected data\n    await expect(successMessage).toContainText('Data loaded successfully');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8154,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4846,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 47.68,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_138",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.76,
+  "total_latency_s": 35.312,
+  "final_script": "describe('Modal Responsive on Mobile Screen Sizes', () => {\n  beforeEach(() => {\n    cy.visit('/modal');\n  });\n\n  it('should display modal responsively on mobile devices', () => {\n    // Set viewport to mobile size\n    cy.viewport('iphone-x');\n\n    // Verify modal is visible and has correct dimensions\n    cy.get('[data-testid=\"modal-container\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-container\"]').should('have.css', 'width', '375px');\n    cy.get('[data-testid=\"modal-container\"]').should('have.css', 'height', '812px');\n\n    // Verify modal content is readable\n    cy.get('[data-testid=\"modal-title\"]').should('contain', 'Modal Title');\n    cy.get('[data-testid=\"modal-body\"]').should('contain', 'Modal body content');\n\n    // Verify close button is present and functional\n    cy.get('[data-testid=\"modal-close-btn\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-close-btn\"]').click();\n    cy.get('[data-testid=\"modal-container\"]').should('not.exist');\n  });\n\n  it('should handle modal overflow on very small screens', () => {\n    // Set viewport to extremely small size\n    cy.viewport('iphone-xs');\n\n    // Verify modal is still visible and does not overflow\n    cy.get('[data-testid=\"modal-container\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-container\"]').should('have.css', 'width', '320px');\n    cy.get('[data-testid=\"modal-container\"]').should('have.css', 'height', '800px');\n\n    // Verify modal content is still readable\n    cy.get('[data-testid=\"modal-title\"]').should('contain', 'Modal Title');\n    cy.get('[data-testid=\"modal-body\"]').should('contain', 'Modal body content');\n\n    // Verify scrollable overflow is handled\n    cy.get('[data-testid=\"modal-body\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-body\"]').scrollTo('bottom');\n    cy.get('[data-testid=\"modal-body\"]').should('have.scrollHeight', '> 800px');\n\n    // Verify close button is still functional\n    cy.get('[data-testid=\"modal-close-btn\"]').click();\n    cy.get('[data-testid=\"modal-container\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.76,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 35.312,
+      "feedback_used": ""
+    }
+  ]
+}

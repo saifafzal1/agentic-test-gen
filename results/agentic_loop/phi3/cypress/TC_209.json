@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_209",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7136,
+  "total_latency_s": 45.941,
+  "final_script": "describe('Screen Reader Error Message Announcements', () => {\n  beforeEach(() => {\n    cy.visit('/error-page');\n  });\n\n  it('should announce error message when page loads with validation error', () => {\n    cy.intercept('GET', '/api/validate-form').as('validationRequest');\n    cy.wait('@validationRequest');\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please fill all required fields');\n    cy.get('[data-testid=\"error-message\"]').should('have.attr', 'aria-live', 'polite');\n    cy.get('[data-testid=\"error-message\"]').should('have.attr', 'aria-atomic', 'true');\n    cy.get('[data-testid=\"error-message\"]').should('have.attr', 'aria-relevant', 'auto');\n    cy.get('[data-testid=\"error-message\"]').should('have.attr', 'role', 'alert');\n    cy.get('[data-testid=\"error-message\"]').should('have.attr', 'aria-describedby', 'error-details');\n    cy.get('[data-testid=\"error-details\"]').should('be.visible');\n    cy.get('[data-testid=\"error-details\"]').should('contain', 'Field X is required');\n    cy.get('[data-testid=\"error-details\"]').should('contain', 'Field Y is required');\n  });\n\n  it('should announce error message when form submission fails due to validation', () => {\n    cy.intercept('POST', '/api/submit-form', {\n      statusCode: 400,\n      body: { error: 'Validation failed' }\n    }).as('formSubmission');\n\n    cy.get('[data-testid=\"form-input-name\"]').type('John Doe');\n    cy.get('[data-testid=\"form-input-email\"]').type('john@example.com');\n    cy.get('[data-testid=\"form-input-password\"]').type('password123');\n    cy.get('[data-testid=\"form-submit-button\"]').click();\n\n    cy.wait('@formSubmission');\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Validation failed');\n    cy.get('[data-testid=\"error-message\"]').should('have.attr', 'aria-live', 'polite');\n    cy.get('[data-testid=\"error-message\"]').should('have.attr', 'aria-atomic', 'true');\n    cy.get('[data-testid=\"error-message\"]').should('have.attr', 'aria-relevant', 'auto');\n    cy.get('[data-testid=\"error-message\"]').should('have.attr', 'role', 'alert');\n    cy.get('[data-testid=\"error-message\"]').should('have.attr', 'aria-describedby', 'error-details');\n    cy.get('[data-testid=\"error-details\"]').should('be.visible');\n    cy.get('[data-testid=\"error-details\"]').should('contain', 'Email is invalid');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7136,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2453,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 45.941,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_159",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7934,
+  "total_latency_s": 72.473,
+  "final_script": "describe('Table Row Selection Highlighting', () => {\n  beforeEach(() => {\n    cy.visit('/table');\n  });\n\n  it('should highlight selected rows with a different background color', () => {\n    // Verify table is visible\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n    \n    // Verify rows exist\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 0);\n    \n    // Select the first row\n    cy.get('[data-testid=\"table-row\"]').first().click();\n    \n    // Verify the first row is highlighted\n    cy.get('[data-testid=\"table-row\"]').first().should('have.class', 'selected-row');\n    cy.get('[data-testid=\"table-row\"]').first().should('have.css', 'background-color', 'rgb(230, 243, 255)');\n    \n    // Verify the highlight color is different from default\n    cy.get('[data-testid=\"table-row\"]').first().should('not.have.class', 'default-row');\n    \n    // Select the second row\n    cy.get('[data-testid=\"table-row\"]').eq(1).click();\n    \n    // Verify the second row is highlighted\n    cy.get('[data-testid=\"table-row\"]').eq(1).should('have.class', 'selected-row');\n    cy.get('[data-testid=\"table-row\"]').eq(1).should('have.css', 'background-color', 'rgb(230, 243, 255)');\n    \n    // Verify the first row is still highlighted\n    cy.get('[data-testid=\"table-row\"]').first().should('have.class', 'selected-row');\n    \n    // Verify both rows are highlighted\n    cy.get('[data-testid=\"table-row\"]').should('have.class', 'selected-row');\n    cy.get('[data-testid=\"table-row\"]').eq(1).should('have.class', 'selected-row');\n  });\n\n  it('should unhighlight a row when it is deselected', () => {\n    // Select the first row\n    cy.get('[data-testid=\"table-row\"]').first().click();\n    cy.get('[data-testid=\"table-row\"]').first().should('have.class', 'selected-row');\n    \n    // Select the second row\n    cy.get('[data-testid=\"table-row\"]').eq(1).click();\n    cy.get('[data-testid=\"table-row\"]').eq(1).should('have.class', 'selected-row');\n    \n    // Deselect the first row by clicking it again\n    cy.get('[data-testid=\"table-row\"]').first().click();\n    \n    // Verify the first row is no longer highlighted\n    cy.get('[data-testid=\"table-row\"]').first().should('not.have.class', 'selected-row');\n    cy.get('[data-testid=\"table-row\"]').first().should('have.css', 'background-color', 'rgb(255, 255, 255)');\n    \n    // Verify the second row remains highlighted\n    cy.get('[data-testid=\"table-row\"]').eq(1).should('have.class', 'selected-row');\n    \n    // Select the first row again\n    cy.get('[data-testid=\"table-row\"]').first().click();\n    cy.get('[data-testid=\"table-row\"]').first().should('have.class', 'selected-row');\n    \n    // Verify the second row is still highlighted\n    cy.get('[data-testid=\"table-row\"]').eq(1).should('have.class', 'selected-row');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7934,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5113,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.473,
+      "feedback_used": ""
+    }
+  ]
+}

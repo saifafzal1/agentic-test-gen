@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_119",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7505,
+  "total_latency_s": 398.071,
+  "final_script": "describe('Countdown Timer Interval Update', () => {\n  beforeEach(() => {\n    cy.visit('/timer');\n  });\n\n  it('should update countdown timer every second and display remaining time', () => {\n    // Verify initial countdown timer is displayed\n    cy.get('[data-testid=\"countdown-timer\"]').should('be.visible');\n    cy.get('[data-testid=\"countdown-timer\"]').should('contain', '00:00:00');\n\n    // Verify initial state\n    cy.get('[data-testid=\"timer-value\"]').should('contain', '00');\n    cy.get('[data-testid=\"timer-minutes\"]').should('contain', '00');\n    cy.get('[data-testid=\"timer-seconds\"]').should('contain', '00');\n\n    // Wait for 1 second\n    cy.wait(1000);\n\n    // Verify timer has updated\n    cy.get('[data-testid=\"countdown-timer\"]').should('contain', '00:00:01');\n    cy.get('[data-testid=\"timer-value\"]').should('contain', '00');\n    cy.get('[data-testid=\"timer-minutes\"]').should('contain', '00');\n    cy.get('[data-testid=\"timer-seconds\"]').should('contain', '01');\n\n    // Wait for another second\n    cy.wait(1000);\n\n    // Verify timer has updated again\n    cy.get('[data-testid=\"countdown-timer\"]').should('contain', '00:00:02');\n    cy.get('[data-testid=\"timer-value\"]').should('contain', '00');\n    cy.get('[data-testid=\"timer-minutes\"]').should('contain', '00');\n    cy.get('[data-testid=\"timer-seconds\"]').should('contain', '02');\n\n    // Wait for 5 seconds\n    cy.wait(5000);\n\n    // Verify timer has reached 0\n    cy.get('[data-testid=\"countdown-timer\"]').should('contain', '00:00:05');\n    cy.get('[data-testid=\"timer-value\"]').should('contain', '00');\n    cy.get('[data-testid=\"timer-minutes\"]').should('contain', '00');\n    cy.get('[data-testid=\"timer-seconds\"]').should('contain', '05');\n\n    // Verify countdown ends\n    cy.get('[data-testid=\"countdown-timer\"]').should('contain', '00:00:00');\n    cy.get('[data-testid=\"timer-value\"]').should('contain', '00');\n    cy.get('[data-testid=\"timer-minutes\"]').should('contain', '00');\n    cy.get('[data-testid=\"timer-seconds\"]').should('contain', '00');\n  });\n\n  it('should handle interval reset and continue updating', () => {\n    // Verify initial countdown timer is displayed\n    cy.get('[data-testid=\"countdown-timer\"]').should('be.visible');\n    cy.get('[data-testid=\"countdown-timer\"]').should('contain', '00:00:00');\n\n    // Wait for 3 seconds\n    cy.wait(3000);\n\n    // Verify timer has updated\n    cy.get('[data-testid=\"countdown-timer\"]').should('contain', '00:00:03');\n\n    // Verify timer is still running\n    cy.get('[data-testid=\"timer-value\"]').should('contain', '00');\n    cy.get('[data-testid=\"timer-minutes\"]').should('contain', '00');\n    cy.get('[data-testid=\"timer-seconds\"]').should('contain', '03');\n\n    // Click reset button\n    cy.get('[data-testid=\"reset-button\"]').click();\n\n    // Verify timer resets\n    cy.get('[data-testid=\"countdown-timer\"]').should('contain', '00:00:00');\n    cy.get('[data-testid=\"timer-value\"]').should('contain', '00');\n    cy.get('[data-testid=\"timer-minutes\"]').should('contain', '00');\n    cy.get('[data-testid=\"timer-seconds\"]').should('contain', '00');\n\n    // Wait for 2 seconds\n    cy.wait(2000);\n\n    // Verify timer has updated after reset\n    cy.get('[data-testid=\"countdown-timer\"]').should('contain', '00:00:02');\n    cy.get('[data-testid=\"timer-value\"]').should('contain', '00');\n    cy.get('[data-testid=\"timer-minutes\"]').should('contain', '00');\n    cy.get('[data-testid=\"timer-seconds\"]').should('contain', '02');\n\n    // Verify timer continues to update\n    cy.wait(1000);\n\n    // Verify timer has updated again\n    cy.get('[data-testid=\"countdown-timer\"]').should('contain', '00:00:03');\n    cy.get('[data-testid=\"timer-value\"]').should('contain', '00');\n    cy.get('[data-testid=\"timer-minutes\"]').should('contain', '00');\n    cy.get('[data-testid=\"timer-seconds\"]').should('contain', '03');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4786,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3686,
+        "missing_keywords": [],
+        "assertion_count": 27,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 53.97,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7505,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3684,
+        "missing_keywords": [],
+        "assertion_count": 39,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 344.101,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

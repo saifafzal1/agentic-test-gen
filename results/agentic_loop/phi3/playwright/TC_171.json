@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_171",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8565,
+  "total_latency_s": 41.132,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Upload Cancellation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload');\n  });\n\n  test('should successfully cancel an in-progress upload', async ({ page }) => {\n    // Verify upload button is visible\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await expect(uploadButton).toBeVisible();\n\n    // Click upload button to start upload\n    await uploadButton.click();\n\n    // Verify upload progress bar appears\n    const progressBar = page.locator('[data-testid=\"upload-progress-bar\"]');\n    await expect(progressBar).toBeVisible();\n\n    // Verify upload cancel button is visible\n    const cancelButton = page.getByRole('button', { name: /cancel/i });\n    await expect(cancelButton).toBeVisible();\n\n    // Click cancel button\n    await cancelButton.click();\n\n    // Verify upload progress bar disappears\n    await expect(progressBar).not.toBeVisible();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/upload cancelled/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify file name is cleared\n    const fileInput = page.getByLabel(/file/i);\n    await expect(fileInput).toHaveValue('');\n\n    // Verify error message is not visible\n    const errorMessage = page.getByText(/error/i);\n    await expect(errorMessage).not.toBeVisible();\n  });\n\n  test('should display error when canceling a failed upload', async ({ page }) => {\n    // Verify upload button is visible\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await expect(uploadButton).toBeVisible();\n\n    // Click upload button to start upload\n    await uploadButton.click();\n\n    // Verify upload progress bar appears\n    const progressBar = page.locator('[data-testid=\"upload-progress-bar\"]');\n    await expect(progressBar).toBeVisible();\n\n    // Verify upload cancel button is visible\n    const cancelButton = page.getByRole('button', { name: /cancel/i });\n    await expect(cancelButton).toBeVisible();\n\n    // Click cancel button\n    await cancelButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/upload failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify upload progress bar still exists\n    await expect(progressBar).toBeVisible();\n\n    // Verify file name is still present\n    const fileInput = page.getByLabel(/file/i);\n    await expect(fileInput).toHaveValue('');\n\n    // Verify success message is not visible\n    const successMessage = page.getByText(/upload cancelled/i);\n    await expect(successMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8565,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5217,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 41.132,
+      "feedback_used": ""
+    }
+  ]
+}

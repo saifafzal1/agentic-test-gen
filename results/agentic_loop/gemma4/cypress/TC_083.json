@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_083",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7678,
+  "total_latency_s": 72.543,
+  "final_script": "describe('Category Assignment via Dropdown', () => {\n  beforeEach(() => {\n    cy.visit('/records');\n  });\n\n  it('should successfully assign a category to a record via dropdown', () => {\n    // Intercept the API call for category assignment\n    cy.intercept('POST', '/api/records/*/assign-category').as('assignCategory');\n\n    // Click on a record to open details\n    cy.get('[data-testid=\"record-row-1\"]').click();\n\n    // Verify record details are visible\n    cy.get('[data-testid=\"record-details\"]').should('be.visible');\n\n    // Verify category dropdown is visible and has options\n    cy.get('[data-testid=\"category-dropdown\"]').should('be.visible');\n    cy.get('[data-testid=\"category-dropdown option\"]').should('have.length.greaterThan', 0);\n\n    // Select a category from the dropdown\n    cy.get('[data-testid=\"category-dropdown\"]').select('Work');\n\n    // Verify selected value is displayed\n    cy.get('[data-testid=\"selected-category-display\"]').should('contain', 'Work');\n\n    // Click the assign button\n    cy.get('[data-testid=\"assign-category-button\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@assignCategory');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Category assigned successfully');\n\n    // Verify the record now has the assigned category\n    cy.get('[data-testid=\"record-category-badge\"]').should('be.visible').should('contain', 'Work');\n  });\n\n  it('should handle unassigning a category when dropdown is empty', () => {\n    // Intercept the API call for unassigning category\n    cy.intercept('POST', '/api/records/*/unassign-category').as('unassignCategory');\n\n    // Click on a record with an existing category\n    cy.get('[data-testid=\"record-row-2\"]').click();\n\n    // Verify category is currently assigned\n    cy.get('[data-testid=\"record-category-badge\"]').should('be.visible').should('contain', 'Personal');\n\n    // Open category dropdown\n    cy.get('[data-testid=\"category-dropdown\"]').click();\n\n    // Select 'None' or clear the selection\n    cy.get('[data-testid=\"category-dropdown option[value=\\\"none\\\"]').click();\n\n    // Verify selected value is 'None'\n    cy.get('[data-testid=\"selected-category-display\"]').should('contain', 'None');\n\n    // Click the unassign button\n    cy.get('[data-testid=\"unassign-category-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@unassignCategory');\n\n    // Verify success message for unassigning\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Category unassigned successfully');\n\n    // Verify category badge is removed or shows 'Uncategorized'\n    cy.get('[data-testid=\"record-category-badge\"]').should('not.exist');\n    cy.get('[data-testid=\"record-category-status\"]').should('contain', 'Uncategorized');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7678,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4258,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.543,
+      "feedback_used": ""
+    }
+  ]
+}

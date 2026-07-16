@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_058",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7687,
+  "total_latency_s": 318.492,
+  "final_script": "describe('API Call Error Banner', () => {\n  beforeEach(() => {\n    cy.visit('/api-endpoint');\n  });\n\n  it('should display error banner when API call fails', () => {\n    // Intercept the API call with a 500 Internal Server Error response\n    cy.intercept('GET', '/api/data', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' }\n    }).as('apiError');\n\n    // Attempt to trigger the API call\n    cy.get('[data-testid=\"fetch-data-button\"]').click();\n\n    // Wait for the error response\n    cy.wait('@apiError');\n\n    // Verify error banner is visible\n    cy.get('[data-testid=\"error-banner\"]').should('be.visible');\n    cy.get('[data-testid=\"error-banner\"]').should('contain', 'Error');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Internal Server Error');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n\n    // Verify success button is disabled\n    cy.get('[data-testid=\"success-button\"]').should('be.disabled');\n\n    // Verify error banner has a close button\n    cy.get('[data-testid=\"close-error-button\"]').should('be.visible');\n  });\n\n  it('should clear error banner when API call succeeds after failure', () => {\n    // First, intercept with a failure\n    cy.intercept('GET', '/api/data', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' }\n    }).as('apiError');\n\n    // Click the fetch button to trigger the error\n    cy.get('[data-testid=\"fetch-data-button\"]').click();\n\n    // Wait for the error response\n    cy.wait('@apiError');\n\n    // Verify error banner is visible\n    cy.get('[data-testid=\"error-banner\"]').should('be.visible');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Internal Server Error');\n\n    // Click the retry button\n    cy.get('[data-testid=\"retry-button\"]').click();\n\n    // Intercept the API call with a successful response\n    cy.intercept('GET', '/api/data', {\n      statusCode: 200,\n      body: { data: 'Successful response' }\n    }).as('apiSuccess');\n\n    // Wait for the successful response\n    cy.wait('@apiSuccess');\n\n    // Verify error banner is no longer visible\n    cy.get('[data-testid=\"error-banner\"]').should('not.exist');\n\n    // Verify success button is now enabled\n    cy.get('[data-testid=\"success-button\"]').should('be.visible');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Data fetched successfully');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7687,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4289,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 318.492,
+      "feedback_used": ""
+    }
+  ]
+}

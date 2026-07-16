@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_101",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7939,
+  "total_latency_s": 394.111,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('JavaScript Error Recovery', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should recover gracefully after a JavaScript error and display error message', async ({ page }) => {\n    // Trigger a JavaScript error by clicking a button that causes an error\n    const errorButton = page.getByRole('button', { name: /trigger error/i });\n    await errorButton.click();\n\n    // Wait for error state\n    await page.waitForTimeout(500);\n\n    // Verify error state is visible\n    const errorMessage = page.getByText(/unexpected error/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify navigation button is still accessible\n    const navigationButton = page.getByRole('button', { name: /go back/i });\n    await expect(navigationButton).toBeVisible();\n\n    // Verify navigation button is enabled\n    await expect(navigationButton).toBeEnabled();\n\n    // Verify error message contains recovery instructions\n    await expect(errorMessage).toContainText(/retry/i);\n\n    // Verify application state is preserved\n    const dashboardTitle = page.getByRole('heading', { name: /dashboard/i });\n    await expect(dashboardTitle).toBeVisible();\n\n    // Verify data is still displayed\n    const dataTable = page.getByRole('table');\n    await expect(dataTable).toBeVisible();\n\n    // Verify error message is dismissible\n    const dismissButton = page.getByRole('button', { name: /dismiss/i });\n    await expect(dismissButton).toBeVisible();\n\n    // Verify error message is dismissed on click\n    await dismissButton.click();\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify application returns to normal state\n    await expect(dashboardTitle).toBeVisible();\n    await expect(dataTable).toBeVisible();\n\n    // Verify navigation button is still accessible after recovery\n    await expect(navigationButton).toBeVisible();\n  });\n\n  test('should handle multiple consecutive JavaScript errors and display recovery message', async ({ page }) => {\n    // Trigger first JavaScript error\n    const errorButton1 = page.getByRole('button', { name: /trigger error/i });\n    await errorButton1.click();\n\n    // Wait for error state\n    await page.waitForTimeout(500);\n\n    // Verify error message is displayed\n    const errorMessage1 = page.getByText(/unexpected error/i);\n    await expect(errorMessage1).toBeVisible();\n\n    // Verify navigation button is still accessible\n    const navigationButton = page.getByRole('button', { name: /go back/i });\n    await expect(navigationButton).toBeVisible();\n\n    // Verify error message contains recovery instructions\n    await expect(errorMessage1).toContainText(/retry/i);\n\n    // Trigger second JavaScript error\n    const errorButton2 = page.getByRole('button', { name: /trigger error/i });\n    await errorButton2.click();\n\n    // Wait for error state\n    await page.waitForTimeout(500);\n\n    // Verify error message is displayed again\n    const errorMessage2 = page.getByText(/unexpected error/i);\n    await expect(errorMessage2).toBeVisible();\n\n    // Verify error message contains recovery instructions\n    await expect(errorMessage2).toContainText(/retry/i);\n\n    // Verify navigation button is still accessible\n    await expect(navigationButton).toBeVisible();\n\n    // Verify error message is dismissible\n    const dismissButton = page.getByRole('button', { name: /dismiss/i });\n    await expect(dismissButton).toBeVisible();\n\n    // Verify error message is dismissed on click\n    await dismissButton.click();\n    await expect(errorMessage2).not.toBeVisible();\n\n    // Verify application returns to normal state\n    await expect(dashboardTitle).toBeVisible();\n    await expect(dataTable).toBeVisible();\n\n    // Verify navigation button is still accessible after recovery\n    await expect(navigationButton).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7939,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4129,
+        "missing_keywords": [],
+        "assertion_count": 22,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 394.111,
+      "feedback_used": ""
+    }
+  ]
+}

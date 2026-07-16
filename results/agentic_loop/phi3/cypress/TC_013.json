@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_013",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7635,
+  "total_latency_s": 522.36,
+  "final_script": "describe('Username Pre-fill on Login', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should pre-fill username when user is logged in from previous session', () => {\n    // Mock the localStorage to simulate a previous login\n    cy.window().then((win) => {\n      win.localStorage.setItem('authToken', 'mock-token');\n      win.localStorage.setItem('username', 'john.doe');\n    });\n\n    // Intercept the login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n\n    // Attempt to login without entering username\n    cy.get('[data-testid=\"email-input\"]').type('jane.doe@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('password123');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for the login API call\n    cy.wait('@loginRequest');\n\n    // Verify the username is pre-filled\n    cy.get('[data-testid=\"username-input\"]').should('have.value', 'john.doe');\n\n    // Verify the email is still empty\n    cy.get('[data-testid=\"email-input\"]').should('have.value', '');\n\n    // Verify the login button is still visible\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n\n    // Verify the success message appears\n    cy.get('[data-testid=\"login-success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"login-success-message\"]').should('contain', 'Welcome back, john.doe');\n  });\n\n  it('should not pre-fill username when user is logged in from a different device', () => {\n    // Mock the localStorage to simulate a previous login from a different device\n    cy.window().then((win) => {\n      win.localStorage.setItem('authToken', 'mock-token');\n      win.localStorage.setItem('username', 'jane.doe');\n    });\n\n    // Intercept the login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n\n    // Attempt to login from a different device\n    cy.get('[data-testid=\"email-input\"]').type('jane.doe@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('password123');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for the login API call\n    cy.wait('@loginRequest');\n\n    // Verify the username is not pre-filled\n    cy.get('[data-testid=\"username-input\"]').should('have.value', '');\n\n    // Verify the email is still empty\n    cy.get('[data-testid=\"email-input\"]').should('have.value', '');\n\n    // Verify the login button is still visible\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n\n    // Verify the success message appears\n    cy.get('[data-testid=\"login-success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"login-success-message\"]').should('contain', 'Welcome back, jane.doe');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7635,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4118,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 522.36,
+      "feedback_used": ""
+    }
+  ]
+}

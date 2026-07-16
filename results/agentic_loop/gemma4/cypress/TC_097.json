@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_097",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8223,
+  "total_latency_s": 72.301,
+  "final_script": "describe('User Registration - Email Already Exists Error', () => {\n  beforeEach(() => {\n    cy.visit('/register');\n  });\n\n  it('should display clear error message when registering with an existing email', () => {\n    // Intercept the registration API call\n    cy.intercept('POST', '/api/auth/register').as('registerRequest');\n\n    // Fill in registration form with existing email\n    cy.get('[data-testid=\"email-input\"]').type('existing@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('ValidPassword123!');\n    cy.get('[data-testid=\"confirm-password-input\"]').type('ValidPassword123!');\n\n    // Submit the registration form\n    cy.get('[data-testid=\"register-button\"]').click();\n\n    // Wait for the API response\n    cy.wait('@registerRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(499);\n    });\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]')\n      .should('be.visible')\n      .should('contain', 'This email is already registered');\n\n    // Verify form is not submitted and user remains on registration page\n    cy.url().should('include', '/register');\n    cy.get('[data-testid=\"email-input\"]').should('have.value', 'existing@example.com');\n  });\n\n  it('should handle multiple validation errors when email already exists', () => {\n    // Intercept the registration API call\n    cy.intercept('POST', '/api/auth/register').as('registerRequest');\n\n    // Fill in form with existing email and invalid password\n    cy.get('[data-testid=\"email-input\"]').type('existing@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('short');\n    cy.get('[data-testid=\"confirm-password-input\"]').type('short');\n\n    // Submit the registration form\n    cy.get('[data-testid=\"register-button\"]').click();\n\n    // Wait for the API response\n    cy.wait('@registerRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(422);\n    });\n\n    // Verify multiple error messages are displayed\n    cy.get('[data-testid=\"error-message\"]')\n      .should('be.visible')\n      .should('contain', 'This email is already registered');\n\n    cy.get('[data-testid=\"password-error\"]')\n      .should('be.visible')\n      .should('contain', 'Password must be at least 8 characters');\n\n    // Verify form fields retain values\n    cy.get('[data-testid=\"email-input\"]').should('have.value', 'existing@example.com');\n    cy.get('[data-testid=\"password-input\"]').should('have.value', 'short');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8223,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.6078,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.301,
+      "feedback_used": ""
+    }
+  ]
+}

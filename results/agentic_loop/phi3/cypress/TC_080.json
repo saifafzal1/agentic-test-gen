@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_080",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.762,
+  "total_latency_s": 306.223,
+  "final_script": "describe('Record Created and Last Modified Dates', () => {\n  beforeEach(() => {\n    cy.visit('/records');\n  });\n\n  it('should display created and last modified dates on record details page', () => {\n    // Intercept the API call to get record details\n    cy.intercept('GET', '/api/records/1').as('getRecordDetails');\n\n    // Navigate to a specific record\n    cy.get('[data-testid=\"record-1\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@getRecordDetails');\n\n    // Verify the record details are visible\n    cy.get('[data-testid=\"record-details-container\"]').should('be.visible');\n\n    // Verify created date is displayed\n    cy.get('[data-testid=\"created-date\"]').should('contain', 'Created');\n    cy.get('[data-testid=\"created-date\"]').should('contain', 'January 1, 2023');\n\n    // Verify last modified date is displayed\n    cy.get('[data-testid=\"last-modified-date\"]').should('contain', 'Last Modified');\n    cy.get('[data-testid=\"last-modified-date\"]').should('contain', 'January 15, 2023');\n\n    // Verify dates are formatted correctly\n    cy.get('[data-testid=\"created-date\"]').should('have.css', 'text-decoration', 'underline');\n    cy.get('[data-testid=\"last-modified-date\"]').should('have.css', 'text-decoration', 'underline');\n  });\n\n  it('should handle record without created or last modified dates', () => {\n    // Intercept the API call to get a record without dates\n    cy.intercept('GET', '/api/records/2').as('getRecordWithoutDates');\n\n    // Navigate to the record\n    cy.get('[data-testid=\"record-2\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@getRecordWithoutDates');\n\n    // Verify the record details are visible\n    cy.get('[data-testid=\"record-details-container\"]').should('be.visible');\n\n    // Verify created date is not displayed\n    cy.get('[data-testid=\"created-date\"]').should('not.exist');\n\n    // Verify last modified date is not displayed\n    cy.get('[data-testid=\"last-modified-date\"]').should('not.exist');\n\n    // Verify no error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.762,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4065,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 306.223,
+      "feedback_used": ""
+    }
+  ]
+}

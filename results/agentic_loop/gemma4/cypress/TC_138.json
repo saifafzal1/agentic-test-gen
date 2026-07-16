@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_138",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.757,
+  "total_latency_s": 73.54,
+  "final_script": "describe('Modal Dialog Responsiveness on Mobile Screens', () => {\n  beforeEach(() => {\n    cy.visit('/modal-page');\n  });\n\n  it('should display modal correctly and be responsive on mobile screen sizes', () => {\n    // Intercept modal open API call\n    cy.intercept('GET', '/api/modal/open').as('openModal');\n\n    // Click button to open modal\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n\n    // Wait for modal to open\n    cy.wait('@openModal');\n\n    // Verify modal is visible\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Verify modal content is visible\n    cy.get('[data-testid=\"modal-title\"]').should('contain', 'Modal Title');\n    cy.get('[data-testid=\"modal-body\"]').should('be.visible');\n\n    // Verify modal is not overflowing horizontally\n    cy.get('[data-testid=\"modal-dialog\"]').should('have.css', 'overflow-x', 'hidden');\n\n    // Verify modal is centered on screen\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Verify modal has correct width on mobile\n    cy.get('[data-testid=\"modal-dialog\"]').should('have.css', 'max-width', '100%');\n\n    // Verify modal is scrollable if content exceeds viewport height\n    cy.get('[data-testid=\"modal-body\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-body\"]').should('have.css', 'overflow-y', 'auto');\n\n    // Verify close button is visible and functional\n    cy.get('[data-testid=\"close-modal-btn\"]').should('be.visible');\n    cy.get('[data-testid=\"close-modal-btn\"]').click();\n\n    // Verify modal is closed\n    cy.get('[data-testid=\"modal-dialog\"]').should('not.exist');\n  });\n\n  it('should handle modal responsiveness when screen size changes', () => {\n    // Open modal\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n    cy.wait('@openModal');\n\n    // Verify modal is visible on desktop size\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-dialog\"]').should('have.css', 'max-width', '500px');\n\n    // Change viewport to mobile size\n    cy.viewport('iphone-x');\n\n    // Verify modal is still visible and responsive\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-dialog\"]').should('have.css', 'max-width', '100%');\n\n    // Verify modal content is still readable on mobile\n    cy.get('[data-testid=\"modal-title\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-body\"]').should('be.visible');\n\n    // Verify modal is not causing horizontal scroll on mobile\n    cy.get('[data-testid=\"modal-dialog\"]').should('not.have.css', 'overflow-x', 'scroll');\n\n    // Verify modal can be closed from mobile view\n    cy.get('[data-testid=\"close-modal-btn\"]').click();\n    cy.get('[data-testid=\"modal-dialog\"]').should('not.exist');\n\n    // Change viewport back to desktop size\n    cy.viewport('desktop');\n\n    // Verify modal can be reopened and is responsive on desktop\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n    cy.wait('@openModal');\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-dialog\"]').should('have.css', 'max-width', '500px');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.757,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.39,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.54,
+      "feedback_used": ""
+    }
+  ]
+}

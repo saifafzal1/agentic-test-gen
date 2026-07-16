@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_145",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8236,
+  "total_latency_s": 72.213,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Cookie Consent Banner - Acceptance', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/home');\n  });\n\n  test('should hide cookie consent banner after user accepts', async ({ page }) => {\n    // Verify cookie consent banner is visible\n    const banner = page.getByRole('banner', { name: /cookie consent/i });\n    await expect(banner).toBeVisible();\n\n    // Verify accept button is visible and clickable\n    const acceptButton = page.getByRole('button', { name: /accept/i });\n    await expect(acceptButton).toBeVisible();\n\n    // Click accept button\n    await acceptButton.click();\n\n    // Verify banner disappears\n    await expect(banner).not.toBeVisible();\n\n    // Verify acceptance cookie is set\n    const acceptanceCookie = page.context().cookies().find(\n      (cookie: any) => cookie.name === 'cookie_consent_accepted'\n    );\n    expect(acceptanceCookie).toBeDefined();\n\n    // Verify user can interact with main page content\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeVisible();\n  });\n\n  test('should not hide cookie consent banner if user closes it without accepting', async ({ page }) => {\n    // Verify cookie consent banner is visible\n    const banner = page.getByRole('banner', { name: /cookie consent/i });\n    await expect(banner).toBeVisible();\n\n    // Verify close button is visible and clickable\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Click close button\n    await closeButton.click();\n\n    // Verify banner remains visible\n    await expect(banner).toBeVisible();\n\n    // Verify acceptance cookie is NOT set\n    const acceptanceCookie = page.context().cookies().find(\n      (cookie: any) => cookie.name === 'cookie_consent_accepted'\n    );\n    expect(acceptanceCookie).toBeUndefined();\n\n    // Verify user can still interact with main page content\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8236,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5119,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.213,
+      "feedback_used": ""
+    }
+  ]
+}

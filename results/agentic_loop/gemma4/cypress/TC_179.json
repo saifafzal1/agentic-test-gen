@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_179",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8005,
+  "total_latency_s": 72.327,
+  "final_script": "describe('Inline PDF Viewer - File Upload', () => {\n  beforeEach(() => {\n    cy.visit('/file-upload');\n  });\n\n  it('should display uploaded PDF in inline viewer', () => {\n    // Intercept the file upload API call\n    cy.intercept('POST', '/api/files/upload').as('uploadFile');\n\n    // Get the file input element\n    cy.get('[data-testid=\"pdf-file-input\"]').selectFile('cypress/fixtures/sample.pdf', { force: true });\n\n    // Verify file name is displayed\n    cy.get('[data-testid=\"uploaded-file-name\"]').should('contain', 'sample.pdf');\n\n    // Click upload button\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for API call\n    cy.wait('@uploadFile');\n\n    // Verify success message\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'File uploaded successfully');\n\n    // Verify inline viewer is visible\n    cy.get('[data-testid=\"pdf-viewer-container\"]').should('be.visible');\n\n    // Verify PDF viewer has content\n    cy.get('[data-testid=\"pdf-viewer-canvas\"]').should('be.visible');\n\n    // Verify viewer displays first page\n    cy.get('[data-testid=\"pdf-page-number\"]').should('contain', '1');\n  });\n\n  it('should handle invalid file types and display error', () => {\n    // Intercept the file upload API call\n    cy.intercept('POST', '/api/files/upload').as('uploadFile');\n\n    // Attempt to upload an invalid file type (e.g., .txt)\n    cy.get('[data-testid=\"pdf-file-input\"]').selectFile('cypress/fixtures/sample.txt', { force: true });\n\n    // Click upload button\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for API call\n    cy.wait('@uploadFile');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Invalid file type. Only PDF is allowed');\n\n    // Verify inline viewer is not visible\n    cy.get('[data-testid=\"pdf-viewer-container\"]').should('not.exist');\n\n    // Verify file name is not displayed\n    cy.get('[data-testid=\"uploaded-file-name\"]').should('not.exist');\n\n    // Verify file input is cleared\n    cy.get('[data-testid=\"pdf-file-input\"]').should('have.value', '');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8005,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.535,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.327,
+      "feedback_used": ""
+    }
+  ]
+}

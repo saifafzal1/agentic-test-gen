@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_179",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.825,
+  "total_latency_s": 51.397,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('PDF Inline Viewer', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload');\n  });\n\n  test('should display uploaded PDF in inline viewer', async ({ page }) => {\n    // Intercept the file upload API\n    await page.route('**/api/upload', (route) => {\n      route.continue();\n    });\n\n    // Upload a PDF file using getByLabel\n    const uploadInput = page.getByLabel('Upload File');\n    await uploadInput.fill('test.pdf');\n\n    // Verify the file is uploaded by checking the preview button\n    const previewButton = page.getByRole('button', { name: /preview/i });\n    await expect(previewButton).toBeVisible();\n\n    // Click the preview button to display the PDF\n    await previewButton.click();\n\n    // Verify the PDF is displayed in the inline viewer\n    const viewer = page.getByRole('region', { name: /inline viewer/i });\n    await expect(viewer).toBeVisible();\n\n    // Verify the viewer contains the correct PDF content\n    const pdfContent = page.locator('[data-testid=\"pdf-content\"]');\n    await expect(pdfContent).toContainText('test.pdf');\n\n    // Verify the viewer has the correct file size\n    const fileSize = page.getByText('File Size: 123 KB');\n    await expect(fileSize).toBeVisible();\n\n    // Verify the viewer has the correct file name\n    const fileName = page.getByText('test.pdf');\n    await expect(fileName).toBeVisible();\n\n    // Verify the viewer has the correct file type\n    const fileType = page.getByText('PDF');\n    await expect(fileType).toBeVisible();\n\n    // Verify the viewer has the correct file extension\n    const fileExtension = page.getByText('pdf');\n    await expect(fileExtension).toBeVisible();\n\n    // Verify the viewer has the correct file icon\n    const fileIcon = page.getByRole('img', { name: /pdf icon/i });\n    await expect(fileIcon).toBeVisible();\n\n    // Verify the viewer has the correct page count\n    const pageCount = page.getByText('Page 1 of 1');\n    await expect(pageCount).toBeVisible();\n  });\n\n  test('should handle empty file upload and display error message', async ({ page }) => {\n    // Intercept the file upload API\n    await page.route('**/api/upload', (route) => {\n      route.abort();\n    });\n\n    // Upload an empty file using getByLabel\n    const uploadInput = page.getByLabel('Upload File');\n    await uploadInput.fill('');\n\n    // Verify the preview button is disabled\n    const previewButton = page.getByRole('button', { name: /preview/i });\n    await expect(previewButton).toBeDisabled();\n\n    // Verify the error message is displayed\n    const errorMessage = page.getByText(/File is empty/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the viewer is not displayed\n    const viewer = page.getByRole('region', { name: /inline viewer/i });\n    await expect(viewer).not.toBeVisible();\n\n    // Verify the file name and file type are not displayed\n    const fileName = page.getByText('test.pdf');\n    await expect(fileName).not.toBeVisible();\n\n    const fileType = page.getByText('PDF');\n    await expect(fileType).not.toBeVisible();\n\n    // Verify the file size is not displayed\n    const fileSize = page.getByText('File Size: 0 KB');\n    await expect(fileSize).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.825,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4168,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 51.397,
+      "feedback_used": ""
+    }
+  ]
+}

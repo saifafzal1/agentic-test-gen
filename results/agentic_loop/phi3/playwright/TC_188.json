@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_188",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8428,
+  "total_latency_s": 571.274,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Results Sorting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should sort search results by relevance, price, or date', async ({ page }) => {\n    // Set up initial search state\n    const searchInput = page.getByLabel('Search');\n    await searchInput.fill('laptop');\n\n    // Click the sort button for relevance\n    const sortRelevanceButton = page.getByRole('button', { name: /sort by relevance/i });\n    await sortRelevanceButton.click();\n\n    // Verify results are sorted by relevance\n    const resultItems = page.locator('[data-testid=\"search-result-item\"]');\n    const firstItem = await resultItems.first();\n    await expect(firstItem).toContainText('Laptop Model A - Best Seller');\n    const secondItem = await resultItems.nth(1);\n    await expect(secondItem).toContainText('Laptop Model B - Highly Rated');\n\n    // Click the sort button for price\n    const sortPriceButton = page.getByRole('button', { name: /sort by price/i });\n    await sortPriceButton.click();\n\n    // Verify results are sorted by price\n    const thirdItem = await resultItems.nth(2);\n    await expect(thirdItem).toContainText('Laptop Model C - Budget');\n    const fourthItem = await resultItems.nth(3);\n    await expect(fourthItem).toContainText('Laptop Model A - Best Seller');\n\n    // Click the sort button for date\n    const sortDateButton = page.getByRole('button', { name: /sort by date/i });\n    await sortDateButton.click();\n\n    // Verify results are sorted by date\n    const fifthItem = await resultItems.nth(4);\n    await expect(fifthItem).toContainText('Laptop Model D - New Release');\n    const sixthItem = await resultItems.nth(5);\n    await expect(sixthItem).toContainText('Laptop Model A - Best Seller');\n  });\n\n  test('should handle empty search results gracefully', async ({ page }) => {\n    // Set up initial search state with empty results\n    const searchInput = page.getByLabel('Search');\n    await searchInput.fill('nonexistent product');\n\n    // Click the sort button for relevance\n    const sortRelevanceButton = page.getByRole('button', { name: /sort by relevance/i });\n    await sortRelevanceButton.click();\n\n    // Verify no results are displayed\n    const resultItems = page.locator('[data-testid=\"search-result-item\"]');\n    const count = await resultItems.count();\n    expect(count).toBe(0);\n\n    // Verify no error message is displayed\n    const errorMessage = page.getByText(/no results found/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the sort button is still available\n    await expect(sortRelevanceButton).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 63.926,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8428,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.476,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 507.348,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

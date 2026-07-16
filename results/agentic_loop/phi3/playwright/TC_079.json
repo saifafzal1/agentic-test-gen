@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_079",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8187,
+  "total_latency_s": 324.469,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Record Restoration - Archived Records', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should successfully restore an archived record', async ({ page }) => {\n    // Verify archived records are visible\n    const archivedRecordsList = page.getByRole('region', { name: /archived records/i });\n    await expect(archivedRecordsList).toBeVisible();\n\n    // Locate and click restore button on a specific archived record\n    const restoreButton = page.getByRole('button', { name: /restore/i });\n    await expect(restoreButton).toBeVisible();\n    await restoreButton.click();\n\n    // Verify restore confirmation modal appears\n    const restoreModal = page.getByRole('dialog', { name: /restore record/i });\n    await expect(restoreModal).toBeVisible();\n\n    // Verify restore button is disabled in modal\n    const restoreButtonModal = page.getByRole('button', { name: /restore/i });\n    await expect(restoreButtonModal).toBeDisabled();\n\n    // Verify restore button is enabled after successful restore\n    const restoreButtonModalDisabled = page.getByRole('button', { name: /restore/i });\n    await expect(restoreButtonModalDisabled).not.toBeDisabled();\n\n    // Verify record is restored and visible\n    const restoredRecord = page.getByText(/restored record/i);\n    await expect(restoredRecord).toBeVisible();\n\n    // Verify restore button is now disabled\n    await expect(restoreButtonModalDisabled).toBeDisabled();\n\n    // Verify restore button is not visible in archived records list\n    await expect(restoreButtonModalDisabled).not.toBeVisible();\n\n    // Verify restore button is visible in main records list\n    const mainRecordsList = page.getByRole('region', { name: /records/i });\n    await expect(mainRecordsList).toBeVisible();\n    const restoreButtonMain = page.getByRole('button', { name: /restore/i });\n    await expect(restoreButtonMain).toBeVisible();\n  });\n\n  test('should handle restore failure and display error message', async ({ page }) => {\n    // Locate and click restore button on an archived record\n    const restoreButton = page.getByRole('button', { name: /restore/i });\n    await expect(restoreButton).toBeVisible();\n    await restoreButton.click();\n\n    // Verify restore confirmation modal appears\n    const restoreModal = page.getByRole('dialog', { name: /restore record/i });\n    await expect(restoreModal).toBeVisible();\n\n    // Verify restore button is disabled in modal\n    const restoreButtonModal = page.getByRole('button', { name: /restore/i });\n    await expect(restoreButtonModal).toBeDisabled();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/restore failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify restore button is still disabled\n    await expect(restoreButtonModal).toBeDisabled();\n\n    // Verify restore button is visible in main records list\n    const mainRecordsList = page.getByRole('region', { name: /records/i });\n    await expect(mainRecordsList).toBeVisible();\n    const restoreButtonMain = page.getByRole('button', { name: /restore/i });\n    await expect(restoreButtonMain).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8187,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4957,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 324.469,
+      "feedback_used": ""
+    }
+  ]
+}

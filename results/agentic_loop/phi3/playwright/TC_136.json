@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_136",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8004,
+  "total_latency_s": 416.131,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Content Scroll Independent Overflow', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/modal-dialog');\n  });\n\n  test('should scroll modal content independently when overflowing', async ({ page }) => {\n    // Open modal\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modal = page.locator('[data-testid=\"modal-dialog\"]');\n    await expect(modal).toBeVisible();\n\n    // Get modal content container\n    const modalContent = page.locator('[data-testid=\"modal-content\"]');\n    await expect(modalContent).toBeVisible();\n\n    // Set up overflow\n    await modalContent.setInputValue('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');\n\n    // Verify content overflows\n    await expect(modalContent).toHaveValue('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');\n\n    // Scroll to bottom\n    const scrollBar = page.locator('[data-testid=\"modal-scrollbar\"]');\n    await scrollBar.click();\n\n    // Verify content is visible at bottom\n    await expect(modalContent).toBeVisible();\n\n    // Scroll to top\n    await scrollBar.click();\n\n    // Verify content is visible at top\n    await expect(modalContent).toBeVisible();\n\n    // Close modal\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n\n    // Verify modal is no longer visible\n    await expect(modal).not.toBeVisible();\n  });\n\n  test('should handle empty modal content gracefully', async ({ page }) => {\n    // Open modal\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modal = page.locator('[data-testid=\"modal-dialog\"]');\n    await expect(modal).toBeVisible();\n\n    // Get modal content container\n    const modalContent = page.locator('[data-testid=\"modal-content\"]');\n    await expect(modalContent).toBeVisible();\n\n    // Set up empty content\n    await modalContent.setInputValue('');\n\n    // Verify content is empty\n    await expect(modalContent).toHaveValue('');\n\n    // Scroll to bottom\n    const scrollBar = page.locator('[data-testid=\"modal-scrollbar\"]');\n    await scrollBar.click();\n\n    // Verify content is still empty\n    await expect(modalContent).toHaveValue('');\n\n    // Close modal\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n\n    // Verify modal is no longer visible\n    await expect(modal).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8004,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4348,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 416.131,
+      "feedback_used": ""
+    }
+  ]
+}

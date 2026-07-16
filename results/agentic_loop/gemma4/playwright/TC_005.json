@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_005",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8914,
+  "total_latency_s": 75.702,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Password Reset Confirmation Message', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/forgot-password');\n  });\n\n  test('should display confirmation message after successful password reset', async ({ page }) => {\n    // Locate and fill email input using getByLabel\n    const emailInput = page.getByLabel('Email address');\n    await emailInput.fill('user@example.com');\n\n    // Locate and click reset button using getByRole\n    const resetBtn = page.getByRole('button', { name: /reset password/i });\n    await resetBtn.click();\n\n    // Wait for confirmation message to appear\n    const confirmationMessage = page.getByText(/password reset link sent/i);\n    await expect(confirmationMessage).toBeVisible();\n\n    // Verify success message contains expected text\n    await expect(confirmationMessage).toContainText('Password reset link sent to user@example.com');\n\n    // Verify success class is applied\n    const successClass = page.locator('[data-testid=\"success-message\"]');\n    await expect(successClass).toHaveClass(/success-message/);\n\n    // Verify reset form is no longer visible\n    const emailInputAfterReset = page.getByLabel('Email address');\n    await expect(emailInputAfterReset).not.toBeVisible();\n  });\n\n  test('should not display confirmation message when email is invalid', async ({ page }) => {\n    // Locate and fill email input with invalid format using getByLabel\n    const emailInput = page.getByLabel('Email address');\n    await emailInput.fill('invalid-email');\n\n    // Locate and click reset button using getByRole\n    const resetBtn = page.getByRole('button', { name: /reset password/i });\n    await resetBtn.click();\n\n    // Wait for error message to appear\n    const errorMessage = page.getByText(/invalid email format/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message contains expected text\n    await expect(errorMessage).toContainText('Please enter a valid email address');\n\n    // Verify confirmation message does not exist\n    const confirmationMessage = page.getByText(/password reset link sent/i);\n    await expect(confirmationMessage).not.toBeVisible();\n\n    // Verify reset form is still visible\n    const emailInputAfterError = page.getByLabel('Email address');\n    await expect(emailInputAfterError).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8914,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.638,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 75.702,
+      "feedback_used": ""
+    }
+  ]
+}

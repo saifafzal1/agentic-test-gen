@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_082",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7251,
+  "total_latency_s": 766.527,
+  "final_script": "describe('List Item Reordering by Drag and Drop', () => {\n  beforeEach(() => {\n    cy.visit('/list');\n  });\n\n  it('should successfully reorder list items by dragging and dropping', () => {\n    // Verify initial list order\n    cy.get('[data-testid=\"list-item-1\"]').should('be.visible');\n    cy.get('[data-testid=\"list-item-2\"]').should('be.visible');\n    cy.get('[data-testid=\"list-item-3\"]').should('be.visible');\n\n    // Click and drag list item 2 to the top\n    cy.get('[data-testid=\"list-item-2\"]').click();\n    cy.get('[data-testid=\"list-item-1\"]').click();\n    cy.get('[data-testid=\"list-item-2\"]').click();\n\n    // Verify list item 2 is now at the top\n    cy.get('[data-testid=\"list-item-2\"]').should('be.visible');\n    cy.get('[data-testid=\"list-item-1\"]').should('be.visible');\n    cy.get('[data-testid=\"list-item-3\"]').should('be.visible');\n\n    // Verify list item 2 is now first\n    cy.get('[data-testid=\"list-item-2\"]').should('have.css', 'order', '1');\n    cy.get('[data-testid=\"list-item-1\"]').should('have.css', 'order', '2');\n    cy.get('[data-testid=\"list-item-3\"]').should('have.css', 'order', '3');\n\n    // Verify list item 2 has moved to the top\n    cy.get('[data-testid=\"list-item-2\"]').should('have.css', 'transform', 'translateY(0)');\n\n    // Verify list item 1 and 3 have moved down\n    cy.get('[data-testid=\"list-item-1\"]').should('have.css', 'transform', 'translateY(100px)');\n    cy.get('[data-testid=\"list-item-3\"]').should('have.css', 'transform', 'translateY(200px)');\n\n    // Verify list item 2 is now at the top\n    cy.get('[data-testid=\"list-item-2\"]').should('have.css', 'order', '1');\n\n    // Verify list item 1 and 3 have new positions\n    cy.get('[data-testid=\"list-item-1\"]').should('have.css', 'order', '2');\n    cy.get('[data-testid=\"list-item-3\"]').should('have.css', 'order', '3');\n\n    // Verify list item 2 is visible and in the correct position\n    cy.get('[data-testid=\"list-item-2\"]').should('be.visible');\n    cy.get('[data-testid=\"list-item-2\"]').should('have.css', 'order', '1');\n  });\n\n  it('should handle reordering when list items are dragged over each other', () => {\n    // Verify initial list order\n    cy.get('[data-testid=\"list-item-1\"]').should('be.visible');\n    cy.get('[data-testid=\"list-item-2\"]').should('be.visible');\n    cy.get('[data-testid=\"list-item-3\"]').should('be.visible');\n\n    // Click and drag list item 2 over list item 1\n    cy.get('[data-testid=\"list-item-2\"]').click();\n    cy.get('[data-testid=\"list-item-1\"]').click();\n    cy.get('[data-testid=\"list-item-2\"]').click();\n\n    // Verify list item 2 is now between list item 1 and 3\n    cy.get('[data-testid=\"list-item-2\"]').should('have.css', 'order', '2');\n    cy.get('[data-testid=\"list-item-1\"]').should('have.css', 'order', '1');\n    cy.get('[data-testid=\"list-item-3\"]').should('have.css', 'order', '3');\n\n    // Verify list item 2 is visible and in the correct position\n    cy.get('[data-testid=\"list-item-2\"]').should('be.visible');\n    cy.get('[data-testid=\"list-item-2\"]').should('have.css', 'order', '2');\n\n    // Verify list item 1 and 3 have new positions\n    cy.get('[data-testid=\"list-item-1\"]').should('have.css', 'order', '1');\n    cy.get('[data-testid=\"list-item-3\"]').should('have.css', 'order', '3');\n\n    // Verify list item 2 is now between list item 1 and 3\n    cy.get('[data-testid=\"list-item-2\"]').should('have.css', 'order', '2');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4683,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3343,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 376.277,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7251,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2837,
+        "missing_keywords": [],
+        "assertion_count": 28,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 390.25,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

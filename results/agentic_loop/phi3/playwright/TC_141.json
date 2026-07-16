@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_141",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8425,
+  "total_latency_s": 306.144,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Video Modal Pause Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/video-modal');\n  });\n\n  test('should pause the video when modal is closed', async ({ page }) => {\n    // Open the modal using getByRole\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n\n    // Verify video is playing\n    const videoPlayer = page.locator('[data-testid=\"video-player\"]');\n    await expect(videoPlayer).toBeVisible();\n    const playButton = page.getByRole('button', { name: /play/i });\n    await expect(playButton).toBeVisible();\n\n    // Get the initial playback time\n    const initialTime = await videoPlayer.evaluate((el) => el.currentTime);\n    expect(initialTime).toBeLessThan(10);\n\n    // Close the modal using getByRole\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n\n    // Verify modal is no longer visible\n    await expect(modal).not.toBeVisible();\n\n    // Verify video is paused\n    await expect(videoPlayer).toHaveAttribute('paused', 'true');\n\n    // Verify play button is disabled\n    await expect(playButton).toBeDisabled();\n\n    // Verify play button text is disabled\n    await expect(playButton).toContainText('Disabled');\n\n    // Verify close button is visible\n    await expect(closeButton).toBeVisible();\n  });\n\n  test('should resume video when modal is reopened', async ({ page }) => {\n    // Open the modal using getByRole\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n\n    // Verify video is playing\n    const videoPlayer = page.locator('[data-testid=\"video-player\"]');\n    await expect(videoPlayer).toBeVisible();\n    const playButton = page.getByRole('button', { name: /play/i });\n    await expect(playButton).toBeVisible();\n\n    // Get the playback time\n    const playbackTime = await videoPlayer.evaluate((el) => el.currentTime);\n    expect(playbackTime).toBeGreaterThan(0);\n\n    // Close the modal using getByRole\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n\n    // Verify modal is no longer visible\n    await expect(modal).not.toBeVisible();\n\n    // Reopen the modal using getByRole\n    await openButton.click();\n\n    // Verify modal is visible again\n    await expect(modal).toBeVisible();\n\n    // Verify video is resumed\n    await expect(videoPlayer).toHaveAttribute('paused', 'false');\n\n    // Verify play button is enabled\n    await expect(playButton).toBeEnabled();\n\n    // Verify play button text is enabled\n    await expect(playButton).toContainText('Play');\n\n    // Verify close button is visible\n    await expect(closeButton).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8425,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.575,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 306.144,
+      "feedback_used": ""
+    }
+  ]
+}

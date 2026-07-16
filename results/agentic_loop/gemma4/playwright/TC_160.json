@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_160",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8324,
+  "total_latency_s": 72.357,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Numeric Column Summary Row', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table');\n  });\n\n  test('should display summary row with correct total when numeric column has data', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify numeric column header exists\n    const numericHeader = page.getByRole('columnheader', { name: /amount/i });\n    await expect(numericHeader).toBeVisible();\n\n    // Verify summary row is visible\n    const summaryRow = page.getByRole('row', { name: /summary/i });\n    await expect(summaryRow).toBeVisible();\n\n    // Verify summary row contains total amount\n    const totalAmountCell = page.getByRole('cell', { name: /total/i });\n    await expect(totalAmountCell).toContainText('$1,250.00');\n\n    // Verify summary row contains count\n    const totalCountCell = page.getByRole('cell', { name: /count/i });\n    await expect(totalCountCell).toContainText('15');\n\n    // Verify summary row is at the bottom of the table\n    const tableBody = page.getByRole('rowgroup', { name: /table body/i });\n    const summaryRowBoundingBox = await summaryRow.boundingBox();\n    const tableBodyBoundingBox = await tableBody.boundingBox();\n    expect(summaryRowBoundingBox.y).toBeGreaterThan(tableBodyBoundingBox.y);\n    expect(summaryRowBoundingBox.y).toBeLessThan(tableBodyBoundingBox.y + 10);\n  });\n\n  test('should not display summary row when numeric column is empty', async ({ page }) => {\n    // Intercept API call to return empty data\n    await page.route('**/api/table/data', route => {\n      route.abort();\n    });\n\n    // Click on empty state button\n    const emptyStateButton = page.getByRole('button', { name: /empty state/i });\n    await emptyStateButton.click();\n\n    // Wait for empty state to load\n    await page.waitForLoadState('networkidle');\n\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify no summary row is displayed\n    const summaryRow = page.getByRole('row', { name: /summary/i });\n    await expect(summaryRow).not.toBeVisible();\n\n    // Verify empty state message is displayed\n    const emptyMessage = page.getByText(/no data available/i);\n    await expect(emptyMessage).toBeVisible();\n\n    // Verify total amount cell does not exist\n    const totalAmountCell = page.getByRole('cell', { name: /total/i });\n    await expect(totalAmountCell).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8324,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5413,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.357,
+      "feedback_used": ""
+    }
+  ]
+}

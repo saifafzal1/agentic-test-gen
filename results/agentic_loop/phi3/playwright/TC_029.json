@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_029",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8354,
+  "total_latency_s": 862.867,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Data Persistence on Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should persist form data when navigating away and returning', async ({ page }) => {\n    // Fill out the form using getByLabel\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('John Doe');\n\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('john.doe@example.com');\n\n    const messageInput = page.getByLabel('Message');\n    await messageInput.fill('This is a test message');\n\n    // Submit the form\n    const submitButton = page.getByRole('button', { name: 'Submit' });\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Navigate away from the form\n    await page.goto('/dashboard');\n\n    // Verify form data is still present on the dashboard\n    const dashboardForm = page.getByLabel('Contact Form');\n    await expect(dashboardForm).toBeVisible();\n\n    const nameDisplay = page.getByText('John Doe');\n    await expect(nameDisplay).toBeVisible();\n\n    const emailDisplay = page.getByText('john.doe@example.com');\n    await expect(emailDisplay).toBeVisible();\n\n    // Return to the form\n    await page.goto('/form');\n\n    // Verify form data is still present\n    const nameInput = page.getByLabel('Full Name');\n    await expect(nameInput).toHaveValue('John Doe');\n\n    const emailInput = page.getByLabel('Email Address');\n    await expect(emailInput).toHaveValue('john.doe@example.com');\n\n    // Verify success message is still visible\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should not persist form data when navigating away and returning with invalid data', async ({ page }) => {\n    // Fill out the form using getByLabel\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('Jane Smith');\n\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('jane.smith@example.com');\n\n    // Submit the form\n    const submitButton = page.getByRole('button', { name: 'Submit' });\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Navigate away from the form\n    await page.goto('/dashboard');\n\n    // Return to the form with invalid data\n    await page.goto('/form');\n\n    // Verify form data is cleared\n    const nameInput = page.getByLabel('Full Name');\n    await expect(nameInput).toHaveValue('');\n\n    const emailInput = page.getByLabel('Email Address');\n    await expect(emailInput).toHaveValue('');\n\n    // Verify success message is no longer visible\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify error message appears\n    const errorMessage = page.getByText('Please fill out all fields');\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5064,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4212,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 382.216,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8354,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4515,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 480.651,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

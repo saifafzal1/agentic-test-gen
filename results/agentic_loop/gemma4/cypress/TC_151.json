@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_151",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7662,
+  "total_latency_s": 72.466,
+  "final_script": "describe('Table Column Freezing - First Column', () => {\n  beforeEach(() => {\n    cy.visit('/table');\n  });\n\n  it('should freeze the first column when scrolling horizontally', () => {\n    // Verify table is visible\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n    \n    // Verify first column header is visible\n    cy.get('[data-testid=\"table-header-first-column\"]').should('be.visible');\n    \n    // Verify first column data cells are visible\n    cy.get('[data-testid=\"table-cell-first-column-row-1\"]').should('be.visible');\n    cy.get('[data-testid=\"table-cell-first-column-row-2\"]').should('be.visible');\n    \n    // Scroll horizontally to trigger column freeze\n    cy.get('[data-testid=\"data-table\"]').then(($table) => {\n      const tableWidth = $table.width();\n      const scrollAmount = tableWidth * 1.5;\n      cy.wrap($table).scrollTo(0, 0);\n      cy.wrap($table).scrollTo(0, 0);\n      cy.wrap($table).scrollTo(0, scrollAmount);\n    });\n    \n    // Verify first column is frozen and remains visible\n    cy.get('[data-testid=\"table-cell-first-column-row-1\"]').should('be.visible');\n    cy.get('[data-testid=\"table-cell-first-column-row-2\"]').should('be.visible');\n    \n    // Verify other columns scroll normally\n    cy.get('[data-testid=\"table-cell-second-column-row-1\"]').should('be.visible');\n    cy.get('[data-testid=\"table-cell-third-column-row-1\"]').should('be.visible');\n    \n    // Verify first column content is not affected by scroll\n    cy.get('[data-testid=\"table-cell-first-column-row-1\"]').should('contain', 'ID');\n    cy.get('[data-testid=\"table-cell-first-column-row-2\"]').should('contain', '2');\n  });\n\n  it('should unfreeze the first column when scroll position is reset', () => {\n    // Scroll horizontally to freeze the first column\n    cy.get('[data-testid=\"data-table\"]').then(($table) => {\n      const tableWidth = $table.width();\n      cy.wrap($table).scrollTo(0, tableWidth * 2);\n    });\n    \n    // Verify first column is frozen\n    cy.get('[data-testid=\"table-cell-first-column-row-1\"]').should('be.visible');\n    \n    // Reset scroll position\n    cy.get('[data-testid=\"data-table\"]').then(($table) => {\n      cy.wrap($table).scrollTo(0, 0);\n    });\n    \n    // Verify first column is no longer frozen and scrolls with the table\n    cy.get('[data-testid=\"table-cell-first-column-row-1\"]').should('be.visible');\n    cy.get('[data-testid=\"table-cell-first-column-row-1\"]').should('not.have.css', 'position', 'sticky');\n    \n    // Verify all columns scroll together\n    cy.get('[data-testid=\"table-cell-second-column-row-1\"]').should('be.visible');\n    cy.get('[data-testid=\"table-cell-third-column-row-1\"]').should('be.visible');\n    \n    // Verify first column content is still visible\n    cy.get('[data-testid=\"table-cell-first-column-row-1\"]').should('contain', 'ID');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7662,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4205,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.466,
+      "feedback_used": ""
+    }
+  ]
+}

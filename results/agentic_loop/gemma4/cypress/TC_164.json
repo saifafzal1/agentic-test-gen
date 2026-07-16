@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_164",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7648,
+  "total_latency_s": 72.359,
+  "final_script": "describe('Table Column Sort Direction Indicator', () => {\n  beforeEach(() => {\n    cy.visit('/table');\n  });\n\n  it('should display arrow icon to indicate sort direction when column is sorted', () => {\n    // Verify table is visible\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n    \n    // Verify column headers are present\n    cy.get('[data-testid=\"column-header-name\"]').should('be.visible');\n    cy.get('[data-testid=\"column-header-email\"]').should('be.visible');\n    \n    // Click on column header to sort\n    cy.get('[data-testid=\"column-header-name\"]').click();\n    \n    // Verify arrow icon appears next to column header\n    cy.get('[data-testid=\"column-header-name\"]').find('[data-testid=\"sort-arrow-icon\"]').should('be.visible');\n    \n    // Verify arrow icon indicates ascending sort (up arrow)\n    cy.get('[data-testid=\"column-header-name\"]').find('[data-testid=\"sort-arrow-icon\"]').should('have.class', 'sort-arrow-up');\n    \n    // Verify table data is sorted\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', 'Alice');\n    cy.get('[data-testid=\"table-row\"]').last().should('contain', 'Zoe');\n    \n    // Click again to sort in descending order\n    cy.get('[data-testid=\"column-header-name\"]').click();\n    \n    // Verify arrow icon changes to descending sort (down arrow)\n    cy.get('[data-testid=\"column-header-name\"]').find('[data-testid=\"sort-arrow-icon\"]').should('have.class', 'sort-arrow-down');\n    \n    // Verify table data is sorted in descending order\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', 'Zoe');\n    cy.get('[data-testid=\"table-row\"]').last().should('contain', 'Alice');\n  });\n\n  it('should remove arrow icon when column is not sorted', () => {\n    // Verify table is visible\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n    \n    // Verify arrow icon is not visible initially\n    cy.get('[data-testid=\"column-header-name\"]').find('[data-testid=\"sort-arrow-icon\"]').should('not.exist');\n    \n    // Verify arrow icon is not visible on other columns\n    cy.get('[data-testid=\"column-header-email\"]').find('[data-testid=\"sort-arrow-icon\"]').should('not.exist');\n    \n    // Click on column header to sort\n    cy.get('[data-testid=\"column-header-name\"]').click();\n    \n    // Verify arrow icon appears\n    cy.get('[data-testid=\"column-header-name\"]').find('[data-testid=\"sort-arrow-icon\"]').should('be.visible');\n    \n    // Click on column header again to sort in descending order\n    cy.get('[data-testid=\"column-header-name\"]').click();\n    \n    // Verify arrow icon is still visible\n    cy.get('[data-testid=\"column-header-name\"]').find('[data-testid=\"sort-arrow-icon\"]').should('be.visible');\n    \n    // Click on a different column header to sort\n    cy.get('[data-testid=\"column-header-email\"]').click();\n    \n    // Verify arrow icon appears on the new column\n    cy.get('[data-testid=\"column-header-email\"]').find('[data-testid=\"sort-arrow-icon\"]').should('be.visible');\n    \n    // Verify arrow icon on the previous column is removed\n    cy.get('[data-testid=\"column-header-name\"]').find('[data-testid=\"sort-arrow-icon\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7648,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.416,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.359,
+      "feedback_used": ""
+    }
+  ]
+}

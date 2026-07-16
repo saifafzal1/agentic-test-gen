@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_051",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8278,
+  "total_latency_s": 37.495,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mobile Hamburger Menu Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should open and close the mobile hamburger menu correctly', async ({ page }) => {\n    // Verify the hamburger menu icon is visible by default\n    const menuIcon = page.getByRole('button', { name: /menu/i });\n    await expect(menuIcon).toBeVisible();\n\n    // Verify the menu is closed by default\n    const menuList = page.getByRole('list', { name: /menu items/i });\n    await expect(menuList).not.toBeVisible();\n\n    // Click the hamburger menu icon to open the menu\n    await menuIcon.click();\n\n    // Verify the menu list is now visible\n    await expect(menuList).toBeVisible();\n\n    // Verify menu items are present\n    const menuItem = page.getByRole('menuitem', { name: /home/i });\n    await expect(menuItem).toBeVisible();\n\n    const menuItem2 = page.getByRole('menuitem', { name: /settings/i });\n    await expect(menuItem2).toBeVisible();\n\n    // Verify the menu is closed when clicking the icon again\n    await menuIcon.click();\n    await expect(menuList).not.toBeVisible();\n\n    // Verify the menu icon is still visible\n    await expect(menuIcon).toBeVisible();\n  });\n\n  test('should handle menu item clicks and navigate to the correct page', async ({ page }) => {\n    // Open the menu\n    const menuIcon = page.getByRole('button', { name: /menu/i });\n    await menuIcon.click();\n\n    // Verify the menu list is visible\n    const menuList = page.getByRole('list', { name: /menu items/i });\n    await expect(menuList).toBeVisible();\n\n    // Click the home menu item\n    const homeMenuItem = page.getByRole('menuitem', { name: /home/i });\n    await homeMenuItem.click();\n\n    // Verify navigation to the home page\n    const homePage = page.getByRole('main', { name: /home/i });\n    await expect(homePage).toBeVisible();\n\n    // Verify the menu is closed\n    await expect(menuList).not.toBeVisible();\n\n    // Click the settings menu item\n    const settingsMenuItem = page.getByRole('menuitem', { name: /settings/i });\n    await settingsMenuItem.click();\n\n    // Verify navigation to the settings page\n    const settingsPage = page.getByRole('main', { name: /settings/i });\n    await expect(settingsPage).toBeVisible();\n\n    // Verify the menu is closed\n    await expect(menuList).not.toBeVisible();\n\n    // Verify the hamburger menu icon is still visible\n    await expect(menuIcon).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8278,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.526,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 37.495,
+      "feedback_used": ""
+    }
+  ]
+}

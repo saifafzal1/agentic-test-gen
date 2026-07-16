@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_110",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8103,
+  "total_latency_s": 43.716,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async Data Fetching - Non-blocking Initial Page Render', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display initial page content without waiting for async data', async ({ page }) => {\n    // Verify initial page content is visible\n    const header = page.getByRole('heading', { name: /dashboard/i });\n    await expect(header).toBeVisible();\n\n    const userList = page.getByRole('list', { name: /users/i });\n    await expect(userList).toBeVisible();\n\n    const userCount = page.getByText(/10 users/i);\n    await expect(userCount).toBeVisible();\n\n    // Verify async data fetching has not blocked initial render\n    const loadingIndicator = page.getByRole('status', { name: /loading/i });\n    await expect(loadingIndicator).toBeVisible();\n\n    // Verify async data is loaded after initial render\n    const userItem = page.getByRole('listitem', { name: /user/i });\n    await expect(userItem).toBeVisible();\n\n    // Verify async data is displayed\n    const userName = page.getByText(/John Doe/i);\n    await expect(userName).toBeVisible();\n\n    // Verify async data is fully loaded\n    const userEmail = page.getByText(/john.doe@example.com/i);\n    await expect(userEmail).toBeVisible();\n\n    // Verify loading indicator is gone\n    await expect(loadingIndicator).not.toBeVisible();\n  });\n\n  test('should handle error state when async data fetching fails', async ({ page }) => {\n    // Mock async data fetch failure\n    await page.route('**/api/users', (route) => {\n      route.abort('failed');\n    });\n\n    // Verify error state is displayed\n    const errorMessage = page.getByText(/failed to load users/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify loading indicator is still visible\n    const loadingIndicator = page.getByRole('status', { name: /loading/i });\n    await expect(loadingIndicator).toBeVisible();\n\n    // Verify user list is empty\n    const userList = page.getByRole('list', { name: /users/i });\n    await expect(userList).toBeEmpty();\n\n    // Verify error message is visible\n    const errorList = page.getByRole('list', { name: /error/i });\n    await expect(errorList).toBeVisible();\n\n    // Verify error message contains specific text\n    await expect(errorList).toContainText(/failed to load users/i);\n\n    // Verify user count is not displayed\n    const userCount = page.getByText(/10 users/i);\n    await expect(userCount).not.toBeVisible();\n\n    // Verify user item is not displayed\n    const userItem = page.getByRole('listitem', { name: /user/i });\n    await expect(userItem).not.toBeVisible();\n\n    // Verify user email is not displayed\n    const userEmail = page.getByText(/john.doe@example.com/i);\n    await expect(userEmail).not.toBeVisible();\n\n    // Verify error message is still visible after retry\n    await page.reload();\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8103,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4675,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 43.716,
+      "feedback_used": ""
+    }
+  ]
+}

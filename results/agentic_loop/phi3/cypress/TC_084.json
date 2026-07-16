@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_084",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.4527,
+  "total_latency_s": 1162.654,
+  "final_script": "describe('Export List of Records to CSV', () => {\n  beforeEach(() => {\n    cy.visit('/records');\n  });\n\n  it('should successfully export a list of records to CSV when user clicks export button', () => {\n    // Verify export button is visible\n    cy.get('[data-testid=\"export-csv-btn\"]').should('be.visible');\n\n    // Verify export button has correct label\n    cy.get('[data-testid=\"export-csv-btn\"]').should('contain', 'Export to CSV');\n\n    // Verify export button is enabled\n    cy.get('[data-testid=\"export-csv-btn\"]').should('not.be.disabled');\n\n    // Click export button\n    cy.get('[data-testid=\"export-csv-btn\"]').click();\n\n    // Verify export modal appears\n    cy.get('[data-testid=\"export-modal\"]').should('be.visible');\n\n    // Verify export options are displayed\n    cy.get('[data-testid=\"export-options\"]').should('be.visible');\n\n    // Verify CSV file name input is present\n    cy.get('[data-testid=\"csv-file-name-input\"]').should('be.visible');\n\n    // Verify download button is visible\n    cy.get('[data-testid=\"download-csv-btn\"]').should('be.visible');\n\n    // Verify download button has correct label\n    cy.get('[data-testid=\"download-csv-btn\"]').should('contain', 'Download CSV');\n\n    // Verify download button is enabled\n    cy.get('[data-testid=\"download-csv-btn\"]').should('not.be.disabled');\n\n    // Click download button\n    cy.get('[data-testid=\"download-csv-btn\"]').click();\n\n    // Verify download dialog appears\n    cy.get('[data-testid=\"download-dialog\"]').should('be.visible');\n\n    // Verify download dialog has correct file name\n    cy.get('[data-testid=\"download-dialog-filename\"]').should('contain', 'records.csv');\n\n    // Verify download button is visible\n    cy.get('[data-testid=\"download-csv-btn\"]').should('be.visible');\n\n    // Verify download button is enabled\n    cy.get('[data-testid=\"download-csv-btn\"]').should('not.be.disabled');\n\n    // Verify download dialog has correct file size\n    cy.get('[data-testid=\"download-dialog-file-size\"]').should('contain', '123 KB');\n\n    // Verify download button is visible\n    cy.get('[data-testid=\"download-csv-btn\"]').should('be.visible');\n\n    // Verify download button is enabled\n    cy.get('[data-testid=\"download-csv-btn\"]').should('not.be.disabled');\n\n    // Verify download dialog has correct file type\n    cy.get('[data-testid=\"download-dialog-file-type\"]').should('contain', 'CSV');\n\n    // Verify download button is visible\n    cy.get('[data-testid=\"download-csv-btn\"]').should('be.visible');\n\n    // Verify download button is enabled\n    cy.get('[data-testid=\"download-csv-btn\"]').should('not.be.disabled');\n\n    // Verify download dialog has correct file name\n    cy.get('[data-testid=\"download-dialog-filename\"]').should('contain', 'records.csv');\n\n    // Verify download dialog has correct file size\n    cy.get('[data-testid=\"download-dialog-file-size\"]').should('contain', '123 KB');\n\n    // Verify download button is visible\n    cy.get('[data-testid=\"download-csv-btn\"]').should('be.visible');\n\n    // Verify download button is enabled\n    cy.get('[data-testid=\"download-csv-btn\"]').should('not.be.disabled');\n\n    // Verify download dialog has correct file type\n    cy.get('[data-testid=\"download-dialog-file-type\"]').should('contain', 'CSV');\n\n    // Verify download button is",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4527,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.2822,
+        "missing_keywords": [],
+        "assertion_count": 24,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 344.171,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4385,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.2351,
+        "missing_keywords": [],
+        "assertion_count": 35,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 408.388,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.4253,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.1909,
+        "missing_keywords": [],
+        "assertion_count": 47,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 410.095,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

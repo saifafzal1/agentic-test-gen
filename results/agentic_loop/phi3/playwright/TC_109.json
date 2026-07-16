@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_109",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8416,
+  "total_latency_s": 52.025,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async Login Spinner', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should display spinner while login request is in progress', async ({ page }) => {\n    // Setup: intercept the login API call\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('Request aborted');\n    });\n\n    // Verify spinner is visible\n    const spinner = page.getByRole('status', { name: /loading/i });\n    await expect(spinner).toBeVisible();\n\n    // Verify login button is disabled\n    const loginButton = page.getByRole('button', { name: /sign in/i });\n    await expect(loginButton).toBeDisabled();\n\n    // Verify spinner is visible and has loading text\n    const spinnerText = page.getByText(/loading/i);\n    await expect(spinnerText).toBeVisible();\n\n    // Verify error message is not visible\n    const errorMessage = page.getByText(/error/i);\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify login form is not empty\n    const emailInput = page.getByLabel(/email/i);\n    await expect(emailInput).toHaveValue('user@example.com');\n\n    const passwordInput = page.getByLabel(/password/i);\n    await expect(passwordInput).toHaveValue('password123');\n\n    // Verify login button is still disabled\n    await expect(loginButton).toBeDisabled();\n  });\n\n  test('should hide spinner and show success message after successful login', async ({ page }) => {\n    // Setup: intercept the login API call with success response\n    await page.route('**/api/auth/login', (route) => {\n      route.continue();\n    });\n\n    // Verify spinner is visible\n    const spinner = page.getByRole('status', { name: /loading/i });\n    await expect(spinner).toBeVisible();\n\n    // Verify login button is disabled\n    const loginButton = page.getByRole('button', { name: /sign in/i });\n    await expect(loginButton).toBeDisabled();\n\n    // Verify spinner is visible and has loading text\n    const spinnerText = page.getByText(/loading/i);\n    await expect(spinnerText).toBeVisible();\n\n    // Verify error message is not visible\n    const errorMessage = page.getByText(/error/i);\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify login form is not empty\n    const emailInput = page.getByLabel(/email/i);\n    await expect(emailInput).toHaveValue('user@example.com');\n\n    const passwordInput = page.getByLabel(/password/i);\n    await expect(passwordInput).toHaveValue('password123');\n\n    // Verify login button is still disabled\n    await expect(loginButton).toBeDisabled();\n\n    // Click login button\n    const loginButton = page.getByRole('button', { name: /sign in/i });\n    await loginButton.click();\n\n    // Wait for spinner to disappear\n    await page.waitForTimeout(500);\n\n    // Verify spinner is no longer visible\n    const spinner = page.getByRole('status', { name: /loading/i });\n    await expect(spinner).not.toBeVisible();\n\n    // Verify success message is visible\n    const successMessage = page.getByText(/logged in/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify user is redirected to dashboard\n    const dashboardLink = page.getByRole('link', { name: /dashboard/i });\n    await expect(dashboardLink).toBeVisible();\n\n    // Verify user is logged in\n    const userName = page.getByText(/user@example.com/i);\n    await expect(userName).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8416,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4721,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 52.025,
+      "feedback_used": ""
+    }
+  ]
+}

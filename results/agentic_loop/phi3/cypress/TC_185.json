@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_185",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7427,
+  "total_latency_s": 685.868,
+  "final_script": "describe('File Upload Organization into Folders', () => {\n  beforeEach(() => {\n    cy.visit('/file-upload');\n  });\n\n  it('should successfully upload files and organize them into folders', () => {\n    // Intercept the file upload API\n    cy.intercept('POST', '/api/upload/files', {\n      statusCode: 200,\n      body: {\n        success: true,\n        fileId: '12345',\n        folderId: '67890',\n        filePath: '/uploads/folder/67890/file_12345.txt'\n      }\n    }).as('uploadFile');\n\n    // Select file input and upload a file\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/sample.txt', { force: true });\n\n    // Verify file upload API was called\n    cy.wait('@uploadFile');\n\n    // Verify file appears in the upload list\n    cy.get('[data-testid=\"upload-list\"]').should('be.visible');\n    cy.get('[data-testid=\"upload-item-12345\"]').should('contain', 'sample.txt');\n\n    // Verify file is organized into the correct folder\n    cy.get('[data-testid=\"upload-item-12345\"]').should('have.css', 'background-image', 'url(/uploads/folder/67890/file_12345.png)');\n\n    // Verify file name is displayed\n    cy.get('[data-testid=\"upload-item-12345\"]').should('contain', 'sample.txt');\n\n    // Verify file size is displayed\n    cy.get('[data-testid=\"upload-item-12345\"]').should('contain', 'Size: 123 KB');\n\n    // Verify file upload button is disabled after successful upload\n    cy.get('[data-testid=\"upload-button\"]').should('be.disabled');\n  });\n\n  it('should handle uploading files to non-existent folders', () => {\n    // Intercept the file upload API\n    cy.intercept('POST', '/api/upload/files', {\n      statusCode: 200,\n      body: {\n        success: false,\n        error: 'Folder does not exist'\n      }\n    }).as('uploadFileError');\n\n    // Select file input and upload a file\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/sample.txt', { force: true });\n\n    // Verify file upload API was called\n    cy.wait('@uploadFileError');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Folder does not exist');\n\n    // Verify file upload button is still enabled\n    cy.get('[data-testid=\"upload-button\"]').should('not.be.disabled');\n\n    // Verify file is not listed in the upload list\n    cy.get('[data-testid=\"upload-list\"]').should('not.contain', 'sample.txt');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4595,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3051,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 341.033,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7427,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3422,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 344.835,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

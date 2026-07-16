@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_104",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7965,
+  "total_latency_s": 72.733,
+  "final_script": "describe('Error Message Screen Reader Accessibility', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n  });\n\n  it('should display error message with aria-live=\"polite\" and be announced by screen reader', () => {\n    // Attempt to submit form with invalid email\n    cy.get('[data-testid=\"email-input\"]').type('invalid-email');\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify error message appears\n    cy.get('[data-testid=\"email-error-message\"]').should('be.visible');\n\n    // Verify aria-live=\"polite\" attribute is present\n    cy.get('[data-testid=\"email-error-message\"]').should('have.attr', 'aria-live', 'polite');\n\n    // Verify error message contains descriptive text\n    cy.get('[data-testid=\"email-error-message\"]').should('contain', 'Please enter a valid email address');\n\n    // Verify error message has role=\"alert\" or similar for screen reader announcement\n    cy.get('[data-testid=\"email-error-message\"]').should('have.attr', 'role', 'alert');\n\n    // Verify error message is associated with the input field\n    cy.get('[data-testid=\"email-input\"]').should('have.attr', 'aria-describedby', '[data-testid=\"email-error-message\"]');\n\n    // Verify error message is visible to screen reader\n    cy.get('[data-testid=\"email-error-message\"]').should('be.visible');\n  });\n\n  it('should handle multiple error messages and announce them correctly', () => {\n    // Attempt to submit form with invalid email and password\n    cy.get('[data-testid=\"email-input\"]').type('invalid-email');\n    cy.get('[data-testid=\"password-input\"]').type('short');\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify both error messages appear\n    cy.get('[data-testid=\"email-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"password-error-message\"]').should('be.visible');\n\n    // Verify both error messages have aria-live=\"polite\"\n    cy.get('[data-testid=\"email-error-message\"]').should('have.attr', 'aria-live', 'polite');\n    cy.get('[data-testid=\"password-error-message\"]').should('have.attr', 'aria-live', 'polite');\n\n    // Verify both error messages are associated with their respective inputs\n    cy.get('[data-testid=\"email-input\"]').should('have.attr', 'aria-describedby', '[data-testid=\"email-error-message\"]');\n    cy.get('[data-testid=\"password-input\"]').should('have.attr', 'aria-describedby', '[data-testid=\"password-error-message\"]');\n\n    // Verify error messages are not hidden from screen readers\n    cy.get('[data-testid=\"email-error-message\"]').should('not.have.attr', 'hidden');\n    cy.get('[data-testid=\"password-error-message\"]').should('not.have.attr', 'hidden');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7965,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5217,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.733,
+      "feedback_used": ""
+    }
+  ]
+}

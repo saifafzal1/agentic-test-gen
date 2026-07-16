@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_101",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.794,
+  "total_latency_s": 77.258,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Graceful Recovery After JavaScript Error', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should recover gracefully after a JavaScript error and display error boundary', async ({ page }) => {\n    // Intercept the API call that will fail\n    await page.route('**/api/data', (route) => {\n      route.abort('failed');\n    });\n\n    // Click the button that triggers the error\n    const errorButton = page.getByRole('button', { name: /load data/i });\n    await errorButton.click();\n\n    // Wait for the error boundary to render\n    await page.waitForTimeout(500);\n\n    // Verify the error boundary is visible\n    const errorBoundary = page.getByText(/error boundary/i);\n    await expect(errorBoundary).toBeVisible();\n\n    // Verify the error message is displayed\n    const errorMessage = page.getByText(/failed to load data/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the retry button is available\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify the main content is not visible\n    const mainContent = page.getByText(/dashboard/i);\n    await expect(mainContent).not.toBeVisible();\n\n    // Click retry button\n    await retryButton.click();\n\n    // Verify the error boundary is gone\n    await expect(errorBoundary).not.toBeVisible();\n\n    // Verify the main content is visible after retry\n    await expect(mainContent).toBeVisible();\n  });\n\n  test('should handle multiple consecutive JavaScript errors and maintain app state', async ({ page }) => {\n    // Intercept the API call and abort it\n    await page.route('**/api/data', (route) => {\n      route.abort('failed');\n    });\n\n    // Click the button to trigger the first error\n    const errorButton = page.getByRole('button', { name: /load data/i });\n    await errorButton.click();\n\n    // Wait for the first error boundary to appear\n    await page.waitForTimeout(500);\n    const errorBoundary = page.getByText(/error boundary/i);\n    await expect(errorBoundary).toBeVisible();\n\n    // Click retry button\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await retryButton.click();\n\n    // Verify the error boundary is gone\n    await expect(errorBoundary).not.toBeVisible();\n\n    // Click the button again to trigger a second error\n    await errorButton.click();\n\n    // Wait for the second error boundary to appear\n    await page.waitForTimeout(500);\n    await expect(errorBoundary).toBeVisible();\n\n    // Verify the retry button is still available\n    await expect(retryButton).toBeVisible();\n\n    // Verify the app state is preserved (e.g., user profile is still visible)\n    const userProfile = page.getByText(/user profile/i);\n    await expect(userProfile).toBeVisible();\n\n    // Verify the retry button is still functional\n    await retryButton.click();\n    await expect(errorBoundary).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.794,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4132,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 77.258,
+      "feedback_used": ""
+    }
+  ]
+}

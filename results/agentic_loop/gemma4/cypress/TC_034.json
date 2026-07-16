@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_034",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7475,
+  "total_latency_s": 71.443,
+  "final_script": "describe('Form Auto-Save as Draft', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n  });\n\n  it('should auto-save form as draft every 30 seconds', () => {\n    // Fill form with initial data\n    cy.get('[data-testid=\"form-input-name\"]').type('John Doe');\n    cy.get('[data-testid=\"form-input-email\"]').type('john@example.com');\n    cy.get('[data-testid=\"form-input-message\"]').type('This is a test message for auto-save.');\n\n    // Verify form is not yet saved\n    cy.get('[data-testid=\"save-status\"]').should('contain', 'Unsaved');\n\n    // Wait for the first auto-save interval (30 seconds)\n    cy.wait(31000);\n\n    // Verify form is saved as draft\n    cy.get('[data-testid=\"save-status\"]').should('contain', 'Saved as Draft');\n    cy.get('[data-testid=\"draft-indicator\"]').should('be.visible');\n\n    // Modify form data\n    cy.get('[data-testid=\"form-input-name\"]').clear().type('Jane Doe');\n    cy.get('[data-testid=\"form-input-email\"]').clear().type('jane@example.com');\n\n    // Wait for the second auto-save interval\n    cy.wait(31000);\n\n    // Verify form is updated and saved as draft\n    cy.get('[data-testid=\"save-status\"]').should('contain', 'Saved as Draft');\n    cy.get('[data-testid=\"draft-indicator\"]').should('be.visible');\n    cy.get('[data-testid=\"form-input-name\"]').should('have.value', 'Jane Doe');\n  });\n\n  it('should not auto-save when form is empty or disabled', () => {\n    // Verify form is not saved when empty\n    cy.get('[data-testid=\"save-status\"]').should('contain', 'Unsaved');\n\n    // Wait for the first auto-save interval\n    cy.wait(31000);\n\n    // Verify form is still not saved\n    cy.get('[data-testid=\"save-status\"]').should('contain', 'Unsaved');\n    cy.get('[data-testid=\"draft-indicator\"]').should('not.exist');\n\n    // Disable form inputs\n    cy.get('[data-testid=\"form-input-name\"]').click();\n    cy.get('[data-testid=\"form-input-name\"]').should('be.disabled');\n    cy.get('[data-testid=\"form-input-email\"]').should('be.disabled');\n\n    // Wait for the auto-save interval while disabled\n    cy.wait(31000);\n\n    // Verify form is still not saved\n    cy.get('[data-testid=\"save-status\"]').should('contain', 'Unsaved');\n    cy.get('[data-testid=\"draft-indicator\"]').should('not.exist');\n\n    // Enable form inputs\n    cy.get('[data-testid=\"form-input-name\"]').should('not.be.disabled');\n    cy.get('[data-testid=\"form-input-email\"]').should('not.be.disabled');\n\n    // Fill form with data\n    cy.get('[data-testid=\"form-input-name\"]').type('Test User');\n    cy.get('[data-testid=\"form-input-email\"]').type('test@example.com');\n\n    // Wait for auto-save\n    cy.wait(31000);\n\n    // Verify form is saved as draft\n    cy.get('[data-testid=\"save-status\"]').should('contain', 'Saved as Draft');\n    cy.get('[data-testid=\"draft-indicator\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7475,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3582,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.443,
+      "feedback_used": ""
+    }
+  ]
+}

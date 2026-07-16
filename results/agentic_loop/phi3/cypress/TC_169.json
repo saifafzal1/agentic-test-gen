@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_169",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7656,
+  "total_latency_s": 391.694,
+  "final_script": "describe('Multiple File Upload', () => {\n  beforeEach(() => {\n    cy.visit('/file-upload');\n  });\n\n  it('should successfully upload multiple files at once', () => {\n    // Intercept the file upload API endpoint\n    cy.intercept('POST', '/api/uploads/batch').as('uploadBatch');\n\n    // Select multiple files from the file input\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/file1.pdf', { force: true });\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/file2.docx', { force: true });\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/file3.jpg', { force: true });\n\n    // Verify files are selected\n    cy.get('[data-testid=\"file-input\"]').should('have.files.count', 3);\n\n    // Click the upload button\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for the upload batch API call\n    cy.wait('@uploadBatch');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Files uploaded successfully');\n\n    // Verify file names are displayed\n    cy.get('[data-testid=\"uploaded-files-list\"]').should('be.visible');\n    cy.get('[data-testid=\"uploaded-files-list\"]').should('contain', 'file1.pdf');\n    cy.get('[data-testid=\"uploaded-files-list\"]').should('contain', 'file2.docx');\n    cy.get('[data-testid=\"uploaded-files-list\"]').should('contain', 'file3.jpg');\n\n    // Verify file sizes are displayed\n    cy.get('[data-testid=\"file-size\"]').should('be.visible');\n    cy.get('[data-testid=\"file-size\"]').should('contain', '1.2 MB');\n    cy.get('[data-testid=\"file-size\"]').should('contain', '2.5 MB');\n    cy.get('[data-testid=\"file-size\"]').should('contain', '3.1 MB');\n\n    // Verify error message does not appear\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n  });\n\n  it('should handle uploading multiple files with invalid file types', () => {\n    // Intercept the file upload API endpoint\n    cy.intercept('POST', '/api/uploads/batch').as('uploadBatch');\n\n    // Select multiple files, including an invalid file type\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/file1.pdf', { force: true });\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/file2.docx', { force: true });\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/invalid-file.exe', { force: true });\n\n    // Verify files are selected\n    cy.get('[data-testid=\"file-input\"]').should('have.files.count', 3);\n\n    // Click the upload button\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for the upload batch API call\n    cy.wait('@uploadBatch');\n\n    // Verify error message appears for invalid file\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Invalid file type');\n\n    // Verify success message does not appear\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n\n    // Verify only valid files are listed\n    cy.get('[data-testid=\"uploaded-files-list\"]').should('be.visible');\n    cy.get('[data-testid=\"uploaded-files-list\"]').should('contain', 'file1.pdf');\n    cy.get('[data-testid=\"uploaded-files-list\"]').should('contain', 'file2.docx');\n\n    // Verify error message is visible\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'File type not supported');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5006,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.442,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 55.189,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7656,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4187,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 336.505,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

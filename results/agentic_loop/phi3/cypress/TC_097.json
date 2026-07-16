@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_097",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7693,
+  "total_latency_s": 877.164,
+  "final_script": "describe('Email Uniqueness Validation - Registration', () => {\n  beforeEach(() => {\n    cy.visit('/register');\n  });\n\n  it('should display error when trying to register with an already-used email', () => {\n    // Setup: Register with a valid email\n    cy.get('[data-testid=\"email-input\"]').type('testuser@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('SecurePassword123!');\n    cy.get('[data-testid=\"confirm-password-input\"]').type('SecurePassword123!');\n    cy.get('[data-testid=\"register-button\"]').click();\n\n    // Intercept the registration API call\n    cy.intercept('POST', '/api/auth/register').as('registerRequest');\n\n    // Verify error message appears\n    cy.wait('@registerRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(400);\n    });\n\n    // Verify error message is visible\n    cy.get('[data-testid=\"email-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"email-error-message\"]').should('contain', 'Email already in use');\n\n    // Verify form is still visible\n    cy.get('[data-testid=\"email-input\"]').should('be.visible');\n    cy.get('[data-testid=\"password-input\"]').should('be.visible');\n    cy.get('[data-testid=\"confirm-password-input\"]').should('be.visible');\n    cy.get('[data-testid=\"register-button\"]').should('be.visible');\n  });\n\n  it('should not display error when registering with a new email', () => {\n    // Setup: Register with a new, valid email\n    cy.get('[data-testid=\"email-input\"]').type('newuser@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('SecurePassword123!');\n    cy.get('[data-testid=\"confirm-password-input\"]').type('SecurePassword123!');\n    cy.get('[data-testid=\"register-button\"]').click();\n\n    // Intercept the registration API call\n    cy.intercept('POST', '/api/auth/register').as('registerRequest');\n\n    // Verify success message appears\n    cy.wait('@registerRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify success message is visible\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Registration successful');\n\n    // Verify form is cleared\n    cy.get('[data-testid=\"email-input\"]').should('have.value', '');\n    cy.get('[data-testid=\"password-input\"]').should('have.value', '');\n    cy.get('[data-testid=\"confirm-password-input\"]').should('have.value', '');\n    cy.get('[data-testid=\"register-button\"]').should('be.disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.479,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.37,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 391.025,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7693,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.431,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 486.139,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

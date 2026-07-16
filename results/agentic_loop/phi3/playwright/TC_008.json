@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_008",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8423,
+  "total_latency_s": 43.419,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Loading Spinner', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should display loading spinner while login request is processing', async ({ page }) => {\n    // Setup intercept for login API\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('Request aborted');\n    });\n\n    // Verify spinner is visible initially\n    const spinner = page.getByRole('status');\n    await expect(spinner).toBeVisible();\n\n    // Verify spinner has correct text\n    await expect(spinner).toContainText('Loading...');\n\n    // Verify login button is enabled\n    const loginButton = page.getByRole('button', { name: /sign in/i });\n    await expect(loginButton).toBeEnabled();\n\n    // Fill login form\n    const emailInput = page.getByLabel(/email/i);\n    await emailInput.fill('user@example.com');\n\n    const passwordInput = page.getByLabel(/password/i);\n    await passwordInput.fill('password123');\n\n    // Click login button\n    await loginButton.click();\n\n    // Wait for spinner to disappear\n    const spinnerAfterClick = page.getByRole('status');\n    await expect(spinnerAfterClick).not.toBeVisible();\n\n    // Verify login success message appears\n    const successMessage = page.getByText(/logged in/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify user is redirected to dashboard\n    const dashboard = page.getByRole('region', { name: /dashboard/i });\n    await expect(dashboard).toBeVisible();\n  });\n\n  test('should hide spinner and show error message when login fails', async ({ page }) => {\n    // Setup intercept for failed login API\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('Failed to authenticate');\n    });\n\n    // Verify spinner is visible initially\n    const spinner = page.getByRole('status');\n    await expect(spinner).toBeVisible();\n\n    // Verify spinner has correct text\n    await expect(spinner).toContainText('Loading...');\n\n    // Fill login form\n    const emailInput = page.getByLabel(/email/i);\n    await emailInput.fill('user@example.com');\n\n    const passwordInput = page.getByLabel(/password/i);\n    await passwordInput.fill('wrongpassword');\n\n    // Click login button\n    const loginButton = page.getByRole('button', { name: /sign in/i });\n    await loginButton.click();\n\n    // Wait for spinner to disappear\n    const spinnerAfterClick = page.getByRole('status');\n    await expect(spinnerAfterClick).not.toBeVisible();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/authentication failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify login button is disabled\n    await expect(loginButton).not.toBeEnabled();\n\n    // Verify user is not redirected\n    const dashboard = page.getByRole('region', { name: /dashboard/i });\n    await expect(dashboard).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8423,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4742,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 43.419,
+      "feedback_used": ""
+    }
+  ]
+}

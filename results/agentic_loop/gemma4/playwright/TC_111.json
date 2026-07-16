@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_111",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7785,
+  "total_latency_s": 72.005,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Multiple Concurrent API Calls Resolution', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/data');\n  });\n\n  test('should resolve multiple concurrent API calls before displaying data', async ({ page }) => {\n    // Intercept the first API call\n    await page.route('**/api/data/1', (route) => {\n      route.abort('failed');\n    });\n\n    // Intercept the second API call\n    await page.route('**/api/data/2', (route) => {\n      route.continue();\n    });\n\n    // Intercept the third API call\n    await page.route('**/api/data/3', (route) => {\n      route.continue();\n    });\n\n    // Verify loading state is visible\n    const loadingIndicator = page.getByRole('status', { name: /loading/i });\n    await expect(loadingIndicator).toBeVisible();\n\n    // Verify data container is empty\n    const dataContainer = page.getByTestId('data-container');\n    await expect(dataContainer).toHaveText('');\n\n    // Wait for the first API call to fail and the others to resolve\n    await page.waitForTimeout(500);\n\n    // Verify error message for the failed call\n    const errorMessage = page.getByText('Failed to load data');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify data is displayed from successful calls\n    const dataItems = page.getByTestId('data-item');\n    await expect(dataItems).toHaveCount(2);\n\n    // Verify data content\n    const item1 = page.getByText('Data from API 2');\n    const item2 = page.getByText('Data from API 3');\n    await expect(item1).toBeVisible();\n    await expect(item2).toBeVisible();\n\n    // Verify loading indicator is gone\n    await expect(loadingIndicator).not.toBeVisible();\n  });\n\n  test('should handle all concurrent API calls resolving successfully', async ({ page }) => {\n    // Intercept all three API calls and resolve them\n    await page.route('**/api/data/1', (route) => {\n      route.continue();\n    });\n\n    await page.route('**/api/data/2', (route) => {\n      route.continue();\n    });\n\n    await page.route('**/api/data/3', (route) => {\n      route.continue();\n    });\n\n    // Verify loading state is visible\n    const loadingIndicator = page.getByRole('status', { name: /loading/i });\n    await expect(loadingIndicator).toBeVisible();\n\n    // Verify data container is empty initially\n    const dataContainer = page.getByTestId('data-container');\n    await expect(dataContainer).toHaveText('');\n\n    // Wait for all API calls to resolve\n    await page.waitForTimeout(1000);\n\n    // Verify loading indicator is gone\n    await expect(loadingIndicator).not.toBeVisible();\n\n    // Verify all three data items are displayed\n    const dataItems = page.getByTestId('data-item');\n    await expect(dataItems).toHaveCount(3);\n\n    // Verify data content\n    const item1 = page.getByText('Data from API 1');\n    const item2 = page.getByText('Data from API 2');\n    const item3 = page.getByText('Data from API 3');\n    await expect(item1).toBeVisible();\n    await expect(item2).toBeVisible();\n    await expect(item3).toBeVisible();\n\n    // Verify success message is displayed\n    const successMessage = page.getByText('Data loaded successfully');\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7785,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3615,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.005,
+      "feedback_used": ""
+    }
+  ]
+}

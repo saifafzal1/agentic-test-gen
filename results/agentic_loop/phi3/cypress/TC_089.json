@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_089",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7681,
+  "total_latency_s": 348.287,
+  "final_script": "describe('Error Page Display on 500 Server Error', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should display error page when server returns 500 status', () => {\n    // Intercept the API call and simulate a 500 error response\n    cy.intercept('GET', '/api/data', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' }\n    }).as('apiError');\n\n    // Attempt to load data\n    cy.get('[data-testid=\"load-data-button\"]').click();\n\n    // Wait for the error response\n    cy.wait('@apiError');\n\n    // Verify error page is displayed\n    cy.get('[data-testid=\"error-page\"]').should('be.visible');\n    cy.get('[data-testid=\"error-title\"]').should('contain', 'Something went wrong');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Internal Server Error');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n\n    // Verify navigation back button is available\n    cy.get('[data-testid=\"back-to-home-button\"]').should('be.visible');\n  });\n\n  it('should handle 500 error gracefully and not crash the app', () => {\n    // Intercept the API call and simulate a 500 error response\n    cy.intercept('GET', '/api/data', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' }\n    }).as('apiError');\n\n    // Attempt to load data\n    cy.get('[data-testid=\"load-data-button\"]').click();\n\n    // Wait for the error response\n    cy.wait('@apiError');\n\n    // Verify error page is displayed\n    cy.get('[data-testid=\"error-page\"]').should('be.visible');\n\n    // Verify user can navigate back to previous page\n    cy.get('[data-testid=\"back-to-home-button\"]').click();\n\n    // Verify app is still responsive and user can interact with other elements\n    cy.get('[data-testid=\"dashboard-section\"]').should('be.visible');\n    cy.get('[data-testid=\"dashboard-header\"]').should('contain', 'Dashboard');\n\n    // Verify error message is cleared after retry\n    cy.get('[data-testid=\"retry-button\"]').click();\n    cy.get('[data-testid=\"error-page\"]').should('not.exist');\n    cy.get('[data-testid=\"dashboard-section\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7681,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.427,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 348.287,
+      "feedback_used": ""
+    }
+  ]
+}

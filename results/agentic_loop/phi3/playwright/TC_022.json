@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_022",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7884,
+  "total_latency_s": 991.85,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Currency Field Formatting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should format currency input with commas and two decimal places', async ({ page }) => {\n    // Locate and interact with the currency input using getByLabel\n    const currencyInput = page.getByLabel('Currency Amount');\n    await expect(currencyInput).toBeVisible();\n    \n    // Set initial value to test formatting\n    await currencyInput.fill('123456789012345678901234567890');\n    \n    // Verify initial value is displayed correctly\n    const valueDisplay = page.getByText('123,456,789,012,345,678,901,234,567,890');\n    await expect(valueDisplay).toBeVisible();\n    \n    // Verify input has correct format\n    await expect(currencyInput).toHaveValue('123,456,789,012,345,678,901,234,567,890');\n    \n    // Verify input is not editable\n    await expect(currencyInput).not.toBeEditable();\n    \n    // Verify input has proper validation state\n    await expect(currencyInput).toHaveClass(/valid|invalid/);\n    \n    // Verify error message is not displayed\n    const errorMessage = page.getByText('Invalid format');\n    await expect(errorMessage).not.toBeVisible();\n    \n    // Verify currency formatting is applied\n    const formattedValue = page.getByText('123,456,789,012,345,678,901,234,567,890');\n    await expect(formattedValue).toBeVisible();\n    \n    // Verify formatting persists after focus loss\n    await currencyInput.blur();\n    await expect(formattedValue).toBeVisible();\n  });\n\n  test('should handle negative currency values with proper formatting', async ({ page }) => {\n    // Locate and interact with the currency input using getByLabel\n    const currencyInput = page.getByLabel('Currency Amount');\n    await expect(currencyInput).toBeVisible();\n    \n    // Set negative value to test formatting\n    await currencyInput.fill('-123456789012345678901234567890');\n    \n    // Verify negative value is displayed correctly\n    const valueDisplay = page.getByText('-123,456,789,012,345,678,901,234,567,890');\n    await expect(valueDisplay).toBeVisible();\n    \n    // Verify input has correct format\n    await expect(currencyInput).toHaveValue('-123,456,789,012,345,678,901,234,567,890');\n    \n    // Verify input is not editable\n    await expect(currencyInput).not.toBeEditable();\n    \n    // Verify input has proper validation state\n    await expect(currencyInput).toHaveClass(/valid|invalid/);\n    \n    // Verify error message is not displayed\n    const errorMessage = page.getByText('Invalid format');\n    await expect(errorMessage).not.toBeVisible();\n    \n    // Verify negative sign is preserved\n    const negativeSign = page.getByText('-');\n    await expect(negativeSign).toBeVisible();\n    \n    // Verify formatting persists after focus loss\n    await currencyInput.blur();\n    await expect(negativeSign).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.496,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4065,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 459.353,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7884,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3948,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 532.497,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_124",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7563,
+  "total_latency_s": 607.236,
+  "final_script": "describe('Long-Running Task Persistence Across Page Refreshes', () => {\n  beforeEach(() => {\n    cy.visit('/tasks');\n  });\n\n  it('should persist long-running task state across page refreshes', () => {\n    // Intercept the API call to start a long-running task\n    cy.intercept('POST', '/api/tasks/start').as('startTask');\n\n    // Verify initial page state\n    cy.get('[data-testid=\"task-list\"]').should('be.visible');\n    cy.get('[data-testid=\"task-item\"]').should('have.length.greaterThan', 0);\n\n    // Start a long-running task\n    cy.get('[data-testid=\"start-task-button\"]').click();\n    cy.wait('@startTask');\n\n    // Verify task is in progress state\n    cy.get('[data-testid=\"task-item\"]').first().should('contain', 'In Progress');\n\n    // Verify task details are displayed\n    cy.get('[data-testid=\"task-name\"]').should('contain', 'Long Running Task');\n    cy.get('[data-testid=\"task-status\"]').should('contain', 'In Progress');\n\n    // Verify task ID is stored in local storage\n    cy.window().then((win) => {\n      expect(win.localStorage.getItem('taskId')).to.not.be.null;\n    });\n\n    // Refresh the page\n    cy.reload();\n\n    // Verify task persists after refresh\n    cy.get('[data-testid=\"task-list\"]').should('be.visible');\n    cy.get('[data-testid=\"task-item\"]').first().should('contain', 'In Progress');\n\n    // Verify task ID is still stored in local storage\n    cy.window().then((win) => {\n      expect(win.localStorage.getItem('taskId')).to.not.be.null;\n    });\n\n    // Verify task details are still displayed\n    cy.get('[data-testid=\"task-name\"]').should('contain', 'Long Running Task');\n    cy.get('[data-testid=\"task-status\"]').should('contain', 'In Progress');\n  });\n\n  it('should handle task state when page is refreshed with no task ID', () => {\n    // Intercept the API call to start a long-running task\n    cy.intercept('POST', '/api/tasks/start').as('startTask');\n\n    // Start a long-running task\n    cy.get('[data-testid=\"start-task-button\"]').click();\n    cy.wait('@startTask');\n\n    // Verify task is in progress state\n    cy.get('[data-testid=\"task-item\"]').first().should('contain', 'In Progress');\n\n    // Simulate page refresh without task ID\n    cy.window().then((win) => {\n      win.localStorage.removeItem('taskId');\n    });\n\n    // Verify task persists without ID\n    cy.reload();\n\n    // Verify task is still visible\n    cy.get('[data-testid=\"task-list\"]').should('be.visible');\n\n    // Verify task details are still displayed\n    cy.get('[data-testid=\"task-item\"]').first().should('contain', 'In Progress');\n\n    // Verify task ID is not stored in local storage\n    cy.window().then((win) => {\n      expect(win.localStorage.getItem('taskId')).to.be.null;\n    });\n\n    // Verify task is still in progress state\n    cy.get('[data-testid=\"task-status\"]').should('contain', 'In Progress');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4872,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3973,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 307.778,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7563,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3878,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 299.458,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

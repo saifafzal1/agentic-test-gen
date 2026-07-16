@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_118",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8203,
+  "total_latency_s": 181.765,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Checkout Flow Sequential Async Steps', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should complete checkout flow with sequential async steps in correct order', async ({ page }) => {\n    // Step 1: Verify initial state and click 'Continue'\n    const continueButton = page.getByRole('button', { name: /continue/i });\n    await expect(continueButton).toBeVisible();\n    await continueButton.click();\n\n    // Step 2: Verify shipping address form is visible\n    const shippingForm = page.locator('[data-testid=\"shipping-form\"]');\n    await expect(shippingForm).toBeVisible();\n\n    // Step 3: Fill in shipping address using getByLabel\n    const addressInput = page.getByLabel(/street address/i);\n    await addressInput.fill('123 Main St');\n\n    const cityInput = page.getByLabel(/city/i);\n    await cityInput.fill('Anytown');\n\n    const zipInput = page.getByLabel(/zip code/i);\n    await zipInput.fill('12345');\n\n    // Step 4: Click 'Continue' to proceed to payment\n    const nextButton = page.getByRole('button', { name: /continue/i });\n    await expect(nextButton).toBeVisible();\n    await nextButton.click();\n\n    // Step 5: Verify payment form is visible\n    const paymentForm = page.locator('[data-testid=\"payment-form\"]');\n    await expect(paymentForm).toBeVisible();\n\n    // Step 6: Fill in payment details using getByLabel\n    const cardNumberInput = page.getByLabel(/card number/i);\n    await cardNumberInput.fill('4111111111111234');\n\n    const expiryInput = page.getByLabel(/expiry date/i);\n    await expiryInput.fill('12/25');\n\n    // Step 7: Click 'Continue' to proceed to review\n    const reviewButton = page.getByRole('button', { name: /continue/i });\n    await expect(reviewButton).toBeVisible();\n    await reviewButton.click();\n\n    // Step 8: Verify order review page is visible\n    const reviewPage = page.locator('[data-testid=\"order-review\"]');\n    await expect(reviewPage).toBeVisible();\n\n    // Step 9: Verify order summary contains correct data\n    const orderTotal = page.getByText(/\\$123.99/);\n    await expect(orderTotal).toBeVisible();\n\n    // Step 10: Click 'Place Order' button\n    const placeOrderButton = page.getByRole('button', { name: /place order/i });\n    await expect(placeOrderButton).toBeVisible();\n    await placeOrderButton.click();\n\n    // Step 11: Verify success message appears\n    const successMessage = page.getByText(/order placed successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Step 12: Verify confirmation page is displayed\n    const confirmationPage = page.locator('[data-testid=\"confirmation-page\"]');\n    await expect(confirmationPage).toBeVisible();\n  });\n\n  test('should handle async step failure and prevent order submission', async ({ page }) => {\n    // Step 1: Click 'Continue' to shipping\n    const continueButton = page.getByRole('button', { name: /continue/i });\n    await continueButton.click();\n\n    // Step 2: Fill in shipping address\n    const addressInput = page.getByLabel(/street address/i);\n    await addressInput.fill('404 Not Found Lane');\n\n    const cityInput = page.getByLabel(/city/i);\n    await cityInput.fill('Errorville');\n\n    const zipInput = page.getByLabel(/zip code/i);\n    await zipInput.fill('99999');\n\n    // Step 3: Click 'Continue' to payment\n    const nextButton = page.getByRole('button', { name: /continue/i });\n    await nextButton.click();\n\n    // Step 4: Fill in payment details\n    const cardNumberInput = page.getByLabel(/card number/i);\n    await cardNumberInput.fill('4111111111111234');\n\n    const expiryInput = page.getByLabel(/expiry date/i);\n    await expiryInput.fill('12/25');\n\n    // Step 5: Click 'Continue' to review\n    const reviewButton = page.getByRole('button', { name: /continue/i });\n    await reviewButton.click();\n\n    // Step 6: Verify order review page is visible\n    const reviewPage = page.locator('[data-testid=\"order-review\"]');\n    await expect(reviewPage).toBeVisible();\n\n    // Step 7: Attempt to click 'Place Order' button\n    const placeOrderButton = page.getByRole('button', { name: /place order/i });\n    await expect(placeOrderButton).toBeVisible();\n\n    // Step 8: Intercept the API call and simulate failure\n    await page.route('**/api/checkout/submit', route => {\n      route.abort('failed');\n    });\n\n    // Step 9: Click 'Place Order' button\n    await placeOrderButton.click();\n\n    // Step 10: Verify error message appears\n    const errorMessage = page.getByText(/payment failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Step 11: Verify user remains on review page\n    await expect(reviewPage).toBeVisible();\n\n    // Step 12: Verify order confirmation page does not exist\n    const confirmationPage = page.locator('[data-testid=\"confirmation-page\"]');\n    await expect(confirmationPage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5098,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4325,
+        "missing_keywords": [],
+        "assertion_count": 5,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.164,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8203,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4009,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 109.601,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

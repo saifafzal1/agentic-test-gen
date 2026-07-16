@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_072",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8293,
+  "total_latency_s": 94.352,
+  "final_script": "describe('File Download Export Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/data-table');\n  });\n\n  it('should trigger file download when export button is clicked', () => {\n    // Setup: intercept the export API call\n    cy.intercept('GET', '/api/data/export', {\n      statusCode: 200,\n      headers: {\n        'content-type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',\n        'content-disposition': 'attachment; filename=\"data-export.xlsx\"'\n      },\n      body: '...'\n    }).as('exportData');\n\n    // Verify data table is visible\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n\n    // Click the export button\n    cy.get('[data-testid=\"export-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@exportData');\n\n    // Verify download prompt or file appears\n    cy.get('[data-testid=\"download-status\"]').should('contain', 'Export successful');\n\n    // Verify download link/button is visible\n    cy.get('[data-testid=\"download-link\"]').should('be.visible');\n\n    // Verify download link has correct href\n    cy.get('[data-testid=\"download-link\"]').should('have.attr', 'href');\n  });\n\n  it('should handle export failure and display error message', () => {\n    // Setup: intercept the export API call with error\n    cy.intercept('GET', '/api/data/export', {\n      statusCode: 500,\n      body: { error: 'Internal server error' }\n    }).as('exportDataError');\n\n    // Verify data table is visible\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n\n    // Click the export button\n    cy.get('[data-testid=\"export-button\"]').click();\n\n    // Wait for the failed API call\n    cy.wait('@exportDataError');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Export failed');\n\n    // Verify download link is not visible\n    cy.get('[data-testid=\"download-link\"]').should('not.exist');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8293,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.631,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 94.352,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_063",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8433,
+  "total_latency_s": 302.013,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('No Results Found Message', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should display \"No results found\" when API returns an empty list', async ({ page }) => {\n    // Set up intercept for empty response\n    await page.route('**/api/search', (route) => {\n      route.abort('failed');\n    });\n\n    // Set up intercept for successful response with empty list\n    await page.route('**/api/search', (route) => {\n      route.continue({\n        status: 200,\n        body: JSON.stringify([])\n      });\n    });\n\n    // Verify search input is visible\n    const searchInput = page.getByLabel('Search');\n    await expect(searchInput).toBeVisible();\n\n    // Fill search input with query\n    await searchInput.fill('nonexistent query');\n\n    // Verify results container is empty\n    const resultsContainer = page.getByTestId('search-results');\n    await expect(resultsContainer).toBeEmpty();\n\n    // Verify 'No results found' message is displayed\n    const noResultsMessage = page.getByText('No results found');\n    await expect(noResultsMessage).toBeVisible();\n\n    // Verify message has correct styling\n    await expect(noResultsMessage).toHaveClass(/alert-message/);\n\n    // Verify search button is still visible and enabled\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await expect(searchButton).toBeVisible();\n    await expect(searchButton).toBeEnabled();\n\n    // Verify no results message is visible when page is reloaded\n    await page.reload();\n    await expect(noResultsMessage).toBeVisible();\n  });\n\n  test('should handle empty list gracefully and not display error message', async ({ page }) => {\n    // Set up intercept for successful response with empty list\n    await page.route('**/api/search', (route) => {\n      route.continue({\n        status: 200,\n        body: JSON.stringify([])\n      });\n    });\n\n    // Verify search input is visible\n    const searchInput = page.getByLabel('Search');\n    await expect(searchInput).toBeVisible();\n\n    // Fill search input with query\n    await searchInput.fill('nonexistent query');\n\n    // Verify results container is empty\n    const resultsContainer = page.getByTestId('search-results');\n    await expect(resultsContainer).toBeEmpty();\n\n    // Verify no results message is displayed\n    const noResultsMessage = page.getByText('No results found');\n    await expect(noResultsMessage).not.toBeVisible();\n\n    // Verify error message is not displayed\n    const errorMessage = page.getByText('Error');\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify search button is still visible and enabled\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await expect(searchButton).toBeVisible();\n    await expect(searchButton).toBeEnabled();\n\n    // Verify page content is still visible\n    const pageContent = page.getByTestId('page-content');\n    await expect(pageContent).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8433,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4778,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 302.013,
+      "feedback_used": ""
+    }
+  ]
+}

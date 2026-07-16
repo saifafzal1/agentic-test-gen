@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_001",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8696,
+  "total_latency_s": 141.522,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Login with Valid Credentials', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should successfully log in with valid credentials and navigate to dashboard', async ({ page }) => {\n    // Setup: intercept the login API call\n    await page.route('**/api/auth/login', (route) => {\n      route.continue();\n    });\n\n    // Intercept the dashboard API call\n    await page.route('**/api/dashboard', (route) => {\n      route.continue();\n    });\n\n    // Verify login form is visible\n    const loginForm = page.getByRole('form', { name: /login/i });\n    await expect(loginForm).toBeVisible();\n\n    // Fill in valid credentials\n    const emailInput = page.getByLabel(/email/i);\n    await emailInput.fill('user@example.com');\n\n    const passwordInput = page.getByLabel(/password/i);\n    await passwordInput.fill('validPassword123');\n\n    // Click login button\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await loginButton.click();\n\n    // Verify login success message appears\n    const successMessage = page.getByText(/logged in successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify dashboard route is active\n    const dashboardRoute = page.route('**/api/dashboard');\n    await expect(dashboardRoute).toHaveBeenFired();\n\n    // Verify dashboard is visible\n    const dashboardNav = page.getByRole('navigation', { name: /dashboard/i });\n    await expect(dashboardNav).toBeVisible();\n\n    // Verify dashboard content is loaded\n    const dashboardContent = page.getByText(/dashboard content/i);\n    await expect(dashboardContent).toBeVisible();\n\n    // Verify user is logged in\n    const userProfile = page.getByText(/user@example.com/i);\n    await expect(userProfile).toBeVisible();\n  });\n\n  test('should display error message when login fails with invalid credentials', async ({ page }) => {\n    // Setup: intercept the login API call with invalid credentials\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('failed');\n    });\n\n    // Verify login form is visible\n    const loginForm = page.getByRole('form', { name: /login/i });\n    await expect(loginForm).toBeVisible();\n\n    // Fill in invalid credentials\n    const emailInput = page.getByLabel(/email/i);\n    await emailInput.fill('invalidEmail');\n\n    const passwordInput = page.getByLabel(/password/i);\n    await passwordInput.fill('wrongPassword');\n\n    // Click login button\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await loginButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/invalid credentials/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify login form is still visible\n    await expect(loginForm).toBeVisible();\n\n    // Verify dashboard route is not active\n    const dashboardRoute = page.route('**/api/dashboard');\n    await expect(dashboardRoute).not.toHaveBeenFired();\n\n    // Verify login button is still clickable\n    await expect(loginButton).toBeEnabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8696,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5654,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 141.522,
+      "feedback_used": ""
+    }
+  ]
+}

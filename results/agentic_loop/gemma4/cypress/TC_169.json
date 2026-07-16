@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_169",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7705,
+  "total_latency_s": 72.362,
+  "final_script": "describe('Multiple File Upload', () => {\n  beforeEach(() => {\n    cy.visit('/file-upload');\n  });\n\n  it('should successfully upload multiple files at once', () => {\n    // Create mock files\n    const file1 = new File(['content of file 1'], 'document1.pdf', { type: 'application/pdf' });\n    const file2 = new File(['content of file 2'], 'image.png', { type: 'image/png' });\n    const file3 = new File(['content of file 3'], 'spreadsheet.xlsx', { type: 'application/vnd.openxmlformats-spreadsheet' });\n\n    // Intercept the upload API endpoint\n    cy.intercept('POST', '/api/files/upload').as('uploadFiles');\n\n    // Upload multiple files\n    cy.get('[data-testid=\"file-input\"]').selectFile([file1, file2, file3]);\n\n    // Verify file names appear in the upload queue\n    cy.get('[data-testid=\"file-list\"]').should('contain', 'document1.pdf');\n    cy.get('[data-testid=\"file-list\"]').should('contain', 'image.png');\n    cy.get('[data-testid=\"file-list\"]').should('contain', 'spreadsheet.xlsx');\n\n    // Click upload button\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@uploadFiles').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n      expect(interception.response.body).to.have.property('success', true);\n    });\n\n    // Verify success message\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Files uploaded successfully');\n\n    // Verify uploaded files are listed in the results\n    cy.get('[data-testid=\"uploaded-files-list\"]').should('contain', 'document1.pdf');\n    cy.get('[data-testid=\"uploaded-files-list\"]').should('contain', 'image.png');\n    cy.get('[data-testid=\"uploaded-files-list\"]').should('contain', 'spreadsheet.xlsx');\n  });\n\n  it('should handle file upload with invalid file types and display error messages', () => {\n    // Create mock files with invalid types\n    const invalidFile1 = new File(['invalid content'], 'script.js', { type: 'text/javascript' });\n    const invalidFile2 = new File(['invalid content'], 'exe_file', { type: 'application/x86-64-win32-exe' });\n\n    // Intercept the upload API endpoint\n    cy.intercept('POST', '/api/files/upload').as('uploadFiles');\n\n    // Upload invalid files\n    cy.get('[data-testid=\"file-input\"]').selectFile([invalidFile1, invalidFile2]);\n\n    // Verify file names appear in the upload queue\n    cy.get('[data-testid=\"file-list\"]').should('contain', 'script.js');\n    cy.get('[data-testid=\"file-list\"]').should('contain', 'exe_file');\n\n    // Click upload button\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@uploadFiles').then((interception) => {\n      expect(interception.response.statusCode).to.equal(400);\n      expect(interception.response.body).to.have.property('success', false);\n      expect(interception.response.body).to.have.property('errors');\n    });\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Invalid file type');\n\n    // Verify uploaded files are not in the success list\n    cy.get('[data-testid=\"uploaded-files-list\"]').should('not.exist');\n\n    // Verify error details are shown for each file\n    cy.get('[data-testid=\"file-error-script.js\"]').should('be.visible').should('contain', 'Invalid file type');\n    cy.get('[data-testid=\"file-error-exe_file\"]').should('be.visible').should('contain', 'Invalid file type');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7705,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4351,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.362,
+      "feedback_used": ""
+    }
+  ]
+}

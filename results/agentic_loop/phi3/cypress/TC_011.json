@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_011",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7521,
+  "total_latency_s": 60.767,
+  "final_script": "describe('Password Strength Indicator', () => {\n  beforeEach(() => {\n    cy.visit('/password-reset');\n  });\n\n  it('should display password strength indicator and update as user types', () => {\n    // Intercept the password reset API call\n    cy.intercept('POST', '/api/password-reset').as('passwordReset');\n\n    // Verify the password strength indicator is visible\n    cy.get('[data-testid=\"password-strength-indicator\"]').should('be.visible');\n\n    // Verify initial strength is weak\n    cy.get('[data-testid=\"password-strength-indicator\"]').should('contain', 'Weak');\n\n    // Type a weak password\n    cy.get('[data-testid=\"new-password-input\"]').type('password123');\n    cy.get('[data-testid=\"password-strength-indicator\"]').should('contain', 'Weak');\n\n    // Type a medium password\n    cy.get('[data-testid=\"new-password-input\"]').type('Passw0rd123');\n    cy.get('[data-testid=\"password-strength-indicator\"]').should('contain', 'Medium');\n\n    // Type a strong password\n    cy.get('[data-testid=\"new-password-input\"]').type('P@ssw0rd!2345');\n    cy.get('[data-testid=\"password-strength-indicator\"]').should('contain', 'Strong');\n\n    // Verify the password strength indicator updates in real-time\n    cy.get('[data-testid=\"new-password-input\"]').type('P@ssw0rd!23456789');\n    cy.get('[data-testid=\"password-strength-indicator\"]').should('contain', 'Strong');\n\n    // Verify the password reset form is still valid\n    cy.get('[data-testid=\"password-reset-form\"]').should('be.visible');\n    cy.get('[data-testid=\"password-reset-form\"]').should('have.class', 'valid');\n\n    // Verify the password reset button is enabled\n    cy.get('[data-testid=\"password-reset-button\"]').should('be.visible');\n    cy.get('[data-testid=\"password-reset-button\"]').should('not.be.disabled');\n\n    // Verify the password reset API call was made\n    cy.wait('@passwordReset').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n  });\n\n  it('should display error message when password does not meet strength requirements', () => {\n    // Intercept the password reset API call\n    cy.intercept('POST', '/api/password-reset').as('passwordReset');\n\n    // Type a password that does not meet strength requirements\n    cy.get('[data-testid=\"new-password-input\"]').type('12345678');\n\n    // Verify the password strength indicator shows weak\n    cy.get('[data-testid=\"password-strength-indicator\"]').should('contain', 'Weak');\n\n    // Verify the password reset form is still visible\n    cy.get('[data-testid=\"password-reset-form\"]').should('be.visible');\n\n    // Verify the password reset button is disabled\n    cy.get('[data-testid=\"password-reset-button\"]').should('be.disabled');\n\n    // Verify the error message is displayed\n    cy.get('[data-testid=\"password-strength-error\"]').should('be.visible');\n    cy.get('[data-testid=\"password-strength-error\"]').should('contain', 'Password must be at least 8 characters long');\n\n    // Verify the password reset API call was not made\n    cy.wait('@passwordReset').then((interception) => {\n      expect(interception.response.statusCode).to.equal(400);\n    });\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7521,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3737,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 60.767,
+      "feedback_used": ""
+    }
+  ]
+}

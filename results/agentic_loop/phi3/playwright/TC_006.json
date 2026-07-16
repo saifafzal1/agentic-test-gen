@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_006",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8375,
+  "total_latency_s": 133.646,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Form Validation - Empty Fields', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should prevent form submission with empty username and password fields', async ({ page }) => {\n    // Set up intercept for login API\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('API call aborted');\n    });\n\n    // Locate and fill username field\n    const usernameInput = page.getByLabel('Username');\n    await usernameInput.fill('testuser');\n\n    // Locate and clear password field\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('');\n\n    // Locate and clear email field\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('');\n\n    // Locate and clear submit button\n    const submitButton = page.getByRole('button', { name: /sign in/i });\n    await submitButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('Username and password are required');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify form is not submitted\n    const form = page.locator('[data-testid=\"login-form\"]');\n    await expect(form).toBeVisible();\n\n    // Verify form has not been reset\n    const usernameInputValue = await usernameInput.evaluate((el) => el.value);\n    expect(usernameInputValue).toBe('testuser');\n\n    const passwordInputValue = await passwordInput.evaluate((el) => el.value);\n    expect(passwordInputValue).toBe('');\n\n    // Verify error message is visible\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should allow form submission with valid username and password', async ({ page }) => {\n    // Set up intercept for login API\n    await page.route('**/api/auth/login', (route) => {\n      route.continue();\n    });\n\n    // Locate and fill username field\n    const usernameInput = page.getByLabel('Username');\n    await usernameInput.fill('validuser');\n\n    // Locate and fill password field\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('validpassword');\n\n    // Locate and clear email field\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('');\n\n    // Locate and click submit button\n    const submitButton = page.getByRole('button', { name: /sign in/i });\n    await submitButton.click();\n\n    // Verify success message is displayed\n    const successMessage = page.getByText('Login successful');\n    await expect(successMessage).toBeVisible();\n\n    // Verify form is reset\n    const usernameInputValue = await usernameInput.evaluate((el) => el.value);\n    expect(usernameInputValue).toBe('');\n\n    const passwordInputValue = await passwordInput.evaluate((el) => el.value);\n    expect(passwordInputValue).toBe('');\n\n    // Verify form is not visible\n    const form = page.locator('[data-testid=\"login-form\"]');\n    await expect(form).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8375,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4583,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 133.646,
+      "feedback_used": ""
+    }
+  ]
+}

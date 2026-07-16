@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_121",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8149,
+  "total_latency_s": 46.626,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async PDF Generation Download', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/generate-pdf');\n  });\n\n  test('should generate and download PDF when button is clicked', async ({ page }) => {\n    // Verify initial page content\n    const generateButton = page.getByRole('button', { name: /generate pdf/i });\n    await expect(generateButton).toBeVisible();\n\n    // Click the generate button\n    await generateButton.click();\n\n    // Wait for PDF generation to complete\n    const downloadPromise = page.waitForEvent('download');\n\n    // Verify download dialog appears\n    const downloadDialog = page.getByRole('dialog', { name: /download pdf/i });\n    await expect(downloadDialog).toBeVisible();\n\n    // Verify download link is present\n    const downloadLink = page.getByRole('link', { href: /.pdf$/i });\n    await expect(downloadLink).toBeVisible();\n\n    // Verify download button is visible\n    const downloadButton = page.getByRole('button', { name: /download/i });\n    await expect(downloadButton).toBeVisible();\n\n    // Click the download button\n    await downloadButton.click();\n\n    // Verify download file appears in downloads folder\n    const downloadFolder = page.getByRole('navigation', { name: /downloads/i });\n    await expect(downloadFolder).toBeVisible();\n\n    const downloadFile = page.getByText(/my-document.pdf/i);\n    await expect(downloadFile).toBeVisible();\n\n    // Verify file size is not zero\n    const fileSize = page.getByText(/bytes/i);\n    await expect(fileSize).toContainText('12345');\n\n    // Verify file is not empty\n    const fileContent = page.getByText(/content/i);\n    await expect(fileContent).toBeVisible();\n\n    // Verify download dialog is closed\n    await expect(downloadDialog).not.toBeVisible();\n  });\n\n  test('should handle failed PDF generation and display error message', async ({ page }) => {\n    // Mock PDF generation API to fail\n    await page.route('**/api/generate-pdf', (route) => {\n      route.abort('Failed to generate PDF');\n    });\n\n    // Click the generate button\n    const generateButton = page.getByRole('button', { name: /generate pdf/i });\n    await expect(generateButton).toBeVisible();\n    await generateButton.click();\n\n    // Wait for error state\n    const errorMessage = page.getByText(/failed to generate pdf/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error dialog appears\n    const errorDialog = page.getByRole('dialog', { name: /failed to generate pdf/i });\n    await expect(errorDialog).toBeVisible();\n\n    // Verify retry button is visible\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify download button is not visible\n    const downloadButton = page.getByRole('button', { name: /download/i });\n    await expect(downloadButton).not.toBeVisible();\n\n    // Verify error message is displayed\n    await expect(errorMessage).toContainText('Failed to generate PDF');\n\n    // Verify error dialog is closed when retry is clicked\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await retryButton.click();\n\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8149,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4831,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 46.626,
+      "feedback_used": ""
+    }
+  ]
+}

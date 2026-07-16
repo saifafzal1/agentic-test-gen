@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_081",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7449,
+  "total_latency_s": 342.831,
+  "final_script": "describe('Inline Editing on Table Row', () => {\n  beforeEach(() => {\n    cy.visit('/table');\n  });\n\n  it('should enable inline editing on table row and update data without modal', () => {\n    // Verify table is visible\n    cy.get('[data-testid=\"table-container\"]').should('be.visible');\n\n    // Get the first row\n    cy.get('[data-testid=\"table-row-1\"]').should('be.visible');\n\n    // Verify initial data is displayed\n    cy.get('[data-testid=\"table-row-1\"]').should('contain', 'John Doe');\n    cy.get('[data-testid=\"table-row-1\"]').should('contain', 'john@example.com');\n\n    // Click on the edit icon to enable inline editing\n    cy.get('[data-testid=\"edit-icon-1\"]').click();\n\n    // Verify edit mode is active\n    cy.get('[data-testid=\"table-row-1\"]').should('have.class', 'edit-mode');\n\n    // Verify input fields are visible\n    cy.get('[data-testid=\"edit-name-1\"]').should('be.visible');\n    cy.get('[data-testid=\"edit-email-1\"]').should('be.visible');\n\n    // Fill in new data\n    cy.get('[data-testid=\"edit-name-1\"]').type('Jane Smith');\n    cy.get('[data-testid=\"edit-email-1\"]').type('jane.smith@example.com');\n\n    // Click the save button to update\n    cy.get('[data-testid=\"save-button-1\"]').click();\n\n    // Verify inline editing is closed\n    cy.get('[data-testid=\"table-row-1\"]').should('not.have.class', 'edit-mode');\n\n    // Verify updated data is displayed\n    cy.get('[data-testid=\"table-row-1\"]').should('contain', 'Jane Smith');\n    cy.get('[data-testid=\"table-row-1\"]').should('contain', 'jane.smith@example.com');\n\n    // Verify no modal is displayed\n    cy.get('[data-testid=\"modal-container\"]').should('not.exist');\n  });\n\n  it('should handle invalid input and display error message without modal', () => {\n    // Get the first row\n    cy.get('[data-testid=\"table-row-1\"]').should('be.visible');\n\n    // Click on the edit icon\n    cy.get('[data-testid=\"edit-icon-1\"]').click();\n\n    // Verify edit mode is active\n    cy.get('[data-testid=\"table-row-1\"]').should('have.class', 'edit-mode');\n\n    // Fill in invalid data\n    cy.get('[data-testid=\"edit-name-1\"]').type('John');\n    cy.get('[data-testid=\"edit-email-1\"]').type('invalid-email');\n\n    // Click the save button\n    cy.get('[data-testid=\"save-button-1\"]').click();\n\n    // Verify inline editing is closed\n    cy.get('[data-testid=\"table-row-1\"]').should('not.have.class', 'edit-mode');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please enter a valid email address');\n\n    // Verify no modal is displayed\n    cy.get('[data-testid=\"modal-container\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7449,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3498,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 342.831,
+      "feedback_used": ""
+    }
+  ]
+}

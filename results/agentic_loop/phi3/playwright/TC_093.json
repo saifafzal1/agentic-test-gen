@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_093",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.806,
+  "total_latency_s": 387.491,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Request Timeout Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/api/data');\n  });\n\n  test('should display timeout error when request takes longer than 10 seconds', async ({ page }) => {\n    // Set up a mock API response with a timeout\n    await page.route('**/api/data', (route) => {\n      setTimeout(() => {\n        route.abort('Request timed out');\n      }, 11000);\n    });\n\n    // Intercept the request and wait for the timeout\n    const responsePromise = page.waitForResponse('**/api/data');\n\n    // Wait for the timeout error to be displayed\n    const errorMessage = page.getByText('Request timed out');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the error message contains the expected text\n    await expect(errorMessage).toContainText('Request timed out');\n\n    // Verify the error icon is visible\n    const errorIcon = page.getByRole('img', { name: /error/i });\n    await expect(errorIcon).toBeVisible();\n\n    // Verify the request status is set to failed\n    const requestStatus = page.getByRole('status');\n    await expect(requestStatus).toHaveText('Failed');\n\n    // Verify the request URL is visible\n    const requestUrl = page.getByRole('heading', { name: /api/ });\n    await expect(requestUrl).toBeVisible();\n\n    // Verify the error message is displayed with a timeout duration\n    const timeoutDuration = page.getByText('Request timed out after 10 seconds');\n    await expect(timeoutDuration).toBeVisible();\n\n    // Verify the retry button is visible\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify the retry button is enabled\n    await expect(retryButton).toBeEnabled();\n  });\n\n  test('should handle request timeout gracefully and display error message', async ({ page }) => {\n    // Set up a mock API response with a timeout\n    await page.route('**/api/data', (route) => {\n      setTimeout(() => {\n        route.abort('Request timed out');\n      }, 10000);\n    });\n\n    // Intercept the request and wait for the timeout\n    const responsePromise = page.waitForResponse('**/api/data');\n\n    // Verify the error message is displayed\n    const errorMessage = page.getByText('Request timed out');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the error icon is visible\n    const errorIcon = page.getByRole('img', { name: /error/i });\n    await expect(errorIcon).toBeVisible();\n\n    // Verify the request status is set to failed\n    const requestStatus = page.getByRole('status');\n    await expect(requestStatus).toHaveText('Failed');\n\n    // Verify the request URL is visible\n    const requestUrl = page.getByRole('heading', { name: /api/ });\n    await expect(requestUrl).toBeVisible();\n\n    // Verify the error message is displayed with a timeout duration\n    const timeoutDuration = page.getByText('Request timed out after 10 seconds');\n    await expect(timeoutDuration).toBeVisible();\n\n    // Verify the retry button is visible\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify the retry button is enabled\n    await expect(retryButton).toBeEnabled();\n\n    // Verify the user is notified of the error\n    const errorNotification = page.getByText('Failed to load data');\n    await expect(errorNotification).toBeVisible();\n\n    // Verify the user can navigate away from the error page\n    const navigationButton = page.getByRole('button', { name: /back/i });\n    await expect(navigationButton).toBeVisible();\n\n    await expect(navigationButton).toBeEnabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.806,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4534,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 387.491,
+      "feedback_used": ""
+    }
+  ]
+}

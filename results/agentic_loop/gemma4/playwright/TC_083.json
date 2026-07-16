@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_083",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8564,
+  "total_latency_s": 76.456,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Record Category Assignment via Dropdown', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should successfully assign a category to a record using the dropdown', async ({ page }) => {\n    // Locate and click the record to open details\n    const recordItem = page.getByRole('button', { name: /record 1/i });\n    await recordItem.click();\n\n    // Verify record details are visible\n    const recordTitle = page.getByRole('heading', { name: /record 1/i });\n    await expect(recordTitle).toBeVisible();\n\n    // Locate and click the category dropdown\n    const categoryDropdown = page.getByRole('combobox', { name: /category/i });\n    await expect(categoryDropdown).toBeVisible();\n    await categoryDropdown.click();\n\n    // Select a category from the dropdown options\n    const electronicsOption = page.getByRole('option', { name: /electronics/i });\n    await expect(electronicsOption).toBeVisible();\n    await electronicsOption.click();\n\n    // Verify the selected category is displayed\n    await expect(categoryDropdown).toHaveValue('electronics');\n\n    // Locate and click the save button\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await saveButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/category assigned successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify the category is updated in the record details\n    const categoryDisplay = page.getByText(/category: electronics/i);\n    await expect(categoryDisplay).toBeVisible();\n  });\n\n  test('should handle category assignment with validation when no category is selected', async ({ page }) => {\n    // Locate and click the record to open details\n    const recordItem = page.getByRole('button', { name: /record 2/i });\n    await recordItem.click();\n\n    // Verify record details are visible\n    const recordTitle = page.getByRole('heading', { name: /record 2/i });\n    await expect(recordTitle).toBeVisible();\n\n    // Locate and click the category dropdown\n    const categoryDropdown = page.getByRole('combobox', { name: /category/i });\n    await categoryDropdown.click();\n\n    // Verify all options are visible\n    const allOptions = page.getByRole('option');\n    await expect(allOptions).toHaveCount(4);\n\n    // Click save without selecting a category\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await saveButton.click();\n\n    // Verify validation error message appears\n    const errorMessage = page.getByText(/please select a category/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the category dropdown still shows the default placeholder\n    await expect(categoryDropdown).toHaveValue('');\n\n    // Verify the record category was not updated\n    const categoryDisplay = page.getByText(/category:/i);\n    await expect(categoryDisplay).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8564,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.6213,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 76.456,
+      "feedback_used": ""
+    }
+  ]
+}

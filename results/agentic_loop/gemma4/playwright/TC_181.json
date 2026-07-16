@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_181",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.9023,
+  "total_latency_s": 72.628,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload Success Checkmark', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should display success checkmark when file upload completes successfully', async ({ page }) => {\n    // Locate and interact with file input using getByLabel\n    const fileInput = page.getByLabel('Upload File');\n    await fileInput.setInputFiles('playwright/fixtures/sample.pdf');\n\n    // Locate and click upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: 'Upload' });\n    await uploadButton.click();\n\n    // Wait for upload progress to complete\n    await page.waitForResponse(response => \n      response.url().includes('/api/upload') && response.status() === 200\n    );\n\n    // Verify success checkmark appears using getByRole\n    const successCheckmark = page.getByRole('img', { name: /success/i });\n    await expect(successCheckmark).toBeVisible();\n\n    // Verify success message is displayed using getByText\n    const successMessage = page.getByText(/File uploaded successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify file name is displayed in success state\n    const fileNameDisplay = page.getByText('sample.pdf');\n    await expect(fileNameDisplay).toBeVisible();\n\n    // Verify upload progress bar is no longer visible\n    const progressBar = page.locator('[data-testid=\"upload-progress-bar\"]');\n    await expect(progressBar).not.toBeVisible();\n  });\n\n  test('should not display success checkmark when file upload fails', async ({ page }) => {\n    // Locate and interact with file input using getByLabel\n    const fileInput = page.getByLabel('Upload File');\n    await fileInput.setInputFiles('playwright/fixtures/large_file.zip');\n\n    // Intercept the upload API call and simulate failure\n    await page.route('**/api/upload', route => {\n      route.abort('failed');\n    });\n\n    // Locate and click upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: 'Upload' });\n    await uploadButton.click();\n\n    // Wait for error response\n    await page.waitForResponse(response => \n      response.url().includes('/api/upload') && response.status() === 500\n    );\n\n    // Verify success checkmark does not appear\n    const successCheckmark = page.getByRole('img', { name: /success/i });\n    await expect(successCheckmark).not.toBeVisible();\n\n    // Verify error message is displayed using getByText\n    const errorMessage = page.getByText(/Upload failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify file name is still visible in error state\n    const fileNameDisplay = page.getByText('large_file.zip');\n    await expect(fileNameDisplay).toBeVisible();\n\n    // Verify error icon is displayed using getByRole\n    const errorIcon = page.getByRole('img', { name: /error/i });\n    await expect(errorIcon).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.9023,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.6743,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.628,
+      "feedback_used": ""
+    }
+  ]
+}

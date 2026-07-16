@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_070",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.798,
+  "total_latency_s": 72.139,
+  "final_script": "describe('Background Sync Toast Notification', () => {\n  beforeEach(() => {\n    cy.visit('/sync');\n  });\n\n  it('should display toast notification when background sync completes successfully', () => {\n    // Intercept the background sync completion API call\n    cy.intercept('POST', '/api/sync/complete').as('syncComplete');\n\n    // Trigger background sync\n    cy.get('[data-testid=\"sync-button\"]').click();\n\n    // Wait for the sync completion API call\n    cy.wait('@syncComplete');\n\n    // Verify toast notification appears\n    cy.get('[data-testid=\"toast-notification\"]')\n      .should('be.visible')\n      .should('contain', 'Background sync completed');\n\n    // Verify toast has success styling\n    cy.get('[data-testid=\"toast-notification\"]')\n      .should('have.class', 'toast-success');\n\n    // Verify toast has correct icon\n    cy.get('[data-testid=\"toast-icon\"]')\n      .should('be.visible')\n      .should('have.class', 'icon-check');\n\n    // Verify toast disappears after a timeout\n    cy.get('[data-testid=\"toast-notification\"]')\n      .should('be.visible')\n      .wait(3000)\n      .should('not.exist');\n  });\n\n  it('should handle background sync failure and display error toast', () => {\n    // Intercept the background sync completion API call and mock a 500 error\n    cy.intercept('POST', '/api/sync/complete', {\n      statusCode: 500,\n      body: { error: 'Server error during sync' }\n    }).as('syncFailed');\n\n    // Trigger background sync\n    cy.get('[data-testid=\"sync-button\"]').click();\n\n    // Wait for the failed sync API call\n    cy.wait('@syncFailed');\n\n    // Verify error toast notification appears\n    cy.get('[data-testid=\"toast-notification\"]')\n      .should('be.visible')\n      .should('contain', 'Background sync failed');\n\n    // Verify toast has error styling\n    cy.get('[data-testid=\"toast-notification\"]')\n      .should('have.class', 'toast-error');\n\n    // Verify toast has error icon\n    cy.get('[data-testid=\"toast-icon\"]')\n      .should('be.visible')\n      .should('have.class', 'icon-error');\n\n    // Verify error message details\n    cy.get('[data-testid=\"toast-message\"]')\n      .should('contain', 'Server error during sync');\n\n    // Verify toast persists until dismissed\n    cy.get('[data-testid=\"toast-notification\"]')\n      .should('be.visible');\n\n    // Verify dismiss button exists and can be clicked\n    cy.get('[data-testid=\"toast-dismiss-button\"]')\n      .should('be.visible')\n      .click();\n\n    // Verify toast is dismissed\n    cy.get('[data-testid=\"toast-notification\"]')\n      .should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.798,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5266,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.139,
+      "feedback_used": ""
+    }
+  ]
+}

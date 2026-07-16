@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_043",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8076,
+  "total_latency_s": 382.632,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Sidebar Collapse and Expand Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should collapse and expand the sidebar on click', async ({ page }) => {\n    // Verify sidebar is visible by default\n    const sidebar = page.getByRole('navigation');\n    await expect(sidebar).toBeVisible();\n\n    // Verify sidebar has correct initial state\n    const sidebarState = page.getByRole('status', { name: /collapsed/i });\n    await expect(sidebarState).toBeVisible();\n\n    // Click the sidebar toggle button to collapse\n    const toggleButton = page.getByRole('button', { name: /toggle sidebar/i });\n    await toggleButton.click();\n\n    // Verify sidebar is now collapsed\n    await expect(sidebar).not.toBeVisible();\n\n    // Verify status message indicates collapsed state\n    await expect(sidebarState).toContainText(/collapsed/i);\n\n    // Click the toggle button again to expand\n    await toggleButton.click();\n\n    // Verify sidebar is now visible\n    await expect(sidebar).toBeVisible();\n\n    // Verify status message indicates expanded state\n    await expect(sidebarState).toContainText(/expanded/i);\n\n    // Verify sidebar content is accessible\n    const sidebarContent = page.getByRole('navigation', { name: /dashboard/i });\n    await expect(sidebarContent).toBeVisible();\n\n    // Verify sidebar menu items are visible\n    const menuItem = page.getByRole('link', { name: /settings/i });\n    await expect(menuItem).toBeVisible();\n\n    // Verify sidebar menu items are clickable\n    await expect(menuItem).toBeEnabled();\n  });\n\n  test('should handle edge case: clicking outside sidebar', async ({ page }) => {\n    // Verify sidebar is visible\n    const sidebar = page.getByRole('navigation');\n    await expect(sidebar).toBeVisible();\n\n    // Verify sidebar is expanded\n    const sidebarState = page.getByRole('status', { name: /expanded/i });\n    await expect(sidebarState).toBeVisible();\n\n    // Click outside the sidebar to trigger collapse\n    const outsideElement = page.locator('body');\n    await outsideElement.click();\n\n    // Verify sidebar collapses\n    await expect(sidebar).not.toBeVisible();\n\n    // Verify status message indicates collapsed state\n    await expect(sidebarState).toContainText(/collapsed/i);\n\n    // Verify sidebar content is still accessible\n    const sidebarContent = page.getByRole('navigation', { name: /dashboard/i });\n    await expect(sidebarContent).toBeVisible();\n\n    // Verify sidebar menu items are still visible\n    const menuItem = page.getByRole('link', { name: /settings/i });\n    await expect(menuItem).toBeVisible();\n\n    // Verify sidebar menu items are still clickable\n    await expect(menuItem).toBeEnabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8076,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4586,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 382.632,
+      "feedback_used": ""
+    }
+  ]
+}

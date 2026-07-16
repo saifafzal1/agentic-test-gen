@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_176",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7785,
+  "total_latency_s": 72.322,
+  "final_script": "describe('File Upload Retry Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/upload');\n  });\n\n  it('should successfully retry a failed upload without re-selecting the file', () => {\n    // Setup: intercept the initial upload request\n    cy.intercept('POST', '/api/upload').as('initialUpload');\n    \n    // Select a file\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/test-file.pdf');\n    \n    // Trigger upload\n    cy.get('[data-testid=\"upload-button\"]').click();\n    \n    // Wait for initial upload attempt\n    cy.wait('@initialUpload').then((interception) => {\n      expect(interception.response.statusCode).to.equal(500);\n    });\n    \n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Upload failed');\n    \n    // Verify retry button is visible\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n    \n    // Click retry button\n    cy.get('[data-testid=\"retry-button\"]').click();\n    \n    // Setup: intercept the retry request\n    cy.intercept('POST', '/api/upload').as('retryUpload');\n    \n    // Wait for retry upload\n    cy.wait('@retryUpload').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n    \n    // Verify success message is displayed\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Upload successful');\n    \n    // Verify file input value is still present (not cleared)\n    cy.get('[data-testid=\"file-input\"]').should('have.value', 'cypress/fixtures/test-file.pdf');\n  });\n\n  it('should not retry if retry button is not visible or file is not selected', () => {\n    // Setup: intercept the initial upload request\n    cy.intercept('POST', '/api/upload').as('initialUpload');\n    \n    // Navigate to upload page without selecting a file\n    cy.visit('/upload');\n    \n    // Attempt to trigger upload without file\n    cy.get('[data-testid=\"upload-button\"]').click();\n    \n    // Verify validation error appears\n    cy.get('[data-testid=\"validation-error\"]').should('be.visible').should('contain', 'Please select a file');\n    \n    // Verify retry button does not appear\n    cy.get('[data-testid=\"retry-button\"]').should('not.exist');\n    \n    // Select a file and trigger upload to fail\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/test-file.pdf');\n    cy.get('[data-testid=\"upload-button\"]').click();\n    \n    cy.wait('@initialUpload').then((interception) => {\n      expect(interception.response.statusCode).to.equal(500);\n    });\n    \n    // Verify retry button appears after failure\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n    \n    // Click retry button and verify it fails again (edge case: persistent failure)\n    cy.get('[data-testid=\"retry-button\"]').click();\n    cy.intercept('POST', '/api/upload').as('retryUploadFail');\n    cy.wait('@retryUploadFail').then((interception) => {\n      expect(interception.response.statusCode).to.equal(500);\n    });\n    \n    // Verify error message persists\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Upload failed');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7785,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4615,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.322,
+      "feedback_used": ""
+    }
+  ]
+}

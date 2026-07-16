@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_123",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.768,
+  "total_latency_s": 37.175,
+  "final_script": "describe('Async Error with Retry Option', () => {\n  beforeEach(() => {\n    cy.visit('/async-operation');\n  });\n\n  it('should display retry button when async operation fails', () => {\n    // Intercept the API call to simulate failure\n    cy.intercept('GET', '/api/async-operation', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' }\n    }).as('asyncOperationFailed');\n\n    // Attempt the async operation\n    cy.get('[data-testid=\"start-async-btn\"]').click();\n\n    // Verify error state is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Failed to complete operation');\n\n    // Verify retry button is visible\n    cy.get('[data-testid=\"retry-btn\"]').should('be.visible');\n    cy.get('[data-testid=\"retry-btn\"]').should('contain', 'Retry');\n\n    // Verify retry button is clickable\n    cy.get('[data-testid=\"retry-btn\"]').click();\n\n    // Verify retry button is still visible after click\n    cy.get('[data-testid=\"retry-btn\"]').should('be.visible');\n\n    // Verify error message is cleared after retry\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n\n    // Verify success state is displayed after retry\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Operation completed successfully');\n  });\n\n  it('should not display retry button when operation succeeds on first attempt', () => {\n    // Intercept the API call to simulate success\n    cy.intercept('GET', '/api/async-operation', {\n      statusCode: 200,\n      body: { success: true, data: 'Operation completed' }\n    }).as('asyncOperationSuccess');\n\n    // Attempt the async operation\n    cy.get('[data-testid=\"start-async-btn\"]').click();\n\n    // Verify success state is displayed\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Operation completed successfully');\n\n    // Verify retry button is not visible\n    cy.get('[data-testid=\"retry-btn\"]').should('not.exist');\n\n    // Verify error message is not displayed\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.768,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4266,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 37.175,
+      "feedback_used": ""
+    }
+  ]
+}

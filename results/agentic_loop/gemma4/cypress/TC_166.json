@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_166",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7693,
+  "total_latency_s": 72.323,
+  "final_script": "describe('Row Selection Badge Count', () => {\n  beforeEach(() => {\n    cy.visit('/table');\n  });\n\n  it('should display badge count when multiple rows are selected', () => {\n    // Verify table is visible\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n    \n    // Select first row\n    cy.get('[data-testid=\"row-1\"]').click();\n    \n    // Verify badge appears with count 1\n    cy.get('[data-testid=\"selected-row-badge\"]').should('be.visible');\n    cy.get('[data-testid=\"selected-row-badge\"]').should('contain', '1');\n    \n    // Select second row\n    cy.get('[data-testid=\"row-2\"]').click();\n    \n    // Verify badge updates to count 2\n    cy.get('[data-testid=\"selected-row-badge\"]').should('contain', '2');\n    \n    // Select third row\n    cy.get('[data-testid=\"row-3\"]').click();\n    \n    // Verify badge updates to count 3\n    cy.get('[data-testid=\"selected-row-badge\"]').should('contain', '3');\n    \n    // Verify badge styling for multiple selections\n    cy.get('[data-testid=\"selected-row-badge\"]').should('have.class', 'badge-primary');\n  });\n\n  it('should handle badge count reset when selection is cleared', () => {\n    // Select first row\n    cy.get('[data-testid=\"row-1\"]').click();\n    cy.get('[data-testid=\"selected-row-badge\"]').should('contain', '1');\n    \n    // Select second row\n    cy.get('[data-testid=\"row-2\"]').click();\n    cy.get('[data-testid=\"selected-row-badge\"]').should('contain', '2');\n    \n    // Clear selection\n    cy.get('[data-testid=\"clear-selection-button\"]').click();\n    \n    // Verify badge is no longer visible\n    cy.get('[data-testid=\"selected-row-badge\"]').should('not.exist');\n    \n    // Verify no rows are selected\n    cy.get('[data-testid=\"row-1\"]').should('not.have.class', 'selected');\n    cy.get('[data-testid=\"row-2\"]').should('not.have.class', 'selected');\n    \n    // Verify badge count is 0 (or not displayed)\n    cy.get('[data-testid=\"selected-row-badge\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7693,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.431,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.323,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_122",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8004,
+  "total_latency_s": 356.094,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async Operation Cancellation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/async-operation');\n  });\n\n  test('should cancel an ongoing async operation using the Abort button', async ({ page }) => {\n    // Verify the operation is in progress\n    const operationStatus = page.getByRole('status', { name: /processing/i });\n    await expect(operationStatus).toBeVisible();\n\n    // Verify the operation is not completed\n    const result = page.getByRole('status', { name: /completed/i });\n    await expect(result).not.toBeVisible();\n\n    // Verify the Abort button is visible\n    const abortButton = page.getByRole('button', { name: /abort/i });\n    await expect(abortButton).toBeVisible();\n\n    // Click the Abort button to cancel the operation\n    await abortButton.click();\n\n    // Verify the operation status changes to cancelled\n    await expect(operationStatus).toHaveTextContent(/cancelled/i);\n\n    // Verify the operation result is not displayed\n    await expect(result).not.toBeVisible();\n\n    // Verify the operation is no longer in progress\n    await expect(operationStatus).not.toBeVisible();\n\n    // Verify the user is redirected to the success page\n    const successPage = page.getByRole('heading', { name: /success/i });\n    await expect(successPage).toBeVisible();\n\n    // Verify the success message is displayed\n    const successMessage = page.getByText(/operation cancelled/i);\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should handle multiple abort attempts and prevent re-cancellation', async ({ page }) => {\n    // Verify the operation is in progress\n    const operationStatus = page.getByRole('status', { name: /processing/i });\n    await expect(operationStatus).toBeVisible();\n\n    // Verify the operation is not completed\n    const result = page.getByRole('status', { name: /completed/i });\n    await expect(result).not.toBeVisible();\n\n    // Verify the Abort button is visible\n    const abortButton = page.getByRole('button', { name: /abort/i });\n    await expect(abortButton).toBeVisible();\n\n    // Click the Abort button to cancel the operation\n    await abortButton.click();\n\n    // Verify the operation status changes to cancelled\n    await expect(operationStatus).toHaveTextContent(/cancelled/i);\n\n    // Verify the operation result is not displayed\n    await expect(result).not.toBeVisible();\n\n    // Verify the operation is no longer in progress\n    await expect(operationStatus).not.toBeVisible();\n\n    // Verify the user is redirected to the success page\n    const successPage = page.getByRole('heading', { name: /success/i });\n    await expect(successPage).toBeVisible();\n\n    // Verify the success message is displayed\n    const successMessage = page.getByText(/operation cancelled/i);\n    await expect(successMessage).toBeVisible();\n\n    // Click the Abort button again to attempt re-cancellation\n    await abortButton.click();\n\n    // Verify the operation status does not change\n    await expect(operationStatus).toHaveTextContent(/cancelled/i);\n\n    // Verify the operation result is still not displayed\n    await expect(result).not.toBeVisible();\n\n    // Verify the operation is still no longer in progress\n    await expect(operationStatus).not.toBeVisible();\n\n    // Verify the success message remains visible\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8004,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4348,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 356.094,
+      "feedback_used": ""
+    }
+  ]
+}

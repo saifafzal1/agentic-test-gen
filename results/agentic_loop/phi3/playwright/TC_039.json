@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_039",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7988,
+  "total_latency_s": 258.43,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Navigation Bar Active Menu Item Highlighting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should highlight active menu item in navigation bar', async ({ page }) => {\n    // Verify initial state: no active menu item highlighted\n    const navLinks = page.getByRole('navigation').locator('[data-testid=\"nav-link\"]');\n    await expect(navLinks).toHaveCount(3);\n    const activeLink = page.getByRole('navigation').locator('[data-testid=\"nav-link-active\"]');\n    await expect(activeLink).not.toBeVisible();\n\n    // Navigate to Home page\n    const homeLink = page.getByRole('navigation').locator('[data-testid=\"nav-link-home\"]');\n    await homeLink.click();\n\n    // Verify active state is set to Home\n    await expect(homeLink).toBeVisible();\n    await expect(homeLink).toHaveClass(/active/);\n\n    // Verify other links are not highlighted\n    const aboutLink = page.getByRole('navigation').locator('[data-testid=\"nav-link-about\"]');\n    await expect(aboutLink).not.toHaveClass(/active/);\n\n    const contactLink = page.getByRole('navigation').locator('[data-testid=\"nav-link-contact\"]');\n    await expect(contactLink).not.toHaveClass(/active/);\n\n    // Navigate to Contact page\n    const contactLink = page.getByRole('navigation').locator('[data-testid=\"nav-link-contact\"]');\n    await contactLink.click();\n\n    // Verify active state is set to Contact\n    await expect(contactLink).toBeVisible();\n    await expect(contactLink).toHaveClass(/active/);\n\n    // Verify Home link is no longer active\n    await expect(homeLink).not.toHaveClass(/active/);\n\n    // Navigate back to Home\n    const homeLink = page.getByRole('navigation').locator('[data-testid=\"nav-link-home\"]');\n    await homeLink.click();\n\n    // Verify active state is set back to Home\n    await expect(homeLink).toBeVisible();\n    await expect(homeLink).toHaveClass(/active/);\n\n    // Verify other links are not highlighted\n    await expect(aboutLink).not.toHaveClass(/active/);\n    await expect(contactLink).not.toHaveClass(/active/);\n  });\n\n  test('should not highlight active menu item when page is refreshed', async ({ page }) => {\n    // Navigate to About page\n    const aboutLink = page.getByRole('navigation').locator('[data-testid=\"nav-link-about\"]');\n    await aboutLink.click();\n\n    // Verify active state is set to About\n    await expect(aboutLink).toBeVisible();\n    await expect(aboutLink).toHaveClass(/active/);\n\n    // Verify Home and Contact links are not highlighted\n    const homeLink = page.getByRole('navigation').locator('[data-testid=\"nav-link-home\"]');\n    await expect(homeLink).not.toHaveClass(/active/);\n\n    const contactLink = page.getByRole('navigation').locator('[data-testid=\"nav-link-contact\"]');\n    await expect(contactLink).not.toHaveClass(/active/);\n\n    // Refresh the page\n    await page.reload();\n\n    // Verify active state is not set to About\n    await expect(aboutLink).not.toHaveClass(/active/);\n\n    // Verify Home and Contact links are not highlighted\n    await expect(homeLink).not.toHaveClass(/active/);\n    await expect(contactLink).not.toHaveClass(/active/);\n\n    // Verify Home link is now active\n    await expect(homeLink).toBeVisible();\n    await expect(homeLink).toHaveClass(/active/);\n\n    // Verify Contact link is not active\n    await expect(contactLink).not.toHaveClass(/active/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7988,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4294,
+        "missing_keywords": [],
+        "assertion_count": 23,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 258.43,
+      "feedback_used": ""
+    }
+  ]
+}

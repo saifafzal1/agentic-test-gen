@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_041",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.811,
+  "total_latency_s": 266.457,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('404 Page Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should display 404 page when accessing invalid URL', async ({ page }) => {\n    // Navigate to an invalid URL\n    await page.goto('/invalid-page');\n\n    // Verify 404 error message is visible\n    const errorMessage = page.getByText('Page not found');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify navigation back button is present\n    const backButton = page.getByRole('button', { name: /back/i });\n    await expect(backButton).toBeVisible();\n\n    // Verify page title is set to 404\n    const pageTitle = page.getByText('404 - Page not found');\n    await expect(pageTitle).toBeVisible();\n\n    // Verify navigation back button works\n    await backButton.click();\n    await expect(page.url()).toContain('/');\n  });\n\n  test('should handle edge case: empty URL', async ({ page }) => {\n    // Navigate to an empty URL\n    await page.goto('/');\n\n    // Verify 404 page is displayed\n    const errorMessage = page.getByText('Page not found');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify navigation back button is present\n    const backButton = page.getByRole('button', { name: /back/i });\n    await expect(backButton).toBeVisible();\n\n    // Verify page title is set to 404\n    const pageTitle = page.getByText('404 - Page not found');\n    await expect(pageTitle).toBeVisible();\n\n    // Verify navigation back button works\n    await backButton.click();\n    await expect(page.url()).toContain('/');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.811,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4698,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 266.457,
+      "feedback_used": ""
+    }
+  ]
+}

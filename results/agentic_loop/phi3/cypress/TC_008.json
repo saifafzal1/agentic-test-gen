@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_008",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7969,
+  "total_latency_s": 37.406,
+  "final_script": "describe('Login Loading Spinner', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should display loading spinner while login request is processing', () => {\n    // Intercept the login API call\n    cy.intercept('POST', '/api/auth/login', {\n      statusCode: 200,\n      body: { token: 'abc123', userId: 1 }\n    }).as('loginRequest');\n\n    // Verify spinner is visible\n    cy.get('[data-testid=\"spinner\"]').should('be.visible');\n    cy.get('[data-testid=\"spinner\"]').should('contain', 'Loading...');\n\n    // Fill login form\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('password123');\n\n    // Click login button\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for API call\n    cy.wait('@loginRequest');\n\n    // Verify spinner is hidden\n    cy.get('[data-testid=\"spinner\"]').should('not.exist');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Login successful');\n\n    // Verify user is redirected to dashboard\n    cy.url().should('include', '/dashboard');\n  });\n\n  it('should not display spinner when login fails', () => {\n    // Intercept failed login API call\n    cy.intercept('POST', '/api/auth/login', {\n      statusCode: 401,\n      body: { error: 'Invalid credentials' }\n    }).as('loginRequest');\n\n    // Fill login form\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('wrongpassword');\n\n    // Click login button\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for API call\n    cy.wait('@loginRequest');\n\n    // Verify spinner is still visible\n    cy.get('[data-testid=\"spinner\"]').should('be.visible');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid credentials');\n\n    // Verify user is not redirected\n    cy.url().should('include', '/login');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7969,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5231,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 37.406,
+      "feedback_used": ""
+    }
+  ]
+}

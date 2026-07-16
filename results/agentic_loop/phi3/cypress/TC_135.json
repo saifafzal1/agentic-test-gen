@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_135",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7747,
+  "total_latency_s": 459.774,
+  "final_script": "describe('Drawer/Slide-in Panel from Right', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should open drawer/slide-in panel from right with correct animation and visibility', () => {\n    // Verify drawer is closed by default\n    cy.get('[data-testid=\"drawer-panel\"]').should('not.be.visible');\n\n    // Click the drawer toggle button\n    cy.get('[data-testid=\"drawer-toggle-button\"]').click();\n\n    // Verify drawer is now visible and sliding in from the right\n    cy.get('[data-testid=\"drawer-panel\"]').should('be.visible');\n    cy.get('[data-testid=\"drawer-panel\"]').should('have.css', 'transform', 'translateX(-100%)');\n\n    // Verify drawer content is accessible\n    cy.get('[data-testid=\"drawer-content\"]').should('be.visible');\n    cy.get('[data-testid=\"drawer-content\"]').should('contain', 'Drawer content');\n\n    // Verify drawer has correct animation\n    cy.get('[data-testid=\"drawer-panel\"]').should('have.css', 'transition', 'transform 0.3s ease');\n\n    // Verify close button is visible\n    cy.get('[data-testid=\"drawer-close-button\"]').should('be.visible');\n\n    // Verify close button works\n    cy.get('[data-testid=\"drawer-close-button\"]').click();\n\n    // Verify drawer is closed\n    cy.get('[data-testid=\"drawer-panel\"]').should('not.be.visible');\n    cy.get('[data-testid=\"drawer-panel\"]').should('have.css', 'transform', 'translateX(0%)');\n  });\n\n  it('should handle drawer overflow and prevent content from being cut off', () => {\n    // Open drawer\n    cy.get('[data-testid=\"drawer-toggle-button\"]').click();\n    cy.get('[data-testid=\"drawer-panel\"]').should('be.visible');\n\n    // Verify drawer content is fully visible\n    cy.get('[data-testid=\"drawer-content\"]').should('be.visible');\n\n    // Verify drawer content does not overflow\n    cy.get('[data-testid=\"drawer-content\"]').should('have.css', 'overflow-y', 'scroll');\n\n    // Verify scrollbar appears when content is too long\n    cy.get('[data-testid=\"drawer-content\"]').should('have.css', 'overflow-y', 'scroll');\n\n    // Verify scrollbar is functional\n    cy.get('[data-testid=\"drawer-content\"]').scrollTo('bottom');\n    cy.get('[data-testid=\"drawer-content\"]').should('be.visible');\n\n    // Verify drawer closes when scrollbar is used\n    cy.get('[data-testid=\"drawer-close-button\"]').click();\n\n    // Verify drawer is closed\n    cy.get('[data-testid=\"drawer-panel\"]').should('not.be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7747,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.449,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 459.774,
+      "feedback_used": ""
+    }
+  ]
+}

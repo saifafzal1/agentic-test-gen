@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_118",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.5159,
+  "total_latency_s": 804.372,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Checkout Flow - Sequential Async Steps', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should complete checkout flow in order with sequential async steps', async ({ page }) => {\n    // Step 1: Add item to cart\n    const addToCartButton = page.getByRole('button', { name: /add to cart/i });\n    await addToCartButton.click();\n    const cartCount = page.getByText('Cart Items: 1');\n    await expect(cartCount).toBeVisible();\n\n    // Step 2: Proceed to checkout\n    const checkoutButton = page.getByRole('button', { name: /proceed to checkout/i });\n    await checkoutButton.click();\n    const checkoutForm = page.getByRole('form', { name: /checkout/i });\n    await expect(checkoutForm).toBeVisible();\n\n    // Step 3: Enter shipping address\n    const shippingAddressInput = page.getByLabel(/shipping address/i);\n    await expect(shippingAddressInput).toBeVisible();\n    await shippingAddressInput.fill('123 Main St, Anytown, USA');\n\n    // Step 4: Enter billing address\n    const billingAddressInput = page.getByLabel(/billing address/i);\n    await billingAddressInput.fill('456 Elm St, Anytown, USA');\n\n    // Step 5: Select payment method\n    const paymentMethodSelect = page.getByLabel(/payment method/i);\n    await paymentMethodSelect.click();\n    const creditCardButton = page.getByRole('button', { name: /credit card/i });\n    await creditCardButton.click();\n\n    // Step 6: Enter card details\n    const cardNumberInput = page.getByLabel(/card number/i);\n    await cardNumberInput.fill('4111111111111111');\n\n    const expiryDateInput = page.getByLabel(/expiry date/i);\n    await expiryDateInput.fill('12/25');\n\n    const cvvInput = page.getByLabel(/cvv/i);\n    await cvvInput.fill('123');\n\n    // Step 7: Review and confirm order\n    const reviewButton = page.getByRole('button', { name: /review/i });\n    await reviewButton.click();\n    const confirmButton = page.getByRole('button', { name: /confirm/i });\n    await expect(confirmButton).toBeVisible();\n    await confirmButton.click();\n\n    // Step 8: Verify success message\n    const successMessage = page.getByText(/order confirmed/i);\n    await expect(successMessage).toBeVisible();\n\n    // Step 9: Verify order details\n    const orderDetails = page.getByText(/order number: 12345/i);\n    await expect(orderDetails).toBeVisible();\n\n    // Step 10: Verify order summary\n    const orderSummary = page.getByText(/order total: $100.00/i);\n    await expect(orderSummary).toBeVisible();\n\n    // Step 11: Verify order status\n    const orderStatus = page.getByText(/order status: processing/i);\n    await expect(orderStatus).toBeVisible();\n\n    // Step 12: Verify order confirmation email\n    const emailLink = page.getByRole('link', { name: /order confirmation/i });\n    await expect(emailLink).toBeVisible();\n\n    // Step 13: Verify order in cart\n    const cartCount = page.getByText('Cart Items: 0');\n    await expect(cartCount).toBeVisible();\n  });\n\n  test('should handle failure in async steps and retry', async ({ page }) => {\n    // Step 1: Add item to cart\n    const addToCartButton = page.getByRole('button', { name: /add to cart/i });\n    await addToCartButton.click();\n    const cartCount = page.getByText('Cart Items: 1');\n    await expect(cartCount).toBeVisible();",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5159,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4531,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 219.691,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4916,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3721,
+        "missing_keywords": [],
+        "assertion_count": 27,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 269.884,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.4878,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3593,
+        "missing_keywords": [],
+        "assertion_count": 36,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 314.797,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_060",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8372,
+  "total_latency_s": 119.146,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Retry Button on Network Timeout', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/api/data');\n  });\n\n  test('should display retry button when network request times out', async ({ page }) => {\n    // Intercept the initial API request and simulate a timeout\n    await page.route('**/api/data', (route) => {\n      route.abort('timedout');\n    });\n\n    // Click the button that triggers the API call\n    const fetchDataButton = page.getByRole('button', { name: /fetch data/i });\n    await fetchDataButton.click();\n\n    // Wait for the timeout error state to appear\n    await page.waitForTimeout(500);\n\n    // Verify the error message is displayed\n    const errorMessage = page.getByText(/network request timed out/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the retry button is visible\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify the retry button has the correct label\n    await expect(retryButton).toHaveText('Retry');\n\n    // Verify the retry button is enabled\n    await expect(retryButton).toBeEnabled();\n\n    // Click the retry button\n    await retryButton.click();\n\n    // Verify the retry button is disabled while retrying\n    await expect(retryButton).toBeDisabled();\n\n    // Wait for the retry request to complete successfully\n    await page.waitForTimeout(500);\n\n    // Verify the error message is no longer visible\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify the data is now displayed\n    const dataContainer = page.getByTestId('data-container');\n    await expect(dataContainer).toBeVisible();\n    const dataContent = page.getByText(/data loaded successfully/i);\n    await expect(dataContent).toBeVisible();\n  });\n\n  test('should handle multiple retry attempts and display final error', async ({ page }) => {\n    // Intercept the API request and simulate timeout for the first two attempts\n    let attemptCount = 0;\n    await page.route('**/api/data', (route) => {\n      attemptCount++;\n      if (attemptCount <= 2) {\n        route.abort('timedout');\n      } else {\n        route.continue();\n      }\n    });\n\n    // Click the button to trigger the first API call\n    const fetchDataButton = page.getByRole('button', { name: /fetch data/i });\n    await fetchDataButton.click();\n\n    // Wait for the first timeout\n    await page.waitForTimeout(500);\n\n    // Verify retry button is visible after first timeout\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Click retry button (second attempt)\n    await retryButton.click();\n    await page.waitForTimeout(500);\n\n    // Verify retry button is still visible after second timeout\n    await expect(retryButton).toBeVisible();\n\n    // Click retry button (third attempt - should succeed)\n    await retryButton.click();\n    await page.waitForTimeout(500);\n\n    // Verify data is now displayed\n    const dataContainer = page.getByTestId('data-container');\n    await expect(dataContainer).toBeVisible();\n    const dataContent = page.getByText(/data loaded successfully/i);\n    await expect(dataContent).toBeVisible();\n\n    // Verify retry button is no longer visible after success\n    await expect(retryButton).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8372,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5575,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 119.146,
+      "feedback_used": ""
+    }
+  ]
+}

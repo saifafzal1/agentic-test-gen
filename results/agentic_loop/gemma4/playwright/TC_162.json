@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_162",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8065,
+  "total_latency_s": 72.515,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Virtual Scroll List - 10,000 Rows', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/virtual-scroll');\n  });\n\n  test('should render and scroll through 10,000 rows without lag', async ({ page }) => {\n    // Verify the list container is visible\n    const listContainer = page.getByRole('region', { name: /virtual scroll list/i });\n    await expect(listContainer).toBeVisible();\n\n    // Verify the initial row count is displayed\n    const rowCount = page.getByText('10,000 rows');\n    await expect(rowCount).toBeVisible();\n\n    // Scroll to the bottom of the list\n    const scrollButton = page.getByRole('button', { name: /scroll to bottom/i });\n    await scrollButton.click();\n\n    // Wait for the list to render all rows\n    await page.waitForTimeout(1000);\n\n    // Verify the last row is visible\n    const lastRow = page.getByText('Row 10000');\n    await expect(lastRow).toBeVisible();\n\n    // Verify the scroll indicator shows the full height\n    const scrollIndicator = page.getByRole('status', { name: /scroll indicator/i });\n    await expect(scrollIndicator).toContainText('10000');\n\n    // Verify the scroll position is at the bottom\n    const scrollPosition = page.getByRole('status', { name: /scroll position/i });\n    await expect(scrollPosition).toContainText('10000');\n  });\n\n  test('should handle rapid scrolling and maintain performance', async ({ page }) => {\n    // Verify the list container is visible\n    const listContainer = page.getByRole('region', { name: /virtual scroll list/i });\n    await expect(listContainer).toBeVisible();\n\n    // Scroll to the middle of the list\n    const scrollButton = page.getByRole('button', { name: /scroll to middle/i });\n    await scrollButton.click();\n\n    // Wait for the list to render the middle section\n    await page.waitForTimeout(1000);\n\n    // Verify a middle row is visible\n    const middleRow = page.getByText('Row 5000');\n    await expect(middleRow).toBeVisible();\n\n    // Scroll rapidly to the top\n    const scrollUpButton = page.getByRole('button', { name: /scroll to top/i });\n    await scrollUpButton.click();\n\n    // Wait for the list to render the top section\n    await page.waitForTimeout(1000);\n\n    // Verify the first row is visible\n    const firstRow = page.getByText('Row 1');\n    await expect(firstRow).toBeVisible();\n\n    // Verify the scroll position is at the top\n    const scrollPosition = page.getByRole('status', { name: /scroll position/i });\n    await expect(scrollPosition).toContainText('0');\n\n    // Verify the list is responsive to scroll events\n    const scrollEvent = page.evaluate(() => {\n      const list = document.querySelector('[data-testid=\"virtual-scroll-list\"]');\n      if (list) {\n        list.scrollTop = 50000;\n      }\n    });\n\n    // Verify the scroll position updates after programmatic scroll\n    await expect(scrollPosition).toContainText('50000');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8065,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.455,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.515,
+      "feedback_used": ""
+    }
+  ]
+}

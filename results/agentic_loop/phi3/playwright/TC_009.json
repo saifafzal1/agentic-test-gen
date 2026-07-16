@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_009",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8144,
+  "total_latency_s": 598.182,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Account Lock After Failed Login Attempts', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should lock account after 5 failed login attempts', async ({ page }) => {\n    // Setup: Mock API response for failed login attempts\n    await page.route('**/api/auth/login', async (route) => {\n      await route.abort('failed');\n    });\n\n    // First failed attempt\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('admin@example.com');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('wrongpassword');\n\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await loginButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/invalid credentials/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Second failed attempt\n    await passwordInput.fill('wrongpassword');\n    await loginButton.click();\n\n    await expect(errorMessage).toBeVisible();\n\n    // Third failed attempt\n    await passwordInput.fill('wrongpassword');\n    await loginButton.click();\n\n    await expect(errorMessage).toBeVisible();\n\n    // Fourth failed attempt\n    await passwordInput.fill('wrongpassword');\n    await loginButton.click();\n\n    await expect(errorMessage).toBeVisible();\n\n    // Fifth failed attempt\n    await passwordInput.fill('wrongpassword');\n    await loginButton.click();\n\n    // Verify account is locked\n    const lockMessage = page.getByText(/account locked/i);\n    await expect(lockMessage).toBeVisible();\n\n    // Verify login button is disabled\n    const loginButtonDisabled = page.getByRole('button', { name: /login/i });\n    await expect(loginButtonDisabled).toBeDisabled();\n\n    // Verify email is displayed\n    const emailDisplay = page.getByText('admin@example.com');\n    await expect(emailDisplay).toBeVisible();\n\n    // Verify lockout message is displayed\n    const lockoutMessage = page.getByText(/account locked/i);\n    await expect(lockoutMessage).toBeVisible();\n\n    // Verify lockout duration\n    const lockoutDuration = page.getByText(/locked for 15 minutes/i);\n    await expect(lockoutDuration).toBeVisible();\n\n    // Verify reset button is available\n    const resetButton = page.getByRole('button', { name: /reset password/i });\n    await expect(resetButton).toBeVisible();\n\n    // Verify reset link is present\n    const resetLink = page.getByRole('link', { name: /reset password/i });\n    await expect(resetLink).toBeVisible();\n\n    // Verify admin dashboard is accessible\n    const adminDashboard = page.getByRole('region', { name: /admin dashboard/i });\n    await expect(adminDashboard).toBeVisible();\n  });\n\n  test('should unlock account after successful login after lockout', async ({ page }) => {\n    // Setup: Mock API response for successful login\n    await page.route('**/api/auth/login', async (route) => {\n      await route.continue();\n    });\n\n    // Lock account by simulating 5 failed login attempts\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('admin@example.com');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('wrongpassword');\n\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await loginButton.click();\n\n    // Verify account is locked\n    const lockMessage = page.getByText(/account locked/i);\n    await expect(lockMessage).toBeVisible();\n\n    // Wait for lockout duration\n    await page.waitForTimeout(90000);\n\n    // Verify account is unlocked\n    const unlockMessage = page.getByText(/account unlocked/i);\n    await expect(unlockMessage).toBeVisible();\n\n    // Verify lockout duration is cleared\n    const lockoutDuration = page.getByText(/locked for 15 minutes/i);\n    await expect(lockoutDuration).not.toBeVisible();\n\n    // Verify account is accessible\n    const adminDashboard = page.getByRole('region', { name: /admin dashboard/i });\n    await expect(adminDashboard).toBeVisible();\n\n    // Verify admin dashboard is visible\n    const dashboardLink = page.getByRole('link', { name: /admin dashboard/i });\n    await expect(dashboardLink).toBeVisible();\n\n    // Verify admin dashboard is accessible\n    await expect(adminDashboard).toBeVisible();\n\n    // Verify account is accessible\n    const accountLink = page.getByRole('link', { name: /account/i });\n    await expect(accountLink).toBeVisible();\n\n    // Verify account details are displayed\n    const accountDetails = page.getByText(/admin@example.com/i);\n    await expect(accountDetails).toBeVisible();\n\n    // Verify account recovery options are available\n    const recoveryOptions = page.getByRole('link', { name: /recover account/i });\n    await expect(recoveryOptions).toBeVisible();\n\n    // Verify account settings are available\n    const accountSettings = page.getByRole('link', { name: /account settings/i });\n    await expect(accountSettings).toBeVisible();\n\n    // Verify account security settings are available\n    const securitySettings = page.getByRole('link', { name: /security settings/i });\n    await expect(securitySettings).toBeVisible();\n\n    // Verify account lockout reason is displayed\n    const lockoutReason = page.getByText(/locked due to failed login attempts/i);\n    await expect(lockoutReason).toBeVisible();\n\n    // Verify account is no longer locked\n    const lockMessage = page.getByText(/account locked/i);\n    await expect(lockMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5262,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4874,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 54.13,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8144,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3815,
+        "missing_keywords": [],
+        "assertion_count": 25,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 544.052,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

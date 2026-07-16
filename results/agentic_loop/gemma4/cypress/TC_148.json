@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_148",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7844,
+  "total_latency_s": 72.249,
+  "final_script": "describe('Table Row Filtering by Search Input', () => {\n  beforeEach(() => {\n    cy.visit('/table-list');\n  });\n\n  it('should filter table rows when user types in search input', () => {\n    // Verify table is visible and contains initial rows\n    cy.get('[data-testid=\"table-container\"]').should('be.visible');\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 0);\n\n    // Verify initial rows contain expected data\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', 'John Doe');\n    cy.get('[data-testid=\"table-row\"]').eq(1).should('contain', 'Jane Smith');\n\n    // Type search term into the input field\n    cy.get('[data-testid=\"search-input\"]').type('John');\n\n    // Wait for API call and table update\n    cy.wait('@filterTableRequest');\n\n    // Verify only matching rows are displayed\n    cy.get('[data-testid=\"table-row\"]').should('have.length', 1);\n\n    // Verify the visible row contains the search term\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', 'John Doe');\n\n    // Verify other rows are hidden\n    cy.get('[data-testid=\"table-row\"]').eq(1).should('not.exist');\n\n    // Verify search input retains the typed value\n    cy.get('[data-testid=\"search-input\"]').should('have.value', 'John');\n  });\n\n  it('should handle empty search input and display all rows', () => {\n    // Verify table is visible and contains initial rows\n    cy.get('[data-testid=\"table-container\"]').should('be.visible');\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 0);\n\n    // Type a search term and verify filtering occurs\n    cy.get('[data-testid=\"search-input\"]').type('Jane');\n    cy.wait('@filterTableRequest');\n    cy.get('[data-testid=\"table-row\"]').should('have.length', 1);\n\n    // Clear the search input\n    cy.get('[data-testid=\"search-input\"]').clear();\n\n    // Wait for API call to reset filter\n    cy.wait('@filterTableRequest');\n\n    // Verify all rows are displayed again\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 1);\n\n    // Verify the search input is empty\n    cy.get('[data-testid=\"search-input\"]').should('have.value', '');\n\n    // Verify all original rows are visible\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', 'John Doe');\n    cy.get('[data-testid=\"table-row\"]').eq(1).should('contain', 'Jane Smith');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7844,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4815,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.249,
+      "feedback_used": ""
+    }
+  ]
+}

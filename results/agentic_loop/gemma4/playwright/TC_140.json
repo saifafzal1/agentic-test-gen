@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_140",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8487,
+  "total_latency_s": 72.011,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Popover Toggle Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/popover-toggle');\n  });\n\n  test('should open popover when button is clicked', async ({ page }) => {\n    // Verify popover is initially closed\n    const popover = page.getByRole('region', { name: /popover/i });\n    await expect(popover).not.toBeVisible();\n\n    // Click the toggle button\n    const toggleButton = page.getByRole('button', { name: /toggle popover/i });\n    await toggleButton.click();\n\n    // Verify popover is now visible\n    await expect(popover).toBeVisible();\n\n    // Verify popover content is displayed\n    const popoverContent = page.getByText(/popover content/i);\n    await expect(popoverContent).toBeVisible();\n\n    // Verify popover has focus\n    await expect(popover).toHaveFocus();\n  });\n\n  test('should close popover when button is clicked again', async ({ page }) => {\n    // Open popover by clicking the toggle button\n    const toggleButton = page.getByRole('button', { name: /toggle popover/i });\n    await toggleButton.click();\n\n    // Verify popover is visible\n    const popover = page.getByRole('region', { name: /popover/i });\n    await expect(popover).toBeVisible();\n\n    // Click the toggle button again to close\n    await toggleButton.click();\n\n    // Verify popover is no longer visible\n    await expect(popover).not.toBeVisible();\n\n    // Verify popover content is not displayed\n    const popoverContent = page.getByText(/popover content/i);\n    await expect(popoverContent).not.toBeVisible();\n\n    // Verify button is still enabled\n    await expect(toggleButton).toBeEnabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8487,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5957,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.011,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_027",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7868,
+  "total_latency_s": 71.037,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('ZIP Code Auto-formatting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/contact-form');\n  });\n\n  test('should auto-format ZIP code as user types', async ({ page }) => {\n    // Locate and fill ZIP code field using getByLabel\n    const zipField = page.getByLabel('ZIP Code');\n    await zipField.fill('1234567');\n\n    // Verify the field has been formatted to 5 digits\n    await expect(zipField).toHaveValue('1235');\n\n    // Verify the formatted value is displayed in the input\n    const formattedValue = await zipField.inputValue();\n    expect(formattedValue).toBe('1235');\n\n    // Verify the field has the correct format\n    const regex = /^\\d{5}$/;\n    expect(regex.test(formattedValue)).toBe(true);\n\n    // Verify the field is still interactive\n    await zipField.click();\n    await expect(zipField).toBeVisible();\n  });\n\n  test('should handle partial ZIP code input and allow further typing', async ({ page }) => {\n    // Locate and fill ZIP code field using getByLabel\n    const zipField = page.getByLabel('ZIP Code');\n    await zipField.fill('123');\n\n    // Verify the field has been formatted to 3 digits\n    await expect(zipField).toHaveValue('123');\n\n    // Verify the field is still interactive\n    await zipField.click();\n    await expect(zipField).toBeVisible();\n\n    // Type more characters\n    await zipField.fill('490');\n\n    // Verify the field has been formatted to 6 digits\n    await expect(zipField).toHaveValue('123490');\n\n    // Verify the field is still interactive\n    await zipField.click();\n    await expect(zipField).toBeVisible();\n\n    // Verify the field accepts valid 5-digit ZIP codes\n    await zipField.fill('90210');\n    await expect(zipField).toHaveValue('90210');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7868,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3895,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.037,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_077",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8337,
+  "total_latency_s": 343.098,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Bulk Delete Feature', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/items');\n  });\n\n  test('should successfully bulk-delete selected items from a list', async ({ page }) => {\n    // Verify initial list is displayed\n    const listItems = page.getByRole('listitem');\n    await expect(listItems).toHaveCount(5);\n\n    // Select 3 items using checkboxes\n    const checkbox1 = page.getByLabel('Item 1');\n    await checkbox1.click();\n\n    const checkbox2 = page.getByLabel('Item 2');\n    await checkbox2.click();\n\n    const checkbox3 = page.getByLabel('Item 3');\n    await checkbox3.click();\n\n    // Verify selection is visible\n    const selectedCount = page.getByText('Selected: 3');\n    await expect(selectedCount).toBeVisible();\n\n    // Click bulk delete button\n    const bulkDeleteButton = page.getByRole('button', { name: /bulk delete/i });\n    await bulkDeleteButton.click();\n\n    // Verify confirmation modal appears\n    const confirmModal = page.getByRole('dialog', { name: /confirm bulk delete/i });\n    await expect(confirmModal).toBeVisible();\n\n    // Verify confirm button is visible\n    const confirmButton = page.getByRole('button', { name: /confirm/i });\n    await expect(confirmButton).toBeVisible();\n\n    // Click confirm button\n    await confirmButton.click();\n\n    // Verify success message\n    const successMessage = page.getByText(/deleted 3 items/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify list is updated\n    await expect(listItems).toHaveCount(2);\n\n    // Verify items are removed from the list\n    const item1 = page.getByText('Item 1');\n    await expect(item1).not.toBeVisible();\n\n    const item2 = page.getByText('Item 2');\n    await expect(item2).not.toBeVisible();\n\n    const item3 = page.getByText('Item 3');\n    await expect(item3).not.toBeVisible();\n\n    // Verify remaining items are still visible\n    const remainingItem = page.getByText('Item 4');\n    await expect(remainingItem).toBeVisible();\n\n    const remainingItem2 = page.getByText('Item 5');\n    await expect(remainingItem2).toBeVisible();\n  });\n\n  test('should handle bulk delete with no selected items', async ({ page }) => {\n    // Verify initial list is displayed\n    const listItems = page.getByRole('listitem');\n    await expect(listItems).toHaveCount(5);\n\n    // Click bulk delete button\n    const bulkDeleteButton = page.getByRole('button', { name: /bulk delete/i });\n    await bulkDeleteButton.click();\n\n    // Verify confirmation modal appears\n    const confirmModal = page.getByRole('dialog', { name: /confirm bulk delete/i });\n    await expect(confirmModal).toBeVisible();\n\n    // Verify confirm button is visible\n    const confirmButton = page.getByRole('button', { name: /confirm/i });\n    await expect(confirmButton).toBeVisible();\n\n    // Click confirm button\n    await confirmButton.click();\n\n    // Verify success message\n    const successMessage = page.getByText(/no items selected/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify list remains unchanged\n    await expect(listItems).toHaveCount(5);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8337,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4456,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 343.098,
+      "feedback_used": ""
+    }
+  ]
+}

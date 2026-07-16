@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_117",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7916,
+  "total_latency_s": 124.783,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Result Race Conditions', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should display the latest search result when multiple requests are made concurrently', async ({ page }) => {\n    // Setup: intercept the search API\n    await page.route('**/api/search', (route) => {\n      route.continue();\n    });\n\n    // First request: user types \"playwright\" and hits enter\n    const searchInput = page.getByPlaceholder('Search');\n    await searchInput.fill('playwright');\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await searchButton.click();\n\n    // Wait for the initial result to load\n    const resultContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultContainer).toBeVisible();\n\n    // Second request: user types \"playwright\" again and hits enter\n    await searchInput.fill('playwright');\n    await searchButton.click();\n\n    // Wait for the second result to load\n    await expect(resultContainer).toBeVisible();\n\n    // Verify the latest result is displayed\n    const latestResult = page.getByText('Playwright TypeScript');\n    await expect(latestResult).toBeVisible();\n\n    // Verify the first result is no longer visible\n    const firstResult = page.getByText('Playwright Playwright');\n    await expect(firstResult).not.toBeVisible();\n  });\n\n  test('should handle race conditions and display the correct result when search is interrupted', async ({ page }) => {\n    // Setup: intercept the search API\n    await page.route('**/api/search', (route) => {\n      route.continue();\n    });\n\n    // First request: user types \"playwright\" and hits enter\n    const searchInput = page.getByPlaceholder('Search');\n    await searchInput.fill('playwright');\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await searchButton.click();\n\n    // Wait for the initial result to load\n    const resultContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultContainer).toBeVisible();\n\n    // Second request: user types \"playwright\" again and hits enter\n    await searchInput.fill('playwright');\n    await searchButton.click();\n\n    // Wait for the second result to load\n    await expect(resultContainer).toBeVisible();\n\n    // Third request: user types \"playwright\" again and hits enter\n    await searchInput.fill('playwright');\n    await searchButton.click();\n\n    // Wait for the third result to load\n    await expect(resultContainer).toBeVisible();\n\n    // Verify the latest result is displayed\n    const latestResult = page.getByText('Playwright TypeScript');\n    await expect(latestResult).toBeVisible();\n\n    // Verify the first result is no longer visible\n    const firstResult = page.getByText('Playwright Playwright');\n    await expect(firstResult).not.toBeVisible();\n\n    // Verify the second result is still visible\n    const secondResult = page.getByText('Playwright Playwright');\n    await expect(secondResult).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7916,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4053,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 124.783,
+      "feedback_used": ""
+    }
+  ]
+}

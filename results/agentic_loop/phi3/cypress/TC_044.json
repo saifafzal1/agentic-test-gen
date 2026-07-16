@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_044",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7818,
+  "total_latency_s": 284.933,
+  "final_script": "describe('Notification Click Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should navigate to relevant content when clicking a notification', () => {\n    // Verify notification is visible\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('contain', 'New article published');\n\n    // Click the notification\n    cy.get('[data-testid=\"notification-item\"]').click();\n\n    // Verify navigation occurred\n    cy.url().should('include', '/articles');\n\n    // Verify we are on the correct page\n    cy.get('[data-testid=\"article-title\"]').should('be.visible');\n    cy.get('[data-testid=\"article-title\"]').should('contain', 'New article published');\n\n    // Verify content is displayed\n    cy.get('[data-testid=\"article-content\"]').should('be.visible');\n    cy.get('[data-testid=\"article-content\"]').should('contain', 'This is the article content');\n  });\n\n  it('should handle edge case when notification is empty or not clickable', () => {\n    // Verify notification is empty\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('contain', 'No new notifications');\n\n    // Attempt to click an empty notification\n    cy.get('[data-testid=\"notification-item\"]').click();\n\n    // Verify navigation did not occur\n    cy.url().should('not.include', '/articles');\n\n    // Verify user is still on notifications page\n    cy.url().should('include', '/notifications');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'No new notifications');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7818,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4726,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 284.933,
+      "feedback_used": ""
+    }
+  ]
+}

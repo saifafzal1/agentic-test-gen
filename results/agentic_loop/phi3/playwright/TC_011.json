@@ -1,0 +1,59 @@
+{
+  "tc_id": "TC_011",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.4801,
+  "total_latency_s": 1187.455,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Password Strength Indicator', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/password-change');\n  });\n\n  test('should display password strength indicator with weak password', async ({ page }) => {\n    // Set up intercept for password input\n    await page.route('**/api/password-change/set-password', (route) => {\n      route.continue();\n    });\n\n    // Set up intercept for password strength response\n    await page.route('**/api/password-strength', (route) => {\n      route.continue();\n    });\n\n    // Set up intercept for success response\n    await page.route('**/api/password-change/set-password/success', (route) => {\n      route.continue();\n    });\n\n    // Set up intercept for error response\n    await page.route('**/api/password-change/set-password/error', (route) => {\n      route.abort('failed');\n    });\n\n    // Set up intercept for loading state\n    await page.route('**/api/password-change/set-password/loading', (route) => {\n      route.abort('failed');\n    });\n\n    // Get password input by role\n    const passwordInput = page.getByRole('textbox', { name: /password/i });\n    await expect(passwordInput).toBeVisible();\n\n    // Set weak password\n    await passwordInput.fill('123456');\n\n    // Get password strength indicator by role\n    const strengthIndicator = page.getByRole('status', { name: /weak/i });\n    await expect(strengthIndicator).toBeVisible();\n\n    // Verify indicator text\n    await expect(strengthIndicator).toContainText('Weak');\n\n    // Verify password strength icon\n    const strengthIcon = page.getByTestId('password-strength-icon');\n    await expect(strengthIcon).toBeVisible();\n\n    // Verify error message\n    const errorMessage = page.getByText(/Password must be at least 8 characters long/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify success message\n    const successMessage = page.getByText(/Password set successfully/i);\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify password input is still visible\n    await expect(passwordInput).toBeVisible();\n  });\n\n  test('should display password strength indicator with strong password', async ({ page }) => {\n    // Set up intercept for password input\n    await page.route('**/api/password-change/set-password', (route) => {\n      route.continue();\n    });\n\n    // Set up intercept for password strength response\n    await page.route('**/api/password-strength', (route) => {\n      route.continue();\n    });\n\n    // Set up intercept for success response\n    await page.route('**/api/password-change/set-password/success', (route) => {\n      route.continue();\n    });\n\n    // Set up intercept for error response\n    await page.route('**/api/password-change/set-password/error', (route) => {\n      route.abort('failed');\n    });\n\n    // Set up intercept for loading state\n    await page.route('**/api/password-change/set-password/loading', (route) => {\n      route.abort('failed');\n    });\n\n    // Get password input by role\n    const passwordInput = page.getByRole('textbox', { name: /password/i });\n    await expect(passwordInput).toBeVisible();\n\n    // Set strong password\n    await passwordInput.fill('P@ssw0rd123');\n\n    // Get password strength indicator by role\n    const strengthIndicator = page.getByRole('status', { name: /strong/i });\n    await expect(strengthIndicator).toBeVisible();\n\n    // Verify indicator text\n    await expect(strengthIndicator).toContainText('Strong');\n\n    // Verify password strength icon\n    const strengthIcon = page.getByTestId('password-strength-icon');\n    await expect(strengthIcon).toBeVisible();\n\n    // Verify success message",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4801,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3537,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 54.693,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.1036,
+        "syntax": 0.1,
+        "assertion": 0.0,
+        "rouge_l": 0.212,
+        "missing_keywords": [
+          "expect("
+        ],
+        "assertion_count": 0,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2",
+        "complete": false
+      },
+      "latency_s": 543.286,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.4724,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3279,
+        "missing_keywords": [],
+        "assertion_count": 23,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 589.476,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2"
+    }
+  ]
+}

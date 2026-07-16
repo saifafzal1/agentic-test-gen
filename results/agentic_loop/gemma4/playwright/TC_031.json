@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_031",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8181,
+  "total_latency_s": 71.165,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload - Size Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should reject files larger than 5MB and display error message', async ({ page }) => {\n    // Setup: intercept the upload API endpoint\n    await page.route('**/api/upload', (route) => {\n      route.abort('blockedbyclient');\n    });\n\n    // Setup: create a large file (e.g., 6MB)\n    const largeFile = await page.evaluate(() => {\n      const buffer = new ArrayBuffer(6 * 1024 * 1024);\n      return new Blob([buffer], { type: 'application/pdf' });\n    });\n\n    // Setup: create a small, valid file (e.g., 1MB)\n    const smallFile = await page.evaluate(() => {\n      const buffer = new ArrayBuffer(1 * 1024 * 1024);\n      return new Blob([buffer], { type: 'application/pdf' });\n    });\n\n    // Get the file input using getByLabel\n    const fileInput = page.getByLabel('Upload File');\n    await expect(fileInput).toBeVisible();\n\n    // Upload the large file\n    await fileInput.setInputFiles(largeFile);\n\n    // Verify the file name appears with the large file\n    const fileNameDisplay = page.getByText('large-file.pdf');\n    await expect(fileNameDisplay).toBeVisible();\n\n    // Verify the size error message appears\n    const errorMessage = page.getByText('File size must be less than 5MB');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the upload button is disabled\n    const uploadButton = page.getByRole('button', { name: 'Upload' });\n    await expect(uploadButton).toBeDisabled();\n\n    // Attempt to submit the form\n    await uploadButton.click();\n\n    // Verify the error message persists after submission attempt\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should allow and upload files smaller than 5MB', async ({ page }) => {\n    // Setup: intercept the upload API endpoint and mock success\n    await page.route('**/api/upload', (route) => {\n      route.continue();\n    });\n\n    // Setup: create a small, valid file (e.g., 1MB)\n    const smallFile = await page.evaluate(() => {\n      const buffer = new ArrayBuffer(1 * 1024 * 1021);\n      return new Blob([buffer], { type: 'application/pdf' });\n    });\n\n    // Get the file input using getByLabel\n    const fileInput = page.getByLabel('Upload File');\n    await expect(fileInput).toBeVisible();\n\n    // Upload the small file\n    await fileInput.setInputFiles(smallFile);\n\n    // Verify the file name appears with the small file\n    const fileNameDisplay = page.getByText('small-file.pdf');\n    await expect(fileNameDisplay).toBeVisible();\n\n    // Verify the size error message does NOT appear\n    const errorMessage = page.getByText('File size must be less than 5MB');\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify the upload button is enabled\n    const uploadButton = page.getByRole('button', { name: 'Upload' });\n    await expect(uploadButton).toBeEnabled();\n\n    // Submit the form\n    await uploadButton.click();\n\n    // Wait for the upload request to complete\n    await page.waitForResponse(response => \n      response.url().includes('/api/upload') && response.status() === 200\n    );\n\n    // Verify success message appears\n    const successMessage = page.getByText('File uploaded successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify the file name is displayed in the success area\n    await expect(fileNameDisplay).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8181,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3935,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.165,
+      "feedback_used": ""
+    }
+  ]
+}

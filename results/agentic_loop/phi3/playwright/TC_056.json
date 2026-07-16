@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_056",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8236,
+  "total_latency_s": 623.206,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Page Number Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should navigate to a specific page using page number input', async ({ page }) => {\n    // Verify initial page content\n    const pageNumberList = page.getByRole('region', { name: /page number/i });\n    await expect(pageNumberList).toBeVisible();\n\n    const pageCount = page.getByRole('heading', { name: /page count/i });\n    await expect(pageCount).toBeVisible();\n\n    const pageNumberInput = page.getByLabel('Page Number');\n    await expect(pageNumberInput).toBeVisible();\n\n    // Verify page navigation button is disabled initially\n    const pageNavButton = page.getByRole('button', { name: /go to page/i });\n    await expect(pageNavButton).toBeDisabled();\n\n    // Set page number input to a valid value\n    await pageNumberInput.fill('5');\n\n    // Verify page number input is focused\n    await expect(pageNumberInput).toHaveFocus();\n\n    // Verify page navigation button is now enabled\n    await expect(pageNavButton).not.toBeDisabled();\n\n    // Click the page navigation button\n    await pageNavButton.click();\n\n    // Verify we are on the correct page\n    const pageContent = page.getByText(/page 5/i);\n    await expect(pageContent).toBeVisible();\n\n    // Verify page number is displayed\n    const pageNumberDisplay = page.getByText('Page 5');\n    await expect(pageNumberDisplay).toBeVisible();\n\n    // Verify page count is updated\n    await expect(pageCount).toContainText('Page 5 of 10');\n\n    // Verify page number input is cleared after navigation\n    await expect(pageNumberInput).toHaveValue('');\n\n    // Verify page navigation button is disabled again\n    await expect(pageNavButton).toBeDisabled();\n  });\n\n  test('should handle invalid page number input and display error message', async ({ page }) => {\n    // Verify initial page content\n    const pageNumberList = page.getByRole('region', { name: /page number/i });\n    await expect(pageNumberList).toBeVisible();\n\n    const pageCount = page.getByRole('heading', { name: /page count/i });\n    await expect(pageCount).toBeVisible();\n\n    const pageNumberInput = page.getByLabel('Page Number');\n    await expect(pageNumberInput).toBeVisible();\n\n    // Verify page navigation button is disabled initially\n    const pageNavButton = page.getByRole('button', { name: /go to page/i });\n    await expect(pageNavButton).toBeDisabled();\n\n    // Set page number input to an invalid value\n    await pageNumberInput.fill('11');\n\n    // Verify page number input is focused\n    await expect(pageNumberInput).toHaveFocus();\n\n    // Verify page navigation button is still disabled\n    await expect(pageNavButton).toBeDisabled();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/invalid page number/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify page number input is still visible\n    await expect(pageNumberInput).toBeVisible();\n\n    // Verify page number is not displayed\n    const pageNumberDisplay = page.getByText(/page 11/i);\n    await expect(pageNumberDisplay).not.toBeVisible();\n\n    // Verify page count is not updated\n    await expect(pageCount).not.toContainText('Page 11 of 10');\n\n    // Verify page navigation button is still disabled\n    await expect(pageNavButton).toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4849,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3495,
+        "missing_keywords": [],
+        "assertion_count": 24,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 327.525,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8236,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.412,
+        "missing_keywords": [],
+        "assertion_count": 22,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 295.681,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

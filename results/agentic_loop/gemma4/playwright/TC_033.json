@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_033",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8624,
+  "total_latency_s": 71.054,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Submission Button Disabled Until All Required Fields Are Filled', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should disable submit button when required fields are empty', async ({ page }) => {\n    // Verify submit button is disabled initially\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeDisabled();\n\n    // Verify required fields are visible\n    const firstNameInput = page.getByLabel(/first name/i);\n    const lastNameInput = page.getByLabel(/last name/i);\n    const emailInput = page.getByLabel(/email/i);\n    const phoneInput = page.getByLabel(/phone number/i);\n\n    await expect(firstNameInput).toBeVisible();\n    await expect(lastNameInput).toBeVisible();\n    await expect(emailInput).toBeVisible();\n    await expect(phoneInput).toBeVisible();\n\n    // Attempt to submit with empty fields\n    await submitButton.click();\n    await expect(submitButton).toBeDisabled();\n    await expect(page).toHaveURL(/.*form/);\n  });\n\n  test('should enable submit button when all required fields are filled', async ({ page }) => {\n    // Fill in all required fields\n    const firstNameInput = page.getByLabel(/first name/i);\n    const lastNameInput = page.getByLabel(/last name/i);\n    const emailInput = page.getByLabel(/email/i);\n    const phoneInput = page.getByLabel(/phone number/i);\n\n    await firstNameInput.fill('John');\n    await lastNameInput.fill('Doe');\n    await emailInput.fill('john.doe@example.com');\n    await phoneInput.fill('555-123-467');\n\n    // Verify submit button is now enabled\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).not.toBeDisabled();\n\n    // Submit the form\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/form submitted successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify form is cleared\n    await expect(firstNameInput).toHaveValue('');\n    await expect(lastNameInput).toHaveValue('');\n    await expect(emailInput).toHaveValue('');\n    await expect(phoneInput).toHaveValue('');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8624,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5413,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.054,
+      "feedback_used": ""
+    }
+  ]
+}

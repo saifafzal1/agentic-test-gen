@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_149",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8614,
+  "total_latency_s": 73.312,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Row Selection with Header Checkbox', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should select all rows when header checkbox is checked', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify header checkbox exists and is unchecked\n    const headerCheckbox = page.getByRole('checkbox', { name: /select all/i });\n    await expect(headerCheckbox).not.toBeChecked();\n\n    // Verify row checkboxes exist and are unchecked\n    const rowCheckboxes = page.locator('[data-testid=\"row-checkbox\"]');\n    const rowCount = await rowCheckboxes.count();\n    expect(rowCount).toBeGreaterThan(0);\n\n    // Verify row checkboxes are unchecked\n    for (let i = 0; i < rowCount; i++) {\n      const checkbox = rowCheckboxes.nth(i);\n      await expect(checkbox).not.toBeChecked();\n    }\n\n    // Check the header checkbox\n    await headerCheckbox.click();\n    await expect(headerCheckbox).toBeChecked();\n\n    // Verify all row checkboxes are now checked\n    for (let i = 0; i < rowCount; i++) {\n      const checkbox = rowCheckboxes.nth(i);\n      await expect(checkbox).toBeChecked();\n    }\n\n    // Verify selection count is updated\n    const selectionCount = page.getByText(/selected/i);\n    await expect(selectionCount).toContainText('All');\n  });\n\n  test('should unselect all rows when header checkbox is unchecked', async ({ page }) => {\n    // Check the header checkbox to select all rows\n    const headerCheckbox = page.getByRole('checkbox', { name: /select all/i });\n    await headerCheckbox.click();\n    await expect(headerCheckbox).toBeChecked();\n\n    // Verify all row checkboxes are checked\n    const rowCheckboxes = page.locator('[data-testid=\"row-checkbox\"]');\n    const rowCount = await rowCheckboxes.count();\n    for (let i = 0; i < rowCount; i++) {\n      const checkbox = rowCheckboxes.nth(i);\n      await expect(checkbox).toBeChecked();\n    }\n\n    // Uncheck the header checkbox\n    await headerCheckbox.click();\n    await expect(headerCheckbox).not.toBeChecked();\n\n    // Verify all row checkboxes are now unchecked\n    for (let i = 0; i < rowCount; i++) {\n      const checkbox = rowCheckboxes.nth(i);\n      await expect(checkbox).not.toBeChecked();\n    }\n\n    // Verify selection count is reset\n    const selectionCount = page.getByText(/selected/i);\n    await expect(selectionCount).toContainText('0');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8614,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.6381,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.312,
+      "feedback_used": ""
+    }
+  ]
+}

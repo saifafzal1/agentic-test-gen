@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_046",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7296,
+  "total_latency_s": 71.903,
+  "final_script": "describe('External Links Open in New Tab', () => {\n  beforeEach(() => {\n    cy.visit('/page');\n  });\n\n  it('should open external links in a new tab', () => {\n    // Verify the page loads\n    cy.get('[data-testid=\"page-container\"]').should('be.visible');\n\n    // Click on an external link\n    cy.get('[data-testid=\"external-link\"]').click();\n\n    // Verify a new tab/window is opened\n    cy.window().then((win) => {\n      expect(win.opener).to.exist;\n    });\n\n    // Verify the new tab has a different URL\n    cy.window().then((win) => {\n      expect(win.location.href).to.include('https://external-site.com');\n    });\n\n    // Verify the original tab is still open and functional\n    cy.get('[data-testid=\"page-container\"]').should('be.visible');\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Page Title');\n  });\n\n  it('should handle multiple external links and close the new tab', () => {\n    // Click on the first external link\n    cy.get('[data-testid=\"external-link-1\"]').click();\n\n    // Verify the first new tab opens\n    cy.window().then((win) => {\n      expect(win.opener).to.exist;\n    });\n\n    // Click on the second external link\n    cy.get('[data-testid=\"external-link-2\"]').click();\n\n    // Verify the second new tab opens\n    cy.window().then((win) => {\n      expect(win.opener).to.exist;\n    });\n\n    // Close the first new tab\n    cy.window().then((win) => {\n      win.close();\n    });\n\n    // Verify the original tab is still open\n    cy.get('[data-testid=\"page-container\"]').should('be.visible');\n\n    // Verify the second new tab is still open\n    cy.window().then((win) => {\n      expect(win.opener).to.exist;\n    });\n\n    // Verify the second new tab has the correct URL\n    cy.window().then((win) => {\n      expect(win.location.href).to.include('https://external-site.com/page2');\n    });\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7296,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2987,
+        "missing_keywords": [],
+        "assertion_count": 4,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.903,
+      "feedback_used": ""
+    }
+  ]
+}

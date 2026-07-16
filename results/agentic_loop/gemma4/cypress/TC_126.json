@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_126",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8042,
+  "total_latency_s": 73.805,
+  "final_script": "describe('Animated Transitions Between Async Page Loads', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should display animated transition when navigating between async pages', () => {\n    // Intercept the async API call for page navigation\n    cy.intercept('GET', '/api/page-data').as('pageData');\n\n    // Click the navigation button to trigger async page load\n    cy.get('[data-testid=\"nav-to-settings\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@pageData');\n\n    // Verify the animated transition element appears\n    cy.get('[data-testid=\"transition-spinner\"]').should('be.visible');\n    cy.get('[data-testid=\"transition-spinner\"]').should('have.class', 'animate-fade-in');\n\n    // Verify the new page content is visible after transition\n    cy.get('[data-testid=\"settings-page-title\"]').should('be.visible');\n    cy.get('[data-testid=\"settings-page-title\"]').should('contain', 'Settings');\n\n    // Verify the transition animation completes\n    cy.get('[data-testid=\"transition-spinner\"]').should('not.exist');\n    cy.get('[data-testid=\"settings-page-content\"]').should('be.visible');\n  });\n\n  it('should handle transition animation when async page load fails', () => {\n    // Intercept the async API call and force it to fail\n    cy.intercept('GET', '/api/page-data', {\n      statusCode: 500,\n      body: { error: 'Server error' }\n    }).as('pageDataError');\n\n    // Click the navigation button\n    cy.get('[data-testid=\"nav-to-profile\"]').click();\n\n    // Wait for the failed API call\n    cy.wait('@pageDataError');\n\n    // Verify error state is displayed with animation\n    cy.get('[data-testid=\"transition-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"transition-error-message\"]').should('have.class', 'animate-shake');\n    cy.get('[data-testid=\"transition-error-message\"]').should('contain', 'Failed to load');\n\n    // Verify the original page content is still visible\n    cy.get('[data-testid=\"dashboard-page-title\"]').should('be.visible');\n    cy.get('[data-testid=\"dashboard-page-title\"]').should('contain', 'Dashboard');\n\n    // Verify error recovery button is available\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n    cy.get('[data-testid=\"retry-button\"]').should('contain', 'Retry');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8042,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5474,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.805,
+      "feedback_used": ""
+    }
+  ]
+}

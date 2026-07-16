@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_104",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8428,
+  "total_latency_s": 76.189,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Error Message Screen Reader Accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should display error messages with accessible labels and roles', async ({ page }) => {\n    // Intercept the API call to simulate an error\n    await page.route('**/api/submit', route => {\n      route.abort('failed');\n    });\n\n    // Fill in form fields\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('test@example.com');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('Password123');\n\n    // Click submit button\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Wait for error message to appear\n    await page.waitForTimeout(500);\n\n    // Verify error message is visible\n    const errorMessage = page.getByText('Email is required');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message has an accessible role\n    const errorContainer = page.locator('[data-testid=\"error-container\"]');\n    await expect(errorContainer).toBeVisible();\n    await expect(errorContainer).toHaveAttribute('role', 'alert');\n\n    // Verify error message has an accessible label\n    await expect(errorMessage).toHaveAttribute('aria-live', 'polite');\n  });\n\n  test('should handle multiple error messages with proper ARIA attributes', async ({ page }) => {\n    // Intercept the API call to simulate multiple errors\n    await page.route('**/api/submit', route => {\n      route.abort('failed');\n    });\n\n    // Fill in form fields with invalid data\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('invalid-email');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('short');\n\n    // Click submit button\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Wait for error messages to appear\n    await page.waitForTimeout(500);\n\n    // Verify both error messages are visible\n    const emailError = page.getByText('Invalid email format');\n    await expect(emailError).toBeVisible();\n\n    const passwordError = page.getByText('Password must be at least 8 characters');\n    await expect(passwordError).toBeVisible();\n\n    // Verify error container has correct role and multiple messages\n    const errorContainer = page.locator('[data-testid=\"error-container\"]');\n    await expect(errorContainer).toHaveAttribute('role', 'alert');\n\n    // Verify all error messages are within the alert container\n    const allErrorMessages = page.locator('[data-testid=\"error-message\"]');\n    const count = await allErrorMessages.count();\n    expect(count).toBe(2);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8428,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4759,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 76.189,
+      "feedback_used": ""
+    }
+  ]
+}

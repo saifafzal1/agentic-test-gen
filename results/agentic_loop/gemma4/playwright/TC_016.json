@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_016",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8616,
+  "total_latency_s": 71.036,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Form CAPTCHA - After Failed Attempts', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should display CAPTCHA after 3 failed login attempts', async ({ page }) => {\n    // First failed attempt\n    const emailInput = page.getByLabel('Email');\n    const passwordInput = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: /login/i });\n\n    await emailInput.fill('user@example.com');\n    await passwordInput.fill('wrongpassword123');\n    await loginButton.click();\n\n    const errorMessage = page.getByText('Invalid credentials');\n    await expect(errorMessage).toBeVisible();\n\n    // Second failed attempt\n    await passwordInput.fill('wrongpassword123');\n    await loginButton.click();\n\n    await expect(errorMessage).toBeVisible();\n\n    // Third failed attempt - CAPTCHA should appear\n    await passwordInput.fill('wrongpassword123');\n    await loginButton.click();\n\n    const captchaContainer = page.getByRole('region', { name: /captcha/i });\n    await expect(captchaContainer).toBeVisible();\n\n    const captchaChallenge = page.getByText(/please verify you are human/i);\n    await expect(captchaChallenge).toBeVisible();\n\n    const captchaVerifyButton = page.getByRole('button', { name: /verify/i });\n    await expect(captchaVerifyButton).toBeVisible();\n\n    // Verify email and password fields are still visible\n    await expect(emailInput).toBeVisible();\n    await expect(passwordInput).toBeVisible();\n  });\n\n  test('should allow successful login after CAPTCHA verification', async ({ page }) => {\n    // First two failed attempts\n    await page.getByLabel('Email').fill('user@example.com');\n    await page.getByLabel('Password').fill('wrongpassword123');\n    await page.getByRole('button', { name: /login/i }).click();\n    await page.getByText('Invalid credentials').waitFor();\n\n    await page.getByLabel('Password').fill('wrongpassword123');\n    await page.getByRole('button', { name: /login/i }).click();\n    await page.getByText('Invalid credentials').waitFor();\n\n    // Third failed attempt - CAPTCHA appears\n    await page.getByLabel('Password').fill('wrongpassword123');\n    await page.getByRole('button', { name: /login/i }).click();\n\n    const captchaContainer = page.getByRole('region', { name: /captcha/i });\n    await expect(captchaContainer).toBeVisible();\n\n    // Fill in correct credentials\n    await page.getByLabel('Email').fill('user@example.com');\n    await page.getByLabel('Password').fill('correctpassword123');\n\n    // Verify CAPTCHA is visible and ready\n    const captchaChallenge = page.getByText(/please verify you are human/i);\n    await expect(captchaChallenge).toBeVisible();\n\n    // Click verify button\n    const captchaVerifyButton = page.getByRole('button', { name: /verify/i });\n    await captchaVerifyButton.click();\n\n    // Wait for CAPTCHA verification to complete\n    await page.waitForTimeout(1000);\n\n    // Submit login form\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await loginButton.click();\n\n    // Verify successful login\n    const dashboardHeader = page.getByRole('heading', { name: /dashboard/i });\n    await expect(dashboardHeader).toBeVisible();\n    const welcomeMessage = page.getByText(/welcome back/i);\n    await expect(welcomeMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8616,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5388,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.036,
+      "feedback_used": ""
+    }
+  ]
+}

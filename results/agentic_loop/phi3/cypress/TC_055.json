@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_055",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7217,
+  "total_latency_s": 640.297,
+  "final_script": "describe('Pagination Controls - Load Correct Page of Results', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should load the correct page of results when navigating pagination controls', () => {\n    // Verify initial page loads correctly\n    cy.get('[data-testid=\"pagination-controls\"]').should('be.visible');\n    cy.get('[data-testid=\"page-1-button\"]').should('be.visible');\n    cy.get('[data-testid=\"page-2-button\"]').should('be.visible');\n    cy.get('[data-testid=\"page-3-button\"]').should('be.visible');\n    cy.get('[data-testid=\"page-1-button\"]').click();\n    cy.get('[data-testid=\"results-container\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify page 2 loads correctly\n    cy.get('[data-testid=\"page-2-button\"]').click();\n    cy.get('[data-testid=\"results-container\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify page 3 loads correctly\n    cy.get('[data-testid=\"page-3-button\"]').click();\n    cy.get('[data-testid=\"results-container\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify navigation back to page 1 works\n    cy.get('[data-testid=\"page-1-button\"]').click();\n    cy.get('[data-testid=\"results-container\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify navigation to page 2 from page 1 works\n    cy.get('[data-testid=\"page-2-button\"]').click();\n    cy.get('[data-testid=\"results-container\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify navigation to page 3 from page 2 works\n    cy.get('[data-testid=\"page-3-button\"]').click();\n    cy.get('[data-testid=\"results-container\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify navigation to page 1 from page 3 works\n    cy.get('[data-testid=\"page-1-button\"]').click();\n    cy.get('[data-testid=\"results-container\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n  });\n\n  it('should handle edge case when navigating to a non-existent page', () => {\n    // Verify initial page loads correctly\n    cy.get('[data-testid=\"pagination-controls\"]').should('be.visible');\n    cy.get('[data-testid=\"page-1-button\"]').click();\n    cy.get('[data-testid=\"results-container\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify navigation to a non-existent page (e.g., page 10)\n    cy.get('[data-testid=\"page-10-button\"]').click();\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Page does not exist');\n\n    // Verify pagination controls are still visible\n    cy.get('[data-testid=\"pagination-controls\"]').should('be.visible');\n\n    // Verify user can navigate back to valid pages\n    cy.get('[data-testid=\"page-1-button\"]').click();\n    cy.get('[data-testid=\"results-container\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4591,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3035,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 330.89,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7217,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2725,
+        "missing_keywords": [],
+        "assertion_count": 26,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 309.407,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

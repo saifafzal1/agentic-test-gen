@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_089",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.4994,
+  "total_latency_s": 1487.149,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('500 Error Page Display', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display error page when server returns 500 error', async ({ page }) => {\n    // Setup intercept to simulate 500 error\n    await page.route('**/api/data', (route) => {\n      route.abort('failed');\n    });\n\n    // Attempt to load data\n    const dataButton = page.getByRole('button', { name: /load data/i });\n    await expect(dataButton).toBeVisible();\n    await dataButton.click();\n\n    // Verify error page is displayed\n    const errorMessage = page.getByText(/unexpected error/i);\n    await expect(errorMessage).toBeVisible();\n\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify error page has correct title\n    const errorTitle = page.getByText(/500 Internal Server Error/i);\n    await expect(errorTitle).toBeVisible();\n\n    // Verify error page has descriptive message\n    const errorDescription = page.getByText(/failed to load data due to server error/i);\n    await expect(errorDescription).toBeVisible();\n\n    // Verify error page has navigation options\n    const backButton = page.getByRole('button', { name: /back/i });\n    await expect(backButton).toBeVisible();\n\n    const homeButton = page.getByRole('button', { name: /home/i });\n    await expect(homeButton).toBeVisible();\n\n    // Verify error page has status code displayed\n    const statusCode = page.getByText(/500/i);\n    await expect(statusCode).toBeVisible();\n\n    // Verify error page has a timestamp\n    const timestamp = page.getByText(/at \\d{2}:\\d{2}:\\d{2}/i);\n    await expect(timestamp).toBeVisible();\n\n    // Verify error page has a stack trace (if available)\n    const stackTrace = page.getByText(/stack trace/i);\n    await expect(stackTrace).toBeVisible();\n\n    // Verify error page has a retry button\n    await expect(retryButton).toBeVisible();\n\n    // Verify error page has a close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify error page is not accessible by direct URL\n    const errorPageUrl = page.url();\n    expect(errorPageUrl).toContain('/error');\n  });\n\n  test('should handle 500 error gracefully and display error page', async ({ page }) => {\n    // Setup intercept to simulate 500 error\n    await page.route('**/api/data', (route) => {\n      route.abort('failed');\n    });\n\n    // Attempt to load data\n    const dataButton = page.getByRole('button', { name: /load data/i });\n    await expect(dataButton).toBeVisible();\n    await dataButton.click();\n\n    // Verify error page is displayed\n    const errorMessage = page.getByText(/unexpected error/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error page has descriptive message\n    const errorDescription = page.getByText(/failed to load data due to server error/i);\n    await expect(errorDescription).toBeVisible();\n\n    // Verify error page has navigation options\n    const backButton = page.getByRole('button', { name: /back/i });\n    await expect(backButton).toBeVisible();\n\n    const homeButton = page.getByRole('button', { name: /home/i });\n    await expect(homeButton).toBeVisible();\n\n    // Verify error page has a status code displayed\n    const statusCode = page.getByText(/500/i);\n    await expect(statusCode).toBeVisible();\n\n    // Verify error page has a timestamp\n    const timestamp =",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4994,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4181,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 365.733,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4658,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.306,
+        "missing_keywords": [],
+        "assertion_count": 31,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 562.178,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.4508,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.256,
+        "missing_keywords": [],
+        "assertion_count": 43,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 559.238,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

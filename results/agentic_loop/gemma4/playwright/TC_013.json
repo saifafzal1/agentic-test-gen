@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_013",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8505,
+  "total_latency_s": 71.079,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Username Pre-fill on Login', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should pre-fill username if user has logged in before', async ({ page }) => {\n    // Mock successful login response\n    await page.route('**/api/auth/login', (route) => {\n      route.continue();\n    });\n\n    // Intercept and mock user data response\n    await page.route('**/api/user/profile', (route) => {\n      route.abort('blockedbyclient');\n    });\n\n    // Mock user profile API call\n    await page.route('**/api/user/profile', (route) => {\n      route.continue();\n    });\n\n    // Set up localStorage with previous username\n    localStorage.setItem('user_profile', JSON.stringify({ username: 'johndoe123' }));\n\n    // Get username input field by role\n    const usernameInput = page.getByLabel('Username');\n    await expect(usernameInput).toBeVisible();\n\n    // Verify username is pre-filled\n    await expect(usernameInput).toHaveValue('johndoe123');\n\n    // Fill password field\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('SecurePassword123');\n\n    // Get login button by role\n    const loginButton = page.getByRole('button', { name: 'Log In' });\n    await loginButton.click();\n\n    // Wait for navigation to dashboard\n    await page.waitForURL('**/dashboard');\n\n    // Verify user is logged in\n    const welcomeMessage = page.getByText('Welcome, johndoe123');\n    await expect(welcomeMessage).toBeVisible();\n  });\n\n  test('should not pre-fill username if no previous login exists', async ({ page }) => {\n    // Clear localStorage to ensure no previous login data exists\n    localStorage.clear();\n\n    // Mock successful login response\n    await page.route('**/api/auth/login', (route) => {\n      route.continue();\n    });\n\n    // Mock user profile API call\n    await page.route('**/api/user/profile', (route) => {\n      route.continue();\n    });\n\n    // Get username input field by role\n    const usernameInput = page.getByLabel('Username');\n    await expect(usernameInput).toBeVisible();\n\n    // Verify username input is empty\n    await expect(usernameInput).toHaveValue('');\n\n    // Fill username and password\n    await usernameInput.fill('newuser');\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('SecurePassword123');\n\n    // Get login button by role\n    const loginButton = page.getByRole('button', { name: 'Log In' });\n    await loginButton.click();\n\n    // Wait for navigation to dashboard\n    await page.waitForURL('**/dashboard');\n\n    // Verify user is logged in\n    const welcomeMessage = page.getByText('Welcome, newuser');\n    await expect(welcomeMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8505,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5018,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.079,
+      "feedback_used": ""
+    }
+  ]
+}

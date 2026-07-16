@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_034",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7467,
+  "total_latency_s": 505.189,
+  "final_script": "describe('Form Auto-Save Draft Feature', () => {\n  beforeEach(() => {\n    cy.visit('/form-page');\n  });\n\n  it('should auto-save form as draft every 30 seconds on user interaction', () => {\n    // Intercept the API call to save the form\n    cy.intercept('POST', '/api/form/save').as('saveForm');\n\n    // Fill in the form fields\n    cy.get('[data-testid=\"name-input\"]').type('John Doe');\n    cy.get('[data-testid=\"email-input\"]').type('john@example.com');\n    cy.get('[data-testid=\"message-textarea\"]').type('This is a test message');\n\n    // Verify initial state\n    cy.get('[data-testid=\"form-status\"]').should('contain', 'Draft');\n\n    // Wait for the first auto-save interval\n    cy.wait(30000);\n\n    // Verify the form was saved as a draft\n    cy.get('[data-testid=\"form-status\"]').should('contain', 'Draft');\n    cy.get('[data-testid=\"save-button\"]').should('be.disabled');\n\n    // Intercept the second auto-save\n    cy.intercept('POST', '/api/form/save').as('saveForm2');\n\n    // Wait for the second auto-save interval\n    cy.wait(30000);\n\n    // Verify the form was saved again as a draft\n    cy.get('[data-testid=\"form-status\"]').should('contain', 'Draft');\n    cy.get('[data-testid=\"save-button\"]').should('be.disabled');\n\n    // Verify the API was called twice\n    cy.get('@saveForm').then((interception) => {\n      expect(interception.request.body).to.include('name');\n      expect(interception.request.body).to.include('email');\n      expect(interception.request.body).to.include('message');\n    });\n\n    // Verify the form is still in draft state\n    cy.get('[data-testid=\"form-status\"]').should('contain', 'Draft');\n  });\n\n  it('should not auto-save when form is empty or user cancels', () => {\n    // Fill in the form fields\n    cy.get('[data-testid=\"name-input\"]').type('');\n    cy.get('[data-testid=\"email-input\"]').type('');\n    cy.get('[data-testid=\"message-textarea\"]').type('');\n\n    // Verify initial state\n    cy.get('[data-testid=\"form-status\"]').should('contain', 'Draft');\n\n    // Wait for the first auto-save interval\n    cy.wait(30000);\n\n    // Verify the form was not saved (empty fields)\n    cy.get('[data-testid=\"form-status\"]').should('contain', 'Draft');\n    cy.get('[data-testid=\"save-button\"]').should('be.disabled');\n\n    // Verify the API was not called\n    cy.get('@saveForm').should('not.exist');\n\n    // Fill in the form with valid data\n    cy.get('[data-testid=\"name-input\"]').type('Jane Smith');\n    cy.get('[data-testid=\"email-input\"]').type('jane@example.com');\n    cy.get('[data-testid=\"message-textarea\"]').type('This is a valid message');\n\n    // Wait for the second auto-save interval\n    cy.wait(30000);\n\n    // Verify the form was saved as a draft\n    cy.get('[data-testid=\"form-status\"]').should('contain', 'Draft');\n    cy.get('[data-testid=\"save-button\"]').should('be.disabled');\n\n    // Verify the API was called\n    cy.get('@saveForm2').should('have.length', 1);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7467,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3557,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 505.189,
+      "feedback_used": ""
+    }
+  ]
+}

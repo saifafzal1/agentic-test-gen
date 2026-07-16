@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_129",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8353,
+  "total_latency_s": 71.891,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Dialog - Escape Key Close Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/modal-dialog');\n  });\n\n  test('should close modal when Escape key is pressed', async ({ page }) => {\n    // Open modal by clicking the open button\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modalContainer = page.locator('[data-testid=\"modal-container\"]');\n    await expect(modalContainer).toBeVisible();\n\n    // Verify modal title is displayed\n    const modalTitle = page.getByRole('heading', { name: /modal title/i });\n    await expect(modalTitle).toBeVisible();\n\n    // Verify close button is visible\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Press Escape key to close modal\n    await page.keyboard.press('Escape');\n\n    // Verify modal is no longer visible\n    await expect(modalContainer).not.toBeVisible();\n\n    // Verify modal title is no longer visible\n    await expect(modalTitle).not.toBeVisible();\n\n    // Verify close button is no longer visible\n    await expect(closeButton).not.toBeVisible();\n  });\n\n  test('should not close modal when Escape key is pressed while modal is not open', async ({ page }) => {\n    // Verify modal is not visible initially\n    const modalContainer = page.locator('[data-testid=\"modal-container\"]');\n    await expect(modalContainer).not.toBeVisible();\n\n    // Press Escape key when modal is closed\n    await page.keyboard.press('Escape');\n\n    // Verify modal remains closed\n    await expect(modalContainer).not.toBeVisible();\n\n    // Verify modal title is not visible\n    const modalTitle = page.getByRole('heading', { name: /modal title/i });\n    await expect(modalTitle).not.toBeVisible();\n\n    // Open modal by clicking the open button\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is now visible\n    await expect(modalContainer).toBeVisible();\n\n    // Press Escape key again\n    await page.keyboard.press('Escape');\n\n    // Verify modal is closed\n    await expect(modalContainer).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8353,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5508,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.891,
+      "feedback_used": ""
+    }
+  ]
+}

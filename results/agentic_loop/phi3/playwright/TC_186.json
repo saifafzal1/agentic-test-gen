@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_186",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.4839,
+  "total_latency_s": 1235.584,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Product Search by Keyword - Instant Results', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/products');\n  });\n\n  test('should display instant search results when user enters a valid keyword', async ({ page }) => {\n    // Setup: intercept the search API call\n    await page.route('**/api/products/search', (route) => {\n      route.continue();\n    });\n\n    // Verify search input exists\n    const searchInput = page.getByPlaceholder('Search products...');\n    await expect(searchInput).toBeVisible();\n\n    // Verify search button exists\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await expect(searchButton).toBeVisible();\n\n    // Verify search results container exists\n    const searchResultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(searchResultsContainer).toBeVisible();\n\n    // Verify no results are displayed initially\n    const resultCount = page.getByText('0 results');\n    await expect(resultCount).toBeVisible();\n\n    // Enter a valid keyword and trigger search\n    await searchInput.fill('laptop');\n    await searchButton.click();\n\n    // Wait for search results to load\n    await page.waitForTimeout(500);\n\n    // Verify results are displayed\n    const resultCount = page.getByText('1 result');\n    await expect(resultCount).toBeVisible();\n\n    // Verify result item is visible\n    const resultItem = page.getByText('Dell Latitude 7410 Laptop');\n    await expect(resultItem).toBeVisible();\n\n    // Verify result item has correct details\n    const resultTitle = page.getByText('Dell Latitude 7410 Laptop');\n    await expect(resultTitle).toBeVisible();\n\n    const resultPrice = page.getByText('$999');\n    await expect(resultPrice).toBeVisible();\n\n    // Verify result item has a clickable link\n    const resultLink = page.getByRole('link', { name: /laptop/i });\n    await expect(resultLink).toBeVisible();\n\n    // Verify search results container has correct count\n    const resultCountText = page.getByText('1 result');\n    await expect(resultCountText).toBeVisible();\n  });\n\n  test('should handle empty search and display no results message', async ({ page }) => {\n    // Setup: intercept the search API call\n    await page.route('**/api/products/search', (route) => {\n      route.continue();\n    });\n\n    // Verify search input exists\n    const searchInput = page.getByPlaceholder('Search products...');\n    await expect(searchInput).toBeVisible();\n\n    // Verify search button exists\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await expect(searchButton).toBeVisible();\n\n    // Verify search results container exists\n    const searchResultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(searchResultsContainer).toBeVisible();\n\n    // Verify no results are displayed initially\n    const resultCount = page.getByText('0 results');\n    await expect(resultCount).toBeVisible();\n\n    // Enter an empty search and trigger search\n    await searchInput.fill('');\n    await searchButton.click();\n\n    // Wait for search results to load\n    await page.waitForTimeout(500);\n\n    // Verify no results are displayed\n    const resultCount = page.getByText('0 results');\n    await expect(resultCount).toBeVisible();\n\n    // Verify no result item is visible\n    const resultItem = page.getByText('Dell Latitude 7410 Laptop');\n    await expect(resultItem).not.toBeVisible();\n\n    // Verify no result item has details\n    const resultTitle = page.getByText('Dell Latitude 7410 Laptop');\n    await expect(resultTitle).not.toBeVisible();\n\n    // Verify no result item has a clickable link\n    const resultLink",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4839,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3664,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 356.837,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4584,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.2614,
+        "missing_keywords": [],
+        "assertion_count": 27,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 453.562,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.4459,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.2197,
+        "missing_keywords": [],
+        "assertion_count": 36,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 425.185,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

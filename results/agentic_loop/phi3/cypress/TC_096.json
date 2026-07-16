@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_096",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7782,
+  "total_latency_s": 34.435,
+  "final_script": "describe('Coupon Code Validation - Error States', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should display error message when coupon code is invalid', () => {\n    // Intercept the API call to validate coupon code\n    cy.intercept('POST', '/api/validate-coupon', {\n      statusCode: 200,\n      body: {\n        isValid: false,\n        error: 'Invalid coupon code format'\n      }\n    }).as('validateCoupon');\n\n    // Attempt to apply an invalid coupon code\n    cy.get('[data-testid=\"coupon-input\"]').type('INVALID123');\n    cy.get('[data-testid=\"apply-coupon-button\"]').click();\n\n    // Wait for the API response\n    cy.wait('@validateCoupon');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Invalid coupon code format');\n\n    // Verify coupon input is still visible\n    cy.get('[data-testid=\"coupon-input\"]').should('be.visible');\n\n    // Verify success button is disabled\n    cy.get('[data-testid=\"success-button\"]').should('be.disabled');\n  });\n\n  it('should display error message when coupon code is expired', () => {\n    // Intercept the API call to validate coupon code\n    cy.intercept('POST', '/api/validate-coupon', {\n      statusCode: 200,\n      body: {\n        isValid: false,\n        error: 'Coupon code has expired'\n      }\n    }).as('validateCouponExpired');\n\n    // Attempt to apply an expired coupon code\n    cy.get('[data-testid=\"coupon-input\"]').type('EXPIRED123');\n    cy.get('[data-testid=\"apply-coupon-button\"]').click();\n\n    // Wait for the API response\n    cy.wait('@validateCouponExpired');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Coupon code has expired');\n\n    // Verify coupon input is still visible\n    cy.get('[data-testid=\"coupon-input\"]').should('be.visible');\n\n    // Verify success button is disabled\n    cy.get('[data-testid=\"success-button\"]').should('be.disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7782,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4606,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 34.435,
+      "feedback_used": ""
+    }
+  ]
+}

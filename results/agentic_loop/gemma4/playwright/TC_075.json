@@ -1,0 +1,44 @@
+{
+  "tc_id": "TC_075",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8436,
+  "total_latency_s": 186.571,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Task Deletion with Confirmation Dialog', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/tasks');\n  });\n\n  test('should successfully delete a task after confirming deletion', async ({ page }) => {\n    // Setup: Add a task to delete\n    const taskInput = page.getByPlaceholder('Enter task description');\n    await taskInput.fill('Complete the Playwright script');\n    const addButton = page.getByRole('button', { name: /add task/i });\n    await addButton.click();\n\n    // Verify task exists\n    const taskItem = page.getByText('Complete the Playwright script');\n    await expect(taskItem).toBeVisible();\n\n    // Get the delete button for the task\n    const deleteButton = page.getByRole('button', { name: /delete/i });\n    await deleteButton.click();\n\n    // Verify confirmation dialog appears\n    const confirmDialog = page.locator('[data-testid=\"confirm-dialog\"]');\n    await expect(confirmDialog).toBeVisible();\n    await expect(confirmDialog).toContainText('Are you sure you want to delete this task?');\n\n    // Confirm deletion\n    const confirmButton = page.getByRole('button', { name: /confirm/i });\n    await confirmButton.click();\n\n    // Verify confirmation dialog closes\n    await expect(confirmDialog).not.toBeVisible();\n\n    // Verify task is removed from the list\n    await expect(taskItem).not.toBeVisible();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Task deleted successfully');\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should cancel task deletion when user clicks cancel in confirmation dialog', async ({ page }) => {\n    // Setup: Add a task to delete\n    const taskInput = page.getByPlaceholder('Enter task description');\n    await taskInput.fill('Review the Playwright script');\n    const addButton = page.getByRole('button', { name: /add task/i });\n    await addButton.click();\n\n    // Verify task exists\n    const taskItem = page.getByText('Review the Playwright script');\n    await expect(taskItem).toBeVisible();\n\n    // Get the delete button for the task\n    const deleteButton = page.getByRole('button', { name: /delete/i });\n    await deleteButton.click();\n\n    // Verify confirmation dialog appears\n    const confirmDialog = page.locator('[data-testid=\"confirm-dialog\"]');\n    await expect(confirmDialog).toBeVisible();\n\n    // Cancel deletion\n    const cancelButton = page.getByRole('button', { name: /cancel/i });\n    await cancelButton.click();\n\n    // Verify confirmation dialog closes\n    await expect(confirmDialog).not.toBeVisible();\n\n    // Verify task still exists\n    await expect(taskItem).toBeVisible();\n\n    // Verify no success message appears\n    const successMessage = page.getByText('Task deleted successfully');\n    await expect(successMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.1105,
+        "syntax": 0.1,
+        "assertion": 0.0,
+        "rouge_l": 0.2349,
+        "missing_keywords": [
+          "expect("
+        ],
+        "assertion_count": 0,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2",
+        "complete": false
+      },
+      "latency_s": 72.066,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8436,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5786,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 114.505,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_116",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8834,
+  "total_latency_s": 72.037,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Username Availability Async Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/signup');\n  });\n\n  test('should display username availability when available', async ({ page }) => {\n    const usernameInput = page.getByLabel('Username');\n    await usernameInput.fill('newuser123');\n\n    const checkButton = page.getByRole('button', { name: /check availability/i });\n    await checkButton.click();\n\n    const availabilityMessage = page.getByText('Username is available');\n    await expect(availabilityMessage).toBeVisible();\n\n    const successIndicator = page.getByRole('status', { name: /available/i });\n    await expect(successIndicator).toBeVisible();\n  });\n\n  test('should display username taken message when username is unavailable', async ({ page }) => {\n    const usernameInput = page.getByLabel('Username');\n    await usernameInput.fill('existinguser');\n\n    const checkButton = page.getByRole('button', { name: /check availability/i });\n    await checkButton.click();\n\n    const takenMessage = page.getByText('Username is already taken');\n    await expect(takenMessage).toBeVisible();\n\n    const errorIndicator = page.getByRole('status', { name: /taken/i });\n    await expect(errorIndicator).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8834,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.6113,
+        "missing_keywords": [],
+        "assertion_count": 4,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.037,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_065",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8002,
+  "total_latency_s": 35.598,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('401 Error Handling - Redirect to Login', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should redirect to login page when API returns 401 Unauthorized', async ({ page }) => {\n    // Set up intercept for unauthorized response\n    await page.route('**/api/data', (route) => {\n      route.abort('failed');\n    });\n\n    // Attempt to access protected route\n    const dashboardButton = page.getByRole('button', { name: /dashboard/i });\n    await dashboardButton.click();\n\n    // Verify redirection to login\n    const loginPage = page.getByRole('dialog', { name: /login/i });\n    await expect(loginPage).toBeVisible();\n\n    // Verify login button is visible\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await expect(loginButton).toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/unauthorized/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify user is not logged in\n    const userProfile = page.getByText(/user profile/i);\n    await expect(userProfile).not.toBeVisible();\n  });\n\n  test('should handle 401 error with custom error page', async ({ page }) => {\n    // Set up intercept for unauthorized response\n    await page.route('**/api/data', (route) => {\n      route.abort('failed');\n    });\n\n    // Set up intercept for custom error page\n    await page.route('**/api/error', (route) => {\n      route.abort('failed');\n    });\n\n    // Attempt to access protected route\n    const dashboardButton = page.getByRole('button', { name: /dashboard/i });\n    await dashboardButton.click();\n\n    // Verify custom error page is displayed\n    const errorPage = page.getByRole('dialog', { name: /error/i });\n    await expect(errorPage).toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/unauthorized/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify user is not logged in\n    const userProfile = page.getByText(/user profile/i);\n    await expect(userProfile).not.toBeVisible();\n\n    // Verify login button is visible\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await expect(loginButton).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8002,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.434,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 35.598,
+      "feedback_used": ""
+    }
+  ]
+}

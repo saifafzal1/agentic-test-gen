@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_037",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7861,
+  "total_latency_s": 71.931,
+  "final_script": "describe('Form Submission Confirmation Email', () => {\n  beforeEach(() => {\n    cy.visit('/contact-form');\n  });\n\n  it('should send confirmation email after successful form submission', () => {\n    // Intercept the API call to submit the form\n    cy.intercept('POST', '/api/form/submit').as('formSubmission');\n\n    // Fill in form fields\n    cy.get('[data-testid=\"name-input\"]').type('John Doe');\n    cy.get('[data-testid=\"email-input\"]').type('john.doe@example.com');\n    cy.get('[data-testid=\"subject-input\"]').type('Inquiry about service');\n    cy.get('[data-testid=\"message-textarea\"]').type('I would like to learn more about your services.');\n\n    // Submit the form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@formSubmission');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Form submitted successfully');\n\n    // Verify confirmation email notification\n    cy.get('[data-testid=\"confirmation-email-notification\"]').should('be.visible').should('contain', 'Confirmation email sent');\n\n    // Verify form is cleared\n    cy.get('[data-testid=\"name-input\"]').should('have.value', '');\n    cy.get('[data-testid=\"email-input\"]').should('have.value', '');\n  });\n\n  it('should handle form submission with invalid email format and display error', () => {\n    // Intercept the API call\n    cy.intercept('POST', '/api/form/submit').as('formSubmission');\n\n    // Fill in form with invalid email\n    cy.get('[data-testid=\"name-input\"]').type('Jane Doe');\n    cy.get('[data-testid=\"email-input\"]').type('invalid-email-format');\n    cy.get('[data-testid=\"subject-input\"]').type('Test');\n    cy.get('[data-testid=\"message-textarea\"]').type('This is a test message.');\n\n    // Submit the form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@formSubmission');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Please enter a valid email address');\n\n    // Verify success message is NOT displayed\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n\n    // Verify confirmation email notification is NOT displayed\n    cy.get('[data-testid=\"confirmation-email-notification\"]').should('not.exist');\n\n    // Verify form fields are still populated\n    cy.get('[data-testid=\"name-input\"]').should('have.value', 'Jane Doe');\n    cy.get('[data-testid=\"email-input\"]').should('have.value', 'invalid-email-format');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7861,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4869,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.931,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_208",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7479,
+  "total_latency_s": 426.917,
+  "final_script": "describe('Form Field Accessibility - Label Association', () => {\n  beforeEach(() => {\n    cy.visit('/form-page');\n  });\n\n  it('should have form fields with associated labels for screen reader users', () => {\n    // Verify form is visible\n    cy.get('[data-testid=\"form-container\"]').should('be.visible');\n\n    // Verify first input field has a label\n    cy.get('[data-testid=\"first-name-input\"]').should('be.visible');\n    cy.get('[data-testid=\"first-name-label\"]').should('contain', 'First Name');\n\n    // Verify second input field has a label\n    cy.get('[data-testid=\"last-name-input\"]').should('be.visible');\n    cy.get('[data-testid=\"last-name-label\"]').should('contain', 'Last Name');\n\n    // Verify email input field has a label\n    cy.get('[data-testid=\"email-input\"]').should('be.visible');\n    cy.get('[data-testid=\"email-label\"]').should('contain', 'Email Address');\n\n    // Verify password input field has a label\n    cy.get('[data-testid=\"password-input\"]').should('be.visible');\n    cy.get('[data-testid=\"password-label\"]').should('contain', 'Password');\n\n    // Verify confirm password field has a label\n    cy.get('[data-testid=\"confirm-password-input\"]').should('be.visible');\n    cy.get('[data-testid=\"confirm-password-label\"]').should('contain', 'Confirm Password');\n\n    // Verify all labels are associated with their respective inputs\n    cy.get('[data-testid=\"first-name-label\"]').should('have.attr', 'for', 'first-name-input');\n    cy.get('[data-testid=\"last-name-label\"]').should('have.attr', 'for', 'last-name-input');\n    cy.get('[data-testid=\"email-label\"]').should('have.attr', 'for', 'email-input');\n    cy.get('[data-testid=\"password-label\"]').should('have.attr', 'for', 'password-input');\n    cy.get('[data-testid=\"confirm-password-label\"]').should('have.attr', 'for', 'confirm-password-input');\n\n    // Verify form is accessible with screen reader\n    cy.get('[data-testid=\"form-container\"]').should('have.attr', 'aria-labelledby', 'first-name-label first-name-input');\n    cy.get('[data-testid=\"form-container\"]').should('have.attr', 'aria-describedby', 'first-name-label first-name-input');\n  });\n\n  it('should handle edge case where form field is missing a label', () => {\n    // Intercept the API call to load form\n    cy.intercept('GET', '/api/form-data').as('loadForm');\n    cy.wait('@loadForm');\n\n    // Verify form is loaded\n    cy.get('[data-testid=\"form-container\"]').should('be.visible');\n\n    // Verify a field is missing a label\n    cy.get('[data-testid=\"phone-input\"]').should('be.visible');\n    cy.get('[data-testid=\"phone-label\"]').should('not.exist');\n\n    // Verify screen reader still announces the field\n    cy.get('[data-testid=\"phone-input\"]').should('have.attr', 'aria-label', 'Phone Number');\n\n    // Verify form is still accessible\n    cy.get('[data-testid=\"form-container\"]').should('have.attr', 'aria-labelledby', 'first-name-label first-name-input');\n    cy.get('[data-testid=\"form-container\"]').should('have.attr', 'aria-describedby', 'first-name-label first-name-input');\n\n    // Verify error message is displayed for missing label\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please provide a label for the phone field');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4617,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3125,
+        "missing_keywords": [],
+        "assertion_count": 25,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 56.726,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7479,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3596,
+        "missing_keywords": [],
+        "assertion_count": 26,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 370.191,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_054",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7941,
+  "total_latency_s": 271.696,
+  "final_script": "describe('Page Title Update on Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should update page title when navigating between sections', () => {\n    // Verify initial page title\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Dashboard');\n\n    // Navigate to a different section\n    cy.get('[data-testid=\"nav-link-section-1\"]').click();\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Section 1');\n\n    // Verify title update\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Section 1');\n\n    // Navigate back to dashboard\n    cy.get('[data-testid=\"nav-link-dashboard\"]').click();\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Dashboard');\n\n    // Verify title update\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Dashboard');\n\n    // Navigate to another section\n    cy.get('[data-testid=\"nav-link-section-2\"]').click();\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Section 2');\n\n    // Verify title update\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Section 2');\n\n    // Navigate back to dashboard\n    cy.get('[data-testid=\"nav-link-dashboard\"]').click();\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Dashboard');\n\n    // Verify title update\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Dashboard');\n  });\n\n  it('should handle edge case when navigation fails', () => {\n    // Verify initial page title\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Dashboard');\n\n    // Attempt to navigate to a non-existent section\n    cy.get('[data-testid=\"nav-link-section-99\"]').click();\n\n    // Verify page title does not change\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Dashboard');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Navigation failed');\n\n    // Verify page title remains unchanged\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Dashboard');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7941,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5136,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 271.696,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_128",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8278,
+  "total_latency_s": 72.027,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Confirmation Modal for Record Deletion', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should display confirmation modal when user clicks delete button', async ({ page }) => {\n    // Locate and click the delete button using getByRole\n    const deleteButton = page.getByRole('button', { name: /delete/i });\n    await deleteButton.click();\n\n    // Verify confirmation modal is visible\n    const confirmationModal = page.getByRole('dialog', { name: /confirm deletion/i });\n    await expect(confirmationModal).toBeVisible();\n\n    // Verify modal title and message are displayed using getByText\n    const modalTitle = page.getByText(/confirm deletion/i);\n    await expect(modalTitle).toBeVisible();\n\n    const modalMessage = page.getByText(/are you sure you want to delete this record/i);\n    await expect(modalMessage).toBeVisible();\n\n    // Verify confirmation button is visible\n    const confirmButton = page.getByRole('button', { name: /confirm/i });\n    await expect(confirmButton).toBeVisible();\n\n    // Verify cancel button is visible\n    const cancelButton = page.getByRole('button', { name: /cancel/i });\n    await expect(cancelButton).toBeVisible();\n\n    // Verify delete button is disabled while modal is open\n    await expect(deleteButton).toBeDisabled();\n  });\n\n  test('should close confirmation modal when user clicks cancel', async ({ page }) => {\n    // Locate and click the delete button using getByRole\n    const deleteButton = page.getByRole('button', { name: /delete/i });\n    await deleteButton.click();\n\n    // Verify confirmation modal is visible\n    const confirmationModal = page.getByRole('dialog', { name: /confirm deletion/i });\n    await expect(confirmationModal).toBeVisible();\n\n    // Verify cancel button is visible\n    const cancelButton = page.getByRole('button', { name: /cancel/i });\n    await expect(cancelButton).toBeVisible();\n\n    // Click cancel button using getByRole\n    await cancelButton.click();\n\n    // Verify confirmation modal is no longer visible\n    await expect(confirmationModal).not.toBeVisible();\n\n    // Verify delete button is enabled again\n    await expect(deleteButton).not.toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8278,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5261,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.027,
+      "feedback_used": ""
+    }
+  ]
+}

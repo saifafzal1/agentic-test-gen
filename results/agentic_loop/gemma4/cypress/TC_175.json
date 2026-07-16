@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_175",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7785,
+  "total_latency_s": 72.285,
+  "final_script": "describe('File Upload - File Name and Size Display', () => {\n  beforeEach(() => {\n    cy.visit('/file-upload');\n  });\n\n  it('should display file name and size after selecting a file', () => {\n    // Intercept the file upload API call\n    cy.intercept('POST', '/api/files/upload').as('uploadFile');\n\n    // Click the file input button\n    cy.get('[data-testid=\"file-input-button\"]').click();\n\n    // Select a file using the file upload dialog\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/sample.pdf', { force: true });\n\n    // Wait for the upload API call\n    cy.wait('@uploadFile');\n\n    // Verify file name is displayed\n    cy.get('[data-testid=\"file-name-display\"]').should('be.visible');\n    cy.get('[data-testid=\"file-name-display\"]').should('contain', 'sample.pdf');\n\n    // Verify file size is displayed\n    cy.get('[data-testid=\"file-size-display\"]').should('be.visible');\n    cy.get('[data-testid=\"file-size-display\"]').should('contain', '1. 1 MB');\n\n    // Verify success message is shown\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'File uploaded successfully');\n\n    // Verify file details container is visible\n    cy.get('[data-testid=\"file-details-container\"]').should('be.visible');\n  });\n\n  it('should handle file selection with invalid or unsupported file types', () => {\n    // Intercept the file upload API call\n    cy.intercept('POST', '/api/files/upload').as('uploadFile');\n\n    // Click the file input button\n    cy.get('[data-testid=\"file-input-button\"]').click();\n\n    // Attempt to select an unsupported file type (e.g., .exe)\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/sample.exe', { force: true });\n\n    // Wait for the upload API call\n    cy.wait('@uploadFile');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Unsupported file type');\n\n    // Verify file name and size are NOT displayed\n    cy.get('[data-testid=\"file-name-display\"]').should('not.exist');\n    cy.get('[data-testid=\"file-size-display\"]').should('not.exist');\n\n    // Verify file details container is hidden\n    cy.get('[data-testid=\"file-details-container\"]').should('not.exist');\n\n    // Verify error icon is visible\n    cy.get('[data-testid=\"error-icon\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7785,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4615,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.285,
+      "feedback_used": ""
+    }
+  ]
+}

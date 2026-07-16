@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_001",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.9049,
+  "total_latency_s": 79.45,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Login with Valid Credentials', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should successfully log in with valid credentials and navigate to dashboard', async ({ page }) => {\n    // Verify login page is visible\n    const loginPage = page.getByRole('main');\n    await expect(loginPage).toBeVisible();\n\n    // Locate and fill email input using getByLabel\n    const emailInput = page.getByLabel('Email Address');\n    await expect(emailInput).toBeVisible();\n    await emailInput.fill('user@example.com');\n\n    // Locate and fill password input using getByLabel\n    const passwordInput = page.getByLabel('Password');\n    await expect(passwordInput).toBeVisible();\n    await passwordInput.fill('ValidPassword123');\n\n    // Locate and click login button using getByRole\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await expect(loginButton).toBeVisible();\n    await loginButton.click();\n\n    // Wait for navigation to dashboard\n    await page.waitForURL('**/dashboard');\n\n    // Verify dashboard page is loaded\n    const dashboardPage = page.getByRole('main');\n    await expect(dashboardPage).toBeVisible();\n\n    // Verify welcome message is displayed\n    const welcomeMessage = page.getByText(/welcome back/i);\n    await expect(welcomeMessage).toBeVisible();\n\n    // Verify user profile icon is visible\n    const profileIcon = page.getByRole('img', { name: /profile/i });\n    await expect(profileIcon).toBeVisible();\n\n    // Verify user is logged in by checking for dashboard content\n    const dashboardContent = page.getByText(/your dashboard/i);\n    await expect(dashboardContent).toBeVisible();\n  });\n\n  test('should display error message when login fails with invalid password', async ({ page }) => {\n    // Locate and fill email input using getByLabel\n    const emailInput = page.getByLabel('Email Address');\n    await expect(emailInput).toBeVisible();\n    await emailInput.fill('user@example.example.com');\n\n    // Locate and fill password input with invalid password using getByLabel\n    const passwordInput = page.getByLabel('Password');\n    await expect(passwordInput).toBeVisible();\n    await passwordInput.fill('WrongPassword123');\n\n    // Locate and click login button using getByRole\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await expect(loginButton).toBeVisible();\n    await loginButton.click();\n\n    // Wait for error message to appear\n    await page.waitForTimeout(500);\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/invalid credentials/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify user remains on login page\n    const loginPage = page.getByRole('main');\n    await expect(loginPage).toBeVisible();\n\n    // Verify login button is still visible for retry\n    await expect(loginButton).toBeVisible();\n\n    // Verify email input still contains value\n    await expect(emailInput).toHaveValue('user@example.com');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.9049,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.6831,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.45,
+      "feedback_used": ""
+    }
+  ]
+}

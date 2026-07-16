@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_049",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.779,
+  "total_latency_s": 333.707,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Browser Back Button Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should navigate to previous page using browser Back button without breaking app state', async ({ page }) => {\n    // Verify initial page content\n    const dashboardTitle = page.getByRole('heading', { name: /dashboard/i });\n    await expect(dashboardTitle).toBeVisible();\n\n    // Navigate to a new page\n    const settingsButton = page.getByRole('button', { name: /settings/i });\n    await settingsButton.click();\n\n    const settingsPageTitle = page.getByRole('heading', { name: /settings/i });\n    await expect(settingsPageTitle).toBeVisible();\n\n    // Verify app state is preserved\n    const dashboardNav = page.getByRole('navigation', { name: /dashboard/i });\n    await expect(dashboardNav).toBeVisible();\n\n    // Verify settings page content\n    const settingsContent = page.getByText(/settings/i);\n    await expect(settingsContent).toBeVisible();\n\n    // Navigate back using browser Back button\n    await page.evaluate(() => window.history.back());\n\n    // Verify we are back to dashboard\n    await expect(dashboardPageTitle).toBeVisible();\n\n    // Verify app state is preserved\n    await expect(dashboardNav).toBeVisible();\n\n    // Verify dashboard content is still visible\n    const dashboardContent = page.getByText(/dashboard/i);\n    await expect(dashboardContent).toBeVisible();\n\n    // Verify navigation history is correct\n    const historyCount = page.evaluate(() => window.history.length);\n    await expect(historyCount).toBeGreaterThan(1);\n  });\n\n  test('should handle edge case where no previous page exists', async ({ page }) => {\n    // Navigate to a page with no previous page\n    const noPreviousPageButton = page.getByRole('button', { name: /no previous page/i });\n    await noPreviousPageButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/no previous page/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify navigation history is empty\n    const historyCount = page.evaluate(() => window.history.length);\n    await expect(historyCount).toBe(1);\n\n    // Verify app state is not broken\n    const dashboardNav = page.getByRole('navigation', { name: /dashboard/i });\n    await expect(dashboardNav).toBeVisible();\n\n    // Verify user can navigate to a different page\n    const settingsButton = page.getByRole('button', { name: /settings/i });\n    await settingsButton.click();\n\n    const settingsPageTitle = page.getByRole('heading', { name: /settings/i });\n    await expect(settingsPageTitle).toBeVisible();\n\n    // Verify app state is preserved\n    await expect(dashboardNav).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.779,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3633,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 333.707,
+      "feedback_used": ""
+    }
+  ]
+}

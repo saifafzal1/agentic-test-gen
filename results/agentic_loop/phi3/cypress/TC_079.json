@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_079",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7453,
+  "total_latency_s": 46.07,
+  "final_script": "describe('Archive and Restore Record', () => {\n  beforeEach(() => {\n    cy.visit('/records');\n  });\n\n  it('should successfully restore an archived record', () => {\n    // Verify initial state: no records are visible\n    cy.get('[data-testid=\"no-records-message\"]').should('be.visible');\n\n    // Archive a record\n    cy.get('[data-testid=\"record-item-1\"]').click();\n    cy.get('[data-testid=\"archive-button\"]').click();\n    cy.get('[data-testid=\"confirm-archive-modal\"]').should('be.visible');\n    cy.get('[data-testid=\"confirm-archive-button\"]').click();\n\n    // Verify record is archived\n    cy.get('[data-testid=\"archive-status-badge\"]').should('contain', 'Archived');\n\n    // Verify no records are visible\n    cy.get('[data-testid=\"no-records-message\"]').should('not.exist');\n\n    // Restore the archived record\n    cy.get('[data-testid=\"restore-button\"]').click();\n    cy.get('[data-testid=\"confirm-restore-modal\"]').should('be.visible');\n    cy.get('[data-testid=\"confirm-restore-button\"]').click();\n\n    // Verify record is restored\n    cy.get('[data-testid=\"record-item-1\"]').should('be.visible');\n    cy.get('[data-testid=\"restore-status-badge\"]').should('contain', 'Restored');\n\n    // Verify record details are displayed\n    cy.get('[data-testid=\"record-title\"]').should('contain', 'Sample Record');\n    cy.get('[data-testid=\"record-description\"]').should('contain', 'Sample Description');\n\n    // Verify restore button is disabled\n    cy.get('[data-testid=\"restore-button\"]').should('be.disabled');\n  });\n\n  it('should not restore a record if it is already visible', () => {\n    // Verify initial state: no records are visible\n    cy.get('[data-testid=\"no-records-message\"]').should('be.visible');\n\n    // Archive a record\n    cy.get('[data-testid=\"record-item-2\"]').click();\n    cy.get('[data-testid=\"archive-button\"]').click();\n    cy.get('[data-testid=\"confirm-archive-modal\"]').should('be.visible');\n    cy.get('[data-testid=\"confirm-archive-button\"]').click();\n\n    // Verify record is archived\n    cy.get('[data-testid=\"archive-status-badge\"]').should('contain', 'Archived');\n\n    // Verify no records are visible\n    cy.get('[data-testid=\"no-records-message\"]').should('not.exist');\n\n    // Attempt to restore the archived record\n    cy.get('[data-testid=\"restore-button\"]').click();\n\n    // Verify restore button is disabled\n    cy.get('[data-testid=\"restore-button\"]').should('be.disabled');\n\n    // Verify no error message is displayed\n    cy.get('[data-testid=\"restore-error-message\"]').should('not.exist');\n\n    // Verify record remains archived\n    cy.get('[data-testid=\"archive-status-badge\"]').should('contain', 'Archived');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7453,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3509,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 46.07,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_036",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8131,
+  "total_latency_s": 80.093,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Multi-step Form Navigation - Go Back', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/multi-step-form');\n  });\n\n  test('should navigate back to previous step without losing form data', async ({ page }) => {\n    // Step 1: Enter name\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('John Doe');\n\n    // Step 2: Enter email\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('john@example.com');\n\n    // Step 3: Enter phone\n    const phoneInput = page.getByLabel('Phone Number');\n    await phoneInput.fill('555-123');\n\n    // Verify current step is 3\n    const stepIndicator = page.getByRole('status', { name: /Step 3/i });\n    await expect(stepIndicator).toBeVisible();\n\n    // Click back button to go to Step 2\n    const backButton = page.getByRole('button', { name: /Back/i });\n    await backButton.click();\n\n    // Verify current step is 2\n    const stepIndicator2 = page.getByRole('status', { name: /Step 2/i });\n    await expect(stepIndicator2).toBeVisible();\n\n    // Verify name and email data are preserved\n    await expect(nameInput).toHaveValue('John Doe');\n    await expect(emailInput).toHaveValue('john@example.com');\n\n    // Click back button again to go to Step 1\n    await backButton.click();\n\n    // Verify current step is 1\n    const stepIndicator1 = page.getByRole('status', { name: /Step 1/i });\n    await expect(stepIndicator1).toBeVisible();\n\n    // Verify name data is preserved\n    await expect(nameInput).toHaveValue('John Doe');\n\n    // Verify email and phone fields are cleared (as expected in Step 1)\n    await expect(emailInput).toHaveValue('');\n    await expect(phoneInput).toHaveValue('');\n  });\n\n  test('should handle navigation back when form data is incomplete', async ({ page }) => {\n    // Step 1: Enter name\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('Jane Smith');\n\n    // Step 2: Enter email\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('jane@example.com');\n\n    // Step 3: Attempt to navigate back without filling phone\n    const backButton = page.getByRole('button', { name: /Back/i });\n    await backButton.click();\n\n    // Verify current step is 2\n    const stepIndicator2 = page.getByRole('status', { name: /Step 2/i });\n    await expect(stepIndicator2).toBeVisible();\n\n    // Verify name and email data are preserved\n    await expect(nameInput).toHaveValue('Jane Smith');\n    await expect(emailInput).toHaveValue('jane@example.com');\n\n    // Verify phone field is empty\n    await expect(phoneInput).toHaveValue('');\n\n    // Click back button again to go to Step 1\n    await backButton.click();\n\n    // Verify current step is 1\n    const stepIndicator1 = page.getByRole('status', { name: /Step 1/i });\n    await expect(stepIndicator1).toBeVisible();\n\n    // Verify name data is preserved\n    await expect(nameInput).toHaveValue('Jane Smith');\n\n    // Verify email and phone fields are cleared\n    await expect(emailInput).toHaveValue('');\n    await expect(phoneInput).toHaveValue('');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8131,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3769,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 80.093,
+      "feedback_used": ""
+    }
+  ]
+}

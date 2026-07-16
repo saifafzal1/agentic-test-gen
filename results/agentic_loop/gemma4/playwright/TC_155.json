@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_155",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8284,
+  "total_latency_s": 72.562,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Empty State Illustration - Table List', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should display empty state illustration when table has no data', async ({ page }) => {\n    // Intercept the API call and return an empty response\n    await page.route('**/api/table/data', (route) => {\n      route.abort('blockedbyclient');\n    });\n\n    // Click the refresh button to trigger the empty state\n    const refreshButton = page.getByRole('button', { name: /refresh/i });\n    await refreshButton.click();\n\n    // Wait for the empty state to load\n    await page.waitForLoadState('networkidle');\n\n    // Verify the empty state illustration is visible\n    const emptyStateIllustration = page.getByTestId('empty-state-illustration');\n    await expect(emptyStateIllustration).toBeVisible();\n\n    // Verify the empty state message is displayed\n    const emptyStateMessage = page.getByText(/no data available/i);\n    await expect(emptyStateMessage).toBeVisible();\n\n    // Verify the table container is empty\n    const tableContainer = page.getByTestId('table-container');\n    await expect(tableContainer).toBeVisible();\n    const tableRows = page.getByRole('row');\n    const rowCount = await tableRows.count();\n    expect(rowCount).toBe(0);\n\n    // Verify the empty state illustration has the correct alt text\n    const illustrationAlt = page.getByTestId('empty-state-illustration').first().getAttribute('alt');\n    expect(illustrationAlt).toContain('no data');\n  });\n\n  test('should hide empty state illustration when data is loaded', async ({ page }) => {\n    // Intercept the API call and return a successful response with data\n    await page.route('**/api/table/data', (route) => {\n      route.continue();\n    });\n\n    // Click the refresh button to load data\n    const refreshButton = page.getByRole('button', { name: /refresh/i });\n    await refreshButton.click();\n\n    // Wait for the data to load\n    await page.waitForLoadState('networkidle');\n\n    // Verify the empty state illustration is no longer visible\n    const emptyStateIllustration = page.getByTestId('empty-state-illustration');\n    await expect(emptyStateIllustration).not.toBeVisible();\n\n    // Verify the table container is visible and contains data\n    const tableContainer = page.getByTestId('table-container');\n    await expect(tableContainer).toBeVisible();\n    const tableRows = page.getByRole('row');\n    const rowCount = await tableRows.count();\n    expect(rowCount).toBeGreaterThan(0);\n\n    // Verify the empty state message is no longer visible\n    const emptyStateMessage = page.getByText(/no data available/i);\n    await expect(emptyStateMessage).not.toBeVisible();\n\n    // Verify the table header is visible\n    const tableHeader = page.getByRole('columnheader', { name: /name/i });\n    await expect(tableHeader).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8284,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5281,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.562,
+      "feedback_used": ""
+    }
+  ]
+}

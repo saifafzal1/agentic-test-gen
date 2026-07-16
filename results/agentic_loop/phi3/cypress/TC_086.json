@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_086",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7236,
+  "total_latency_s": 864.936,
+  "final_script": "describe('Mark Record as Favourite', () => {\n  beforeEach(() => {\n    cy.visit('/records');\n  });\n\n  it('should mark a record as favourite and display the star icon', () => {\n    // Verify initial state: no records are displayed\n    cy.get('[data-testid=\"no-records-message\"]').should('be.visible');\n\n    // Intercept the API call to fetch records\n    cy.intercept('GET', '/api/records').as('getRecords');\n\n    // Wait for the API call to complete\n    cy.wait('@getRecords');\n\n    // Verify records are now visible\n    cy.get('[data-testid=\"record-list\"]').should('be.visible');\n\n    // Get the first record\n    cy.get('[data-testid=\"record-item\"]').first().as('firstRecord');\n\n    // Verify the record has a title and description\n    cy.get('[data-testid=\"record-title\"]', { parent: 'firstRecord' }).should('contain', 'Sample Record');\n    cy.get('[data-testid=\"record-description\"]', { parent: 'firstRecord' }).should('contain', 'This is a sample record');\n\n    // Click the star icon to mark as favourite\n    cy.get('[data-testid=\"star-icon\"]', { parent: 'firstRecord' }).click();\n\n    // Verify the star icon is now visible\n    cy.get('[data-testid=\"star-icon\"]', { parent: 'firstRecord' }).should('be.visible');\n\n    // Verify the record is now marked as favourite\n    cy.get('[data-testid=\"favourite-count\"]', { parent: 'firstRecord' }).should('contain', '1');\n\n    // Verify the star icon has changed color\n    cy.get('[data-testid=\"star-icon\"]', { parent: 'firstRecord' }).should('have.css', 'color', 'green');\n\n    // Verify the record is now in the favourites list\n    cy.get('[data-testid=\"favourites-list\"]').should('be.visible');\n    cy.get('[data-testid=\"favourite-item\"]', { text: 'Sample Record' }).should('be.visible');\n\n    // Verify the record is still visible in the main list\n    cy.get('[data-testid=\"record-list\"]').should('contain', 'Sample Record');\n  });\n\n  it('should handle marking multiple records as favourite and display count', () => {\n    // Intercept the API call to fetch multiple records\n    cy.intercept('GET', '/api/records').as('getMultipleRecords');\n\n    // Wait for the API call to complete\n    cy.wait('@getMultipleRecords');\n\n    // Verify multiple records are now visible\n    cy.get('[data-testid=\"record-list\"]').should('be.visible');\n\n    // Get the first two records\n    cy.get('[data-testid=\"record-item\"]').first().as('firstRecord');\n    cy.get('[data-testid=\"record-item\"]').eq(1).as('secondRecord');\n\n    // Verify the first record has a title and description\n    cy.get('[data-testid=\"record-title\"]', { parent: 'firstRecord' }).should('contain', 'Sample Record 1');\n    cy.get('[data-testid=\"record-description\"]', { parent: 'firstRecord' }).should('contain', 'This is the first sample record');\n\n    // Verify the second record has a title and description\n    cy.get('[data-testid=\"record-title\"]', { parent: 'secondRecord' }).should('contain', 'Sample Record 2');\n    cy.get('[data-testid=\"record-description\"]', { parent: 'secondRecord' }).should('contain', 'This is the second sample record');\n\n    // Click the star icon on the first record\n    cy.get('[data-testid=\"star-icon\"]', { parent: 'firstRecord' }).click();\n\n    // Verify the star icon is now visible and has changed color\n    cy.get('[data-testid=\"star-icon\"]', { parent: 'firstRecord' }).should('be.visible');\n    cy.get('[data-testid=\"star-icon\"]', { parent: 'firstRecord' }).should('have.css', 'color', 'green');\n\n    // Click the star icon on the second record\n    cy.get('[data-testid=\"star-icon\"]', { parent: 'secondRecord' }).click();\n\n    // Verify the star icon is now visible and has changed color\n    cy.get('[data-testid=\"star-icon\"]', { parent: 'secondRecord' }).should('be.visible');\n    cy.get('[data-testid=\"star-icon\"]', { parent: 'secondRecord' }).should('have.css', 'color', 'green');\n\n    // Verify the favourite count is incremented for both records\n    cy.get('[data-testid=\"favourite-count\"]', { parent: 'firstRecord' }).should('contain', '2');\n    cy.get('[data-testid=\"favourite-count\"]', { parent: 'secondRecord' }).should('contain', '2');\n\n    // Verify the star icon is now visible for both records\n    cy.get('[data-testid=\"star-icon\"]', { parent: 'firstRecord' }).should('be.visible');\n    cy.get('[data-testid=\"star-icon\"]', { parent: 'secondRecord' }).should('be.visible');\n\n    // Verify the records are still visible in the main list\n    cy.get('[data-testid=\"record-list\"]').should('contain', 'Sample Record 1');\n    cy.get('[data-testid=\"record-list\"]').should('contain', 'Sample Record 2');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4738,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3527,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 330.922,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7236,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2787,
+        "missing_keywords": [],
+        "assertion_count": 25,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 534.014,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

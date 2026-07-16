@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_079",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7737,
+  "total_latency_s": 72.605,
+  "final_script": "describe('Restore Archived Record Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/records');\n  });\n\n  it('should successfully restore an archived record to active status', () => {\n    // Intercept the API call to restore the record\n    cy.intercept('POST', '/api/records/*/restore').as('restoreRecord');\n\n    // Navigate to the records list\n    cy.get('[data-testid=\"records-list\"]').should('be.visible');\n\n    // Find the archived record and click the restore button\n    cy.get('[data-testid=\"record-row-123\"]').should('be.visible');\n    cy.get('[data-testid=\"restore-button-123\"]').should('contain', 'Restore').click();\n\n    // Wait for the API call to complete\n    cy.wait('@restoreRecord').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-toast\"]').should('be.visible');\n    cy.get('[data-testid=\"success-toast\"]').should('contain', 'Record restored successfully');\n\n    // Verify the record is no longer in archived state\n    cy.get('[data-testid=\"record-row-123\"]').should('contain', 'Active');\n    cy.get('[data-testid=\"archived-badge-123\"]').should('not.exist');\n\n    // Verify the restore button is replaced with edit/delete options\n    cy.get('[data-testid=\"edit-button-123\"]').should('be.visible');\n    cy.get('[data-testid=\"restore-button-123\"]').should('not.exist');\n  });\n\n  it('should handle error when restoring an archived record', () => {\n    // Intercept the API call and mock a server error\n    cy.intercept('POST', '/api/records/*/restore', {\n      statusCode: 500,\n      body: { error: 'Internal server error' }\n    }).as('restoreRecordError');\n\n    // Navigate to the records list\n    cy.get('[data-testid=\"records-list\"]').should('be.visible');\n\n    // Find the archived record and click the restore button\n    cy.get('[data-testid=\"record-row-456\"]').should('be.visible');\n    cy.get('[data-testid=\"restore-button-456\"]').should('contain', 'Restore').click();\n\n    // Wait for the failed API call\n    cy.wait('@restoreRecordError');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-toast\"]').should('be.visible');\n    cy.get('[data-testid=\"error-toast\"]').should('contain', 'Failed to restore record');\n\n    // Verify the record remains in archived state\n    cy.get('[data-testid=\"record-row-456\"]').should('contain', 'Archived');\n    cy.get('[data-testid=\"archived-badge-456\"]').should('be.visible');\n\n    // Verify the restore button is still available\n    cy.get('[data-testid=\"restore-button-456\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7737,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4456,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.605,
+      "feedback_used": ""
+    }
+  ]
+}

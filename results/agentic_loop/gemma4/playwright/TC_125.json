@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_125",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8205,
+  "total_latency_s": 72.108,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async State Preservation During Browser Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/async-state');\n  });\n\n  test('should preserve async state when navigating back and forth', async ({ page }) => {\n    // Verify initial async state is loaded\n    const asyncValue = page.getByTestId('async-value');\n    await expect(asyncValue).toContainText('Loaded');\n\n    // Trigger async operation\n    const asyncButton = page.getByRole('button', { name: /start async/i });\n    await asyncButton.click();\n\n    // Wait for async operation to complete\n    await page.waitForResponse(response => \n      response.url().includes('/api/async-operation') && response.status() === 200\n    );\n\n    // Verify async state is updated\n    await expect(asyncValue).toContainText('Completed');\n    const statusIndicator = page.getByTestId('status-indicator');\n    await expect(statusIndicator).toHaveText('Success');\n\n    // Navigate to another page\n    const navLink = page.getByRole('link', { name: /dashboard/i });\n    await navLink.click();\n\n    // Navigate back to the async state page\n    await page.goto('/async-state');\n\n    // Verify async state is preserved after navigation\n    await expect(asyncValue).toContainText('Completed');\n    await expect(statusIndicator).toHaveText('Success');\n\n    // Verify async button is still available\n    const asyncButtonAfterNav = page.getByRole('button', { name: /start async/i });\n    await expect(asyncButtonAfterNav).toBeVisible();\n  });\n\n  test('should handle async state reset when navigating to a new session', async ({ page }) => {\n    // Verify initial async state is loaded\n    const asyncValue = page.getByTestId('async-value');\n    await expect(asyncValue).toContainText('Loaded');\n\n    // Trigger async operation\n    const asyncButton = page.getByRole('button', { name: /start async/i });\n    await asyncButton.click();\n\n    // Wait for async operation to complete\n    await page.waitForResponse(response => \n      response.url().includes('/api/async-operation') && response.status() === 200\n    );\n\n    // Verify async state is updated\n    await expect(asyncValue).toContainText('Completed');\n    const statusIndicator = page.getByTestId('status-indicator');\n    await expect(statusIndicator).toHaveText('Success');\n\n    // Navigate to a different page\n    const navLink = page.getByRole('link', { name: /settings/i });\n    await navLink.click();\n\n    // Navigate back to async state page\n    await page.goto('/async-state');\n\n    // Verify async state is preserved\n    await expect(asyncValue).toContainText('Completed');\n    await expect(statusIndicator).toHaveText('Success');\n\n    // Navigate to a completely different section\n    const homeLink = page.getByRole('link', { name: /home/i });\n    await homeLink.click();\n\n    // Navigate back to async state page\n    await page.goto('/async-state');\n\n    // Verify async state is still preserved\n    await expect(asyncValue).toContainText('Completed');\n    await expect(statusIndicator).toHaveText('Success');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8205,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5017,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.108,
+      "feedback_used": ""
+    }
+  ]
+}

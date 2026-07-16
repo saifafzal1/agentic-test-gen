@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_083",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7952,
+  "total_latency_s": 354.54,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Record Category Assignment via Dropdown', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should successfully assign a category to a record using dropdown', async ({ page }) => {\n    // Verify the category dropdown is visible\n    const categoryDropdown = page.getByRole('combobox', { name: /category/i });\n    await expect(categoryDropdown).toBeVisible();\n\n    // Verify the dropdown contains category options\n    const categoryOptions = page.getByRole('option');\n    await expect(categoryOptions).toHaveCount(3);\n\n    // Select a category from the dropdown\n    const selectedCategory = page.getByRole('option', { name: /category/i, value: /finance/i });\n    await selectedCategory.click();\n\n    // Verify the selected category is displayed in the UI\n    const categoryLabel = page.getByText(/finance/i);\n    await expect(categoryLabel).toBeVisible();\n\n    // Verify the category is assigned to the record\n    const recordCategory = page.getByText(/finance/i);\n    await expect(recordCategory).toBeVisible();\n\n    // Verify the record has a category icon\n    const categoryIcon = page.getByRole('img', { name: /category icon/i });\n    await expect(categoryIcon).toBeVisible();\n\n    // Verify the category is reflected in the record details\n    const recordDetails = page.getByRole('region', { name: /record details/i });\n    await expect(recordDetails).toBeVisible();\n\n    // Verify the category is listed in the record details\n    const categoryList = page.getByText(/finance/i);\n    await expect(categoryList).toBeVisible();\n\n    // Verify the category is saved in the record\n    const recordId = page.getByRole('heading', { name: /record id/i });\n    await expect(recordId).toBeVisible();\n    const recordIdValue = page.getByText(/record-123/i);\n    await expect(recordIdValue).toBeVisible();\n\n    // Verify the category is saved in the database\n    const categoryStorage = page.getByRole('status', { name: /category saved/i });\n    await expect(categoryStorage).toBeVisible();\n  });\n\n  test('should handle invalid category selection and display error message', async ({ page }) => {\n    // Verify the category dropdown is visible\n    const categoryDropdown = page.getByRole('combobox', { name: /category/i });\n    await expect(categoryDropdown).toBeVisible();\n\n    // Verify the dropdown contains category options\n    const categoryOptions = page.getByRole('option');\n    await expect(categoryOptions).toHaveCount(3);\n\n    // Select an invalid category from the dropdown\n    const invalidCategory = page.getByRole('option', { name: /invalid category/i, value: /none/i });\n    await invalidCategory.click();\n\n    // Verify the category is not displayed in the UI\n    const categoryLabel = page.getByText(/invalid category/i);\n    await expect(categoryLabel).not.toBeVisible();\n\n    // Verify the category is not assigned to the record\n    const recordCategory = page.getByText(/finance/i);\n    await expect(recordCategory).not.toBeVisible();\n\n    // Verify the category is not listed in the record details\n    const categoryList = page.getByText(/finance/i);\n    await expect(categoryList).not.toBeVisible();\n\n    // Verify the category is not saved in the record\n    const recordId = page.getByRole('heading', { name: /record id/i });\n    await expect(recordId).toBeVisible();\n    const recordIdValue = page.getByText(/record-123/i);\n    await expect(recordIdValue).toBeVisible();\n\n    // Verify the category is not saved in the database\n    const categoryStorage = page.getByRole('status', { name: /category saved/i });\n    await expect(categoryStorage).not.toBeVisible();\n\n    // Verify the error message is displayed\n    const errorMessage = page.getByText(/invalid category/i);\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5114,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.458,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 47.634,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7952,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4175,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 306.906,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

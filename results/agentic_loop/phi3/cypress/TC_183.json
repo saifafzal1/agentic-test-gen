@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_183",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7328,
+  "total_latency_s": 164.248,
+  "final_script": "describe('Virus Scan Status for Uploaded Files', () => {\n  beforeEach(() => {\n    cy.visit('/file-upload');\n  });\n\n  it('should display virus scan status for uploaded file', () => {\n    // Intercept the API call to upload file\n    cy.intercept('POST', '/api/upload/file', {\n      statusCode: 200,\n      body: {\n        fileId: '12345',\n        fileSize: '1024KB',\n        virusScanStatus: 'Pending',\n        virusScanResult: 'Not detected',\n        uploadDate: '2023-04-01T12:00:00Z'\n      }\n    }).as('uploadFile');\n\n    // Upload a file\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/test-file.pdf', { force: true });\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for the upload API call\n    cy.wait('@uploadFile');\n\n    // Verify virus scan status is displayed\n    cy.get('[data-testid=\"virus-scan-status\"]').should('be.visible');\n    cy.get('[data-testid=\"virus-scan-status\"]').should('contain', 'Pending');\n\n    // Verify virus scan result is displayed\n    cy.get('[data-testid=\"virus-scan-result\"]').should('be.visible');\n    cy.get('[data-testid=\"virus-scan-result\"]').should('contain', 'Not detected');\n\n    // Verify file details are displayed\n    cy.get('[data-testid=\"file-name\"]').should('contain', 'test-file.pdf');\n    cy.get('[data-testid=\"file-size\"]').should('contain', '1024KB');\n\n    // Verify upload date is displayed\n    cy.get('[data-testid=\"upload-date\"]').should('be.visible');\n    cy.get('[data-testid=\"upload-date\"]').should('contain', '2023-04-01');\n  });\n\n  it('should display error when virus scan fails', () => {\n    // Intercept the API call to upload file with error\n    cy.intercept('POST', '/api/upload/file', {\n      statusCode: 500,\n      body: {\n        error: 'Internal server error',\n        fileId: null\n      }\n    }).as('uploadFileError');\n\n    // Upload a file\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/test-file.pdf', { force: true });\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for the failed upload API call\n    cy.wait('@uploadFileError');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Upload failed');\n\n    // Verify virus scan status is not displayed\n    cy.get('[data-testid=\"virus-scan-status\"]').should('not.exist');\n\n    // Verify file details are not displayed\n    cy.get('[data-testid=\"file-name\"]').should('not.exist');\n    cy.get('[data-testid=\"file-size\"]').should('not.exist');\n\n    // Verify retry button is visible\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7328,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3095,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 164.248,
+      "feedback_used": ""
+    }
+  ]
+}

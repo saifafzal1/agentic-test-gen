@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_179",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7808,
+  "total_latency_s": 41.117,
+  "final_script": "describe('PDF Inline Viewer', () => {\n  beforeEach(() => {\n    cy.visit('/pdf-upload');\n  });\n\n  it('should display uploaded PDF in inline viewer after successful upload', () => {\n    // Intercept the PDF upload API\n    cy.intercept('POST', '/api/upload/pdf', {\n      statusCode: 200,\n      body: {\n        fileId: '12345',\n        fileUrl: 'https://example.com/files/12345.pdf',\n        status: 'success'\n      }\n    }).as('uploadPDF');\n\n    // Upload a PDF file\n    cy.get('[data-testid=\"pdf-upload-input\"]').selectFile('cypress/fixtures/sample.pdf', {\n      force: true\n    });\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for the upload to complete\n    cy.wait('@uploadPDF');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"upload-success-message\"]').should('be.visible').should('contain', 'PDF uploaded successfully');\n\n    // Verify inline viewer is displayed\n    cy.get('[data-testid=\"pdf-viewer\"]').should('be.visible');\n    cy.get('[data-testid=\"pdf-viewer\"]').should('contain', 'sample.pdf');\n\n    // Verify viewer shows correct file name\n    cy.get('[data-testid=\"pdf-viewer-file-name\"]').should('contain', 'sample.pdf');\n\n    // Verify viewer shows file size\n    cy.get('[data-testid=\"pdf-viewer-file-size\"]').should('contain', '1.2 MB');\n\n    // Verify viewer has correct file URL\n    cy.get('[data-testid=\"pdf-viewer-file-url\"]').should('contain', 'https://example.com/files/12345.pdf');\n  });\n\n  it('should display error message when PDF upload fails', () => {\n    // Intercept the PDF upload API with error response\n    cy.intercept('POST', '/api/upload/pdf', {\n      statusCode: 500,\n      body: {\n        error: 'Internal server error',\n        fileId: null\n      }\n    }).as('uploadPDFError');\n\n    // Upload a PDF file\n    cy.get('[data-testid=\"pdf-upload-input\"]').selectFile('cypress/fixtures/sample.pdf', {\n      force: true\n    });\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for the failed upload\n    cy.wait('@uploadPDFError');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"upload-error-message\"]').should('be.visible').should('contain', 'Upload failed');\n\n    // Verify inline viewer is not displayed\n    cy.get('[data-testid=\"pdf-viewer\"]').should('not.exist');\n\n    // Verify error message contains specific text\n    cy.get('[data-testid=\"upload-error-message\"]').should('contain', 'Internal server error');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7808,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4692,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 41.117,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_147",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.4995,
+  "total_latency_s": 733.059,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Sorting by Column Headers', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should sort table by clicking column headers and display sorted data', async ({ page }) => {\n    // Verify initial table is displayed\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify table headers are visible and clickable\n    const headers = page.getByRole('columnheader');\n    await expect(headers).toBeVisible();\n\n    // Verify first column header is visible and clickable\n    const firstHeader = page.getByRole('columnheader', { name: /name/i });\n    await expect(firstHeader).toBeVisible();\n    await expect(firstHeader).toBeClickable();\n\n    // Verify second column header is visible and clickable\n    const secondHeader = page.getByRole('columnheader', { name: /age/i });\n    await expect(secondHeader).toBeVisible();\n    await expect(secondHeader).toBeClickable();\n\n    // Verify third column header is visible and clickable\n    const thirdHeader = page.getByRole('columnheader', { name: /email/i });\n    await expect(thirdHeader).toBeVisible();\n    await expect(thirdHeader).toBeClickable();\n\n    // Verify table data is displayed\n    const rows = page.getByRole('row');\n    await expect(rows).toHaveCount(10);\n\n    // Click first column header to sort by name\n    await firstHeader.click();\n\n    // Verify table is now sorted by name\n    const sortedRows = page.getByRole('row');\n    await expect(sortedRows).toHaveCount(10);\n    const firstRow = sortedRows.nth(0);\n    await expect(firstRow).toContainText('Alice');\n    const lastRow = sortedRows.nth(-1);\n    await expect(lastRow).toContainText('Zoe');\n\n    // Click second column header to sort by age\n    await secondHeader.click();\n\n    // Verify table is now sorted by age\n    const ageSortedRows = page.getByRole('row');\n    await expect(ageSortedRows).toHaveCount(10);\n    const firstAgeRow = ageSortedRows.nth(0);\n    await expect(firstAgeRow).toContainText('Bob');\n    const lastAgeRow = ageSortedRows.nth(-1);\n    await expect(lastAgeRow).toContainText('Charlie');\n\n    // Click third column header to sort by email\n    await thirdHeader.click();\n\n    // Verify table is now sorted by email\n    const emailSortedRows = page.getByRole('row');\n    await expect(emailSortedRows).toHaveCount(10);\n    const firstEmailRow = emailSortedRows.nth(0);\n    await expect(firstEmailRow).toContainText('alice@example.com');\n    const lastEmailRow = emailSortedRows.nth(-1);\n    await expect(lastEmailRow).toContainText('charlie@example.com');\n  });\n\n  test('should handle sorting when table is empty', async ({ page }) => {\n    // Verify table is empty\n    const table = page.getByRole('table');\n    await expect(table).toBeEmpty();\n\n    // Verify no column headers are visible\n    const headers = page.getByRole('columnheader');\n    await expect(headers).toBeEmpty();\n\n    // Verify no rows are displayed\n    const rows = page.getByRole('row');\n    await expect(rows).toHaveCount(0);\n\n    // Click first column header to sort by name\n    const firstHeader = page.getByRole('columnheader', { name: /name/i });\n    await expect(firstHeader).toBeVisible();\n    await firstHeader.click();\n\n    // Verify table still displays no data\n    const sortedRows = page.getByRole('row');\n    await expect(sortedRows).toHaveCount(0);\n\n    // Click second column header to sort by age\n    const secondHeader = page.getByRole('columnheader', { name: /age/i });\n    await expect(",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4995,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4185,
+        "missing_keywords": [],
+        "assertion_count": 24,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 54.255,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4726,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3288,
+        "missing_keywords": [],
+        "assertion_count": 30,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 321.465,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.4633,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.2975,
+        "missing_keywords": [],
+        "assertion_count": 40,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 357.339,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

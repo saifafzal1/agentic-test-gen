@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_048",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7556,
+  "total_latency_s": 306.871,
+  "final_script": "describe('Breadcrumb Navigation - Current Location Display', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should display correct breadcrumb trail for home page', () => {\n    // Verify home page is loaded\n    cy.get('[data-testid=\"home-page\"]').should('be.visible');\n\n    // Verify breadcrumb container exists\n    cy.get('[data-testid=\"breadcrumb-container\"]').should('be.visible');\n\n    // Verify breadcrumb items are present\n    cy.get('[data-testid=\"breadcrumb-item\"]').should('have.length', 3);\n\n    // Verify first breadcrumb item is 'Home'\n    cy.get('[data-testid=\"breadcrumb-item\"]').eq(0).should('contain', 'Home');\n\n    // Verify second breadcrumb item is 'Category'\n    cy.get('[data-testid=\"breadcrumb-item\"]').eq(1).should('contain', 'Category');\n\n    // Verify third breadcrumb item is 'Subcategory'\n    cy.get('[data-testid=\"breadcrumb-item\"]').eq(2).should('contain', 'Subcategory');\n\n    // Verify breadcrumb separator\n    cy.get('[data-testid=\"breadcrumb-separator\"]').should('be.visible');\n\n    // Verify breadcrumb link for 'Home'\n    cy.get('[data-testid=\"breadcrumb-link\"]').eq(0).should('have.attr', 'href', '/');\n\n    // Verify breadcrumb link for 'Category'\n    cy.get('[data-testid=\"breadcrumb-link\"]').eq(1).should('have.attr', 'href', '/category');\n\n    // Verify breadcrumb link for 'Subcategory'\n    cy.get('[data-testid=\"breadcrumb-link\"]').eq(2).should('have.attr', 'href', '/category/subcategory');\n  });\n\n  it('should update breadcrumb trail when navigating to a different page', () => {\n    // Navigate to a different page\n    cy.get('[data-testid=\"category-link\"]').click();\n\n    // Verify breadcrumb container still exists\n    cy.get('[data-testid=\"breadcrumb-container\"]').should('be.visible');\n\n    // Verify breadcrumb items are updated\n    cy.get('[data-testid=\"breadcrumb-item\"]').should('have.length', 3);\n\n    // Verify first breadcrumb item is 'Category'\n    cy.get('[data-testid=\"breadcrumb-item\"]').eq(0).should('contain', 'Category');\n\n    // Verify second breadcrumb item is 'Subcategory'\n    cy.get('[data-testid=\"breadcrumb-item\"]').eq(1).should('contain', 'Subcategory');\n\n    // Verify third breadcrumb item is 'Product'\n    cy.get('[data-testid=\"breadcrumb-item\"]').eq(2).should('contain', 'Product');\n\n    // Verify breadcrumb separator\n    cy.get('[data-testid=\"breadcrumb-separator\"]').should('be.visible');\n\n    // Verify breadcrumb link for 'Category'\n    cy.get('[data-testid=\"breadcrumb-link\"]').eq(0).should('have.attr', 'href', '/category');\n\n    // Verify breadcrumb link for 'Subcategory'\n    cy.get('[data-testid=\"breadcrumb-link\"]').eq(1).should('have.attr', 'href', '/category/subcategory');\n\n    // Verify breadcrumb link for 'Product'\n    cy.get('[data-testid=\"breadcrumb-link\"]').eq(2).should('have.attr', 'href', '/category/subcategory/product');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7556,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3855,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 306.871,
+      "feedback_used": ""
+    }
+  ]
+}

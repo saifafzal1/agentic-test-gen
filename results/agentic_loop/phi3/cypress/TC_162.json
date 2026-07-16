@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_162",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7235,
+  "total_latency_s": 425.694,
+  "final_script": "describe('Virtual Scroll List Performance with 10,000 Rows', () => {\n  beforeEach(() => {\n    cy.visit('/virtual-scroll-list');\n  });\n\n  it('should handle 10,000 rows with no lag and display all items', () => {\n    // Setup: Create 10,000 mock list items\n    for (let i = 1; i <= 10000; i++) {\n      cy.get('[data-testid=\"list-item-container\"]').append(`\n        <li data-testid=\"list-item-${i}\" class=\"list-item\">\n          Item ${i}\n        </li>\n      `);\n    }\n\n    // Verify all items are visible\n    cy.get('[data-testid=\"list-item-container\"]').should('have.length.greaterThan', 10000);\n\n    // Verify scrollbar is present\n    cy.get('[data-testid=\"scroll-bar\"]').should('be.visible');\n\n    // Verify first item is visible\n    cy.get('[data-testid=\"list-item-1\"]').should('be.visible');\n\n    // Verify last item is visible\n    cy.get('[data-testid=\"list-item-10000\"]').should('be.visible');\n\n    // Verify virtual scroll is enabled\n    cy.get('[data-testid=\"virtual-scroll-enabled\"]').should('be.true');\n\n    // Verify performance - no lag\n    cy.get('[data-testid=\"list-item-container\"]').then(($container) => {\n      const scrollHeight = $container.scrollHeight;\n      const clientHeight = $container.clientHeight;\n      expect(scrollHeight).to.be.greaterThan(clientHeight);\n    });\n\n    // Verify lazy loading works\n    cy.get('[data-testid=\"list-item-10001\"]').should('be.visible');\n  });\n\n  it('should handle scrolling to the bottom without performance issues', () => {\n    // Setup: Create 10,000 mock list items\n    for (let i = 1; i <= 10000; i++) {\n      cy.get('[data-testid=\"list-item-container\"]').append(`\n        <li data-testid=\"list-item-${i}\" class=\"list-item\">\n          Item ${i}\n        </li>\n      `);\n    }\n\n    // Scroll to the bottom\n    cy.get('[data-testid=\"list-item-container\"]').scrollTo('bottom');\n\n    // Verify last item is visible\n    cy.get('[data-testid=\"list-item-10000\"]').should('be.visible');\n\n    // Verify no lag during scroll\n    cy.get('[data-testid=\"list-item-container\"]').then(($container) => {\n      const scrollHeight = $container.scrollHeight;\n      const clientHeight = $container.clientHeight;\n      expect(scrollHeight).to.be.greaterThan(clientHeight);\n    });\n\n    // Verify virtual scroll is still enabled\n    cy.get('[data-testid=\"virtual-scroll-enabled\"]').should('be.true');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7235,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2783,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 425.694,
+      "feedback_used": ""
+    }
+  ]
+}

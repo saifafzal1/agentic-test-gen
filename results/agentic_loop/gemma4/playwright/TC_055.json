@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_055",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.5097,
+  "total_latency_s": 344.48,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Pagination Controls', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/results');\n  });\n\n  test('should load the correct page of results when clicking pagination buttons', async ({ page }) => {\n    // Verify initial page loads\n    const resultsList = page.getByRole('region', { name: /results/i });\n    await expect(resultsList).toBeVisible();\n    const pageIndicator = page.getByText('Page 1 of 5');\n    await expect(pageIndicator).toBeVisible();\n\n    // Verify first page results are displayed\n    const resultItems = page.getByRole('listitem');\n    const count = await resultItems.count();\n    expect(count).toBeGreaterThan(0);\n\n    // Click next page button\n    const nextPageButton = page.getByRole('button', { name: /next/i });\n    await expect(nextPageButton).toBeVisible();\n    await nextPageButton.click();\n\n    // Verify page indicator updates\n    await expect(pageIndicator).toHaveText('Page 2 of 5');\n\n    // Verify results are updated\n    const updatedResultItems = page.getByRole('listitem');\n    const updatedCount = await updatedResultItems.count();\n    expect(updatedCount).toBeGreaterThan(0);\n\n    // Verify page number is updated\n    const pageNumber = page.getByText('2');\n    await expect(pageNumber).toBeVisible();\n\n    // Click last page button\n    const lastPageButton = page.getByRole('button', { name: /last/i });\n    await expect(lastPageButton).toBeVisible();\n    await lastPageButton.click();\n\n    // Verify page indicator shows last page\n    await expect(pageIndicator).toHaveText('Page 5 of 5');\n\n    // Verify page number is 5\n    const pageNumberFinal = page.getByText('5');\n    await expect(pageNumberFinal).toBeVisible();\n  });\n\n  test('should handle pagination when page is out of bounds', async ({ page }) => {\n    // Navigate to a page that doesn't exist\n    const pageInput = page.getByLabel(/page number/i);\n    await pageInput.fill('99');\n\n    // Click go button\n    const goButton = page.getByRole('button', { name: /go/i });\n    await goButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/page not found/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify results list is empty\n    const resultsList = page.getByRole('region', { name: /results/i });\n    const resultItems = page.getByRole('listitem');\n    const count = await resultItems.count();\n    expect(count).toBe(0);\n\n    // Verify pagination controls are disabled or hidden\n    const nextPageButton = page.getByRole('button', { name: /next/i });\n    const nextPageDisabled = await nextPageButton.isDisabled();\n    expect(pageNumber).toBe(true);\n\n    // Verify previous page button is enabled\n    const prevPageButton = page.getByRole('button', { name: /previous/i });\n    const prevPageEnabled = await prevPageButton.isEnabled();\n    expect(prevPageEnabled).toBe(true);\n\n    // Navigate back to page 1\n    await pageInput.fill('1');\n    await goButton.click();\n\n    // Verify page indicator resets\n    const pageIndicator = page.getByText('Page 1 of 5');\n    await expect(pageIndicator).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4705,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3217,
+        "missing_keywords": [],
+        "assertion_count": 3,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 71.368,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.5097,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4323,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 110.304,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.5097,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4323,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 162.808,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

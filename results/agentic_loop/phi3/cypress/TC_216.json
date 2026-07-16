@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_216",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7735,
+  "total_latency_s": 31.119,
+  "final_script": "describe('Modal Title Announcement', () => {\n  beforeEach(() => {\n    cy.visit('/modal');\n  });\n\n  it('should announce modal title when modal is opened', () => {\n    // Verify modal is not visible initially\n    cy.get('[data-testid=\"modal-container\"]').should('not.exist');\n\n    // Open modal\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n\n    // Verify modal is now visible\n    cy.get('[data-testid=\"modal-container\"]').should('be.visible');\n\n    // Verify modal title is announced\n    cy.get('[data-testid=\"announce-modal-title\"]').should('be.visible');\n    cy.get('[data-testid=\"announce-modal-title\"]').should('contain', 'Modal Title');\n\n    // Verify modal content is visible\n    cy.get('[data-testid=\"modal-content\"]').should('be.visible');\n\n    // Verify modal is closed\n    cy.get('[data-testid=\"close-modal-btn\"]').click();\n\n    // Verify modal is hidden again\n    cy.get('[data-testid=\"modal-container\"]').should('not.exist');\n  });\n\n  it('should announce modal title when modal is closed by pressing escape key', () => {\n    // Open modal\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n    cy.get('[data-testid=\"modal-container\"]').should('be.visible');\n\n    // Verify modal title is announced\n    cy.get('[data-testid=\"announce-modal-title\"]').should('be.visible');\n    cy.get('[data-testid=\"announce-modal-title\"]').should('contain', 'Modal Title');\n\n    // Press escape key to close modal\n    cy.get('body').type('{esc}');\n\n    // Verify modal is closed\n    cy.get('[data-testid=\"modal-container\"]').should('not.exist');\n\n    // Verify modal title is no longer announced\n    cy.get('[data-testid=\"announce-modal-title\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7735,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4451,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 31.119,
+      "feedback_used": ""
+    }
+  ]
+}

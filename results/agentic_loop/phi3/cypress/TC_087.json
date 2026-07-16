@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_087",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7238,
+  "total_latency_s": 41.51,
+  "final_script": "describe('Comment on Record', () => {\n  beforeEach(() => {\n    cy.visit('/records');\n  });\n\n  it('should successfully submit a comment on a record', () => {\n    // Verify the list of records is displayed\n    cy.get('[data-testid=\"record-list\"]').should('be.visible');\n    cy.get('[data-testid=\"record-item\"]').should('have.length.greaterThan', 0);\n\n    // Navigate to a specific record\n    cy.get('[data-testid=\"record-item\"]').first().click();\n    cy.get('[data-testid=\"record-details\"]').should('be.visible');\n\n    // Verify comment form is visible\n    cy.get('[data-testid=\"comment-form\"]').should('be.visible');\n\n    // Fill in the comment form\n    cy.get('[data-testid=\"comment-input\"]').type('This is a great product!');\n    cy.get('[data-testid=\"comment-submit-button\"]').click();\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Comment submitted successfully');\n\n    // Verify record details remain unchanged\n    cy.get('[data-testid=\"record-details\"]').should('contain', 'This is a great product!');\n\n    // Verify comment is visible in the list\n    cy.get('[data-testid=\"record-item\"]').first().should('contain', 'This is a great product!');\n  });\n\n  it('should display error when comment submission fails', () => {\n    // Navigate to a record\n    cy.get('[data-testid=\"record-item\"]').first().click();\n    cy.get('[data-testid=\"record-details\"]').should('be.visible');\n\n    // Fill in the comment form\n    cy.get('[data-testid=\"comment-input\"]').type('This is a great product!');\n\n    // Submit empty comment\n    cy.get('[data-testid=\"comment-submit-button\"]').click();\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Comment cannot be empty');\n\n    // Verify record details remain unchanged\n    cy.get('[data-testid=\"record-details\"]').should('contain', 'This is a great product!');\n\n    // Verify comment form is still visible\n    cy.get('[data-testid=\"comment-form\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7238,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2795,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 41.51,
+      "feedback_used": ""
+    }
+  ]
+}

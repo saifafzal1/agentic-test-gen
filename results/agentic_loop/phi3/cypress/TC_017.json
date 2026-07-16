@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_017",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.804,
+  "total_latency_s": 319.593,
+  "final_script": "describe('Login Page Mobile Responsiveness', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should display login form correctly on mobile devices', () => {\n    cy.viewport('iphone-x');\n    cy.get('[data-testid=\"login-form\"]').should('be.visible');\n    cy.get('[data-testid=\"email-input\"]').should('be.visible');\n    cy.get('[data-testid=\"password-input\"]').should('be.visible');\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('password123');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"welcome-message\"]').should('be.visible');\n  });\n\n  it('should handle mobile-specific form validation errors', () => {\n    cy.viewport('iphone-x');\n    cy.get('[data-testid=\"email-input\"]').type('invalid-email');\n    cy.get('[data-testid=\"password-input\"]').type('password123');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please enter a valid email address');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Password must be at least 8 characters');\n    cy.get('[data-testid=\"email-input\"]').clear();\n    cy.get('[data-testid=\"password-input\"]').clear();\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.url().should('include', '/dashboard');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4373,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.231,
+        "missing_keywords": [],
+        "assertion_count": 22,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 63.951,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.804,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5468,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 255.642,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

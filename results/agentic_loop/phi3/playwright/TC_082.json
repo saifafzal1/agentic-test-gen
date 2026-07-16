@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_082",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7766,
+  "total_latency_s": 773.8,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Reorder List Items by Drag and Drop', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/list-items');\n  });\n\n  test('should reorder list items using drag and drop', async ({ page }) => {\n    // Verify initial list order\n    const listItems = page.locator('[data-testid=\"list-item\"]');\n    const initialOrder = await listItems.count();\n    expect(initialOrder).toBeGreaterThan(0);\n\n    // Verify list items are displayed\n    const listContainer = page.getByTestId('list-container');\n    await expect(listContainer).toBeVisible();\n\n    // Verify list items have correct initial order\n    const firstItem = page.getByText('Item 1');\n    const secondItem = page.getByText('Item 2');\n    const thirdItem = page.getByText('Item 3');\n    await expect(firstItem).toBeVisible();\n    await expect(secondItem).toBeVisible();\n    await expect(thirdItem).toBeVisible();\n\n    // Verify drag handles are visible\n    const dragHandles = page.locator('[data-testid=\"drag-handle\"]');\n    await expect(dragHandles).toBeVisible();\n\n    // Verify list items have correct initial data attributes\n    const firstItemData = await firstItem.evaluate((el) => el.dataset.id);\n    const secondItemData = await secondItem.evaluate((el) => el.dataset.id);\n    const thirdItemData = await thirdItem.evaluate((el) => el.dataset.id);\n    expect(firstItemData).toBe('item-1');\n    expect(secondItemData).toBe('item-2');\n    expect(thirdItemData).toBe('item-3');\n\n    // Verify initial sort order is correct\n    const firstItemOrder = await firstItem.evaluate((el) => el.dataset.order);\n    const secondItemOrder = await secondItem.evaluate((el) => el.dataset.order);\n    const thirdItemOrder = await thirdItem.evaluate((el) => el.dataset.order);\n    expect(firstItemOrder).toBe('1');\n    expect(secondItemOrder).toBe('2');\n    expect(thirdItemOrder).toBe('3');\n\n    // Drag second item to first position\n    const secondItem = page.getByText('Item 2');\n    const firstItem = page.getByText('Item 1');\n    await secondItem.click();\n    await firstItem.click();\n\n    // Verify list items are reordered\n    const firstItemOrderAfterDrag = await firstItem.evaluate((el) => el.dataset.order);\n    const secondItemOrderAfterDrag = await secondItem.evaluate((el) => el.dataset.order);\n    const thirdItemOrderAfterDrag = await thirdItem.evaluate((el) => el.dataset.order);\n    expect(firstItemOrderAfterDrag).toBe('1');\n    expect(secondItemOrderAfterDrag).toBe('1');\n    expect(thirdItemOrderAfterDrag).toBe('2');\n\n    // Verify list items are displayed in new order\n    const firstItemAfterDrag = page.getByText('Item 2');\n    const secondItemAfterDrag = page.getByText('Item 1');\n    await expect(firstItemAfterDrag).toBeVisible();\n    await expect(secondItemAfterDrag).toBeVisible();\n\n    // Verify list container reflects new order\n    const listContainerAfterDrag = page.getByTestId('list-container');\n    await expect(listContainerAfterDrag).toContainText('Item 2');\n    await expect(listContainerAfterDrag).toContainText('Item 1');\n\n    // Verify drag handles are still visible\n    const dragHandlesAfterDrag = page.locator('[data-testid=\"drag-handle\"]');\n    await expect(dragHandlesAfterDrag).toBeVisible();\n\n    // Verify list items have updated data attributes\n    const firstItemDataAfterDrag = await firstItemAfterDrag.evaluate((el) => el.dataset.id);\n    const secondItemDataAfterDrag = await secondItemAfterDrag.evaluate((el) => el.dataset.id);\n    expect(firstItemDataAfterDrag).toBe('item-2');\n    expect(secondItemDataAfterDrag).toBe('item-1');\n  });\n\n  test('should handle empty list and prevent reordering', async ({ page }) => {\n    // Verify list is empty\n    const listContainer = page.getByTestId('list-container');\n    await expect(listContainer).toBeEmpty();\n\n    // Verify no list items are visible\n    const listItems = page.locator('[data-testid=\"list-item\"]');\n    await expect(listItems).not.toBeVisible();\n\n    // Verify no drag handles are visible\n    const dragHandles = page.locator('[data-testid=\"drag-handle\"]');\n    await expect(dragHandles).not.toBeVisible();\n\n    // Verify reorder button is disabled\n    const reorderButton = page.getByRole('button', { name: /reorder/i });\n    await expect(reorderButton).toBeDisabled();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/no items to reorder/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify empty list state is maintained\n    const listContainerAfterEmpty = page.getByTestId('list-container');\n    await expect(listContainerAfterEmpty).toBeEmpty();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4781,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3468,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 419.456,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7766,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3552,
+        "missing_keywords": [],
+        "assertion_count": 28,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 354.344,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

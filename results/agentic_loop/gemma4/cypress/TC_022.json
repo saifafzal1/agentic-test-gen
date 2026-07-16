@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_022",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7573,
+  "total_latency_s": 71.217,
+  "final_script": "describe('Currency Field Formatting', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n  });\n\n  it('should format currency input with commas and two decimal places', () => {\n    // Intercept the form submission API\n    cy.intercept('POST', '/api/submit-form').as('formSubmit');\n\n    // Locate the currency input field\n    cy.get('[data-testid=\"currency-input\"]').should('be.visible');\n\n    // Type a number without formatting\n    cy.get('[data-testid=\"currency-input\"]').type('1234967');\n\n    // Verify the input field displays formatted value\n    cy.get('[data-testid=\"currency-input\"]').should('have.value', '1,234,967.00');\n\n    // Type another number with decimals\n    cy.get('[data-testid=\"currency-input\"]').clear().type('1234967.5');\n\n    // Verify the input field displays formatted value with two decimal places\n    cy.get('[data-testid=\"currency-input\"]').should('have.value', '1,238,500.50');\n\n    // Submit the form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for API call\n    cy.wait('@formSubmit');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Form submitted successfully');\n  });\n\n  it('should handle negative numbers and empty input gracefully', () => {\n    // Intercept the form submission API\n    cy.intercept('POST', '/api/submit-form').as('formSubmit');\n\n    // Locate the currency input field\n    cy.get('[data-testid=\"currency-input\"]').should('be.visible');\n\n    // Type a negative number\n    cy.get('[data-testid=\"currency-input\"]').type('-12345.6');\n\n    // Verify negative number is formatted correctly\n    cy.get('[data-testid=\"currency-input\"]').should('have.value', '-12,345.60');\n\n    // Clear the input field\n    cy.get('[data-testid=\"currency-input\"]').clear();\n\n    // Verify input is empty\n    cy.get('[data-testid=\"currency-input\"]').should('have.value', '');\n\n    // Attempt to submit with empty field\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify validation error appears\n    cy.get('[data-testid=\"validation-error\"]').should('be.visible');\n    cy.get('[data-testid=\"validation-error\"]').should('contain', 'Currency field is required');\n\n    // Verify form was not submitted\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n\n    // Type a valid value and submit\n    cy.get('[data-testid=\"currency-input\"]').type('100.00');\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for API call\n    cy.wait('@formSubmit');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7573,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3909,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.217,
+      "feedback_used": ""
+    }
+  ]
+}

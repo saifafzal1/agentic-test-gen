@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_096",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8545,
+  "total_latency_s": 376.255,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Coupon Code Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should display error message when coupon code is invalid', async ({ page }) => {\n    // Intercept the API call to validate coupon code\n    await page.route('**/api/checkout/validate-coupon', (route) => {\n      route.abort('failed');\n    });\n\n    // Locate and fill the coupon input using getByLabel\n    const couponInput = page.getByLabel('Coupon Code');\n    await couponInput.fill('INVALID123');\n\n    // Locate and click the apply coupon button using getByRole\n    const applyButton = page.getByRole('button', { name: /apply coupon/i });\n    await applyButton.click();\n\n    // Verify error message is displayed using getByText\n    const errorMessage = page.getByText('Invalid coupon code');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message contains specific text\n    await expect(errorMessage).toContainText('Coupon code is not valid');\n\n    // Verify success message is not displayed\n    const successMessage = page.getByText('Coupon applied successfully');\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify coupon input is still visible\n    await expect(couponInput).toBeVisible();\n  });\n\n  test('should display success message when coupon code is valid', async ({ page }) => {\n    // Intercept the API call to validate coupon code\n    await page.route('**/api/checkout/validate-coupon', (route) => {\n      route.continue();\n    });\n\n    // Locate and fill the coupon input using getByLabel\n    const couponInput = page.getByLabel('Coupon Code');\n    await couponInput.fill('SAVE10');\n\n    // Locate and click the apply coupon button using getByRole\n    const applyButton = page.getByRole('button', { name: /apply coupon/i });\n    await applyButton.click();\n\n    // Verify success message is displayed using getByText\n    const successMessage = page.getByText('Coupon applied successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify error message is not displayed\n    const errorMessage = page.getByText('Invalid coupon code');\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify coupon input is still visible\n    await expect(couponInput).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8545,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5152,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 376.255,
+      "feedback_used": ""
+    }
+  ]
+}

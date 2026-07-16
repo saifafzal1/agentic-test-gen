@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_176",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8831,
+  "total_latency_s": 72.575,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload Retry Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should retry a failed upload without re-selecting the file', async ({ page }) => {\n    // Setup: Intercept the upload API endpoint\n    await page.route('**/api/upload', (route) => {\n      route.abort('failed');\n    });\n\n    // Setup: Intercept the retry API endpoint\n    await page.route('**/api/upload/retry', (route) => {\n      route.continue();\n    });\n\n    // Locate and interact with file input using getByLabel\n    const fileInput = page.getByLabel('Select file');\n    await fileInput.setInputFiles('playwright/fixtures/test-file.pdf');\n\n    // Locate and click upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: 'Upload' });\n    await uploadButton.click();\n\n    // Verify upload failed\n    const errorMessage = page.getByText('Upload failed');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify retry button is visible\n    const retryButton = page.getByRole('button', { name: 'Retry' });\n    await expect(retryButton).toBeVisible();\n\n    // Click retry button using getByRole\n    await retryButton.click();\n\n    // Verify retry request was sent\n    await page.waitForResponse(response =>\n      response.url().includes('/api/upload/retry') && response.status() === 200\n    );\n\n    // Verify success message appears\n    const successMessage = page.getByText('Upload successful');\n    await expect(successMessage).toBeVisible();\n\n    // Verify file name is still displayed\n    const fileNameDisplay = page.getByText('test-file.pdf');\n    await expect(fileNameDisplay).toBeVisible();\n  });\n\n  test('should handle multiple retry attempts and display final status', async ({ page }) => {\n    // Setup: Intercept the upload API endpoint\n    await page.route('**/api/upload', (route) => {\n      route.abort('failed');\n    });\n\n    // Setup: Intercept the retry API endpoint - first two fail, third succeeds\n    let retryCount = 0;\n    await page.route('**/api/upload/retry', (route) => {\n      retryCount++;\n      if (retryCount <= 2) {\n        route.abort('failed');\n      } else {\n        route.continue();\n      }\n    });\n\n    // Locate and interact with file input using getByLabel\n    const fileInput = page.getByLabel('Select file');\n    await fileInput.setInputFiles('playwright/fixtures/test-file.pdf');\n\n    // Locate and click upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: 'Upload' });\n    await uploadButton.click();\n\n    // Verify initial failure\n    const errorMessage = page.getByText('Upload failed');\n    await expect(errorMessage).toBeVisible();\n\n    // Click retry button using getByRole\n    const retryButton = page.getByRole('button', { name: 'Retry' });\n    await retryButton.click();\n\n    // Verify first retry failed\n    await page.waitForResponse(response =>\n      response.url().includes('/api/upload/retry') && response.status() === 500\n    );\n    await expect(errorMessage).toBeVisible();\n\n    // Click retry button again\n    await retryButton.click();\n\n    // Verify second retry failed\n    await page.waitForResponse(response =>\n      response.url().includes('/api/upload/retry') && response.status() === 500\n    );\n    await expect(errorMessage).toBeVisible();\n\n    // Click retry button for third time (should succeed)\n    await retryButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Upload successful');\n    await expect(successMessage).toBeVisible();\n\n    // Verify retry button is no longer visible\n    await expect(retryButton).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8831,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.6105,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.575,
+      "feedback_used": ""
+    }
+  ]
+}

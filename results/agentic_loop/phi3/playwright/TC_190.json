@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_190",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8206,
+  "total_latency_s": 33.413,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Clear All Filters Button', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should clear all applied filters with a single button click', async ({ page }) => {\n    // Apply multiple filters\n    const categoryFilter = page.getByRole('button', { name: /category/i });\n    await categoryFilter.click();\n    const categorySelect = page.getByRole('combobox', { name: /category/i });\n    await categorySelect.fill('books');\n\n    const priceFilter = page.getByRole('button', { name: /price/i });\n    await priceFilter.click();\n    const priceRangeSelect = page.getByRole('combobox', { name: /price/i });\n    await priceRangeSelect.fill('under $10');\n\n    const authorFilter = page.getByRole('button', { name: /author/i });\n    await authorFilter.click();\n    const authorSelect = page.getByRole('combobox', { name: /author/i });\n    await authorSelect.fill('J.K. Rowling');\n\n    // Verify filters are applied\n    const resultsList = page.getByRole('list', { name: /search results/i });\n    await expect(resultsList).toBeVisible();\n\n    // Click clear button\n    const clearButton = page.getByRole('button', { name: /clear filters/i });\n    await clearButton.click();\n\n    // Verify filters are cleared\n    await expect(categorySelect).toBeEmpty();\n    await expect(priceRangeSelect).toBeEmpty();\n    await expect(authorSelect).toBeEmpty();\n\n    // Verify results list is empty\n    await expect(resultsList).toHaveCount(0);\n\n    // Verify clear button is disabled after clearing\n    await expect(clearButton).toBeDisabled();\n  });\n\n  test('should handle clear button click when no filters are applied', async ({ page }) => {\n    // Verify results list is empty initially\n    const resultsList = page.getByRole('list', { name: /search results/i });\n    await expect(resultsList).toHaveCount(0);\n\n    // Click clear button\n    const clearButton = page.getByRole('button', { name: /clear filters/i });\n    await clearButton.click();\n\n    // Verify results list is still empty\n    await expect(resultsList).toHaveCount(0);\n\n    // Verify clear button is enabled\n    await expect(clearButton).not.toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8206,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.502,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 33.413,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_083",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7711,
+  "total_latency_s": 45.608,
+  "final_script": "describe('Assign Category to Record via Dropdown', () => {\n  beforeEach(() => {\n    cy.visit('/records');\n  });\n\n  it('should successfully assign a category to a record via dropdown', () => {\n    // Verify initial state: no category assigned\n    cy.get('[data-testid=\"record-list\"]').should('be.visible');\n    cy.get('[data-testid=\"record-item\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"record-item\"]').first().should('contain', 'No Category');\n\n    // Intercept API call to assign category\n    cy.intercept('POST', '/api/records/1/assign-category').as('assignCategory');\n\n    // Select a category from the dropdown\n    cy.get('[data-testid=\"category-dropdown\"]').click();\n    cy.get('[data-testid=\"category-option\"]').click({ force: true });\n    cy.get('[data-testid=\"category-option-finance\"]').click();\n\n    // Verify category is selected\n    cy.get('[data-testid=\"category-dropdown\"]').should('contain', 'Finance');\n\n    // Verify API call was made\n    cy.wait('@assignCategory').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify category is now assigned\n    cy.get('[data-testid=\"record-item\"]').first().should('contain', 'Finance');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Category assigned successfully');\n  });\n\n  it('should handle edge case: selecting disabled category option', () => {\n    // Verify initial state: no category assigned\n    cy.get('[data-testid=\"record-list\"]').should('be.visible');\n    cy.get('[data-testid=\"record-item\"]').should('have.length.greaterThan', 0);\n\n    // Intercept API call to assign category\n    cy.intercept('POST', '/api/records/1/assign-category').as('assignCategory');\n\n    // Select a disabled category from the dropdown\n    cy.get('[data-testid=\"category-dropdown\"]').click();\n    cy.get('[data-testid=\"category-option\"]').click({ force: true });\n    cy.get('[data-testid=\"category-option-disabled\"]').click();\n\n    // Verify disabled option is not selected\n    cy.get('[data-testid=\"category-dropdown\"]').should('not.contain', 'Disabled');\n\n    // Verify API call was not made\n    cy.wait('@assignCategory').then((interception) => {\n      expect(interception.request.body.category).to.equal('Disabled');\n      expect(interception.response.statusCode).to.equal(400);\n    });\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Category cannot be disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7711,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4368,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 45.608,
+      "feedback_used": ""
+    }
+  ]
+}

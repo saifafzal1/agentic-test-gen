@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_157",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8242,
+  "total_latency_s": 316.522,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Right-click Row Context Menu', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should display context menu with correct options when right-clicking a row', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Get first row using getByRole\n    const firstRow = page.getByRole('row', { name: /row 1/i });\n    await expect(firstRow).toBeVisible();\n\n    // Right-click the first row\n    await firstRow.rightClick();\n\n    // Wait for context menu to appear\n    const contextMenu = page.locator('[data-testid=\"context-menu\"]');\n    await page.waitForTimeout(100);\n\n    // Verify context menu is visible\n    await expect(contextMenu).toBeVisible();\n\n    // Verify context menu contains expected options\n    const copyAction = page.getByRole('button', { name: /copy/i });\n    await expect(copyAction).toBeVisible();\n\n    const editAction = page.getByRole('button', { name: /edit/i });\n    await expect(editAction).toBeVisible();\n\n    const deleteAction = page.getByRole('button', { name: /delete/i });\n    await expect(deleteAction).toBeVisible();\n\n    // Verify context menu is positioned correctly\n    const contextMenuPosition = page.evaluate(() => {\n      const menu = document.querySelector('[data-testid=\"context-menu\"]');\n      return {\n        x: window.getComputedStyle(menu).getPropertyValue('left'),\n        y: window.getComputedStyle(menu).getPropertyValue('top')\n      };\n    });\n\n    expect(contextMenuPosition.x).toBeGreaterThan(0);\n    expect(contextMenuPosition.y).toBeGreaterThan(0);\n\n    // Verify context menu is not visible when clicking outside\n    const outsideElement = page.locator('body');\n    await outsideElement.click();\n    await expect(contextMenu).not.toBeVisible();\n  });\n\n  test('should not display context menu when clicking outside of table', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Get first row using getByRole\n    const firstRow = page.getByRole('row', { name: /row 1/i });\n    await expect(firstRow).toBeVisible();\n\n    // Right-click the first row\n    await firstRow.rightClick();\n\n    // Verify context menu appears\n    const contextMenu = page.locator('[data-testid=\"context-menu\"]');\n    await expect(contextMenu).toBeVisible();\n\n    // Click outside of table\n    const outsideElement = page.locator('body');\n    await outsideElement.click();\n\n    // Verify context menu is not visible\n    await expect(contextMenu).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8242,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.514,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 316.522,
+      "feedback_used": ""
+    }
+  ]
+}

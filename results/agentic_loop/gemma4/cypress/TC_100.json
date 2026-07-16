@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_100",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7507,
+  "total_latency_s": 184.431,
+  "final_script": "describe('Rate Limit Error Handling on Form Submission', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n  });\n\n  it('should display rate limit error when submitting form too many times', () => {\n    // First successful submission\n    cy.get('[data-testid=\"form-input\"]').type('test@example.com');\n    cy.get('[data-testid=\"form-password\"]').type('password123');\n    cy.get('[data-testid=\"submit-button\"]').click();\n    cy.intercept('POST', '/api/submit').as('formSubmit');\n    cy.wait('@formSubmit');\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Form submitted successfully');\n\n    // Second submission (should succeed)\n    cy.get('[data-testid=\"form-input\"]').clear().type('another@example.com');\n    cy.get('[data-testid=\"form-password\"]').clear().type('password123');\n    cy.get('[data-testid=\"submit-button\"]').click();\n    cy.intercept('POST', '/api/submit').as('formSubmit2');\n    cy.wait('@formSubmit2');\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n\n    // Third submission (should trigger rate limit error)\n    cy.get('[data-testid=\"form-input\"]').clear().type('third@example.com');\n    cy.get('[data-testid=\"form-password\"]').clear().type('password123');\n    cy.get('[data-testid=\"submit-button\"]').click();\n    cy.intercept('POST', '/api/submit', {\n      statusCode: 429,\n      body: { error: 'Too many requests', retryAfter: 60 }\n    }).as('rateLimitError');\n    cy.wait('@rateLimitError');\n\n    // Verify rate limit error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Too many requests');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please try again in 60 seconds');\n\n    // Verify form is still visible and not disabled\n    cy.get('[data-testid=\"form-input\"]').should('be.visible');\n    cy.get('[data-testid=\"submit-button\"]').should('not.be.disabled');\n  });\n\n  it('should disable submit button and show error when rate limit is exceeded', () => {\n    // First submission (should succeed)\n    cy.get('[data-testid=\"form-input\"]').type('first@example.com');\n    cy.get('[data-testid=\"form-password\"]').type('password123');\n    cy.get('[data-testid=\"submit-button\"]').click();\n    cy.intercept('POST', '/api/submit').as('formSubmit1');\n    cy.wait('@formSubmit1');\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n\n    // Second submission (should succeed)\n    cy.get('[data-testid=\"form-input\"]').clear().type('second@example.com');\n    cy.get('[data-testid=\"form-password\"]').clear().type('password123');\n    cy.get('[data-testid=\"submit-button\"]').click();\n    cy.intercept('POST', '/api/submit').as('formSubmit2');\n    cy.wait('@formSubmit2');\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n\n    // Third submission (should trigger rate limit error)\n    cy.get('[data-testid=\"form-input\"]').clear().type('third@example.com');\n    cy.get('[data-testid=\"form-password\"]').clear().type('password123');\n    cy.get('[data-testid=\"submit-button\"]').click();\n    cy.intercept('POST', '/api/submit', {\n      statusCode: 429,\n      body: { error: 'Too many requests', retryAfter: 60 }\n    }).as('rateLimitError');\n    cy.wait('@rateLimitError');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Rate limit exceeded');\n\n    // Verify submit button is disabled after rate limit error\n    cy.get('[data-testid=\"submit-button\"]').should('be.disabled');\n\n    // Verify retry timer is visible\n    cy.get('[data-testid=\"retry-timer\"]').should('be.visible');\n    cy.get('[data-testid=\"retry-timer\"]').should('contain', '60 seconds');\n\n    // Verify form fields are still populated with last attempt data\n    cy.get('[data-testid=\"form-input\"]').should('have.value', 'third@example.com');\n    cy.get('[data-testid=\"form-password\"]').should('have.value', 'password123');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4833,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3844,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.513,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7507,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3691,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 111.918,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

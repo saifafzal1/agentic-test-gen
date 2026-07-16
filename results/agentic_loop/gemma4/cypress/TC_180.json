@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_180",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8246,
+  "total_latency_s": 72.317,
+  "final_script": "describe('File Upload Button Disabled During Upload', () => {\n  beforeEach(() => {\n    cy.visit('/file-upload');\n  });\n\n  it('should disable upload button while file is uploading', () => {\n    // Intercept the upload API call\n    cy.intercept('POST', '/api/files/upload').as('uploadFile');\n\n    // Verify upload button is enabled initially\n    cy.get('[data-testid=\"upload-button\"]').should('be.visible').should('not.be.disabled');\n\n    // Select a file\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/sample.pdf');\n\n    // Verify upload button is still enabled before clicking\n    cy.get('[data-testid=\"upload-button\"]').should('not.be.disabled');\n\n    // Click upload button to start upload\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Verify upload button is disabled during upload\n    cy.get('[data-testid=\"upload-button\"]').should('be.disabled');\n\n    // Wait for the upload API call\n    cy.wait('@uploadFile');\n\n    // Verify upload button is re-enabled after upload completes\n    cy.get('[data-testid=\"upload-button\"]').should('not.be.disabled');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'File uploaded successfully');\n  });\n\n  it('should re-enable upload button if upload fails', () => {\n    // Intercept the upload API call and force it to fail\n    cy.intercept('POST', '/api/files/upload', {\n      statusCode: 500,\n      body: { error: 'Server error' }\n    }).as('uploadFileFailed');\n\n    // Verify upload button is enabled initially\n    cy.get('[data-testid=\"upload-button\"]').should('be.visible').should('not.be.disabled');\n\n    // Select a file\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/sample.pdf');\n\n    // Click upload button\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Verify upload button is disabled during upload attempt\n    cy.get('[data-testid=\"upload-button\"]').should('be.disabled');\n\n    // Wait for the failed upload API call\n    cy.wait('@uploadFileFailed');\n\n    // Verify upload button is re-enabled after failure\n    cy.get('[data-testid=\"upload-button\"]').should('not.be.disabled');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Upload failed');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8246,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.6154,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.317,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_185",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8331,
+  "total_latency_s": 356.873,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload - Organize into Folders', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should successfully upload a file and organize it into a specified folder', async ({ page }) => {\n    // Intercept the file upload API\n    await page.route('**/api/upload', (route) => {\n      route.continue();\n    });\n\n    // Locate and click the file input using getByRole\n    const fileInput = page.getByRole('button', { name: /choose file/i });\n    await fileInput.click();\n\n    // Locate and select a file using getByLabel\n    const fileSelect = page.getByLabel(/select file/i);\n    await fileSelect.setInputFiles('fixtures/sample-file.pdf');\n\n    // Locate and click the upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await uploadButton.click();\n\n    // Wait for the upload to complete\n    await page.waitForURL('**/api/upload/.*');\n\n    // Verify success message using getByRole\n    const successMessage = page.getByRole('status');\n    await expect(successMessage).toContainText('File uploaded successfully');\n\n    // Verify file appears in the specified folder using getByRole\n    const folderList = page.getByRole('list', { name: /uploads/i });\n    await expect(folderList).toBeVisible();\n\n    const folderItem = page.getByText('Documents');\n    await expect(folderItem).toBeVisible();\n\n    // Verify file name is displayed\n    const fileName = page.getByText('sample-file.pdf');\n    await expect(fileName).toBeVisible();\n  });\n\n  test('should handle uploading multiple files into a single folder', async ({ page }) => {\n    // Intercept the file upload API\n    await page.route('**/api/upload', (route) => {\n      route.continue();\n    });\n\n    // Locate and click the file input using getByRole\n    const fileInput = page.getByRole('button', { name: /choose file/i });\n    await fileInput.click();\n\n    // Locate and select multiple files using getByLabel\n    const fileSelect = page.getByLabel(/select file/i);\n    await fileSelect.setInputFiles('fixtures/sample-file1.pdf', 'fixtures/sample-file2.pdf');\n\n    // Locate and click the upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await uploadButton.click();\n\n    // Wait for the upload to complete\n    await page.waitForURL('**/api/upload/.*');\n\n    // Verify success message using getByRole\n    const successMessage = page.getByRole('status');\n    await expect(successMessage).toContainText('Files uploaded successfully');\n\n    // Verify all files appear in the specified folder using getByRole\n    const folderList = page.getByRole('list', { name: /uploads/i });\n    await expect(folderList).toBeVisible();\n\n    const folderItem = page.getByText('Documents');\n    await expect(folderItem).toBeVisible();\n\n    // Verify file names are displayed\n    const fileName1 = page.getByText('sample-file1.pdf');\n    await expect(fileName1).toBeVisible();\n    const fileName2 = page.getByText('sample-file2.pdf');\n    await expect(fileName2).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8331,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4437,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 356.873,
+      "feedback_used": ""
+    }
+  ]
+}

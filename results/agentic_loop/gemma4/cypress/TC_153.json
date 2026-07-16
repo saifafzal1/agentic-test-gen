@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_153",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7916,
+  "total_latency_s": 71.731,
+  "final_script": "describe('Column Visibility Toggle from Settings Menu', () => {\n  beforeEach(() => {\n    cy.visit('/table');\n  });\n\n  it('should toggle column visibility from settings menu', () => {\n    // Verify table is visible with all columns\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n    cy.get('[data-testid=\"column-header-name\"]').should('be.visible');\n    cy.get('[data-testid=\"column-header-email\"]').should('be.visible');\n    cy.get('[data-testid=\"column-header-phone\"]').should('be.visible');\n\n    // Open settings menu\n    cy.get('[data-testid=\"settings-button\"]').click();\n    cy.get('[data-testid=\"settings-menu\"]').should('be.visible');\n\n    // Verify column visibility checkboxes are visible\n    cy.get('[data-testid=\"checkbox-name\"]').should('be.visible');\n    cy.get('[data-testid=\"checkbox-email\"]').should('be.visible');\n    cy.get('[data-testid=\"checkbox-phone\"]').should('be.visible');\n\n    // Uncheck email column\n    cy.get('[data-testid=\"checkbox-email\"]').click();\n    cy.get('[data-testid=\"checkbox-email\"]').should('not.be.checked');\n\n    // Verify email column is hidden in table\n    cy.get('[data-testid=\"column-header-email\"]').should('not.exist');\n    cy.get('[data-testid=\"table-row\"]').should('contain', 'Name');\n    cy.get('[data-testid=\"table-row\"]').should('contain', 'Phone');\n\n    // Close settings menu\n    cy.get('[data-testid=\"close-settings-button\"]').click();\n    cy.get('[data-testid=\"settings-menu\"]').should('not.exist');\n\n    // Verify table is still visible\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n  });\n\n  it('should handle toggling column visibility and persist state', () => {\n    // Open settings menu\n    cy.get('[data-testid=\"settings-button\"]').click();\n    cy.get('[data-testid=\"settings-menu\"]').should('be.visible');\n\n    // Uncheck phone column\n    cy.get('[data-testid=\"checkbox-phone\"]').click();\n    cy.get('[data-testid=\"checkbox-phone\"]').should('not.be.checked');\n\n    // Close settings menu\n    cy.get('[data-testid=\"close-settings-button\"]').click();\n    cy.get('[data-testid=\"settings-menu\"]').should('not.exist');\n\n    // Verify phone column is hidden\n    cy.get('[data-testid=\"column-header-phone\"]').should('not.exist');\n\n    // Reload page to test persistence\n    cy.reload();\n\n    // Verify phone column remains hidden after reload\n    cy.get('[data-testid=\"column-header-phone\"]').should('not.exist');\n    cy.get('[data-testid=\"column-header-name\"]').should('be.visible');\n\n    // Open settings menu again\n    cy.get('[data-testid=\"settings-button\"]').click();\n    cy.get('[data-testid=\"settings-menu\"]').should('be.visible');\n\n    // Check if phone column checkbox is unchecked\n    cy.get('[data-testid=\"checkbox-phone\"]').should('not.be.checked');\n\n    // Check if name and email columns are still visible\n    cy.get('[data-testid=\"checkbox-name\"]').should('be.checked');\n    cy.get('[data-testid=\"checkbox-email\"]').should('be.checked');\n\n    // Re-enable phone column\n    cy.get('[data-testid=\"checkbox-phone\"]').click();\n    cy.get('[data-testid=\"checkbox-phone\"]').should('be.checked');\n\n    // Close settings menu\n    cy.get('[data-testid=\"close-settings-button\"]').click();\n    cy.get('[data-testid=\"settings-menu\"]').should('not.exist');\n\n    // Verify phone column is now visible\n    cy.get('[data-testid=\"column-header-phone\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7916,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5054,
+        "missing_keywords": [],
+        "assertion_count": 27,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.731,
+      "feedback_used": ""
+    }
+  ]
+}

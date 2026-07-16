@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_035",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7752,
+  "total_latency_s": 71.305,
+  "final_script": "describe('Multi-Step Form Progress Indicator', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n  });\n\n  it('should display progress indicator as user navigates through form steps', () => {\n    // Verify initial state: progress indicator should show step 1 of 3\n    cy.get('[data-testid=\"progress-indicator\"]').should('be.visible');\n    cy.get('[data-testid=\"progress-step-1\"]').should('contain', 'Step 1');\n    cy.get('[data-testid=\"progress-step-2\"]').should('contain', 'Step 2');\n    cy.get('[data-testid=\"progress-step-3\"]').should('contain', 'Step 3');\n\n    // Fill in step 1\n    cy.get('[data-testid=\"name-input\"]').type('John Doe');\n    cy.get('[data-testid=\"email-input\"]').type('john@example.com');\n\n    // Click next button to move to step 2\n    cy.get('[data-testid=\"next-button\"]').click();\n\n    // Verify progress indicator updated to step 2\n    cy.get('[data-testid=\"progress-step-1\"]').should('have.class', 'completed');\n    cy.get('[data-testid=\"progress-step-2\"]').should('have.class', 'active');\n    cy.get('[data-testid=\"progress-step-3\"]').should('contain', 'Step 3');\n\n    // Fill in step 2\n    cy.get('[data-testid=\"address-input\"]').type('123 Main St');\n    cy.get('[data-testid=\"city-input\"]').type('Anytown');\n\n    // Click next button to move to step 3\n    cy.get('[data-testid=\"next-button\"]').click();\n\n    // Verify progress indicator updated to step 3\n    cy.get('[data-testid=\"progress-step-1\"]').should('have.class', 'completed');\n    cy.get('[data-testid=\"progress-step-2\"]').should('have.class', 'completed');\n    cy.get('[data-testid=\"progress-step-3\"]').should('have.class', 'active');\n\n    // Fill in step 3\n    cy.get('[data-testid=\"phone-input\"]').type('555-123-465');\n\n    // Click submit button\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify form submission success message\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Form submitted successfully');\n  });\n\n  it('should not allow navigation backward if form is incomplete', () => {\n    // Fill in only step 1\n    cy.get('[data-testid=\"name-input\"]').type('Jane Doe');\n    cy.get('[data-testid=\"email-input\"]').type('jane@example.com');\n\n    // Attempt to click next button without filling step 2\n    cy.get('[data-testid=\"next-button\"]').click();\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please complete all required fields');\n\n    // Verify progress indicator remains on step 1\n    cy.get('[data-testid=\"progress-step-1\"]').should('have.class', 'active');\n    cy.get('[data-testid=\"progress-step-2\"]').should('not.have.class', 'active');\n\n    // Verify back button is disabled or not visible\n    cy.get('[data-testid=\"back-button\"]').should('be.disabled');\n\n    // Fill in step 2 and try again\n    cy.get('[data-testid=\"address-input\"]').type('456 Oak Ave');\n    cy.get('[data-testid=\"city-input\"]').type('Springfield');\n\n    // Click next button\n    cy.get('[data-testid=\"next-button\"]').click();\n\n    // Verify progress indicator moves to step 2\n    cy.get('[data-testid=\"progress-step-1\"]').should('have.class', 'completed');\n    cy.get('[data-testid=\"progress-step-2\"]').should('have.class', 'active');\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7752,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4506,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.305,
+      "feedback_used": ""
+    }
+  ]
+}

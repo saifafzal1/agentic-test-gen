@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_072",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7735,
+  "total_latency_s": 273.834,
+  "final_script": "describe('File Download on Export Button Click', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should trigger file download when export button is clicked', () => {\n    // Verify export button is visible\n    cy.get('[data-testid=\"export-button\"]').should('be.visible');\n    cy.get('[data-testid=\"export-button\"]').should('contain', 'Download Report');\n\n    // Click export button\n    cy.get('[data-testid=\"export-button\"]').click();\n\n    // Verify download dialog appears\n    cy.get('[data-testid=\"download-dialog\"]').should('be.visible');\n\n    // Verify download button is present in dialog\n    cy.get('[data-testid=\"download-button\"]').should('be.visible');\n\n    // Verify file name is displayed\n    cy.get('[data-testid=\"file-name\"]').should('contain', 'Report.pdf');\n\n    // Verify file size is displayed\n    cy.get('[data-testid=\"file-size\"]').should('contain', '1.2 MB');\n\n    // Verify download button has correct href\n    cy.get('[data-testid=\"download-button\"]').should('have.attr', 'href');\n    cy.get('[data-testid=\"download-button\"]').should('have.attr', 'download');\n\n    // Verify file download starts\n    cy.intercept('GET', '/api/reports/export/report.pdf').as('downloadReport');\n    cy.wait('@downloadReport');\n\n    // Verify download dialog closes after file is downloaded\n    cy.get('[data-testid=\"download-dialog\"]').should('not.exist');\n\n    // Verify file is present in downloads folder\n    cy.get('[data-testid=\"downloads-folder\"]').should('contain', 'Report.pdf');\n  });\n\n  it('should handle failed file download and display error message', () => {\n    // Mock API to return error\n    cy.intercept('GET', '/api/reports/export/report.pdf', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' }\n    }).as('failedDownload');\n\n    // Click export button\n    cy.get('[data-testid=\"export-button\"]').click();\n\n    // Verify download dialog appears\n    cy.get('[data-testid=\"download-dialog\"]').should('be.visible');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Failed to download file');\n\n    // Verify download button is still visible\n    cy.get('[data-testid=\"download-button\"]').should('be.visible');\n\n    // Verify file is not downloaded\n    cy.get('[data-testid=\"downloads-folder\"]').should('not.contain', 'Report.pdf');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7735,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.445,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 273.834,
+      "feedback_used": ""
+    }
+  ]
+}

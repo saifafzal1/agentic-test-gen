@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_054",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8143,
+  "total_latency_s": 31.229,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Page Title Update on Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should update page title when navigating between sections', async ({ page }) => {\n    // Verify initial page title\n    const pageTitle = page.getByRole('heading', { name: /Dashboard/i });\n    await expect(pageTitle).toBeVisible();\n\n    // Verify initial URL\n    const url = page.url();\n    expect(url).toContain('/dashboard');\n\n    // Navigate to the overview section\n    const overviewNav = page.getByRole('navigation', { name: /overview/i });\n    await overviewNav.click();\n\n    // Verify page title updates\n    const overviewTitle = page.getByRole('heading', { name: /Overview/i });\n    await expect(overviewTitle).toBeVisible();\n\n    // Verify URL changes\n    const overviewUrl = page.url();\n    expect(overviewUrl).toContain('/dashboard/overview');\n\n    // Navigate back to the dashboard\n    const backNav = page.getByRole('navigation', { name: /back/i });\n    await backNav.click();\n\n    // Verify page title reverts to dashboard\n    const dashboardTitle = page.getByRole('heading', { name: /Dashboard/i });\n    await expect(dashboardTitle).toBeVisible();\n\n    // Verify URL reverts to initial state\n    const dashboardUrl = page.url();\n    expect(dashboardUrl).toContain('/dashboard');\n  });\n\n  test('should handle navigation to non-existent sections gracefully', async ({ page }) => {\n    // Navigate to a non-existent section\n    const nonExistentNav = page.getByRole('navigation', { name: /reports/i });\n    await nonExistentNav.click();\n\n    // Verify page title does not update\n    const pageTitle = page.getByRole('heading', { name: /Dashboard/i });\n    await expect(pageTitle).toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/Section not found/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify URL remains unchanged\n    const currentUrl = page.url();\n    expect(currentUrl).toContain('/dashboard');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8143,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4809,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 31.229,
+      "feedback_used": ""
+    }
+  ]
+}

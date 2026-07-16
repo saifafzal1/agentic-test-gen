@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_113",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8066,
+  "total_latency_s": 72.086,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Background Job Notification via Toast', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/jobs');\n  });\n\n  test('should display toast notification when background job completes successfully', async ({ page }) => {\n    // Verify job list is visible\n    const jobList = page.getByRole('region', { name: /job list/i });\n    await expect(jobList).toBeVisible();\n\n    // Click start button for a background job\n    const startButton = page.getByRole('button', { name: /start job/i });\n    await startButton.click();\n\n    // Verify job is in pending state\n    const jobItem = page.getByText(/pending/i);\n    await expect(jobItem).toBeVisible();\n\n    // Wait for job to complete (simulate async operation)\n    await page.waitForTimeout(1500);\n\n    // Verify job status updates to completed\n    const completedJobItem = page.getByText(/completed/i);\n    await expect(completedJobItem).toBeVisible();\n\n    // Verify toast notification appears\n    const toastNotification = page.getByRole('alert');\n    await expect(toastNotification).toBeVisible();\n    await expect(toastNotification).toContainText('Job completed successfully');\n\n    // Verify toast has success styling\n    const toastContainer = page.locator('[data-testid=\"toast-container\"]');\n    await expect(toastContainer).toHaveClass(/toast-success/);\n  });\n\n  test('should handle background job failure and display error toast', async ({ page }) => {\n    // Click start button for a job that will fail\n    const startButton = page.getByRole('button', { name: /start job/i });\n    await startButton.click();\n\n    // Verify job is in pending state\n    const jobItem = page.getByText(/pending/i);\n    await expect(jobItem).toBeVisible();\n\n    // Wait for job to fail (simulate async operation)\n    await page.waitForTimeout(1500);\n\n    // Verify job status updates to failed\n    const failedJobItem = page.getByText(/failed/i);\n    await expect(failedJobItem).toBeVisible();\n\n    // Verify error toast notification appears\n    const errorToast = page.getByRole('alert');\n    await expect(errorToast).toBeVisible();\n    await expect(errorToast).toContainText('Job failed');\n\n    // Verify toast has error styling\n    const toastContainer = page.locator('[data-testid=\"toast-container\"]');\n    await expect(toastContainer).toHaveClass(/toast-error/);\n\n    // Verify user can retry the failed job\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n    await retryButton.click();\n\n    // Verify job status updates to pending again\n    await expect(jobItem).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8066,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4555,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.086,
+      "feedback_used": ""
+    }
+  ]
+}

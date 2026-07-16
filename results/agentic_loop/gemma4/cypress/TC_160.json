@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_160",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7753,
+  "total_latency_s": 72.345,
+  "final_script": "describe('Numeric Column Summary Row', () => {\n  beforeEach(() => {\n    cy.visit('/table');\n  });\n\n  it('should display summary row with correct total when table is populated', () => {\n    // Intercept the API call to fetch table data\n    cy.intercept('GET', '/api/table/data').as('getTableData');\n    cy.get('[data-testid=\"load-table-button\"]').click();\n\n    // Wait for the API response\n    cy.wait('@getTableData');\n\n    // Verify table rows are displayed\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 0);\n\n    // Verify numeric column exists\n    cy.get('[data-testid=\"numeric-column\"]').should('be.visible');\n\n    // Verify summary row is visible at the bottom\n    cy.get('[data-testid=\"summary-row\"]').should('be.visible');\n\n    // Verify summary row contains total\n    cy.get('[data-testid=\"summary-total\"]').should('contain', 'Total');\n\n    // Verify total value is calculated correctly (e.g., 10 + 20 + 5 = 35)\n    cy.get('[data-testid=\"summary-value\"]').should('contain', '35');\n\n    // Verify summary row is styled as a footer\n    cy.get('[data-testid=\"summary-row\"]').should('have.class', 'table-footer');\n  });\n\n  it('should handle empty table and display appropriate message', () => {\n    // Intercept the API call with empty data\n    cy.intercept('GET', '/api/table/data', {\n      statusCode: 200,\n      body: { rows: [] }\n    }).as('getEmptyTableData');\n\n    cy.get('[data-testid=\"load-table-button\"]').click();\n    cy.wait('@getEmptyTableData');\n\n    // Verify table is empty\n    cy.get('[data-testid=\"table-row\"]').should('not.exist');\n\n    // Verify summary row is not displayed or shows zero\n    cy.get('[data-testid=\"summary-row\"]').should('be.visible');\n    cy.get('[data-testid=\"summary-total\"]').should('contain', 'Total');\n    cy.get('[data-testid=\"summary-value\"]').should('contain', '0');\n\n    // Verify empty state message is shown\n    cy.get('[data-testid=\"empty-table-message\"]').should('be.visible');\n    cy.get('[data-testid=\"empty-table-message\"]').should('contain', 'No data available');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7753,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4511,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.345,
+      "feedback_used": ""
+    }
+  ]
+}

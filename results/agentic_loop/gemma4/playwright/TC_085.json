@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_085",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8446,
+  "total_latency_s": 194.008,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('CSV Import Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should successfully import records from a valid CSV file', async ({ page }) => {\n    // Setup: intercept the API call\n    await page.route('**/api/records/import', (route) => {\n      route.continue();\n    });\n\n    // Setup: create a valid CSV file\n    const csvContent = 'id,name,email\\n1,John Doe,john@example.com\\n2,Jane Smith,jane@example.com';\n    const csvFile = await page.evaluate((content) => {\n      const blob = new Blob([content], { type: 'text/csv' });\n      return URL.createObjectURL(blob);\n    }, csvContent);\n\n    // Get the file input using getByLabel\n    const fileInput = page.getByLabel('Upload CSV');\n    await expect(fileInput).toBeVisible();\n\n    // Set the file input value\n    await fileInput.setInputFiles(csvFile);\n\n    // Get and click the import button using getByRole\n    const importButton = page.getByRole('button', { name: /import records/i });\n    await expect(importButton).toBeVisible();\n    await importButton.click();\n\n    // Wait for the import process to complete\n    await page.waitForResponse(response => \n      response.url().includes('/api/records/import') && response.status() === 200\n    );\n\n    // Verify success message appears\n    const successMessage = page.getByText(/import successful/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify records are displayed\n    const recordList = page.getByRole('region', { name: /records/i });\n    await expect(recordList).toBeVisible();\n\n    const recordItems = page.locator('[data-testid=\"record-item\"]');\n    const count = await recordItems.count();\n    expect(count).toBe(2);\n\n    // Verify imported data is visible\n    const recordNames = page.locator('[data-testid=\"record-name\"]');\n    const names = await recordNames.allTextContents();\n    expect(names).toContain('John Doe');\n    expect(names).toContain('Jane Smith');\n  });\n\n  test('should display error message when uploading an invalid CSV file', async ({ page }) => {\n    // Setup: intercept the API call\n    await page.route('**/api/records/import', (route) => {\n      route.abort('failed');\n    });\n\n    // Setup: create an invalid CSV file (missing closing quotes)\n    const invalidCsvContent = 'id,name,email\\n1,\"John Doe\\n2,\"Jane Smith,jane@example.com';\n    const csvFile = await page.evaluate((content) => {\n      const blob = new Blob([content], { type: 'text/csv' });\n      return URL.createObjectURL(blob);\n    }, invalidCsvContent);\n\n    // Get the file input using getByLabel\n    const fileInput = page.getByLabel('Upload CSV');\n    await expect(fileInput).toBeVisible();\n\n    // Set the invalid file input\n    await fileInput.setInputFiles(csvFile);\n\n    // Get and click the import button using getByRole\n    const importButton = page.getByRole('button', { name: /import records/i });\n    await expect(importButton).toBeVisible();\n    await importButton.click();\n\n    // Wait for the error response\n    await page.waitForResponse(response => \n      response.url().includes('/api/records/import') && response.status() === 400\n    );\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/invalid csv format/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify no records are displayed\n    const recordList = page.getByRole('region', { name: /records/i });\n    const recordItems = page.locator('[data-testid=\"record-item\"]');\n    const count = await recordItems.count();\n    expect(count).toBe(0);\n\n    // Verify the file input is still visible for retry\n    await expect(fileInput).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.52,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4665,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 76.45,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8446,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.482,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 117.558,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

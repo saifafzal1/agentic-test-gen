@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_117",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7891,
+  "total_latency_s": 186.557,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Race Condition Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should display only the latest search result when multiple requests are in flight', async ({ page }) => {\n    // Intercept the search API endpoint\n    await page.route('**/api/search', (route) => {\n      const request = route.request();\n      const query = request.url().split('q=')[1];\n      \n      if (query === 'apple') {\n        // Simulate a slow response for the first request\n        setTimeout(() => {\n          route.fulfill({\n            status: 200,\n            contentType: 'application/json',\n            body: JSON.stringify({ results: [{ id: 1, name: 'Apple iPhone 14' }] }),\n          });\n        }, 1500);\n      } else if (query === 'banana') {\n        // Simulate a fast response for the second request\n        setTimeout(() => {\n          route.fulfill({\n            status: 200,\n            contentType: 'application/json',\n            body: JSON.stringify({ results: [{ id: 2, name: 'Banana Split' }] }),\n          });\n        }, 300);\n      } else if (query === 'apple again') {\n        // Simulate a third, even slower response\n        setTimeout(() => {\n          route.fulfill({\n            status: 200,\n            contentType: 'application/json',\n            body: JSON.stringify({ results: [{ id: 3, name: 'Apple Watch Series 7' }] }),\n          });\n        }, 2500);\n      }\n    });\n\n    // First search: 'apple'\n    const searchInput = page.getByRole('searchbox');\n    await searchInput.fill('apple');\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await searchButton.click();\n\n    // Second search: 'banana' (should complete before first)\n    await searchInput.fill('banana');\n    await searchButton.click();\n\n    // Third search: 'apple again' (should be the final result)\n    await searchInput.fill('apple again');\n    await searchButton.click();\n\n    // Wait for all requests to settle\n    await page.waitForTimeout(3000);\n\n    // Verify only the latest result is displayed\n    const resultItem = page.getByText('Apple Watch Series 7');\n    await expect(resultItem).toBeVisible();\n\n    // Verify the previous results are not visible\n    const appleResult = page.getByText('Apple iPhone 14');\n    await expect(appleResult).not.toBeVisible();\n\n    const bananaResult = page.getByText('Banana Split');\n    await expect(bananaResult).not.toBeVisible();\n  });\n\n  test('should handle rapid successive searches without displaying stale results', async ({ page }) => {\n    // Intercept the search API endpoint\n    await page.route('**/api/search', (route) => {\n      const request = route.request();\n      const query = request.url().split('q=')[1];\n      \n      if (query === 'test1') {\n        setTimeout(() => {\n          route.fulfill({\n            status: 200,\n            contentType: 'application/json',\n            body: JSON.stringify({ results: [{ id: 101, name: 'Test Result 1' }] }),\n          });\n        }, 1000);\n      } else if (query === 'test2') {\n        setTimeout(() => {\n          route.fulfill({\n            status: 200,\n            contentType: 'application/json',\n            body: JSON.stringify({ results: [{ id: 201, name: 'Test Result 2' }] }),\n          });\n        }, 500);\n      } else if (query === 'test3') {\n        setTimeout(() => {\n          route.fulfill({\n            status: 200,\n            contentType: 'application/json',\n            body: JSON.stringify({ results: [{ id: 301, name: 'Test Result 3' }] }),\n          });\n        }, 100);\n      }\n    });\n\n    // Rapidly trigger three searches\n    const searchInput = page.getByRole('searchbox');\n    const searchButton = page.getByRole('button', { name: /search/i });\n\n    await searchInput.fill('test1');\n    await searchButton.click();\n\n    await searchInput.fill('test2');\n    await searchButton.click();\n\n    await searchInput.fill('test3');\n    await searchButton.click();\n\n    // Wait briefly for all requests to complete\n    await page.waitForTimeout(1500);\n\n    // Verify only the latest result is displayed\n    const latestResult = page.getByText('Test Result 3');\n    await expect(latestResult).toBeVisible();\n\n    // Verify previous results are not visible\n    const result1 = page.getByText('Test Result 1');\n    await expect(result1).not.toBeVisible();\n\n    const result2 = page.getByText('Test Result 2');\n    await expect(result2).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4904,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.368,
+        "missing_keywords": [],
+        "assertion_count": 5,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.135,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7891,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3968,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 114.422,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

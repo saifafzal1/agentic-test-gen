@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_164",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8367,
+  "total_latency_s": 72.585,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Column Sort Direction Indicator', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table');\n  });\n\n  test('should display sort direction arrow icon when column is sorted', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Click on column header to sort\n    const nameHeader = page.getByRole('columnheader', { name: 'Name' });\n    await nameHeader.click();\n\n    // Verify sort direction arrow appears\n    const sortArrow = page.getByRole('img', { name: /sort direction/i });\n    await expect(sortArrow).toBeVisible();\n\n    // Verify arrow points up (ascending)\n    const arrowIcon = page.locator('[data-testid=\"sort-arrow\"]');\n    await expect(arrowIcon).toHaveAttribute('data-direction', 'asc');\n\n    // Verify sort indicator text is visible\n    const sortIndicator = page.getByText('Name');\n    await expect(sortIndicator).toBeVisible();\n\n    // Verify table rows are sorted by name\n    const rows = page.locator('[data-testid=\"table-row\"]');\n    const rowNames = await rows.allTextContents();\n    expect(rowNames[0]).toContain('Alice');\n    expect(rowNames[rows.count() - 1]).toContain('Zoe');\n  });\n\n  test('should update sort direction arrow when column is re-sorted', async ({ page }) => {\n    // Click on column header to sort ascending\n    const emailHeader = page.getByRole('columnheader', { name: 'Email' });\n    await emailHeader.click();\n\n    // Verify ascending arrow is displayed\n    const sortArrow = page.getByRole('img', { name: /sort direction/i });\n    await expect(sortArrow).toBeVisible();\n    const arrowIcon = page.locator('[data-testid=\"sort-arrow\"]');\n    await expect(arrowIcon).toHaveAttribute('data-direction', 'asc');\n\n    // Click on the same column header to sort descending\n    await emailHeader.click();\n\n    // Verify sort direction arrow updates to descending\n    await expect(arrowIcon).toHaveAttribute('data-direction', 'desc');\n\n    // Verify sort indicator text is updated\n    const sortIndicator = page.getByText('Email');\n    await expect(sortIndicator).toBeVisible();\n\n    // Verify table rows are sorted in descending order\n    const rows = page.locator('[data-testid=\"table-row\"]');\n    const rowEmails = await rows.allTextContents();\n    expect(rowEmails[0]).toContain('zoe@example.com');\n    expect(rowEmails[rows.count() - 1]).toContain('alice@example.com');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8367,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5558,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.585,
+      "feedback_used": ""
+    }
+  ]
+}

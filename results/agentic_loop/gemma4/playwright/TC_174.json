@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_174",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8809,
+  "total_latency_s": 72.534,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload - Size Limit Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should display error when file exceeds maximum size limit', async ({ page }) => {\n    // Setup: intercept the file upload API endpoint\n    await page.route('**/api/upload', (route) => {\n      route.abort('blockedbyclient');\n    });\n\n    // Get file input using getByLabel\n    const fileInput = page.getByLabel('Select file');\n    await expect(fileInput).toBeVisible();\n\n    // Create a large dummy file (e > 1MB)\n    const largeFile = Buffer.alloc(1 * 1024 * 1029, 'a');\n    const fileHandle = await page.evaluate((file) => {\n      const blob = new Blob([file], { type: 'application/octet' });\n      return URL.createObjectURL(blob);\n    }, largeFile);\n\n    // Set the large file using getByLabel\n    await fileInput.setInputFile({\n      name: 'file',\n      mimeType: 'application/octet',\n      allowMultiple: false,\n      value: fileHandle,\n    });\n\n    // Get upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await expect(uploadButton).toBeVisible();\n\n    // Click upload button\n    await uploadButton.click();\n\n    // Wait for error message to appear\n    const errorMessage = page.getByText(/file exceeds maximum size limit/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error styling\n    await expect(errorMessage).toHaveClass(/error-message/);\n\n    // Verify upload button is disabled\n    await expect(uploadButton).toBeDisabled();\n  });\n\n  test('should allow file upload when size is within limit', async ({ page }) => {\n    // Setup: intercept the file upload API endpoint\n    await page.route('**/api/upload', (route) => {\n      route.continue();\n    });\n\n    // Get file input using getByLabel\n    const fileInput = page.getByLabel('Select file');\n    await expect(fileInput).toBeVisible();\n\n    // Create a small dummy file (e < 1MB)\n    const smallFile = Buffer.alloc(500 * 1024, 'b');\n    const fileHandle = await page.evaluate((file) => {\n      const blob = new Blob([file], { type: 'application/octet' });\n      return URL.createObjectURL(blob);\n    }, smallFile);\n\n    // Set the small file using getByLabel\n    await fileInput.setInputFile({\n      name: 'file',\n      mimeType: 'application/octet',\n      allowMultiple: false,\n      value: fileHandle,\n    });\n\n    // Get upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await expect(uploadButton).toBeVisible();\n\n    // Click upload button\n    await uploadButton.click();\n\n    // Wait for success message\n    const successMessage = page.getByText(/file uploaded successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify upload button is enabled\n    await expect(uploadButton).not.toBeDisabled();\n\n    // Verify file name is displayed\n    const fileNameDisplay = page.getByText(/small-file\\.bin/i);\n    await expect(fileNameDisplay).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8809,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.6029,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.534,
+      "feedback_used": ""
+    }
+  ]
+}

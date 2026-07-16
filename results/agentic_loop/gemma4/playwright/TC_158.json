@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_158",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.795,
+  "total_latency_s": 72.634,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Row Hover Highlight', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table');\n  });\n\n  test('should highlight a row when hovered', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Get the first row using getByRole('row')\n    const firstRow = page.getByRole('row', { name: /first row/i });\n    await expect(firstRow).toBeVisible();\n\n    // Hover over the first row\n    await firstRow.hover();\n\n    // Verify the row has a highlight class\n    await expect(firstRow).toHaveClass(/highlighted-row/);\n\n    // Verify the highlight class is applied to the row element\n    const rowElement = page.locator('[data-testid=\"first-row\"]');\n    await expect(rowElement).toHaveClass(/highlighted-row/);\n\n    // Verify the highlight color is visible\n    const highlightColor = page.locator('[data-testid=\"first-row\"]').first();\n    await expect(highlightColor).toHaveCSS('background-color', /rgba\\(255, 255, 255, 0.1\\)/);\n\n    // Verify the row content is still visible\n    const rowContent = page.locator('[data-testid=\"first-row\"]');\n    await expect(rowContent).toBeVisible();\n  });\n\n  test('should remove highlight when hover ends', async ({ page }) => {\n    // Get the second row using getByRole('row')\n    const secondRow = page.getByRole('row', { name: /second row/i });\n    await expect(secondRow).toBeVisible();\n\n    // Hover over the second row\n    await secondRow.hover();\n\n    // Verify the row has a highlight class\n    await expect(secondRow).toHaveClass(/highlighted-row/);\n\n    // Verify the highlight color is visible\n    const highlightColor = page.locator('[data-testid=\"second-row\"]').first();\n    await expect(highlightColor).toHaveCSS('background-color', /rgba\\(255, 255, 255, 0.1\\)/);\n\n    // Remove hover by moving mouse away\n    await page.mouse.move(50, 50);\n\n    // Wait for highlight to be removed\n    await page.waitForTimeout(100);\n\n    // Verify the highlight class is removed\n    await expect(secondRow).not.toHaveClass(/highlighted-row/);\n\n    // Verify the highlight color is removed\n    await expect(highlightColor).not.toHaveCSS('background-color', /rgba\\(255, 255, 255, 0.1\\)/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.795,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4165,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.634,
+      "feedback_used": ""
+    }
+  ]
+}

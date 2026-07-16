@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_090",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7395,
+  "total_latency_s": 72.554,
+  "final_script": "describe('Internet Connection Drop Error Message', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should display friendly error message when internet connection drops', () => {\n    // Intercept the initial API call\n    cy.intercept('GET', '/api/user-data').as('initialData');\n    cy.wait('@initialData');\n\n    // Simulate internet connection loss\n    cy.window().then((win) => {\n      win.navigator.onLine = false;\n    });\n\n    // Attempt to refresh or make another API call\n    cy.get('[data-testid=\"refresh-button\"]').click();\n\n    // Wait for the error state to appear\n    cy.get('[data-testid=\"connection-error-message\"]')\n      .should('be.visible')\n      .should('contain', 'You appear to be offline');\n\n    // Verify friendly guidance is provided\n    cy.get('[data-testid=\"connection-error-guidance\"]')\n      .should('be.visible')\n      .should('contain', 'Please check your internet connection');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-button\"]')\n      .should('be.visible')\n      .should('contain', 'Try Again');\n\n    // Verify main content is not visible or is replaced by error state\n    cy.get('[data-testid=\"main-content\"]').should('not.exist');\n  });\n\n  it('should hide error message when internet connection is restored', () => {\n    // Simulate internet connection loss\n    cy.window().then((win) => {\n      win.navigator.onLine = false;\n    });\n\n    // Trigger connection drop\n    cy.get('[data-testid=\"refresh-button\"]').click();\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"connection-error-message\"]')\n      .should('be.visible');\n\n    // Restore internet connection\n    cy.window().then((win) => {\n      win.navigator.onLine = true;\n    });\n\n    // Wait for the retry button to be clicked and API call to succeed\n    cy.get('[data-testid=\"retry-button\"]').click();\n    cy.intercept('GET', '/api/user-data').as('retryData');\n    cy.wait('@retryData');\n\n    // Verify error message is hidden\n    cy.get('[data-testid=\"connection-error-message\"]').should('not.exist');\n\n    // Verify main content is restored\n    cy.get('[data-testid=\"main-content\"]')\n      .should('be.visible')\n      .should('contain', 'Dashboard');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"success-message\"]')\n      .should('be.visible')\n      .should('contain', 'Data loaded successfully');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7395,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3315,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.554,
+      "feedback_used": ""
+    }
+  ]
+}

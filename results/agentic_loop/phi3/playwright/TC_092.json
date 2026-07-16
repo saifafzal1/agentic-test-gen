@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_092",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8551,
+  "total_latency_s": 41.718,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Error Clearing on Invalid Input Correction', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should clear error message when user corrects invalid input', async ({ page }) => {\n    // Setup: Fill form with invalid data\n    const nameInput = page.getByLabel('Name');\n    await nameInput.fill('John Doe');\n\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('john.doe@example.com');\n\n    const submitButton = page.getByRole('button', { name: 'Submit' });\n    await submitButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText('Name is required');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify form is not submitted\n    const formStatus = page.getByRole('status');\n    await expect(formStatus).toContainText('Form is invalid');\n\n    // User corrects invalid input\n    await nameInput.fill('Jane Doe');\n\n    // Verify error message is cleared\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify form is now valid\n    await expect(formStatus).toContainText('Form is valid');\n\n    // Verify form is submitted\n    await expect(submitButton).toBeEnabled();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should not clear error message when user submits with invalid data', async ({ page }) => {\n    // Setup: Fill form with invalid data\n    const nameInput = page.getByLabel('Name');\n    await nameInput.fill('');\n\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('invalid-email');\n\n    const submitButton = page.getByRole('button', { name: 'Submit' });\n    await submitButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText('Name is required');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify form is not submitted\n    const formStatus = page.getByRole('status');\n    await expect(formStatus).toContainText('Form is invalid');\n\n    // User attempts to correct invalid input\n    await nameInput.fill('Jane Doe');\n\n    // Verify error message persists\n    await expect(errorMessage).toBeVisible();\n\n    // Verify form is still not valid\n    await expect(formStatus).toContainText('Form is invalid');\n\n    // Verify submit button is still disabled\n    await expect(submitButton).not.toBeEnabled();\n\n    // Verify success message does not appear\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8551,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.517,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 41.718,
+      "feedback_used": ""
+    }
+  ]
+}

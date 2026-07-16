@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_155",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7658,
+  "total_latency_s": 295.106,
+  "final_script": "describe('Empty State Illustration in Table', () => {\n  beforeEach(() => {\n    cy.visit('/table-list');\n  });\n\n  it('should display empty state illustration when table has no data', () => {\n    // Verify empty state message is visible\n    cy.get('[data-testid=\"empty-state-message\"]').should('be.visible');\n    cy.get('[data-testid=\"empty-state-message\"]').should('contain', 'No data found');\n\n    // Verify empty state icon is displayed\n    cy.get('[data-testid=\"empty-state-icon\"]').should('be.visible');\n    cy.get('[data-testid=\"empty-state-icon\"]').should('have.class', 'empty-state-icon');\n\n    // Verify table header is still visible\n    cy.get('[data-testid=\"table-header\"]').should('be.visible');\n    cy.get('[data-testid=\"table-header\"]').should('contain', 'No data');\n\n    // Verify no rows are displayed\n    cy.get('[data-testid=\"table-row\"]').should('not.exist');\n\n    // Verify empty state styling is applied\n    cy.get('[data-testid=\"empty-state-container\"]').should('have.class', 'empty-state');\n  });\n\n  it('should handle empty state when data is loaded and then cleared', () => {\n    // Load data into table\n    cy.intercept('GET', '/api/table-data').as('loadData');\n    cy.wait('@loadData');\n\n    // Verify data is displayed\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 0);\n\n    // Clear data\n    cy.get('[data-testid=\"clear-data-button\"]').click();\n\n    // Verify empty state is displayed after clearing\n    cy.get('[data-testid=\"empty-state-message\"]').should('be.visible');\n    cy.get('[data-testid=\"empty-state-message\"]').should('contain', 'No data found');\n\n    // Verify empty state icon is still visible\n    cy.get('[data-testid=\"empty-state-icon\"]').should('be.visible');\n\n    // Verify table header still shows empty state message\n    cy.get('[data-testid=\"table-header\"]').should('contain', 'No data');\n\n    // Verify no rows are displayed\n    cy.get('[data-testid=\"table-row\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7658,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4193,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 295.106,
+      "feedback_used": ""
+    }
+  ]
+}

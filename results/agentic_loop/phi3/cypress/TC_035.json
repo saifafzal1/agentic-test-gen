@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_035",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.718,
+  "total_latency_s": 1197.033,
+  "final_script": "describe('Multi-Step Form Progress Indicator', () => {\n  beforeEach(() => {\n    cy.visit('/multi-step-form');\n  });\n\n  it('should display progress indicator and update as user completes each step', () => {\n    // Verify initial state: progress indicator shows 0%\n    cy.get('[data-testid=\"progress-indicator\"]').should('be.visible');\n    cy.get('[data-testid=\"progress-indicator\"]').should('have.css', 'width', '0%');\n\n    // Intercept API call for first step\n    cy.intercept('POST', '/api/step1').as('step1Request');\n\n    // Complete first step\n    cy.get('[data-testid=\"step1-form-input\"]').type('John Doe');\n    cy.get('[data-testid=\"step1-submit-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@step1Request');\n\n    // Verify progress indicator updates to 25%\n    cy.get('[data-testid=\"progress-indicator\"]').should('have.css', 'width', '25%');\n\n    // Intercept API call for second step\n    cy.intercept('POST', '/api/step2').as('step2Request');\n\n    // Complete second step\n    cy.get('[data-testid=\"step2-form-input\"]').type('jane.doe@example.com');\n    cy.get('[data-testid=\"step2-submit-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@step2Request');\n\n    // Verify progress indicator updates to 50%\n    cy.get('[data-testid=\"progress-indicator\"]').should('have.css', 'width', '50%');\n\n    // Intercept API call for third step\n    cy.intercept('POST', '/api/step3').as('step3Request');\n\n    // Complete third step\n    cy.get('[data-testid=\"step3-form-input\"]').type('123-45-6789');\n    cy.get('[data-testid=\"step3-submit-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@step3Request');\n\n    // Verify progress indicator updates to 100%\n    cy.get('[data-testid=\"progress-indicator\"]').should('have.css', 'width', '100%');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Form submitted successfully');\n\n    // Verify form is submitted\n    cy.get('[data-testid=\"form-submission-status\"]').should('contain', 'Submitted');\n  });\n\n  it('should display error message when form validation fails at any step', () => {\n    // Intercept API call for first step\n    cy.intercept('POST', '/api/step1').as('step1Request');\n\n    // Attempt to complete first step with invalid data\n    cy.get('[data-testid=\"step1-form-input\"]').type('John');\n    cy.get('[data-testid=\"step1-submit-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@step1Request');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please enter a full name');\n\n    // Verify progress indicator does not update\n    cy.get('[data-testid=\"progress-indicator\"]').should('have.css', 'width', '0%');\n\n    // Intercept API call for second step\n    cy.intercept('POST', '/api/step2').as('step2Request');\n\n    // Attempt to complete second step with invalid email\n    cy.get('[data-testid=\"step2-form-input\"]').type('invalid-email');\n    cy.get('[data-testid=\"step2-submit-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@step2Request');\n\n    // Verify error message appears again\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please enter a valid email address');\n\n    // Verify progress indicator remains at 25%\n    cy.get('[data-testid=\"progress-indicator\"]').should('have.css', 'width', '25%');\n\n    // Intercept API call for third step\n    cy.intercept('POST', '/api/step3').as('step3Request');\n\n    // Attempt to complete third step with invalid SSN\n    cy.get('[data-testid=\"step3-form-input\"]').type('123-45-67899');\n    cy.get('[data-testid=\"step3-submit-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@step3Request');\n\n    // Verify error message appears for the third time\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please enter a valid SSN');\n\n    // Verify progress indicator remains at 50%\n    cy.get('[data-testid=\"progress-indicator\"]').should('have.css', 'width', '50%');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.458,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 569.699,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.718,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.26,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 627.334,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

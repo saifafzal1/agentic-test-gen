@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_071",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7749,
+  "total_latency_s": 86.548,
+  "final_script": "describe('Conflict Error Message on Stale Record Save', () => {\n  beforeEach(() => {\n    cy.visit('/records');\n  });\n\n  it('should display conflict error message when saving a stale record', () => {\n    // Intercept the initial GET request\n    cy.intercept('GET', '/api/records/123').as('getRecord');\n    cy.wait('@getRecord');\n\n    // Fill in the form with initial data\n    cy.get('[data-testid=\"record-title-input\"]').type('Initial Record Title');\n    cy.get('[data-testid=\"record-description-input\"]').type('This is the initial description.');\n\n    // Intercept the PUT request with conflict response\n    cy.intercept('PUT', '/api/records/123', {\n      statusCode: 429,\n      body: {\n        error: 'Conflict',\n        message: 'Record has been updated by another user. Please refresh and try again.',\n        timestamp: new Date().toISOString()\n      }\n    }).as('updateRecordConflict');\n\n    // Click save button\n    cy.get('[data-testid=\"save-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@updateRecordConflict');\n\n    // Verify conflict error message is displayed\n    cy.get('[data-testid=\"conflict-error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Record has been updated by another user');\n\n    // Verify error styling\n    cy.get('[data-testid=\"conflict-error-message\"]')\n      .should('have.class', 'error-text');\n\n    // Verify form is not submitted\n    cy.get('[data-testid=\"record-title-input\"]').should('have.value', 'Initial Record Title');\n  });\n\n  it('should handle conflict error and allow user to refresh', () => {\n    // Intercept the initial GET request\n    cy.intercept('GET', '/api/records/123').as('getRecord');\n    cy.wait('@getRecord');\n\n    // Fill in the form\n    cy.get('[data-testid=\"record-title-input\"]').type('Another Record Title');\n    cy.get('[data-testid=\"record-description-input\"]').type('Another description.');\n\n    // Intercept the PUT request with conflict response\n    cy.intercept('PUT', '/api/records/123', {\n      statusCode: 429,\n      body: {\n        error: 'Conflict',\n        message: 'Record has been updated by another user. Please refresh and try again.',\n        timestamp: new Date().toISOString()\n      }\n    }).as('updateRecordConflict');\n\n    // Click save button\n    cy.get('[data-testid=\"save-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@updateRecordConflict');\n\n    // Verify conflict error message is displayed\n    cy.get('[data-testid=\"conflict-error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Record has been updated by another user');\n\n    // Verify refresh button is visible\n    cy.get('[data-testid=\"refresh-button\"]')\n      .should('be.visible')\n      .should('contain', 'Refresh');\n\n    // Click refresh button\n    cy.get('[data-testid=\"refresh-button\"]').click();\n\n    // Verify form is cleared or reset\n    cy.get('[data-testid=\"record-title-input\"]').should('have.value', '');\n    cy.get('[data-testid=\"record-description-input\"]').should('have.value', '');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7749,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4497,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 86.548,
+      "feedback_used": ""
+    }
+  ]
+}

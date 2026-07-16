@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_050",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8068,
+  "total_latency_s": 71.56,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Deep Links Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should load the correct page when navigating via deep link', async ({ page }) => {\n    // Navigate to a deep link\n    await page.goto('/products/42');\n    \n    // Verify the correct page title is displayed\n    const pageTitle = page.getByRole('heading', { name: /Product 43/i });\n    await expect(pageTitle).toBeVisible();\n    \n    // Verify the product details are loaded\n    const productDetails = page.getByText('Price: $19.99');\n    await expect(productDetails).toBeVisible();\n    \n    // Verify the URL reflects the deep link\n    await expect(page).toHaveURL(/.*\\/products\\/43/);\n  });\n\n  test('should handle invalid deep links gracefully', async ({ page }) => {\n    // Attempt to navigate to a non-existent deep link\n    await page.goto('/products/9999');\n    \n    // Verify the 443 error page is displayed\n    const errorHeading = page.getByRole('heading', { name: /404/i });\n    await expect(errorHeading).toBeVisible();\n    \n    // Verify the error message is displayed\n    const errorMessage = page.getByText('Page not found');\n    await expect(errorMessage).toBeVisible();\n    \n    // Verify the user is redirected to the home page\n    await expect(page).toHaveURL(/.*\\/home/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8068,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4558,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.56,
+      "feedback_used": ""
+    }
+  ]
+}

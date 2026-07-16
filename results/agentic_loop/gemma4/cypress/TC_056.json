@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_056",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7814,
+  "total_latency_s": 71.135,
+  "final_script": "describe('Page Number Jump Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/pagination');\n  });\n\n  it('should jump to a specific page when entering page number in input', () => {\n    // Verify initial page is displayed\n    cy.get('[data-testid=\"page-indicator\"]').should('contain', 'Page 1');\n    cy.get('[data-testid=\"page-number-input\"]').should('be.visible');\n\n    // Enter page number in input field\n    cy.get('[data-testid=\"page-number-input\"]').type('5');\n\n    // Click jump button\n    cy.get('[data-testid=\"jump-button\"]').click();\n\n    // Verify page has updated\n    cy.get('[data-testid=\"page-indicator\"]').should('contain', 'Page 5');\n    cy.get('[data-testid=\"items-list\"]').should('be.visible');\n    cy.get('[data-testid=\"items-list\"]').should('have.length.greaterThan', 0);\n  });\n\n  it('should handle invalid page number input and display error', () => {\n    // Verify initial page is displayed\n    cy.get('[data-testid=\"page-indicator\"]').should('contain', 'Page 1');\n    cy.get('[data-testid=\"page-number-input\"]').should('be.visible');\n\n    // Enter invalid page number\n    cy.get('[data-testid=\"page-number-input\"]').type('abc');\n\n    // Click jump button\n    cy.get('[data-testid=\"jump-button\"]').click();\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please enter a valid page number');\n\n    // Verify page has not changed\n    cy.get('[data-testid=\"page-indicator\"]').should('contain', 'Page 1');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7814,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4714,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.135,
+      "feedback_used": ""
+    }
+  ]
+}

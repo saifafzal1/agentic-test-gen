@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_157",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7646,
+  "total_latency_s": 301.772,
+  "final_script": "describe('Right-click Context Menu on Table Row', () => {\n  beforeEach(() => {\n    cy.visit('/table-list');\n  });\n\n  it('should display context menu with right-click on table row', () => {\n    // Verify table is visible\n    cy.get('[data-testid=\"table-container\"]').should('be.visible');\n\n    // Get the first row\n    cy.get('[data-testid=\"table-row-1\"]').should('be.visible');\n\n    // Right-click on the row\n    cy.get('[data-testid=\"table-row-1\"]').trigger('contextmenu');\n\n    // Verify context menu appears\n    cy.get('[data-testid=\"context-menu\"]').should('be.visible');\n\n    // Verify menu items are present\n    cy.get('[data-testid=\"context-menu-item-edit\"]').should('be.visible');\n    cy.get('[data-testid=\"context-menu-item-delete\"]').should('be.visible');\n    cy.get('[data-testid=\"context-menu-item-view\"]').should('be.visible');\n\n    // Verify menu is not visible when clicking elsewhere\n    cy.get('[data-testid=\"table-row-2\"]').click();\n    cy.get('[data-testid=\"context-menu\"]').should('not.exist');\n  });\n\n  it('should handle right-click on disabled row and show disabled message', () => {\n    // Verify table is visible\n    cy.get('[data-testid=\"table-container\"]').should('be.visible');\n\n    // Get a disabled row\n    cy.get('[data-testid=\"table-row-disabled\"]').should('be.visible');\n\n    // Right-click on the disabled row\n    cy.get('[data-testid=\"table-row-disabled\"]').trigger('contextmenu');\n\n    // Verify context menu appears\n    cy.get('[data-testid=\"context-menu\"]').should('be.visible');\n\n    // Verify disabled message is displayed\n    cy.get('[data-testid=\"context-menu-item-edit\"]').should('be.visible');\n    cy.get('[data-testid=\"context-menu-item-delete\"]').should('be.visible');\n    cy.get('[data-testid=\"context-menu-item-view\"]').should('be.visible');\n\n    // Verify disabled message is present\n    cy.get('[data-testid=\"context-menu-disabled-message\"]').should('be.visible');\n    cy.get('[data-testid=\"context-menu-disabled-message\"]').should('contain', 'Row is disabled');\n\n    // Verify menu items are not clickable\n    cy.get('[data-testid=\"context-menu-item-edit\"]').should('be.visible');\n    cy.get('[data-testid=\"context-menu-item-edit\"]').should('not.be.clickable');\n    cy.get('[data-testid=\"context-menu-item-delete\"]').should('not.be.clickable');\n    cy.get('[data-testid=\"context-menu-item-view\"]').should('not.be.clickable');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7646,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4153,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 301.772,
+      "feedback_used": ""
+    }
+  ]
+}

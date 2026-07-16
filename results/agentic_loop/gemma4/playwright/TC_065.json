@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_065",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8459,
+  "total_latency_s": 73.109,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('401 Error Handling - Redirect to Login', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should redirect to login when API returns 401 Unauthorized', async ({ page }) => {\n    // Intercept the protected API endpoint\n    await page.route('/api/user/profile', (route) => {\n      route.abort('failed');\n      route.continue();\n    });\n\n    // Mock the 401 response\n    await page.route('/api/user/profile', (route) => {\n      route.fulfill({\n        status: 401,\n        body: JSON.stringify({ error: 'Unauthorized' }),\n      });\n    });\n\n    // Verify user is on dashboard before API call\n    const dashboardHeader = page.getByRole('heading', { name: /dashboard/i });\n    await expect(dashboardHeader).toBeVisible();\n\n    // Trigger the API call by clicking a protected button\n    const profileButton = page.getByRole('button', { name: /profile/i });\n    await profileButton.click();\n\n    // Wait for navigation to complete\n    await page.waitForURL(/\\/login/);\n\n    // Verify user is redirected to login page\n    const loginHeader = page.getByRole('heading', { name: /login/i });\n    await expect(loginHeader).toBeVisible();\n\n    // Verify login form is visible\n    const emailInput = page.getByLabel(/email/i);\n    await expect(emailInput).toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/unauthorized/i);\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should handle multiple 401 errors and redirect to login', async ({ page }) => {\n    // Intercept the first API call and return 401\n    await page.route('/api/user/settings', (route) => {\n      route.fulfill({\n        status: 401,\n        body: JSON.stringify({ error: 'Unauthorized' }),\n      });\n    });\n\n    // Trigger the first API call\n    const settingsButton = page.getByRole('button', { name: /settings/i });\n    await settingsButton.click();\n\n    // Verify redirect to login\n    await page.waitForURL(/\\/login/);\n    const loginHeader = page.getByRole('heading', { name: /login/i });\n    await expect(loginHeader).toBeVisible();\n\n    // Verify login form is visible\n    const passwordInput = page.getByLabel(/password/i);\n    await expect(passwordInput).toBeVisible();\n\n    // Verify user is not on dashboard\n    const dashboardHeader = page.getByRole('heading', { name: /dashboard/i });\n    await expect(dashboardHeader).not.toBeVisible();\n\n    // Verify redirect persists if user tries to navigate back\n    await page.goBack();\n    await page.waitForURL(/\\/login/);\n    await expect(loginHeader).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8459,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4865,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.109,
+      "feedback_used": ""
+    }
+  ]
+}
