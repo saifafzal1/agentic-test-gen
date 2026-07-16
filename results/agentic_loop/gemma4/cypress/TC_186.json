@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_186",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7479,
+  "total_latency_s": 72.851,
+  "final_script": "describe('Product Search by Keyword', () => {\n  beforeEach(() => {\n    cy.visit('/products');\n  });\n\n  it('should display instant search results as user types a keyword', () => {\n    // Verify initial page loads with products\n    cy.get('[data-testid=\"product-list\"]').should('be.visible');\n    cy.get('[data-testid=\"product-item\"]').should('have.length.greaterThan', 0);\n\n    // Intercept the search API call\n    cy.intercept('GET', '/api/products/search*').as('searchProducts');\n\n    // Type keyword into search input\n    cy.get('[data-testid=\"search-input\"]').type('laptop');\n\n    // Wait for the search API call\n    cy.wait('@searchProducts');\n\n    // Verify search results are displayed\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"product-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify results contain the keyword\n    cy.get('[data-testid=\"product-item\"]').first().should('contain', 'laptop');\n\n    // Verify search input retains the value\n    cy.get('[data-testid=\"search-input\"]').should('have.value', 'laptop');\n\n    // Verify results are updated with the correct count\n    cy.get('[data-testid=\"result-count\"]').should('contain', '1');\n  });\n\n  it('should handle empty search input and display no results message', () => {\n    // Intercept the search API call\n    cy.intercept('GET', '/api/products/search*').as('searchProducts');\n\n    // Clear any existing search term\n    cy.get('[data-testid=\"search-input\"]').clear();\n\n    // Press enter or trigger search with empty input\n    cy.get('[data-testid=\"search-input\"]').type('');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for the search API call\n    cy.wait('@searchProducts');\n\n    // Verify no results message is displayed\n    cy.get('[data-testid=\"no-results-message\"]').should('be.visible');\n    cy.get('[data-testid=\"no-results-message\"]').should('contain', 'No products found');\n\n    // Verify product list is empty\n    cy.get('[data-testid=\"product-item\"]').should('not.exist');\n\n    // Verify search input is still visible\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7479,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3598,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.851,
+      "feedback_used": ""
+    }
+  ]
+}

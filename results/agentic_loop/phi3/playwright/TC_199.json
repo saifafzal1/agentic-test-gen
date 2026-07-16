@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_199",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8159,
+  "total_latency_s": 426.634,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Active Filter Tags Display', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should display active filter tags above search results when filters are applied', async ({ page }) => {\n    // Apply first filter using getByRole\n    const searchInput = page.getByRole('textbox', { name: /search/i });\n    await searchInput.fill('playwright');\n\n    // Apply first filter using getByRole\n    const filterButton = page.getByRole('button', { name: /filter by category/i });\n    await filterButton.click();\n\n    // Verify first filter tag appears\n    const filterTag = page.getByText('Category');\n    await expect(filterTag).toBeVisible();\n\n    // Apply second filter using getByRole\n    const secondFilterButton = page.getByRole('button', { name: /filter by price/i });\n    await secondFilterButton.click();\n\n    // Verify second filter tag appears\n    const secondFilterTag = page.getByText('Price');\n    await expect(secondFilterTag).toBeVisible();\n\n    // Verify active filter tag is highlighted\n    const activeFilterTag = page.getByText('Category');\n    await expect(activeFilterTag).toBeVisible();\n    await expect(activeFilterTag).toHaveClass(/active/i);\n\n    // Verify results are displayed\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n\n    // Verify results contain expected items\n    const resultItem = page.getByText('Playwright Test Script');\n    await expect(resultItem).toBeVisible();\n\n    // Verify filter tags are displayed above results\n    const filterTagsContainer = page.getByRole('region', { name: /filter tags/i });\n    await expect(filterTagsContainer).toBeVisible();\n\n    // Verify filter tags are displayed in correct order\n    const firstFilterTag = page.getByText('Category');\n    const secondFilterTag = page.getByText('Price');\n    await expect(firstFilterTag).toBeVisible();\n    await expect(secondFilterTag).toBeVisible();\n  });\n\n  test('should clear all filters and hide filter tags when clear button is clicked', async ({ page }) => {\n    // Apply first filter using getByRole\n    const searchInput = page.getByRole('textbox', { name: /search/i });\n    await searchInput.fill('playwright');\n\n    // Apply first filter using getByRole\n    const filterButton = page.getByRole('button', { name: /filter by category/i });\n    await filterButton.click();\n\n    // Verify first filter tag appears\n    const filterTag = page.getByText('Category');\n    await expect(filterTag).toBeVisible();\n\n    // Apply second filter using getByRole\n    const secondFilterButton = page.getByRole('button', { name: /filter by price/i });\n    await secondFilterButton.click();\n\n    // Verify second filter tag appears\n    const secondFilterTag = page.getByText('Price');\n    await expect(secondFilterTag).toBeVisible();\n\n    // Click clear button using getByRole\n    const clearButton = page.getByRole('button', { name: /clear filters/i });\n    await clearButton.click();\n\n    // Verify filter tags are hidden\n    const filterTagsContainer = page.getByRole('region', { name: /filter tags/i });\n    await expect(filterTagsContainer).not.toBeVisible();\n\n    // Verify results are displayed without filters\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n\n    // Verify results contain expected items\n    const resultItem = page.getByText('Playwright Test Script');\n    await expect(resultItem).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8159,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4863,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 426.634,
+      "feedback_used": ""
+    }
+  ]
+}

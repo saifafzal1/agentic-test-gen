@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_213",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7879,
+  "total_latency_s": 73.428,
+  "final_script": "describe('Dropdown Close with Escape Key', () => {\n  beforeEach(() => {\n    cy.visit('/dropdown-menu');\n  });\n\n  it('should close dropdown when Escape key is pressed', () => {\n    // Open the dropdown menu\n    cy.get('[data-testid=\"dropdown-button\"]').click();\n    cy.get('[data-testid=\"dropdown-menu\"]').should('be.visible');\n    cy.get('[data-testid=\"dropdown-menu\"]').should('contain', 'Option 1');\n\n    // Press Escape key\n    cy.get('body').type('{esc}');\n\n    // Verify dropdown is closed\n    cy.get('[data-testid=\"dropdown-menu\"]').should('not.exist');\n    cy.get('[data-testid=\"dropdown-menu\"]').should('not.be.visible');\n  });\n\n  it('should not close dropdown when Escape key is pressed while dropdown is not open', () => {\n    // Verify dropdown is initially closed\n    cy.get('[data-testid=\"dropdown-menu\"]').should('not.exist');\n\n    // Press Escape key\n    cy.get('body').type('{esc}');\n\n    // Verify dropdown remains closed\n    cy.get('[data-testid=\"dropdown-menu\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7879,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4932,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.428,
+      "feedback_used": ""
+    }
+  ]
+}

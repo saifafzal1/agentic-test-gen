@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_212",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 402.519,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Icon Button Accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/icon-buttons');\n  });\n\n  test('should have accessible names for all icon buttons', async ({ page }) => {\n    // Verify all icon buttons have role=\"button\"\n    const iconButtons = page.locator('[data-testid=\"icon-button\"]');\n    await expect(iconButtons).toHaveCount(5);\n\n    // Verify each button has a role=\"button\"\n    const roles = await iconButtons.evaluate((buttons) => buttons.map(button => button.getAttribute('role')).filter(Boolean));\n    expect(roles).toHaveLength(5);\n    expect(roles).toContain('button');\n\n    // Verify each button has a descriptive name using getByRole\n    const buttonNames = await iconButtons.getByRole('button');\n    await expect(buttonNames).toHaveCount(5);\n\n    // Verify each button has a visible name\n    const visibleNames = await buttonNames.filter((button) => button.isVisible());\n    await expect(visibleNames).toHaveCount(5);\n\n    // Verify each visible name is not empty\n    const nonEmptyNames = await visibleNames.filter((button) => button.textContent.trim().length > 0);\n    await expect(nonEmptyNames).toHaveCount(5);\n\n    // Verify all button names are accessible using getByRole\n    const accessibleNames = await buttonNames.filter((button) => button.isVisible() && button.textContent.trim().length > 0);\n    await expect(accessibleNames).toHaveCount(5);\n\n    // Verify all button names are unique\n    const uniqueNames = await accessibleNames.map((button) => button.textContent.trim());\n    expect(new Set(uniqueNames)).toHaveSize(5);\n  });\n\n  test('should display tooltip with accessible name on hover', async ({ page }) => {\n    // Locate the first icon button\n    const firstButton = page.getByRole('button', { name: /edit/i });\n    await expect(firstButton).toBeVisible();\n\n    // Verify tooltip appears with accessible name\n    const tooltip = page.getByTestId('icon-button-tooltip');\n    await expect(tooltip).toBeVisible();\n\n    // Verify tooltip text is accessible\n    const tooltipText = page.getByText(/edit/i);\n    await expect(tooltipText).toBeVisible();\n\n    // Verify tooltip is visible when button is hovered\n    await firstButton.hover();\n    await expect(tooltipText).toBeVisible();\n\n    // Verify tooltip disappears when button is not hovered\n    await firstButton.unhover();\n    await expect(tooltipText).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 402.519,
+      "feedback_used": ""
+    }
+  ]
+}

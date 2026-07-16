@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_201",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8189,
+  "total_latency_s": 62.261,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Tolerance for Minor Spelling Mistakes', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should return results for search with minor spelling mistakes', async ({ page }) => {\n    // Set up API interception for search\n    await page.route('**/api/search', (route) => {\n      route.continue();\n    });\n\n    // Perform search with minor spelling mistake\n    const searchInput = page.getByLabel('Search');\n    await searchInput.fill('playwright test script');\n\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await searchButton.click();\n\n    // Wait for results to load\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await page.waitForSelector(resultsContainer);\n\n    // Verify results are displayed\n    await expect(resultsContainer).toBeVisible();\n    const resultItem = page.getByText('Playwright Test Script');\n    await expect(resultItem).toBeVisible();\n\n    // Verify result item has correct link\n    const resultLink = page.getByRole('link', { name: /playwright test script/i });\n    await expect(resultLink).toBeVisible();\n\n    // Verify result item has correct title\n    await expect(resultItem).toContainText('Playwright Test Script');\n\n    // Verify result item has correct description\n    const resultDescription = page.getByText('A Playwright script for automated Playwright tests');\n    await expect(resultDescription).toBeVisible();\n  });\n\n  test('should handle search with multiple minor spelling mistakes', async ({ page }) => {\n    // Set up API interception for search\n    await page.route('**/api/search', (route) => {\n      route.continue();\n    });\n\n    // Perform search with multiple minor spelling mistakes\n    const searchInput = page.getByLabel('Search');\n    await searchInput.fill('playwright test script');\n\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await searchButton.click();\n\n    // Wait for results to load\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await page.waitForSelector(resultsContainer);\n\n    // Verify results are displayed\n    await expect(resultsContainer).toBeVisible();\n\n    // Verify result item with minor spelling mistake is still visible\n    const resultItem = page.getByText('Playwright Test Script');\n    await expect(resultItem).toBeVisible();\n\n    // Verify result item has correct link\n    const resultLink = page.getByRole('link', { name: /playwright test script/i });\n    await expect(resultLink).toBeVisible();\n\n    // Verify result item has correct title\n    await expect(resultItem).toContainText('Playwright Test Script');\n\n    // Verify result item has correct description\n    const resultDescription = page.getByText('A Playwright script for automated Playwright tests');\n    await expect(resultDescription).toBeVisible();\n\n    // Verify result item with different minor spelling mistake is also visible\n    const resultItem2 = page.getByText('Playwright Test Script');\n    await expect(resultItem2).toBeVisible();\n\n    // Verify result item with different minor spelling mistake has correct link\n    const resultLink2 = page.getByRole('link', { name: /playwright test script/i });\n    await expect(resultLink2).toBeVisible();\n\n    // Verify result item with different minor spelling mistake has correct title\n    await expect(resultItem2).toContainText('Playwright Test Script');\n\n    // Verify result item with different minor spelling mistake has correct description\n    const resultDescription2 = page.getByText('A Playwright script for automated Playwright tests');\n    await expect(resultDescription2).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8189,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3965,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 62.261,
+      "feedback_used": ""
+    }
+  ]
+}

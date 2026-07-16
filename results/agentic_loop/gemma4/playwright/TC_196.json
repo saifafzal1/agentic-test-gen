@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_196",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8649,
+  "total_latency_s": 71.934,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Share Filtered Search URL', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should successfully generate and copy a shareable URL with applied filters', async ({ page }) => {\n    // Apply filters using getByRole/getByLabel\n    const categoryFilter = page.getByRole('button', { name: /category/i });\n    await categoryFilter.click();\n    const electronicsOption = page.getByRole('option', { name: /electronics/i });\n    await electronicsOption.click();\n\n    const priceFilter = page.getByRole('button', { name: /price/i });\n    await priceFilter.click();\n    const priceRangeOption = page.getByRole('option', { name: /50-100/i });\n    await priceRangeOption.click();\n\n    // Verify filters are applied\n    const resultsCount = page.getByText(/results found/i);\n    await expect(resultsCount).toBeVisible();\n    \n    const filterTags = page.locator('[data-testid=\"filter-tag\"]');\n    await expect(filterTags).toHaveCount(2);\n\n    // Click the share button using getByRole\n    const shareButton = page.getByRole('button', { name: /share/i });\n    await expect(shareButton).toBeVisible();\n    await shareButton.click();\n\n    // Verify share modal appears\n    const shareModal = page.locator('[data-testid=\"share-modal\"]');\n    await expect(shareModal).toBeVisible();\n\n    // Verify share URL is present\n    const shareUrl = page.getByLabel(/shareable url/i);\n    await expect(shareUrl).toBeVisible();\n    \n    // Copy the URL to clipboard\n    const copyButton = page.getByRole('button', { name: /copy/i });\n    await copyButton.click();\n\n    // Verify success message\n    const successMessage = page.getByText(/copied to clipboard/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify URL contains filter parameters\n    const urlText = await shareUrl.textContent();\n    expect(urlText).toContain('category=electronics');\n    expect(urlText).toContain('price_min=50');\n    expect(urlText).toContain('price_max=100');\n  });\n\n  test('should handle edge case when no filters are applied and generate a base URL', async ({ page }) => {\n    // Verify initial state - no filters applied\n    const filterTags = page.locator('[data-testid=\"filter-tag\"]');\n    await expect(filterTags).toHaveCount(0);\n\n    // Click share button without applying filters\n    const shareButton = page.getByRole('button', { name: /share/i });\n    await shareButton.click();\n\n    // Verify share modal appears\n    const shareModal = page.locator('[data-testid=\"share-modal\"]');\n    await expect(shareModal).toBeVisible();\n\n    // Verify share URL is generated without filter parameters\n    const shareUrl = page.getByLabel(/shareable url/i);\n    await expect(shareUrl).toBeVisible();\n    \n    const urlText = await shareUrl.textContent();\n    expect(urlText).toContain('/search');\n    expect(urlText).not.toContain('category=');\n    expect(urlText).not.toContain('price_min=');\n\n    // Copy the base URL\n    const copyButton = page.getByRole('button', { name: /copy/i });\n    await copyButton.click();\n\n    // Verify success message\n    const successMessage = page.getByText(/copied to clipboard/i);\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8649,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5496,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.934,
+      "feedback_used": ""
+    }
+  ]
+}

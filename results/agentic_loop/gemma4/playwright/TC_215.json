@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_215",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7794,
+  "total_latency_s": 74.436,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Reading Order - Visual Order Match', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/document');\n  });\n\n  test('should display page content in visual reading order', async ({ page }) => {\n    // Verify the first element is visible and in the correct order\n    const firstParagraph = page.getByRole('paragraph', { name: /first paragraph/i });\n    await expect(firstParagraph).toBeVisible();\n\n    // Verify the second element is visible and in the correct order\n    const secondParagraph = page.getByRole('paragraph', { name: /second paragraph/i });\n    await expect(secondParagraph).toBeVisible();\n\n    // Verify the third element is visible and in the correct order\n    const thirdParagraph = page.getByRole('paragraph', { name: /third paragraph/i });\n    await expect(thirdParagraph).toBeVisible();\n\n    // Verify the fourth element is visible and in the correct order\n    const fourthParagraph = page.getByRole('paragraph', { name: /fourth paragraph/i });\n    await expect(fourthParagraph).toBeVisible();\n\n    // Verify the page has a total of 4 paragraphs\n    const allParagraphs = page.getByRole('paragraph');\n    const paragraphCount = await allParagraphs.count();\n    expect(paragraphCount).toBe(4);\n  });\n\n  test('should handle complex layout with correct reading order', async ({ page }) => {\n    // Verify the first section is visible\n    const firstSection = page.getByRole('region', { name: /introduction/i });\n    await expect(firstSection).toBeVisible();\n\n    // Verify the second section is visible\n    const secondSection = page.getByRole('region', { name: /main content/i });\n    await expect(secondSection).toBeVisible();\n\n    // Verify the third section is visible\n    const thirdSection = page.getByRole('region', { name: /conclusion/i });\n    await expect(thirdSection).toBeVisible();\n\n    // Verify the navigation menu is visible and accessible\n    const navMenu = page.getByRole('navigation');\n    await expect(navMenu).toBeVisible();\n\n    // Verify the main content area is not before the navigation\n    const mainContent = page.getByRole('main');\n    const navBoundingBox = await navMenu.boundingBox();\n    const mainBoundingBox = await mainContent.boundingBox();\n\n    expect(navBoundingBox.y).toBeLessThan(mainBoundingBox.y);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7794,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3648,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 74.436,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_194",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8176,
+  "total_latency_s": 72.765,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Faceted Search - Results Update Without Full Page Reload', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should update search results when a facet filter is applied without full page reload', async ({ page }) => {\n    // Verify initial search results are displayed\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n    const resultItems = page.getByRole('listitem');\n    await expect(resultItems).toHaveCount(10);\n\n    // Apply a facet filter using getByRole\n    const categoryFilter = page.getByRole('button', { name: /category/i });\n    await categoryFilter.click();\n    const electronicsFacet = page.getByRole('option', { name: /electronics/i });\n    await electronicsFacet.click();\n\n    // Verify results update without page reload\n    await page.waitForResponse(response => \n      response.url().includes('/api/search') && response.status() === 200\n    );\n\n    // Verify results container is still visible and updated\n    await expect(resultsContainer).toBeVisible();\n    const updatedResultItems = page.getByRole('listitem');\n    await expect(updatedResultItems).toHaveCount(5);\n\n    // Verify the filter is active\n    const activeFilter = page.getByText('Electronics');\n    await expect(activeFilter).toBeVisible();\n  });\n\n  test('should handle multiple facet filters and maintain search context without page reload', async ({ page }) => {\n    // Perform initial search\n    const searchInput = page.getByPlaceholder('Search products...');\n    await searchInput.fill('laptop');\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await searchButton.click();\n\n    // Apply first facet filter (Brand)\n    const brandFilter = page.getByRole('button', { name: /brand/i });\n    await brandFilter.click();\n    const appleFacet = page.getByRole('option', { name: /apple/i });\n    await appleFacet.click();\n\n    // Apply second facet filter (Price Range)\n    const priceFilter = page.getByRole('button', { name: /price range/i });\n    await priceFilter.click();\n    const priceRangeOption = page.getByRole('option', { name: /500-1000/i });\n    await priceRangeOption.click();\n\n    // Verify results update with both filters applied\n    await page.waitForResponse(response => \n      response.url().includes('/api/search') && response.status() === 200\n    );\n\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n    const resultItems = page.getByRole('listitem');\n    await expect(resultItems).toHaveCount(2);\n\n    // Verify both filters are active\n    const activeBrand = page.getByText('Apple');\n    await expect(activeBrand).toBeVisible();\n    const activePrice = page.getByText('$500 - $1000');\n    await expect(activePrice).toBeVisible();\n\n    // Verify no full page reload occurred\n    const pageUrl = page.url();\n    expect(pageUrl).toContain('/search');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8176,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4921,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.765,
+      "feedback_used": ""
+    }
+  ]
+}

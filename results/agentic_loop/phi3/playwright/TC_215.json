@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_215",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.483,
+  "total_latency_s": 1614.156,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Reading Order Matches Visual Order', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/book');\n  });\n\n  test('should read content in visual order when using screen readers', async ({ page }) => {\n    // Set up: Load a page with multiple sections\n    await page.route('**/api/book/sections', async (route) => {\n      await route.continue();\n    });\n\n    // Verify visual order of sections\n    const section1 = page.getByRole('region', { name: /chapter 1/i });\n    await expect(section1).toBeVisible();\n\n    const section2 = page.getByRole('region', { name: /chapter 2/i });\n    await expect(section2).toBeVisible();\n\n    const section3 = page.getByRole('region', { name: /chapter 3/i });\n    await expect(section3).toBeVisible();\n\n    // Verify reading order using getByRole\n    const readingOrder = page.getByRole('heading', { name: /chapter 1/i });\n    await expect(readingOrder).toBeVisible();\n\n    const readingOrder2 = page.getByRole('heading', { name: /chapter 2/i });\n    await expect(readingOrder2).toBeVisible();\n\n    const readingOrder3 = page.getByRole('heading', { name: /chapter 3/i });\n    await expect(readingOrder3).toBeVisible();\n\n    // Verify content is accessible using getByRole\n    const content1 = page.getByRole('article', { name: /chapter 1 content/i });\n    await expect(content1).toBeVisible();\n\n    const content2 = page.getByRole('article', { name: /chapter 2 content/i });\n    await expect(content2).toBeVisible();\n\n    const content3 = page.getByRole('article', { name: /chapter 3 content/i });\n    await expect(content3).toBeVisible();\n\n    // Verify navigation using getByRole\n    const backButton = page.getByRole('button', { name: /back/i });\n    await expect(backButton).toBeVisible();\n\n    const nextButton = page.getByRole('button', { name: /next/i });\n    await expect(nextButton).toBeVisible();\n\n    // Verify reading order using getByText\n    const chapter1Text = page.getByText(/chapter 1/i);\n    await expect(chapter1Text).toBeVisible();\n\n    const chapter2Text = page.getByText(/chapter 2/i);\n    await expect(chapter2Text).toBeVisible();\n\n    const chapter3Text = page.getByText(/chapter 3/i);\n    await expect(chapter3Text).toBeVisible();\n\n    // Verify reading order using getByLabel\n    const section1Label = page.getByLabel(/chapter 1/i);\n    await expect(section1Label).toBeVisible();\n\n    const section2Label = page.getByLabel(/chapter 2/i);\n    await expect(section2Label).toBeVisible();\n\n    const section3Label = page.getByLabel(/chapter 3/i);\n    await expect(section3Label).toBeVisible();\n\n    // Verify reading order using getByRole and getByText\n    const section1Heading = page.getByRole('heading', { name: /chapter 1/i });\n    await expect(section1Heading).toBeVisible();\n\n    const section2Heading = page.getByRole('heading', { name: /chapter 2/i });\n    await expect(section2Heading).toBeVisible();\n\n    const section3Heading = page.getByRole('heading', { name: /chapter 3/i });\n    await expect(section3Heading).toBeVisible();\n\n    // Verify reading order using getByRole and getByLabel\n    const section1Content = page.getByRole('article', { name: /chapter 1 content/i });\n    await expect(section1Content).toBeVisible();\n\n    const section2Content = page.getByRole('article', { name: /chapter 2 content/i });\n    await expect(section2Content).toBeVisible();\n\n    const section3Content = page.getByRole('article', { name: /chapter 3 content/i });\n    await expect(section3Content).toBeVisible();\n\n    // Verify reading order using getByRole and getByText\n    const section1Text = page.getByText(/chapter 1/i);\n    await expect(section1Text).toBeVisible();\n\n    const section2Text = page.getByText(/chapter 2/i);\n    await expect(section2Text).toBeVisible();\n\n    const section3Text = page.getByText(/chapter 3/i);\n    await expect(section3Text).toBeVisible();\n\n    // Verify reading order using getByRole and getByLabel\n    const section1Nav = page.getByRole('navigation', { name: /back/i });\n    await expect(section1Nav).toBeVisible();\n\n    const section2Nav = page.getByRole('navigation', { name: /next/i });\n    await expect(section2Nav).toBeVisible();\n\n    // Verify reading order using getByRole and getByText\n    const section1NavButton = page.getByRole('button', { name: /back/i });\n    await expect(section1NavButton).toBeVisible();\n\n    const section2NavButton = page.getByRole('button', { name: /next/i });\n    await expect(section2NavButton).toBeVisible();\n\n    // Verify reading order using getByRole and getByLabel\n    const section1NavLink = page.getByRole('link', { name: /back/i });\n    await expect(section1NavLink).toBeVisible();\n\n    const section2NavLink = page.getByRole('link', { name: /next/i });\n    await expect(section2NavLink).toBeVisible();\n\n    // Verify reading order using getByRole and getByText\n    const section1NavButton = page.getByRole('button', { name: /back/i });\n    await expect(section1NavButton).toBeVisible();\n\n    const section2NavButton = page.getByRole('button', { name:",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4744,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3346,
+        "missing_keywords": [],
+        "assertion_count": 22,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 448.336,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.483,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3433,
+        "missing_keywords": [],
+        "assertion_count": 33,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 587.976,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.4728,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3094,
+        "missing_keywords": [],
+        "assertion_count": 44,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 577.844,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

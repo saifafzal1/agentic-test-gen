@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_211",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7434,
+  "total_latency_s": 76.868,
+  "final_script": "describe('Dynamic Content Updates Announcement for Screen Readers', () => {\n  beforeEach(() => {\n    cy.visit('/dynamic-content');\n  });\n\n  it('should announce dynamic content updates using aria-live regions', () => {\n    // Verify initial page loads without announcements\n    cy.get('[data-testid=\"live-region\"]').should('be.visible');\n    cy.get('[data-testid=\"content-container\"]').should('contain', 'Initial content');\n\n    // Trigger dynamic content update\n    cy.get('[data-testid=\"load-more-button\"]').click();\n\n    // Verify new content appears\n    cy.get('[data-testid=\"content-container\"]').should('contain', 'More content loaded');\n\n    // Verify aria-live region is used for announcement\n    cy.get('[data-testid=\"live-region\"]').should('have.attr', 'aria-live', 'polite');\n\n    // Verify announcement text is present in live region\n    cy.get('[data-testid=\"live-region\"]').should('contain', 'Content updated');\n\n    // Verify announcement is visible to screen readers (simulated)\n    cy.get('[data-testid=\"live-region\"]').should('be.visible');\n  });\n\n  it('should handle multiple dynamic updates and announce each one', () => {\n    // First update\n    cy.get('[data-testid=\"load-more-button\"]').click();\n    cy.get('[data-testid=\"live-region\"]').should('contain', 'Content updated');\n\n    // Second update\n    cy.get('[data-testid=\"load-more-button\"]').click();\n    cy.get('[data-testid=\"live-region\"]').should('contain', 'More content loaded');\n\n    // Verify content is appended, not replaced\n    cy.get('[data-testid=\"content-container\"]').should('have.length.greaterThan', 1);\n\n    // Third update - edge case: empty state\n    cy.get('[data-testid=\"clear-button\"]').click();\n    cy.get('[data-testid=\"live-region\"]').should('contain', 'Content cleared');\n\n    // Verify content is cleared\n    cy.get('[data-testid=\"content-container\"]').should('not.contain', 'More content loaded');\n\n    // Verify aria-live region is still present and functional\n    cy.get('[data-testid=\"live-region\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7434,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3446,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 76.868,
+      "feedback_used": ""
+    }
+  ]
+}

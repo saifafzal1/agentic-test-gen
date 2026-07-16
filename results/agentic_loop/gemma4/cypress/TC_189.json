@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_189",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7419,
+  "total_latency_s": 72.46,
+  "final_script": "describe('Filter Result Count Display', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should display correct result count for each filter option', () => {\n    // Intercept the search API call\n    cy.intercept('GET', '/api/search*').as('searchRequest');\n\n    // Perform a search with multiple filters\n    cy.get('[data-testid=\"search-input\"]').type('laptop');\n    cy.get('[data-testid=\"filter-category\"]').click();\n    cy.get('[data-testid=\"filter-category-option-electronics\"]').click();\n    cy.get('[data-testid=\"filter-price-range\"]').click();\n    cy.get('[data-testid=\"filter-price-range-option-0-1000\"]').click();\n    cy.get('[data-testid=\"filter-brand\"]').click();\n    cy.get('[data-testid=\"filter-brand-option-dell\"]').click();\n\n    // Wait for the search results to load\n    cy.wait('@searchRequest');\n\n    // Verify the result count for each filter option\n    cy.get('[data-testid=\"filter-category-option-electronics\"]').should('contain', '(12)');\n    cy.get('[data-testid=\"filter-price-range-option-0-1000\"]').should('contain', '(45)');\n    cy.get('[data-testid=\"filter-brand-option-dell\"]').should('contain', '(12)');\n\n    // Verify the total results count is displayed\n    cy.get('[data-testid=\"total-results-count\"]').should('be.visible').should('contain', '12');\n\n    // Verify the search results are displayed\n    cy.get('[data-testid=\"search-results-list\"]').should('be.visible').should('contain', 'Laptop');\n  });\n\n  it('should handle no results scenario and display count as 0', () => {\n    // Intercept the search API call with no results\n    cy.intercept('GET', '/api/search*', {\n      statusCode: 200,\n      body: {\n        results: [],\n        totalCount: 0\n      }\n    }).as('emptySearchRequest');\n\n    // Perform a search with filters that yield no results\n    cy.get('[data-testid=\"search-input\"]').type('tablet');\n    cy.get('[data-testid=\"filter-category\"]').click();\n    cy.get('[data-testid=\"filter-category-option-electronics\"]').click();\n    cy.get('[data-testid=\"filter-price-range\"]').click();\n    cy.get('[data-testid=\"filter-price-range-option-5000-10000\"]').click();\n\n    // Wait for the empty search results to load\n    cy.wait('@emptySearchRequest');\n\n    // Verify the result count for each filter option is 0\n    cy.get('[data-testid=\"filter-category-option-electronics\"]').should('contain', '(0)');\n    cy.get('[data-testid=\"filter-price-range-option-5000-10100\"]').should('contain', '(0)');\n\n    // Verify the total results count is displayed as 0\n    cy.get('[data-testid=\"total-results-count\"]').should('be.visible').should('contain', '0');\n\n    // Verify no search results are displayed\n    cy.get('[data-testid=\"search-results-list\"]').should('be.visible').should('contain', 'No results found');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7419,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3397,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.46,
+      "feedback_used": ""
+    }
+  ]
+}

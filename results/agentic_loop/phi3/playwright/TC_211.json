@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_211",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.794,
+  "total_latency_s": 351.937,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dynamic Content Updates Announcement by Screen Readers', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dynamic-content');\n  });\n\n  test('should announce dynamic content updates using ARIA live regions', async ({ page }) => {\n    // Verify initial content is visible\n    const content = page.getByRole('region', { name: /dynamic content/i });\n    await expect(content).toBeVisible();\n\n    // Verify initial screen reader announcement\n    await expect(page).toHaveScreenReaderRole('region');\n    await expect(page).toHaveScreenReaderText('dynamic content');\n\n    // Trigger content update\n    const updateButton = page.getByRole('button', { name: /update content/i });\n    await updateButton.click();\n\n    // Wait for update to complete\n    await page.waitForTimeout(500);\n\n    // Verify updated content is announced\n    await expect(page).toHaveScreenReaderText('updated dynamic content');\n\n    // Verify previous content is no longer announced\n    await expect(page).not.toHaveScreenReaderText('dynamic content');\n\n    // Verify content is still visible\n    await expect(content).toBeVisible();\n  });\n\n  test('should handle multiple content updates in quick succession', async ({ page }) => {\n    // Verify initial content is visible\n    const content = page.getByRole('region', { name: /dynamic content/i });\n    await expect(content).toBeVisible();\n\n    // Trigger first update\n    const updateButton = page.getByRole('button', { name: /update content/i });\n    await updateButton.click();\n\n    // Wait for first update to complete\n    await page.waitForTimeout(500);\n\n    // Verify first update announcement\n    await expect(page).toHaveScreenReaderText('updated dynamic content');\n\n    // Trigger second update\n    await updateButton.click();\n\n    // Wait for second update to complete\n    await page.waitForTimeout(500);\n\n    // Verify second update announcement\n    await expect(page).toHaveScreenReaderText('updated dynamic content');\n\n    // Verify first update is no longer announced\n    await expect(page).not.toHaveScreenReaderText('updated dynamic content');\n\n    // Verify content is still visible\n    await expect(content).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.794,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4133,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 351.937,
+      "feedback_used": ""
+    }
+  ]
+}

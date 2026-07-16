@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_187",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7725,
+  "total_latency_s": 72.565,
+  "final_script": "describe('Search Filter by Category', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should filter search results by selecting category checkboxes', () => {\n    // Verify initial search results are displayed\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n\n    // Select 'Electronics' category checkbox\n    cy.get('[data-testid=\"category-checkbox-electronics\"]').click();\n    cy.get('[data-testid=\"category-checkbox-electronics\"]').should('be.checked');\n\n    // Select 'Books' category checkbox\n    cy.get('[data-testid=\"category-checkbox-books\"]').click();\n    cy.get('[data-testid=\"category-checkbox-books\"]').should('be.checked');\n\n    // Verify search results are filtered and updated\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"result-item\"]').first().should('contain', 'Electronics');\n    cy.get('[data-testid=\"result-item\"]').first().should('contain', 'Books');\n\n    // Verify filter applied to URL\n    cy.url().should('include', '?category=electronics,books');\n\n    // Verify filter count is displayed\n    cy.get('[data-testid=\"filter-count\"]').should('contain', '2');\n  });\n\n  it('should handle unchecking a category filter and update results', () => {\n    // Select 'Electronics' category checkbox\n    cy.get('[data-testid=\"category-checkbox-electronics\"]').click();\n    cy.get('[data-testid=\"category-checkbox-electronics\"]').should('be.checked');\n\n    // Verify results are filtered\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n\n    // Uncheck 'Electronics' category checkbox\n    cy.get('[data-testid=\"category-checkbox-electronics\"]').click();\n    cy.get('[data-testid=\"category-checkbox-electronics\"]').should('not. be.checked');\n\n    // Verify results are updated after unchecking\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"result-item\"]').first().should('not.contain', 'Electronics');\n\n    // Verify filter is removed from URL\n    cy.url().should('not.include', '?category=electronics');\n\n    // Verify filter count is updated\n    cy.get('[data-testid=\"filter-count\"]').should('contain', '1');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7725,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4417,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.565,
+      "feedback_used": ""
+    }
+  ]
+}

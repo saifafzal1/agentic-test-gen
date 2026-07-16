@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_195",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8334,
+  "total_latency_s": 72.164,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Save Search Query Feature', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should successfully save a search query and display confirmation', async ({ page }) => {\n    // Setup: intercept the save API call\n    await page.route('**/api/search/save', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the success response\n    await page.route('**/api/search/save', (route) => {\n      route.abort('failed');\n    });\n\n    // Setup: intercept the success response\n    await page.route('**/api/search/save', (route) => {\n      route.continue();\n    });\n\n    // Enter search term\n    const searchInput = page.getByPlaceholder('Search products...');\n    await searchInput.fill('laptop');\n\n    // Apply filter\n    const categoryFilter = page.getByRole('button', { name: 'Electronics & Appliances' });\n    await categoryFilter.click();\n\n    // Apply price range filter\n    const priceRangeFilter = page.getByRole('button', { name: 'Price Range' });\n    await priceRangeFilter.click();\n    const priceInput = page.getByLabel('Min Price');\n    await priceInput.fill('500');\n\n    // Click save button\n    const saveButton = page.getByRole('button', { name: 'Save Search' });\n    await saveButton.click();\n\n    // Wait for API response\n    await page.waitForResponse(response =>\n      response.url().includes('/api/search/save') && response.status() === 200\n    );\n\n    // Verify success message\n    const successMessage = page.getByText('Search query saved successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify save button is disabled after successful save\n    await expect(saveButton).toBeDisabled();\n\n    // Verify confirmation icon appears\n    const confirmationIcon = page.getByRole('img', { name: 'Saved' });\n    await expect(confirmationIcon).toBeVisible();\n  });\n\n  test('should handle API errors when saving a search query', async ({ page }) => {\n    // Setup: intercept the save API call and return an error\n    await page.route('**/api/search/save', (route) => {\n      route.abort('failed');\n    });\n\n    // Enter search term\n    const searchInput = page.getByPlaceholder('Search products...');\n    await searchInput.fill('monitor');\n\n    // Apply filter\n    const brandFilter = page.getByRole('button', { name: 'Brand' });\n    await brandFilter.click();\n    const brandOption = page.getByRole('option', { name: 'Dell' });\n    await brandOption.click();\n\n    // Click save button\n    const saveButton = page.getByRole('button', { name: 'Save Search' });\n    await saveButton.click();\n\n    // Wait for API error response\n    await page.waitForResponse(response =>\n      response.url().includes('/api/search/save') && response.status() === 500\n    );\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('Failed to save search query. Please try again.');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify save button is still enabled for retry\n    await expect(saveButton).toBeEnabled();\n\n    // Verify error icon is visible\n    const errorIcon = page.getByRole('img', { name: 'Error' });\n    await expect(errorIcon).toBeVisible();\n\n    // Verify search results are still visible\n    const resultsContainer = page.getByRole('region', { name: 'Search Results' });\n    await expect(resultsContainer).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8334,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4448,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.164,
+      "feedback_used": ""
+    }
+  ]
+}

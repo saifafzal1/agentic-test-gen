@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_204",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7635,
+  "total_latency_s": 52.909,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Image Alt Text Accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/images');\n  });\n\n  test('should display descriptive alt text for all images', async ({ page }) => {\n    // Verify all images have alt attributes\n    const images = page.locator('[data-testid=\"image\"]');\n    await expect(images).toHaveCount(5);\n\n    // Verify each image has non-empty alt text\n    const altTexts = await page.locator('[data-testid=\"image\"]').evaluate((el) => {\n      return el.getAttribute('alt');\n    });\n    expect(altTexts).not.toBeEmpty();\n\n    // Verify alt text is descriptive and not empty\n    const altTextsArray = await altTexts.split('\\n');\n    for (const altText of altTextsArray) {\n      expect(altText).toBeTruthy();\n      expect(altText).toBeGreaterThan(0);\n    }\n\n    // Verify alt text is not just whitespace\n    const nonWhitespaceAltTexts = altTextsArray.filter((altText) => altText.trim().length > 0);\n    expect(nonWhitespaceAltTexts.length).toBeGreaterThan(0);\n\n    // Verify alt text is not empty\n    const nonEmptyAltTexts = altTextsArray.filter((altText) => altText.trim().length > 0);\n    expect(nonEmptyAltTexts.length).toBeGreaterThan(0);\n\n    // Verify alt text is not just a single word\n    const multiWordAltTexts = nonEmptyAltTexts.filter((altText) => altText.split(' ').length > 1);\n    expect(multiWordAltTexts.length).toBeGreaterThan(0);\n  });\n\n  test('should not display alt text for images without content', async ({ page }) => {\n    // Navigate to a page with empty images\n    await page.goto('/empty-images');\n\n    // Verify all images have alt attributes\n    const images = page.locator('[data-testid=\"image\"]');\n    await expect(images).toHaveCount(3);\n\n    // Verify alt text is empty for images without content\n    const altTexts = await page.locator('[data-testid=\"image\"]').evaluate((el) => {\n      return el.getAttribute('alt');\n    });\n    const emptyAltTexts = altTexts.filter((altText) => altText.trim().length === 0);\n    expect(emptyAltTexts.length).toBe(3);\n\n    // Verify alt text is not just whitespace\n    const nonWhitespaceEmptyAltTexts = emptyAltTexts.filter((altText) => altText.trim().length > 0);\n    expect(nonWhitespaceEmptyAltTexts.length).toBe(0);\n\n    // Verify alt text is not just a single word\n    const multiWordEmptyAltTexts = emptyAltTexts.filter((altText) => altText.split(' ').length > 1);\n    expect(multiWordEmptyAltTexts.length).toBe(0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7635,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4118,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 52.909,
+      "feedback_used": ""
+    }
+  ]
+}

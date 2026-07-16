@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_191",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.806,
+  "total_latency_s": 72.937,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Recently Searched Terms Suggestions', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should display recently searched terms as suggestions when user starts typing', async ({ page }) => {\n    // Verify search input is visible\n    const searchInput = page.getByPlaceholder('Search...');\n    await expect(searchInput).toBeVisible();\n\n    // Type the first character\n    await searchInput.fill('a');\n\n    // Wait for suggestions to load\n    await page.waitForResponse(response => \n      response.url().includes('/api/search/suggestions') && response.status() === 200\n    );\n\n    // Verify suggestions container is visible\n    const suggestionsContainer = page.getByRole('region', { name: /suggestions/i });\n    await expect(suggestionsContainer).toBeVisible();\n\n    // Verify suggestions list is visible\n    const suggestionsList = page.getByRole('list');\n    await expect(suggestionsList).toBeVisible();\n\n    // Verify at least one suggestion is displayed\n    const suggestionsItems = page.getByRole('listitem');\n    await expect(suggestionsItems).toHaveCount(1);\n\n    // Verify suggestion text is displayed\n    const suggestionText = page.getByText('apple');\n    await expect(suggestionText).toBeVisible();\n\n    // Click on a suggestion\n    await suggestionText.click();\n\n    // Verify search input is populated with the selected suggestion\n    await expect(searchInput).toHaveValue('apple');\n\n    // Verify search results page is displayed\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n  });\n\n  test('should handle no recent searches and display appropriate message', async ({ page }) => {\n    // Clear any existing search history\n    await page.route('**/api/search/suggestions', route => {\n      route.abort();\n    });\n\n    // Type a character\n    const searchInput = page.getByPlaceholder('Search...');\n    await searchInput.fill('z');\n\n    // Wait for API call to fail or timeout\n    await page.waitForTimeout(500);\n\n    // Verify suggestions container is visible but empty\n    const suggestionsContainer = page.getByRole('region', { name: /suggestions/i });\n    await expect(suggestionsContainer).toBeVisible();\n\n    // Verify no suggestions list is present\n    const suggestionsList = page.getByRole('list');\n    await expect(suggestionsList).not.toBeVisible();\n\n    // Verify no suggestion items exist\n    const suggestionsItems = page.getByRole('listitem');\n    await expect(suggestionsItems).toHaveCount(0);\n\n    // Verify \"No recent searches\" message is displayed\n    const noSuggestionsMessage = page.getByText('No recent searches');\n    await expect(noSuggestionsMessage).toBeVisible();\n\n    // Verify search input is still available for manual entry\n    await expect(searchInput).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.806,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4535,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.937,
+      "feedback_used": ""
+    }
+  ]
+}

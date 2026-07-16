@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_212",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8144,
+  "total_latency_s": 72.544,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Icon Button Accessibility Names', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should assign accessible names to all icon buttons', async ({ page }) => {\n    // Verify the home icon button has an accessible name\n    const homeButton = page.getByRole('button', { name: /home/i });\n    await expect(homeButton).toBeVisible();\n    await expect(homeButton).toHaveAttribute('aria-label', /home/i);\n\n    // Verify the search icon button has an accessible name\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await expect(searchButton).toBeVisible();\n    await expect(searchButton).toHaveAttribute('aria-label', /search/i);\n\n    // Verify the settings icon button has an accessible name\n    const settingsButton = page.getByRole('button', { name: /settings/i });\n    await expect(settingsButton).toBeVisible();\n    await expect(settingsButton).toHaveAttribute('aria-label', /settings/i);\n\n    // Verify the profile icon button has an accessible name\n    const profileButton = page.getByRole('button', { name: /profile/i });\n    await expect(profileButton).toBeVisible();\n    await expect(profileButton).toHaveAttribute('aria-label', /profile/i);\n\n    // Verify the notifications icon button has an accessible name\n    const notificationsButton = page.getByRole('button', { name: /notifications/i });\n    await expect(notificationsButton).toBeVisible();\n    await expect(notificationsButton).toHaveAttribute('aria-label', /notifications/i);\n  });\n\n  test('should handle icon buttons with complex accessible names', async ({ page }) => {\n    // Verify the help icon button has a descriptive accessible name\n    const helpButton = page.getByRole('button', { name: /help/i });\n    await expect(helpButton).toBeVisible();\n    await expect(helpButton).toHaveAttribute('aria-label', /get help/i);\n\n    // Verify the logout icon button has a clear accessible name\n    const logoutButton = page.getByRole('button', { name: /logout/i });\n    await expect(logoutButton).toBeVisible();\n    await expect(logoutButton).toHaveAttribute('aria-label', /log out of account/i);\n\n    // Verify the email icon button has a descriptive accessible name\n    const emailButton = page.getByRole('button', { name: /email/i });\n    await expect(emailButton).toBeVisible();\n    await expect(emailButton).toHaveAttribute('aria-label', /send email to support/i);\n\n    // Verify the message icon button has a descriptive accessible name\n    const messageButton = page.getByRole('button', { name: /message/i });\n    await expect(messageButton).toBeVisible();\n    await expect(messageButton).toHaveAttribute('aria-label', /view messages/i);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8144,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4813,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.544,
+      "feedback_used": ""
+    }
+  ]
+}

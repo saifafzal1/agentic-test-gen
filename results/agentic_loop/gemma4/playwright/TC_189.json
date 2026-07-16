@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_189",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8003,
+  "total_latency_s": 72.473,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Filter Result Counts', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should display result counts for each filter option', async ({ page }) => {\n    // Verify search input is visible\n    const searchInput = page.getByPlaceholder('Search...');\n    await expect(searchInput).toBeVisible();\n\n    // Verify filter options container is visible\n    const filterContainer = page.getByRole('region', { name: /filters/i });\n    await expect(filterContainer).toBeVisible();\n\n    // Verify result count display is visible\n    const resultCount = page.getByText(/results found/i);\n    await expect(resultCount).toBeVisible();\n\n    // Verify filter options are displayed with counts\n    const filterOptions = page.getByRole('option');\n    const filterCount = page.getByText(/\\d+ results/i);\n    await expect(filterOptions).toHaveCount(3);\n    await expect(filterCount).toBeVisible();\n\n    // Verify filter options have count labels\n    const filterOption1 = page.getByRole('option', { name: /category/i });\n    const countLabel1 = page.getByText(/12 results/i);\n    await expect(countLabel1).toBeVisible();\n\n    const filterOption2 = page.getByRole('option', { name: /price range/i });\n    const countLabel2 = page.getByText(/5 results/i);\n    await expect(countLabel2).toBeVisible();\n\n    const filterOption3 = page.getByRole('option', { name: /date added/i });\n    const countLabel3 = page.getByText(/2 results/i);\n    await expect(countLabel3).toBeVisible();\n\n    // Verify filter options are clickable\n    await expect(filterOption1).toBeEnabled();\n    await expect(filterOption2).toBeEnabled();\n    await expect(filterOption3).toBeEnabled();\n\n    // Click on a filter option to verify count updates\n    await filterOption1.click();\n    await expect(countLabel1).toBeVisible();\n    await expect(resultCount).toContainText('12 results found');\n  });\n\n  test('should handle no results when filter options have zero count', async ({ page }) => {\n    // Navigate to a page with no results\n    await page.goto('/search?q=nonexistentquery');\n\n    // Verify no results message is displayed\n    const noResultsMessage = page.getByText(/no results found/i);\n    await expect(noResultsMessage).toBeVisible();\n\n    // Verify filter options are still displayed\n    const filterContainer = page.getByRole('region', { name: /filters/i });\n    await expect(filterContainer).toBeVisible();\n\n    // Verify filter options are visible but have zero count\n    const filterOptions = page.getByRole('option');\n    await expect(filterOptions).toHaveCount(3);\n\n    const filterOption1 = page.getByRole('option', { name: /category/i });\n    const countLabel1 = page.getByText(/0 results/i);\n    await expect(countLabel1).toBeVisible();\n\n    const filterOption2 = page.getByRole('option', { name: /price range/i });\n    const countLabel2 = page.getByText(/0 results/i);\n    await expect(countLabel2).toBeVisible();\n\n    // Verify result count shows zero\n    const resultCount = page.getByText(/0 results found/i);\n    await expect(resultCount).toBeVisible();\n\n    // Verify filter options are still clickable\n    await expect(filterOption1).toBeEnabled();\n    await expect(filterOption2).toBeEnabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8003,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4343,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.473,
+      "feedback_used": ""
+    }
+  ]
+}

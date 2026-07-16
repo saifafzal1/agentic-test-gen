@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_214",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8022,
+  "total_latency_s": 474.687,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Skip Navigation Link Focus Behavior', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should focus on skip navigation link when tabbing from first visible element', async ({ page }) => {\n    // Verify skip navigation link is visible and focusable\n    const skipNavLink = page.getByRole('navigation', { name: /skip navigation/i });\n    await expect(skipNavLink).toBeVisible();\n    await expect(skipNavLink).toBeFocused();\n\n    // Verify first visible element is focused before skip link\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeFocused();\n\n    // Verify skip link is the first focusable element\n    const firstFocusable = page.getByRole('heading', { name: /section/i });\n    await expect(firstFocusable).toBeFocused();\n\n    // Verify skip link receives focus when tabbing\n    await page.keyboard.press('Tab');\n    await expect(skipNavLink).toBeFocused();\n\n    // Verify skip link is visible and has correct aria-label\n    await expect(skipNavLink).toHaveAttribute('aria-label', 'Skip to main content');\n  });\n\n  test('should not focus on skip navigation link when tabbing from non-first visible element', async ({ page }) => {\n    // Verify skip navigation link is visible and focusable\n    const skipNavLink = page.getByRole('navigation', { name: /skip navigation/i });\n    await expect(skipNavLink).toBeVisible();\n\n    // Verify first visible element is not focused\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).not.toBeFocused();\n\n    // Verify skip link is not the first focusable element\n    const firstFocusable = page.getByRole('heading', { name: /section/i });\n    await expect(firstFocusable).not.toBeFocused();\n\n    // Verify skip link is not focused when tabbing from non-first visible element\n    await page.keyboard.press('Tab');\n    await expect(skipNavLink).not.toBeFocused();\n\n    // Verify skip link is still visible and has correct aria-label\n    await expect(skipNavLink).toHaveAttribute('aria-label', 'Skip to main content');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8022,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4408,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 474.687,
+      "feedback_used": ""
+    }
+  ]
+}

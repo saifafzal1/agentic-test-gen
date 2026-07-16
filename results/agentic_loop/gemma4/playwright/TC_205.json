@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_205",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8456,
+  "total_latency_s": 72.358,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Keyboard Navigation - Tab Key', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/keyboard-navigation');\n  });\n\n  test('should navigate all interactive elements using Tab key', async ({ page }) => {\n    // Verify initial state\n    const firstButton = page.getByRole('button', { name: /first button/i });\n    await expect(firstButton).toBeVisible();\n    \n    // Verify first button is focused\n    await firstButton.click();\n    await expect(firstButton).toBeFocused();\n    \n    // Verify tab key moves focus to next interactive element\n    await page.keyboard.press('Tab');\n    const secondButton = page.getByRole('button', { name: /second button/i });\n    await expect(secondButton).toBeFocused();\n    \n    // Verify tab key moves focus to third interactive element\n    await page.keyboard.press('Tab');\n    const thirdButton = page.getByRole('button', { name: /third button/i });\n    await expect(thirdButton).toBeFocused();\n    \n    // Verify tab key moves focus to form input\n    await page.keyboard.press('Tab');\n    const emailInput = page.getByLabel(/email/i);\n    await expect(emailInput).toBeFocused();\n    \n    // Verify tab key moves focus to submit button\n    await page.keyboard.press('Tab');\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeFocused();\n    \n    // Verify tab key wraps around to first interactive element\n    await page.keyboard.press('Tab');\n    await expect(firstButton).toBeFocused();\n  });\n\n  test('should handle tab navigation with disabled and non-interactive elements', async ({ page }) => {\n    // Verify initial state\n    const firstButton = page.getByRole('button', { name: /first button/i });\n    await expect(firstButton).toBeVisible();\n    \n    // Verify first button is focused\n    await firstButton.click();\n    await expect(firstButton).toBeFocused();\n    \n    // Verify tab key moves focus to second button\n    await page.keyboard.press('Tab');\n    const secondButton = page.getByRole('button', { name: /second button/i });\n    await expect(secondButton).toBeFocused();\n    \n    // Verify tab key skips disabled button\n    await page.keyboard.press('Tab');\n    const disabledButton = page.getByRole('button', { name: /disabled button/i });\n    await expect(disabledButton).not.toBeFocused();\n    \n    // Verify tab key moves focus to third button\n    await page.keyboard.press('Tab');\n    const thirdButton = page.getByRole('button', { name: /third button/i });\n    await expect(thirdButton).toBeFocused();\n    \n    // Verify tab key skips non-interactive element (e.button)\n    await page.keyboard.press('Tab');\n    const nonInteractiveElement = page.getByText(/non-interactive element/i);\n    await expect(nonInteractiveElement).not.toBeFocused();\n    \n    // Verify tab key moves focus to form input\n    await page.keyboard.press('Tab');\n    const emailInput = page.getByLabel(/email/i);\n    await expect(emailInput).toBeFocused();\n    \n    // Verify tab key wraps around to first button\n    await page.keyboard.press('Tab');\n    await expect(firstButton).toBeFocused();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8456,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4852,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.358,
+      "feedback_used": ""
+    }
+  ]
+}

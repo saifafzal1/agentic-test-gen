@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_207",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.738,
+  "total_latency_s": 72.929,
+  "final_script": "describe('Colour Contrast WCAG 2.1 AA Compliance', () => {\n  beforeEach(() => {\n    cy.visit('/contrast-checker');\n  });\n\n  it('should display high contrast colours meeting WCAG AA standards', () => {\n    // Verify the contrast checker is visible\n    cy.get('[data-testid=\"contrast-checker\"]').should('be.visible');\n\n    // Verify the default text and background have sufficient contrast\n    cy.get('[data-testid=\"text-input\"]').should('have.attr', 'style', 'color: #000000;');\n    cy.get('[data-testid=\"background-panel\"]').should('have.attr', 'style', 'background-color: #ffffff;');\n\n    // Verify the contrast ratio is displayed and meets AA standard (4.1:1 for normal text)\n    cy.get('[data-testid=\"contrast-ratio\"]').should('contain', '4.1:1');\n    cy.get('[data-testid=\"contrast-status\"]').should('contain', 'Meets WCAG AA');\n\n    // Verify the contrast status indicator is green\n    cy.get('[data-testid=\"contrast-status-indicator\"]').should('have.class', 'status-success');\n\n    // Verify the contrast ratio is displayed in the correct format\n    cy.get('[data-testid=\"contrast-ratio\"]').should('match', /^\\d+\\.\\d+\\/\\d+\\.\\d+$/);\n  });\n\n  it('should flag low contrast colours and provide remediation suggestions', () => {\n    // Intercept the API call to simulate a low contrast scenario\n    cy.intercept('GET', '/api/contrast-check').as('lowContrastCheck');\n\n    // Click the button to check contrast with low contrast colours\n    cy.get('[data-testid=\"check-contrast-button\"]').click();\n\n    // Verify the API call was made\n    cy.wait('@lowContrastCheck');\n\n    // Verify the contrast ratio is displayed and fails AA standard\n    cy.get('[data-testid=\"contrast-ratio\"]').should('contain', '2.1:1');\n    cy.get('[data-testid=\"contrast-status\"]').should('contain', 'Fails WCAG AA');\n\n    // Verify the contrast status indicator is red\n    cy.get('[data-testid=\"contrast-status-indicator\"]').should('have.class', 'status-error');\n\n    // Verify remediation suggestions are displayed\n    cy.get('[data-testid=\"remediation-suggestions\"]').should('be.visible');\n    cy.get('[data-testid=\"remediation-suggestions\"]').should('contain', 'Increase text contrast');\n    cy.get('[data-testid=\"remediation-suggestions\"]').should('contain', 'Use darker background');\n\n    // Verify the user can click on a suggestion to apply it\n    cy.get('[data-testid=\"suggest-darker-background\"]').click();\n    cy.get('[data-testid=\"contrast-ratio\"]').should('contain', '4.1:1');\n    cy.get('[data-testid=\"contrast-status\"]').should('contain', 'Meets WCAG AA');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.738,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3268,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.929,
+      "feedback_used": ""
+    }
+  ]
+}

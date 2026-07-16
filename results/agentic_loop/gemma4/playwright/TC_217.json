@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_217",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.831,
+  "total_latency_s": 72.933,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Loading States for Assistive Technology', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/data-table');\n  });\n\n  test('should communicate loading state to assistive technology when data is being fetched', async ({ page }) => {\n    // Intercept the API call to simulate loading\n    await page.route('**/api/data', (route) => {\n      route.abort('failed');\n    });\n\n    // Click the button to trigger data fetch\n    const fetchButton = page.getByRole('button', { name: /fetch data/i });\n    await expect(fetchButton).toBeVisible();\n    await fetchButton.click();\n\n    // Verify loading spinner is visible\n    const loadingSpinner = page.getByRole('status', { name: /loading/i });\n    await expect(loadingSpinner).toBeVisible();\n\n    // Verify aria-live region is present and has loading message\n    const liveRegion = page.locator('[aria-live=\"polite\"]');\n    await expect(liveRegion).toBeVisible();\n    await expect(liveRegion).toContainText('Loading data');\n\n    // Verify loading state is announced by screen readers\n    const pageContent = page.locator('[data-testid=\"page-content\"]');\n    await expect(pageContent).toContainText('Loading data');\n\n    // Wait for loading to complete\n    await page.waitForTimeout(1000);\n\n    // Verify loading spinner is no longer visible\n    await expect(loadingSpinner).not.toBeVisible();\n\n    // Verify data table is displayed\n    const dataTable = page.getByRole('table');\n    await expect(dataTable).toBeVisible();\n    await expect(dataTable).toContainText('Data loaded successfully');\n  });\n\n  test('should handle loading state when API request fails and communicate error to assistive technology', async ({ page }) => {\n    // Intercept the API call to simulate failure\n    await page.route('**/api/data', (route) => {\n      route.abort('failed');\n    });\n\n    // Click the button to trigger data fetch\n    const fetchButton = page.getByRole('button', { name: /fetch data/i });\n    await expect(fetchButton).toBeVisible();\n    await fetchButton.click();\n\n    // Verify loading spinner is visible\n    const loadingSpinner = page.getByRole('status', { name: /loading/i });\n    await expect(loadingSpinner).toBeVisible();\n\n    // Wait for loading to complete\n    await page.waitForTimeout(1000);\n\n    // Verify loading spinner is no longer visible\n    await expect(loadingSpinner).not.toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByRole('alert');\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).toContainText('Failed to load data');\n\n    // Verify error message is announced by screen readers\n    const liveRegion = page.locator('[aria-live=\"assertive\"]');\n    await expect(liveRegion).toBeVisible();\n    await expect(liveRegion).toContainText('Error: Failed to load data');\n\n    // Verify data table is not displayed\n    const dataTable = page.getByRole('table');\n    await expect(dataTable).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.831,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5367,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.933,
+      "feedback_used": ""
+    }
+  ]
+}

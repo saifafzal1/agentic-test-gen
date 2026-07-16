@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_202",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8241,
+  "total_latency_s": 72.607,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Term Highlighting in Result Snippets', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should highlight search terms in result snippets when search is performed', async ({ page }) => {\n    // Perform search with multiple terms\n    const searchInput = page.getByPlaceholder('Search...');\n    await searchInput.fill('Playwright TypeScript test script');\n\n    // Click search button\n    const searchButton = page.getByRole('button', { name: 'Search' });\n    await searchButton.click();\n\n    // Wait for results to load\n    await page.waitForResponse(response => \n      response.url().includes('/api/search') && response.status() === 200\n    );\n\n    // Verify results are displayed\n    const resultContainer = page.getByTestId('search-results');\n    await expect(resultContainer).toBeVisible();\n\n    // Verify result snippets contain highlighted terms\n    const resultItems = page.getByTestId('search-result-item');\n    const firstResult = resultItems.first();\n    const snippet = firstResult.getByTestId('result-snippet');\n    await expect(snippet).toBeVisible();\n\n    // Verify 'Playwright' is highlighted\n    const playwrightTerm = page.getByText('Playwright');\n    await expect(playwrightTerm).toHaveClass(/highlighted-term/);\n\n    // Verify 'TypeScript' is highlighted\n    const typescriptTerm = page.getByText('TypeScript');\n    await expect(typescriptTerm).toHaveClass(/highlighted-term/);\n\n    // Verify 'test script' is highlighted\n    const testScriptTerm = page.getByText('test script');\n    await expect(testScriptTerm).toHaveClass(/highlighted-term/);\n\n    // Verify result title contains search terms\n    const resultTitle = firstResult.getByTestId('result-title');\n    await expect(resultTitle).toContainText('Playwright TypeScript test script');\n  });\n\n  test('should not highlight terms when search returns no results', async ({ page }) => {\n    // Perform search with non-existent terms\n    const searchInput = page.getByPlaceholder('Search...');\n    await searchInput.fill('xyz123 nonexistentterm');\n\n    // Click search button\n    const searchButton = page.getByRole('button', { name: 'Search' });\n    await searchButton.click();\n\n    // Wait for results to load\n    await page.waitForResponse(response => \n      response.url().includes('/api/search') && response.status() === 200\n    );\n\n    // Verify no results message is displayed\n    const noResultsMessage = page.getByText('No results found');\n    await expect(noResultsMessage).toBeVisible();\n\n    // Verify result container is empty\n    const resultContainer = page.getByTestId('search-results');\n    await expect(resultContainer).toBeVisible();\n    const resultItems = page.getByTestId('search-result-item');\n    await expect(resultItems).toHaveCount(0);\n\n    // Verify no highlighted terms exist\n    const highlightedTerms = page.locator('[data-testid=\"highlighted-term\"]');\n    await expect(highlightedTerms).toHaveCount(0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8241,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5136,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.607,
+      "feedback_used": ""
+    }
+  ]
+}

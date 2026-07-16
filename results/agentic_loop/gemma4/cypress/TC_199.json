@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_199",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.772,
+  "total_latency_s": 73.027,
+  "final_script": "describe('Active Filter Tags Above Search Results', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should display a tag for each active filter above search results', () => {\n    // Apply first filter\n    cy.get('[data-testid=\"filter-category-all\"]').click();\n    cy.get('[data-testid=\"filter-category-electronics\"]').click();\n    cy.get('[data-testid=\"filter-price-range\"]').click();\n    cy.get('[data-testid=\"filter-price-range-0-100\"]').click();\n\n    // Verify filter tags are displayed\n    cy.get('[data-testid=\"active-filter-tag\"]').should('be.visible');\n    cy.get('[data-testid=\"active-filter-tag\"]').should('have.length', 2);\n\n    // Verify first tag content\n    cy.get('[data-testid=\"active-filter-tag\"]').first().should('contain', 'Category: Electronics');\n    cy.get('[data-testid=\"active-filter-tag\"]').first().should('have.class', 'active-filter-tag');\n\n    // Verify second tag content\n    cy.get('[data-testid=\"active-filter-tag\"]').eq(1).should('contain', 'Price Range: $0 - $100');\n    cy.get('[data-testid=\"active-filter-tag\"]').eq(1).should('have.class', 'active-filter-tag');\n\n    // Verify results are displayed\n    cy.get('[data-testid=\"search-results-list\"]').should('be.visible');\n    cy.get('[data-testid=\"search-results-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify each tag has a remove button\n    cy.get('[data-testid=\"active-filter-tag\"]').each(($tag) => {\n      cy.wrap($tag).find('[data-testid=\"remove-filter-btn\"]').should('be.visible');\n    });\n  });\n\n  it('should remove a filter tag when the remove button is clicked', () => {\n    // Apply multiple filters\n    cy.get('[data-testid=\"filter-category-all\"]').click();\n    cy.get('[data-testid=\"filter-category-electronics\"]').click();\n    cy.get('[data-testid=\"filter-price-range\"]').click();\n    cy.get('[data-testid=\"filter-price-range-0-100\"]').click();\n    cy.get('[data-testid=\"filter-brand-sony\"]').click();\n\n    // Verify all tags are visible\n    cy.get('[data-testid=\"active-filter-tag\"]').should('have.length', 3);\n\n    // Click remove button on the first tag (Category)\n    cy.get('[data-testid=\"active-filter-tag\"]').first().find('[data-testid=\"remove-filter-btn\"]').click();\n\n    // Verify the first tag is removed\n    cy.get('[data-testid=\"active-filter-tag\"]').should('have.length', 2);\n\n    // Verify the remaining tags are still visible\n    cy.get('[data-testid=\"active-filter-tag\"]').should('contain', 'Price Range: $0 - $100');\n    cy.get('[data-testid=\"active-filter-tag\"]').should('contain', 'Brand: Sony');\n\n    // Verify results are updated after filter removal\n    cy.get('[data-testid=\"search-results-list\"]').should('be.visible');\n    cy.get('[data-testid=\"search-results-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify the removed filter is no longer applied\n    cy.get('[data-testid=\"filter-category-all\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.772,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4399,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.027,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_209",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7303,
+  "total_latency_s": 72.565,
+  "final_script": "describe('Error Message Announcements for Screen Readers', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n  });\n\n  it('should announce error messages when form validation fails', () => {\n    // Attempt to submit form with invalid email\n    cy.get('[data-testid=\"email-input\"]').type('invalid-email');\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify error message appears\n    cy.get('[data-testid=\"email-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"email-error-message\"]').should('contain', 'Please enter a valid email address');\n\n    // Verify error message is announced by screen reader\n    cy.get('[data-testid=\"email-error-message\"]').should('have.attr', 'aria-live', 'polite');\n    cy.get('[data-testid=\"email-error-message\"]').should('have.attr', 'role', 'alert');\n\n    // Verify focus is managed correctly\n    cy.get('[data-testid=\"email-input\"]').should('have.focus');\n  });\n\n  it('should announce multiple error messages when multiple fields are invalid', () => {\n    // Fill form with multiple invalid fields\n    cy.get('[data-testid=\"email-input\"]').type('invalid-email');\n    cy.get('[data-testid=\"password-input\"]').type('short');\n    cy.get('[data-testid=\"confirm-password-input\"]').type('different');\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify all error messages appear\n    cy.get('[data-testid=\"email-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"password-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"confirm-password-error-message\"]').should('be.visible');\n\n    // Verify all error messages are announced by screen reader\n    cy.get('[data-testid=\"email-error-message\"]').should('have.attr', 'aria-live', 'polite');\n    cy.get('[data-testid=\"password-error-message\"]').should('have.attr', 'aria-live', 'polite');\n    cy.get('[data-testid=\"confirm-password-error-message\"]').should('have.attr', 'aria-live', 'polite');\n\n    // Verify focus is managed to the first error\n    cy.get('[data-testid=\"email-input\"]').should('have.focus');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7303,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3009,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.565,
+      "feedback_used": ""
+    }
+  ]
+}

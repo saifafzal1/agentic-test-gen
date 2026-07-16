@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_205",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.792,
+  "total_latency_s": 991.705,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Tab Navigation for Interactive Elements', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/interactive-page');\n  });\n\n  test('should navigate through all interactive elements using Tab', async ({ page }) => {\n    // Verify initial state\n    const firstButton = page.getByRole('button', { name: /first/i });\n    const secondButton = page.getByRole('button', { name: /second/i });\n    const thirdButton = page.getByRole('button', { name: /third/i });\n    const firstInput = page.getByLabel(/first input/i);\n    const secondInput = page.getByLabel(/second input/i);\n    const thirdInput = page.getByLabel(/third input/i);\n    const firstList = page.getByRole('list', { name: /first list/i });\n    const secondList = page.getByRole('list', { name: /second list/i });\n    const thirdList = page.getByRole('list', { name: /third list/i });\n\n    await expect(firstButton).toBeVisible();\n    await expect(secondButton).toBeVisible();\n    await expect(thirdButton).toBeVisible();\n    await expect(firstInput).toBeVisible();\n    await expect(secondInput).toBeVisible();\n    await expect(thirdInput).toBeVisible();\n    await expect(firstList).toBeVisible();\n    await expect(secondList).toBeVisible();\n    await expect(thirdList).toBeVisible();\n\n    // Tab through buttons\n    await firstButton.tab();\n    await expect(firstButton).toBeFocused();\n    await expect(secondButton).toBeVisible();\n    await expect(secondButton).not.toBeFocused();\n\n    await secondButton.tab();\n    await expect(secondButton).toBeFocused();\n    await expect(thirdButton).toBeVisible();\n    await expect(thirdButton).not.toBeFocused();\n\n    // Tab through inputs\n    await firstInput.tab();\n    await expect(firstInput).toBeFocused();\n    await expect(secondInput).toBeVisible();\n    await expect(secondInput).not.toBeFocused();\n\n    await secondInput.tab();\n    await expect(secondInput).toBeFocused();\n    await expect(thirdInput).toBeVisible();\n    await expect(thirdInput).not.toBeFocused();\n\n    // Tab through lists\n    await firstList.tab();\n    await expect(firstList).toBeFocused();\n    await expect(secondList).toBeVisible();\n    await expect(secondList).not.toBeFocused();\n\n    await secondList.tab();\n    await expect(secondList).toBeFocused();\n    await expect(thirdList).toBeVisible();\n    await expect(thirdList).not.toBeFocused();\n\n    // Verify all elements are accessible and navigable\n    await expect(firstButton).toBeVisible();\n    await expect(secondButton).toBeVisible();\n    await expect(thirdButton).toBeVisible();\n    await expect(firstInput).toBeVisible();\n    await expect(secondInput).toBeVisible();\n    await expect(thirdInput).toBeVisible();\n    await expect(firstList).toBeVisible();\n    await expect(secondList).toBeVisible();\n    await expect(thirdList).toBeVisible();\n\n    // Verify focus returns to first button after completing navigation\n    await expect(firstButton).toBeFocused();\n  });\n\n  test('should handle tabbing through elements with complex selectors', async ({ page }) => {\n    // Setup complex selectors\n    const complexButton = page.getByRole('button', { name: /complex button/i });\n    const complexInput = page.getByLabel(/complex input/i);\n    const complexList = page.getByRole('list', { name: /complex list/i });\n\n    // Verify initial state\n    await expect(complexButton).toBeVisible();\n    await expect(complexInput).toBeVisible();\n    await expect(complexList).toBeVisible();\n\n    // Tab through complex button\n    await complexButton.tab();\n    await expect(complexButton).toBeFocused();\n    await expect(complexInput).toBeVisible();\n    await expect(complexList).toBeVisible();\n\n    // Tab through complex input\n    await complexInput.tab();\n    await expect(complexInput).toBeFocused();\n    await expect(complexButton).toBeVisible();\n    await expect(complexList).toBeVisible();\n\n    // Tab through complex list\n    await complexList.tab();\n    await expect(complexList).toBeFocused();\n    await expect(complexButton).toBeVisible();\n    await expect(complexInput).toBeVisible();\n\n    // Verify all elements are accessible and navigable\n    await expect(complexButton).toBeVisible();\n    await expect(complexInput).toBeVisible();\n    await expect(complexList).toBeVisible();\n\n    // Verify focus returns to complex button after completing navigation\n    await expect(complexButton).toBeFocused();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4722,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3072,
+        "missing_keywords": [],
+        "assertion_count": 39,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 428.265,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.792,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3068,
+        "missing_keywords": [],
+        "assertion_count": 53,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 563.44,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

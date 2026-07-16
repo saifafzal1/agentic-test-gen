@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_209",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8096,
+  "total_latency_s": 74.528,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Error Message Screen Reader Announcement', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should announce error messages to screen readers when form validation fails', async ({ page }) => {\n    // Intercept the API call to simulate error response\n    await page.route('**/api/validate', (route) => {\n      route.abort('failed');\n    });\n\n    // Fill in invalid email\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('invalid-email');\n\n    // Submit the form\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Wait for error message to appear\n    await page.waitForTimeout(500);\n\n    // Verify error message is visible\n    const errorMessage = page.getByText('Please enter a valid email address');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message has aria-live region\n    const liveRegion = page.locator('[aria-live]');\n    await expect(liveRegion).toBeVisible();\n\n    // Verify error message has role=\"alert\"\n    const errorElement = page.locator('[data-testid=\"error-message\"]');\n    await expect(errorElement).toHaveAttribute('role', 'alert');\n\n    // Verify error message is announced by screen reader\n    const announcement = page.getByText('Please enter a valid email address');\n    await expect(announcement).toBeVisible();\n  });\n\n  test('should announce error messages when multiple fields fail validation', async ({ page }) => {\n    // Intercept the API call to simulate multiple errors\n    await page.route('**/api/validate', (route) => {\n      route.continue();\n    });\n\n    // Fill in invalid email\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('invalid-email');\n\n    // Fill in invalid password\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('short');\n\n    // Submit the form\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Wait for error messages to appear\n    await page.waitForTimeout(500);\n\n    // Verify both error messages are visible\n    const emailError = page.getByText('Please enter a valid email address');\n    await expect(emailError).toBeVisible();\n\n    const passwordError = page.getByText('Password must be at least 8 characters');\n    await expect(passwordError).toBeVisible();\n\n    // Verify error messages are in aria-live regions\n    const liveRegion = page.locator('[aria-live]');\n    await expect(liveRegion).toBeVisible();\n\n    // Verify error messages have role=\"alert\"\n    const errorElements = page.locator('[data-testid=\"error-message\"]');\n    await expect(errorElements).toHaveCount(2);\n    for (let i = 0; i < 2; i++) {\n      const error = errorElements.nth(i);\n      await expect(error).toHaveAttribute('role', 'alert');\n    }\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8096,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3653,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 74.528,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_201",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8161,
+  "total_latency_s": 184.89,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Tolerance for Minor Spelling Mistakes', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should return correct results when search query contains minor spelling mistakes', async ({ page }) => {\n    // Verify search input is visible\n    const searchInput = page.getByPlaceholder('Search products...');\n    await expect(searchInput).toBeVisible();\n\n    // Enter misspelled search query\n    await searchInput.fill('apple pie');\n\n    // Click search button\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await searchButton.click();\n\n    // Wait for results to load\n    await page.waitForResponse(response => \n      response.url().includes('/api/search') && response.status() === 200\n    );\n\n    // Verify results container is visible\n    const resultsContainer = page.getByTestId('search-results');\n    await expect(resultsContainer).toBeVisible();\n\n    // Verify results list contains expected items\n    const resultItems = page.getByTestId('result-item');\n    const count = await resultItems.count();\n    expect(count).toBeGreaterThan(0);\n\n    // Verify at least one result contains the correct spelling\n    const firstResult = page.getByTestId('result-item').first();\n    const resultText = await firstResult.textContent();\n    expect(resultText).toContain('apple');\n    expect(resultText).toContain('pie');\n\n    // Verify search term is displayed in results\n    const searchTermDisplay = page.getByText('apple pie');\n    await expect(searchTermDisplay).toBeVisible();\n  });\n\n  test('should handle multiple minor spelling errors and return relevant results', async ({ page }) => {\n    // Enter query with multiple errors\n    const searchInput = page.getByPlaceholder('Search products...');\n    await searchInput.fill('televison');\n\n    // Click search button\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await searchButton.click();\n\n    // Wait for results to load\n    await page.waitForResponse(response => \n      response.url().includes('/api/search') && response.status() === 200\n    );\n\n    // Verify results container is visible\n    const resultsContainer = page.getByTestId('search-results');\n    await expect(resultsContainer).toBeVisible();\n\n    // Verify results list contains expected items\n    const resultItems = page.getByTestId('result-item');\n    const count = await resultItems.count();\n    expect(count).toBeGreaterThan(0);\n\n    // Verify at least one result contains the correct spelling\n    const firstResult = page.getByTestId('result-item').first();\n    const resultText = await firstResult.textContent();\n    expect(resultText).toContain('television');\n\n    // Verify search term is displayed with correction suggestion\n    const searchTermDisplay = page.getByText('televison');\n    await expect(searchTermDisplay).toBeVisible();\n\n    // Verify correction suggestion is available\n    const correctionSuggestion = page.getByRole('link', { name: /television/i });\n    await expect(correctionSuggestion).toBeVisible();\n\n    // Click correction suggestion\n    await correctionSuggestion.click();\n\n    // Verify search is updated with corrected term\n    await expect(searchInput).toHaveValue('television');\n\n    // Verify results are updated after correction\n    await page.waitForTimeout(500);\n    const updatedResultItems = page.getByTestId('result-item');\n    const updatedCount = await updatedResultItems.count();\n    expect(updatedCount).toBeGreaterThan(0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5335,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.5315,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.199,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8161,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4871,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 112.691,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

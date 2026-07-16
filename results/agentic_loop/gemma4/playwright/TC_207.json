@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_207",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7764,
+  "total_latency_s": 188.812,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Colour Contrast WCAG 2.1 AA Compliance', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/page');\n  });\n\n  test('should display all text with WCAG AA compliant colour contrast', async ({ page }) => {\n    // Verify main heading has sufficient contrast\n    const mainHeading = page.getByRole('heading', { name: /main content/i });\n    await expect(mainHeading).toBeVisible();\n    \n    // Verify main heading text colour is dark enough\n    const headingText = page.locator('[data-testid=\"heading-text\"]');\n    await expect(headingText).toHaveCSS('color', /#000000|#333333/);\n    \n    // Verify background has sufficient contrast\n    const background = page.locator('[data-testid=\"page-background\"]');\n    await expect(background).toHaveCSS('background-color', /#ffffff|#f5f8fa/);\n    \n    // Verify body text has sufficient contrast against background\n    const bodyText = page.getByText(/this is body text/i);\n    await expect(bodyText).toBeVisible();\n    \n    // Verify body text colour is dark enough\n    await expect(bodyText).toHaveCSS('color', /#000000|#333333/);\n    \n    // Verify body text background has sufficient contrast\n    await expect(bodyText).toHaveCSS('background-color', /#ffffff|#f5f8fa/);\n    \n    // Verify secondary text (e.g., captions) has sufficient contrast\n    const secondaryText = page.getByText(/secondary information/i);\n    await expect(secondaryText).toBeVisible();\n    \n    // Verify secondary text colour is dark enough\n    await expect(secondaryText).toHaveCSS('color', /#333333|#000000/);\n    \n    // Verify secondary text background has sufficient contrast\n    await expect(secondaryText).toHaveCSS('background-color', /#ffffff|#f5f8fa/);\n    \n    // Verify links have sufficient contrast\n    const link = page.getByRole('link', { name: /read more/i });\n    await expect(link).toBeVisible();\n    \n    // Verify link text colour is dark enough\n    await expect(link).toHaveCSS('color', /#000000|#333333/);\n    \n    // Verify link background has sufficient contrast\n    await expect(link).toHaveCSS('background-color', /transparent|none/);\n  });\n\n  test('should fail contrast check when using low-contrast colours', async ({ page }) => {\n    // Navigate to a page with low contrast colours\n    await page.goto('/low-contrast-page');\n    \n    // Verify low contrast heading is visible\n    const lowContrastHeading = page.getByRole('heading', { name: /low contrast example/i });\n    await expect(lowContrastHeading).toBeVisible();\n    \n    // Verify low contrast text colour is light grey\n    const lowContrastText = page.locator('[data-testid=\"low-contrast-text\"]');\n    await expect(lowContrastText).toHaveCSS('color', /#aaaaaa|#cccccc/);\n    \n    // Verify low contrast background is light grey\n    const lowContrastBackground = page.locator('[data-testid=\"low-contrast-background\"]');\n    await expect(lowContrastBackground).toHaveCSS('background-color', /#f0f0f0|#eeeeee/);\n    \n    // Verify low contrast body text is visible\n    const lowContrastBody = page.getByText(/this text has low contrast/i);\n    await expect(lowContrastBody).toBeVisible();\n    \n    // Verify low contrast body text colour is light grey\n    await expect(lowContrastBody).toHaveCSS('color', /#aaaaaa|#cccccc/);\n    \n    // Verify low contrast background is light grey\n    await expect(lowContrastBody).toHaveCSS('background-color', /#f0f0f0|#eeeeee/);\n    \n    // Verify contrast warning message appears\n    const contrastWarning = page.getByText(/colour contrast does not meet WCAG AA standards/i);\n    await expect(contrastWarning).toBeVisible();\n    \n    // Verify warning has appropriate contrast\n    await expect(contrastWarning).toHaveCSS('color', /#000000|#333333/);\n    await expect(contrastWarning).toHaveCSS('background-color', /#ffffff|#f5f8fa/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4698,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3194,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.194,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7764,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3545,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 116.618,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

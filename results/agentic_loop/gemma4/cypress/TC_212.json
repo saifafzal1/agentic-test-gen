@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_212",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7625,
+  "total_latency_s": 73.736,
+  "final_script": "describe('Icon Button Accessibility', () => {\n  beforeEach(() => {\n    cy.visit('/icon-buttons');\n  });\n\n  it('should assign accessible names to all icon buttons', () => {\n    // Verify each icon button has an accessible name\n    cy.get('[data-testid=\"search-icon-button\"]').should('have.attr', 'aria-label');\n    cy.get('[data-testid=\"settings-icon-button\"]').should('have.attr', 'aria-label');\n    cy.get('[data-testid=\"notifications-icon-button\"]').should('have.attr', 'aria-label');\n    cy.get('[data-testid=\"profile-icon-button\"]').should('have.attr', 'aria-label');\n\n    // Verify accessible names are descriptive\n    cy.get('[data-testid=\"search-icon-button\"]').should('have.attr', 'aria-label', 'Search');\n    cy.get('[data-testid=\"settings-icon-button\"]').should('have.attr', 'aria-label', 'Settings');\n    cy.get('[data-testid=\"notifications-icon-button\"]').should('have.attr', 'aria-label', 'Notifications');\n    cy.get('[data-testid=\"profile-icon-button\"]').should('have.attr', 'aria-label', 'User Profile');\n\n    // Verify buttons are focusable\n    cy.get('[data-testid=\"search-icon-button\"]').should('be.focusable');\n    cy.get('[data-testid=\"settings-icon-button\"]').should('be.focusable');\n    cy.get('[data-testid=\"notifications-icon-button\"]').should('be.focusable');\n    cy.get('[data-testid=\"profile-icon-button\"]').should('be.focusable');\n  });\n\n  it('should handle edge case of empty or missing accessible names', () => {\n    // Verify that buttons without aria-label have fallback text or are disabled\n    cy.get('[data-testid=\"empty-icon-button\"]').should('have.attr', 'aria-label', 'Empty State');\n    cy.get('[data-testid=\"disabled-icon-button\"]').should('have.attr', 'aria-disabled', 'true');\n    cy.get('[data-testid=\"disabled-icon-button\"]').should('not.have.attr', 'aria-label');\n\n    // Verify that disabled buttons are not interactive\n    cy.get('[data-testid=\"disabled-icon-button\"]').should('not.be.enabled');\n\n    // Verify that all buttons have a role attribute\n    cy.get('[data-testid=\"search-icon-button\"]').should('have.attr', 'role', 'button');\n    cy.get('[data-testid=\"settings-icon-button\"]').should('have.attr', 'role', 'button');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7625,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4085,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.736,
+      "feedback_used": ""
+    }
+  ]
+}

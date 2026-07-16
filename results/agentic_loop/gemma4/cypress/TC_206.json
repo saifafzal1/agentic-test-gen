@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_206",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7427,
+  "total_latency_s": 72.903,
+  "final_script": "describe('Focus Indicators on Interactive Elements', () => {\n  beforeEach(() => {\n    cy.visit('/interactive-elements');\n  });\n\n  it('should display focus indicators on all interactive elements when focused', () => {\n    // Verify focus indicator is visible on button\n    cy.get('[data-testid=\"submit-button\"]').focus();\n    cy.get('[data-testid=\"submit-button\"]').should('have.class', 'focus-visible');\n    cy.get('[data-testid=\"submit-button\"]').should('be.visible');\n\n    // Verify focus indicator is visible on link\n    cy.get('[data-testid=\"nav-link\"]').focus();\n    cy.get('[data-testid=\"nav-link\"]').should('have.class', 'focus-visible');\n    cy.get('[data-testid=\"nav-link\"]').should('be.visible');\n\n    // Verify focus indicator is visible on input field\n    cy.get('[data-testid=\"search-input\"]').focus();\n    cy.get('[data-testid=\"search-input\"]').should('have.class', 'focus-visible');\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n\n    // Verify focus indicator is visible on select dropdown\n    cy.get('[data-testid=\"dropdown-select\"]').focus();\n    cy.get('[data-testid=\"dropdown-select\"]').should('have.class', 'focus-visible');\n    cy.get('[data-testid=\"dropdown-select\"]').should('be.visible');\n\n    // Verify focus indicator is visible on checkbox\n    cy.get('[data-testid=\"checkbox-option\"]').focus();\n    cy.get('[data-testid=\"checkbox-option\"]').should('have.class', 'focus-visible');\n    cy.get('[data-testid=\"checkbox-option\"]').should('be.visible');\n  });\n\n  it('should remove focus indicator when element loses focus', () => {\n    // Focus on button and verify indicator is visible\n    cy.get('[data-testid=\"submit-button\"]').focus();\n    cy.get('[data-testid=\"submit-button\"]').should('have.class', 'focus-visible');\n\n    // Tab to next element to remove focus from button\n    cy.get('[data-testid=\"nav-link\"]').focus();\n    cy.get('[data-testid=\"submit-button\"]').should('not.have.class', 'focus-visible');\n\n    // Focus on input and verify indicator is visible\n    cy.get('[data-testid=\"search-input\"]').focus();\n    cy.get('[data-testid=\"search-input\"]').should('have.class', 'focus-visible');\n\n    // Tab to next element to remove focus from input\n    cy.get('[data-testid=\"dropdown-select\"]').focus();\n    cy.get('[data-testid=\"search-input\"]').should('not.have.class', 'focus-visible');\n\n    // Verify focus indicator is not present on non-interactive elements\n    cy.get('[data-testid=\"page-title\"]').should('not.have.class', 'focus-visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7427,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3422,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.903,
+      "feedback_used": ""
+    }
+  ]
+}

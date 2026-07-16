@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_194",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7806,
+  "total_latency_s": 75.569,
+  "final_script": "describe('Faceted Search Results Update Without Full Page Reload', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should update search results when applying a facet filter without full page reload', () => {\n    // Verify initial search results are displayed\n    cy.get('[data-testid=\"search-results-container\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n\n    // Intercept the API call for faceted search update\n    cy.intercept('GET', '/api/search/facet/results*').as('updateResults');\n\n    // Click on a facet filter option\n    cy.get('[data-testid=\"facet-filter-category\"]').should('be.visible');\n    cy.get('[data-testid=\"facet-option-electronics\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@updateResults');\n\n    // Verify results are updated without page reload\n    cy.get('[data-testid=\"search-results-container\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify the filter is applied\n    cy.get('[data-testid=\"facet-filter-category\"]').should('contain', 'Electronics');\n\n    // Verify the URL does not change to a full page reload\n    cy.url().should('include', '?facet=category:electronics');\n  });\n\n  it('should handle empty search results when applying a facet filter', () => {\n    // Intercept the API call for faceted search update\n    cy.intercept('GET', '/api/search/facet/results*').as('updateResults');\n\n    // Apply a facet filter that yields no results\n    cy.get('[data-testid=\"facet-filter-color\"]').should('be.visible');\n    cy.get('[data-testid=\"facet-option-purple\"]').click();\n\n    // Wait for the API call\n    cy.wait('@updateResults');\n\n    // Verify empty state message is displayed\n    cy.get('[data-testid=\"empty-results-message\"]').should('be.visible');\n    cy.get('[data-testid=\"empty-results-message\"]').should('contain', 'No results found');\n\n    // Verify results container is empty\n    cy.get('[data-testid=\"search-results-container\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('not.exist');\n\n    // Verify the filter is still applied\n    cy.get('[data-testid=\"facet-filter-color\"]').should('contain', 'Purple');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7806,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4685,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 75.569,
+      "feedback_used": ""
+    }
+  ]
+}

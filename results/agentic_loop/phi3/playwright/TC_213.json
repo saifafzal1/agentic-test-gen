@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_213",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8562,
+  "total_latency_s": 354.861,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dropdown Close on Escape Key Press', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dropdown');\n  });\n\n  test('should close dropdown when Escape key is pressed', async ({ page }) => {\n    // Open dropdown using role-based locator\n    const dropdownMenu = page.getByRole('menu');\n    await dropdownMenu.click();\n\n    // Verify dropdown is visible\n    await expect(dropdownMenu).toBeVisible();\n\n    // Verify dropdown content is visible\n    const dropdownItems = page.getByRole('option');\n    await expect(dropdownItems).toBeVisible();\n\n    // Get the Escape key using getByRole\n    const escapeKey = page.getByRole('keyboard-tab', { name: 'Escape' });\n\n    // Verify Escape key is focused\n    await expect(escapeKey).toBeFocused();\n\n    // Press Escape key\n    await escapeKey.press('Escape');\n\n    // Verify dropdown is closed\n    await expect(dropdownMenu).not.toBeVisible();\n\n    // Verify dropdown content is no longer visible\n    await expect(dropdownItems).not.toBeVisible();\n\n    // Verify page content is restored\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeVisible();\n  });\n\n  test('should not close dropdown when Escape is pressed while typing in an input', async ({ page }) => {\n    // Open dropdown using role-based locator\n    const dropdownMenu = page.getByRole('menu');\n    await dropdownMenu.click();\n\n    // Verify dropdown is visible\n    await expect(dropdownMenu).toBeVisible();\n\n    // Get the Escape key using getByRole\n    const escapeKey = page.getByRole('keyboard-tab', { name: 'Escape' });\n\n    // Verify Escape key is focused\n    await expect(escapeKey).toBeFocused();\n\n    // Press Escape key\n    await escapeKey.press('Escape');\n\n    // Verify dropdown remains open\n    await expect(dropdownMenu).toBeVisible();\n\n    // Verify dropdown content is still visible\n    const dropdownItems = page.getByRole('option');\n    await expect(dropdownItems).toBeVisible();\n\n    // Get input using getByLabel\n    const searchInput = page.getByLabel('Search');\n\n    // Type in the input\n    await searchInput.fill('test');\n\n    // Verify input is focused\n    await expect(searchInput).toBeFocused();\n\n    // Verify dropdown content is still visible\n    await expect(dropdownItems).toBeVisible();\n\n    // Verify Escape key does not close dropdown when typing\n    await expect(escapeKey).toBeFocused();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8562,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5207,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 354.861,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_203",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7661,
+  "total_latency_s": 72.804,
+  "final_script": "describe('Filter List by Multiple Statuses', () => {\n  beforeEach(() => {\n    cy.visit('/list');\n  });\n\n  it('should filter list by multiple selected statuses simultaneously', () => {\n    // Intercept the API call for fetching list items\n    cy.intercept('GET', '/api/list').as('getFilteredList');\n\n    // Verify initial list is displayed\n    cy.get('[data-testid=\"list-container\"]').should('be.visible');\n    cy.get('[data-testid=\"list-item\"]').should('have.length.greaterThan', 0);\n\n    // Select multiple status filters\n    cy.get('[data-testid=\"status-filter-all\"]').click();\n    cy.get('[data-testid=\"status-filter-active\"]').click();\n    cy.get('[data-testid=\"status-filter-pending\"]').click();\n\n    // Verify selected filters are marked\n    cy.get('[data-testid=\"status-filter-all\"]').should('have.class', 'selected');\n    cy.get('[data-testid=\"status-filter-active\"]').should('have.class', 'selected');\n    cy.get('[data-testid=\"status-filter-pending\"]').should('have.class', 'selected');\n\n    // Verify API call is made with multiple filters\n    cy.wait('@getFilteredList');\n\n    // Verify list is updated with filtered results\n    cy.get('[data-testid=\"list-item\"]').should('be.visible');\n    cy.get('[data-testid=\"list-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify filter applied successfully\n    cy.get('[data-testid=\"filter-applied-message\"]').should('contain', 'Showing results for Active, Pending');\n  });\n\n  it('should clear all filters when reset button is clicked', () => {\n    // Intercept the API call for fetching list items\n    cy.intercept('GET', '/api/list').as('getFilteredList');\n\n    // Select multiple status filters\n    cy.get('[data-testid=\"status-filter-active\"]').click();\n    cy.get('[data-testid=\"status-filter-pending\"]').click();\n\n    // Verify filters are applied\n    cy.wait('@getFilteredList');\n    cy.get('[data-testid=\"list-item\"]').should('have.length.greaterThan', 0);\n\n    // Click reset button\n    cy.get('[data-testid=\"reset-filters-button\"]').click();\n\n    // Verify all filters are deselected\n    cy.get('[data-testid=\"status-filter-active\"]').should('not.have.class', 'selected');\n    cy.get('[data-testid=\"status-filter-pending\"]').should('not.have.class', 'selected');\n\n    // Verify API call is made with no filters\n    cy.intercept('GET', '/api/list').as('getUnfilteredList');\n    cy.wait('@getUnfilteredList');\n\n    // Verify list is reset to show all items\n    cy.get('[data-testid=\"list-item\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"filter-applied-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7661,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4204,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.804,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_216",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.816,
+  "total_latency_s": 72.534,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Title Announcement', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/modal-page');\n  });\n\n  test('should announce modal title when opened', async ({ page }) => {\n    // Open the modal by clicking the button\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Wait for the modal to appear\n    const modal = page.locator('[data-testid=\"modal-container\"]');\n    await expect(modal).toBeVisible();\n\n    // Verify the modal title is visible\n    const modalTitle = page.getByRole('heading', { name: /modal title/i });\n    await expect(modalTitle).toBeVisible();\n\n    // Verify the modal content is visible\n    const modalContent = page.locator('[data-testid=\"modal-content\"]');\n    await expect(modalContent).toBeVisible();\n\n    // Verify the modal has aria-modal attribute\n    const hasAriaModal = await modal.getAttribute('aria-modal');\n    expect(hasAriaModal).toBe('true');\n\n    // Verify the modal has role=\"dialog\"\n    const hasDialogRole = await modal.getAttribute('role');\n    expect(hasDialogRole).toBe('dialog');\n  });\n\n  test('should close modal and remove title announcement when closed', async ({ page }) => {\n    // Open the modal\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Wait for the modal to appear\n    const modal = page.locator('[data-testid=\"modal-container\"]');\n    await expect(modal).toBeVisible();\n\n    // Verify modal title is visible\n    const modalTitle = page.getByRole('heading', { name: /modal title/i });\n    await expect(modalTitle).toBeVisible();\n\n    // Close the modal by clicking the close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n\n    // Wait for the modal to close\n    await expect(modal).not.toBeVisible();\n\n    // Verify modal title is no longer visible\n    await expect(modalTitle).not.toBeVisible();\n\n    // Verify modal has no aria-modal attribute\n    const hasAriaModal = await modal.getAttribute('aria-modal');\n    expect(hasAriaModal).toBeNull();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.816,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4867,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.534,
+      "feedback_used": ""
+    }
+  ]
+}

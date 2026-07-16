@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_208",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8019,
+  "total_latency_s": 556.081,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Field Accessibility - Associated Labels', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form-page');\n  });\n\n  test('should have accessible labels for screen reader users', async ({ page }) => {\n    // Verify form is visible\n    const form = page.getByRole('form');\n    await expect(form).toBeVisible();\n\n    // Verify all form fields have associated labels\n    const nameInput = page.getByLabel('Full Name');\n    const emailInput = page.getByLabel('Email Address');\n    const passwordInput = page.getByLabel('Password');\n    const confirmPasswordInput = page.getByLabel('Confirm Password');\n    const submitButton = page.getByRole('button', { name: /submit/i });\n\n    await expect(nameInput).toBeVisible();\n    await expect(emailInput).toBeVisible();\n    await expect(passwordInput).toBeVisible();\n    await expect(confirmPasswordInput).toBeVisible();\n\n    // Verify labels are associated with their respective inputs\n    await expect(nameInput).toHaveAttribute('aria-label', 'Full Name');\n    await expect(emailInput).toHaveAttribute('aria-label', 'Email Address');\n    await expect(passwordInput).toHaveAttribute('aria-label', 'Password');\n    await expect(confirmPasswordInput).toHaveAttribute('aria-label', 'Confirm Password');\n\n    // Verify form is accessible using screen reader\n    await page.evaluate(() => {\n      const screenReader = navigator.screenReader || navigator.msScreenReader;\n      if (screenReader) {\n        screenReader.speak('Form with accessible labels');\n      }\n    });\n\n    // Verify form is navigable using keyboard\n    await page.keyboard.press('Tab');\n    await expect(nameInput).toBeFocused();\n\n    await page.keyboard.press('Tab');\n    await expect(emailInput).toBeFocused();\n\n    await page.keyboard.press('Tab');\n    await expect(passwordInput).toBeFocused();\n\n    await page.keyboard.press('Tab');\n    await expect(confirmPasswordInput).toBeFocused();\n\n    // Verify submit button is accessible\n    await expect(submitButton).toBeFocused();\n\n    // Verify error messages are accessible\n    const errorMessage = page.getByText('Please fill all fields');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify success message is accessible\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify form is accessible after submission\n    await submitButton.click();\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should handle form validation errors gracefully', async ({ page }) => {\n    // Fill in all fields except confirm password\n    const nameInput = page.getByLabel('Full Name');\n    const emailInput = page.getByLabel('Email Address');\n    const passwordInput = page.getByLabel('Password');\n    await nameInput.fill('John Doe');\n    await emailInput.fill('john@example.com');\n    await passwordInput.fill('SecurePassword123');\n\n    // Submit form without confirm password\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('Confirm password is required');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify form is still accessible\n    await expect(nameInput).toBeFocused();\n    await expect(emailInput).toBeFocused();\n    await expect(passwordInput).toBeFocused();\n\n    // Verify error message is announced by screen reader\n    await page.evaluate(() => {\n      const screenReader = navigator.screenReader || navigator.msScreenReader;\n      if (screenReader) {\n        screenReader.speak('Confirm password is required');\n      }\n    });\n\n    // Verify error message is visible\n    await expect(errorMessage).toBeVisible();\n\n    // Verify form is still navigable using keyboard\n    await page.keyboard.press('Tab');\n    await expect(nameInput).toBeFocused();\n\n    await page.keyboard.press('Tab');\n    await expect(emailInput).toBeFocused();\n\n    await page.keyboard.press('Tab');\n    await expect(passwordInput).toBeFocused();\n\n    // Verify error message is still visible\n    await expect(errorMessage).toBeVisible();\n\n    // Verify success message is not visible\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify form is still accessible after error\n    await expect(nameInput).toBeFocused();\n    await expect(emailInput).toBeFocused();\n    await expect(passwordInput).toBeFocused();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.477,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3234,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 59.756,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8019,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3397,
+        "missing_keywords": [],
+        "assertion_count": 30,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 496.325,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

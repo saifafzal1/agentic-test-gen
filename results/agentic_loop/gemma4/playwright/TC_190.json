@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_190",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8364,
+  "total_latency_s": 71.974,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Clear All Filters Button Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should clear all applied filters when clear button is clicked', async ({ page }) => {\n    // Apply multiple filters\n    const categoryFilter = page.getByRole('button', { name: /category/i });\n    await categoryFilter.click();\n    const electronicsOption = page.getByRole('option', { name: /electronics/i });\n    await electronicsOption.click();\n\n    const priceFilter = page.getByRole('button', { name: /price/i });\n    await priceFilter.click();\n    const priceRangeOption = page.getByRole('option', { name: /50-100/i });\n    await priceRangeOption.click();\n\n    const brandFilter = page.getByRole('button', { name: /brand/i });\n    await brandFilter.click();\n    const appleOption = page.getByRole('option', { name: /apple/i });\n    await appleOption.click();\n\n    // Verify filters are applied\n    const activeFilters = page.getByText(/3 filters applied/);\n    await expect(activeFilters).toBeVisible();\n\n    const filterTags = page.locator('[data-testid=\"filter-tag\"]');\n    const filterCount = await filterTags.count();\n    expect(filterCount).toBe(3);\n\n    // Click clear all filters button\n    const clearButton = page.getByRole('button', { name: /clear all filters/i });\n    await clearButton.click();\n\n    // Verify filters are cleared\n    await expect(activeFilters).not.toBeVisible();\n\n    const clearedFilterTags = page.locator('[data-testid=\"filter-tag\"]');\n    const clearedCount = await clearedFilterTags.count();\n    expect(clearedCount).toBe(0);\n\n    // Verify search results are displayed without filters\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n    const resultItems = page.locator('[data-testid=\"result-item\"]');\n    const itemCount = await resultItems.count();\n    expect(itemCount).toBeGreaterThan(0);\n  });\n\n  test('should handle clear all filters button when no filters are applied', async ({ page }) => {\n    // Verify no filters are applied initially\n    const activeFilters = page.getByText(/0 filters applied/);\n    await expect(activeFilters).toBeVisible();\n\n    const filterTags = page.locator('[data-testid=\"filter-tag\"]');\n    const filterCount = await filterTags.count();\n    expect(filterCount).toBe(0);\n\n    // Click clear all filters button\n    const clearButton = page.getByRole('button', { name: /clear all filters/i });\n    await clearButton.click();\n\n    // Verify no error message appears\n    const errorMessage = page.getByText(/no filters to clear/i);\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify no filters are applied\n    const finalFilterTags = page.locator('[data-testid=\"filter-tag\"]');\n    const finalCount = await finalFilterTags.count();\n    expect(finalCount).toBe(0);\n\n    // Verify search results are still visible\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8364,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5546,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.974,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_195",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7824,
+  "total_latency_s": 73.332,
+  "final_script": "describe('Save Search Query Feature', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should successfully save a search query and display confirmation', () => {\n    // Perform a search\n    cy.get('[data-testid=\"search-input\"]').type('laptop');\n    cy.get('[data-testid=\"search-button\"]').click();\n    cy.intercept('GET', '/api/search?q=laptop').as('searchRequest');\n    cy.wait('@searchRequest');\n\n    // Verify search results are displayed\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n\n    // Click save search button\n    cy.get('[data-testid=\"save-search-button\"]').click();\n    cy.intercept('POST', '/api/search/save').as('saveSearchRequest');\n    cy.wait('@saveSearchRequest');\n\n    // Verify success confirmation message\n    cy.get('[data-testid=\"save-success-message\"]')\n      .should('be.visible')\n      .should('contain', 'Search query saved successfully');\n\n    // Verify save button is disabled after saving\n    cy.get('[data-testid=\"save-search-button\"]').should('be.disabled');\n\n    // Verify saved query is listed in saved searches\n    cy.get('[data-testid=\"saved-searches-list\"]')\n      .should('be.visible')\n      .should('contain', 'laptop');\n  });\n\n  it('should handle saving a search query with invalid characters and display error', () => {\n    // Perform a search with special characters\n    cy.get('[data-testid=\"search-input\"]').type('laptop & monitor!');\n    cy.get('[data-testid=\"search-button\"]').click();\n    cy.intercept('GET', '/api/search?q=laptop%26+monitor%21').as('searchRequest');\n    cy.wait('@searchRequest');\n\n    // Verify search results are displayed\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n\n    // Attempt to save the search\n    cy.get('[data-testid=\"save-search-button\"]').click();\n    cy.intercept('POST', '/api/search/save', { statusCode: 441, body: { error: 'Invalid characters in search query' } }).as('saveSearchRequest');\n    cy.wait('@saveSearchRequest');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"save-error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Invalid characters in search query');\n\n    // Verify save button is re-enabled\n    cy.get('[data-testid=\"save-search-button\"]').should('not.be.disabled');\n\n    // Verify saved searches list does not contain the invalid query\n    cy.get('[data-testid=\"saved-searches-list\"]')\n      .should('not.contain', 'laptop & monitor!');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7824,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4746,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.332,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_216",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7835,
+  "total_latency_s": 76.703,
+  "final_script": "describe('Modal Title Announcement', () => {\n  beforeEach(() => {\n    cy.visit('/modal-page');\n  });\n\n  it('should announce modal title when opened', () => {\n    // Open the modal by clicking the trigger button\n    cy.get('[data-testid=\"open-modal-button\"]').click();\n\n    // Verify modal is visible\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Verify modal title is present and announced\n    cy.get('[data-testid=\"modal-title\"]').should('contain', 'Confirm Action');\n\n    // Verify aria-label or aria-labelledby is set for screen readers\n    cy.get('[data-testid=\"modal-dialog\"]').should('have.attr', 'aria-labelledby');\n\n    // Verify modal has focus when opened\n    cy.get('[data-testid=\"modal-dialog\"]').should('have.focus');\n\n    // Verify modal title is read by screen reader (using Cypress accessibility plugin)\n    cy.get('[data-testid=\"modal-title\"]').should('have.attr', 'aria-label', 'Confirm Action');\n  });\n\n  it('should handle modal with empty title gracefully', () => {\n    // Open modal with empty title\n    cy.get('[data-testid=\"open-empty-modal-button\"]').click();\n\n    // Verify modal is visible\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Verify modal title element exists but is empty\n    cy.get('[data-testid=\"modal-title\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-title\"]').should('have.length', 0);\n\n    // Verify modal still has focus and is interactive\n    cy.get('[data-testid=\"modal-dialog\"]').should('have.focus');\n\n    // Verify modal has aria-label fallback if title is empty\n    cy.get('[data-testid=\"modal-dialog\"]').should('have.attr', 'aria-label');\n\n    // Verify close button is accessible\n    cy.get('[data-testid=\"close-modal-button\"]').should('be.visible');\n    cy.get('[data-testid=\"close-modal-button\"]').should('have.attr', 'aria-label', 'Close modal');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7835,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4784,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 76.703,
+      "feedback_used": ""
+    }
+  ]
+}
