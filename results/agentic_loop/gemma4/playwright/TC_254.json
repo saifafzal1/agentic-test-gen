@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_254",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8079,
+  "total_latency_s": 181.624,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Itemised Receipt After Checkout', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should display itemised receipt after successful checkout', async ({ page }) => {\n    // Add items to cart\n    const addToCartButtons = page.getByRole('button', { name: /add to cart/i });\n    await expect(addToCartButtons).toHaveLength(2);\n    await addToCartButtons.first().click();\n    await addToCartButtons.nth(1).click();\n\n    // Proceed to checkout\n    const checkoutButton = page.getByRole('button', { name: /proceed to checkout/i });\n    await expect(checkoutButton).toBeVisible();\n    await checkoutButton.click();\n\n    // Fill in shipping details\n    const shippingAddressInput = page.getByLabel(/shipping address/i);\n    await shippingAddressInput.fill('123 Main St');\n\n    const cityInput = page.getByLabel(/city/i);\n    await cityInput.fill('Anytown');\n\n    const zipInput = page.getByLabel(/zip code/i);\n    await zipInput.fill('12345');\n\n    // Fill in payment details\n    const cardNumberInput = page.getByLabel(/card number/i);\n    await cardNumberInput.fill('4111111111111234');\n\n    const expiryInput = page.getByLabel(/expiry date/i);\n    await expiryInput.fill('12/25');\n\n    const cvvInput = page.getByLabel(/cvv/i);\n    await cvvInput.fill('123');\n\n    // Click place order\n    const placeOrderButton = page.getByRole('button', { name: /place order/i });\n    await expect(placeOrderButton).toBeVisible();\n    await placeOrderButton.click();\n\n    // Wait for order confirmation\n    await page.waitForURL(/.*\\/order-confirmation/);\n\n    // Verify receipt is displayed\n    const receiptContainer = page.getByRole('region', { name: /order receipt/i });\n    await expect(receiptContainer).toBeVisible();\n\n    // Verify itemised list is present\n    const receiptItems = page.getByRole('listitem', { name: /item/i });\n    await expect(receiptItems).toHaveCount(2);\n\n    // Verify item names and prices\n    const item1Name = page.getByText('Product A');\n    await expect(item1Name).toBeVisible();\n\n    const item1Price = page.getByText('$19.99');\n    await expect(item1Price).toBeVisible();\n\n    const item2Name = page.getByText('Product B');\n    await expect(item2Name).toBeVisible();\n\n    const item2Price = page.getByText('$5.00');\n    await expect(item2Price).toBeVisible();\n\n    // Verify total amount\n    const totalAmount = page.getByText('$24.99');\n    await expect(totalAmount).toBeVisible();\n\n    // Verify tax and shipping are itemised\n    const taxAmount = page.getByText('$2.50');\n    await expect(taxAmount).toBeVisible();\n\n    const shippingAmount = page.getByText('$1.00');\n    await expect(shippingAmount).toBeVisible();\n  });\n\n  test('should handle empty cart and prevent checkout', async ({ page }) => {\n    // Verify empty cart message\n    const emptyCartMessage = page.getByText(/your cart is empty/i);\n    await expect(emptyCartMessage).toBeVisible();\n\n    // Attempt to click checkout button\n    const checkoutButton = page.getByRole('button', { name: /proceed to checkout/i });\n    await expect(checkoutButton).toBeDisabled();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/cart cannot be empty/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify no receipt is displayed\n    const receiptContainer = page.getByRole('region', { name: /order receipt/i });\n    await expect(receiptContainer).not.toBeVisible();\n\n    // Verify user is redirected to cart page\n    await expect(page).toHaveURL(/.*\\/cart/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4901,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3669,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 71.889,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8079,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3598,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 109.735,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

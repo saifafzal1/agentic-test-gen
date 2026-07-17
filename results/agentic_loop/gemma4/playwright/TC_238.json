@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_238",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8032,
+  "total_latency_s": 71.936,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Bar Expansion on Mobile Focus', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should expand search bar on focus on mobile viewport', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 862 });\n    \n    const searchInput = page.getByPlaceholder('Search...');\n    await expect(searchInput).toBeVisible();\n    \n    const searchContainer = page.locator('[data-testid=\"search-container\"]');\n    await expect(searchContainer).toBeVisible();\n    \n    const expandButton = page.getByRole('button', { name: /expand/i });\n    await expect(expandButton).not.toBeVisible();\n    \n    await searchInput.click();\n    \n    await expect(expandButton).toBeVisible();\n    \n    const expandedContainer = page.locator('[data-testid=\"search-container-expanded\"]');\n    await expect(expandedContainer).toBeVisible();\n    \n    const searchResults = page.locator('[data-testid=\"search-results\"]');\n    await expect(searchResults).toBeVisible();\n    \n    const searchInputValue = await searchInput.inputValue();\n    expect(searchInputValue).toBe('');\n  });\n\n  test('should collapse search bar when focus is lost on mobile viewport', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 860 });\n    \n    const searchInput = page.getByPlaceholder('Search...');\n    await expect(searchInput).toBeVisible();\n    \n    const searchContainer = page.locator('[data-testid=\"search-container\"]');\n    await expect(searchContainer).toBeVisible();\n    \n    const expandButton = page.getByRole('button', { name: /expand/i });\n    await expect(expandButton).not.toBeVisible();\n    \n    await searchInput.click();\n    \n    await expect(expandButton).toBeVisible();\n    \n    const expandedContainer = page.locator('[data-testid=\"search-container-expanded\"]');\n    await expect(expandedContainer).toBeVisible();\n    \n    const searchResults = page.locator('[data-testid=\"search-results\"]');\n    await expect(searchResults).toBeVisible();\n    \n    await page.mouse.down({ x: 10, y: 10 });\n    await page.mouse.move({ x: 10, y: 10 });\n    await page.mouse.up();\n    \n    await expect(expandedContainer).not.toBeVisible();\n    \n    const collapsedContainer = page.locator('[data-testid=\"search-container\"]');\n    await expect(collapsedContainer).toBeVisible();\n    \n    const searchInputValue = await searchInput.inputValue();\n    expect(searchInputValue).toBe('');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8032,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4439,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.936,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_252",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7432,
+  "total_latency_s": 72.507,
+  "final_script": "describe('Order Confirmation After Successful Payment', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should display order confirmation after successful payment', () => {\n    // Fill in shipping and billing details\n    cy.get('[data-testid=\"first-name-input\"]').type('John');\n    cy.get('[data-testid=\"last-name-input\"]').type('Doe');\n    cy.get('[data-testid=\"email-input\"]').type('john.doe@example.com');\n    cy.get('[data-testid=\"address-input\"]').type('123 Main St');\n    cy.get('[data-testid=\"city-input\"]').type('Anytown');\n    cy.get('[data-testid=\"zip-input\"]').type('12343');\n    cy.get('[data-testid=\"country-select\"]').click();\n    cy.get('[data-testid=\"country-option\"]').click();\n\n    // Add item to cart\n    cy.get('[data-testid=\"add-to-cart-button\"]').click();\n    cy.get('[data-testid=\"product-quantity-input\"]').clear().type('1');\n\n    // Proceed to checkout\n    cy.get('[data-testid=\"proceed-to-checkout-button\"]').click();\n\n    // Fill in payment details\n    cy.get('[data-testid=\"card-number-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"expiry-date-input\"]').type('12/25');\n    cy.get('[data-testid=\"cvv-input\"]').type('123');\n\n    // Submit payment\n    cy.get('[data-testid=\"place-order-button\"]').click();\n\n    // Verify order confirmation page is displayed\n    cy.url().should('include', '/order-confirmation');\n    cy.get('[data-testid=\"order-confirmation-title\"]').should('be.visible').should('contain', 'Order Confirmed');\n    cy.get('[data-testid=\"order-id\"]').should('be.visible').should('have.attr', 'value');\n    cy.get('[data-testid=\"confirmation-message\"]').should('be.visible').should('contain', 'Your order has been successfully placed');\n    cy.get('[data-testid=\"order-summary\"]').should('be.visible');\n  });\n\n  it('should display payment error when card is invalid', () => {\n    // Fill in shipping and billing details\n    cy.get('[data-testid=\"first-name-input\"]').type('Jane');\n    cy.get('[data-testid=\"last-name-input\"]').type('Smith');\n    cy.get('[data-testid=\"email-input\"]').type('jane@example.com');\n    cy.get('[data-testid=\"address-input\"]').type('404 Not Found');\n    cy.get('[data-testid=\"city-input\"]').type('Errorville');\n    cy.get('[data-testid=\"zip-input\"]').type('99999');\n    cy.get('[data-testid=\"country-select\"]').click();\n    cy.get('[data-testid=\"country-option\"]').click();\n\n    // Add item to cart\n    cy.get('[data-testid=\"add-to-cart-button\"]').click();\n    cy.get('[data-testid=\"product-quantity-input\"]').clear().type('1');\n\n    // Proceed to checkout\n    cy.get('[data-testid=\"proceed-to-checkout-button\"]').click();\n\n    // Fill in invalid payment details\n    cy.get('[data-testid=\"card-number-input\"]').type('111111111111111'); // Invalid length\n    cy.get('[data-testid=\"expiry-date-input\"]').type('01/20');\n    cy.get('[data-testid=\"cvv-input\"]').type('12');\n\n    // Attempt to submit payment\n    cy.get('[data-testid=\"place-order-button\"]').click();\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"payment-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"payment-error-message\"]').should('contain', 'Invalid card number');\n    cy.url().should('include', '/checkout');\n    cy.get('[data-testid=\"order-confirmation-title\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7432,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3439,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.507,
+      "feedback_used": ""
+    }
+  ]
+}

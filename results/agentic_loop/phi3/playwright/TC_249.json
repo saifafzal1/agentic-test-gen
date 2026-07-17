@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_249",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8592,
+  "total_latency_s": 50.095,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Save Card Details for Future Purchases', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should successfully save card details and display success message', async ({ page }) => {\n    // Verify card input fields are visible\n    const cardNumberInput = page.getByLabel('Card Number');\n    await expect(cardNumberInput).toBeVisible();\n    const cardHolderInput = page.getByLabel('Card Holder Name');\n    await expect(cardHolderInput).toBeVisible();\n    const expiryDateInput = page.getByLabel('Expiry Date');\n    await expect(expiryDateInput).toBeVisible();\n    const cvvInput = page.getByLabel('CVV');\n    await expect(cvvInput).toBeVisible();\n\n    // Fill in card details\n    await cardNumberInput.fill('4111111111111111');\n    await cardHolderInput.fill('John Doe');\n    await expiryDateInput.fill('12/25');\n    await cvvInput.fill('123');\n\n    // Click save button\n    const saveButton = page.getByRole('button', { name: /save card/i });\n    await saveButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/card saved successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify card details are stored\n    const storedCardDetails = page.getByText(/card number: 4111111111111111/i);\n    await expect(storedCardDetails).toBeVisible();\n\n    // Verify card details are not stored in clear text\n    const clearTextCardDetails = page.getByText(/card number: /i);\n    await expect(clearTextCardDetails).not.toBeVisible();\n\n    // Verify card details are not visible in address bar\n    const addressBar = page.getByRole('textbox', { name: /address/i });\n    await expect(addressBar).toHaveValue('');\n  });\n\n  test('should display error when saving card details with invalid format', async ({ page }) => {\n    // Verify card input fields are visible\n    const cardNumberInput = page.getByLabel('Card Number');\n    await expect(cardNumberInput).toBeVisible();\n    const cardHolderInput = page.getByLabel('Card Holder Name');\n    await expect(cardHolderInput).toBeVisible();\n    const expiryDateInput = page.getByLabel('Expiry Date');\n    await expect(expiryDateInput).toBeVisible();\n    const cvvInput = page.getByLabel('CVV');\n    await expect(cvvInput).toBeVisible();\n\n    // Fill in card details with invalid format\n    await cardNumberInput.fill('1234');\n    await cardHolderInput.fill('Jane Doe');\n    await expiryDateInput.fill('12/31');\n    await cvvInput.fill('1234');\n\n    // Click save button\n    const saveButton = page.getByRole('button', { name: /save card/i });\n    await saveButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/invalid card number/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify card details are not stored\n    const storedCardDetails = page.getByText(/card number: /i);\n    await expect(storedCardDetails).not.toBeVisible();\n\n    // Verify success message does not appear\n    const successMessage = page.getByText(/card saved successfully/i);\n    await expect(successMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8592,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5305,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 50.095,
+      "feedback_used": ""
+    }
+  ]
+}

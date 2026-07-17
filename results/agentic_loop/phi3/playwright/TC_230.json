@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_230",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7918,
+  "total_latency_s": 539.256,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Responsive Font Size on Small Screen', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should display text in readable font size on small screen without zooming', async ({ page }) => {\n    // Set up test environment\n    await page.setViewportSize({ width: 320, height: 480 });\n\n    // Verify page title is visible and readable\n    const pageTitle = page.getByRole('heading', { name: /Welcome/i });\n    await expect(pageTitle).toBeVisible();\n    await expect(pageTitle).toHaveTextContent('Welcome');\n\n    // Verify body text is readable\n    const bodyText = page.getByText(/Welcome to our app/i);\n    await expect(bodyText).toBeVisible();\n    await expect(bodyText).toHaveTextContent('Welcome to our app');\n\n    // Verify font size is not too small\n    const fontSize = page.getByRole('heading', { name: /Welcome/i }).evaluate((el) => window.getComputedStyle(el).fontSize);\n    expect(fontSize).toBeGreaterThan('12px');\n\n    // Verify font size is not too large\n    const maxFontSize = page.getByRole('heading', { name: /Welcome/i }).evaluate((el) => window.getComputedStyle(el).fontSize);\n    expect(maxFontSize).toBeLessThan('24px');\n\n    // Verify responsive font size adjustment\n    await page.setViewportSize({ width: 640, height: 480 });\n    const responsiveFontSize = page.getByRole('heading', { name: /Welcome/i }).evaluate((el) => window.getComputedStyle(el).fontSize);\n    expect(responsiveFontSize).toBeGreaterThan('12px');\n    expect(responsiveFontSize).toBeLessThan('24px');\n  });\n\n  test('should maintain readable font size when user zooms in on small screen', async ({ page }) => {\n    // Set up test environment\n    await page.setViewportSize({ width: 320, height: 480 });\n\n    // Verify page title is visible and readable\n    const pageTitle = page.getByRole('heading', { name: /Welcome/i });\n    await expect(pageTitle).toBeVisible();\n    await expect(pageTitle).toHaveTextContent('Welcome');\n\n    // Verify body text is readable\n    const bodyText = page.getByText(/Welcome to our app/i);\n    await expect(bodyText).toBeVisible();\n    await expect(bodyText).toHaveTextContent('Welcome to our app');\n\n    // Verify font size is not too small\n    const fontSize = page.getByRole('heading', { name: /Welcome/i }).evaluate((el) => window.getComputedStyle(el).fontSize);\n    expect(fontSize).toBeGreaterThan('12px');\n\n    // Verify font size is not too large\n    const maxFontSize = page.getByRole('heading', { name: /Welcome/i }).evaluate((el) => window.getComputedStyle(el).fontSize);\n    expect(maxFontSize).toBeLessThan('24px');\n\n    // Zoom in using keyboard shortcut\n    await page.keyboard.press('Ctrl+0');\n\n    // Verify font size remains readable after zoom\n    const zoomedFontSize = page.getByRole('heading', { name: /Welcome/i }).evaluate((el) => window.getComputedStyle(el).fontSize);\n    expect(zoomedFontSize).toBeGreaterThan('12px');\n    expect(zoomedFontSize).toBeLessThan('24px');\n\n    // Verify text is still visible and readable\n    await expect(pageTitle).toBeVisible();\n    await expect(pageTitle).toHaveTextContent('Welcome');\n\n    await expect(bodyText).toBeVisible();\n    await expect(bodyText).toHaveTextContent('Welcome to our app');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4926,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3954,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 53.743,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7918,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4061,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 485.513,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_218",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7689,
+  "total_latency_s": 80.46,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Click Target Size - Motor Impairment Accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/accessibility/click-targets');\n  });\n\n  test('should display click targets of at least 44x44px', async ({ page }) => {\n    // Verify the page loads\n    const pageTitle = page.getByRole('heading', { name: /click targets/i });\n    await expect(pageTitle).toBeVisible();\n\n    // Verify the first click target button exists and is visible\n    const firstButton = page.getByRole('button', { name: /first button/i });\n    await expect(firstButton).toBeVisible();\n\n    // Verify the first button has a minimum width of 44px\n    const firstButtonWidth = await firstButton.evaluate((el) => el.offsetWidth);\n    expect(firstButtonWidth).toBeGreaterThanOrEqual(44);\n\n    // Verify the first button has a minimum height of 44px\n    const firstButtonHeight = await firstButton.evaluate((el) => el.offsetHeight);\n    expect(firstButtonHeight).toBeGreaterThanOrEqual(42);\n\n    // Verify the second click target button exists and is visible\n    const secondButton = page.getByRole('button', { name: /second button/i });\n    await expect(secondButton).toBeVisible();\n\n    // Verify the second button has a minimum width of 42px\n    const secondButtonWidth = await secondButton.evaluate((el) => el.offsetWidth);\n    expect(secondButtonWidth).toBeGreaterThanOrEqual(42);\n\n    // Verify the second button has a minimum height of 42px\n    const secondButtonHeight = await secondButton.evaluate((el) => el.offsetHeight);\n    expect(secondButtonHeight).toBeGreaterThanOrEqual(42);\n  });\n\n  test('should handle edge case where click target size is exactly 44x44px', async ({ page }) => {\n    // Navigate to the edge case scenario\n    await page.goto('/accessibility/click-targets/edge-case');\n\n    // Verify the page loads\n    const pageTitle = page.getByRole('heading', { name: /click targets/i });\n    await expect(pageTitle).toBeVisible();\n\n    // Verify the first button exists\n    const firstButton = page.getByRole('button', { name: /first button/i });\n    await expect(firstButton).toBeVisible();\n\n    // Verify the first button has a width of exactly 44px\n    const firstButtonWidth = await firstButton.evaluate((el) => el.offsetWidth);\n    expect(firstButtonWidth).toBe(44);\n\n    // Verify the first button has a height of exactly 44px\n    const firstButtonHeight = await firstButton.evaluate((el) => el.offsetHeight);\n    expect(firstButtonHeight).toBe(44);\n\n    // Verify the second button exists\n    const secondButton = page.getByRole('button', { name: /second button/i });\n    await expect(secondButton).toBeVisible();\n\n    // Verify the second button has a width of exactly 42px\n    const secondButtonWidth = await secondButton.evaluate((el) => el.offsetWidth);\n    expect(secondButtonWidth).toBe(42);\n\n    // Verify the second button has a height of exactly 42px\n    const secondButtonHeight = await secondButton.evaluate((el) => el.offsetHeight);\n    expect(secondButtonHeight).toBe(27);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7689,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3297,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 80.46,
+      "feedback_used": ""
+    }
+  ]
+}

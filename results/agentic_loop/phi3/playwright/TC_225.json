@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_225",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7951,
+  "total_latency_s": 54.182,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Date Picker Keyboard Operability', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/date-picker');\n  });\n\n  test('should open date picker using arrow keys and select dates using tab and enter', async ({ page }) => {\n    // Verify date picker is not visible initially\n    const datePicker = page.getByRole('dialog', { name: /date picker/i });\n    await expect(datePicker).not.toBeVisible();\n\n    // Open date picker using right arrow key\n    const openButton = page.getByRole('button', { name: /open/i });\n    await openButton.click();\n    await page.keyboard.press('ArrowRight');\n    await expect(datePicker).toBeVisible();\n\n    // Verify calendar is visible\n    const calendar = page.getByRole('region', { name: /calendar/i });\n    await expect(calendar).toBeVisible();\n\n    // Select first day using tab\n    const firstDay = page.getByRole('option', { name: /1/i });\n    await firstDay.click();\n\n    // Verify first date is selected\n    const selectedDate = page.getByText(/1/i);\n    await expect(selectedDate).toBeVisible();\n\n    // Select second day using tab\n    const secondDay = page.getByRole('option', { name: /2/i });\n    await secondDay.click();\n\n    // Verify second date is selected\n    const selectedDate2 = page.getByText(/2/i);\n    await expect(selectedDate2).toBeVisible();\n\n    // Select third day using tab\n    const thirdDay = page.getByRole('option', { name: /3/i });\n    await thirdDay.click();\n\n    // Verify third date is selected\n    const selectedDate3 = page.getByText(/3/i);\n    await expect(selectedDate3).toBeVisible();\n\n    // Close date picker using Escape key\n    await page.keyboard.press('Escape');\n    await expect(datePicker).not.toBeVisible();\n  });\n\n  test('should handle keyboard navigation and selection of multiple dates', async ({ page }) => {\n    // Open date picker using right arrow key\n    const openButton = page.getByRole('button', { name: /open/i });\n    await openButton.click();\n    await page.keyboard.press('ArrowRight');\n    await expect(page.getByRole('dialog', { name: /date picker/i })).toBeVisible();\n\n    // Navigate to third day using tab\n    const thirdDay = page.getByRole('option', { name: /3/i });\n    await thirdDay.click();\n\n    // Verify third date is selected\n    const selectedDate = page.getByText(/3/i);\n    await expect(selectedDate).toBeVisible();\n\n    // Navigate to second day using tab\n    const secondDay = page.getByRole('option', { name: /2/i });\n    await secondDay.click();\n\n    // Verify second date is selected\n    const selectedDate2 = page.getByText(/2/i);\n    await expect(selectedDate2).toBeVisible();\n\n    // Navigate to first day using tab\n    const firstDay = page.getByRole('option', { name: /1/i });\n    await firstDay.click();\n\n    // Verify first date is selected\n    const selectedDate1 = page.getByText(/1/i);\n    await expect(selectedDate1).toBeVisible();\n\n    // Select fourth day using tab\n    const fourthDay = page.getByRole('option', { name: /4/i });\n    await fourthDay.click();\n\n    // Verify fourth date is selected\n    const selectedDate4 = page.getByText(/4/i);\n    await expect(selectedDate4).toBeVisible();\n\n    // Close date picker using Escape key\n    await page.keyboard.press('Escape');\n    await expect(page.getByRole('dialog', { name: /date picker/i })).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7951,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.417,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 54.182,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_237",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7883,
+  "total_latency_s": 71.936,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Pinch-to-Zoom on Product Images', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/products/123');\n  });\n\n  test('should successfully pinch-to-zoom on a product image', async ({ page }) => {\n    // Verify product image is visible\n    const productImage = page.getByRole('img', { name: /product image/i });\n    await expect(productImage).toBeVisible();\n\n    // Get initial bounding box\n    const initialBox = await productImage.boundingBox();\n    expect(initialBox).not.toBeNull();\n\n    // Get initial scale\n    const initialScale = await page.evaluate(() => {\n      const img = document.querySelector('[data-testid=\"product-image\"]');\n      return window.getComputedStyle(img).transform.replace(/matrix\\(\\d+\\s*, \\d+\\s*, \\d+\\s*, \\d+\\)/, '').split(',').map(Number);\n    });\n\n    // Pinch in (zoom out)\n    await page.evaluate(() => {\n      const img = document.querySelector('[data-testid=\"product-image\"]');\n      if (img) {\n        img.style.transform = 'scale(0.5)';\n      }\n    });\n\n    // Verify zoomed out state\n    const zoomedOutBox = await productImage.boundingBox();\n    expect(zoomedOutBox.width).toBeLessThan(initialBox.width);\n    expect(zoomedOutBox.height).toBeLessThan(initialBox.height);\n\n    // Pinch out (zoom in)\n    await page.evaluate(() => {\n      const img = document.querySelector('[data-testid=\"product-image\"]');\n      if (img) {\n        img.style.transform = 'scale(2)';\n      }\n    });\n\n    // Verify zoomed in state\n    const zoomedInBox = await productImage.boundingBox();\n    expect(zoomedInBox.width).toBeGreaterThan(initialBox.width);\n    expect(zoomedInBox.height).toBeGreaterThan(initialBox.height);\n\n    // Verify zoom level is reflected in UI\n    const zoomLevelIndicator = page.getByText(/2x zoom/i);\n    await expect(zoomLevelIndicator).toBeVisible();\n  });\n\n  test('should handle zoom out to minimum level and prevent further zoom', async ({ page }) => {\n    // Verify product image is visible\n    const productImage = page.getByRole('img', { name: /product image/i });\n    await expect(productImage).toBeVisible();\n\n    // Pinch in (zoom out)\n    await page.evaluate(() => {\n      const img = document.querySelector('[data-testid=\"product-image\"]');\n      if (img) {\n        img.style.transform = 'scale(0.1)';\n      }\n    });\n\n    // Verify zoomed out state\n    const zoomedOutBox = await productImage.boundingBox();\n    expect(zoomedOutBox.width).toBeLessThan(100);\n    expect(zoomedOutBox.height).toBeLessThan(100);\n\n    // Attempt to zoom out further\n    await page.evaluate(() => {\n      const img = document.querySelector('[data-testid=\"product-image\"]');\n      if (img) {\n        img.style.transform = 'scale(0.01)';\n      }\n    });\n\n    // Verify zoom level is capped at minimum\n    const cappedBox = await productImage.boundingBox();\n    expect(cappedBox.width).toBeCloseTo(zoomedOutBox.width);\n    expect(cappedBox.height).toBeCloseTo(zoomedOutBox.height);\n\n    // Verify zoom level indicator shows minimum\n    const zoomLevelIndicator = page.getByText(/min zoom/i);\n    await expect(zoomLevelIndicator).toBeVisible();\n\n    // Pinch out (zoom in)\n    await page.evaluate(() => {\n      const img = document.querySelector('[data-testid=\"product-image\"]');\n      if (img) {\n        img.style.transform = 'scale(1)';\n      }\n    });\n\n    // Verify zoom level is reset to default\n    const resetBox = await productImage.boundingBox();\n    expect(resetBox.width).toBeCloseTo(initialBox.width);\n    expect(resetBox.height).toBeCloseTo(initialBox.height);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7883,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3942,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.936,
+      "feedback_used": ""
+    }
+  ]
+}

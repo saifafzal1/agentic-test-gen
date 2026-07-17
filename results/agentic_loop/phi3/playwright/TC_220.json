@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_220",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.4966,
+  "total_latency_s": 782.03,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Prefers-reduced-motion Compliance', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should respect user\\'s prefers-reduced-motion setting and disable animations', async ({ page }) => {\n    // Set up: Mock the user's prefers-reduced-motion setting\n    await page.evaluate(() => {\n      window.matchMedia('(prefers-reduced-motion: reduce)').matches = true;\n    });\n\n    // Verify the reduced motion setting is applied\n    const reducedMotionSetting = page.getByRole('heading', { name: /preferences/i });\n    await expect(reducedMotionSetting).toBeVisible();\n\n    // Verify animations are disabled\n    const animationContainer = page.locator('[data-testid=\"animation-container\"]');\n    await expect(animationContainer).toHaveClass(/disabled/i);\n\n    // Verify content is still accessible\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeVisible();\n\n    // Verify interactive elements are still functional\n    const button = page.getByRole('button', { name: /submit/i });\n    await expect(button).toBeVisible();\n    await button.click();\n\n    // Verify no animations are triggered\n    const animationLog = page.getByTestId('animation-log');\n    await expect(animationLog).toContainText('No animations triggered');\n\n    // Verify user feedback is clear\n    const successMessage = page.getByText(/success/i);\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should respect user\\'s prefers-reduced-motion setting and disable animations when setting is not present', async ({ page }) => {\n    // Set up: Mock the user's prefers-reduced-motion setting\n    await page.evaluate(() => {\n      window.matchMedia('(prefers-reduced-motion: reduce)').matches = false;\n    });\n\n    // Verify the reduced motion setting is not applied\n    const reducedMotionSetting = page.getByRole('heading', { name: /preferences/i });\n    await expect(reducedMotionSetting).toBeVisible();\n\n    // Verify animations are enabled\n    const animationContainer = page.locator('[data-testid=\"animation-container\"]');\n    await expect(animationContainer).toHaveClass(/enabled/i);\n\n    // Verify content is still accessible\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeVisible();\n\n    // Verify interactive elements are still functional\n    const button = page.getByRole('button', { name: /submit/i });\n    await expect(button).toBeVisible();\n    await button.click();\n\n    // Verify animations are triggered\n    const animationLog = page.getByTestId('animation-log');\n    await expect(animationLog).toContainText('Animations triggered');\n\n    // Verify user feedback is clear\n    const successMessage = page.getByText(/success/i);\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4884,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3813,
+        "missing_keywords": [],
+        "assertion_count": 25,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 248.985,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4966,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4088,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 235.541,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.4966,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4088,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 297.504,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

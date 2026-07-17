@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_248",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7614,
+  "total_latency_s": 337.015,
+  "final_script": "describe('Promo Code Expiration Error Handling', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should display error message when user enters expired promo code', () => {\n    // Intercept the API call to validate promo code\n    cy.intercept('POST', '/api/validate-promo-code', {\n      statusCode: 200,\n      body: {\n        success: false,\n        message: 'Promo code has expired',\n        expirationDate: '2023-01-01T00:00:00Z'\n      }\n    }).as('validatePromoCode');\n\n    // Get the promo code input field\n    cy.get('[data-testid=\"promo-code-input\"]').type('EXPIRED123');\n\n    // Submit the form\n    cy.get('[data-testid=\"apply-promo-button\"]').click();\n\n    // Wait for the API response\n    cy.wait('@validatePromoCode');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Promo code has expired');\n\n    // Verify success message is not displayed\n    cy.get('[data-testid=\"success-message\"]')\n      .should('not.exist');\n\n    // Verify promo code input field is cleared\n    cy.get('[data-testid=\"promo-code-input\"]').should('have.value', '');\n  });\n\n  it('should handle edge case when promo code is valid but expired', () => {\n    // Intercept the API call with a valid but expired promo code\n    cy.intercept('POST', '/api/validate-promo-code', {\n      statusCode: 200,\n      body: {\n        success: true,\n        message: 'Promo code has expired',\n        expirationDate: '2023-01-01T00:00:00Z'\n      }\n    }).as('validatePromoCodeExpired');\n\n    // Get the promo code input field\n    cy.get('[data-testid=\"promo-code-input\"]').type('VALIDCODE2023');\n\n    // Submit the form\n    cy.get('[data-testid=\"apply-promo-button\"]').click();\n\n    // Wait for the API response\n    cy.wait('@validatePromoCodeExpired');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Promo code has expired');\n\n    // Verify success message is not displayed\n    cy.get('[data-testid=\"success-message\"]')\n      .should('not.exist');\n\n    // Verify promo code input field is cleared\n    cy.get('[data-testid=\"promo-code-input\"]').should('have.value', '');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7614,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4047,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 337.015,
+      "feedback_used": ""
+    }
+  ]
+}

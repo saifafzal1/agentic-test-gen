@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_233",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7308,
+  "total_latency_s": 72.204,
+  "final_script": "describe('Modal Full-Screen on Small Viewports', () => {\n  beforeEach(() => {\n    cy.visit('/modal-page');\n  });\n\n  it('should display modal as full-screen on small viewports', () => {\n    // Set viewport to small mobile size\n    cy.viewport('360, 640');\n    \n    // Click button to open modal\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n    \n    // Verify modal is visible\n    cy.get('[data-testid=\"modal-container\"]').should('be.visible');\n    \n    // Verify modal takes up full screen height\n    cy.get('[data-testid=\"modal-container\"]').should('have.css', 'height', '100vh');\n    \n    // Verify modal takes up full screen width\n    cy.get('[data-testid=\"modal-container\"]').should('have.css', 'width', '100vw');\n    \n    // Verify modal content is visible\n    cy.get('[data-testid=\"modal-title\"]').should('contain', 'Modal Title');\n    \n    // Verify close button is visible\n    cy.get('[data-testid=\"close-modal-btn\"]').should('be.visible');\n  });\n\n  it('should handle modal close button click and restore normal view', () => {\n    // Set viewport to small mobile size\n    cy.viewport('320', '640');\n    \n    // Open modal\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n    \n    // Verify modal is visible and full screen\n    cy.get('[data-testid=\"modal-container\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-container\"]').should('have.css', 'height', '100vh');\n    \n    // Click close button\n    cy.get('[data-testid=\"close-modal-btn\"]').click();\n    \n    // Verify modal is no longer visible\n    cy.get('[data-testid=\"modal-container\"]').should('not.exist');\n    \n    // Verify page content is visible again\n    cy.get('[data-testid=\"page-content\"]').should('be.visible');\n    \n    // Verify modal overlay is removed\n    cy.get('[data-testid=\"modal-overlay\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7308,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3025,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.204,
+      "feedback_used": ""
+    }
+  ]
+}

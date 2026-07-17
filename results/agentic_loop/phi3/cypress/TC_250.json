@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_250",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7666,
+  "total_latency_s": 408.693,
+  "final_script": "describe('PayPal Payment Method Selection', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should successfully display PayPal payment option and allow selection', () => {\n    // Verify PayPal payment option is visible\n    cy.get('[data-testid=\"payment-methods\"]').should('be.visible');\n    cy.get('[data-testid=\"paypal-payment-option\"]').should('be.visible');\n\n    // Verify PayPal button is clickable\n    cy.get('[data-testid=\"paypal-payment-button\"]').should('be.visible');\n    cy.get('[data-testid=\"paypal-payment-button\"]').should('have.attr', 'aria-label', 'PayPal');\n\n    // Click PayPal button\n    cy.get('[data-testid=\"paypal-payment-button\"]').click();\n\n    // Verify PayPal payment form is displayed\n    cy.get('[data-testid=\"paypal-payment-form\"]').should('be.visible');\n\n    // Verify PayPal email field is present\n    cy.get('[data-testid=\"paypal-email-field\"]').should('be.visible');\n    cy.get('[data-testid=\"paypal-email-field\"]').should('have.value');\n\n    // Verify PayPal button is visible in form\n    cy.get('[data-testid=\"paypal-confirm-button\"]').should('be.visible');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"payment-success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"payment-success-message\"]').should('contain', 'Payment successful');\n\n    // Verify redirect to success page\n    cy.url().should('include', '/success');\n  });\n\n  it('should handle edge case when PayPal payment fails', () => {\n    // Mock PayPal API failure\n    cy.intercept('POST', '/api/paypal/payment', {\n      statusCode: 500,\n      body: { error: 'Payment processing failed' }\n    }).as('paypalPaymentFailure');\n\n    // Attempt to select PayPal payment\n    cy.get('[data-testid=\"paypal-payment-button\"]').click();\n\n    // Verify error message appears\n    cy.get('[data-testid=\"payment-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"payment-error-message\"]').should('contain', 'Payment processing failed');\n\n    // Verify user is not redirected\n    cy.url().should('include', '/checkout');\n\n    // Verify user can retry\n    cy.get('[data-testid=\"paypal-payment-button\"]').should('be.visible');\n    cy.get('[data-testid=\"paypal-payment-button\"]').click();\n\n    // Verify error message disappears and retry button appears\n    cy.get('[data-testid=\"payment-error-message\"]').should('not.exist');\n    cy.get('[data-testid=\"retry-payment-button\"]').should('be.visible');\n\n    // Verify retry button is clickable\n    cy.get('[data-testid=\"retry-payment-button\"]').should('be.visible');\n    cy.get('[data-testid=\"retry-payment-button\"]').click();\n\n    // Verify PayPal payment form is displayed again\n    cy.get('[data-testid=\"paypal-payment-form\"]').should('be.visible');\n\n    // Verify PayPal button is visible in form\n    cy.get('[data-testid=\"paypal-payment-button\"]').should('be.visible');\n\n    // Verify success message appears after successful retry\n    cy.get('[data-testid=\"payment-success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"payment-success-message\"]').should('contain', 'Payment successful');\n\n    // Verify redirect to success page\n    cy.url().should('include', '/success');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7666,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4219,
+        "missing_keywords": [],
+        "assertion_count": 23,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 408.693,
+      "feedback_used": ""
+    }
+  ]
+}

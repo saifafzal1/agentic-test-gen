@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_244",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.488,
+  "total_latency_s": 1101.904,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Card Payment Flow - Complete Purchase', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should successfully complete purchase with valid card details', async ({ page }) => {\n    // Verify checkout page is visible\n    const checkoutContainer = page.getByRole('region', { name: /checkout/i });\n    await expect(checkoutContainer).toBeVisible();\n\n    // Verify payment form is visible\n    const paymentForm = page.getByRole('form', { name: /enter card details/i });\n    await expect(paymentForm).toBeVisible();\n\n    // Verify card number input is present\n    const cardNumberInput = page.getByLabel(/card number/i);\n    await expect(cardNumberInput).toBeVisible();\n\n    // Verify expiration date input is present\n    const expirationDateInput = page.getByLabel(/expiration date/i);\n    await expect(expirationDateInput).toBeVisible();\n\n    // Verify CVV input is present\n    const cvvInput = page.getByLabel(/cvv/i);\n    await expect(cvvInput).toBeVisible();\n\n    // Verify submit button is visible\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeVisible();\n\n    // Fill in valid card details\n    await cardNumberInput.fill('4111111111111111');\n    await expirationDateInput.fill('12/25');\n    await cvvInput.fill('123');\n\n    // Click submit button\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/purchase successful/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify order confirmation page is displayed\n    const orderConfirmation = page.getByRole('region', { name: /order confirmation/i });\n    await expect(orderConfirmation).toBeVisible();\n\n    // Verify order details are displayed\n    const orderDetails = page.getByText(/order number: 123456789/i);\n    await expect(orderDetails).toBeVisible();\n\n    // Verify order summary is displayed\n    const orderSummary = page.getByText(/total: $100.00/i);\n    await expect(orderSummary).toBeVisible();\n\n    // Verify order button is visible\n    const placeOrderButton = page.getByRole('button', { name: /place order/i });\n    await expect(placeOrderButton).toBeVisible();\n\n    // Verify order button is enabled\n    await expect(placeOrderButton).toBeEnabled();\n\n    // Click place order button\n    await placeOrderButton.click();\n\n    // Verify order is placed\n    const orderConfirmationMessage = page.getByText(/order placed successfully/i);\n    await expect(orderConfirmationMessage).toBeVisible();\n\n    // Verify order confirmation page is still visible\n    await expect(orderConfirmation).toBeVisible();\n  });\n\n  test('should display error when entering invalid card details', async ({ page }) => {\n    // Verify checkout page is visible\n    const checkoutContainer = page.getByRole('region', { name: /checkout/i });\n    await expect(checkoutContainer).toBeVisible();\n\n    // Verify payment form is visible\n    const paymentForm = page.getByRole('form', { name: /enter card details/i });\n    await expect(paymentForm).toBeVisible();\n\n    // Verify card number input is present\n    const cardNumberInput = page.getByLabel(/card number/i);\n    await expect(cardNumberInput).toBeVisible();\n\n    // Verify expiration date input is present\n    const expirationDateInput = page.getByLabel(/expiration date/i);\n    await expect(expirationDateInput).toBeVisible();\n\n    // Verify CVV input is present\n    const cvvInput = page.getByLabel(/cvv/i);\n    await expect(cvvInput).toBeVisible();\n\n    // Fill in invalid card details",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.488,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3602,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 55.431,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4772,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.324,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 501.487,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.4716,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3054,
+        "missing_keywords": [],
+        "assertion_count": 28,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 544.986,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

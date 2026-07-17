@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_238",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8257,
+  "total_latency_s": 516.768,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mobile Search Bar Expansion', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should expand search bar on focus on mobile devices', async ({ page }) => {\n    // Verify search bar is collapsed by default\n    const searchInput = page.getByRole('searchbox');\n    await expect(searchInput).toBeVisible();\n    await expect(searchInput).toHaveValue('');\n\n    // Verify search icon is visible and clickable\n    const searchIcon = page.getByRole('button', { name: /search/i });\n    await expect(searchIcon).toBeVisible();\n\n    // Verify search results container is collapsed\n    const searchResults = page.getByRole('region', { name: /search results/i });\n    await expect(searchResults).toBeVisible();\n    await expect(searchResults).toHaveClass(/collapsed/i);\n\n    // Setup mobile viewport\n    await page.setViewportSize({ width: 375, height: 812 });\n\n    // Focus on search input\n    await searchInput.click();\n\n    // Verify search bar expands\n    await expect(searchInput).toHaveValue('');\n    await expect(searchInput).toBeFocused();\n\n    // Verify search icon is still visible\n    await expect(searchIcon).toBeVisible();\n\n    // Verify search results container is expanded\n    await expect(searchResults).not.toHaveClass(/collapsed/i);\n    await expect(searchResults).toBeVisible();\n\n    // Verify search results are visible\n    const resultItem = page.getByText('Result 1');\n    await expect(resultItem).toBeVisible();\n\n    // Verify search input has placeholder\n    await expect(searchInput).toHavePlaceholder('Search...');\n\n    // Verify search input has correct label\n    const searchLabel = page.getByLabel(/search/i);\n    await expect(searchLabel).toBeVisible();\n  });\n\n  test('should collapse search bar when clicking outside on mobile devices', async ({ page }) => {\n    // Verify search bar is expanded\n    const searchInput = page.getByRole('searchbox');\n    await expect(searchInput).toBeVisible();\n    await expect(searchInput).toHaveValue('');\n\n    // Verify search icon is visible and clickable\n    const searchIcon = page.getByRole('button', { name: /search/i });\n    await expect(searchIcon).toBeVisible();\n\n    // Verify search results container is expanded\n    const searchResults = page.getByRole('region', { name: /search results/i });\n    await expect(searchResults).toBeVisible();\n    await expect(searchResults).not.toHaveClass(/collapsed/i);\n\n    // Setup mobile viewport\n    await page.setViewportSize({ width: 375, height: 812 });\n\n    // Focus on search input\n    await searchInput.click();\n\n    // Verify search bar is expanded\n    await expect(searchInput).toHaveValue('');\n    await expect(searchInput).toBeFocused();\n\n    // Verify search results are visible\n    const resultItem = page.getByText('Result 1');\n    await expect(resultItem).toBeVisible();\n\n    // Click outside search bar to trigger collapse\n    const outsideElement = page.locator('body');\n    await outsideElement.click();\n\n    // Verify search bar collapses\n    await expect(searchInput).toHaveValue('');\n    await expect(searchInput).not.toBeFocused();\n\n    // Verify search results container is collapsed\n    await expect(searchResults).toHaveClass(/collapsed/i);\n    await expect(searchResults).not.toBeVisible();\n\n    // Verify search input has placeholder\n    await expect(searchInput).toHavePlaceholder('Search...');\n\n    // Verify search input has correct label\n    const searchLabel = page.getByLabel(/search/i);\n    await expect(searchLabel).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4763,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3411,
+        "missing_keywords": [],
+        "assertion_count": 22,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 54.969,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8257,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4188,
+        "missing_keywords": [],
+        "assertion_count": 27,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 461.799,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

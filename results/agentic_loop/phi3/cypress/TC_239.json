@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_239",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7435,
+  "total_latency_s": 894.053,
+  "final_script": "describe('Landscape Orientation Responsiveness', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should display app correctly in landscape orientation on mobile', () => {\n    // Set viewport to landscape orientation\n    cy.viewport('iphone-x').then(() => {\n      cy.intercept('GET', '/api/data').as('dataLoad');\n      cy.wait('@dataLoad');\n    });\n\n    // Verify layout elements are visible and positioned correctly\n    cy.get('[data-testid=\"header\"]').should('be.visible');\n    cy.get('[data-testid=\"navigation-menu\"]').should('be.visible');\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n    cy.get('[data-testid=\"sidebar\"]').should('be.visible');\n\n    // Verify responsive design adjustments\n    cy.get('[data-testid=\"hero-image\"]').should('have.css', 'width', '100%');\n    cy.get('[data-testid=\"hero-text\"]').should('have.css', 'font-size', '1.2rem');\n\n    // Verify navigation menu items are stacked vertically\n    cy.get('[data-testid=\"nav-item\"]').should('have.length', 3);\n    cy.get('[data-testid=\"nav-item\"]').first().should('have.css', 'flex-direction', 'column');\n\n    // Verify sidebar is visible and contains links\n    cy.get('[data-testid=\"sidebar-link\"]').should('be.visible');\n    cy.get('[data-testid=\"sidebar-link\"]').first().should('have.text', 'Home');\n\n    // Verify main content area is scrollable\n    cy.get('[data-testid=\"main-content\"]').should('be.scrollable');\n\n    // Verify footer is visible and contains copyright information\n    cy.get('[data-testid=\"footer\"]').should('be.visible');\n    cy.get('[data-testid=\"footer-copyright\"]').should('contain', '\u00a9 2023');\n\n    // Verify media queries are applied\n    cy.get('[data-testid=\"hero-image\"]').should('have.css', 'max-width', '100%');\n    cy.get('[data-testid=\"hero-text\"]').should('have.css', 'max-width', '100%');\n  });\n\n  it('should handle edge case: app fails to load in landscape orientation', () => {\n    // Set viewport to landscape orientation\n    cy.viewport('iphone-x').then(() => {\n      cy.intercept('GET', '/api/data').as('dataLoad');\n      cy.wait('@dataLoad');\n    });\n\n    // Simulate network error\n    cy.intercept('GET', '/api/data', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' }\n    }).as('dataLoadError');\n\n    // Verify error state is displayed\n    cy.wait('@dataLoadError');\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Failed to load data');\n\n    // Verify app does not crash and provides user feedback\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('have.class', 'error');\n\n    // Verify navigation menu is still accessible\n    cy.get('[data-testid=\"nav-item\"]').should('be.visible');\n\n    // Verify user can retry or navigate away\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n    cy.get('[data-testid=\"retry-button\"]').click();\n    cy.get('[data-testid=\"data-load\"]').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4716,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3452,
+        "missing_keywords": [],
+        "assertion_count": 26,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 383.481,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7435,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.345,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 510.572,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

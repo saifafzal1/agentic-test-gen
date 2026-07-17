@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_225",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7611,
+  "total_latency_s": 72.167,
+  "final_script": "describe('Date Picker Keyboard Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/date-picker');\n  });\n\n  it('should allow full date picker operation using only keyboard navigation', () => {\n    // Focus on the date picker input field\n    cy.get('[data-testid=\"date-picker-input\"]').focus();\n\n    // Press Enter to open the calendar view\n    cy.get('[data-testid=\"date-picker-input\"]').type('{enter}');\n\n    // Verify calendar is visible\n    cy.get('[data-testid=\"calendar-popup\"]').should('be.visible');\n\n    // Navigate to the next month using right arrow key\n    cy.get('[data-testid=\"calendar-popup\"]').type('{rightarrow}');\n\n    // Verify month changed\n    cy.get('[data-testid=\"calendar-month-display\"]').should('contain', 'October');\n\n    // Navigate to previous month using left arrow key\n    cy.get('[data-testid=\"calendar-popup\"]').type('{leftarrow}');\n\n    // Verify month changed back\n    cy.get('[data-testid=\"calendar-month-display\"]').should('contain', 'September');\n\n    // Navigate between days using up and down arrow keys\n    cy.get('[data-testid=\"calendar-popup\"]').type('{uparrow}');\n    cy.get('[data-testid=\"calendar-popup\"]').type('{uparrow}');\n\n    // Verify day changed\n    cy.get('[data-testid=\"calendar-day-display\"]').should('contain', '25');\n\n    // Navigate to next day using right arrow key\n    cy.get('[data-testid=\"calendar-popup\"]').type('{rightarrow}');\n\n    // Verify day changed\n    cy.get('[data-testid=\"calendar-day-display\"]').should('contain', '26');\n\n    // Press Enter to select the date\n    cy.get('[data-testid=\"calendar-popup\"]').type('{enter}');\n\n    // Verify date is selected and input is populated\n    cy.get('[data-testid=\"date-picker-input\"]').should('have.value', '2023-09-26');\n\n    // Verify calendar closes\n    cy.get('[data-testid=\"calendar-popup\"]').should('not.exist');\n  });\n\n  it('should handle keyboard navigation with edge cases like month boundaries and invalid inputs', () => {\n    // Focus on date picker input\n    cy.get('[data-testid=\"date-picker-input\"]').focus();\n\n    // Open calendar\n    cy.get('[data-testid=\"date-picker-input\"]').type('{enter}');\n\n    // Navigate to the first day of the month\n    cy.get('[data-testid=\"calendar-popup\"]').type('{leftarrow}');\n    cy.get('[data-testid=\"calendar-popup\"]').type('{leftarrow}');\n\n    // Verify month changed\n    cy.get('[data-testid=\"calendar-month-display\"]').should('contain', 'August');\n\n    // Navigate to the first day of the month\n    cy.get('[data-testid=\"calendar-popup\"]').type('{uparrow}');\n    cy.get('[data-testid=\"calendar-popup\"]').type('{uparrow}');\n    cy.get('[data-testid=\"calendar-popup\"]').type('{uparrow}');\n\n    // Verify day is 1\n    cy.get('[data-testid=\"calendar-day-display\"]').should('contain', '1');\n\n    // Navigate to the last day of the month\n    cy.get('[data-testid=\"calendar-popup\"]').type('{rightarrow}');\n    cy.get('[data-testid=\"calendar-popup\"]').type('{rightarrow}');\n    cy.get('[data-testid=\"calendar-popup\"]').type('{rightarrow}');\n    cy.get('[data-testid=\"calendar-popup\"]').type('{rightarrow}');\n    cy.get('[data-testid=\"calendar-popup\"]').type('{rightarrow}');\n    cy.get('[data-testid=\"calendar-popup\"]').type('{rightarrow}');\n    cy.get('[data-testid=\"calendar-popup\"]').type('{rightarrow}');\n    cy.get('[data-testid=\"calendar-popup\"]').type('{rightarrow}');\n\n    // Verify last day is selected\n    cy.get('[data-testid=\"calendar-day-display\"]').should('contain', '31');\n\n    // Press Escape to close calendar without selecting a date\n    cy.get('[data-testid=\"calendar-popup\"]').type('{escape}');\n\n    // Verify date input is not populated\n    cy.get('[data-testid=\"date-picker-input\"]').should('have.value', '');\n\n    // Verify calendar is closed\n    cy.get('[data-testid=\"calendar-popup\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7611,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4038,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.167,
+      "feedback_used": ""
+    }
+  ]
+}

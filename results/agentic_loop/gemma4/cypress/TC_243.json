@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_243",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.795,
+  "total_latency_s": 72.38,
+  "final_script": "describe('Video Player Responsive Resize on Tablet Viewports', () => {\n  beforeEach(() => {\n    cy.visit('/video-player');\n  });\n\n  it('should resize video player proportionally when viewport width changes to tablet size', () => {\n    // Verify video player is visible on desktop viewport\n    cy.get('[data-testid=\"video-player\"]').should('be.visible');\n    cy.get('[data-testid=\"video-player\"]').should('have.css', 'width', '1000px');\n    cy.get('[data-testid=\"video-player\"]').should('have.css', 'height', '562.5px');\n\n    // Change viewport to tablet size (768px width)\n    cy.viewport('768', '1020');\n\n    // Verify video player resizes proportionally\n    cy.get('[data-testid=\"video-player\"]').should('be.visible');\n    cy.get('[data-testid=\"video-player\"]').should('have.css', 'width', '100%');\n    cy.get('[data-testid=\"video-player\"]').should('have.css', 'height', 'auto');\n\n    // Verify aspect ratio is maintained (16:9)\n    cy.get('[data-testid=\"video-player\"]').then(($player) => {\n      const width = $player.width();\n      const height = $player.height();\n      const aspectRatio = width / height;\n      expect(aspectRatio).to.be.closeTo(16 / 9, 0.01);\n    });\n\n    // Verify video controls are still functional\n    cy.get('[data-testid=\"play-button\"]').should('be.visible');\n    cy.get('[data-testid=\"play-button\"]').click();\n    cy.get('[data-testid=\"video-player\"]').should('contain', 'playing');\n  });\n\n  it('should handle video player resize gracefully when viewport is too narrow', () => {\n    // Change viewport to mobile size (320px width)\n    cy.viewport('320', '600');\n\n    // Verify video player still displays and maintains aspect ratio\n    cy.get('[data-testid=\"video-player\"]').should('be.visible');\n    cy.get('[data-testid=\"video-player\"]').should('have.css', 'width', '100%');\n    cy.get('[data-testid=\"video-player\"]').should('have.css', 'height', 'auto');\n\n    // Verify aspect ratio is maintained\n    cy.get('[data-testid=\"video-player\"]').then(($player) => {\n      const width = $player.width();\n      const height = $player.height();\n      const aspectRatio = width / height;\n      expect(aspectRatio).to.be.closeTo(16 / 9, 0.01);\n    });\n\n    // Verify video controls are still accessible and functional\n    cy.get('[data-testid=\"play-button\"]').should('be.visible');\n    cy.get('[data-testid=\"volume-control\"]').should('be.visible');\n    cy.get('[data-testid=\"volume-control\"]').click();\n    cy.get('[data-testid=\"volume-slider\"]').should('be.visible');\n\n    // Verify video can be paused\n    cy.get('[data-testid=\"pause-button\"]').click();\n    cy.get('[data-testid=\"video-player\"]').should('contain', 'paused');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.795,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5166,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.38,
+      "feedback_used": ""
+    }
+  ]
+}

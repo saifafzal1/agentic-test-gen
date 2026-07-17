@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_241",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7289,
+  "total_latency_s": 458.661,
+  "final_script": "describe('Dashboard Sidebar to Bottom Nav Bar Transition on Mobile', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should display sidebar as bottom nav bar on mobile viewport', () => {\n    // Set viewport to mobile\n    cy.viewport('iphone-x').then(() => {\n      cy.intercept('GET', '/api/dashboard/sidebar').as('sidebarData');\n      cy.wait('@sidebarData');\n    });\n\n    // Verify sidebar is visible\n    cy.get('[data-testid=\"sidebar-toggle\"]').should('be.visible');\n    cy.get('[data-testid=\"sidebar-menu\"]').should('be.visible');\n\n    // Verify sidebar has correct class for mobile\n    cy.get('[data-testid=\"sidebar-menu\"]').should('have.class', 'mobile-nav');\n\n    // Verify sidebar items are present\n    cy.get('[data-testid=\"sidebar-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify navigation links are clickable\n    cy.get('[data-testid=\"sidebar-item\"]').first().click();\n    cy.url().should('include', '/dashboard/settings');\n\n    // Verify sidebar is hidden when toggled\n    cy.get('[data-testid=\"sidebar-toggle\"]').click();\n    cy.get('[data-testid=\"sidebar-menu\"]').should('not.exist');\n\n    // Verify main content is visible\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n  });\n\n  it('should handle edge case where sidebar is already in bottom nav bar state', () => {\n    // Set viewport to mobile\n    cy.viewport('iphone-x').then(() => {\n      cy.intercept('GET', '/api/dashboard/sidebar').as('sidebarData');\n      cy.wait('@sidebarData');\n    });\n\n    // Verify sidebar is initially visible\n    cy.get('[data-testid=\"sidebar-menu\"]').should('be.visible');\n\n    // Verify sidebar has correct class for mobile\n    cy.get('[data-testid=\"sidebar-menu\"]').should('have.class', 'mobile-nav');\n\n    // Verify sidebar items are present\n    cy.get('[data-testid=\"sidebar-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify navigation links are clickable\n    cy.get('[data-testid=\"sidebar-item\"]').first().click();\n    cy.url().should('include', '/dashboard/settings');\n\n    // Verify sidebar is still visible after toggling\n    cy.get('[data-testid=\"sidebar-toggle\"]').click();\n    cy.get('[data-testid=\"sidebar-menu\"]').should('be.visible');\n\n    // Verify main content is still visible\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7289,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2963,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 458.661,
+      "feedback_used": ""
+    }
+  ]
+}

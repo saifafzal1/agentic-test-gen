@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_247",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8231,
+  "total_latency_s": 48.97,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Promo Code Application and Discounted Total Display', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should apply promo code and display discounted total', async ({ page }) => {\n    // Verify promo code input field is visible\n    const promoCodeInput = page.getByLabel('Promo Code');\n    await expect(promoCodeInput).toBeVisible();\n\n    // Verify discounted total display is visible\n    const discountedTotal = page.getByRole('heading', { name: /discounted total/i });\n    await expect(discountedTotal).toBeVisible();\n\n    // Verify apply button is visible and enabled\n    const applyButton = page.getByRole('button', { name: /apply/i });\n    await expect(applyButton).toBeVisible();\n\n    // Verify promo code input is focused\n    await expect(promoCodeInput).toHaveFocus();\n\n    // Enter a valid promo code\n    await promoCodeInput.fill('SAVE10');\n\n    // Verify apply button is now enabled\n    await expect(applyButton).toBeEnabled();\n\n    // Click apply button\n    await applyButton.click();\n\n    // Verify discounted total is displayed\n    await expect(discountedTotal).toBeVisible();\n\n    // Verify discounted total value is correct\n    const discountedTotalValue = page.getByText(/discounted total: \\$19.99/i);\n    await expect(discountedTotalValue).toBeVisible();\n\n    // Verify original total is still visible\n    const originalTotal = page.getByText(/original total: \\$29.99/i);\n    await expect(originalTotal).toBeVisible();\n\n    // Verify success message is displayed\n    const successMessage = page.getByText(/promo code applied successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify checkout button is now enabled\n    const checkoutButton = page.getByRole('button', { name: /checkout/i });\n    await expect(checkoutButton).toBeEnabled();\n\n    // Verify checkout button is visible\n    await expect(checkoutButton).toBeVisible();\n  });\n\n  test('should handle invalid promo code and display error message', async ({ page }) => {\n    // Verify promo code input is visible\n    const promoCodeInput = page.getByLabel('Promo Code');\n    await expect(promoCodeInput).toBeVisible();\n\n    // Verify error message is not visible\n    const errorMessage = page.getByText(/invalid promo code/i);\n    await expect(errorMessage).not.toBeVisible();\n\n    // Enter an invalid promo code\n    await promoCodeInput.fill('INVALID123');\n\n    // Verify apply button is now disabled\n    const applyButton = page.getByRole('button', { name: /apply/i });\n    await expect(applyButton).not.toBeEnabled();\n\n    // Verify error message is displayed\n    await expect(errorMessage).toBeVisible();\n\n    // Verify original total is still visible\n    const originalTotal = page.getByText(/original total: \\$29.99/i);\n    await expect(originalTotal).toBeVisible();\n\n    // Verify discounted total is not displayed\n    const discountedTotal = page.getByRole('heading', { name: /discounted total/i });\n    await expect(discountedTotal).not.toBeVisible();\n\n    // Verify apply button is still visible\n    await expect(applyButton).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8231,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4104,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 48.97,
+      "feedback_used": ""
+    }
+  ]
+}

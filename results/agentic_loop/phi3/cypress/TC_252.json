@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_252",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7605,
+  "total_latency_s": 860.61,
+  "final_script": "describe('Order Confirmation After Successful Payment', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should display order confirmation after successful payment', () => {\n    // Intercept the payment API call\n    cy.intercept('POST', '/api/payments/process').as('paymentProcess');\n\n    // Fill in order details\n    cy.get('[data-testid=\"order-form-name\"]').type('John Doe');\n    cy.get('[data-testid=\"order-form-email\"]').type('john.doe@example.com');\n    cy.get('[data-testid=\"order-form-address\"]').type('123 Main St, Anytown, USA');\n    cy.get('[data-testid=\"order-form-phone\"]').type('555-1234');\n    cy.get('[data-testid=\"order-form-total\"]').type('150.00');\n\n    // Submit the order\n    cy.get('[data-testid=\"order-submit-button\"]').click();\n\n    // Wait for payment API call\n    cy.wait('@paymentProcess');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"order-confirmation-message\"]').should('be.visible');\n    cy.get('[data-testid=\"order-confirmation-message\"]').should('contain', 'Payment successful');\n\n    // Verify order details are displayed\n    cy.get('[data-testid=\"order-confirmation-details\"]').should('be.visible');\n    cy.get('[data-testid=\"order-confirmation-details\"]').should('contain', 'John Doe');\n    cy.get('[data-testid=\"order-confirmation-details\"]').should('contain', '123 Main St, Anytown, USA');\n\n    // Verify order ID is displayed\n    cy.get('[data-testid=\"order-confirmation-order-id\"]').should('be.visible');\n    cy.get('[data-testid=\"order-confirmation-order-id\"]').should('contain', 'ORD-123456');\n\n    // Verify success toast appears\n    cy.get('[data-testid=\"success-toast\"]').should('be.visible');\n    cy.get('[data-testid=\"success-toast\"]').should('contain', 'Order confirmed');\n\n    // Verify payment success notification\n    cy.get('[data-testid=\"payment-success-notification\"]').should('be.visible');\n    cy.get('[data-testid=\"payment-success-notification\"]').should('contain', 'Payment processed');\n\n    // Verify order summary\n    cy.get('[data-testid=\"order-summary\"]').should('be.visible');\n    cy.get('[data-testid=\"order-summary\"]').should('contain', 'Total: $150.00');\n\n    // Verify back button is available\n    cy.get('[data-testid=\"order-summary-back-button\"]').should('be.visible');\n  });\n\n  it('should display error message when payment fails', () => {\n    // Intercept the payment API call with a failure response\n    cy.intercept('POST', '/api/payments/process', {\n      statusCode: 500,\n      body: { error: 'Internal server error' }\n    }).as('paymentProcessFail');\n\n    // Fill in order details\n    cy.get('[data-testid=\"order-form-name\"]').type('Jane Smith');\n    cy.get('[data-testid=\"order-form-email\"]').type('jane.smith@example.com');\n    cy.get('[data-testid=\"order-form-address\"]').type('456 Elm St, Othertown, USA');\n    cy.get('[data-testid=\"order-form-phone\"]').type('555-6789');\n    cy.get('[data-testid=\"order-form-total\"]').type('200.00');\n\n    // Submit the order\n    cy.get('[data-testid=\"order-submit-button\"]').click();\n\n    // Wait for payment API call\n    cy.wait('@paymentProcessFail');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"order-confirmation-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"order-confirmation-error-message\"]').should('contain', 'Payment failed');\n\n    // Verify error toast appears\n    cy.get('[data-testid=\"error-toast\"]').should('be.visible');\n    cy.get('[data-testid=\"error-toast\"]').should('contain', 'Payment processing error');\n\n    // Verify order was not confirmed\n    cy.get('[data-testid=\"order-confirmation-message\"]').should('not.exist');\n\n    // Verify user is redirected to error page\n    cy.url().should('include', '/error');\n\n    // Verify user can retry payment\n    cy.get('[data-testid=\"retry-payment-button\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4812,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3775,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 324.561,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7605,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4018,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 536.049,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

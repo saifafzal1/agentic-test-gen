@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_241",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8116,
+  "total_latency_s": 73.25,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dashboard Sidebar to Bottom Nav Bar on Mobile', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should transform sidebar to bottom nav bar on mobile viewport', async ({ page }) => {\n    // Set viewport to mobile size\n    await page.setViewportSize({ width: 375, height: 820 });\n\n    // Verify sidebar is visible and contains navigation links\n    const sidebar = page.getByRole('navigation', { name: /dashboard navigation/i });\n    await expect(sidebar).toBeVisible();\n\n    const homeLink = page.getByRole('link', { name: /home/i });\n    await expect(homeLink).toBeVisible();\n\n    const profileLink = page.getByRole('link', { name: /profile/i });\n    await expect(profileLink).toBeVisible();\n\n    // Verify sidebar has the correct mobile class\n    const sidebarElement = page.locator('[data-testid=\"sidebar-container\"]');\n    await expect(sidebarElement).toHaveClass(/mobile-sidebar/);\n\n    // Verify bottom nav bar is visible\n    const bottomNav = page.locator('[data-testid=\"bottom-nav\"]');\n    await expect(bottomNav).toBeVisible();\n\n    // Verify bottom nav bar contains navigation links\n    const bottomHome = page.getByRole('link', { name: /home/i });\n    await expect(bottomHome).toBeVisible();\n\n    const bottomProfile = page.getByRole('link', { name: /profile/i });\n    await expect(bottomProfile).toBeVisible();\n\n    // Verify sidebar is hidden on mobile\n    await expect(sidebarElement).not.toBeVisible();\n  });\n\n  test('should revert to sidebar on desktop viewport and handle navigation', async ({ page }) => {\n    // Set viewport to desktop size\n    await page.setViewportSize({ width: 1200, height: 900 });\n\n    // Verify sidebar is visible and bottom nav is hidden\n    const sidebar = page.getByRole('navigation', { name: /dashboard navigation/i });\n    await expect(sidebar).toBeVisible();\n\n    const bottomNav = page.locator('[data-testid=\"bottom-nav\"]');\n    await expect(bottomNav).not.toBeVisible();\n\n    // Verify sidebar has desktop class\n    const sidebarElement = page.locator('[data-testid=\"sidebar-container\"]');\n    await expect(sidebarElement).toHaveClass(/desktop-sidebar/);\n\n    // Verify navigation links are in sidebar\n    const homeLink = page.getByRole('link', { name: /home/i });\n    await expect(homeLink).toBeVisible();\n\n    const profileLink = page.getByRole('link', { name: /profile/i });\n    await expect(profileLink).toBeVisible();\n\n    // Click on a sidebar link to verify navigation\n    await homeLink.click();\n    await expect(page).toHaveURL(/.*\\/dashboard\\/home/);\n\n    // Verify bottom nav is still hidden\n    await expect(bottomNav).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8116,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4718,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.25,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_227",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.6908,
+  "total_latency_s": 72.113,
+  "final_script": "describe('Touch Target Size - Mobile View', () => {\n  beforeEach(() => {\n    cy.visit('/mobile-form');\n  });\n\n  it('should display touch targets large enough for easy tapping on mobile', () => {\n    cy.viewport('iphone-x');\n    cy.get('[data-testid=\"submit-button\"]').should('be.visible');\n    cy.get('[data-testid=\"email-input\"]').should('be.visible');\n    cy.get('[data-testid=\"password-input\"]').should('be.visible');\n    cy.get('[data-testid=\"submit-button\"]').should('have.css', 'width').and('include', '40px');\n    cy.get('[data-testid=\"submit-button\"]').should('have.css', 'height').and('include', '40px');\n    cy.get('[data-testid=\"email-input\"]').should('have.css', 'min-height').and('include', '40px');\n    cy.get('[data-testid=\"password-input\"]').should('have.css', 'min-height').and('include', '40px');\n    cy.get('[data-testid=\"email-input\"]').should('have.css', 'padding').and('include', '10px');\n    cy.get('[data-testid=\"password-input\"]').should('have.css', 'padding').and('include', '10px');\n    cy.get('[data-testid=\"submit-button\"]').should('be.enabled');\n    cy.get('[data-testid=\"submit-button\"]').click();\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n  });\n\n  it('should handle edge case of small touch targets being disabled or hidden', () => {\n    cy.viewport('iphone-12');\n    cy.get('[data-testid=\"submit-button\"]').should('be.visible');\n    cy.get('[data-testid=\"submit-button\"]').should('be.disabled');\n    cy.get('[data-testid=\"submit-button\"]').should('have.attr', 'aria-disabled', 'true');\n    cy.get('[data-testid=\"submit-button\"]').should('not.have.css', 'width').and('not.include', '10px');\n    cy.get('[data-testid=\"submit-button\"]').should('not.have.css', 'height').and('not.include', '10px');\n    cy.get('[data-testid=\"email-input\"]').should('have.css', 'min-height').and('include', '40px');\n    cy.get('[data-testid=\"email-input\"]').should('have.css', 'padding').and('include', '10px');\n    cy.get('[data-testid=\"email-input\"]').should('be.visible');\n    cy.get('[data-testid=\"email-input\"]').type('test@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('password123');\n    cy.get('[data-testid=\"submit-button\"]').should('not.be.disabled');\n    cy.get('[data-testid=\"submit-button\"]').click();\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.6908,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.1692,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.113,
+      "feedback_used": ""
+    }
+  ]
+}

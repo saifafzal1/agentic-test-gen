@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_251",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8073,
+  "total_latency_s": 181.625,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Order Summary Before Payment Confirmation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/cart');\n  });\n\n  test('should display order summary before payment confirmation', async ({ page }) => {\n    // Verify cart page loads\n    await expect(page.getByRole('heading', { name: /cart/i })).toBeVisible();\n\n    // Add item to cart\n    const addButton = page.getByRole('button', { name: /add to cart/i });\n    await addButton.click();\n\n    // Verify item is in cart\n    const itemRow = page.getByText('Product Name');\n    await expect(itemRow).toBeVisible();\n\n    // Verify subtotal is displayed\n    const subtotal = page.getByText(/\\$\\d+\\.\\d{2}/);\n    await expect(subtotal).toBeVisible();\n\n    // Verify total is displayed\n    const total = page.getByText(/\\$\\d+\\.\\d{2}/);\n    await expect(total).toBeVisible();\n\n    // Click checkout button\n    const checkoutButton = page.getByRole('button', { name: /checkout/i });\n    await checkoutButton.click();\n\n    // Verify order summary page loads\n    await expect(page.getByRole('heading', { name: /order summary/i })).toBeVisible();\n\n    // Verify order details are visible\n    const orderDetails = page.getByRole('region', { name: /order details/i });\n    await expect(orderDetails).toBeVisible();\n\n    // Verify total amount is displayed in summary\n    const summaryTotal = page.getByText(/\\$\\d+\\.\\d{2}/);\n    await expect(summaryTotal).toBeVisible();\n\n    // Verify payment options are available\n    const paymentOptions = page.getByRole('group', { name: /payment options/i });\n    await expect(paymentOptions).toBeVisible();\n\n    // Click confirm payment button\n    const confirmButton = page.getByRole('button', { name: /confirm payment/i });\n    await confirmButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/payment successful/i);\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should handle empty cart and prevent checkout', async ({ page }) => {\n    // Verify cart page loads\n    await expect(page.getByRole('heading', { name: /cart/i })).toBeVisible();\n\n    // Verify empty cart message is displayed\n    const emptyCartMessage = page.getByText(/your cart is empty/i);\n    await expect(emptyCartMessage).toBeVisible();\n\n    // Verify checkout button is disabled or not present\n    const checkoutButton = page.getByRole('button', { name: /checkout/i });\n    await expect(checkoutButton).not.toBeVisible();\n\n    // Attempt to navigate to checkout directly\n    await page.goto('/checkout');\n\n    // Verify empty cart message persists on checkout page\n    const checkoutEmptyMessage = page.getByText(/your cart is empty/i);\n    await expect(checkoutEmptyMessage).toBeVisible();\n\n    // Verify order summary section is not displayed\n    const orderSummary = page.getByRole('region', { name: /order summary/i });\n    await expect(orderSummary).not.toBeVisible();\n\n    // Verify user is prompted to add items\n    const promptMessage = page.getByText(/please add items to your cart/i);\n    await expect(promptMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5176,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4786,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 71.863,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8073,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4578,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 109.762,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

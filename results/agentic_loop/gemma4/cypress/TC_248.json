@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_248",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7849,
+  "total_latency_s": 72.509,
+  "final_script": "describe('Expired Promo Code Validation', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should display error message when entering expired promo code', () => {\n    // Intercept the API call for promo code validation\n    cy.intercept('POST', '/api/promo-code/validate').as('validatePromoCode');\n\n    // Enter a valid promo code\n    cy.get('[data-testid=\"promo-code-input\"]').type('SUMMER2024');\n\n    // Click apply button\n    cy.get('[data-testid=\"apply-promo-code-btn\"]').click();\n\n    // Wait for API response\n    cy.wait('@validatePromoCode').then((interception) => {\n      expect(interception.response.statusCode).to.equal(400);\n      expect(interception.response.body).to.include('expired');\n    });\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"promo-code-error-message\"]')\n      .should('be.visible')\n      .should('contain', 'This promo code has expired');\n\n    // Verify discount is not applied\n    cy.get('[data-testid=\"discount-amount\"]')\n      .should('contain', '$0.00');\n  });\n\n  it('should handle multiple expired promo codes and display error', () => {\n    // Intercept the API call for promo code validation\n    cy.intercept('POST', '/api/promo-code/validate').as('validatePromoCode');\n\n    // Enter an expired promo code\n    cy.get('[data-testid=\"promo-code-input\"]').type('OLDCODE123');\n\n    // Click apply button\n    cy.get('[data-testid=\"apply-promo-code-btn\"]').click();\n\n    // Wait for API response\n    cy.wait('@validatePromoCode').then((interception) => {\n      expect(interception.response.statusCode).to.equal(400);\n      expect(interception.response.body).to.include('expired');\n    });\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"promo-code-error-message\"]')\n      .should('be.visible')\n      .should('contain', 'This promo code has expired');\n\n    // Verify discount is not applied\n    cy.get('[data-testid=\"discount-amount\"]')\n      .should('contain', '$0.00');\n\n    // Verify user can still proceed with checkout\n    cy.get('[data-testid=\"continue-to-payment-btn\"]')\n      .should('be.visible')\n      .click();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7849,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4831,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.509,
+      "feedback_used": ""
+    }
+  ]
+}

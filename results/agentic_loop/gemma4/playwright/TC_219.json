@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_219",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8208,
+  "total_latency_s": 72.209,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Video Captions Accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/videos');\n  });\n\n  test('should display captions when video is playing', async ({ page }) => {\n    // Locate and click the video element using getByRole\n    const video = page.getByRole('button', { name: /play/i });\n    await video.click();\n\n    // Wait for video to load\n    await page.waitForLoadState('networkidle');\n\n    // Verify video is playing\n    const videoElement = page.locator('[data-testid=\"video-player\"]');\n    await expect(videoElement).toBeVisible();\n\n    // Locate and click the captions toggle button using getByRole\n    const captionsToggle = page.getByRole('button', { name: /captions/i });\n    await captionsToggle.click();\n\n    // Verify captions are visible\n    const captionsContainer = page.locator('[data-testid=\"captions-container\"]');\n    await expect(captionsContainer).toBeVisible();\n\n    // Verify captions text is displayed\n    const captionText = page.getByText(/this is a sample video with captions/i);\n    await expect(captionText).toBeVisible();\n\n    // Verify captions are styled correctly\n    const captionStyle = page.locator('[data-testid=\"captions-style\"]');\n    await expect(captionStyle).toHaveCSS('background-color', 'rgba(0, 0, 0, 0.7)');\n  });\n\n  test('should hide captions when captions toggle is clicked again', async ({ page }) => {\n    // Locate and click the video element using getByRole\n    const video = page.getByRole('button', { name: /play/i });\n    await video.click();\n\n    // Wait for video to load\n    await page.waitForLoadState('networkidle');\n\n    // Locate and click the captions toggle button using getByRole\n    const captionsToggle = page.getByRole('button', { name: /captions/i });\n    await captionsToggle.click();\n\n    // Verify captions are visible\n    const captionsContainer = page.locator('[data-testid=\"captions-container\"]');\n    await expect(captionsContainer).toBeVisible();\n\n    // Locate and click the captions toggle button again\n    await captionsToggle.click();\n\n    // Verify captions are hidden\n    await expect(captionsContainer).not.toBeVisible();\n\n    // Verify captions text is no longer visible\n    const captionText = page.getByText(/this is a sample video with captions/i);\n    await expect(captionText).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8208,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5027,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.209,
+      "feedback_used": ""
+    }
+  ]
+}

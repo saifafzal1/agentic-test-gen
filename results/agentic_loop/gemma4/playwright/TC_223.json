@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_223",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7969,
+  "total_latency_s": 71.924,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Document Language Declaration in HTML Tag', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/document-language');\n  });\n\n  test('should display correct language when lang attribute is set', async ({ page }) => {\n    // Verify the lang attribute is present on the html tag\n    const htmlTag = page.locator('html');\n    await expect(htmlTag).toHaveAttribute('lang', 'en-US');\n\n    // Verify the language is displayed on the page\n    const languageDisplay = page.getByText('English (US)');\n    await expect(languageDisplay).toBeVisible();\n\n    // Verify the language is used in the page content\n    const content = page.getByText('Welcome to the document');\n    await expect(content).toBeVisible();\n\n    // Verify the language is used in the navigation\n    const nav = page.getByRole('navigation');\n    await expect(nav).toBeVisible();\n  });\n\n  test('should handle multiple language declarations and fallback gracefully', async ({ page }) => {\n    // Intercept the language API call to simulate a fallback scenario\n    await page.route('**/api/language', (route) => {\n      route.abort();\n    });\n\n    // Verify the fallback language is displayed\n    const fallbackLanguage = page.getByText('Default Language');\n    await expect(fallbackLanguage).toBeVisible();\n\n    // Verify the lang attribute is set to the fallback\n    const htmlTag = page.locator('html');\n    await expect(htmlTag).toHaveAttribute('lang', 'en');\n\n    // Verify the page content is still readable\n    const content = page.getByText('Welcome to the document');\n    await expect(content).toBeVisible();\n\n    // Verify the language selector is available\n    const languageSelector = page.getByRole('combobox', { name: /language/i });\n    await expect(languageSelector).toBeVisible();\n\n    // Verify the language selector has options\n    const options = page.getByRole('option');\n    const optionCount = await options.count();\n    expect(optionCount).toBeGreaterThan(1);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7969,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.423,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.924,
+      "feedback_used": ""
+    }
+  ]
+}

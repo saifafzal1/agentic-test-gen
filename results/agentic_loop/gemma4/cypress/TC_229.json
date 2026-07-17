@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_229",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7196,
+  "total_latency_s": 72.2,
+  "final_script": "describe('Image Scaling on Mobile Devices', () => {\n  beforeEach(() => {\n    cy.visit('/images');\n  });\n\n  it('should scale images down to fit screen width on mobile viewport', () => {\n    // Set viewport to a mobile size\n    cy.viewport('iphone-x');\n\n    // Verify the image container is visible\n    cy.get('[data-testid=\"image-container\"]').should('be.visible');\n\n    // Verify the image element exists\n    cy.get('[data-testid=\"main-image\"]').should('be.visible');\n\n    // Verify the image has a max-width style applied\n    cy.get('[data-testid=\"main-image\"]').should('have.css', 'max-width', '100%');\n\n    // Verify the image has a height style applied to maintain aspect ratio\n    cy.get('[data-testid=\"main-image\"]').should('have.css', 'height', 'auto');\n\n    // Verify the image width is less than the viewport width\n    cy.get('[data-testid=\"main-image\"]').then(($img) => {\n      const imgWidth = $img.width();\n      const viewportWidth = cy.get('body').then(($body) => $body.width());\n      expect(imgWidth).to.be.lessThan(viewportWidth);\n    });\n\n    // Verify the image is not overflowing the container\n    cy.get('[data-testid=\"image-container\"]').should('have.css', 'overflow', 'hidden');\n  });\n\n  it('should handle images with different aspect ratios and scale correctly', () => {\n    // Navigate to a page with various images\n    cy.visit('/images/gallery');\n\n    // Set viewport to a tablet size\n    cy.viewport('ipad-pro');\n\n    // Verify the first image scales correctly\n    cy.get('[data-testid=\"gallery-image-1\"]').should('be.visible');\n    cy.get('[data-testid=\"gallery-image-1\"]').should('have.css', 'max-width', '100%');\n\n    // Verify the second image (different aspect ratio) scales correctly\n    cy.get('[data-testid=\"gallery-image-2\"]').should('be.visible');\n    cy.get('[data-testid=\"gallery-image-2\"]').should('have.css', 'max-width', '100%');\n\n    // Verify the third image (portrait) scales correctly\n    cy.get('[data-testid=\"gallery-image-3\"]').should('be.visible');\n    cy.get('[data-testid=\"gallery-image-3\"]').should('have.css', 'max-width', '100%');\n\n    // Verify all images are within the viewport boundaries\n    cy.get('[data-testid=\"gallery-image-1\"]').should('not.have.css', 'overflow');\n    cy.get('[data-testid=\"gallery-image-2\"]').should('not.have.css', 'overflow');\n    cy.get('[data-testid=\"gallery-image-3\"]').should('not.have.css', 'overflow');\n\n    // Verify image scaling is applied even when zoomed in on mobile\n    cy.get('[data-testid=\"main-image\"]').then(($img) => {\n      const imgWidth = $img.width();\n      const viewportWidth = cy.get('body').then(($body) => $body.width());\n      expect(imgWidth).to.be.lessThanOrEqual(viewportWidth);\n    });\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7196,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2654,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.2,
+      "feedback_used": ""
+    }
+  ]
+}

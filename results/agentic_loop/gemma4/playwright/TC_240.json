@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_240",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.5067,
+  "total_latency_s": 345.229,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Checkout Form Mobile Responsiveness', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should stack checkout form fields vertically on mobile screen', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 862 });\n    \n    // Verify form fields are visible\n    const emailField = page.getByLabel('Email Address');\n    const cardNumberField = page.getByLabel('Card Number');\n    const expiryField = page.getByLabel('Expiry Date');\n    const cvvField = page.getByLabel('CVV');\n    const billingAddressField = page.getByLabel('Billing Address');\n    const submitButton = page.getByRole('button', { name: 'Place Order' });\n    \n    await expect(emailField).toBeVisible();\n    await expect(cardNumberField).toBeVisible();\n    await expect(expiryField).toBeVisible();\n    await expect(cvvField).toBeVisible();\n    await expect(billingAddressField).toBeVisible();\n    await expect(submitButton).toBeVisible();\n    \n    // Fill in form fields\n    await emailField.fill('user@example.com');\n    await cardNumberField.fill('4111111111111111');\n    await expiryField.fill('12/25');\n    await cvvField.fill('123');\n    await billingAddressField.fill('123 Main St');\n    \n    // Verify form fields are stacked vertically (check display style)\n    const formContainer = page.locator('[data-testid=\"checkout-form-container\"]');\n    const fieldElements = page.locator('[data-testid=\"form-field\"]');\n    const fieldCount = await fieldElements.count();\n    \n    // Verify all fields are present\n    expect(fieldCount).toBe(5);\n    \n    // Verify fields are stacked (check display style)\n    const firstField = fieldElements.first();\n    const secondField = fieldElements.nth(1);\n    \n    const firstDisplay = await firstField.evaluate((el) => window.getComputedStyle(el).display);\n    const secondDisplay = await secondField.evaluate((el) => window.getComputedStyle(el).display);\n    \n    expect(firstDisplay).toBe('block');\n    expect(secondDisplay).toBe('block');\n    \n    // Verify submit button is also block level\n    const buttonDisplay = await submitButton.evaluate((el) => window.getComputedStyle(el).display);\n    expect(buttonDisplay).toBe('block');\n    \n    // Submit the form\n    await submitButton.click();\n    \n    // Verify success message appears\n    const successMessage = page.getByText('Order placed successfully');\n    await expect(successMessage).toBeVisible();\n  });\n  \n  test('should not stack form fields on desktop screen', async ({ page }) => {\n    await page.setViewportSize({ width: 1225, height: 856 });\n    \n    // Verify form fields are visible\n    const emailField = page.getByLabel('Email Address');\n    const cardNumberField = page.getByLabel('Card Number');\n    const expiryField = page.getByLabel('Expiry Date');\n    const cvvField = page.getByLabel('CVV');\n    const billingAddressField = page.getByLabel('Billing Address');\n    const submitButton = page.getByRole('button', { name: 'Place Order' });\n    \n    await expect(emailField).toBeVisible();\n    await expect(cardNumberField).toBeVisible();\n    await expect(expiryField).toBeVisible();\n    await expect(cvvField).toBeVisible();\n    await expect(billingAddressField).toBeVisible();\n    await expect(submitButton).toBeVisible();\n    \n    // Fill in form fields\n    await emailField.fill('desktop@example.com');\n    await cardNumberField.fill('4111111111111111');\n    await expiryField.fill('12/25');\n    await cvvField.fill('123');\n    await billingAddressField.fill('123 Main St');\n    \n    // Verify form fields are displayed inline (not stacked)\n    const formContainer = page.locator('[data-testid=\"checkout-form-container\"]');\n    const fieldElements = page.locator('[data-testid=\"form-field\"]');\n    const fieldCount = await fieldElements.count();\n    \n    expect(fieldCount).toBe(5);\n    \n    // Verify fields are displayed inline (check display style)\n    const firstField = fieldElements.first();\n    const secondField = fieldElements.nth(1);\n    \n    const firstDisplay = await firstField.evaluate((el)) => window.getComputedStyle(el).display);\n    const secondDisplay = await secondField.evaluate((el)) => window.getComputedStyle(el).display);\n    \n    expect(firstDisplay).not.toBe('block');\n    expect(secondDisplay).not.toBe('block');\n    \n    // Verify fields are displayed inline using flex or grid\n    const firstInline = await firstField.evaluate((el)) => window.getComputedStyle(el).display);\n    const secondInline = await secondField.evaluate((el)) => window.getComputedStyle(el).display);\n    \n    expect(firstInline).toBe('inline-flex');\n    expect(secondInline).toBe('inline-flex');\n    \n    // Verify submit button is inline-flex\n    const buttonInline = await submitButton.evaluate((el)) => window.getComputedStyle(el).display);\n    expect(buttonInline).toBe('inline-flex');\n    \n    // Verify form is submitted successfully\n    await submitButton.click();\n    const successMessage = page.getByText('Order placed successfully');\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4878,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3594,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 71.867,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.5067,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4225,
+        "missing_keywords": [],
+        "assertion_count": 24,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 111.293,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.5067,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4225,
+        "missing_keywords": [],
+        "assertion_count": 24,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 162.069,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

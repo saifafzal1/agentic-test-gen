@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_225",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8133,
+  "total_latency_s": 71.905,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Date Picker Keyboard Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/date-picker');\n  });\n\n  test('should allow full date picker operation using only keyboard navigation', async ({ page }) => {\n    // Open date picker by pressing Enter on input field\n    const dateInput = page.getByRole('textbox', { name: /date/i });\n    await dateInput.press('Enter');\n\n    // Verify calendar is visible\n    const calendar = page.getByRole('region', { name: /calendar/i });\n    await expect(calendar).toBeVisible();\n\n    // Navigate to previous month using arrow keys\n    const prevMonthBtn = page.getByRole('button', { name: /previous month/i });\n    await prevMonthBtn.press('ArrowLeft');\n    await expect(calendar).toBeVisible();\n\n    // Navigate to next month using arrow keys\n    const nextMonthBtn = page.getByRole('button', { name: /next month/i });\n    await nextMonthBtn.press('ArrowRight');\n    await expect(calendar).toBeVisible();\n\n    // Navigate to next year using arrow keys\n    const nextYearBtn = page.getByRole('button', { name: /next year/i });\n    await nextYearBtn.press('ArrowRight');\n    await expect(calendar).toBeVisible();\n\n    // Navigate to next day using arrow keys\n    const today = page.getByText(/today/i);\n    await today.press('ArrowRight');\n    await expect(calendar).toBeVisible();\n\n    // Navigate to previous day using arrow keys\n    const prevDay = page.getByText(/yesterday/i);\n    await prevDay.press('ArrowLeft');\n    await expect(calendar).toBeVisible();\n\n    // Select a date using Enter key\n    const targetDate = page.getByText('15');\n    await targetDate.press('Enter');\n\n    // Verify date is selected and input is updated\n    await expect(dateInput).toHaveValue(/1[0-9]{2}\\/\\d{2}/);\n    await expect(dateInput).toContainText('15');\n  });\n\n  test('should handle keyboard navigation when date picker is already open', async ({ page }) => {\n    // Open date picker by pressing Enter on input field\n    const dateInput = page.getByRole('textbox', { name: /date/i });\n    await dateInput.press('Enter');\n\n    // Verify calendar is visible\n    const calendar = page.getByRole('region', { name: /calendar/i });\n    await expect(calendar).toBeVisible();\n\n    // Navigate to next month using arrow keys\n    const nextMonthBtn = page.getByRole('button', { name: /next month/i });\n    await nextMonthBtn.press('ArrowRight');\n    await expect(calendar).toBeVisible();\n\n    // Navigate to previous month using arrow keys\n    await nextMonthBtn.press('ArrowLeft');\n    await expect(calendar).toBeVisible();\n\n    // Navigate to next year using arrow keys\n    const nextYearBtn = page.getByRole('button', { name: /next year/i });\n    await nextYearBtn.press('ArrowRight');\n    await expect(calendar).toBeVisible();\n\n    // Navigate to previous year using arrow keys\n    await nextYearBtn.press('ArrowLeft');\n    await expect(calendar).toBeVisible();\n\n    // Select a date using Enter key\n    const selectedDate = page.getByText('1');\n    await selectedDate.press('Enter');\n\n    // Verify date is selected and input is updated\n    await expect(dateInput).toHaveValue(/01\\/\\d{2}\\/\\d{4}/);\n    await expect(dateInput).toContainText('1');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8133,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4777,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.905,
+      "feedback_used": ""
+    }
+  ]
+}

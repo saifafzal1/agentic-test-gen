@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_221",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8305,
+  "total_latency_s": 49.704,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Autocomplete Attributes - Accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form-autocomplete');\n  });\n\n  test('should set correct autocomplete attributes for input fields', async ({ page }) => {\n    // Intercept the API call for autocomplete suggestions\n    await page.route('**/api/autocomplete', (route) => {\n      route.continue();\n    });\n\n    // Fill in the first input field using getByLabel\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('test@example.com');\n\n    // Verify the autocomplete attribute is set\n    const emailInputAttribute = await emailInput.evaluate((el) => el.getAttribute('data-autocomplete'));\n    expect(emailInputAttribute).toBe('email');\n\n    // Verify the input has the correct role\n    const emailInputRole = await emailInput.evaluate((el) => el.getAttribute('aria-role'));\n    expect(emailInputRole).toBe('textbox');\n\n    // Verify the input has the correct aria-autocomplete attribute\n    const emailInputAriaAutocomplete = await emailInput.evaluate((el) => el.getAttribute('aria-autocomplete'));\n    expect(emailInputAriaAutocomplete).toBe('list');\n\n    // Fill in the second input field using getByLabel\n    const firstNameInput = page.getByLabel('First Name');\n    await firstNameInput.fill('John');\n\n    // Verify the autocomplete attribute is set\n    const firstNameInputAttribute = await firstNameInput.evaluate((el) => el.getAttribute('data-autocomplete'));\n    expect(firstNameInputAttribute).toBe('text');\n\n    // Verify the input has the correct role\n    const firstNameInputRole = await firstNameInput.evaluate((el) => el.getAttribute('aria-role'));\n    expect(firstNameInputRole).toBe('textbox');\n\n    // Verify the input has the correct aria-autocomplete attribute\n    const firstNameInputAriaAutocomplete = await firstNameInput.evaluate((el) => el.getAttribute('aria-autocomplete'));\n    expect(firstNameInputAriaAutocomplete).toBe('list');\n\n    // Verify the form is accessible using getByRole\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeVisible();\n  });\n\n  test('should handle invalid input and display appropriate error messages', async ({ page }) => {\n    // Fill in the first input field with invalid data\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('invalid-email');\n\n    // Verify the input has the correct aria-invalid attribute\n    const emailInputAriaInvalid = await emailInput.evaluate((el) => el.getAttribute('aria-invalid'));\n    expect(emailInputAriaInvalid).toBe('true');\n\n    // Verify the input has the correct aria-describedby attribute\n    const emailInputAriaDescribedBy = await emailInput.evaluate((el) => el.getAttribute('aria-describedby'));\n    expect(emailInputAriaDescribedBy).toBeDefined();\n\n    // Verify the error message is displayed\n    const errorMessage = page.getByText(/Please enter a valid email address/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the submit button is disabled\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeDisabled();\n\n    // Verify the form has the correct tabindex\n    const emailInputTabIndex = await emailInput.evaluate((el) => el.getAttribute('tabindex'));\n    expect(emailInputTabIndex).toBe('0');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8305,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.435,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 49.704,
+      "feedback_used": ""
+    }
+  ]
+}

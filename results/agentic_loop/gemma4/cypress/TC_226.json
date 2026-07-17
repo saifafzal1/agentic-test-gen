@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_226",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7746,
+  "total_latency_s": 71.988,
+  "final_script": "describe('Mobile Navigation Collapse to Hamburger Menu', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should collapse navigation into hamburger menu on mobile viewport', () => {\n    // Set viewport to mobile size\n    cy.viewport('iphone-x');\n    \n    // Verify navigation links are visible in desktop view\n    cy.get('[data-testid=\"nav-link-home\"]').should('be.visible');\n    cy.get('[data-testid=\"nav-link-about\"]').should('be.visible');\n    cy.get('[data-testid=\"nav-link-services\"]').should('be.visible');\n    \n    // Verify hamburger menu button is visible\n    cy.get('[data-testid=\"hamburger-menu-button\"]').should('be.visible');\n    \n    // Click hamburger menu button\n    cy.get('[data-testid=\"hamburger-menu-button\"]').click();\n    \n    // Verify navigation menu is now open\n    cy.get('[data-testid=\"mobile-nav-menu\"]').should('be.visible');\n    \n    // Verify navigation links are inside the mobile menu\n    cy.get('[data-testid=\"mobile-nav-link-home\"]').should('be.visible');\n    cy.get('[data-testid=\"mobile-nav-link-about\"]').should('be.visible');\n    cy.get('[data-testid=\"mobile-nav-link-services\"]').should('be.visible');\n    \n    // Verify menu has a close button\n    cy.get('[data-testid=\"close-mobile-menu-button\"]').should('be.visible');\n    \n    // Click close button\n    cy.get('[data-testid=\"close-mobile-menu-button\"]').click();\n    \n    // Verify navigation menu is closed\n    cy.get('[data-testid=\"mobile-nav-menu\"]').should('not.exist');\n  });\n\n  it('should handle navigation menu interaction and close on outside click', () => {\n    // Set viewport to mobile size\n    cy.viewport('iphone-12');\n    \n    // Open hamburger menu\n    cy.get('[data-testid=\"hamburger-menu-button\"]').click();\n    cy.get('[data-testid=\"mobile-nav-menu\"]').should('be.visible');\n    \n    // Click on a navigation link\n    cy.get('[data-testid=\"mobile-nav-link-about\"]').click();\n    \n    // Verify navigation link is active\n    cy.get('[data-testid=\"mobile-nav-link-about\"]').should('have.class', 'active');\n    \n    // Verify menu closes after link click\n    cy.get('[data-testid=\"mobile-nav-menu\"]').should('not.exist');\n    \n    // Open menu again\n    cy.get('[data-testid=\"hamburger-menu-button\"]').click();\n    cy.get('[data-testid=\"mobile-nav-menu\"]').should('be.visible');\n    \n    // Click outside the menu to close it\n    cy.get('[data-testid=\"nav-link-home\"]').click();\n    \n    // Verify menu closes on outside click\n    cy.get('[data-testid=\"mobile-nav-menu\"]').should('not.exist');\n    \n    // Verify hamburger button is still functional\n    cy.get('[data-testid=\"hamburger-menu-button\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7746,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4486,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.988,
+      "feedback_used": ""
+    }
+  ]
+}

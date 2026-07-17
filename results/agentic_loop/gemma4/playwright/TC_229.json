@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_229",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7844,
+  "total_latency_s": 71.864,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Image Scaling on Mobile Viewport', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/images');\n  });\n\n  test('should scale down images to fit screen width on mobile viewport', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 862 });\n    \n    // Verify the first image is visible and scaled\n    const firstImage = page.getByRole('img', { name: /image 1/i });\n    await expect(firstImage).toBeVisible();\n    \n    // Verify the image width is less than the viewport width\n    const imageWidth = await firstImage.evaluate((el) => el.style.width);\n    expect(imageWidth).toBeLessThan('375px');\n    \n    // Verify the image height is scaled proportionally\n    const imageHeight = await firstImage.evaluate((el) => el.style.height);\n    expect(imageHeight).toBeLessThan('1000px');\n    \n    // Verify the image has the correct aspect ratio\n    const aspectRatio = await firstImage.evaluate((el) => {\n      const width = el.style.width;\n      const height = el.style.height;\n      return parseFloat(width) / parseFloat(height);\n    });\n    expect(aspectRatio).toBeCloseTo(1 / 1.5);\n    \n    // Verify the image is responsive by resizing the viewport\n    await page.setViewportSize({ width: 320, height: 600 });\n    const resizedImage = page.getByRole('img', { name: /image 1/i });\n    await expect(resizedImage).toBeVisible();\n    \n    const newImageWidth = await resizedImage.evaluate((el) => el.style.width);\n    expect(newImageWidth).toBeLessThan('320px');\n  });\n\n  test('should handle large images gracefully and maintain aspect ratio on mobile', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 860 });\n    \n    // Verify the second image is visible\n    const secondImage = page.getByRole('img', { name: /image 2/i });\n    await expect(secondImage).toBeVisible();\n    \n    // Verify the image is scaled down\n    const imageWidth = await secondImage.evaluate((el) => el.style.width);\n    expect(imageWidth).toBeLessThan('375px');\n    \n    // Verify the image height is scaled proportionally\n    const imageHeight = await secondImage.evaluate((el) => el.style.height);\n    expect(imageHeight).toBeLessThan('1000px');\n    \n    // Verify the image has the correct aspect ratio\n    const aspectRatio = await secondImage.evaluate((el) => {\n      const width = el.style.width;\n      const height = el.style.height;\n      return parseFloat(width) / parseFloat(height);\n    });\n    expect(aspectRatio).toBeCloseTo(1 / 2.5);\n    \n    // Verify the image is not distorted\n    const imageBoundingBox = await secondImage.boundingBox();\n    expect(imageBoundingBox).not.toBeNull();\n    \n    // Verify the image is not overflowing the viewport\n    const viewportWidth = 375;\n    const viewportHeight = 860;\n    expect(imageBoundingBox.x + imageBoundingBox.width).toBeLessThan(viewportWidth);\n    expect(imageBoundingBox.y + imageBoundingBox.height).toBeLessThan(viewportHeight);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7844,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3815,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.864,
+      "feedback_used": ""
+    }
+  ]
+}

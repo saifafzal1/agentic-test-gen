@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_241",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7398,
+  "total_latency_s": 72.46,
+  "final_script": "describe('Dashboard Sidebar to Bottom Nav Bar on Mobile', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should transform sidebar to bottom nav bar on mobile viewport', () => {\n    // Set viewport to mobile size\n    cy.viewport('iphone-x');\n\n    // Verify sidebar is visible and in standard desktop position\n    cy.get('[data-testid=\"sidebar-menu\"]').should('be.visible');\n    cy.get('[data-testid=\"sidebar-menu\"]').should('have.class', 'sidebar-desktop');\n\n    // Verify bottom nav bar is not visible yet\n    cy.get('[data-testid=\"bottom-nav-bar\"]').should('not.exist');\n\n    // Resize viewport to trigger mobile layout\n    cy.viewport('iphone-12');\n\n    // Verify sidebar is hidden or transformed\n    cy.get('[data-testid=\"sidebar-menu\"]').should('not.exist');\n\n    // Verify bottom nav bar appears\n    cy.get('[data-testid=\"bottom-nav-bar\"]').should('be.visible');\n    cy.get('[data-testid=\"bottom-nav-bar\"]').should('have.class', 'bottom-nav-mobile');\n\n    // Verify bottom nav bar contains expected links\n    cy.get('[data-testid=\"bottom-nav-item-dashboard\"]').should('be.visible');\n    cy.get('[data-testid=\"bottom-nav-item-settings\"]').should('be.visible');\n    cy.get('[data-testid=\"bottom-nav-item-profile\"]').should('be.visible');\n\n    // Verify bottom nav bar is fixed at the bottom\n    cy.get('[data-testid=\"bottom-nav-bar\"]').should('have.css', 'bottom: 0px');\n    cy.get('[data-testid=\"bottom-nav-bar\"]').should('have.css', 'left: 0px');\n  });\n\n  it('should handle sidebar to bottom nav transformation with active state and edge cases', () => {\n    // Set viewport to mobile size\n    cy.viewport('iphone-12');\n\n    // Verify bottom nav bar is visible\n    cy.get('[data-testid=\"bottom-nav-bar\"]').should('be.visible');\n\n    // Verify active link is highlighted\n    cy.get('[data-testid=\"bottom-nav-item-dashboard\"]').should('have.class', 'active');\n    cy.get('[data-testid=\"bottom-nav-item-settings\"]').should('not.have.class', 'active');\n\n    // Click on another navigation item\n    cy.get('[data-testid=\"bottom-nav-item-settings\"]').click();\n\n    // Verify active state changes\n    cy.get('[data-testid=\"bottom-nav-item-settings\"]').should('have.class', 'active');\n    cy.get('[data-testid=\"bottom-nav-item-dashboard\"]').should('not.have.class', 'active');\n\n    // Verify bottom nav bar remains fixed\n    cy.get('[data-testid=\"bottom-nav-bar\"]').should('be.visible');\n    cy.get('[data-testid=\"bottom-nav-bar\"]').should('have.css', 'bottom: 0px');\n\n    // Test edge case: empty state on mobile\n    cy.get('[data-testid=\"bottom-nav-item-profile\"]').click();\n    cy.get('[data-testid=\"profile-page-content\"]').should('be.visible');\n    cy.get('[data-testid=\"profile-page-content\"]').should('contain', 'User Profile');\n\n    // Verify bottom nav bar is still present after navigation\n    cy.get('[data-testid=\"bottom-nav-bar\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7398,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3325,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.46,
+      "feedback_used": ""
+    }
+  ]
+}

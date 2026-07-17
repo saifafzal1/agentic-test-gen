@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_254",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7759,
+  "total_latency_s": 72.514,
+  "final_script": "describe('Itemised Receipt After Checkout', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should display an itemised receipt after successful checkout', () => {\n    // Add items to cart\n    cy.get('[data-testid=\"add-to-cart-btn\"]').click();\n    cy.get('[data-testid=\"add-to-cart-btn\"]').click();\n    cy.get('[data-testid=\"add-to-cart-btn\"]').click();\n\n    // Proceed to checkout\n    cy.get('[data-testid=\"proceed-to-checkout-btn\"]').click();\n\n    // Fill in shipping details\n    cy.get('[data-testid=\"shipping-address-input\"]').type('123 Main St');\n    cy.get('[data-testid=\"city-input\"]').type('Anytown');\n    cy.get('[data-testid=\"zip-code-input\"]').type('12343');\n\n    // Select shipping method\n    cy.get('[data-testid=\"shipping-method-standard\"]').click();\n\n    // Proceed to payment\n    cy.get('[data-testid=\"continue-to-payment-btn\"]').click();\n\n    // Fill in payment details\n    cy.get('[data-testid=\"card-number-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"expiry-date-input\"]').type('12/25');\n    cy.get('[data-testid=\"cvv-input\"]').type('123');\n\n    // Complete checkout\n    cy.get('[data-testid=\"place-order-btn\"]').click();\n\n    // Verify receipt is displayed\n    cy.get('[data-testid=\"receipt-container\"]').should('be.visible');\n    cy.get('[data-testid=\"receipt-title\"]').should('contain', 'Order Receipt');\n\n    // Verify itemised list is present\n    cy.get('[data-testid=\"receipt-item-row\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"receipt-item-row\"]').first().should('contain', 'Product Name');\n    cy.get('[data-testid=\"receipt-item-row\"]').first().should('contain', '$19.99');\n\n    // Verify total amount is displayed\n    cy.get('[data-testid=\"receipt-total\"]').should('be.visible');\n    cy.get('[data-testid=\"receipt-total\"]').should('contain', '$59.97');\n\n    // Verify tax and shipping are itemised\n    cy.get('[data-testid=\"receipt-tax-line\"]').should('be.visible');\n    cy.get('[data-testid=\"receipt-shipping-line\"]').should('be.visible');\n  });\n\n  it('should handle empty cart and prevent receipt display', () => {\n    // Attempt to proceed to checkout with empty cart\n    cy.get('[data-testid=\"proceed-to-checkout-btn\"]').click();\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"empty-cart-error\"]').should('be.visible');\n    cy.get('[data-testid=\"empty-cart-error\"]').should('contain', 'Your cart is empty');\n\n    // Verify receipt container does not appear\n    cy.get('[data-testid=\"receipt-container\"]').should('not.exist');\n\n    // Verify user is redirected back to cart page\n    cy.url().should('include', '/cart');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7759,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.453,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.514,
+      "feedback_used": ""
+    }
+  ]
+}

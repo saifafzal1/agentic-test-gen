@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_238",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7359,
+  "total_latency_s": 72.785,
+  "final_script": "describe('Search Bar Mobile Expansion on Focus', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should expand search bar on focus on mobile viewport', () => {\n    cy.viewport('iphone-x');\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n    cy.get('[data-testid=\"search-input\"]').should('have.attr', 'type', 'text');\n    cy.get('[data-testid=\"search-input\"]').click();\n    cy.get('[data-testid=\"search-input\"]').should('have.attr', 'aria-expanded', 'true');\n    cy.get('[data-testid=\"search-input\"]').should('have.class', 'expanded');\n    cy.get('[data-testid=\"search-input\"]').should('have.css', 'width', '100%');\n    cy.get('[data-testid=\"search-input\"]').should('have.css', 'height', '50px');\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n    cy.get('[data-testid=\"search-input\"]').should('contain', 'Search...');\n  });\n\n  it('should collapse search bar when focus is lost on mobile viewport', () => {\n    cy.viewport('iphone-12');\n    cy.get('[data-testid=\"search-input\"]').click();\n    cy.get('[data-testid=\"search-input\"]').should('have.class', 'expanded');\n    cy.get('[data-testid=\"search-input\"]').should('have.css', 'width', '100%');\n    cy.get('[data-testid=\"search-input\"]').type('test query');\n    cy.get('[data-testid=\"search-input\"]').blur();\n    cy.get('[data-testid=\"search-input\"]').should('not.have.class', 'expanded');\n    cy.get('[data-testid=\"search-input\"]').should('have.css', 'width', 'auto');\n    cy.get('[data-testid=\"search-input\"]').should('have.css', 'height', '40px');\n    cy.get('[data-testid=\"search-input\"]').should('contain', 'test query');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7359,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3197,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.785,
+      "feedback_used": ""
+    }
+  ]
+}

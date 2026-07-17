@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_230",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7864,
+  "total_latency_s": 72.162,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Font Size Readability on Small Screens', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should display readable font size on small screen without zooming', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 667 });\n    \n    const header = page.getByRole('heading', { name: /main content/i });\n    await expect(header).toBeVisible();\n    \n    const paragraph = page.getByText(/this is a paragraph of text/i);\n    await expect(paragraph).toBeVisible();\n    \n    const button = page.getByRole('button', { name: /submit/i });\n    await expect(button).toBeVisible();\n    \n    const fontSize = await header.evaluate((el) => parseFloat(window.getComputedStyle(el).fontSize));\n    expect(fontSize).toBeGreaterThan(16);\n    \n    const paragraphFontSize = await paragraph.evaluate((el) => parseFloat(window.getComputedStyle(el).fontSize));\n    expect(paragraphFontSize).toBeGreaterThan(14);\n    \n    const buttonFontSize = await button.evaluate((el) => parseFloat(window.getComputedStyle(el).fontSize));\n    expect(buttonFontSize).toBeGreaterThan(14);\n  });\n\n  test('should maintain readable font size when screen size changes', async ({ page }) => {\n    await page.setViewportSize({ width: 1200, height: 800 });\n    \n    const header = page.getByRole('heading', { name: /main content/i });\n    await expect(header).toBeVisible();\n    \n    const paragraph = page.getByText(/this is a paragraph of text/i);\n    await expect(paragraph).toBeVisible();\n    \n    const button = page.getByRole('button', { name: /submit/i });\n    await expect(button).toBeVisible();\n    \n    const headerFontSize = await header.evaluate((el) => parseFloat(window.getComputedStyle(el).fontSize));\n    expect(headerFontSize).toBeGreaterThan(24);\n    \n    await page.setViewportSize({ width: 375, height: 667 });\n    \n    const newHeaderFontSize = await header.evaluate((el) => parseFloat(window.getComputedStyle(el).fontSize));\n    expect(newHeaderFontSize).toBeGreaterThan(16);\n    \n    const newParagraphFontSize = await paragraph.evaluate((el) => parseFloat(window.getComputedStyle(el).fontSize));\n    expect(newParagraphFontSize).toBeGreaterThan(12);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7864,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3881,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.162,
+      "feedback_used": ""
+    }
+  ]
+}

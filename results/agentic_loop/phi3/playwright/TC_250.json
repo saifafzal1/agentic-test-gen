@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_250",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8301,
+  "total_latency_s": 41.394,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('PayPal Payment Method Selection', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should successfully select PayPal as payment method and proceed to payment page', async ({ page }) => {\n    // Verify PayPal button is visible\n    const paypalButton = page.getByRole('button', { name: /paypal/i });\n    await expect(paypalButton).toBeVisible();\n\n    // Click PayPal button\n    await paypalButton.click();\n\n    // Verify PayPal payment method is selected\n    const paypalMethod = page.getByRole('heading', { name: /PayPal/i });\n    await expect(paypalMethod).toBeVisible();\n\n    // Verify PayPal details are displayed\n    const paypalDetails = page.getByText(/PayPal/i);\n    await expect(paypalDetails).toBeVisible();\n\n    // Verify payment form is visible\n    const paymentForm = page.getByRole('form', { name: /payment/i });\n    await expect(paymentForm).toBeVisible();\n\n    // Verify PayPal button is disabled (should not be clicked twice)\n    await expect(paypalButton).toBeDisabled();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/Payment successful/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify user is redirected to payment page\n    const paymentPage = page.getByRole('main', { name: /payment/i });\n    await expect(paymentPage).toBeVisible();\n  });\n\n  test('should handle PayPal payment failure and display error message', async ({ page }) => {\n    // Mock PayPal API response to simulate failure\n    await page.route('**/api/paypal/payment', (route) => {\n      route.abort('failed');\n    });\n\n    // Verify PayPal button is visible\n    const paypalButton = page.getByRole('button', { name: /paypal/i });\n    await expect(paypalButton).toBeVisible();\n\n    // Click PayPal button\n    await paypalButton.click();\n\n    // Verify PayPal payment method is selected\n    const paypalMethod = page.getByRole('heading', { name: /PayPal/i });\n    await expect(paypalMethod).toBeVisible();\n\n    // Verify PayPal details are displayed\n    const paypalDetails = page.getByText(/PayPal/i);\n    await expect(paypalDetails).toBeVisible();\n\n    // Verify payment form is visible\n    const paymentForm = page.getByRole('form', { name: /payment/i });\n    await expect(paymentForm).toBeVisible();\n\n    // Verify PayPal button is disabled (should not be clicked twice)\n    await expect(paypalButton).toBeDisabled();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/Payment failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify user is redirected to error page\n    const errorPage = page.getByRole('main', { name: /error/i });\n    await expect(errorPage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8301,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5336,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 41.394,
+      "feedback_used": ""
+    }
+  ]
+}

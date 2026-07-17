@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_234",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8065,
+  "total_latency_s": 31.854,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Sticky Footer Navigation on Mobile', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should display sticky footer navigation on mobile viewport', async ({ page }) => {\n    // Set viewport to mobile\n    await page.setViewportSize({ width: 375, height: 812 });\n\n    // Verify footer navigation is visible\n    const navLinks = page.getByRole('navigation').first();\n    await expect(navLinks).toBeVisible();\n\n    // Verify navigation links are accessible via role\n    const homeLink = page.getByRole('link', { name: /home/i });\n    await expect(homeLink).toBeVisible();\n\n    const aboutLink = page.getByRole('link', { name: /about/i });\n    await expect(aboutLink).toBeVisible();\n\n    const contactLink = page.getByRole('link', { name: /contact/i });\n    await expect(contactLink).toBeVisible();\n\n    // Verify footer navigation is sticky\n    const footerNav = page.getByRole('navigation');\n    await expect(footerNav).toHaveAttribute('style', /position: sticky; top: 0;/);\n\n    // Verify footer navigation is responsive\n    await expect(footerNav).toHaveStyle('min-width: 100%;');\n  });\n\n  test('should maintain sticky footer navigation state after scrolling', async ({ page }) => {\n    // Set viewport to mobile\n    await page.setViewportSize({ width: 375, height: 812 });\n\n    // Verify footer navigation is visible\n    const navLinks = page.getByRole('navigation').first();\n    await expect(navLinks).toBeVisible();\n\n    // Scroll down to test stickiness\n    const scrollContainer = page.locator('[data-testid=\"scroll-container\"]');\n    await scrollContainer.evaluate((el) => el.scrollTop = el.scrollHeight);\n\n    // Verify footer navigation is still visible after scrolling\n    await expect(navLinks).toBeVisible();\n\n    // Verify footer navigation is still sticky\n    await expect(footerNav).toHaveAttribute('style', /position: sticky; top: 0;/);\n\n    // Verify footer navigation is responsive after scrolling\n    await expect(footerNav).toHaveStyle('min-width: 100%;');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8065,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4549,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 31.854,
+      "feedback_used": ""
+    }
+  ]
+}

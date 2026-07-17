@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_243",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 3,
+  "best_score": 0.78,
+  "total_latency_s": 1081.915,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Video Player Responsive Tablet Viewport', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/video-player');\n  });\n\n  test('should resize video player proportionally on tablet viewports', async ({ page }) => {\n    // Setup: Open the video player page\n    await page.getByRole('heading', { name: /video player/i }).click();\n\n    // Verify initial desktop viewport size\n    const desktopWidth = page.getByRole('heading', { name: /video player/i }).boundingBox().width;\n    const desktopHeight = page.getByRole('heading', { name: /video player/i }).boundingBox().height;\n    expect(desktopWidth).toBeGreaterThan(1024);\n    expect(desktopHeight).toBeGreaterThan(768);\n\n    // Verify initial video player dimensions\n    const videoPlayer = page.getByRole('region', { name: /video player/i });\n    const videoWidth = await videoPlayer.boundingBox().width;\n    const videoHeight = await videoPlayer.boundingBox().height;\n    expect(videoWidth).toBeGreaterThan(0);\n    expect(videoHeight).toBeGreaterThan(0);\n\n    // Setup: Trigger tablet viewport\n    await page.evaluate(() => {\n      window.matchMedia('(max-width: 1024px)').addEventListener('change', (e) => {\n        if (e.matches) {\n          window.matchMedia('(max-width: 1024px)').removeEventListener('change');\n          window.matchMedia('(min-width: 1025px)').removeEventListener('change');\n        }\n      });\n    });\n\n    // Verify video player resizes on tablet viewport\n    await page.evaluate(() => {\n      window.matchMedia('(max-width: 1024px)').addListener('change', (e) => {\n        if (e.matches) {\n          const video = document.querySelector('video');\n          video.style.width = '100%';\n          video.style.height = 'auto';\n        }\n      });\n    });\n\n    // Verify video player dimensions on tablet viewport\n    const videoWidthTablet = await videoPlayer.boundingBox().width;\n    const videoHeightTablet = await videoPlayer.boundingBox().height;\n    expect(videoWidthTablet).toBeLessThanOrEqual(1024);\n    expect(videoHeightTablet).toBeLessThanOrEqual(768);\n\n    // Verify video controls are visible and functional\n    const playButton = page.getByRole('button', { name: /play/i });\n    await expect(playButton).toBeVisible();\n    await playButton.click();\n\n    // Verify video is playing\n    const playbackStatus = page.getByRole('status');\n    await expect(playbackStatus).toContainText('Playing');\n\n    // Verify video player maintains aspect ratio\n    const aspectRatio = videoWidthTablet / videoHeightTablet;\n    expect(aspectRatio).toBeGreaterThanOrEqual(1);\n\n    // Verify controls are still visible and functional on tablet viewport\n    await expect(playButton).toBeVisible();\n    await expect(playButton).toBeEnabled();\n\n    // Verify video player resizes back to desktop viewport\n    await page.evaluate(() => {\n      window.matchMedia('(min-width: 1025px)').addListener('change', (e) => {\n        if (e.matches) {\n          window.matchMedia('(max-width: 1024px)').removeListener('change');\n          window.matchMedia('(min-width: 1025px)').removeListener('change');\n        }\n      });\n    });\n\n    // Verify video player dimensions return to desktop viewport\n    const videoWidthDesktop = await videoPlayer.boundingBox().width;\n    const videoHeightDesktop = await videoPlayer.boundingBox().height;\n    expect(videoWidthDesktop).toBeGreaterThan(1024);\n    expect(videoHeightDesktop).toBeGreaterThan(768);\n  });\n\n  test('should handle video player scaling issues on tablet viewports', async ({ page }) => {\n    // Setup: Open the video player page\n    await page.getByRole('heading', { name: /video player/i }).click();\n\n    // Verify initial desktop viewport size\n    const desktopWidth = page.getByRole('heading', { name: /video player/i }).boundingBox().width;\n    const desktopHeight = page.getByRole('heading', { name: /video player/i }).boundingBox().height;\n    expect(desktopWidth).toBeGreaterThan(1024);\n    expect(desktopHeight).toBeGreaterThan(768);\n\n    // Verify initial video player dimensions\n    const videoPlayer = page.getByRole('region', { name: /video player/i });\n    const videoWidth = await videoPlayer.boundingBox().width;\n    const videoHeight = await videoPlayer.boundingBox().height;\n    expect(videoWidth).toBeGreaterThan(0);\n    expect(videoHeight).toBeGreaterThan(0);\n\n    // Setup: Trigger tablet viewport\n    await page.evaluate(() => {\n      window.matchMedia('(max-width: 1024px)').addEventListener('change', (e) => {\n        if (e.matches) {\n          window.matchMedia('(max-width: 1024px)').removeEventListener('change');\n          window.matchMedia('(min-width: 1025px)').removeEventListener('change');\n        }\n      });\n    });\n\n    // Verify video player fails to load on tablet viewport\n    await page.evaluate(() => {\n      window.matchMedia('(max-width: 1024px)').addListener('change', (e) => {\n        if (e.matches) {\n          const video = document.querySelector('video');\n          video.src = 'invalid-video-source';\n        }\n      });\n    });\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/error loading video/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify video player does not play\n    const playbackStatus = page.getByRole('status');\n    await expect(playbackStatus).toContainText('Error');\n\n    // Verify video controls are still visible and functional\n    const playButton = page.getByRole('button', { name: /play/i });\n    await expect(playButton).toBeVisible();\n    await expect(playButton).toBeEnabled();\n\n    // Verify video player resizes back to desktop viewport\n    await page.evaluate(() => {\n      window.matchMedia('(min-width: 1025px)').addListener('change', (e) => {\n        if (e.matches) {\n          window.matchMedia('(max-width: 1024px)').removeListener('change');\n          window.matchMedia('(min-width: 1025px)').removeListener('change');\n        }\n      });\n    });\n\n    // Verify video player dimensions return to desktop viewport\n    const videoWidthDesktop = await videoPlayer.boundingBox().width;\n    const videoHeightDesktop = await videoPlayer.boundingBox().height;\n    expect(videoWidthDesktop).toBeGreaterThan(1024);\n    expect(videoHeightDesktop).toBeGreaterThan(768);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5108,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4561,
+        "missing_keywords": [],
+        "assertion_count": 22,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 56.248,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4824,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3614,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 496.63,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.78,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3667,
+        "missing_keywords": [],
+        "assertion_count": 23,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 529.037,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

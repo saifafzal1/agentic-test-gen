@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_251",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7549,
+  "total_latency_s": 357.62,
+  "final_script": "describe('Order Summary Before Payment Confirmation', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should display order summary with correct details before payment confirmation', () => {\n    // Intercept the API call to get order details\n    cy.intercept('GET', '/api/orders/12345').as('getOrderDetails');\n\n    // Navigate to checkout page\n    cy.get('[data-testid=\"checkout-button\"]').click();\n\n    // Wait for order details to load\n    cy.wait('@getOrderDetails');\n\n    // Verify order summary is visible\n    cy.get('[data-testid=\"order-summary\"]').should('be.visible');\n\n    // Verify order summary contains correct order details\n    cy.get('[data-testid=\"order-summary\"]').should('contain', 'Order ID: 12345');\n    cy.get('[data-testid=\"order-summary\"]').should('contain', 'Total: $150.00');\n    cy.get('[data-testid=\"order-summary\"]').should('contain', 'Shipping: $10.00');\n    cy.get('[data-testid=\"order-summary\"]').should('contain', 'Tax: $15.00');\n    cy.get('[data-testid=\"order-summary\"]').should('contain', 'Subtotal: $135.00');\n    cy.get('[data-testid=\"order-summary\"]').should('contain', 'Discount: $0.00');\n    cy.get('[data-testid=\"order-summary\"]').should('contain', 'Grand Total: $150.00');\n\n    // Verify payment options are displayed\n    cy.get('[data-testid=\"payment-methods\"]').should('be.visible');\n    cy.get('[data-testid=\"payment-method-card\"]').should('be.visible');\n    cy.get('[data-testid=\"payment-method-paypal\"]').should('be.visible');\n\n    // Verify confirm button is visible\n    cy.get('[data-testid=\"confirm-payment-button\"]').should('be.visible');\n  });\n\n  it('should handle empty order summary when no order details are available', () => {\n    // Intercept the API call to get order details\n    cy.intercept('GET', '/api/orders/99999').as('getOrderDetails');\n\n    // Navigate to checkout page\n    cy.get('[data-testid=\"checkout-button\"]').click();\n\n    // Wait for order details to load\n    cy.wait('@getOrderDetails');\n\n    // Verify order summary is not visible when no order details are returned\n    cy.get('[data-testid=\"order-summary\"]').should('not.exist');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'No order details found');\n\n    // Verify user is redirected to error page\n    cy.url().should('include', '/error');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7549,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3831,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 357.62,
+      "feedback_used": ""
+    }
+  ]
+}

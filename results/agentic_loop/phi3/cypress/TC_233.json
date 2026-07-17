@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_233",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7064,
+  "total_latency_s": 435.777,
+  "final_script": "describe('Mobile Full-Screen Modals on Small Viewports', () => {\n  beforeEach(() => {\n    cy.visit('/modals');\n  });\n\n  it('should display modal in full-screen on small viewports', () => {\n    // Set viewport to small size\n    cy.viewport('iphone-x');\n\n    // Intercept modal API call\n    cy.intercept('GET', '/api/modal/details').as('getModalDetails');\n\n    // Click modal trigger button\n    cy.get('[data-testid=\"modal-trigger\"]').click();\n\n    // Wait for modal API call\n    cy.wait('@getModalDetails');\n\n    // Verify modal is visible and full-screen\n    cy.get('[data-testid=\"modal-overlay\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-content\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-content\"]').should('have.css', 'width', '100%');\n    cy.get('[data-testid=\"modal-content\"]').should('have.css', 'height', '100%');\n\n    // Verify modal has correct title\n    cy.get('[data-testid=\"modal-title\"]').should('contain', 'Modal Title');\n\n    // Verify modal has correct body content\n    cy.get('[data-testid=\"modal-body\"]').should('contain', 'Modal body content');\n\n    // Verify close button is present\n    cy.get('[data-testid=\"modal-close-btn\"]').should('be.visible');\n\n    // Close modal\n    cy.get('[data-testid=\"modal-close-btn\"]').click();\n\n    // Verify modal is closed\n    cy.get('[data-testid=\"modal-overlay\"]').should('not.exist');\n  });\n\n  it('should handle modal closing on small viewports with backdrop click', () => {\n    // Set viewport to small size\n    cy.viewport('iphone-x');\n\n    // Intercept modal API call\n    cy.intercept('GET', '/api/modal/details').as('getModalDetails');\n\n    // Click modal trigger button\n    cy.get('[data-testid=\"modal-trigger\"]').click();\n\n    // Wait for modal API call\n    cy.wait('@getModalDetails');\n\n    // Verify modal is visible and full-screen\n    cy.get('[data-testid=\"modal-overlay\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-content\"]').should('be.visible');\n\n    // Verify modal has correct title\n    cy.get('[data-testid=\"modal-title\"]').should('contain', 'Modal Title');\n\n    // Verify modal has correct body content\n    cy.get('[data-testid=\"modal-body\"]').should('contain', 'Modal body content');\n\n    // Verify close button is present\n    cy.get('[data-testid=\"modal-close-btn\"]').should('be.visible');\n\n    // Click backdrop to close modal\n    cy.get('[data-testid=\"modal-overlay\"]').click();\n\n    // Verify modal is closed\n    cy.get('[data-testid=\"modal-overlay\"]').should('not.exist');\n\n    // Verify page content is still visible\n    cy.get('[data-testid=\"page-content\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7064,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2215,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 435.777,
+      "feedback_used": ""
+    }
+  ]
+}

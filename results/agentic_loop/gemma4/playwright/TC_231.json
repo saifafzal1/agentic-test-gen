@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_231",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7864,
+  "total_latency_s": 71.876,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Horizontal Scrolling Disabled on Main Layout', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/main-layout');\n  });\n\n  test('should disable horizontal scrolling when viewport is mobile size', async ({ page }) => {\n    // Set viewport to mobile size\n    await page.setViewportSize({ width: 375, height: 667 });\n\n    // Verify main content is visible without horizontal scrollbar\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeVisible();\n\n    // Verify no horizontal scrollbar is present\n    const scrollbar = page.locator('[data-testid=\"horizontal-scrollbar\"]');\n    await expect(scrollbar).not.toBeVisible();\n\n    // Verify content fits within viewport width\n    const contentWidth = await mainContent.evaluate((el) => el.scrollWidth);\n    const viewportWidth = 375;\n    expect(contentWidth).toBeLessThanOrEqual(viewportWidth);\n\n    // Verify user can scroll vertically\n    const verticalScroll = page.locator('[data-testid=\"vertical-scrollbar\"]');\n    await expect(verticalScroll).toBeVisible();\n    await verticalScroll.evaluate((el) => el.scrollTop = 100);\n    await expect(mainContent).toHaveScrollTop(100);\n  });\n\n  test('should allow horizontal scrolling when viewport is desktop size', async ({ page }) => {\n    // Set viewport to desktop size\n    await page.setViewportSize({ width: 1920, height: 1080 });\n\n    // Verify main content is visible\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeVisible();\n\n    // Verify horizontal scrollbar is present\n    const scrollbar = page.locator('[data-testid=\"horizontal-scrollbar\"]');\n    await expect(scrollbar).toBeVisible();\n\n    // Verify content overflows viewport width\n    const contentWidth = await mainContent.evaluate((el) => el.scrollWidth);\n    const viewportWidth = 1920;\n    expect(contentWidth).toBeGreaterThan(viewportWidth);\n\n    // Verify user can scroll horizontally\n    const horizontalScroll = page.locator('[data-testid=\"horizontal-scrollbar\"]');\n    await horizontalScroll.evaluate((el) => el.scrollLeft = 500);\n    await expect(mainContent).toHaveScrollLeft(500);\n\n    // Verify user can scroll vertically\n    const verticalScroll = page.locator('[data-testid=\"vertical-scrollbar\"]');\n    await verticalScroll.evaluate((el) => el.scrollTop = 100);\n    await expect(mainContent).toHaveScrollTop(100);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7864,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3881,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.876,
+      "feedback_used": ""
+    }
+  ]
+}

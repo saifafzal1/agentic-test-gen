@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_230",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7477,
+  "total_latency_s": 347.29,
+  "final_script": "describe('Responsive Font Size on Small Screens', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should display readable font size on small screens without zooming', () => {\n    // Set viewport to simulate small screen\n    cy.viewport('iphone-x').then(() => {\n      cy.intercept('GET', '/api/fonts').as('fetchFonts');\n      cy.wait('@fetchFonts');\n    });\n\n    // Verify font size is set to a readable value\n    cy.get('[data-testid=\"page-title\"]').should('be.visible');\n    cy.get('[data-testid=\"page-title\"]').should('have.css', 'font-size', '16px');\n\n    // Verify text is not blurry or pixelated\n    cy.get('[data-testid=\"page-title\"]').should('have.css', 'font-smooth', 'auto');\n\n    // Verify text is still legible and not overflowing\n    cy.get('[data-testid=\"page-title\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"page-title\"]').should('not.contain', '...');\n\n    // Verify responsive design adjusts font size on smaller screens\n    cy.viewport('iphone-xs').then(() => {\n      cy.get('[data-testid=\"page-title\"]').should('have.css', 'font-size', '14px');\n    });\n  });\n\n  it('should maintain readability when user zooms in on small screen', () => {\n    // Set viewport to simulate small screen\n    cy.viewport('iphone-x').then(() => {\n      cy.intercept('GET', '/api/fonts').as('fetchFonts');\n      cy.wait('@fetchFonts');\n    });\n\n    // Verify initial font size is readable\n    cy.get('[data-testid=\"page-title\"]').should('be.visible');\n    cy.get('[data-testid=\"page-title\"]').should('have.css', 'font-size', '16px');\n\n    // Simulate user zooming in\n    cy.get('[data-testid=\"page-title\"]').trigger('wheel', { deltaY: -100 });\n\n    // Verify font size does not increase beyond a reasonable limit\n    cy.get('[data-testid=\"page-title\"]').should('have.css', 'font-size', '18px');\n\n    // Verify text remains legible and not overflowing\n    cy.get('[data-testid=\"page-title\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"page-title\"]').should('not.contain', '...');\n\n    // Verify user can zoom out to original size\n    cy.get('[data-testid=\"page-title\"]').trigger('wheel', { deltaY: 100 });\n    cy.get('[data-testid=\"page-title\"]').should('have.css', 'font-size', '16px');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4696,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3386,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 55.816,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7477,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3588,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 291.474,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

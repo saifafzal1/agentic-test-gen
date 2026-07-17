@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_245",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8098,
+  "total_latency_s": 544.403,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Card Number Validation - Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/payment');\n  });\n\n  test('should display error message when user enters an invalid card number', async ({ page }) => {\n    // Setup: intercept the API call to validate card number\n    await page.route('**/api/validate-card-number', (route) => {\n      route.abort('failed');\n    });\n\n    // Intercept the API call with invalid card number\n    await page.route('**/api/validate-card-number', (route) => {\n      route.continue();\n    });\n\n    // Verify error message is visible\n    const errorMessage = page.getByText('Invalid card number');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error class is applied\n    const errorClass = page.getByTestId('error-class');\n    await expect(errorClass).toBeVisible();\n\n    // Verify error icon is displayed\n    const errorIcon = page.getByTestId('error-icon');\n    await expect(errorIcon).toBeVisible();\n\n    // Verify error message is displayed in a specific container\n    const errorContainer = page.getByTestId('error-container');\n    await expect(errorContainer).toBeVisible();\n\n    // Verify error message text is correct\n    await expect(errorMessage).toContainText('Invalid card number');\n\n    // Verify error message is styled appropriately\n    await expect(errorMessage).toHaveClass(/error-message/);\n\n    // Verify form is still present and can be interacted with\n    const cardNumberInput = page.getByLabel('Card Number');\n    await expect(cardNumberInput).toBeVisible();\n\n    // Verify card number input has error state\n    await expect(cardNumberInput).toHaveClass(/error-input/);\n\n    // Verify submit button is disabled\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeDisabled();\n  });\n\n  test('should clear error message when user enters a valid card number', async ({ page }) => {\n    // Setup: intercept the API call to validate card number\n    await page.route('**/api/validate-card-number', (route) => {\n      route.continue();\n    });\n\n    // Verify error message is visible initially\n    const errorMessage = page.getByText('Invalid card number');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error class is applied\n    const errorClass = page.getByTestId('error-class');\n    await expect(errorClass).toBeVisible();\n\n    // Verify error icon is displayed\n    const errorIcon = page.getByTestId('error-icon');\n    await expect(errorIcon).toBeVisible();\n\n    // Verify error message is displayed in a specific container\n    const errorContainer = page.getByTestId('error-container');\n    await expect(errorContainer).toBeVisible();\n\n    // Verify error message text is correct\n    await expect(errorMessage).toContainText('Invalid card number');\n\n    // Verify error message is styled appropriately\n    await expect(errorMessage).toHaveClass(/error-message/);\n\n    // Verify card number input is initially empty\n    const cardNumberInput = page.getByLabel('Card Number');\n    await expect(cardNumberInput).toHaveValue('');\n\n    // Verify card number input has error state\n    await expect(cardNumberInput).toHaveClass(/error-input/);\n\n    // Enter a valid card number\n    await cardNumberInput.fill('1234567890123456');\n\n    // Verify error message disappears\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify error class is no longer applied\n    await expect(errorClass).not.toBeVisible();\n\n    // Verify error icon is no longer displayed\n    const errorIcon = page.getByTestId('error-icon');\n    await expect(errorIcon).not.toBeVisible();\n\n    // Verify error message is not present\n    const errorMessage = page.getByText('Invalid card number');\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify error message is not styled\n    await expect(errorMessage).not.toHaveClass(/error-message/);\n\n    // Verify error message is cleared\n    const errorContainer = page.getByTestId('error-container');\n    await expect(errorContainer).not.toBeVisible();\n\n    // Verify error message is cleared from DOM\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify error message is cleared from state\n    const errorState = page.evaluate(() => {\n      const error = document.querySelector('[data-testid=\"error-message\"]');\n      return error ? error.textContent : '';\n    });\n    await expect(errorState).toBe('');\n\n    // Verify submit button is now enabled\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeEnabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.498,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3932,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 55.142,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8098,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.366,
+        "missing_keywords": [],
+        "assertion_count": 26,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 489.261,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

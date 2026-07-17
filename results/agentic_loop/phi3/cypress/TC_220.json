@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_220",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.466,
+  "total_latency_s": 737.304,
+  "final_script": "describe('Prefers Reduced Motion Setting', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should respect user\\'s prefers-reduced-motion setting and disable animations', () => {\n    // Set the prefers-reduced-motion to no-animations\n    cy.window().then((win) => {\n      win.localStorage.setItem('prefers_reduced_motion', 'no-animations');\n    });\n\n    // Verify the setting is applied\n    cy.window().then((win) => {\n      expect(win.getItem('prefers_reduced_motion')).to.equal('no-animations');\n    });\n\n    // Intercept API call to fetch user settings\n    cy.intercept('GET', '/api/user-settings').as('getUserSettings');\n\n    // Wait for the API call\n    cy.wait('@getUserSettings');\n\n    // Verify the API returns the reduced motion setting\n    cy.get('@getUserSettings').then((interception) => {\n      expect(interception.response.body.prefersReducedMotion).to.equal('no-animations');\n    });\n\n    // Verify animations are disabled\n    cy.get('[data-testid=\"animated-button\"]').should('not.be.visible');\n    cy.get('[data-testid=\"fade-in-modal\"]').should('not.exist');\n    cy.get('[data-testid=\"slide-in-sidebar\"]').should('not.be.visible');\n\n    // Verify content is still accessible\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n  });\n\n  it('should handle edge case where prefers-reduced-motion is not set', () => {\n    // Clear any existing prefers-reduced-motion setting\n    cy.window().then((win) => {\n      win.localStorage.removeItem('prefers_reduced_motion');\n    });\n\n    // Verify the setting is cleared\n    cy.window().then((win) => {\n      expect(win.getItem('prefers_reduced_motion')).to.be.undefined;\n    });\n\n    // Verify default animations are enabled\n    cy.get('[data-testid=\"animated-button\"]').should('be.visible');\n    cy.get('[data-testid=\"fade-in-modal\"]').should('be.visible');\n    cy.get('[data-testid=\"slide-in-sidebar\"]').should('be.visible');\n\n    // Verify user can still interact with the app\n    cy.get('[data-testid=\"animated-button\"]').click();\n    cy.get('[data-testid=\"modal-content\"]').should('be.visible');\n\n    // Verify user can override the setting\n    cy.window().then((win) => {\n      win.localStorage.setItem('prefers_reduced_motion', 'no-animations');\n    });\n\n    // Verify the setting is applied again\n    cy.window().then((win) => {\n      expect(win.getItem('prefers_reduced_motion')).to.equal('no-animations');\n    });\n\n    // Verify animations are disabled again\n    cy.get('[data-testid=\"animated-button\"]').should('not.be.visible');\n    cy.get('[data-testid=\"fade-in-modal\"]').should('not.exist');\n    cy.get('[data-testid=\"slide-in-sidebar\"]').should('not.be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.466,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3265,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 243.716,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4629,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3163,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 247.28,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.4629,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3163,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 246.308,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_228",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7944,
+  "total_latency_s": 529.41,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Tablet Layout - Two-Column Grid', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/tablet-layout');\n  });\n\n  test('should switch to two-column grid layout on tablet viewport', async ({ page }) => {\n    // Set viewport to tablet size\n    await page.setViewportSize({ width: 768, height: 1024 });\n\n    // Verify initial layout is single column\n    const singleColumnLayout = page.getByRole('region', { name: /single column/i });\n    await expect(singleColumnLayout).toBeVisible();\n\n    // Verify two-column layout is not visible\n    const twoColumnLayout = page.getByRole('region', { name: /two column/i });\n    await expect(twoColumnLayout).not.toBeVisible();\n\n    // Verify tablet-specific styles are applied\n    const tabletStyles = page.getByTestId('tablet-styles');\n    await expect(tabletStyles).toBeVisible();\n\n    // Verify grid items are visible in single column\n    const gridItem = page.getByRole('heading', { name: /Item 1/i });\n    await expect(gridItem).toBeVisible();\n\n    // Verify grid item is not visible in two-column layout\n    await expect(twoColumnLayout).not.toContainText('Item 1');\n\n    // Verify two-column layout is visible after setting viewport\n    await page.setViewportSize({ width: 1024, height: 1024 });\n    await expect(twoColumnLayout).toBeVisible();\n\n    // Verify grid items are visible in two-column layout\n    await expect(gridItem).toBeVisible();\n\n    // Verify grid item is visible in both columns\n    const column1 = page.getByRole('region', { name: /column 1/i });\n    const column2 = page.getByRole('region', { name: /column 2/i });\n    await expect(column1).toContainText('Item 1');\n    await expect(column2).toContainText('Item 1');\n\n    // Verify responsive breakpoints are respected\n    await page.setViewportSize({ width: 1280, height: 1024 });\n    await expect(twoColumnLayout).toBeVisible();\n\n    // Verify layout switches back to single column on smaller viewport\n    await page.setViewportSize({ width: 640, height: 1024 });\n    await expect(twoColumnLayout).not.toBeVisible();\n    await expect(singleColumnLayout).toBeVisible();\n  });\n\n  test('should maintain two-column layout on tablet when resizing', async ({ page }) => {\n    // Set viewport to tablet size\n    await page.setViewportSize({ width: 768, height: 1024 });\n\n    // Verify initial two-column layout is visible\n    const twoColumnLayout = page.getByRole('region', { name: /two column/i });\n    await expect(twoColumnLayout).toBeVisible();\n\n    // Verify grid items are visible in two-column layout\n    const gridItem = page.getByRole('heading', { name: /Item 1/i });\n    await expect(gridItem).toBeVisible();\n\n    // Resize viewport to test responsive behavior\n    await page.setViewportSize({ width: 1024, height: 1024 });\n    await expect(twoColumnLayout).toBeVisible();\n\n    // Verify grid items are still visible in two-column layout\n    await expect(gridItem).toBeVisible();\n\n    // Resize viewport to test edge case\n    await page.setViewportSize({ width: 1280, height: 1024 });\n    await expect(twoColumnLayout).toBeVisible();\n\n    // Verify layout switches back to single column on smaller viewport\n    await page.setViewportSize({ width: 640, height: 1024 });\n    await expect(twoColumnLayout).not.toBeVisible();\n    await expect(singleColumnLayout).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5078,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4461,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 53.751,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7944,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4147,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 475.659,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

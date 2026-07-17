@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_239",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7486,
+  "total_latency_s": 72.53,
+  "final_script": "describe('Mobile Landscape Orientation - Responsive Design', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should display app content correctly in landscape orientation on mobile', () => {\n    // Set viewport to a mobile device in landscape orientation\n    cy.viewport('768x460');\n\n    // Verify main content is visible and not cut off\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n    cy.get('[data-testid=\"header\"]').should('be.visible');\n    cy.get('[data-testid=\"footer\"]').should('be.visible');\n\n    // Verify layout elements are positioned correctly\n    cy.get('[data-testid=\"navigation-menu\"]').should('have.length', 1);\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Dashboard');\n\n    // Verify no horizontal scrollbar appears\n    cy.get('body').should('have.no-class', 'overflow-x');\n    cy.get('body').should('not.have.class', 'overflow-x-hidden');\n\n    // Verify content fits within the viewport width\n    cy.get('[data-testid=\"main-content\"]').should('have.width', '100%');\n  });\n\n  it('should handle content overflow gracefully in landscape orientation', () => {\n    // Set viewport to a mobile device in landscape orientation\n    cy.viewport('760px', '400px');\n\n    // Navigate to a page with potentially long content\n    cy.get('[data-testid=\"nav-link-profile\"]').click();\n\n    // Verify content is still visible and scrollable vertically\n    cy.get('[data-testid=\"profile-details\"]').should('be.visible');\n    cy.get('[data-testid=\"profile-details\"]').should('have.height', 'auto');\n\n    // Verify vertical scrollbar is present and functional\n    cy.get('body').should('have.class', 'overflow-y-scroll');\n    cy.get('[data-testid=\"profile-details\"]').then(($el) => {\n      const height = $el.height();\n      const scrollHeight = $el[0].scrollHeight;\n      expect(height).to.be.lessThan(scrollHeight);\n    });\n\n    // Verify no horizontal scrollbar appears\n    cy.get('body').should('not.have.class', 'overflow-x-hidden');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7486,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3621,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.53,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_224",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7963,
+  "total_latency_s": 294.957,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Interactive Toast Notifications Accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should announce interactive toast notifications using screen readers', async ({ page }) => {\n    // Setup: Trigger toast notification\n    const toastButton = page.getByRole('button', { name: /show toast/i });\n    await toastButton.click();\n\n    // Verify toast is visible\n    const toast = page.getByRole('alert');\n    await expect(toast).toBeVisible();\n\n    // Verify toast has correct role and aria attributes\n    await expect(toast).toHaveAttribute('role', 'alert');\n    await expect(toast).toHaveAttribute('aria-live', 'polite');\n    await expect(toast).toHaveAttribute('aria-atomic', 'true');\n\n    // Verify toast contains interactive elements\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify toast contains descriptive text\n    await expect(toast).toContainText('Toast message');\n\n    // Verify toast is announced by screen reader\n    await page.evaluate(() => {\n      const alert = document.querySelector('[role=\"alert\"]');\n      if (alert) {\n        alert.setAttribute('aria-live', 'assertive');\n      }\n    });\n\n    // Verify screen reader announces toast\n    await expect(page).toHaveScreenReaderInteraction();\n\n    // Verify toast is dismissed when close button is clicked\n    await closeButton.click();\n    await expect(toast).not.toBeVisible();\n\n    // Verify screen reader stops announcing toast\n    await expect(page).not.toHaveScreenReaderInteraction();\n  });\n\n  test('should handle multiple toast notifications without overlapping', async ({ page }) => {\n    // Setup: Trigger first toast notification\n    const firstToastButton = page.getByRole('button', { name: /show first toast/i });\n    await firstToastButton.click();\n\n    // Verify first toast is visible\n    const firstToast = page.getByRole('alert');\n    await expect(firstToast).toBeVisible();\n\n    // Trigger second toast notification\n    const secondToastButton = page.getByRole('button', { name: /show second toast/i });\n    await secondToastButton.click();\n\n    // Verify second toast is visible\n    const secondToast = page.getByRole('alert');\n    await expect(secondToast).toBeVisible();\n\n    // Verify both toasts are announced by screen reader\n    await expect(page).toHaveScreenReaderInteraction();\n\n    // Verify toasts are displayed in sequence\n    await expect(firstToast).toContainText('First toast message');\n    await expect(secondToast).toContainText('Second toast message');\n\n    // Verify toasts are dismissed when close button is clicked\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n\n    // Verify only first toast is dismissed\n    await expect(firstToast).not.toBeVisible();\n    await expect(secondToast).toBeVisible();\n\n    // Verify screen reader stops announcing toast\n    await expect(page).not.toHaveScreenReaderInteraction();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4846,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3686,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 53.431,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7963,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4211,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 241.526,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

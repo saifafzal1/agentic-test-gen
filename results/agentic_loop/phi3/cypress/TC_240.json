@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_240",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 3,
+  "best_score": 0.7241,
+  "total_latency_s": 1132.75,
+  "final_script": "describe('Mobile Checkout Form Vertical Stacking', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should stack checkout form vertically on mobile screens', () => {\n    // Set viewport to mobile dimensions\n    cy.viewport('iphone-x');\n\n    // Verify form is visible and stacked vertically\n    cy.get('[data-testid=\"checkout-form\"]').should('be.visible');\n    cy.get('[data-testid=\"checkout-form\"]').should('have.css', 'display', 'block');\n    cy.get('[data-testid=\"checkout-form\"]').should('have.css', 'flex-direction', 'column');\n\n    // Verify form elements are stacked vertically\n    cy.get('[data-testid=\"name-input\"]').should('be.visible');\n    cy.get('[data-testid=\"email-input\"]').should('be.visible');\n    cy.get('[data-testid=\"address-input\"]').should('be.visible');\n    cy.get('[data-testid=\"phone-input\"]').should('be.visible');\n    cy.get('[data-testid=\"card-number-input\"]').should('be.visible');\n    cy.get('[data-testid=\"card-expiry-input\"]').should('be.visible');\n    cy.get('[data-testid=\"card-cvc-input\"]').should('be.visible');\n    cy.get('[data-testid=\"shipping-address-input\"]').should('be.visible');\n    cy.get('[data-testid=\"shipping-method-select\"]').should('be.visible');\n    cy.get('[data-testid=\"payment-method-select\"]').should('be.visible');\n    cy.get('[data-testid=\"submit-button\"]').should('be.visible');\n\n    // Verify form elements are not overlapping\n    cy.get('[data-testid=\"name-input\"]').should('have.css', 'margin-bottom', '1rem');\n    cy.get('[data-testid=\"email-input\"]').should('have.css', 'margin-bottom', '1rem');\n    cy.get('[data-testid=\"address-input\"]').should('have.css', 'margin-bottom', '1rem');\n    cy.get('[data-testid=\"phone-input\"]').should('have.css', 'margin-bottom', '1rem');\n    cy.get('[data-testid=\"card-number-input\"]').should('have.css', 'margin-bottom', '1rem');\n    cy.get('[data-testid=\"card-expiry-input\"]').should('have.css', 'margin-bottom', '1rem');\n    cy.get('[data-testid=\"card-cvc-input\"]').should('have.css', 'margin-bottom', '1rem');\n    cy.get('[data-testid=\"shipping-address-input\"]').should('have.css', 'margin-bottom', '1rem');\n    cy.get('[data-testid=\"shipping-method-select\"]').should('have.css', 'margin-bottom', '1rem');\n    cy.get('[data-testid=\"payment-method-select\"]').should('have.css', 'margin-bottom', '1rem');\n\n    // Verify form is responsive and stacks correctly on mobile\n    cy.viewport('iphone-x').then(() => {\n      cy.get('[data-testid=\"checkout-form\"]').should('have.css', 'flex-direction', 'column');\n    });\n\n    // Verify form is not stacked vertically on desktop\n    cy.viewport('desktop').then(() => {\n      cy.get('[data-testid=\"checkout-form\"]').should('have.css', 'flex-direction', 'row');\n    });\n  });\n\n  it('should handle form submission on mobile with valid data', () => {\n    // Set viewport to mobile dimensions\n    cy.viewport('iphone-x');\n\n    // Fill form with valid data\n    cy.get('[data-testid=\"name-input\"]').type('John Doe');\n    cy.get('[data-testid=\"email-input\"]').type('john.doe@example.com');\n    cy.get('[data-testid=\"address-input\"]').type('123 Main St, Anytown, USA');\n    cy.get('[data-testid=\"phone-input\"]').type('555-1234');\n    cy.get('[data-testid=\"card-number-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"card-expiry-input\"]').type('12/25');\n    cy.get('[data-testid=\"card-cvc-input\"]').type('123');\n    cy.get('[data-testid=\"shipping-address-input\"]').type('456 Elm St, Othertown, USA');\n    cy.get('[data-testid=\"shipping-method-select\"]').click();\n    cy.get('[data-testid=\"payment-method-select\"]').click();\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Thank you for your purchase');\n\n    // Verify form is cleared for next submission\n    cy.get('[data-testid=\"name-input\"]').should('have.value', '');\n    cy.get('[data-testid=\"email-input\"]').should('have.value', '');\n    cy.get('[data-testid=\"address-input\"]').should('have.value', '');\n    cy.get('[data-testid=\"phone-input\"]').should('have.value', '');\n    cy.get('[data-testid=\"card-number-input\"]').should('have.value', '');\n    cy.get('[data-testid=\"card-expiry-input\"]').should('have.value', '');\n    cy.get('[data-testid=\"card-cvc-input\"]').should('have.value', '');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4586,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3019,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 56.133,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4499,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.2731,
+        "missing_keywords": [],
+        "assertion_count": 35,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 535.816,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.7241,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2805,
+        "missing_keywords": [],
+        "assertion_count": 35,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 540.801,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

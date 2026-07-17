@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_239",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7898,
+  "total_latency_s": 71.879,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mobile Landscape Orientation - Responsive Layout', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should display app correctly in landscape orientation on mobile', async ({ page }) => {\n    await page.setViewportSize({ width: 768, height: 444 });\n    await page.setMobileDevice('iPhone 12');\n    await page.setViewportSize({ width: 720, height: 400 });\n\n    const appContainer = page.getByRole('main');\n    await expect(appContainer).toBeVisible();\n\n    const header = page.getByRole('banner');\n    await expect(header).toBeVisible();\n\n    const navLinks = page.getByRole('navigation').getByRole('link');\n    await expect(navLinks).toBeVisible();\n\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeVisible();\n\n    const footer = page.getByRole('contentinfo');\n    await expect(footer).toBeVisible();\n\n    const logo = page.getByRole('img', { name: /app logo/i });\n    await expect(logo).toBeVisible();\n\n    const mainTitle = page.getByRole('heading', { name: /welcome/i });\n    await expect(mainTitle).toBeVisible();\n  });\n\n  test('should handle landscape orientation with correct content flow and no overflow', async ({ page }) => {\n    await page.setViewportSize({ width: 720, height: 300 });\n    await page.setMobileDevice('iPhone 12');\n\n    const appContainer = page.getByRole('main');\n    await expect(appContainer).toBeVisible();\n\n    const header = page.getByRole('banner');\n    await expect(header).toBeVisible();\n\n    const navLinks = page.getByRole('navigation').getByRole('link');\n    await expect(navLinks).toBeVisible();\n\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeVisible();\n\n    const footer = page.getByRole('contentinfo');\n    await expect(footer).toBeVisible();\n\n    const overflow = page.locator('[data-testid=\"overflow-error\"]');\n    await expect(overflow).not.toBeVisible();\n\n    const contentArea = page.locator('[data-testid=\"content-area\"]');\n    await expect(contentArea).toHaveCSS('overflow-y', 'visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7898,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3992,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.879,
+      "feedback_used": ""
+    }
+  ]
+}

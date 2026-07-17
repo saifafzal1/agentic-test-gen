@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_247",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7396,
+  "total_latency_s": 72.478,
+  "final_script": "describe('Promo Code Application - Discounted Total', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should apply a valid promo code and display discounted total', () => {\n    // Verify initial state\n    cy.get('[data-testid=\"cart-total\"]').should('be.visible');\n    cy.get('[data-testid=\"cart-total\"]').should('contain', '$100.00');\n\n    // Apply promo code\n    cy.get('[data-testid=\"promo-code-input\"]').type('SUMMER20');\n    cy.get('[data-testid=\"apply-promo-code-button\"]').click();\n\n    // Verify success message and discount\n    cy.get('[data-testid=\"promo-code-success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"promo-code-success-message\"]').should('contain', 'Promo code applied successfully');\n\n    // Verify discounted total\n    cy.get('[data-testid=\"cart-total\"]').should('be.visible');\n    cy.get('[data-testid=\"cart-total\"]').should('contain', '$80.00');\n\n    // Verify discount amount is displayed\n    cy.get('[data-testid=\"discount-amount\"]').should('be.visible');\n    cy.get('[data-testid=\"discount-amount\"]').should('contain', '-$20.00');\n\n    // Verify total is updated\n    cy.get('[data-testid=\"order-summary\"]').should('contain', '$80.00');\n  });\n\n  it('should handle invalid promo code and display error message', () => {\n    // Verify initial state\n    cy.get('[data-testid=\"cart-total\"]').should('be.visible');\n    cy.get('[data-testid=\"cart-total\"]').should('contain', '$100.00');\n\n    // Apply invalid promo code\n    cy.get('[data-testid=\"promo-code-input\"]').type('INVALIDCODE123');\n    cy.get('[data-testid=\"apply-promo-code-button\"]').click();\n\n    // Verify error message appears\n    cy.get('[data-testid=\"promo-code-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"promo-code-error-message\"]').should('contain', 'Invalid promo code');\n\n    // Verify total remains unchanged\n    cy.get('[data-testid=\"cart-total\"]').should('be.visible');\n    cy.get('[data-testid=\"cart-total\"]').should('contain', '$100.00');\n\n    // Verify no discount amount is displayed\n    cy.get('[data-testid=\"discount-amount\"]').should('not.exist');\n\n    // Verify user can try another code\n    cy.get('[data-testid=\"promo-code-input\"]').clear().type('SUMMER20');\n    cy.get('[data-testid=\"apply-promo-code-button\"]').click();\n\n    // Verify valid code is applied\n    cy.get('[data-testid=\"promo-code-success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"cart-total\"]').should('contain', '$80.00');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7396,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.332,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.478,
+      "feedback_used": ""
+    }
+  ]
+}

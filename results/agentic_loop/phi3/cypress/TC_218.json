@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_218",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7225,
+  "total_latency_s": 371.207,
+  "final_script": "describe('Click Target Size for Users with Motor Impairment', () => {\n  beforeEach(() => {\n    cy.visit('/accessibility-test');\n  });\n\n  it('should ensure click targets are at least 44x44px for users with motor impairment', () => {\n    // Verify the page has a button with a class for testing\n    cy.get('[data-testid=\"large-button\"]').should('be.visible');\n\n    // Get the computed style of the button\n    cy.get('[data-testid=\"large-button\"]').then((button) => {\n      const style = window.getComputedStyle(button);\n      const width = parseInt(style.width, 10);\n      const height = parseInt(style.height, 10);\n\n      // Assert the button meets the minimum size requirement\n      expect(width).to.be.at.least(44);\n      expect(height).to.be.at.least(44);\n    });\n\n    // Verify the button is not too small\n    cy.get('[data-testid=\"small-button\"]').should('be.visible');\n\n    // Get the computed style of the small button\n    cy.get('[data-testid=\"small-button\"]').then((button) => {\n      const style = window.getComputedStyle(button);\n      const width = parseInt(style.width, 10);\n      const height = parseInt(style.height, 10);\n\n      // Assert the small button does not meet the minimum size requirement\n      expect(width).to.be.lessThan(44);\n      expect(height).to.be.lessThan(44);\n    });\n  });\n\n  it('should handle click targets with dynamic content sizes', () => {\n    // Verify a dynamic content element exists\n    cy.get('[data-testid=\"dynamic-content-button\"]').should('be.visible');\n\n    // Intercept the API call to get dynamic content size\n    cy.intercept('GET', '/api/dynamic-content-size').as('getDynamicSize');\n\n    // Click the button to trigger the API call\n    cy.get('[data-testid=\"dynamic-content-button\"]').click();\n\n    // Wait for the API response\n    cy.wait('@getDynamicSize');\n\n    // Verify the API returns a size that meets the requirement\n    cy.get('@getDynamicSize').then((interception) => {\n      const size = interception.response.body.size;\n      expect(size.width).to.be.at.least(44);\n      expect(size.height).to.be.at.least(44);\n    });\n\n    // Verify the button is still clickable after dynamic content load\n    cy.get('[data-testid=\"dynamic-content-button\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4181,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.167,
+        "missing_keywords": [],
+        "assertion_count": 26,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 151.458,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7225,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2749,
+        "missing_keywords": [],
+        "assertion_count": 4,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 219.749,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

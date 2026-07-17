@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_234",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8134,
+  "total_latency_s": 72.055,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Sticky Footer Navigation on Mobile', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 820 });\n    await page.goto('/home');\n  });\n\n  test('should display sticky footer navigation when content is short', async ({ page }) => {\n    // Verify main content is visible\n    const content = page.getByRole('main');\n    await expect(content).toBeVisible();\n\n    // Verify footer navigation is visible and sticky\n    const footerNav = page.getByRole('navigation', { name: /footer/i });\n    await expect(footerNav).toBeVisible();\n\n    // Verify navigation items are visible\n    const homeBtn = page.getByRole('button', { name: /home/i });\n    const searchBtn = page.getByRole('button', { name: /search/i });\n    const profileBtn = page.getByRole('button', { name: /profile/i });\n    await expect(homeBtn).toBeVisible();\n    await expect(searchBtn).toBeVisible();\n    await expect(profileBtn).toBeVisible();\n\n    // Verify footer is fixed at the bottom of the viewport\n    const footerBoundingBox = await footerNav.boundingBox();\n    expect(footerBoundingBox.y).toBeGreaterThan(page.viewportSize().height - 100);\n    expect(footerBoundingBox.height).toBeGreaterThan(50);\n\n    // Verify navigation buttons are accessible\n    await expect(homeBtn).toBeEnabled();\n    await expect(searchBtn).toBeEnabled();\n    await expect(profileBtn).toBeEnabled();\n  });\n\n  test('should scroll content and keep footer sticky when content is long', async ({ page }) => {\n    // Verify initial footer position\n    const footerNav = page.getByRole('navigation', { name: /footer/i });\n    const footerBoundingBox = await footerNav.boundingBox();\n    expect(footerBoundingBox.y).toBeGreaterThan(page.viewportSize().height - 100);\n\n    // Scroll down to trigger sticky behavior\n    const scrollButton = page.getByRole('button', { name: /scroll to top/i });\n    await scrollButton.click();\n\n    // Verify footer remains visible and sticky after scrolling\n    const footerBoundingBoxAfterScroll = await footerNav.boundingBox();\n    expect(footerBoundingBoxAfterScroll.y).toBeGreaterThan(page.viewportSize().height - 100);\n\n    // Verify navigation buttons are still visible and accessible\n    const homeBtn = page.getByRole('button', { name: /home/i });\n    const searchBtn = page.getByRole('button', { name: /search/i });\n    const profileBtn = page.getByRole('button', { name: /profile/i });\n    await expect(homeBtn).toBeVisible();\n    await expect(searchBtn).toBeVisible();\n    await expect(profileBtn).toBeVisible();\n\n    // Verify footer height is consistent\n    const footerHeight = await footerNav.evaluate((el) => el.offsetHeight);\n    expect(footerHeight).toBeGreaterThan(50);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8134,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4779,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.055,
+      "feedback_used": ""
+    }
+  ]
+}

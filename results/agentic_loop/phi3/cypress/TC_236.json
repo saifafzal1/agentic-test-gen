@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_236",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7167,
+  "total_latency_s": 317.162,
+  "final_script": "describe('Homepage Hero Section Responsiveness', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should display hero section with large image and text on desktop', () => {\n    cy.viewport('1920x1080');\n    cy.get('[data-testid=\"hero-section\"]').should('be.visible');\n    cy.get('[data-testid=\"hero-image\"]').should('have.attr', 'src');\n    cy.get('[data-testid=\"hero-image\"]').should('have.css', 'width', '100%');\n    cy.get('[data-testid=\"hero-text\"]').should('be.visible');\n    cy.get('[data-testid=\"hero-text\"]').should('contain', 'Welcome to Our Site');\n    cy.get('[data-testid=\"hero-cta\"]').should('be.visible');\n    cy.get('[data-testid=\"hero-cta\"]').should('contain', 'Get Started');\n  });\n\n  it('should display hero section with smaller image and condensed text on mobile', () => {\n    cy.viewport('480x854');\n    cy.get('[data-testid=\"hero-section\"]').should('be.visible');\n    cy.get('[data-testid=\"hero-image\"]').should('have.attr', 'src');\n    cy.get('[data-testid=\"hero-image\"]').should('have.css', 'width', '100%');\n    cy.get('[data-testid=\"hero-text\"]').should('be.visible');\n    cy.get('[data-testid=\"hero-text\"]').should('contain', 'Welcome to Our Site');\n    cy.get('[data-testid=\"hero-cta\"]').should('be.visible');\n    cy.get('[data-testid=\"hero-cta\"]').should('contain', 'Get Started');\n    cy.get('[data-testid=\"hero-cta\"]').should('have.css', 'font-size', '1.2rem');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7167,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2558,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 317.162,
+      "feedback_used": ""
+    }
+  ]
+}

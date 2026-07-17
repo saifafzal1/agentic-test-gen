@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_231",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7339,
+  "total_latency_s": 44.055,
+  "final_script": "describe('Mobile Layout Horizontal Scroll Disabled', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should disable horizontal scrolling on mobile layout', () => {\n    // Set viewport to mobile dimensions\n    cy.viewport('iphone-x');\n\n    // Verify horizontal scrollbar is visible initially\n    cy.get('[data-testid=\"main-container\"]').should('have.css', 'overflow-x', 'scroll');\n\n    // Intercept the scroll event\n    cy.intercept('scroll', {\n      method: 'POST',\n      url: '/api/scroll-event',\n      statusCode: 200,\n    }).as('scrollEvent');\n\n    // Scroll horizontally\n    cy.get('[data-testid=\"main-container\"]').scrollTo('left', -1000);\n\n    // Verify scroll event was triggered\n    cy.wait('@scrollEvent');\n\n    // Verify horizontal scrollbar is still visible\n    cy.get('[data-testid=\"main-container\"]').should('have.css', 'overflow-x', 'scroll');\n\n    // Verify content is still visible and not cut off\n    cy.get('[data-testid=\"content-item\"]').should('be.visible');\n\n    // Verify horizontal scrollbar is disabled\n    cy.get('[data-testid=\"main-container\"]').should('not.have.css', 'overflow-x');\n\n    // Verify vertical scroll is still enabled\n    cy.get('[data-testid=\"main-container\"]').scrollTo('top', -1000);\n    cy.get('[data-testid=\"main-container\"]').should('have.css', 'overflow-y', 'scroll');\n  });\n\n  it('should handle edge case where horizontal scroll is still enabled', () => {\n    // Set viewport to mobile dimensions\n    cy.viewport('iphone-x');\n\n    // Verify horizontal scrollbar is visible\n    cy.get('[data-testid=\"main-container\"]').should('have.css', 'overflow-x', 'scroll');\n\n    // Scroll horizontally\n    cy.get('[data-testid=\"main-container\"]').scrollTo('left', -1000);\n\n    // Verify scroll event was triggered\n    cy.wait('@scrollEvent');\n\n    // Verify horizontal scrollbar is still visible\n    cy.get('[data-testid=\"main-container\"]').should('have.css', 'overflow-x', 'scroll');\n\n    // Verify content is still visible and not cut off\n    cy.get('[data-testid=\"content-item\"]').should('be.visible');\n\n    // Verify horizontal scrollbar is still enabled (edge case)\n    cy.get('[data-testid=\"main-container\"]').should('have.css', 'overflow-x', 'scroll');\n\n    // Verify vertical scroll is still enabled\n    cy.get('[data-testid=\"main-container\"]').scrollTo('top', -1000);\n    cy.get('[data-testid=\"main-container\"]').should('have.css', 'overflow-y', 'scroll');\n\n    // Verify no horizontal scrollbar appears when scrolling vertically\n    cy.get('[data-testid=\"main-container\"]').scrollTo('top', -1000);\n    cy.get('[data-testid=\"main-container\"]').should('not.have.css', 'overflow-x');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7339,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3131,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 44.055,
+      "feedback_used": ""
+    }
+  ]
+}

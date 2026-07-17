@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_243",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7398,
+  "total_latency_s": 1034.218,
+  "final_script": "describe('Video Player Responsive Tablet Viewport', () => {\n  beforeEach(() => {\n    cy.visit('/video-player');\n  });\n\n  it('should resize video player proportionally on tablet viewports', () => {\n    // Setup: Open video player on desktop viewport\n    cy.viewport('1920x1080');\n    cy.get('[data-testid=\"video-player\"]').should('be.visible');\n    cy.get('[data-testid=\"play-button\"]').click();\n\n    // Verify initial desktop size\n    cy.get('[data-testid=\"video-player\"]').should('have.css', 'width', '1920px');\n    cy.get('[data-testid=\"video-player\"]').should('have.css', 'height', '1080px');\n\n    // Navigate to tablet viewport\n    cy.viewport('768x1024');\n\n    // Verify video player resizes proportionally\n    cy.get('[data-testid=\"video-player\"]').should('have.css', 'width', '768px');\n    cy.get('[data-testid=\"video-player\"]').should('have.css', 'height', '1024px');\n\n    // Verify aspect ratio is maintained\n    cy.get('[data-testid=\"video-player\"]').should('have.css', 'aspect-ratio', '16/9');\n\n    // Verify controls are still accessible and visible\n    cy.get('[data-testid=\"play-button\"]').should('be.visible');\n    cy.get('[data-testid=\"play-button\"]').click();\n\n    // Verify video is playing\n    cy.get('[data-testid=\"video-player\"]').should('have.class', 'playing');\n\n    // Verify controls are responsive\n    cy.get('[data-testid=\"volume-control\"]').should('be.visible');\n    cy.get('[data-testid=\"volume-control\"]').click();\n\n    // Verify video player returns to original size when navigating back\n    cy.viewport('1920x1080');\n    cy.get('[data-testid=\"video-player\"]').should('have.css', 'width', '1920px');\n    cy.get('[data-testid=\"video-player\"]').should('have.css', 'height', '1080px');\n  });\n\n  it('should handle edge case: video player resizing on very small tablet viewports', () => {\n    // Setup: Open video player on desktop viewport\n    cy.viewport('1920x1080');\n    cy.get('[data-testid=\"video-player\"]').should('be.visible');\n    cy.get('[data-testid=\"play-button\"]').click();\n\n    // Navigate to very small tablet viewport\n    cy.viewport('320x480');\n\n    // Verify video player resizes to fit the viewport\n    cy.get('[data-testid=\"video-player\"]').should('have.css', 'width', '320px');\n    cy.get('[data-testid=\"video-player\"]').should('have.css', 'height', '480px');\n\n    // Verify aspect ratio is maintained\n    cy.get('[data-testid=\"video-player\"]').should('have.css', 'aspect-ratio', '16/9');\n\n    // Verify video is still playable\n    cy.get('[data-testid=\"video-player\"]').should('have.class', 'playing');\n\n    // Verify controls are still accessible and visible\n    cy.get('[data-testid=\"play-button\"]').should('be.visible');\n    cy.get('[data-testid=\"play-button\"]').click();\n\n    // Verify video player does not overflow the viewport\n    cy.get('[data-testid=\"video-player\"]').should('not.be.visible');\n\n    // Verify error message is displayed if video cannot fit\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Video cannot fit in this viewport');\n\n    // Verify user can choose to view full-screen\n    cy.get('[data-testid=\"full-screen-button\"]').should('be.visible');\n    cy.get('[data-testid=\"full-screen-button\"]').click();\n\n    // Verify video player returns to original size when navigating back\n    cy.viewport('1920x1080');\n    cy.get('[data-testid=\"video-player\"]').should('have.css', 'width', '1920px');\n    cy.get('[data-testid=\"video-player\"]').should('have.css', 'height', '1080px');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4682,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3341,
+        "missing_keywords": [],
+        "assertion_count": 22,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 493.732,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7398,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3326,
+        "missing_keywords": [],
+        "assertion_count": 23,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 540.486,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_226",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7977,
+  "total_latency_s": 289.442,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mobile Navigation Collapse', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should collapse navigation into hamburger menu on mobile view', async ({ page }) => {\n    // Set viewport to mobile\n    await page.setViewportSize({ width: 375, height: 812 });\n\n    // Verify hamburger menu is visible\n    const hamburgerMenu = page.getByRole('button', { name: /menu/i });\n    await expect(hamburgerMenu).toBeVisible();\n\n    // Verify navigation links are collapsed\n    const navLinks = page.getByRole('link', { name: /home|about|services|contact/i });\n    await expect(navLinks).not.toBeVisible();\n\n    // Verify hamburger menu icon is visible\n    const menuIcon = page.getByRole('button', { name: /menu/i });\n    await expect(menuIcon).toBeVisible();\n\n    // Verify navigation menu opens when hamburger is clicked\n    await hamburgerMenu.click();\n    await expect(navLinks).toBeVisible();\n\n    // Verify navigation menu closes when hamburger is clicked again\n    await hamburgerMenu.click();\n    await expect(navLinks).not.toBeVisible();\n\n    // Verify hamburger menu is still visible\n    await expect(menuIcon).toBeVisible();\n\n    // Verify navigation menu is responsive and closes on click outside\n    const outsideClick = page.locator('body');\n    await outsideClick.click();\n    await expect(navLinks).not.toBeVisible();\n    await expect(menuIcon).toBeVisible();\n  });\n\n  test('should handle edge case: navigation menu opens on page load on mobile', async ({ page }) => {\n    // Set viewport to mobile\n    await page.setViewportSize({ width: 375, height: 812 });\n\n    // Verify hamburger menu is visible on page load\n    const hamburgerMenu = page.getByRole('button', { name: /menu/i });\n    await expect(hamburgerMenu).toBeVisible();\n\n    // Verify navigation links are collapsed\n    const navLinks = page.getByRole('link', { name: /home|about|services|contact/i });\n    await expect(navLinks).not.toBeVisible();\n\n    // Verify hamburger menu icon is visible\n    const menuIcon = page.getByRole('button', { name: /menu/i });\n    await expect(menuIcon).toBeVisible();\n\n    // Verify navigation menu opens when hamburger is clicked\n    await hamburgerMenu.click();\n    await expect(navLinks).toBeVisible();\n\n    // Verify navigation menu closes when hamburger is clicked again\n    await hamburgerMenu.click();\n    await expect(navLinks).not.toBeVisible();\n\n    // Verify hamburger menu is still visible\n    await expect(menuIcon).toBeVisible();\n\n    // Verify navigation menu closes when clicking outside\n    const outsideClick = page.locator('body');\n    await outsideClick.click();\n    await expect(navLinks).not.toBeVisible();\n    await expect(menuIcon).toBeVisible();\n\n    // Verify navigation menu is responsive and closes on page load\n    await expect(navLinks).not.toBeVisible();\n    await expect(menuIcon).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5159,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4731,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 39.106,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7977,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4256,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 250.336,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

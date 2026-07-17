@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_236",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8198,
+  "total_latency_s": 501.023,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Homepage Hero Section Responsiveness', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should display mobile-friendly hero section on mobile devices', async ({ page }) => {\n    // Set viewport to mobile\n    await page.setViewportSize({ width: 375, height: 667 });\n\n    // Verify hero section is visible on mobile\n    const heroSection = page.getByRole('region', { name: /hero/i });\n    await expect(heroSection).toBeVisible();\n\n    // Verify hero image is responsive and fills the viewport\n    const heroImage = page.getByRole('img', { name: /hero image/i });\n    await expect(heroImage).toBeVisible();\n    await expect(heroImage).toHaveAttribute('src', /hero-mobile-image/i);\n\n    // Verify hero text is readable and styled appropriately\n    const heroHeading = page.getByRole('heading', { name: /hero heading/i });\n    await expect(heroHeading).toBeVisible();\n    await expect(heroHeading).toHaveTextContent('Welcome to Our Site');\n\n    // Verify hero button is visible and accessible\n    const heroButton = page.getByRole('button', { name: /sign up/i });\n    await expect(heroButton).toBeVisible();\n\n    // Verify hero section has appropriate padding and margins\n    const heroPadding = page.getByRole('region', { name: /hero/i }).boundingBox();\n    expect(heroPadding).toBeGreaterThan(0);\n\n    // Verify hero section has correct background color\n    const heroBackgroundColor = page.getByRole('region', { name: /hero/i }).evaluate((el) => window.getComputedStyle(el).backgroundColor);\n    expect(heroBackgroundColor).toBe('rgb(255, 255, 255)');\n  });\n\n  test('should display desktop-friendly hero section on desktop devices', async ({ page }) => {\n    // Set viewport to desktop\n    await page.setViewportSize({ width: 1280, height: 720 });\n\n    // Verify hero section is visible on desktop\n    const heroSection = page.getByRole('region', { name: /hero/i });\n    await expect(heroSection).toBeVisible();\n\n    // Verify hero image is responsive and does not overflow\n    const heroImage = page.getByRole('img', { name: /hero image/i });\n    await expect(heroImage).toBeVisible();\n    await expect(heroImage).toHaveAttribute('src', /desktop-hero-image/i);\n\n    // Verify hero text is readable and styled appropriately\n    const heroHeading = page.getByRole('heading', { name: /hero heading/i });\n    await expect(heroHeading).toBeVisible();\n    await expect(heroHeading).toHaveTextContent('Welcome to Our Site');\n\n    // Verify hero button is visible and accessible\n    const heroButton = page.getByRole('button', { name: /sign up/i });\n    await expect(heroButton).toBeVisible();\n\n    // Verify hero section has appropriate padding and margins\n    const heroPadding = page.getByRole('region', { name: /hero/i }).boundingBox();\n    expect(heroPadding).toBeGreaterThan(0);\n\n    // Verify hero section has correct background color\n    const heroBackgroundColor = page.getByRole('region', { name: /hero/i }).evaluate((el) => window.getComputedStyle(el).backgroundColor);\n    expect(heroBackgroundColor).toBe('rgb(255, 255, 255)');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4994,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4181,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 55.645,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8198,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4992,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 445.378,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

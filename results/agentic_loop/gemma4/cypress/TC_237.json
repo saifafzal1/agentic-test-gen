@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_237",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.6367,
+  "total_latency_s": 188.39,
+  "final_script": "describe('Pinch-to-Zoom on Product Images', () => {\n  beforeEach(() => {\n    cy.visit('/products/item-123');\n  });\n\n  it('should successfully pinch-to-zoom on a product image', () => {\n    // Verify product image is visible\n    cy.get('[data-testid=\"product-image\"]').should('be.visible');\n    cy.get('[data-testid=\"product-image\"]').should('have.attr', 'src');\n\n    // Get initial image dimensions\n    cy.get('[data-testid=\"product-image\"]').then(($img) => {\n      const initialWidth = $img.width();\n      const initialHeight = $img.height();\n\n      // Pinch in (zoom out)\n      cy.get('[data-testid=\"product-image\"]').trigger('pinch', {\n        clientX: 50,\n        clientY: 50,\n        scale: 0.5,\n        detail: 'pinch-out',\n        detailType: 'pinch',\n        detailDirection: 'out',\n        detailVector: { x: 0, y: 0 },\n        detailVectorScale: 1,\n        detailVectorUnit: true,\n        detailVectorOrigin: { x: 50, y: 50 },\n        detailVectorOriginScale: 1,\n        detailVectorOriginUnit: true,\n        detailVectorOriginDirection: 'out',\n        detailVectorOriginType: 'out',\n      });\n\n      // Verify zoom out occurred\n      cy.get('[data-testid=\"product-image\"]').then(($img) => {\n        const zoomedWidth = $img.width();\n        const zoomedHeight = $img.height();\n        expect(zoomedWidth).to.be.lessThan(initialWidth);\n        expect(zoomedHeight).to.be.lessThan(initialHeight);\n      });\n\n      // Pinch out (zoom in)\n      cy.get('[data-testid=\"product-image\"]').trigger('pinch', {\n        clientX: 50,\n        clientY: 50,\n        scale: 2.0,\n        detail: 'pinch-in',\n        detailType: 'pinch',\n        detailDirection: 'in',\n        detailVector: { x: 0, y: 0 },\n        detailVectorScale: 1,\n        detailVectorUnit: true,\n        detailVectorOrigin: { x: 50, y: 50 },\n        detailVectorOriginScale: 1,\n        detailVectorOriginUnit: true,\n        detailVectorOriginDirection: 'in',\n        detailVectorOriginType: 'in',\n      });\n\n      // Verify zoom in occurred\n      cy.get('[data-testid=\"product-image\"]').then(($img) => {\n        const zoomedWidth = $img.width();\n        const zoomedHeight = $img.height();\n        expect(zoomedWidth).to.be.greaterThan(initialWidth);\n        expect(zoomedHeight).to.be.greaterThan(initialHeight);\n      });\n    });\n  });\n\n  it('should handle pinch-to-zoom with boundary limits and reset', () => {\n    // Verify initial state\n    cy.get('[data-testid=\"product-image\"]').should('be.visible');\n\n    // Pinch in (zoom in) to max limit\n    cy.get('[data-testid=\"product-image\"]').trigger('pinch', {\n      clientX: 50,\n      clientY: 50,\n      scale: 3.0,\n      detail: 'pinch-in',\n      detailType: 'pinch',\n      detailDirection: 'in',\n      detailVector: { x: 0, y: 0 },\n      detailVectorScale: 1,\n      detailVectorUnit: true,\n      detailVectorOrigin: { x: 50, y: 50 },\n      detailVectorOriginScale: 1,\n      detailVectorOriginUnit: true,\n      detailVectorOriginDirection: 'in',\n      detailVectorOriginType: 'in',\n    });\n\n    // Verify zoom is at max limit (should not exceed 3x)\n    cy.get('[data-testid=\"product-image\"]').then(($img) => {\n      const currentWidth = $img.width();\n      expect(currentWidth).to.be.at.most(3 * 100); // Assuming initial width is 100\n    });\n\n    // Attempt to zoom further (should be capped)\n    cy.get('[data-testid=\"product-image\"]').trigger('pinch', {\n      clientX: 50,\n      clientY: 50,\n      scale: 5.0,\n      detail: 'pinch-in',\n      detailType: 'pinch',\n      detailDirection: 'in',\n      detailVector: { x: 0.1, y: 0.1 },\n      detailVectorScale: 1,\n      detailVectorUnit: true,\n      detailVectorOrigin: { x: 50, y: 50 },\n      detailVectorOriginScale: 1,\n      detailVectorOriginUnit: true,\n      detailVectorOriginDirection: 'in',\n      detailVectorOriginType: 'in',\n    });\n\n    // Verify zoom remains at max limit\n    cy.get('[data-testid=\"product-image\"]').then(($img) => {\n      const currentWidth = $img.width();\n      expect(currentWidth).to.equal(3 * 100);\n    });\n\n    // Pinch out (zoom out) to reset\n    cy.get('[data-testid=\"product-image\"]').trigger('pinch', {\n      clientX: 50,\n      clientY: 50,\n      scale: 1.0,\n      detail: 'pinch-out',\n      detailType: 'pinch',\n      detailDirection: 'out',\n      detailVector: { x: 0.1, y: 0.1 },\n      detailVectorScale: 1,\n      detailVectorUnit: true,\n      detailVectorOrigin: { x: 50, y: 50 },\n      detailVectorOriginScale: 1,\n      detailVectorOriginUnit: true,\n      detailVectorOriginDirection: 'out',\n      detailVectorOriginType: 'out',\n    });\n\n    // Verify zoom is reset to initial state\n    cy.get('[data-testid=\"product-image\"]').then(($img) => {\n      const currentWidth = $img.width();\n      expect(currentWidth).to.equal(100);\n    });\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.3603,
+        "syntax": 0.17,
+        "assertion": 0.75,
+        "rouge_l": 0.2242,
+        "missing_keywords": [],
+        "assertion_count": 3,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.364,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.6367,
+        "syntax": 0.85,
+        "assertion": 0.75,
+        "rouge_l": 0.2391,
+        "missing_keywords": [],
+        "assertion_count": 3,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 116.026,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

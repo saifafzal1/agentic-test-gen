@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_234",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.756,
+  "total_latency_s": 37.074,
+  "final_script": "describe('Sticky Footer Navigation on Mobile', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should display sticky footer navigation on mobile viewport', () => {\n    // Set viewport to mobile\n    cy.viewport('iphone-x');\n\n    // Verify footer navigation is visible\n    cy.get('[data-testid=\"footer-nav\"]').should('be.visible');\n    cy.get('[data-testid=\"footer-nav\"]').should('contain', 'Home');\n    cy.get('[data-testid=\"footer-nav\"]').should('contain', 'About');\n    cy.get('[data-testid=\"footer-nav\"]').should('contain', 'Contact');\n\n    // Verify footer navigation is sticky\n    cy.get('[data-testid=\"footer-nav\"]').should('have.style', 'position', 'sticky');\n    cy.get('[data-testid=\"footer-nav\"]').should('have.style', 'top', '0px');\n\n    // Verify navigation links are clickable\n    cy.get('[data-testid=\"footer-nav\"]').find('a').should('be.visible');\n    cy.get('[data-testid=\"footer-nav\"]').find('a').first().should('have.attr', 'href');\n\n    // Verify footer content is visible\n    cy.get('[data-testid=\"footer-content\"]').should('be.visible');\n    cy.get('[data-testid=\"footer-content\"]').should('contain', 'Copyright \u00a9 2023');\n  });\n\n  it('should maintain sticky footer navigation when scrolling down', () => {\n    // Set viewport to mobile\n    cy.viewport('iphone-x');\n\n    // Scroll down to test stickiness\n    cy.get('[data-testid=\"main-content\"]').scrollTo('bottom');\n\n    // Verify footer navigation is still sticky\n    cy.get('[data-testid=\"footer-nav\"]').should('have.style', 'position', 'sticky');\n    cy.get('[data-testid=\"footer-nav\"]').should('have.style', 'top', '0px');\n\n    // Verify footer navigation content is still visible\n    cy.get('[data-testid=\"footer-content\"]').should('be.visible');\n    cy.get('[data-testid=\"footer-content\"]').should('contain', 'Copyright \u00a9 2023');\n\n    // Verify footer navigation links are still clickable\n    cy.get('[data-testid=\"footer-nav\"]').find('a').should('be.visible');\n    cy.get('[data-testid=\"footer-nav\"]').find('a').first().should('have.attr', 'href');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.756,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3866,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 37.074,
+      "feedback_used": ""
+    }
+  ]
+}

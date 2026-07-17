@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_251",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7656,
+  "total_latency_s": 72.444,
+  "final_script": "describe('Order Summary Before Payment Confirmation', () => {\n  beforeEach(() => {\n    cy.visit('/cart');\n  });\n\n  it('should display order summary before confirming payment', () => {\n    // Add items to cart\n    cy.get('[data-testid=\"add-to-cart-btn\"]').click();\n    cy.get('[data-testid=\"product-1\"]').click();\n    cy.get('[data-testid=\"add-to-cart-btn\"]').click();\n    cy.get('[data-testid=\"product-2\"]').click();\n    cy.get('[data-testid=\"add-to-cart-btn\"]').click();\n\n    // Navigate to checkout\n    cy.get('[data-testid=\"checkout-btn\"]').click();\n\n    // Verify order summary is visible\n    cy.get('[data-testid=\"order-summary-section\"]').should('be.visible');\n    cy.get('[data-testid=\"subtotal\"]').should('contain', '$100.00');\n    cy.get('[data-testid=\"shipping-cost\"]').should('contain', '$5.00');\n    cy.get('[data-testid=\"tax-amount\"]').should('contain', '$8.50');\n    cy.get('[data-testid=\"total-amount\"]').should('contain', '$113.50');\n\n    // Verify order items are listed\n    cy.get('[data-testid=\"order-item-list\"]').should('be.visible');\n    cy.get('[data-testid=\"order-item-row\"]').should('have.length', 2);\n\n    // Verify confirmation button is visible\n    cy.get('[data-testid=\"confirm-payment-btn\"]').should('be.visible');\n    cy.get('[data-testid=\"confirm-payment-btn\"]').should('not.be.disabled');\n\n    // Click confirm payment\n    cy.get('[data-testid=\"confirm-payment-btn\"]').click();\n    cy.get('[data-testid=\"payment-processing-spinner\"]').should('be.visible');\n    cy.get('[data-testid=\"payment-success-message\"]').should('be.visible');\n  });\n\n  it('should handle empty cart and prevent order summary display', () => {\n    // Verify cart is empty\n    cy.get('[data-testid=\"cart-items-container\"]').should('not.exist');\n    cy.get('[data-testid=\"empty-cart-message\"]').should('be.visible');\n    cy.get('[data-testid=\"empty-cart-message\"]').should('contain', 'Your cart is empty');\n\n    // Verify order summary is not displayed\n    cy.get('[data-testid=\"order-summary-section\"]').should('not.exist');\n\n    // Verify checkout button is disabled or hidden\n    cy.get('[data-testid=\"checkout-btn\"]').should('be.disabled');\n\n    // Attempt to click disabled button\n    cy.get('[data-testid=\"checkout-btn\"]').click({ force: true });\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please add items to your cart');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7656,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4187,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.444,
+      "feedback_used": ""
+    }
+  ]
+}

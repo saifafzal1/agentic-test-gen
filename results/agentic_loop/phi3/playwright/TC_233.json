@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_233",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7992,
+  "total_latency_s": 35.955,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mobile Modal Full-Screen on Small Viewports', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/modal');\n  });\n\n  test('should display modal in full-screen on small viewports', async ({ page }) => {\n    // Set viewport to mobile size\n    await page.setViewportSize({ width: 375, height: 667 });\n    \n    // Verify modal is visible and covers the entire screen\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n    await expect(modal).toHaveAttribute('aria-label', 'Modal');\n    \n    const modalContent = page.getByRole('main');\n    await expect(modalContent).toBeVisible();\n    \n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n    \n    // Verify modal is full-screen\n    const modalRect = await modal.boundingBox();\n    expect(modalRect.width).toBeGreaterThan(375);\n    expect(modalRect.height).toBeGreaterThan(667);\n    \n    // Verify modal content is visible and not cut off\n    await expect(modalContent).toBeVisible();\n    await expect(modalContent).toBeVisible();\n    \n    // Verify close button is visible and functional\n    await expect(closeButton).toBeVisible();\n    await closeButton.click();\n    \n    // Verify modal is closed\n    await expect(modal).not.toBeVisible();\n  });\n  \n  test('should handle modal closing on small viewports', async ({ page }) => {\n    // Set viewport to mobile size\n    await page.setViewportSize({ width: 375, height: 667 });\n    \n    // Open modal\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n    \n    // Verify modal is open\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n    \n    // Verify modal content is visible and not cut off\n    const modalContent = page.getByRole('main');\n    await expect(modalContent).toBeVisible();\n    \n    // Verify close button is visible and functional\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n    \n    // Close modal\n    await closeButton.click();\n    \n    // Verify modal is closed\n    await expect(modal).not.toBeVisible();\n    \n    // Verify page content is visible\n    const pageContent = page.getByRole('main');\n    await expect(pageContent).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7992,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4306,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 35.955,
+      "feedback_used": ""
+    }
+  ]
+}

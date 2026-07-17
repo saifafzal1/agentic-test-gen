@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_251",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 3,
+  "best_score": 0.8156,
+  "total_latency_s": 1485.331,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Order Summary Before Payment Confirmation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should display order summary with correct details before payment confirmation', async ({ page }) => {\n    // Verify order summary container is visible\n    const summaryContainer = page.getByRole('region', { name: /order summary/i });\n    await expect(summaryContainer).toBeVisible();\n\n    // Verify summary title is present\n    const summaryTitle = page.getByRole('heading', { name: /order summary/i });\n    await expect(summaryTitle).toBeVisible();\n\n    // Verify order details are displayed\n    const orderDetails = page.getByRole('region', { name: /order details/i });\n    await expect(orderDetails).toBeVisible();\n\n    // Verify item list is displayed\n    const itemList = page.getByRole('list', { name: /items/i });\n    await expect(itemList).toBeVisible();\n\n    // Verify item details are displayed\n    const itemName = page.getByRole('heading', { name: /item name/i });\n    await expect(itemName).toBeVisible();\n\n    const itemPrice = page.getByRole('heading', { name: /item price/i });\n    await expect(itemPrice).toBeVisible();\n\n    // Verify total price is displayed\n    const totalPrice = page.getByRole('heading', { name: /total price/i });\n    await expect(totalPrice).toBeVisible();\n\n    // Verify shipping address is displayed\n    const shippingAddress = page.getByRole('region', { name: /shipping address/i });\n    await expect(shippingAddress).toBeVisible();\n\n    // Verify payment options are displayed\n    const paymentOptions = page.getByRole('region', { name: /payment options/i });\n    await expect(paymentOptions).toBeVisible();\n\n    // Verify confirm button is visible\n    const confirmButton = page.getByRole('button', { name: /confirm order/i });\n    await expect(confirmButton).toBeVisible();\n\n    // Verify cancel button is visible\n    const cancelButton = page.getByRole('button', { name: /cancel/i });\n    await expect(cancelButton).toBeVisible();\n\n    // Verify order summary is visible and contains correct data\n    const summaryText = page.getByText(/order summary/i);\n    await expect(summaryText).toBeVisible();\n\n    // Verify order details contain correct information\n    const itemNameText = page.getByText(/item name/i);\n    await expect(itemNameText).toBeVisible();\n\n    const itemPriceText = page.getByText(/item price/i);\n    await expect(itemPriceText).toBeVisible();\n\n    // Verify total price is correct\n    const totalPriceText = page.getByText(/total price/i);\n    await expect(totalPriceText).toBeVisible();\n\n    // Verify shipping address is correct\n    const shippingAddressText = page.getByText(/shipping address/i);\n    await expect(shippingAddressText).toBeVisible();\n\n    // Verify payment options are available\n    const paymentOptionText = page.getByText(/payment options/i);\n    await expect(paymentOptionText).toBeVisible();\n\n    // Verify confirm button is enabled\n    await expect(confirmButton).toBeEnabled();\n\n    // Verify cancel button is enabled\n    await expect(cancelButton).toBeEnabled();\n  });\n\n  test('should handle edge case where order summary is empty', async ({ page }) => {\n    // Navigate to checkout page\n    await page.goto('/checkout');\n\n    // Mock API response to return empty order summary\n    await page.route('**/api/order-summary', (route) => {\n      route.abort('failed to load');\n    });\n\n    // Verify order summary container is empty\n    const summaryContainer = page.getByRole('region', { name: /order summary/i });\n    await expect(summaryContainer).toHaveClass(/empty/);\n\n    // Verify summary title is not visible\n    const summaryTitle = page.getByRole('heading', { name: /order summary/i });\n    await expect(summaryTitle).not.toBeVisible();\n\n    // Verify no item details are displayed\n    const itemList = page.getByRole('list', { name: /items/i });\n    await expect(itemList).not.toBeVisible();\n\n    // Verify no total price is displayed\n    const totalPrice = page.getByRole('heading', { name: /total price/i });\n    await expect(totalPrice).not.toBeVisible();\n\n    // Verify shipping address is not displayed\n    const shippingAddress = page.getByRole('region', { name: /shipping address/i });\n    await expect(shippingAddress).not.toBeVisible();\n\n    // Verify payment options are still available\n    const paymentOptionText = page.getByText(/payment options/i);\n    await expect(paymentOptionText).toBeVisible();\n\n    // Verify confirm button is still visible\n    const confirmButton = page.getByRole('button', { name: /confirm order/i });\n    await expect(confirmButton).toBeVisible();\n\n    // Verify cancel button is still visible\n    const cancelButton = page.getByRole('button', { name: /cancel/i });\n    await expect(cancelButton).toBeVisible();\n\n    // Verify user is prompted to enter order details\n    const orderDetailsPrompt = page.getByText(/please enter order details/i);\n    await expect(orderDetailsPrompt).toBeVisible();\n\n    // Verify user can enter order details\n    const orderDetailsInput = page.getByLabel(/order details/i);\n    await expect(orderDetailsInput).toBeVisible();\n\n    // Verify user can proceed with empty order\n    await confirmButton.click();\n\n    // Verify user is redirected to order summary page\n    const orderSummaryPage = page.getByRole('main', { name: /order summary/i });\n    await expect(orderSummaryPage).toBeVisible();\n\n    // Verify user is able to edit and save order\n    const editButton = page.getByRole('button', { name: /edit order/i });\n    await expect(editButton).toBeVisible();\n\n    // Verify user can save changes\n    await editButton.click();\n\n    // Verify order summary is updated\n    const updatedSummaryText = page.getByText(/updated order summary/i);\n    await expect(updatedSummaryText).toBeVisible();\n\n    // Verify user is redirected to confirmation page\n    const confirmationPage = page.getByRole('main', { name: /confirm order/i });\n    await expect(confirmationPage).toBeVisible();\n\n    // Verify user can proceed with payment\n    await confirmButton.click();\n\n    // Verify payment page is displayed\n    const paymentPage = page.getByRole('main', { name: /payment page/i });\n    await expect(paymentPage).toBeVisible();\n\n    // Verify user can complete payment\n    await confirmButton.click();\n\n    // Verify user is redirected to success page\n    const successPage = page.getByRole('main', { name: /success/i });\n    await expect(successPage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5036,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.432,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 433.158,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.5072,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4241,
+        "missing_keywords": [],
+        "assertion_count": 31,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 511.622,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.8156,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3855,
+        "missing_keywords": [],
+        "assertion_count": 35,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 540.551,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

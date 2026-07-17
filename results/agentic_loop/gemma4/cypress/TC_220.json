@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_220",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7267,
+  "total_latency_s": 72.736,
+  "final_script": "describe('Reduced Motion Preference', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should disable reduced motion animations when prefers-reduced-motion is set to true', () => {\n    // Set prefers-reduced-motion to true\n    cy.viewport('iphone-x');\n    cy.get('[data-testid=\"body\"]').then(($body) => {\n      cy.wrap($body).invoke('attr', 'style', 'prefers-reduced-motion: reduce;');\n    });\n\n    // Verify reduced motion is active\n    cy.get('[data-testid=\"modal-enter-animation\"]').should('not.exist');\n    cy.get('[data-testid=\"page-transition-animation\"]').should('not.exist');\n\n    // Verify content is still accessible\n    cy.get('[data-testid=\"modal-content\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-title\"]').should('contain', 'Modal Title');\n\n    // Verify no jarring animations are present\n    cy.get('[data-testid=\"modal-content\"]').should('have.css', 'transform', 'none');\n    cy.get('[data-testid=\"modal-content\"]').should('have.css', 'opacity', '1');\n\n    // Verify modal can still be interacted with\n    cy.get('[data-testid=\"modal-close-button\"]').click();\n    cy.get('[data-testid=\"modal-content\"]').should('not.exist');\n  });\n\n  it('should enable reduced motion animations when prefers-reduced-motion is not set', () => {\n    // Remove reduced motion style\n    cy.get('[data-testid=\"body\"]').then(($body) => {\n      cy.wrap($body).invoke('removeAttr', 'style', 'prefers-reduced-motion');\n    });\n\n    // Verify reduced motion animations are enabled\n    cy.get('[data-testid=\"modal-enter-animation\"]').should('be.visible');\n    cy.get('[data-testid=\"page-transition-animation\"]').should('be.visible');\n\n    // Verify animations are applied\n    cy.get('[data-testid=\"modal-content\"]').should('have.css', 'transform', 'translateY(0px)');\n    cy.get('[data-testid=\"modal-content\"]').should('have.css', 'opacity', '0');\n\n    // Verify modal can still be interacted with\n    cy.get('[data-testid=\"modal-close-button\"]').click();\n    cy.get('[data-testid=\"modal-content\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7267,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.289,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.736,
+      "feedback_used": ""
+    }
+  ]
+}

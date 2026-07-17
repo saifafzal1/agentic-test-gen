@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_232",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7517,
+  "total_latency_s": 72.356,
+  "final_script": "describe('Data Table Responsive Stacking on Small Screens', () => {\n  beforeEach(() => {\n    cy.visit('/data-table');\n  });\n\n  it('should stack data table rows vertically on small screens', () => {\n    // Intercept the API call to fetch table data\n    cy.intercept('GET', '/api/data').as('fetchData');\n    cy.wait('@fetchData');\n\n    // Verify table is visible\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n\n    // Verify table has rows\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 0);\n\n    // Verify table is in responsive mode (stacked)\n    cy.get('[data-testid=\"data-table\"]').should('have.class', 'responsive-table');\n\n    // Verify table headers are visible and not hidden\n    cy.get('[data-testid=\"table-header\"]').should('be.visible');\n\n    // Verify each row contains all expected data cells\n    cy.get('[data-testid=\"table-row\"]').each(($row) => {\n      cy.wrap($row).should('contain', 'Name');\n      cy.wrap($row).should('contain', 'Email');\n      cy.wrap($row).should('contain', 'Status');\n    });\n\n    // Verify table is not in traditional table format\n    cy.get('[data-testid=\"table-row\"]').should('not.have.class', 'table-row-traditional');\n  });\n\n  it('should handle empty data table gracefully on small screens', () => {\n    // Intercept the API call with empty data\n    cy.intercept('GET', '/api/data', { body: { data: [] } }).as('fetchEmptyData');\n    cy.wait('@fetchEmptyData');\n\n    // Verify table container is visible\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n\n    // Verify no rows are displayed\n    cy.get('[data-testid=\"table-row\"]').should('not.exist');\n\n    // Verify empty state message is displayed\n    cy.get('[data-testid=\"empty-state-message\"]')\n      .should('be.visible')\n      .should('contain', 'No data available');\n\n    // Verify responsive class is still applied for consistency\n    cy.get('[data-testid=\"data-table\"]').should('have.class', 'responsive-table');\n\n    // Verify empty state message is styled for small screens\n    cy.get('[data-testid=\"empty-state-message\"]')\n      .should('have.css', 'font-size')\n      .and('not.equal', '0px');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7517,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3724,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.356,
+      "feedback_used": ""
+    }
+  ]
+}

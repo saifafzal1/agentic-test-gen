@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_249",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7856,
+  "total_latency_s": 72.421,
+  "final_script": "describe('Save Card Details for Future Purchases', () => {\n  beforeEach(() => {\n    cy.visit('/payment/card-details');\n  });\n\n  it('should successfully save a new card with valid details', () => {\n    // Intercept the API call to save card details\n    cy.intercept('POST', '/api/payment/save-card').as('saveCard');\n\n    // Fill in card details form\n    cy.get('[data-testid=\"card-number-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"expiry-date-input\"]').type('12/25');\n    cy.get('[data-testid=\"cvc-input\"]').type('123');\n    cy.get('[data-testid=\"card-holder-name-input\"]').type('John Doe');\n\n    // Click save button\n    cy.get('[data-testid=\"save-card-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@saveCard');\n\n    // Verify success message\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Card saved successfully');\n\n    // Verify card is added to saved cards list\n    cy.get('[data-testid=\"saved-cards-list\"]').should('contain', 'Visa ending in 1111');\n\n    // Verify form is cleared\n    cy.get('[data-testid=\"card-number-input\"]').should('have.value', '');\n  });\n\n  it('should display error message when saving card with invalid details', () => {\n    // Intercept the API call\n    cy.intercept('POST', '/api/payment/save-card').as('saveCard');\n\n    // Fill in card details with invalid data (e.g, invalid CVV)\n    cy.get('[data-testid=\"card-number-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"expiry-date-input\"]').type('12/25');\n    cy.get('[data-testid=\"cvc-input\"]').type('12'); // Invalid CVV length\n    cy.get('[data-testid=\"card-holder-name-input\"]').type('John Doe');\n\n    // Click save button\n    cy.get('[data-testid=\"save-card-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@saveCard');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Invalid CVV');\n\n    // Verify card is NOT added to saved cards list\n    cy.get('[data-testid=\"saved-cards-list\"]').should('not.contain', 'Visa ending in 1111');\n\n    // Verify form is not cleared\n    cy.get('[data-testid=\"card-number-input\"]').should('have.value', '4111111111111111');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7856,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4853,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.421,
+      "feedback_used": ""
+    }
+  ]
+}
