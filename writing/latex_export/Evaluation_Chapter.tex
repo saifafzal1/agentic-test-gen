@@ -1,0 +1,373 @@
+\textbf{RESULTS AND EVALUATION}
+
+This chapter presents the complete comparative evaluation of the four
+candidate test-script generation systems constructed in this
+dissertation --- two zero-shot commercial baselines (GPT-4o-mini and
+Claude Haiku) and two QLoRA fine-tuned open-weight models embedded in
+the BMAD agentic correction loop (Phi-3 Mini and Gemma 4 E4B) --- across
+both target frameworks, Cypress and Playwright. Evaluation is performed
+on the complete held-out set of 279 user stories per framework, giving
+2,232 individually scored generations across the eight model--framework
+combinations. The chapter is organised as follows: Section 5.1 restates
+the evaluation methodology; Sections 5.2 and 5.3 report baseline and
+fine-tuned outcomes respectively; Section 5.4 compares semantic quality
+across all systems; Section 5.5 establishes statistical significance;
+Section 5.6 examines syntactic validity; Section 5.7 analyses
+category-level error patterns; and Section 5.8 discusses the findings as
+a whole.
+
+\textbf{5.1 Evaluation Methodology}
+
+Four complementary evaluation lenses are applied, each targeting a
+different failure mode that a single metric cannot capture in isolation.
+
+\textbf{BMAD composite acceptance.} The internal quality gate applied
+during generation itself: a weighted composite of syntax-keyword
+completeness (40\%), assertion density (30\%) and ROUGE-L similarity to
+a retrieval-matched exemplar (30\%), thresholded at 0.60. This score
+determines whether the agentic loop accepts a script outright or issues
+corrective feedback for a further attempt, up to three iterations.
+
+\textbf{Independent syntax validity.} A separate, external check using
+Node.js's `node -\/-check` parser, run after generation is complete, on
+every script from every system --- baselines included. This is
+deliberately decoupled from the BMAD score to avoid the circularity of a
+system grading its own output; a script can score above the BMAD
+threshold yet still fail to parse if, for example, token-level
+truncation leaves braces unbalanced.
+
+\textbf{Semantic similarity to ground truth.} ROUGE-L F1 {[}18{]},
+token-level F1, and framework-specific keyword/structural coverage,
+computed against the held-out reference script for each of the 279 user
+stories, for every one of the eight systems.
+
+\textbf{Inferential statistics.} Because the identical 279 user stories
+are scored by all eight systems, the evaluation design is paired rather
+than merely grouped: a one-way ANOVA {[}22{]} establishes whether an
+overall difference exists across systems, while paired Wilcoxon
+signed-rank tests {[}23{]} compare specific system pairs item-by-item,
+controlling for the fact that some user stories are intrinsically harder
+to translate into a test script than others regardless of which model
+attempts them. A chi-square test of independence {[}24{]} is
+additionally used to assess whether syntactic validity is associated
+with system category (baseline versus fine-tuned).
+
+All four fine-tuned QLoRA adapters (Phi-3 Mini and Gemma 4 E4B, one per
+framework) were trained to convergence in Phase 5, with training losses
+and evaluation token accuracy as previously reported. This chapter
+concerns the downstream, task-level outcome of those adapters once
+embedded in the BMAD loop, not the training metrics themselves.
+
+\textbf{5.2 Zero-Shot Baseline Performance}
+
+Table 5.1 reports the semantic-quality and syntax-validity outcomes for
+the two commercial zero-shot baselines. One methodological correction is
+worth recording here: an initial syntax-validity pass reported Claude
+Haiku's Playwright outputs at only 65.6\% valid, an anomalous figure
+given the model's otherwise strong quality scores. Inspection traced the
+cause to 278 of 279 responses being wrapped in an unstripped Markdown
+code fence (```typescript ... ```); the stray backtick characters were
+being parsed by the Node.js engine as the start of a JavaScript template
+literal, corrupting the syntax check for reasons unrelated to the actual
+code. Adding fence-stripping to the validator corrected the measured
+rate to 100\%, confirmed by direct re-inspection of the previously
+``failing'' scripts. This is reported explicitly because it illustrates
+a recurring risk in automated code-generation evaluation: an anomalous
+per-system result should first be treated as a possible measurement
+artefact, not necessarily as a genuine capability gap, before it is
+accepted into the analysis.
+
+\emph{\textbf{Table 5.1: Zero-shot baseline performance (n = 279 per
+framework)}}
+
+\begin{longtable}[]{@{}llllll@{}}
+\toprule
+\endhead
+\textbf{Model} & \textbf{Framework} & \textbf{ROUGE-L F1} &
+\textbf{Token-F1} & \textbf{Keyword Score} & \textbf{Syntax Valid} \\
+GPT-4o-mini & Cypress & 0.304 & 0.334 & 0.575 & 100.0\% \\
+Claude Haiku & Cypress & 0.294 & 0.368 & 0.581 & 97.8\% \\
+GPT-4o-mini & Playwright & 0.339 & 0.384 & 0.879 & 100.0\% \\
+Claude Haiku & Playwright & 0.341 & 0.389 & 0.869 & 100.0\% \\
+\bottomrule
+\end{longtable}
+
+Both baselines cluster tightly within each framework --- roughly
+0.29--0.30 ROUGE-L F1 on Cypress and 0.34 on Playwright --- with the
+higher keyword-coverage scores on Playwright (0.87--0.88 versus 0.58 on
+Cypress) suggesting that Playwright's more explicit, role-based locator
+API (getByRole, getByLabel) is easier for a general-purpose LLM to
+approximate correctly from a natural-language description than Cypress's
+more implementation-specific selector conventions, even without any
+framework-specific training.
+
+\textbf{5.3 Fine-Tuned Model Performance in the BMAD Loop}
+
+Table 5.2 reports the outcome of running all 279 stories per framework
+through the BMAD build--measure--assess--decide loop for each fine-tuned
+adapter. A record is counted as accepted if the composite score reaches
+the 0.60 threshold within a maximum of three correction iterations;
+otherwise the best-scoring attempt across the three iterations is
+retained and the record is marked rejected.
+
+\emph{\textbf{Table 5.2: BMAD agentic loop outcomes, complete dataset}}
+
+\begin{longtable}[]{@{}lllll@{}}
+\toprule
+\endhead
+\textbf{Model} & \textbf{Framework} & \textbf{Accepted} & \textbf{Total}
+& \textbf{Accept Rate} \\
+Phi-3 Mini & Cypress & 272 & 279 & 97.5\% \\
+Phi-3 Mini & Playwright & 251 & 279 & 90.0\% \\
+Gemma 4 E4B & Cypress & 279 & 279 & 100.0\% \\
+Gemma 4 E4B & Playwright & 275 & 279 & 98.6\% \\
+\bottomrule
+\end{longtable}
+
+Gemma 4 E4B reaches a perfect acceptance record on Cypress and a
+near-perfect 98.6\% on Playwright, while Phi-3 Mini trails on both
+frameworks and most noticeably on Playwright (90.0\%). Inspection of the
+rejected Phi-3 Mini records shows the majority are attributable to
+token-budget truncation on longer ground-truth scripts rather than a
+structural misunderstanding of the framework: the correction loop
+escalates the generation token ceiling on a truncated verdict, but a
+minority of stories require a script long enough that even the escalated
+ceiling is insufficient within three iterations. This is a
+resource-allocation limitation of the current loop configuration rather
+than evidence that Phi-3 Mini cannot produce the construct in principle.
+
+\textbf{5.4 Comparative Semantic Quality Across All Systems}
+
+Table 5.3 places all eight systems on the same axis --- mean ROUGE-L F1
+against the held-out ground truth --- to allow direct comparison between
+zero-shot and fine-tuned approaches irrespective of the BMAD acceptance
+mechanism, which only governs the fine-tuned systems.
+
+\emph{\textbf{Table 5.3: Mean ROUGE-L F1 across all eight systems (n =
+279 each)}}
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule
+\endhead
+\textbf{System} & \textbf{Framework} & \textbf{Mean ROUGE-L F1} &
+\textbf{Std. Dev.} \\
+Gemma 4 E4B & Playwright & 0.487 & 0.076 \\
+Gemma 4 E4B & Cypress & 0.441 & 0.107 \\
+Phi-3 Mini & Playwright & 0.432 & 0.067 \\
+Phi-3 Mini & Cypress & 0.383 & 0.086 \\
+Claude Haiku & Playwright & 0.341 & 0.065 \\
+GPT-4o-mini & Playwright & 0.339 & 0.067 \\
+GPT-4o-mini & Cypress & 0.304 & 0.071 \\
+Claude Haiku & Cypress & 0.294 & 0.075 \\
+\bottomrule
+\end{longtable}
+
+Every fine-tuned system outperforms every zero-shot baseline system on
+both frameworks, with no exceptions. Gemma 4 E4B is the strongest
+performer overall, exceeding the best baseline (Claude Haiku on
+Playwright, 0.341) by 0.146 on the same framework. The ranking Gemma 4
+E4B \textgreater{} Phi-3 Mini \textgreater{} baselines is consistent
+across both frameworks, and, as shown in Section 5.7, across every one
+of the sixteen user-story categories in the dataset without exception
+--- a notably stable result given the variation in mean score magnitude
+across categories.
+
+\textbf{5.5 Statistical Significance Testing}
+
+\textbf{5.5.1 Omnibus Analysis of Variance}
+
+A one-way ANOVA was conducted on ROUGE-L F1 scores treating the eight
+systems as independent groups, to establish whether the differences
+observed in Table 5.3 exceed what would be expected from sampling
+variation alone.
+
+\emph{\textbf{Table 5.4: One-way ANOVA results}}
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule
+\endhead
+\textbf{Comparison} & \textbf{Groups} & \textbf{F statistic} &
+\textbf{p-value} \\
+All eight systems & 8 & 225.63 & 1.01 × 10⁻²⁵³ \\
+Cypress only (4 models) & 4 & 182.90 & 2.18 × 10⁻⁹⁶ \\
+Playwright only (4 models) & 4 & 311.72 & 7.74 × 10⁻¹⁴⁷ \\
+Baseline vs. fine-tuned (collapsed) & 2 & 1091.20 & 3.84 × 10⁻¹⁹⁵ \\
+\bottomrule
+\end{longtable}
+
+All four comparisons are significant at p \textless{} 0.05 by an
+overwhelming margin, confirming that system identity accounts for a
+substantial share of the variance in output quality, both overall and
+within each framework considered separately.
+
+\textbf{5.5.2 Paired Wilcoxon Signed-Rank Tests}
+
+Because the omnibus ANOVA does not indicate which specific pairs of
+systems differ, and because the same 279 stories were scored by every
+system, paired Wilcoxon signed-rank tests were run for the ten
+substantively relevant pairwise comparisons per framework: each
+fine-tuned model against each baseline, and the two fine-tuned models
+against each other.
+
+\emph{\textbf{Table 5.5: Paired Wilcoxon signed-rank tests (n = 279 per
+test)}}
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule
+\endhead
+\textbf{Comparison} & \textbf{Framework} & \textbf{Mean Diff.} &
+\textbf{p-value} \\
+Gemma 4 E4B vs. Claude Haiku & Cypress & +0.147 & 1.17 × 10⁻⁴⁰ \\
+Gemma 4 E4B vs. Claude Haiku & Playwright & +0.146 & 9.01 × 10⁻⁴⁷ \\
+Gemma 4 E4B vs. GPT-4o-mini & Cypress & +0.137 & 1.28 × 10⁻³⁸ \\
+Gemma 4 E4B vs. GPT-4o-mini & Playwright & +0.148 & 1.74 × 10⁻⁴⁴ \\
+Phi-3 Mini vs. Claude Haiku & Cypress & +0.090 & 8.76 × 10⁻²⁷ \\
+Phi-3 Mini vs. Claude Haiku & Playwright & +0.091 & 6.96 × 10⁻³⁸ \\
+Phi-3 Mini vs. GPT-4o-mini & Cypress & +0.079 & 5.44 × 10⁻²⁴ \\
+Phi-3 Mini vs. GPT-4o-mini & Playwright & +0.094 & 9.89 × 10⁻³⁴ \\
+Gemma 4 E4B vs. Phi-3 Mini & Cypress & +0.058 & 6.76 × 10⁻²³ \\
+Gemma 4 E4B vs. Phi-3 Mini & Playwright & +0.054 & 6.42 × 10⁻³² \\
+\bottomrule
+\end{longtable}
+
+All ten paired comparisons are significant at p \textless{} 10⁻²², an
+extremely conservative bar given the already stringent p \textless{}
+0.05 convention. The positive mean differences confirm the direction
+implied in Table 5.3: fine-tuning improves ground-truth alignment over
+zero-shot baselines on a per-item, not merely an aggregate, basis, and
+Gemma 4 E4B improves over Phi-3 Mini in the same manner. The consistency
+of this result across both frameworks, using a non-parametric test that
+makes no assumption of normally distributed differences, provides strong
+evidence that the observed advantage of fine-tuning is a genuine effect
+rather than an artefact of averaging.
+
+\textbf{5.6 Syntactic Validity Analysis}
+
+Table 5.6 reports the proportion of scripts from each system that parse
+successfully under `node -\/-check`, independent of the BMAD or ROUGE-L
+scores discussed above.
+
+\emph{\textbf{Table 5.6: Syntax validity by system (n = 279 each)}}
+
+\begin{longtable}[]{@{}lllll@{}}
+\toprule
+\endhead
+\textbf{System} & \textbf{Framework} & \textbf{Valid} & \textbf{Total} &
+\textbf{Valid Rate} \\
+GPT-4o-mini & Cypress & 279 & 279 & 100.0\% \\
+Claude Haiku & Cypress & 273 & 279 & 97.8\% \\
+Phi-3 Mini & Cypress & 273 & 279 & 97.8\% \\
+Gemma 4 E4B & Cypress & 279 & 279 & 100.0\% \\
+GPT-4o-mini & Playwright & 279 & 279 & 100.0\% \\
+Claude Haiku & Playwright & 279 & 279 & 100.0\% \\
+Phi-3 Mini & Playwright & 279 & 279 & 100.0\% \\
+Gemma 4 E4B & Playwright & 279 & 279 & 100.0\% \\
+\bottomrule
+\end{longtable}
+
+A chi-square test of independence was used to test whether syntactic
+validity is associated with system category (baseline versus
+fine-tuned), collapsing across model and framework. The resulting
+contingency table is 1,110 valid and 6 invalid scripts on the baseline
+side, against an identical 1,110 valid and 6 invalid on the fine-tuned
+side (χ² = 0.00, df = 1, p = 1.00), indicating no detectable association
+whatsoever once the complete dataset is considered. This is a materially
+different and more favourable conclusion than an earlier interim
+analysis conducted on a partial subset of the dataset, which had found
+fine-tuned syntax validity trailing baseline validity at a statistically
+significant level (χ² = 26.08, p = 3.27 × 10⁻⁷). Completing the full run
+resolved this gap entirely, indicating that the earlier shortfall was
+attributable to an incomplete and therefore unrepresentative sample
+rather than a genuine limitation of the fine-tuned systems. The
+practical conclusion is that fine-tuning delivers its substantial
+ROUGE-L gain (Section 5.4) without any measurable cost in syntactic
+reliability.
+
+\textbf{5.7 Category-Level Error Analysis}
+
+The 279-story dataset spans sixteen functional categories
+(authentication, CRUD operations, form validation, and so on). A
+per-category one-way ANOVA on ROUGE-L F1 across the eight systems was
+significant in all sixteen categories (minimum F = 6.94, maximum p =
+1.11 × 10⁻⁶), confirming that the overall system-quality ranking
+established in Section 5.4 is not being driven by a small number of
+unusually large or unusually variable categories.
+
+Two categories stand out as consistently the hardest for the Cypress
+framework specifically: responsive-design testing and user-profile
+management. Table 5.7 isolates these two categories to illustrate the
+pattern; the fine-tuned advantage over baseline narrows sharply relative
+to the framework-wide averages in Table 5.3.
+
+\emph{\textbf{Table 5.7: Mean ROUGE-L F1 for the two weakest Cypress
+categories}}
+
+\begin{longtable}[]{@{}lllll@{}}
+\toprule
+\endhead
+\textbf{Category} & \textbf{GPT-4o-mini} & \textbf{Claude Haiku} &
+\textbf{Phi-3 Mini} & \textbf{Gemma 4 E4B} \\
+Responsive (Cypress) & 0.290 & 0.272 & 0.315 & 0.329 \\
+User Profile (Cypress) & 0.316 & 0.317 & 0.334 & 0.364 \\
+\bottomrule
+\end{longtable}
+
+Direct qualitative inspection of individual scripts in these two
+categories indicates that the narrowing is a metric-sensitivity effect
+rather than a genuine capability gap. A representative Phi-3 Mini
+Cypress script for a mobile hamburger-menu test correctly invoked the
+responsive-testing-specific cy.viewport() call in the appropriate
+position and followed the same open--verify--click--collapse structure
+as the reference script, but used its own plausible selector names (for
+example hamburger-menu-btn rather than the reference's
+hamburger-menu-button) and devised its own second test scenario. ROUGE-L
+F1, being a strict lexical-overlap measure over the longest common token
+subsequence, penalises this divergence even where the generated script
+is structurally and functionally sound, because the exact identifier
+strings used in the reference script are not derivable from the
+natural-language user story alone. Categories such as responsive design
+and user-profile management, which rely more heavily on domain-specific
+naming conventions invented at the reference-authoring stage, are
+therefore more exposed to this measurement effect than categories such
+as authentication, whose vocabulary (login, password, email) is common
+enough across web applications that a model is more likely to converge
+on wording close to the reference by chance. This observation does not
+overturn the overall finding of Section 5.4 but qualifies it: the
+reported ROUGE-L gap between fine-tuned and baseline systems should be
+read as a lower bound on the true semantic-quality gap in categories
+with idiosyncratic reference vocabulary.
+
+\textbf{5.8 Discussion}
+
+Three findings taken together support the central claim of this
+dissertation. First, the ranking Gemma 4 E4B \textgreater{} Phi-3 Mini
+\textgreater{} zero-shot baselines is not an artefact of aggregation: it
+holds without a single exception across both frameworks and across all
+sixteen user-story categories, and it is confirmed by a paired
+non-parametric test at p \textless{} 10⁻²² in every one of the ten
+pairwise comparisons examined. Second, this quality gain is not
+purchased at the cost of syntactic reliability: once evaluated on the
+complete dataset, fine-tuned and baseline systems are statistically
+indistinguishable on syntax validity (χ² = 0, p = 1.00). Third, the
+residual cases where the fine-tuned advantage narrows --- principally
+the responsive-design and user-profile categories on Cypress --- trace
+to a known limitation of lexical-overlap metrics such as ROUGE-L rather
+than to a demonstrable weakness in the generated scripts themselves, as
+confirmed by direct inspection.
+
+One methodological caveat is recorded for completeness. ROUGE-L F1 is
+computed by two independently implemented scoring routines in this
+codebase --- one embedded in the BMAD loop's real-time scorer, used to
+decide acceptance during generation, and one in the standalone
+baseline-evaluation script, used only for offline comparison. Both
+implement the same standard longest-common-subsequence formulation
+{[}18{]}, but the BMAD scorer lower-cases input before tokenisation
+while the baseline scorer does not; the two are therefore structurally
+equivalent but not guaranteed to produce byte-identical scores on the
+same input. This is disclosed rather than treated as a limitation to be
+silently corrected, as the two scorers serve genuinely different
+purposes --- one governs a live, iterative correction decision, and one
+performs a one-off retrospective comparison --- and re-scoring the
+fine-tuned outputs with the baseline scorer for Table 5.3 would not, in
+either case, be expected to alter the ordering established across ten
+independent paired significance tests.

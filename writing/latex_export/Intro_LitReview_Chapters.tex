@@ -1,0 +1,189 @@
+\textbf{1. INTRODUCTION AND BROAD AREA OF WORK}
+
+Software quality assurance has automated a great deal of what was once
+manual regression testing, yet one activity has resisted that
+automation: the authoring of the end-to-end test scripts themselves.
+Turning an informal product requirement into a syntactically precise,
+assertion-rich automation script --- one that exercises both the
+happy-path journey a user is expected to take through a feature and the
+edge cases most likely to expose a defect {[}11{]} --- remains a task
+performed by a human engineer, and one that is repetitive,
+time-consuming, and sensitive to that engineer's familiarity with the
+specific application domain and test framework in use. It is this gap
+between a plainly stated requirement and a working test script that
+motivates the present research.
+
+Large language models trained on code have shown that a pre-trained
+transformer can produce output that is structurally plausible --- code
+that reads as syntactically correct even where it is not necessarily
+logically correct --- from a natural-language description alone
+{[}12{]}. A general-purpose model prompted with no task-specific
+grounding, however, has no exposure to the particular selector
+conventions, assertion idioms, and API surface mandated by a specific
+test framework such as Cypress {[}13{]} or Playwright {[}14{]};
+zero-shot or few-shot prompting {[}12{]} of such a model typically
+yields scripts that are structurally incomplete, rely on deprecated
+APIs, or omit the assertions needed for the test to carry any real
+verification value. Closing this gap requires more than a better prompt:
+it requires the model to be grounded in the target framework's
+conventions and given a mechanism to check and correct its own output.
+
+This dissertation makes three complementary contributions toward that
+goal. A domain-specific dataset of 279 aligned
+user-story-and-test-script pairs was constructed through a structured,
+quality-validated generation pipeline, split evenly and independently
+between the Cypress and Playwright frameworks. Two open-weight language
+models, Phi-3 Mini and Gemma 4 E4B, were then adapted to this dataset
+under the QLoRA (Quantised Low-Rank Adaptation) parameter-efficient
+fine-tuning paradigm, producing one specialised adapter per model per
+framework so that no adapter is ever exposed to the syntax of the
+framework it was not trained for. Finally, an agentic
+Build--Measure--Assess--Decide (BMAD) correction loop was designed and
+implemented to autonomously generate, statically inspect, score, and ---
+where necessary --- iteratively revise each script until it meets a
+defined quality threshold or a maximum number of correction attempts is
+reached, removing the need for a human reviewer in the refinement cycle
+itself.
+
+The research sits at the intersection of AI-assisted software
+engineering and test automation, with direct practical relevance to
+organisations that maintain continuous integration pipelines under Agile
+delivery practices, where the marginal cost of authoring and maintaining
+end-to-end test coverage is a recurring constraint on release velocity.
+All eight phases of the work --- dataset construction, baseline
+evaluation, fine-tuning, agentic-loop implementation, and comparative
+statistical evaluation --- have been completed at the time of this
+report. Chapter 2 surveys the literature that motivates the specific
+design choices made; Chapter 3 describes the system design and
+architecture; Chapter 4 details the implementation; Chapter 5 reports
+the complete comparative evaluation across all systems studied; and
+Chapter 6 concludes with a synthesis of findings, limitations, and
+directions for future work.
+
+\textbf{2. LITERATURE REVIEW}
+
+This chapter surveys three bodies of literature that together frame the
+design of the system described in this dissertation: LLM-driven code and
+test generation, parameter-efficient fine-tuning, and agentic
+self-correcting AI architectures. Each is examined for what it
+establishes and, more importantly, for what it leaves unaddressed with
+respect to the specific problem this dissertation tackles.
+
+The use of large language models for automated code generation has
+progressed from general-purpose function synthesis toward increasingly
+specialised, test-oriented applications. Chen et al. {[}1{]} established
+the field's reference evaluation methodology with Codex and the
+HumanEval benchmark, demonstrating that a decoder-only transformer
+trained on large code corpora attains substantial competence at
+function-level synthesis and popularising pass-at-k as the standard
+accuracy metric for generated code. Austin et al. {[}2{]} broadened this
+evaluation basis with MBPP, a benchmark of crowd-sourced programming
+problems spanning a wider range of task types than HumanEval alone.
+Closer to the concern of this dissertation, Liu et al. {[}3{]} examined
+LLM-generated unit tests specifically, showing that a model supplied
+with a method signature can produce tests that measurably improve code
+coverage --- evidence that test-script generation, not only
+application-code generation, is within reach of current models, provided
+they are given adequate task grounding. StarCoder {[}4{]} and
+DeepSeek-Coder {[}5{]} extended the open-weight code-model landscape by
+training on broader multi-language corpora, yielding models that are
+both competitive on standard benchmarks and, unlike proprietary
+alternatives, available for further fine-tuning --- a property this
+dissertation depends upon directly.
+
+None of this literature, however, addresses UI test-script generation
+for a named commercial framework with selector-level correctness as an
+explicit criterion: HumanEval and MBPP evaluate general-purpose function
+synthesis, and the unit-test generation work of Liu et al. targets
+arbitrary application code rather than the domain-specific object model,
+locator conventions, and assertion idioms of a browser-automation
+framework such as Cypress or Playwright.
+
+Because full-parameter fine-tuning of a billion-parameter model demands
+GPU infrastructure well beyond consumer hardware, this dissertation
+relies instead on parameter-efficient fine-tuning (PEFT), a family of
+techniques that adapts a pre-trained model to a target task by updating
+only a small fraction of its parameters while leaving the bulk of its
+pre-trained knowledge frozen. Hu et al. {[}6{]} introduced Low-Rank
+Adaptation (LoRA), which injects small trainable rank-decomposition
+matrices alongside the frozen weights of each adapted layer, cutting the
+number of trainable parameters by several orders of magnitude with
+little measurable loss of task performance. Dettmers et al. {[}7{]}
+extended this idea to QLoRA, quantising the frozen base model itself to
+4-bit precision while training the LoRA adapters at higher precision, a
+combination that for the first time made fine-tuning of
+7-billion-parameter-class models practical on a single consumer GPU.
+This is the specific technique this dissertation applies, and it is what
+makes on-device fine-tuning on Apple Silicon --- rather than a cloud GPU
+cluster --- a realistic option for a project of this scope.
+
+Yet the QLoRA literature to date has been benchmarked and validated
+almost exclusively on CUDA-capable NVIDIA hardware; Apple's Metal
+Performance Shaders (MPS) backend, which this dissertation targets,
+differs from CUDA in numerically significant ways --- for instance in
+how mixed-precision gradient scaling behaves --- and its suitability for
+producing a fine-tuned adapter of comparable quality has not been
+previously reported for this task.
+
+The third relevant body of work concerns agentic architectures, in which
+a model does not merely produce a single output but reasons, acts, and
+revises across an iterative loop, often incorporating feedback from an
+external tool or from its own prior attempt. Yao et al. {[}8{]} proposed
+ReAct, interleaving explicit reasoning traces with executable actions so
+that a model can invoke external tools and incorporate their results
+before producing a final answer. Wang et al. {[}9{]} demonstrated, with
+AutoGen, that two cooperating agents --- one producing code and a second
+critiquing it --- can improve code quality beyond what either agent
+achieves alone. Shinn et al. {[}10{]} introduced Reflexion, in which an
+agent inspects the outcome of a failed attempt and uses that reflection
+to generate a corrected subsequent attempt without any change to the
+underlying model weights. These three works collectively establish the
+conceptual template followed by the BMAD loop developed in this
+dissertation, in which an orchestrating process evaluates the syntactic
+and semantic quality of a generated script and decides, on that basis,
+whether to accept it or to trigger a further, feedback-guided generation
+attempt.
+
+None of these agentic frameworks, however, has been applied to the
+specific problem of iteratively correcting a UI test script using
+static-analysis feedback as the correction signal, nor evaluated with
+the paired statistical rigour --- the same held-out items scored across
+every system under comparison --- that this dissertation's evaluation
+chapter applies.
+
+Table 2.1 summarises the three gaps identified across this survey and
+states how this dissertation addresses each of them; the corresponding
+evidence for each closure is presented in Chapter 5.
+
+\emph{\textbf{Table 2.1: Literature gaps and how this dissertation
+addresses them}}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule
+\endhead
+\textbf{Gap} & \textbf{Description} & \textbf{How Addressed} \\
+Gap 1: No framework-idiomatic UI test-script fine-tuning & Prior code-
+and test-generation work {[}1, 3{]} evaluates general-purpose function
+or unit-test synthesis; none fine-tunes a model specifically on the
+selector conventions and assertion idioms of a named commercial UI test
+framework. & Two open-weight models were fine-tuned on a
+framework-isolated, 279-pair Cypress/Playwright dataset, producing
+framework-specific adapters evaluated against both zero-shot baselines
+and independent syntax validation (Chapter 5). \\
+Gap 2: QLoRA feasibility unexamined on Apple Silicon & QLoRA and related
+PEFT studies {[}6, 7{]} report results exclusively on CUDA-capable GPUs;
+the technique's behaviour on Apple's MPS backend, including known
+numerical differences in mixed-precision training, is unreported. & All
+four adapters were trained to convergence on Apple M4 Pro hardware under
+MPS, with the specific adaptations required (bfloat16 precision,
+completion-only masking configuration) documented in Chapter 4. \\
+Gap 3: No agentic correction loop for UI test scripts & Agentic
+self-correction frameworks {[}8, 9, 10{]} have been demonstrated for
+general code generation and conversational tasks, but not for the
+iterative, static-analysis-guided correction of UI test scripts
+specifically. & The BMAD loop was implemented and evaluated across the
+complete 279-story dataset for all four fine-tuned adapters, with
+acceptance-rate and correction-iteration outcomes reported in Chapter
+5. \\
+\bottomrule
+\end{longtable}

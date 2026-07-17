@@ -1,0 +1,279 @@
+\textbf{IMPLEMENTATION}
+
+This chapter describes how the five architectural components introduced
+earlier were realised in practice: the repository and
+development-environment organisation, the dataset and baseline
+pipelines, the QLoRA fine-tuning procedure, the BMAD agentic correction
+loop and its underlying inference mechanism, and the evaluation tooling
+used to produce the results reported in Chapter 5. Particular attention
+is given to Section 4.5, which documents both the original
+implementation of the agentic loop's inference layer and a subsequent
+architectural revision undertaken after the original design proved
+unreliable under sustained, unattended execution --- a revision that is
+reported here in full because the diagnosis and correction of that
+unreliability is itself a substantive piece of engineering work
+underpinning the validity of the results in Chapter 5.
+
+\textbf{4.1 Development Environment and Repository Organisation}
+
+Development was distributed across two machines according to
+computational demand. Mac A, an Apple M4 Pro with 48 GB of unified
+memory, hosted all locally executed model inference: QLoRA fine-tuning,
+the BMAD agentic loop, and the statistical evaluation. Mac B, an
+Intel-based machine with 16 GB of RAM and no CUDA-capable GPU, was
+reserved for work that depends only on network calls to external APIs
+rather than local model execution --- principally dataset generation and
+the two zero-shot commercial baselines. This division reflects a
+deliberate architectural decision established early in the project and
+confirmed empirically during development: Mac B's hardware is unsuited
+to hosting a 3.8--4-billion-parameter transformer for repeated,
+low-latency inference, whereas its Intel CPU is entirely adequate for
+issuing HTTP requests to a commercial LLM API and storing the response.
+
+The codebase is organised as a single Git repository with directories
+corresponding to each pipeline stage --- data/, baselines/,
+fine\_tuning/, agentic\_loop/, evaluation/ and results/ --- and is
+version-controlled across four branches: main, which holds the dataset,
+baseline, and fine-tuning code common to all subsequent work;
+phase6-eval, an early implementation of the agentic loop later found to
+have a systemic reliability defect (Section 4.5.1) and retained for
+historical record rather than active use; phase6-rebuild, the corrected
+implementation used to produce the results in Chapter 5; and
+final-submission, into which phase6-rebuild has been merged as the basis
+for this dissertation.
+
+\textbf{4.2 Dataset Generation and Preparation}
+
+The 279-story dataset was produced by a generation script that
+synthesises Jira-style user stories paired with a Cypress and a
+Playwright reference script for each story, balanced across sixteen
+functional categories (authentication, CRUD operations, form validation,
+responsive design, and others) and three complexity tiers (simple,
+medium, complex). A separate splitting utility partitions the unified
+dataset into framework-isolated JSON Lines files, one containing only
+Cypress reference scripts and one containing only Playwright reference
+scripts, so that fine-tuning and baseline evaluation for a given
+framework never has visibility of the other framework's syntax during
+training or prompting.
+
+\textbf{4.3 Zero-Shot Baseline Inference}
+
+The baseline runner issues one API request per user story to each of the
+two commercial models under evaluation, GPT-4o-mini and Claude Haiku,
+and persists the response together with prompt and completion token
+counts, latency, and a timestamp as an individual JSON record. A
+per-model, per-framework summary file records aggregate completion
+counts, allowing an interrupted baseline run to resume from the last
+completed record rather than reissuing already-completed API calls. A
+third candidate baseline, Gemini Flash, was evaluated for inclusion but
+excluded after its free-tier request quota proved insufficient for the
+558 calls required across both frameworks; this decision is recorded in
+the codebase rather than silently omitted.
+
+\textbf{4.4 QLoRA Fine-Tuning}
+
+Each of the four adapters --- Phi-3 Mini and Gemma 4 E4B, one instance
+per framework --- was produced by a dedicated fine-tuning script
+applying Low-Rank Adaptation {[}6{]} under 4-bit quantisation (QLoRA)
+{[}7{]} to the frozen base model, using the framework-isolated training
+split described in Section 4.2. Training and inference both execute on
+Apple Silicon through PyTorch's Metal Performance Shaders (MPS) backend,
+which required three specific adaptations relative to a conventional
+CUDA training configuration, identified during the Phase 4 diagnostic
+experiments reported at the mid-semester stage: the bfloat16 numeric
+format {[}20{]} must be used in place of float16, since PyTorch's
+gradient scaler silently skips optimiser steps under float16 on MPS;
+HuggingFace TRL's {[}21{]} completion-only masking collator produced NaN
+losses under certain batch configurations and required adjustment; and
+Python's standard output buffering must be disabled at the interpreter
+level to obtain real-time loss visibility during training. These
+adaptations, once established, reduced the iteration time for subsequent
+fine-tuning experiments materially, as reflected in the substantially
+shorter Phi-3 Mini training times reported in the mid-semester results
+(under one hour per framework, against 3.78 and 5.71 hours for Gemma 4
+E4B).
+
+\textbf{4.5 The BMAD Agentic Correction Loop}
+
+The agentic loop is the central engineering artefact of this
+dissertation. It implements a Build--Measure--Assess--Decide cycle: for
+a given user story, the Build step generates a candidate script from the
+appropriate fine-tuned adapter; the Measure step scores the candidate
+against a composite quality rubric; the Assess step compares that score
+to an acceptance threshold; and, if the threshold is not met, the Decide
+step constructs targeted corrective feedback and returns control to
+Build for a further attempt, up to a configurable maximum of three
+iterations, after which the best-scoring candidate across all attempts
+is retained regardless of whether it cleared the threshold.
+
+\textbf{4.5.1 Original Implementation and Its Failure Modes}
+
+The loop was first implemented as two separate processes communicating
+over HTTP: a FastAPI/uvicorn inference server that loaded a fine-tuned
+adapter and exposed a single generation endpoint on a local port, and a
+client process implementing the Build--Measure--Assess--Decide logic
+that issued one HTTP request per generation attempt. This separation is
+a conventional and reasonable design for a service intended to handle
+concurrent external callers; however, subjecting it to sustained,
+unattended execution across the full 279-story dataset for all four
+adapters --- a workload spanning tens of continuous hours per adapter
+--- exposed four distinct reliability defects, each diagnosed and
+corrected in turn.
+
+\begin{itemize}
+\item
+  A port-binding conflict: a previous inference-server process that had
+  not been fully terminated continued to hold the local port, so a fresh
+  server process for the next model/framework combination failed to bind
+  while the orchestration script's health check nonetheless reported the
+  (stale) server as healthy, causing a subsequent generation combination
+  to run against the wrong model without failing loudly.
+\item
+  Read-timeout failures under memory pressure: when overall system
+  memory pressure was high, individual generation calls occasionally
+  exceeded the client's request timeout even though the server process
+  was still alive, and this exception type had not been included in the
+  client's retry-on-failure logic, so a single slow response terminated
+  the entire multi-hour run.
+\item
+  An incorrect exception reference in the retry-handling code itself:
+  the client's connection-retry logic referenced an exception class that
+  does not exist in the networking library in use, so on the one
+  occasion a genuine dropped connection occurred, the retry mechanism
+  intended to handle it raised a second, unrelated error and crashed
+  rather than retrying.
+\item
+  A defect introduced while fixing a memory-growth issue: an interim
+  mitigation for gradual memory growth in the long-lived server process
+  (Section 4.5.2) itself contained a variable-scoping error that caused
+  every subsequent request to fail; this was caught by validating the
+  fix against a live request before redeploying it, rather than relying
+  on a syntax check alone, and is recorded here as an example of why
+  runtime verification, not just static verification, was adopted as
+  standard practice for the remainder of the implementation.
+\end{itemize}
+
+Each of these defects shares a common root cause: the HTTP boundary
+between the correction loop and the model introduced a class of failure
+--- connection state, timeouts, port lifecycle, serialisation of retry
+logic --- that has nothing to do with the correctness of the generated
+test scripts, yet was capable of terminating a multi-hour unattended
+run. This observation motivated a architectural revision rather than a
+further round of point fixes.
+
+\textbf{4.5.2 Rearchitected Single-Process Implementation}
+
+The corrected implementation, on which all results in Chapter 5 are
+based, removes the HTTP boundary entirely. Model loading, prompt
+construction, and generation are performed by a single in-process module
+that the Build--Measure--Assess--Decide loop calls directly as a
+function, with no server, no port, and no network client involved. This
+eliminates the entire class of failure described in Section 4.5.1 by
+construction, since there is no longer a connection to drop, a port to
+conflict over, or a timeout to elapse. Two further corrections, both
+genuine model-behaviour fixes rather than infrastructure fixes, were
+carried into the rearchitected implementation:
+
+\begin{itemize}
+\item
+  Gemma 4 E4B's generation calls previously specified only the
+  tokenizer's default end-of-sequence token as a stopping criterion;
+  because Gemma 4's chat template delimits a turn with a distinct
+  \textless end\_of\_turn\textgreater{} marker, generation would
+  occasionally continue past the intended script into a hallucinated
+  continuation of the conversation. The corrected implementation passes
+  the model-specific turn-boundary token explicitly as an additional
+  stopping criterion, and applies a truncate-at-first-marker safety net
+  on the decoded output as a second line of defence should the stopping
+  criterion still be missed.
+\item
+  Memory usage on the Metal Performance Shaders backend was found to
+  grow gradually across hundreds of sequential generation calls within a
+  single long-lived process, eventually contributing to the read-timeout
+  failures described above. An explicit garbage-collection pass together
+  with the MPS-specific cache-clearing call is now issued after every
+  generation, which measurably stabilised memory usage across multi-hour
+  continuous runs in subsequent testing.
+\end{itemize}
+
+The loop additionally implements a token-budget escalation policy: if a
+candidate script is rejected specifically because its braces or
+parentheses are unbalanced --- the signature of truncation against the
+generation token ceiling rather than a content-quality failure --- the
+next correction attempt is issued with a higher token ceiling rather
+than an identical one, since re-requesting ``the complete script'' at an
+unchanged budget simply reproduces the same cutoff. The ceiling is
+capped to bound worst-case latency per record.
+
+\textbf{4.5.3 Execution Reliability Engineering}
+
+Beyond the single-process architectural change, three operational
+measures were adopted to make the full-dataset run practical on a single
+development machine shared with other applications, rather than a
+dedicated server.
+
+\begin{itemize}
+\item
+  Checkpoint and resume: before generating a script for a given story,
+  the loop checks whether a result file for that story identifier
+  already exists in the output directory and, if so, skips regeneration.
+  This allows a run to be safely interrupted and restarted from the
+  point of interruption without discarding completed work, and underlies
+  the chunked execution strategy below.
+\item
+  Chunked execution: rather than attempting all 279 records per adapter
+  in a single continuous process lifetime, execution was performed in
+  fixed increments of 35 records per model/framework combination, with
+  the process exiting and being relaunched between increments. Combined
+  with checkpoint/resume, this bounds the maximum continuous process
+  lifetime and correspondingly bounds any residual memory growth, while
+  the retry-with-restart wrapper in the orchestration script
+  additionally re-attempts a failed combination up to three times,
+  restarting the process and resuming from checkpoint, before surfacing
+  an error rather than continuing silently.
+\item
+  Sleep prevention: because each chunk could run for several hours
+  unattended, the operating system's default idle-sleep behaviour ---
+  which would otherwise suspend all running processes after a short
+  period of inactivity --- was suppressed for the duration of each chunk
+  using a process-scoped sleep-prevention utility tied to the lifetime
+  of the pipeline process, so that sleep prevention is released
+  automatically when the chunk completes rather than requiring manual
+  cleanup.
+\end{itemize}
+
+\textbf{4.6 Evaluation Tooling}
+
+Two categories of evaluation tooling were implemented to produce the
+results in Chapter 5. Independent syntax validation runs Node.js's
+built-in JavaScript/TypeScript parser (node -\/-check) against every
+generated script from all eight systems, applying the same stop-marker
+truncation used defensively during generation (Section 4.5.2) so that
+any residual leaked chat-template text does not distort the validity
+measurement, and a corresponding Markdown-code-fence stripping step for
+the baseline systems after the fence-related measurement artefact
+described in Section 5.2 was identified. Statistical analysis tooling,
+built on the SciPy library, loads the per-record scores produced by both
+the BMAD loop and the baseline evaluator, joins them by story identifier
+to construct the paired dataset described in Section 5.1, and computes
+the one-way ANOVA, paired Wilcoxon signed-rank tests, chi-square test of
+independence, and category-level error matrices reported throughout
+Chapter 5.
+
+\textbf{4.7 Summary}
+
+The implementation delivers all five architectural components introduced
+earlier: a framework-isolated dataset pipeline, a resumable zero-shot
+baseline evaluator, an MPS-adapted QLoRA fine-tuning procedure, a
+single-process BMAD agentic correction loop, and a statistical
+evaluation toolchain. The most significant engineering finding to emerge
+during implementation was that the original two-process, HTTP-mediated
+design for the agentic loop was reliable for short runs but not for the
+sustained, multi-hour unattended execution required to process the
+complete dataset, and that removing the HTTP boundary entirely ---
+rather than continuing to patch individual failure modes within it ---
+was the more effective correction. All quantitative results reported in
+Chapter 5 were produced using the corrected, single-process
+implementation described in Section 4.5.2, executed to completion across
+all four model/framework combinations with zero unrecovered failures
+once the chunked execution strategy of Section 4.5.3 was adopted.

@@ -1,0 +1,214 @@
+\textbf{CONCLUSION AND FUTURE WORK}
+
+\textbf{6.1 Conclusion}
+
+This dissertation set out to investigate whether a domain-fine-tuned
+large language model, embedded inside an agentic self-correction loop,
+can autonomously produce syntactically valid and semantically faithful
+end-to-end user-interface test scripts directly from natural-language
+user stories. The motivation was the persistent quality-assurance
+bottleneck in modern software teams, where manual authoring and
+maintenance of end-to-end test scripts consumes disproportionate
+engineering effort relative to the value delivered. Eight phases of work
+were undertaken to answer this question: a curated, framework-balanced
+dataset of 279 Jira-style user stories was constructed and validated;
+two commercial large language models were evaluated as zero-shot
+reference systems; two open-weight models, Phi-3 Mini and Gemma 4 E4B,
+were adapted through QLoRA parameter-efficient fine-tuning into
+framework-isolated adapters for Cypress and Playwright; a
+Build--Measure--Assess--Decide agentic correction loop was implemented
+to iteratively refine generated scripts against a composite quality
+threshold; and a comprehensive statistical evaluation was carried out
+comparing all eight resulting systems on the complete held-out dataset.
+
+The evaluation reported in Chapter 5 answers the research question in
+the affirmative, with three specific, statistically substantiated
+conclusions. First, fine-tuning produces a large and highly consistent
+improvement in ground-truth semantic alignment over zero-shot prompting:
+the ranking Gemma 4 E4B \textgreater{} Phi-3 Mini \textgreater{}
+commercial baselines holds without a single exception across both
+frameworks and across all sixteen functional categories in the dataset,
+and every one of the ten paired Wilcoxon signed-rank comparisons
+conducted was significant at p \textless{} 10⁻²². Second, this
+improvement is not obtained at the expense of syntactic reliability:
+once evaluated on the complete dataset rather than a partial sample,
+fine-tuned and baseline systems are statistically indistinguishable on
+syntax validity (χ² = 0.00, p = 1.00). Third, the agentic correction
+loop itself is an effective mechanism for closing the residual gap
+between a first-attempt generation and an acceptable script, with the
+strongest configuration --- Gemma 4 E4B on Cypress --- reaching a 100\%
+acceptance rate across all 279 held-out stories.
+
+Beyond the headline quantitative result, this work makes three further
+contributions that are methodological rather than purely empirical. The
+evaluation design pairs every one of the 279 stories across all eight
+systems, enabling item-level non-parametric significance testing rather
+than comparison of aggregate means alone --- a stronger design than is
+typical in comparable code-generation studies, where baseline and
+treatment systems are often evaluated on non-identical or non-paired
+samples. Second, two measurement artefacts were identified and corrected
+during the course of the evaluation itself: an unstripped Markdown code
+fence that had suppressed Claude Haiku's apparent Playwright
+syntax-validity score by more than thirty percentage points, and an
+incomplete-dataset sample that had made fine-tuned syntax reliability
+appear to lag baseline reliability by a statistically significant
+margin, a gap that closed entirely once the full 279-story dataset was
+scored. Both corrections are reported transparently in Chapter 5 rather
+than silently absorbed into the final figures, illustrating a broader
+methodological point for automated code-generation research: an
+unexpected per-system result should be treated as a candidate
+measurement artefact and investigated before it is accepted as a genuine
+finding. Third, the category-level analysis in Section 5.7 demonstrates
+that a lexical-overlap metric such as ROUGE-L can systematically
+understate model quality in categories whose reference scripts rely on
+idiosyncratic, non-derivable naming conventions, a qualification that
+should inform how future work in this area interprets ROUGE-L-based
+comparisons.
+
+\textbf{6.2 Limitations}
+
+Several limitations qualify the scope of the conclusions reported above
+and should be considered when generalising the findings beyond the
+conditions under which this study was conducted.
+
+\begin{itemize}
+\item
+  Dataset scale and provenance. The 279-story dataset, while balanced
+  across sixteen functional categories and three complexity levels, is a
+  single synthetically constructed corpus rather than a sample of user
+  stories drawn from an operating production backlog. Although its scale
+  is consistent with established parameter-efficient fine-tuning
+  practice for LoRA-style adapters, a larger and organisationally
+  diverse dataset would strengthen claims of generalisability to
+  arbitrary real-world Jira tickets.
+\item
+  Framework coverage. Evaluation is restricted to Cypress and
+  Playwright, the two most widely adopted browser-based end-to-end
+  testing frameworks at the time of this study. The findings do not
+  directly extend to other test automation paradigms such as Selenium
+  WebDriver, native mobile frameworks such as Appium, or API-level
+  contract testing, each of which carries a different syntactic and
+  semantic profile.
+\item
+  Model scale. Both fine-tuned base models --- Phi-3 Mini and Gemma 4
+  E4B --- were selected in part for their feasibility on Apple Silicon
+  hardware operating under a 48 GB unified-memory budget. Larger
+  open-weight or proprietary models may exhibit different fine-tuning
+  dynamics and zero-shot baseline quality; the results reported here
+  should be read as evidence for models in this parameter range, not as
+  an upper bound on what fine-tuning can achieve at larger scale.
+\item
+  Single fine-tuning run per configuration. Each of the four adapters
+  was trained once to convergence rather than across multiple random
+  seeds. Training-run-to-training-run variance was therefore not
+  quantified, and the reported accept rates and ROUGE-L scores reflect
+  one instantiation of each adapter rather than a distribution over
+  repeated training runs.
+\item
+  Token-budget-bound rejections. A minority of Phi-3 Mini rejections,
+  most visible on Playwright, were attributable to the generation token
+  ceiling being insufficient for unusually long reference scripts even
+  after the correction loop's automatic escalation. This is a
+  configuration limit of the present loop rather than evidence of a
+  structural incapacity in the model, but it does mean the reported
+  accept rates slightly understate what a more generous or adaptively
+  sized token budget could achieve.
+\item
+  Metric-based rather than execution-based validation. Quality was
+  assessed through static syntax checking and lexical similarity to a
+  reference script; no generated script was executed against a live
+  application under test. A script can therefore be judged syntactically
+  valid and lexically close to the reference while still failing at
+  runtime --- for example, if a selector it references does not exist in
+  the target application's actual DOM. This is discussed further as a
+  priority direction for future work below.
+\end{itemize}
+
+\textbf{6.3 Future Work}
+
+The limitations identified above translate directly into concrete
+directions for extending this research.
+
+\textbf{6.3.1 Execution-Based Validation}
+
+The most consequential extension is to move beyond static and lexical
+evaluation toward execution-based validation: running each generated
+script against a live or containerised instance of the target
+application and recording pass, fail, or runtime-error outcomes. This
+would close the remaining gap between ``the script looks correct'' and
+``the script actually verifies the intended behaviour,'' and would allow
+the BMAD loop's Measure stage to incorporate a genuine
+functional-correctness signal alongside the current static heuristics. A
+natural implementation path is a sandboxed headless-browser execution
+stage inserted between the current syntax check and the composite-score
+computation, feeding pass/fail outcomes back as an additional term in
+the acceptance threshold.
+
+\textbf{6.3.2 Human Evaluation}
+
+A structured human evaluation, in which practising QA engineers rate a
+sample of generated scripts for readability, maintainability, and
+fitness for direct use in a real codebase, would complement the
+automated metrics used in this dissertation. ROUGE-L and token-F1
+capture surface similarity to a reference implementation but cannot
+assess whether an engineer would accept a generated script into a pull
+request with minimal edits --- a criterion that ultimately determines
+the practical value of the system studied here.
+
+\textbf{6.3.3 Broader Framework and Domain Coverage}
+
+Extending the framework-isolated fine-tuning methodology used here to
+Selenium WebDriver, Appium-based mobile test automation, and API-level
+contract testing frameworks such as Postman or REST Assured would test
+whether the observed fine-tuning advantage generalises beyond
+browser-based UI testing, and would allow a single organisation's full
+test-automation surface to be addressed by variants of the same agentic
+loop.
+
+\textbf{6.3.4 Larger-Scale and Multi-Seed Training}
+
+Repeating the QLoRA fine-tuning procedure across multiple random seeds
+per adapter would quantify training-run variance and strengthen the
+statistical claims made in Chapter 5. Scaling the dataset beyond 279
+stories per framework, and sourcing a portion of it from real,
+anonymised production backlogs rather than synthetic generation, would
+additionally test whether the fine-tuning gains reported here persist on
+more heterogeneous and less internally consistent user-story phrasing.
+
+\textbf{6.3.5 Adaptive Token Budgeting}
+
+The token-budget-bound rejections identified in Section 6.2 could be
+addressed directly by predicting an appropriate generation length from
+the user story's category and complexity label before the first
+generation attempt, rather than escalating the token ceiling reactively
+only after a truncated first attempt --- a refinement that would likely
+narrow the residual accept-rate gap between Phi-3 Mini and Gemma 4 E4B
+on Playwright.
+
+\textbf{6.3.6 Multi-Agent Specialisation}
+
+The current architecture applies a single agentic loop uniformly across
+all categories of user story. A natural extension is to decompose the
+loop into specialised sub-agents --- for instance, a dedicated agent for
+accessibility-focused assertions, or one specialised in
+responsive-design viewport handling, the category identified in Chapter
+5 as the most metric-sensitive --- coordinated by a routing mechanism
+that dispatches each incoming story to the most appropriate specialist
+before the shared Build--Measure--Assess--Decide cycle proceeds.
+
+\textbf{6.4 Concluding Remarks}
+
+Taken as a whole, this dissertation provides statistically robust
+evidence that parameter-efficient fine-tuning, combined with an agentic
+self-correction loop, can substantially improve an open-weight language
+model's ability to translate natural-language user stories into usable
+end-to-end test scripts, without sacrificing syntactic reliability
+relative to considerably larger zero-shot commercial systems. The scale
+of the improvement, its consistency across every category and framework
+tested, and the rigour with which measurement artefacts were identified
+and corrected during the evaluation process together support the
+conclusion that this is a genuine and practically meaningful effect
+rather than an outcome of favourable aggregation. The limitations and
+future directions identified in this chapter define a clear path by
+which the present findings could be extended toward a system suitable
+for evaluation in an operating software delivery pipeline.
