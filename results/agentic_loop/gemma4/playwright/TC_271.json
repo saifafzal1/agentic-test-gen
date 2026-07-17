@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_271",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8413,
+  "total_latency_s": 72.444,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Copy to Clipboard Snackbar Notification', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/copy-to-clipboard');\n  });\n\n  test('should display snackbar message after successfully copying text to clipboard', async ({ page }) => {\n    // Locate and click the copy button using getByRole\n    const copyButton = page.getByRole('button', { name: /copy to clipboard/i });\n    await expect(copyButton).toBeVisible();\n    await copyButton.click();\n\n    // Wait for the snackbar to appear\n    const snackbar = page.locator('[data-testid=\"snackbar-message\"]');\n    await expect(snackbar).toBeVisible();\n\n    // Verify the snackbar contains the correct success message\n    const messageText = page.getByText(/copied to clipboard/i);\n    await expect(messageText).toBeVisible();\n\n    // Verify the snackbar has a success styling (e.g, green background)\n    await expect(snackbar).toHaveCSS('background-color', /green/);\n\n    // Verify the snackbar has a dismiss button and it works\n    const dismissButton = page.getByRole('button', { name: /dismiss/i });\n    await expect(dismissButton).toBeVisible();\n    await dismissButton.click();\n\n    // Verify the snackbar is dismissed\n    await expect(snackbar).not.toBeVisible();\n  });\n\n  test('should handle copy failure and display error snackbar message', async ({ page }) => {\n    // Intercept the copy API call and simulate failure\n    await page.route('**/api/copy-text', route => {\n      route.abort('failed');\n    });\n\n    // Locate and click the copy button using getByRole\n    const copyButton = page.getByRole('button', { name: /copy to clipboard/i });\n    await expect(copyButton).toBeVisible();\n    await copyButton.click();\n\n    // Wait for the error snackbar to appear\n    const snackbar = page.locator('[data-testid=\"snackbar-message\"]');\n    await expect(snackbar).toBeVisible();\n\n    // Verify the snackbar contains the correct error message\n    const errorMessage = page.getByText(/failed to copy/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the snackbar has an error styling (e.g., red background)\n    await expect(snackbar).toHaveCSS('background-color', /red/);\n\n    // Verify the error message is displayed with appropriate styling\n    await expect(snackbar).toContainText('Error');\n\n    // Verify the error message has a dismiss button and it works\n    const dismissButton = page.getByRole('button', { name: /dismiss/i });\n    await expect(dismissButton).toBeVisible();\n    await dismissButton.click();\n\n    // Verify the error snackbar is dismissed\n    await expect(snackbar).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8413,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5709,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.444,
+      "feedback_used": ""
+    }
+  ]
+}

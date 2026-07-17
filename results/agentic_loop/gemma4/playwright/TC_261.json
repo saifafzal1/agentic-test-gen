@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_261",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8271,
+  "total_latency_s": 72.989,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Dismissal', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should dismiss a notification when close button is clicked', async ({ page }) => {\n    // Verify notification is visible\n    const notification = page.getByRole('alert');\n    await expect(notification).toBeVisible();\n    \n    // Verify close button is visible\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n    \n    // Verify notification content is visible\n    const notificationText = page.getByText('New message received');\n    await expect(notificationText).toBeVisible();\n    \n    // Click the close button to dismiss the notification\n    await closeButton.click();\n    \n    // Verify notification is no longer visible\n    await expect(notification).not.toBeVisible();\n    \n    // Verify success message appears\n    const successMessage = page.getByText('Notification dismissed');\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should handle multiple notifications and dismiss them individually', async ({ page }) => {\n    // Verify multiple notifications are present\n    const notification1 = page.getByRole('alert', { name: /new message/i });\n    const notification2 = page.getByRole('alert', { name: /system update/i });\n    await expect(notification1).toBeVisible();\n    await expect(notification2).toBeVisible();\n    \n    // Dismiss the first notification\n    const closeButton1 = page.getByRole('button', { name: /close/i });\n    await closeButton1.click();\n    \n    // Verify first notification is dismissed\n    await expect(notification1).not.toBeVisible();\n    \n    // Verify second notification is still visible\n    await expect(notification2).toBeVisible();\n    \n    // Dismiss the second notification\n    const closeButton2 = page.getByRole('button', { name: /close/i });\n    await closeButton2.click();\n    \n    // Verify second notification is dismissed\n    await expect(notification2).not.toBeVisible();\n    \n    // Verify all notifications are gone\n    const allNotifications = page.getByRole('alert');\n    await expect(allNotifications).toHaveCount(0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8271,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5235,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.989,
+      "feedback_used": ""
+    }
+  ]
+}

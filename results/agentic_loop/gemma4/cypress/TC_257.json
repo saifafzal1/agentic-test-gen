@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_257",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8065,
+  "total_latency_s": 71.928,
+  "final_script": "describe('Total Price Update on Quantity Change', () => {\n  beforeEach(() => {\n    cy.visit('/cart');\n  });\n\n  it('should update total price when quantity is increased', () => {\n    // Verify initial state\n    cy.get('[data-testid=\"item-price\"]').should('contain', '$10.00');\n    cy.get('[data-testid=\"quantity-input\"]').should('have.value', '1');\n    cy.get('[data-testid=\"total-price\"]').should('contain', '$10.00');\n\n    // Increase quantity\n    cy.get('[data-testid=\"quantity-input\"]').clear().type('3');\n\n    // Verify total price updates\n    cy.get('[data-testid=\"total-price\"]').should('contain', '$30.00');\n    cy.get('[data-testid=\"item-price\"]').should('contain', '$10.00');\n    cy.get('[data-testid=\"quantity-display\"]').should('contain', '3');\n  });\n\n  it('should update total price when quantity is decreased to zero', () => {\n    // Set initial quantity\n    cy.get('[data-testid=\"quantity-input\"]').clear().type('5');\n    cy.get('[data-testid=\"total-price\"]').should('contain', '$50.00');\n\n    // Decrease quantity\n    cy.get('[data-testid=\"quantity-input\"]').clear().type('1');\n\n    // Verify total price updates\n    cy.get('[data-testid=\"total-price\"]').should('contain', '$10.00');\n    cy.get('[data-testid=\"quantity-display\"]').should('contain', '1');\n\n    // Verify total price is not zero when quantity is 1\n    cy.get('[data-testid=\"total-price\"]').should('not.contain', '$0.00');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8065,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5551,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.928,
+      "feedback_used": ""
+    }
+  ]
+}

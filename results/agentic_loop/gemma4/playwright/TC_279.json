@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_279",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8612,
+  "total_latency_s": 72.608,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Change Email Address with Confirmation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/user/profile');\n  });\n\n  test('should successfully change email address after confirmation', async ({ page }) => {\n    // Verify current email is displayed\n    const emailDisplay = page.getByText(/current email/);\n    await expect(emailDisplay).toBeVisible();\n    const currentEmail = page.getByText(/user@example.com/);\n    await expect(currentEmail).toBeVisible();\n\n    // Click edit email button\n    const editButton = page.getByRole('button', { name: /edit email/i });\n    await expect(editButton).toBeVisible();\n    await editButton.click();\n\n    // Fill in new email address\n    const newEmailInput = page.getByLabel(/new email address/i);\n    await expect(newEmailInput).toBeVisible();\n    await newEmailInput.fill('new.email@example.com');\n\n    // Click change email button\n    const changeEmailButton = page.getByRole('button', { name: /change email/i });\n    await expect(changeEmailButton).toBeVisible();\n    await changeEmailButton.click();\n\n    // Verify confirmation modal appears\n    const confirmationModal = page.locator('[data-testid=\"confirmation-modal\"]');\n    await expect(confirmationModal).toBeVisible();\n\n    // Click confirm button in modal\n    const confirmButton = page.getByRole('button', { name: /confirm/i });\n    await expect(confirmButton).toBeVisible();\n    await confirmButton.click();\n\n    // Verify success message\n    const successMessage = page.getByText(/email address updated successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify new email is displayed\n    const updatedEmail = page.getByText(/new.email@example.com/);\n    await expect(updatedEmail).toBeVisible();\n  });\n\n  test('should prevent email change with invalid format and show error', async ({ page }) => {\n    // Verify current email is displayed\n    const emailDisplay = page.getByText(/current email/);\n    await expect(emailDisplay).toBeVisible();\n\n    // Click edit email button\n    const editButton = page.getByRole('button', { name: /edit email/i });\n    await expect(editButton).toBeVisible();\n    await editButton.click();\n\n    // Fill in invalid email address\n    const newEmailInput = page.getByLabel(/new email address/i);\n    await expect(newEmailInput).toBeVisible();\n    await newEmailInput.fill('invalid-email');\n\n    // Click change email button\n    const changeEmailButton = page.getByRole('button', { name: /change email/i });\n    await expect(changeEmailButton).toBeVisible();\n    await changeEmailButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/invalid email format/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify confirmation modal does not appear\n    const confirmationModal = page.locator('[data-testid=\"confirmation-modal\"]');\n    await expect(confirmationModal).not.toBeVisible();\n\n    // Verify email field still contains invalid input\n    await expect(newEmailInput).toHaveValue('invalid-email');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8612,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5374,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.608,
+      "feedback_used": ""
+    }
+  ]
+}

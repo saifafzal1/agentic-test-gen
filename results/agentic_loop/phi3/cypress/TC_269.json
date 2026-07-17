@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_269",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7923,
+  "total_latency_s": 45.296,
+  "final_script": "describe('Notification Panel Slide In', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should display notification panel sliding in from the top when a notification is received', () => {\n    // Verify notification panel is not visible initially\n    cy.get('[data-testid=\"notification-panel\"]').should('not.exist');\n\n    // Trigger notification event\n    cy.intercept('POST', '/api/notifications/new').as('notificationRequest');\n    cy.get('[data-testid=\"notification-button\"]').click();\n\n    // Wait for notification API call\n    cy.wait('@notificationRequest');\n\n    // Verify notification panel appears\n    cy.get('[data-testid=\"notification-panel\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-panel\"]').should('have.class', 'slide-in');\n\n    // Verify notification content is displayed\n    cy.get('[data-testid=\"notification-title\"]').should('contain', 'New Message');\n    cy.get('[data-testid=\"notification-message\"]').should('contain', 'You have a new message');\n\n    // Verify notification panel is sliding in from the top\n    cy.get('[data-testid=\"notification-panel\"]').should('have.css', 'transform', 'translateY(-100%)');\n\n    // Verify close button is visible\n    cy.get('[data-testid=\"notification-close-btn\"]').should('be.visible');\n  });\n\n  it('should close notification panel when close button is clicked', () => {\n    // Trigger notification\n    cy.intercept('POST', '/api/notifications/new').as('notificationRequest');\n    cy.get('[data-testid=\"notification-button\"]').click();\n    cy.wait('@notificationRequest');\n\n    // Verify notification panel appears\n    cy.get('[data-testid=\"notification-panel\"]').should('be.visible');\n\n    // Verify close button is visible\n    cy.get('[data-testid=\"notification-close-btn\"]').should('be.visible');\n\n    // Click close button\n    cy.get('[data-testid=\"notification-close-btn\"]').click();\n\n    // Verify notification panel is hidden\n    cy.get('[data-testid=\"notification-panel\"]').should('not.exist');\n\n    // Verify notification panel does not slide back in\n    cy.get('[data-testid=\"notification-panel\"]').should('not.have.css', 'transform');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7923,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5076,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 45.296,
+      "feedback_used": ""
+    }
+  ]
+}

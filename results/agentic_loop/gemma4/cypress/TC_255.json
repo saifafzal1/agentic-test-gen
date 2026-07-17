@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_255",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7165,
+  "total_latency_s": 80.844,
+  "final_script": "describe('Change Billing Address During Checkout', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should successfully change billing address during checkout', () => {\n    // Verify initial billing address is displayed\n    cy.get('[data-testid=\"billing-address-display\"]').should('be.visible');\n    cy.get('[data-testid=\"billing-address-display\"]').should('contain', '123 Main St');\n\n    // Click on change billing address button\n    cy.get('[data-testid=\"change-billing-address-btn\"]').click();\n\n    // Verify address form appears\n    cy.get('[data-testid=\"billing-address-form\"]').should('be.visible');\n    cy.get('[data-testid=\"billing-address-form\"]').should('contain', 'Change Billing Address');\n\n    // Fill in new billing address\n    cy.get('[data-testid=\"new-address-line1\"]').type('456 Oak Ave');\n    cy.get('[data-testid=\"new-address-line2\"]').type('Apt 2');\n    cy.get('[data-testid=\"new-city\"]').type('Springfield');\n    cy.get('[data-testid=\"new-state-select\"]').select('IL');\n    cy.get('[data-testid=\"new-zipcode\"]').type('62701');\n\n    // Click save button\n    cy.get('[data-testid=\"save-billing-address-btn\"]').click();\n\n    // Verify success message\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Billing address updated successfully');\n\n    // Verify new address is displayed\n    cy.get('[data-testid=\"billing-address-display\"]').should('contain', '456 Oak Ave');\n    cy.get('[data-testid=\"billing-address-display\"]').should('contain', 'Springfield, IL 62701');\n\n    // Verify checkout continues\n    cy.get('[data-testid=\"continue-to-payment-btn\"]').should('be.visible');\n    cy.get('[data-testid=\"continue-to-payment-btn\"]').click();\n  });\n\n  it('should display error when billing address is not fully filled', () => {\n    // Click on change billing address button\n    cy.get('[data-testid=\"change-billing-address-btn\"]').click();\n\n    // Fill in only partial address\n    cy.get('[data-testid=\"new-address-line1\"]').type('700 Pine Ln');\n    cy.get('[data-testid=\"new-city\"]').type('Shelbyville');\n    cy.get('[data-testid=\"new-state-select\"]').select('KY');\n    // Zip code is left empty\n\n    // Attempt to save without zip code\n    cy.get('[data-testid=\"save-billing-address-btn\"]').click();\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Zip code is required');\n\n    // Verify address form is still visible\n    cy.get('[data-testid=\"billing-address-form\"]').should('be.visible');\n\n    // Verify billing address did not change\n    cy.get('[data-testid=\"billing-address-display\"]').should('contain', '123 Main St');\n\n    // Verify user can correct the error\n    cy.get('[data-testid=\"new-zipcode\"]').type('42001');\n    cy.get('[data-testid=\"save-billing-address-btn\"]').click();\n\n    // Verify success message appears after correction\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Billing address updated successfully');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7165,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.255,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 80.844,
+      "feedback_used": ""
+    }
+  ]
+}

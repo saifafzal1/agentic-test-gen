@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_289",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7205,
+  "total_latency_s": 540.473,
+  "final_script": "describe('Language Preference Setting in Profile Settings', () => {\n  beforeEach(() => {\n    cy.visit('/profile');\n  });\n\n  it('should successfully set language preference and save it to profile', () => {\n    // Verify initial language is default\n    cy.get('[data-testid=\"language-dropdown\"]').should('be.visible');\n    cy.get('[data-testid=\"language-dropdown\"]').should('contain', 'English');\n\n    // Intercept API call to save language preference\n    cy.intercept('POST', '/api/user/profile/settings/language').as('setLanguage');\n\n    // Click on the dropdown and select a new language\n    cy.get('[data-testid=\"language-dropdown\"]').click();\n    cy.get('[data-testid=\"language-option\"]').click({ force: true });\n    cy.get('[data-testid=\"language-option\"]').should('contain', 'Spanish');\n\n    // Verify language was updated in UI\n    cy.get('[data-testid=\"language-dropdown\"]').should('contain', 'Spanish');\n\n    // Verify API call was made\n    cy.wait('@setLanguage').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify language preference is saved\n    cy.get('[data-testid=\"language-preference\"]').should('contain', 'Espa\u00f1ol');\n  });\n\n  it('should handle invalid language input and show error message', () => {\n    // Verify initial language is default\n    cy.get('[data-testid=\"language-dropdown\"]').should('be.visible');\n    cy.get('[data-testid=\"language-dropdown\"]').should('contain', 'English');\n\n    // Intercept API call to save language preference\n    cy.intercept('POST', '/api/user/profile/settings/language').as('setLanguage');\n\n    // Click on the dropdown and select an invalid language\n    cy.get('[data-testid=\"language-dropdown\"]').click();\n    cy.get('[data-testid=\"language-option\"]').click({ force: true });\n    cy.get('[data-testid=\"language-option\"]').type('InvalidLanguage');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid language selected');\n\n    // Verify dropdown still shows valid options\n    cy.get('[data-testid=\"language-dropdown\"]').should('contain', 'English');\n\n    // Verify API call was not made\n    cy.wait('@setLanguage').then((interception) => {\n      expect(interception.request.body.language).to.not.equal('InvalidLanguage');\n    });\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7205,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2682,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 540.473,
+      "feedback_used": ""
+    }
+  ]
+}

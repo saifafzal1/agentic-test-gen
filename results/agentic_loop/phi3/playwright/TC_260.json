@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_260",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.812,
+  "total_latency_s": 49.088,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Error Toast Notification', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display error toast notification when action fails', async ({ page }) => {\n    // Intercept the API call\n    await page.route('**/api/user/actions/save', (route) => {\n      route.abort('failed');\n    });\n\n    // Click the button to trigger the action\n    const saveButton = page.getByRole('button', { name: /save changes/i });\n    await saveButton.click();\n\n    // Wait for the toast to appear\n    const toast = page.getByRole('alert');\n    await expect(toast).toBeVisible();\n\n    // Verify the toast contains the error message\n    await expect(toast).toContainText('Failed to save changes');\n\n    // Verify the toast has a dismiss button\n    const dismissButton = page.getByRole('button', { name: /dismiss/i });\n    await expect(dismissButton).toBeVisible();\n\n    // Verify the toast has a close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify the toast has a timestamp\n    const timestamp = page.getByText(/at \\d{2}:\\d{2}:\\d{2}/i);\n    await expect(timestamp).toBeVisible();\n\n    // Verify the toast has a success icon\n    const successIcon = page.getByRole('img', { name: /success/i });\n    await expect(successIcon).toBeVisible();\n\n    // Verify the toast has a close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify the toast is dismissed when clicked\n    await dismissButton.click();\n    await expect(toast).not.toBeVisible();\n  });\n\n  test('should not display error toast when action succeeds', async ({ page }) => {\n    // Mock successful API response\n    await page.route('**/api/user/actions/save', (route) => {\n      route.continue();\n    });\n\n    // Click the button to trigger the action\n    const saveButton = page.getByRole('button', { name: /save changes/i });\n    await saveButton.click();\n\n    // Wait for the toast to appear\n    const toast = page.getByRole('alert');\n    await expect(toast).not.toBeVisible();\n\n    // Verify no toast is displayed\n    const noToast = page.getByText(/no error/i);\n    await expect(noToast).toBeVisible();\n\n    // Verify the success message is displayed\n    const successMessage = page.getByText(/saved successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify the success icon is present\n    const successIcon = page.getByRole('img', { name: /success/i });\n    await expect(successIcon).toBeVisible();\n\n    // Verify the toast is dismissed when clicked\n    const dismissButton = page.getByRole('button', { name: /dismiss/i });\n    await expect(dismissButton).toBeVisible();\n    await dismissButton.click();\n    await expect(toast).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.812,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4733,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 49.088,
+      "feedback_used": ""
+    }
+  ]
+}

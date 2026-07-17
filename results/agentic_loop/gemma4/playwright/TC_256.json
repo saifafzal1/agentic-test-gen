@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_256",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.827,
+  "total_latency_s": 72.641,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Checkout Form - Card Expiry Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should validate card expiry in MM/YY format and display error message', async ({ page }) => {\n    // Fill in required fields\n    await page.getByLabel('Card Number').fill('4111111111111111');\n    await page.getByLabel('Card Holder Name').fill('John Doe');\n    await page.getByLabel('Amount').fill('19.99');\n\n    // Attempt to submit with invalid expiry format\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText('Card expiry must be in MM/YY format');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify form is still visible\n    const formContainer = page.locator('[data-testid=\"checkout-form\"]');\n    await expect(formContainer).toBeVisible();\n\n    // Verify error styling is applied\n    const expiryInput = page.getByLabel('Card Expiry');\n    await expect(expiryInput).toHaveAttribute('data-testid', 'card-expiry-input');\n    await expect(expiryInput).toHaveClass(/error/);\n\n    // Clear error and enter valid expiry\n    await expiryInput.clear();\n    await expiryInput.fill('12/25');\n\n    // Verify error message disappears\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify expiry input no longer has error class\n    await expect(expiryInput).not.toHaveClass(/error/);\n\n    // Verify submit button is now enabled\n    await expect(submitButton).toBeEnabled();\n  });\n\n  test('should allow submission with valid MM/YY expiry and display success message', async ({ page }) => {\n    // Fill in required fields\n    await page.getByLabel('Card Number').fill('4111111111111111');\n    await page.getByLabel('Card Holder Name').fill('Jane Smith');\n    await page.getByLabel('Amount').fill('49.99');\n\n    // Enter valid expiry date\n    const expiryInput = page.getByLabel('Card Expiry');\n    await expiryInput.fill('05/27');\n\n    // Verify expiry input has correct value\n    await expect(expiryInput).toHaveValue('05/2025');\n\n    // Click submit button\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Payment successful');\n    await expect(successMessage).toBeVisible();\n\n    // Verify user is redirected to order confirmation page\n    await expect(page).toHaveURL(/.*\\/order-confirmation/);\n\n    // Verify order details are displayed\n    const orderId = page.getByText(/Order #\\d+/);\n    await expect(orderId).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.827,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4232,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.641,
+      "feedback_used": ""
+    }
+  ]
+}

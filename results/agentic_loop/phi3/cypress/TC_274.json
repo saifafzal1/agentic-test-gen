@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_274",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7289,
+  "total_latency_s": 430.924,
+  "final_script": "describe('Notification Delete Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should successfully delete a single notification from the list', () => {\n    // Verify notification list is displayed\n    cy.get('[data-testid=\"notification-list\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('have.length.greaterThan', 0);\n\n    // Intercept the delete API call\n    cy.intercept('DELETE', '/api/notifications/*').as('deleteNotification');\n\n    // Click on a notification to delete\n    cy.get('[data-testid=\"notification-item-1\"]').click();\n\n    // Verify delete button appears\n    cy.get('[data-testid=\"delete-button\"]').should('be.visible');\n\n    // Click delete button\n    cy.get('[data-testid=\"delete-button\"]').click();\n\n    // Verify confirmation modal appears\n    cy.get('[data-testid=\"confirm-delete-modal\"]').should('be.visible');\n\n    // Verify confirmation button is visible\n    cy.get('[data-testid=\"confirm-delete-button\"]').should('be.visible');\n\n    // Click confirm button\n    cy.get('[data-testid=\"confirm-delete-button\"]').click();\n\n    // Verify notification is removed from list\n    cy.get('[data-testid=\"notification-item-1\"]').should('not.exist');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Notification deleted successfully');\n\n    // Verify API call was made\n    cy.wait('@deleteNotification').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n  });\n\n  it('should handle edge case: deleting a notification when list is empty', () => {\n    // Verify notification list is empty\n    cy.get('[data-testid=\"notification-list\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('not.exist');\n\n    // Click on delete button to trigger empty list error\n    cy.get('[data-testid=\"delete-button\"]').click();\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Cannot delete: No notifications found');\n\n    // Verify delete button is still visible\n    cy.get('[data-testid=\"delete-button\"]').should('be.visible');\n\n    // Verify API call was not made\n    cy.intercept('DELETE', '/api/notifications/*').as('deleteNotification');\n    cy.wait('@deleteNotification').then((interception) => {\n      expect(interception.request.method).to.equal('DELETE');\n      expect(interception.response.statusCode).to.equal(400);\n    });\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7289,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2963,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 430.924,
+      "feedback_used": ""
+    }
+  ]
+}

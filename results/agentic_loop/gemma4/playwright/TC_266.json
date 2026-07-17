@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_266",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7975,
+  "total_latency_s": 72.556,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Empty State - No Notifications', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should display empty state when no notifications exist', async ({ page }) => {\n    // Verify the notifications list is empty\n    const notificationsList = page.getByRole('list', { name: /notifications/i });\n    await expect(notificationsList).toBeVisible();\n\n    // Verify the empty state message is displayed\n    const emptyStateMessage = page.getByText(/no notifications/i);\n    await expect(emptyStateMessage).toBeVisible();\n\n    // Verify the empty state illustration is visible\n    const emptyStateIllustration = page.getByRole('img', { name: /empty state/i });\n    await expect(emptyStateIllustration).toBeVisible();\n\n    // Verify the empty state action button is visible\n    const actionButton = page.getByRole('button', { name: /view all/i });\n    await expect(actionButton).toBeVisible();\n\n    // Verify the notification count badge is not present\n    const notificationCountBadge = page.locator('[data-testid=\"notification-count-badge\"]');\n    await expect(notificationCountBadge).not.toBeVisible();\n  });\n\n  test('should handle empty state when user has viewed all notifications', async ({ page }) => {\n    // Intercept API call to simulate no notifications\n    await page.route('**/api/notifications', route => {\n      route.abort();\n    });\n\n    // Navigate to notifications page\n    await page.goto('/notifications');\n\n    // Verify empty state message is displayed\n    const emptyStateMessage = page.getByText(/no notifications/i);\n    await expect(emptyStateMessage).toBeVisible();\n\n    // Verify empty state illustration is visible\n    const emptyStateIllustration = page.getByRole('img', { name: /empty state/i });\n    await expect(emptyStateIllustration).toBeVisible();\n\n    // Verify the user can still access the settings\n    const settingsButton = page.getByRole('button', { name: /settings/i });\n    await expect(settingsButton).toBeVisible();\n\n    // Verify the user can navigate back\n    const backButton = page.getByRole('button', { name: /back/i });\n    await expect(backButton).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7975,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4251,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.556,
+      "feedback_used": ""
+    }
+  ]
+}

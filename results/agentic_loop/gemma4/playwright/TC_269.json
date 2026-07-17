@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_269",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8031,
+  "total_latency_s": 73.2,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Panel Slide-in from Top', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should display notification panel sliding in from top on first load', async ({ page }) => {\n    // Verify notification panel is visible\n    const notificationPanel = page.getByRole('region', { name: /notification panel/i });\n    await expect(notificationPanel).toBeVisible();\n\n    // Verify panel is positioned at the top\n    const panelBoundingBox = await notificationPanel.boundingBox();\n    expect(panelBoundingBox?.y).toBeLessThan(100);\n\n    // Verify panel has correct height\n    const panelHeight = await notificationPanel.evaluate((el) => el.offsetHeight);\n    expect(panelHeight).toBeGreaterThan(200);\n\n    // Verify panel is not hidden\n    const isHidden = await notificationPanel.evaluate((el) => el.style.display === 'none');\n    expect(isHidden).toBe(false);\n\n    // Verify panel has slide-in animation class\n    const hasSlideInClass = await notificationPanel.evaluate((el) => el.classList.contains('slide-in-from-top'));\n    expect(hasSlideInClass).toBe(true);\n\n    // Verify panel content is visible\n    const message = page.getByText(/new notification/i);\n    await expect(message).toBeVisible();\n  });\n\n  test('should hide notification panel when user clicks close button', async ({ page }) => {\n    // Verify notification panel is visible\n    const notificationPanel = page.getByRole('region', { name: /notification panel/i });\n    await expect(notificationPanel).toBeVisible();\n\n    // Verify close button is visible\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Click close button\n    await closeButton.click();\n\n    // Verify notification panel is no longer visible\n    await expect(notificationPanel).not.toBeVisible();\n\n    // Verify panel has hidden class\n    const isHidden = await notificationPanel.evaluate((el) => el.classList.contains('hidden'));\n    expect(isHidden).toBe(true);\n\n    // Verify close button is still present but disabled\n    await expect(closeButton).toBeVisible();\n    const isDisabled = await closeButton.evaluate((el) => el.disabled);\n    expect(isDisabled).toBe(true);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8031,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4436,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.2,
+      "feedback_used": ""
+    }
+  ]
+}

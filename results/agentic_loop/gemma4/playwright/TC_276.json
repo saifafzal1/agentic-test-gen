@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_276",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8285,
+  "total_latency_s": 72.943,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Update Display Name Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/profile');\n  });\n\n  test('should successfully update display name and reflect it across the app', async ({ page }) => {\n    // Verify initial display name\n    const displayName = page.getByRole('heading', { name: /John Doe/i });\n    await expect(displayName).toBeVisible();\n\n    // Locate and fill in the display name input field\n    const displayNameInput = page.getByLabel('Display Name');\n    await expect(displayNameInput).toBeVisible();\n    await displayNameInput.fill('Jane Smith');\n\n    // Locate and click the save button\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await expect(saveButton).toBeVisible();\n    await saveButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/display name updated successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify updated display name is reflected\n    await expect(displayName).toHaveText('Jane Smith');\n\n    // Verify updated display name is reflected in profile header\n    const profileHeader = page.getByRole('heading', { name: /Jane Smith/i });\n    await expect(profileHeader).toBeVisible();\n  });\n\n  test('should handle empty display name input and prevent update', async ({ page }) => {\n    // Verify initial display name\n    const displayName = page.getByRole('heading', { name: /John Doe/i });\n    await expect(displayName).toBeVisible();\n\n    // Locate and fill in the display name input field with empty string\n    const displayNameInput = page.getByLabel('Display Name');\n    await expect(displayNameInput).toBeVisible();\n    await displayNameInput.fill('');\n\n    // Locate and click the save button\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await expect(saveButton).toBeVisible();\n    await saveButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/display name cannot be empty/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify display name was not updated\n    await expect(displayName).toHaveText('John Doe');\n\n    // Verify success message does not appear\n    const successMessage = page.getByText(/display name updated successfully/i);\n    await expect(successMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8285,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4283,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.943,
+      "feedback_used": ""
+    }
+  ]
+}

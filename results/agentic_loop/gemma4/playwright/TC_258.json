@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_258",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8026,
+  "total_latency_s": 72.762,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Payment Timeout Error Redirection', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/payment');\n  });\n\n  test('should redirect to error page when payment times out', async ({ page }) => {\n    // Intercept the payment API call\n    await page.route('**/api/payment/process', (route) => {\n      route.abort('timedout');\n    });\n\n    // Click the pay button\n    const payButton = page.getByRole('button', { name: /pay/i });\n    await payButton.click();\n\n    // Wait for the timeout error to be processed\n    await page.waitForTimeout(1000);\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/payment timed out/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify user is redirected to error page\n    await expect(page).toHaveURL(/.*\\/error/);\n\n    // Verify error page title\n    const errorTitle = page.getByRole('heading', { name: /error/i });\n    await expect(errorTitle).toBeVisible();\n\n    // Verify error details\n    const errorDetails = page.getByText(/payment failed/i);\n    await expect(errorDetails).toBeVisible();\n  });\n\n  test('should handle multiple payment timeouts and display correct error state', async ({ page }) => {\n    // Intercept the payment API call and abort it\n    await page.route('**/api/payment/process', (route) => {\n      route.abort('timedout');\n    });\n\n    // Click the pay button\n    const payButton = page.getByRole('button', { name: /pay/i });\n    await payButton.click();\n\n    // Wait for the first timeout\n    await page.waitForTimeout(1500);\n\n    // Verify first error message\n    const errorMessage = page.getByText(/payment timed out/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify user is on error page\n    await expect(page).toHaveURL(/.*\\/error/);\n\n    // Verify error details\n    const errorDetails = page.getByText(/payment failed/i);\n    await expect(errorDetails).toBeVisible();\n\n    // Attempt to retry payment\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await retryButton.click();\n\n    // Intercept the retry request\n    await page.route('**/api/payment/process', (route) => {\n      route.abort('timedout');\n    });\n\n    // Wait for the second timeout\n    await page.waitForTimeout(1500);\n\n    // Verify retry error message\n    const retryErrorMessage = page.getByText(/payment timed out again/i);\n    await expect(retryErrorMessage).toBeVisible();\n\n    // Verify error state persists\n    await expect(page).toHaveURL(/.*\\/error/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8026,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4419,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.762,
+      "feedback_used": ""
+    }
+  ]
+}

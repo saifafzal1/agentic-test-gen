@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_266",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7407,
+  "total_latency_s": 72.585,
+  "final_script": "describe('Empty State - No Notifications', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should display empty state when no notifications exist', () => {\n    // Intercept the API call to return an empty array\n    cy.intercept('GET', '/api/notifications', {\n      statusCode: 200,\n      body: []\n    }).as('getNotifications');\n\n    cy.wait('@getNotifications');\n\n    // Verify the empty state message is visible\n    cy.get('[data-testid=\"empty-state-message\"]').should('be.visible');\n    cy.get('[data-testid=\"empty-state-message\"]').should('contain', 'You have no notifications');\n\n    // Verify the notification list is empty\n    cy.get('[data-testid=\"notification-list\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('not.exist');\n\n    // Verify the empty state icon is displayed\n    cy.get('[data-testid=\"empty-state-icon\"]').should('be.visible');\n  });\n\n  it('should hide empty state when notifications are added', () => {\n    // Intercept the API call to return an empty array initially\n    cy.intercept('GET', '/api/notifications', {\n      statusCode: 200,\n      body: []\n    }).as('getNotificationsEmpty');\n\n    cy.wait('@getNotificationsEmpty');\n\n    // Verify empty state is visible initially\n    cy.get('[data-testid=\"empty-state-message\"]').should('be.visible');\n\n    // Intercept the API call to return a notification\n    cy.intercept('GET', '/api/notifications', {\n      statusCode: 200,\n      body: [\n        {\n          id: 1,\n          type: 'like',\n          message: 'Someone liked your post',\n          timestamp: '2023-10-27T10:00:00Z'\n        }\n      ]\n    }).as('getNotificationsWithItems');\n\n    // Trigger refresh or navigate to reload notifications\n    cy.reload();\n    cy.wait('@getNotificationsWithItems');\n\n    // Verify empty state is no longer visible\n    cy.get('[data-testid=\"empty-state-message\"]').should('not.exist');\n\n    // Verify notification list is visible and contains items\n    cy.get('[data-testid=\"notification-list\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('contain', 'Someone liked your post');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7407,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3357,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.585,
+      "feedback_used": ""
+    }
+  ]
+}

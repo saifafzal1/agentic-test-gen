@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_270",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.706,
+  "total_latency_s": 71.553,
+  "final_script": "describe('Unread Notification Visual Distinction', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should visually distinguish unread notifications with a distinct badge or styling', () => {\n    // Intercept API call to fetch notifications\n    cy.intercept('GET', '/api/notifications').as('getNotifications');\n    cy.wait('@getNotifications');\n\n    // Verify unread notification is visible and styled distinctly\n    cy.get('[data-testid=\"notification-item-unread\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item-unread\"]').should('have.class', 'unread-badge');\n    cy.get('[data-testid=\"notification-item-unread\"]').should('contain', 'New message from John');\n\n    // Verify read notification is visible but lacks the distinct unread styling\n    cy.get('[data-testid=\"notification-item-read\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item-read\"]').should('not.have.class', 'unread-badge');\n    cy.get('[data-testid=\"notification-item-read\"]').should('contain', 'Email from Sarah');\n\n    // Verify unread notification has a distinct background or border\n    cy.get('[data-testid=\"notification-item-unread\"]').should('have.css', 'background-color', 'rgb(255, 240, 255)');\n    cy.get('[data-testid=\"notification-item-read\"]').should('have.css', 'background-color', 'rgb(255, 255, 255)');\n  });\n\n  it('should handle edge case of no unread notifications and display appropriate message', () => {\n    // Intercept API call with empty unread notifications\n    cy.intercept('GET', '/api/notifications', {\n      statusCode: 200,\n      body: {\n        notifications: [\n          { id: 1, type: 'read', content: 'Old email', read: true },\n          { id: 2, type: 'read', content: 'Meeting reminder', read: true },\n        ],\n        unreadCount: 0\n      }\n    }).as('getNotificationsEmpty');\n    cy.wait('@getNotificationsEmpty');\n\n    // Verify no unread notification items are displayed\n    cy.get('[data-testid=\"notification-item-unread\"]').should('not.exist');\n\n    // Verify \"No unread notifications\" message is displayed\n    cy.get('[data-testid=\"no-unread-notifications-message\"]').should('be.visible');\n    cy.get('[data-testid=\"no-unread-notifications-message\"]').should('contain', 'You have no unread notifications');\n\n    // Verify unread count badge is not present or shows 0\n    cy.get('[data-testid=\"unread-count-badge\"]').should('be.visible');\n    cy.get('[data-testid=\"unread-count-badge\"]').should('contain', '0');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.706,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2199,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.553,
+      "feedback_used": ""
+    }
+  ]
+}

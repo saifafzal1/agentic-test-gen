@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_275",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8124,
+  "total_latency_s": 72.708,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Count Reset After Reading All Messages', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should reset notification count to zero after reading all messages', async ({ page }) => {\n    // Verify initial notification count is greater than zero\n    const notificationBadge = page.getByRole('status', { name: /notifications/i });\n    await expect(notificationBadge).toBeVisible();\n    const countText = page.getByText(/\\d+/);\n    await expect(countText).toBeVisible();\n    \n    // Verify notification count is displayed\n    const count = await countText.textContent();\n    expect(parseInt(count)).toBeGreaterThan(0);\n\n    // Read all notifications\n    const notificationItems = page.getByRole('listitem');\n    const count = await notificationItems.count();\n    for (let i = 0; i < count; i++) {\n      const item = notificationItems.nth(i);\n      const readButton = item.getByRole('button', { name: /read/i });\n      await readButton.click();\n    }\n\n    // Wait for notification count to reset\n    await page.waitForTimeout(500);\n\n    // Verify notification count is reset to zero\n    const resetCountText = page.getByText('0');\n    await expect(resetCountText).toBeVisible();\n    \n    // Verify notification badge is no longer visible or shows zero\n    await expect(notificationBadge).toBeVisible();\n    await expect(notificationBadge).toContainText('0');\n  });\n\n  test('should not reset notification count if not all messages are read', async ({ page }) => {\n    // Verify initial notification count is greater than zero\n    const notificationBadge = page.getByRole('status', { name: /notifications/i });\n    await expect(notificationBadge).toBeVisible();\n    const countText = page.getByText(/\\d+/);\n    await expect(countText).toBeVisible();\n    \n    // Verify notification count is displayed\n    const count = await countText.textContent();\n    expect(parseInt(count)).toBeGreaterThan(0);\n\n    // Read only some notifications\n    const notificationItems = page.getByRole('listitem');\n    const totalCount = await notificationItems.count();\n    const readCount = Math.floor(totalCount / 2);\n\n    for (let i = 0; i < readCount; i++) {\n      const item = notificationItems.nth(i);\n      const readButton = item.getByRole('button', { name: /read/i });\n      await readButton.click();\n    }\n\n    // Wait for API response\n    await page.waitForTimeout(500);\n\n    // Verify notification count is not reset to zero\n    const remainingCountText = page.getByText(/\\d+/);\n    await expect(remainingCountText).toBeVisible();\n    \n    const remainingCount = await remainingCountText.textContent();\n    expect(parseInt(remainingCount)).toBeGreaterThan(0);\n    \n    // Verify notification badge still shows remaining count\n    await expect(notificationBadge).toContainText(remainingCount);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8124,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4747,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.708,
+      "feedback_used": ""
+    }
+  ]
+}

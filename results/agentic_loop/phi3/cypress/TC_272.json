@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_272",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7544,
+  "total_latency_s": 364.17,
+  "final_script": "describe('In-app Notifications Real-time Update', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should display real-time notifications without page refresh', () => {\n    // Intercept the API call to fetch notifications\n    cy.intercept('GET', '/api/notifications').as('getNotifications');\n\n    // Verify initial state: no notifications displayed\n    cy.get('[data-testid=\"notification-list\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('not.exist');\n\n    // Trigger notification API call\n    cy.get('[data-testid=\"notification-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@getNotifications');\n\n    // Verify notification is displayed\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('contain', 'New message');\n\n    // Verify notification appears without page refresh\n    cy.get('[data-testid=\"notification-item\"]').should('have.css', 'display', 'block');\n    cy.get('[data-testid=\"notification-item\"]').should('not.have.class', 'is-loading');\n\n    // Verify notification is real-time updated\n    cy.intercept('GET', '/api/notifications').as('updateNotifications');\n    cy.get('[data-testid=\"notification-button\"]').click();\n    cy.wait('@updateNotifications');\n\n    // Verify updated notification is displayed\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('contain', 'Updated status');\n  });\n\n  it('should handle empty notification state gracefully', () => {\n    // Intercept the API call to fetch notifications\n    cy.intercept('GET', '/api/notifications').as('getNotifications');\n\n    // Verify initial state: no notifications displayed\n    cy.get('[data-testid=\"notification-list\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('not.exist');\n\n    // Trigger notification API call\n    cy.get('[data-testid=\"notification-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@getNotifications');\n\n    // Verify notification is displayed\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('contain', 'No new messages');\n\n    // Verify empty state is handled gracefully\n    cy.get('[data-testid=\"notification-item\"]').should('have.class', 'empty');\n    cy.get('[data-testid=\"notification-item\"]').should('not.contain', 'Loading');\n\n    // Verify user is notified of empty state\n    cy.get('[data-testid=\"notification-item\"]').should('contain', 'No new messages');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7544,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3812,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 364.17,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_255",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8075,
+  "total_latency_s": 441.003,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Billing Address Change During Checkout', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should successfully update billing address during checkout', async ({ page }) => {\n    // Verify initial billing address is displayed\n    const billingAddressInput = page.getByLabel('Billing Address');\n    await expect(billingAddressInput).toBeVisible();\n\n    // Verify initial billing address is correct\n    const initialAddress = page.getByText('123 Main St, Anytown, USA');\n    await expect(initialAddress).toBeVisible();\n\n    // Verify initial billing address form is valid\n    const billingAddressForm = page.locator('[data-testid=\"billing-address-form\"]');\n    await expect(billingAddressForm).toBeVisible();\n\n    // Verify checkout button is disabled initially\n    const checkoutButton = page.getByRole('button', { name: /checkout/i });\n    await expect(checkoutButton).toBeDisabled();\n\n    // Navigate to billing address update page\n    const updateAddressButton = page.getByRole('button', { name: /update billing address/i });\n    await expect(updateAddressButton).toBeVisible();\n    await updateAddressButton.click();\n\n    // Verify billing address form is now visible\n    await expect(billingAddressForm).toBeVisible();\n\n    // Update billing address\n    const newAddressInput = page.getByLabel('Billing Address');\n    await newAddressInput.fill('456 Elm St, Othertown, USA');\n\n    // Verify new address is displayed\n    const newAddress = page.getByText('456 Elm St, Othertown, USA');\n    await expect(newAddress).toBeVisible();\n\n    // Verify address validation error is cleared\n    const addressValidationError = page.getByText(/is required/i);\n    await expect(addressValidationError).not.toBeVisible();\n\n    // Verify checkout button is now enabled\n    await expect(checkoutButton).toBeEnabled();\n\n    // Verify success message is displayed\n    const successMessage = page.getByText(/billing address updated successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify checkout button is clickable\n    await expect(checkoutButton).toBeClickable();\n\n    // Click checkout button to complete the process\n    await checkoutButton.click();\n\n    // Verify order confirmation page is displayed\n    const orderConfirmation = page.getByText(/order confirmation/i);\n    await expect(orderConfirmation).toBeVisible();\n  });\n\n  test('should display error when billing address is invalid during checkout', async ({ page }) => {\n    // Navigate to checkout\n    await page.goto('/checkout');\n\n    // Verify initial billing address is displayed\n    const billingAddressInput = page.getByLabel('Billing Address');\n    await expect(billingAddressInput).toBeVisible();\n\n    // Verify initial billing address is correct\n    const initialAddress = page.getByText('123 Main St, Anytown, USA');\n    await expect(initialAddress).toBeVisible();\n\n    // Verify initial billing address form is valid\n    const billingAddressForm = page.locator('[data-testid=\"billing-address-form\"]');\n    await expect(billingAddressForm).toBeVisible();\n\n    // Verify checkout button is disabled initially\n    const checkoutButton = page.getByRole('button', { name: /checkout/i });\n    await expect(checkoutButton).toBeDisabled();\n\n    // Navigate to billing address update page\n    const updateAddressButton = page.getByRole('button', { name: /update billing address/i });\n    await updateAddressButton.click();\n\n    // Verify billing address form is now visible\n    await expect(billingAddressForm).toBeVisible();\n\n    // Attempt to update billing address with invalid data\n    const newAddressInput = page.getByLabel('Billing Address');\n    await newAddressInput.fill('');\n\n    // Verify validation error is displayed\n    const addressValidationError = page.getByText(/is required/i);\n    await expect(addressValidationError).toBeVisible();\n\n    // Verify checkout button is still disabled\n    await expect(checkoutButton).toBeDisabled();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/please enter a valid address/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify billing address input is still visible\n    await expect(newAddressInput).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4868,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3562,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 166.034,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8075,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3584,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 274.969,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

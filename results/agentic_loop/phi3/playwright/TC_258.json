@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_258",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7891,
+  "total_latency_s": 294.414,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Payment Timeout Redirect to Error Page', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/payment');\n  });\n\n  test('should redirect to error page when payment times out', async ({ page }) => {\n    // Setup: intercept the payment API call and simulate timeout\n    await page.route('**/api/payment', (route) => {\n      route.abort('Payment timeout');\n    });\n\n    // Intercept the success route and redirect to error page\n    await page.route('**/api/payment/success', (route) => {\n      route.abort('Payment success');\n    });\n\n    // Intercept the failure route and redirect to error page\n    await page.route('**/api/payment/failure', (route) => {\n      route.abort('Payment failure');\n    });\n\n    // Verify error page is visible\n    const errorPage = page.getByRole('region', { name: /error/i });\n    await expect(errorPage).toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/payment failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error page has correct title\n    const errorPageTitle = page.getByText(/error/i);\n    await expect(errorPageTitle).toBeVisible();\n\n    // Verify back button is available\n    const backButton = page.getByRole('button', { name: /back/i });\n    await expect(backButton).toBeVisible();\n\n    // Verify payment form is still visible\n    const paymentForm = page.getByRole('form', { name: /payment form/i });\n    await expect(paymentForm).toBeVisible();\n\n    // Verify payment details are still visible\n    const paymentDetails = page.getByText(/amount: $100/i);\n    await expect(paymentDetails).toBeVisible();\n\n    // Verify error page has correct status code\n    const status = page.getByRole('status');\n    await expect(status).toHaveTextContent('Error');\n  });\n\n  test('should handle successful payment and display success page', async ({ page }) => {\n    // Setup: intercept the payment API call and simulate success\n    await page.route('**/api/payment', (route) => {\n      route.continue();\n    });\n\n    // Intercept the success route and redirect to success page\n    await page.route('**/api/payment/success', (route) => {\n      route.continue();\n    });\n\n    // Intercept the failure route and redirect to error page\n    await page.route('**/api/payment/failure', (route) => {\n      route.abort('Payment failure');\n    });\n\n    // Verify success page is visible\n    const successPage = page.getByRole('region', { name: /success/i });\n    await expect(successPage).toBeVisible();\n\n    // Verify success message is displayed\n    const successMessage = page.getByText(/payment successful/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify success page has correct title\n    const successPageTitle = page.getByText(/success/i);\n    await expect(successPageTitle).toBeVisible();\n\n    // Verify payment details are displayed\n    const paymentDetails = page.getByText(/amount: $100/i);\n    await expect(paymentDetails).toBeVisible();\n\n    // Verify success button is available\n    const successButton = page.getByRole('button', { name: /confirm/i });\n    await expect(successButton).toBeVisible();\n\n    // Verify success page has correct status code\n    const status = page.getByRole('status');\n    await expect(status).toHaveTextContent('Success');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7891,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3971,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 294.414,
+      "feedback_used": ""
+    }
+  ]
+}

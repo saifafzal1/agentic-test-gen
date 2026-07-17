@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_257",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8155,
+  "total_latency_s": 42.389,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Total Price Update on Quantity Change', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should update total price when quantity is increased', async ({ page }) => {\n    // Verify initial total price is displayed\n    const totalPrice = page.getByText('Total: $10.00');\n    await expect(totalPrice).toBeVisible();\n\n    // Verify initial quantity is displayed\n    const quantityInput = page.getByLabel('Quantity');\n    await expect(quantityInput).toBeVisible();\n    const initialQuantity = await quantityInput.evaluate((el) => el.value);\n    expect(initialQuantity).toBe('1');\n\n    // Verify initial price is correct\n    const priceElement = page.getByText('Price: $10.00');\n    await expect(priceElement).toBeVisible();\n\n    // Set up intercept for API call\n    await page.route('**/api/products/123/price', (route) => {\n      route.continue();\n    });\n\n    // Increase quantity to 3\n    const quantityInput = page.getByLabel('Quantity');\n    await quantityInput.fill('3');\n\n    // Verify total price updates\n    const updatedTotalPrice = page.getByText('Total: $30.00');\n    await expect(updatedTotalPrice).toBeVisible();\n\n    // Verify price element updates\n    const updatedPriceElement = page.getByText('Price: $30.00');\n    await expect(updatedPriceElement).toBeVisible();\n\n    // Verify quantity input reflects new value\n    await expect(quantityInput).toHaveValue('3');\n  });\n\n  test('should update total price when quantity is decreased', async ({ page }) => {\n    // Verify initial total price is displayed\n    const totalPrice = page.getByText('Total: $10.00');\n    await expect(totalPrice).toBeVisible();\n\n    // Verify initial quantity is displayed\n    const quantityInput = page.getByLabel('Quantity');\n    await expect(quantityInput).toBeVisible();\n    const initialQuantity = await quantityInput.evaluate((el) => el.value);\n    expect(initialQuantity).toBe('1');\n\n    // Verify initial price is correct\n    const priceElement = page.getByText('Price: $10.00');\n    await expect(priceElement).toBeVisible();\n\n    // Set up intercept for API call\n    await page.route('**/api/products/123/price', (route) => {\n      route.continue();\n    });\n\n    // Decrease quantity to 0\n    const quantityInput = page.getByLabel('Quantity');\n    await quantityInput.fill('0');\n\n    // Verify total price updates\n    const updatedTotalPrice = page.getByText('Total: $0.00');\n    await expect(updatedTotalPrice).toBeVisible();\n\n    // Verify price element updates\n    const updatedPriceElement = page.getByText('Price: $0.00');\n    await expect(updatedPriceElement).toBeVisible();\n\n    // Verify quantity input reflects new value\n    await expect(quantityInput).toHaveValue('0');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8155,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4851,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 42.389,
+      "feedback_used": ""
+    }
+  ]
+}

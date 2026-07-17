@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_263",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7152,
+  "total_latency_s": 311.461,
+  "final_script": "describe('Notification Bell Badge Count', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should display correct badge count on notification bell icon when notifications are present', () => {\n    // Setup: Create 3 notifications\n    cy.intercept('GET', '/api/notifications').as('getNotifications');\n    cy.wait('@getNotifications');\n    cy.get('[data-testid=\"notification-count\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-count\"]').should('contain', '3');\n    cy.get('[data-testid=\"notification-bell-icon\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-bell-icon\"]').should('have.class', 'badge');\n    cy.get('[data-testid=\"notification-bell-icon\"]').should('have.attr', 'aria-label', 'Notification bell');\n    cy.get('[data-testid=\"notification-bell-icon\"]').should('have.attr', 'aria-badge', '3');\n    cy.get('[data-testid=\"notification-bell-icon\"]').should('have.attr', 'aria-hidden', 'false');\n  });\n\n  it('should hide badge count when no notifications are present', () => {\n    // Setup: Clear all notifications\n    cy.intercept('DELETE', '/api/notifications').as('clearNotifications');\n    cy.wait('@clearNotifications');\n\n    cy.get('[data-testid=\"notification-count\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-count\"]').should('contain', '0');\n    cy.get('[data-testid=\"notification-bell-icon\"]').should('have.attr', 'aria-badge', '0');\n    cy.get('[data-testid=\"notification-bell-icon\"]').should('have.attr', 'aria-hidden', 'true');\n    cy.get('[data-testid=\"notification-bell-icon\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7152,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2507,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 311.461,
+      "feedback_used": ""
+    }
+  ]
+}

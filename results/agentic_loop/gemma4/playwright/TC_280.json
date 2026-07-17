@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_280",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.797,
+  "total_latency_s": 72.696,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Change Password from Profile Settings', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/profile');\n    await page.getByRole('button', { name: /settings/i }).click();\n    await page.getByRole('link', { name: /security/i }).click();\n  });\n\n  test('should successfully change password with valid credentials', async ({ page }) => {\n    // Verify current password field is visible\n    const currentPasswordField = page.getByLabel(/current password/i);\n    await expect(currentPasswordField).toBeVisible();\n\n    // Fill in current password\n    await currentPasswordField.fill('ValidCurrentPassword123');\n\n    // Fill in new password\n    const newPasswordField = page.getByLabel(/new password/i);\n    await newPasswordField.fill('NewSecurePassword123!');\n\n    // Fill in confirm new password\n    const confirmPasswordField = page.getByLabel(/confirm new password/i);\n    await confirmPasswordField.fill('NewSecurePassword123!');\n\n    // Click change password button\n    const changePasswordButton = page.getByRole('button', { name: /change password/i });\n    await expect(changePasswordButton).toBeVisible();\n    await changePasswordButton.click();\n\n    // Wait for success message\n    const successMessage = page.getByText(/password changed successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify success message contains correct text\n    await expect(successMessage).toContainText('Password changed successfully');\n\n    // Verify user is redirected to profile page\n    await expect(page).toHaveURL(/.*\\/profile/);\n  });\n\n  test('should display error when new password does not meet complexity requirements', async ({ page }) => {\n    // Fill in current password\n    const currentPasswordField = page.getByLabel(/current password/i);\n    await currentPasswordField.fill('ValidCurrentPassword123');\n\n    // Fill in new password that is too short\n    const newPasswordField = page.getByLabel(/new password/i);\n    await newPasswordField.fill('short');\n\n    // Fill in confirm new password\n    const confirmPasswordField = page.getByLabel(/confirm new password/i);\n    await confirmPasswordField.fill('short');\n\n    // Click change password button\n    const changePasswordButton = page.getByRole('button', { name: /change password/i });\n    await changePasswordButton.click();\n\n    // Wait for error message\n    const errorMessage = page.getByText(/password must be at least 8 characters/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message contains required text\n    await expect(errorMessage).toContainText('at least 8 characters');\n\n    // Verify success message does not appear\n    const successMessage = page.getByText(/password changed successfully/i);\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify user remains on the security page\n    await expect(page).toHaveURL(/.*\\/profile\\/security/);\n  });\n\n  test('should display error when new password and confirmation do not match', async ({ page }) => {\n    // Fill in current password\n    const currentPasswordField = page.getByLabel(/current password/i);\n    await currentPasswordField.fill('ValidCurrentPassword123');\n\n    // Fill in new password\n    const newPasswordField = page.getByLabel(/new password/i);\n    await newPasswordField.fill('NewSecurePassword123!');\n\n    // Fill in mismatched confirm new password\n    const confirmPasswordField = page.getByLabel(/confirm new password/i);\n    await confirmPasswordField.fill('DifferentPassword123!');\n\n    // Click change password button\n    const changePasswordButton = page.getByRole('button', { name: /change password/i });\n    await changePasswordButton.click();\n\n    // Wait for mismatch error\n    const mismatchError = page.getByText(/new password and confirmation do not match/i);\n    await expect(mismatchError).toBeVisible();\n\n    // Verify error message contains required text\n    await expect(mismatchError).toContainText('do not match');\n\n    // Verify success message does not appear\n    const successMessage = page.getByText(/password changed successfully/i);\n    await expect(successMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.797,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3233,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.696,
+      "feedback_used": ""
+    }
+  ]
+}

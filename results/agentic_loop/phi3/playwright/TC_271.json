@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_271",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8028,
+  "total_latency_s": 47.363,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Snackbar Message on Clipboard Copy', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/clipboard-demo');\n  });\n\n  test('should display success snackbar message after copying text to clipboard', async ({ page }) => {\n    // Verify snackbar container is visible\n    const snackbarContainer = page.getByTestId('snackbar-container');\n    await expect(snackbarContainer).toBeVisible();\n\n    // Verify success message is visible\n    const successMessage = page.getByText('Text copied successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify success icon is visible\n    const successIcon = page.getByTestId('success-icon');\n    await expect(successIcon).toBeVisible();\n\n    // Verify close button is visible\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify snackbar is positioned correctly\n    const snackbarPosition = page.getByTestId('snackbar-position');\n    await expect(snackbarPosition).toContainText('bottom');\n\n    // Verify snackbar has correct style\n    const snackbarStyle = page.getByTestId('snackbar-style');\n    await expect(snackbarStyle).toHaveClass(/alert-success/i);\n\n    // Verify snackbar is visible and not scrolled off-screen\n    await expect(snackbarContainer).toBeVisible();\n    await expect(snackbarContainer).not.toBeScrolledOutOfView();\n\n    // Verify success message disappears when close button is clicked\n    await closeButton.click();\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify snackbar container is no longer visible\n    await expect(snackbarContainer).not.toBeVisible();\n  });\n\n  test('should display error snackbar message when copying fails', async ({ page }) => {\n    // Verify error message is visible\n    const errorMessage = page.getByText('Failed to copy text');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error icon is visible\n    const errorIcon = page.getByTestId('error-icon');\n    await expect(errorIcon).toBeVisible();\n\n    // Verify close button is visible\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify snackbar is positioned correctly\n    const snackbarPosition = page.getByTestId('snackbar-position');\n    await expect(snackbarPosition).toContainText('bottom');\n\n    // Verify snackbar has correct style\n    const snackbarStyle = page.getByTestId('snackbar-style');\n    await expect(snackbarStyle).toHaveClass(/alert-error/i);\n\n    // Verify error message disappears when close button is clicked\n    await closeButton.click();\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify snackbar container is no longer visible\n    await expect(snackbarContainer).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8028,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4428,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 47.363,
+      "feedback_used": ""
+    }
+  ]
+}

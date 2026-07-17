@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_288",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7618,
+  "total_latency_s": 72.559,
+  "final_script": "describe('Personal Data Export to JSON', () => {\n  beforeEach(() => {\n    cy.visit('/user/profile');\n  });\n\n  it('should successfully export user data as a JSON file', () => {\n    // Intercept the API call for data export\n    cy.intercept('GET', '/api/user/data/export').as('exportData');\n\n    // Click the export button\n    cy.get('[data-testid=\"export-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@exportData');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Data exported successfully');\n\n    // Verify download link or button appears\n    cy.get('[data-testid=\"download-json-link\"]').should('be.visible');\n\n    // Click the download link\n    cy.get('[data-testid=\"download-json-link\"]').click();\n\n    // Verify file download prompt or confirmation\n    cy.get('[data-testid=\"download-confirmation\"]').should('be.visible').should('contain', 'File download started');\n\n    // Verify the file name is correct\n    cy.get('[data-testid=\"download-filename\"]').should('contain', 'user-data.json');\n  });\n\n  it('should handle API errors during data export', () => {\n    // Intercept the API call and mock an error response\n    cy.intercept('GET', '/api/user/data/export', {\n      statusCode: 500,\n      body: { error: 'Internal server error' }\n    }).as('exportDataError');\n\n    // Click the export button\n    cy.get('[data-testid=\"export-button\"]').click();\n\n    // Wait for the error API call\n    cy.wait('@exportDataError');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Failed to export data');\n\n    // Verify error details are shown\n    cy.get('[data-testid=\"error-details\"]').should('be.visible').should('contain', 'Internal server error');\n\n    // Verify download link does not appear\n    cy.get('[data-testid=\"download-json-link\"]').should('not.exist');\n\n    // Verify user can retry the export\n    cy.get('[data-testid=\"retry-export-button\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7618,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4061,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.559,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "tc_id": "TC_256",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.1117,
+  "total_latency_s": 714.574,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Checkout Form - Card Expiry Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should validate card expiry in MM/YY format and display error message for invalid format', async ({ page }) => {\n    // Setup: intercept the API call to get card details\n    await page.route('**/api/card-details', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the API call to validate card\n    await page.route('**/api/validate-card', (route) => {\n      route.abort('failed');\n    });\n\n    // Setup: intercept the API call to process payment\n    await page.route('**/api/process-payment', (route) => {\n      route.abort('failed');\n    });\n\n    // Setup: intercept the API call to get shipping address\n    await page.route('**/api/shipping-address', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the API call to get billing address\n    await page.route('**/api/billing-address', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the API call to get order summary\n    await page.route('**/api/order-summary', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the API call to get order confirmation\n    await page.route('**/api/order-confirmation', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the API call to get order receipt\n    await page.route('**/api/order-receipt', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the API call to get order tracking\n    await page.route('**/api/order-tracking', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the API call to get order history\n    await page.route('**/api/order-history', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the API call to get customer support\n    await page.route('**/api/customer-support', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the API call to get order status\n    await page.route('**/api/order-status', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the API call to get order cancellation\n    await page.route('**/api/order-cancellation', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the API call to get order refund\n    await page.route('**/api/order-refund', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the API call to get order returns\n    await page.route('**/api/order-returns', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the API call to get order warranty\n    await page.route('**/api/order-warranty', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the API call to get order loyalty points\n    await page.route('**/api/order-loyalty-points', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the API call to get order tax\n    await page.route('**/api/order-tax', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the API call to get order shipping\n    await page.route('**/api/order-shipping', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the API call to get order tracking number\n    await page.route('**/api/order-tracking-number', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the API call to get order delivery date\n    await page.route('",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.1117,
+        "syntax": 0.1,
+        "assertion": 0.0,
+        "rouge_l": 0.2389,
+        "missing_keywords": [
+          "expect("
+        ],
+        "assertion_count": 0,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2",
+        "complete": false
+      },
+      "latency_s": 55.623,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.0993,
+        "syntax": 0.1,
+        "assertion": 0.0,
+        "rouge_l": 0.1976,
+        "missing_keywords": [
+          "expect("
+        ],
+        "assertion_count": 0,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2",
+        "complete": false
+      },
+      "latency_s": 316.08,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2"
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.0889,
+        "syntax": 0.1,
+        "assertion": 0.0,
+        "rouge_l": 0.1629,
+        "missing_keywords": [
+          "expect("
+        ],
+        "assertion_count": 0,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2",
+        "complete": false
+      },
+      "latency_s": 342.871,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2"
+    }
+  ]
+}

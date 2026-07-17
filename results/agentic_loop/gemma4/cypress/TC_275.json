@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_275",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7627,
+  "total_latency_s": 72.144,
+  "final_script": "describe('Notification Count Reset After Reading All Messages', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should reset notification count to zero after reading all messages', () => {\n    // Verify initial notification count is greater than zero\n    cy.get('[data-testid=\"notification-badge\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '3');\n\n    // Verify messages are visible\n    cy.get('[data-testid=\"message-item\"]').should('have.length', 3);\n\n    // Read first message\n    cy.get('[data-testid=\"message-item:first\"]').click();\n    cy.get('[data-testid=\"message-item:first\"]').should('have.class', 'read');\n\n    // Verify notification count decreases\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '2');\n\n    // Read second message\n    cy.get('[data-testid=\"message-item:second\"]').click();\n    cy.get('[data-testid=\"message-item:second\"]').should('have.class', 'read');\n\n    // Verify notification count decreases again\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '1');\n\n    // Read third message\n    cy.get('[data-testid=\"message-item:third\"]').click();\n    cy.get('[data-testid=\"message-item:third\"]').should('have.class', 'read');\n\n    // Verify notification count resets to zero\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '0');\n    cy.get('[data-testid=\"notification-badge\"]').should('not.exist');\n  });\n\n  it('should not reset notification count if not all messages are read', () => {\n    // Verify initial notification count is greater than zero\n    cy.get('[data-testid=\"notification-badge\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '5');\n\n    // Read first message\n    cy.get('[data-testid=\"message-item\"]').first().click();\n    cy.get('[data-testid=\"message-item\"]').first().should('have.class', 'read');\n\n    // Verify notification count decreases\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '4');\n\n    // Verify remaining messages are not marked as read\n    cy.get('[data-testid=\"message-item\"]').eq(1).should('not.have.class', 'read');\n\n    // Verify notification count remains greater than zero\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '4');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7627,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4088,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.144,
+      "feedback_used": ""
+    }
+  ]
+}

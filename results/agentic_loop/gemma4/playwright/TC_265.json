@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_265",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7921,
+  "total_latency_s": 184.229,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Click Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should navigate to related content when clicking a notification', async ({ page }) => {\n    // Verify notification list is visible\n    const notificationList = page.getByRole('region', { name: /notifications/i });\n    await expect(notificationList).toBeVisible();\n\n    // Verify notification items are present\n    const notificationItems = page.getByRole('listitem');\n    const count = await notificationItems.count();\n    expect(count).toBeGreaterThan(0);\n\n    // Get the first notification item\n    const firstNotification = page.getByRole('listitem').first();\n    await expect(firstNotification).toBeVisible();\n\n    // Verify notification content is displayed\n    const notificationTitle = page.getByText(/new message/i);\n    await expect(notificationTitle).toBeVisible();\n\n    // Verify notification action button exists\n    const notificationAction = page.getByRole('button', { name: /view/i });\n    await expect(notificationAction).toBeVisible();\n\n    // Click the notification to navigate\n    await notificationAction.click();\n\n    // Wait for navigation to complete\n    await page.waitForURL(/.*\\/messages.*$/);\n\n    // Verify navigation to messages page\n    await expect(page).toHaveURL(/.*\\/messages.*$/);\n\n    // Verify messages page title is displayed\n    const messagesPageTitle = page.getByRole('heading', { name: /messages/i });\n    await expect(messagesPageTitle).toBeVisible();\n\n    // Verify notification is marked as read\n    const notificationStatus = page.getByText(/read/i);\n    await expect(notificationStatus).toBeVisible();\n  });\n\n  test('should handle notification click when no related content exists', async ({ page }) => {\n    // Intercept the API call for a notification with no content\n    await page.route('**/api/notifications/123', route => {\n      route.abort('failed');\n    });\n\n    // Click the notification with no content\n    const notificationItem = page.getByRole('listitem', { name: /no content/i });\n    await expect(notificationItem).toBeVisible();\n    await notificationItem.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/no content available/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify user remains on notifications page\n    await expect(page).toHaveURL(/.*\\/notifications/);\n\n    // Verify notification is still visible\n    await expect(notificationItem).toBeVisible();\n\n    // Verify error state is displayed\n    const errorState = page.getByRole('status');\n    await expect(errorState).toContainText('error');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4927,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3958,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.325,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7921,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.407,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 111.904,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

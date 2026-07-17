@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_286",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8072,
+  "total_latency_s": 73.346,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Google Account Connection to User Profile', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/profile');\n  });\n\n  test('should successfully connect Google account and update profile with user details', async ({ page }) => {\n    // Verify profile page loads\n    const profileHeader = page.getByRole('heading', { name: /profile/i });\n    await expect(profileHeader).toBeVisible();\n\n    // Click Google connect button\n    const connectButton = page.getByRole('button', { name: /connect google/i });\n    await expect(connectButton).toBeVisible();\n    await connectButton.click();\n\n    // Verify Google authentication modal appears\n    const authModal = page.locator('[data-testid=\"google-auth-modal\"]');\n    await expect(authModal).toBeVisible();\n\n    // Click sign in with Google\n    const signInButton = page.getByRole('button', { name: /sign in with google/i });\n    await expect(signInButton).toBeVisible();\n    await signInButton.click();\n\n    // Verify Google sign-in page loads\n    const googleSignInPage = page.locator('[data-testid=\"google-sign-in-page\"]');\n    await expect(googleSignInPage).toBeVisible();\n\n    // Mock successful Google authentication response\n    await page.route('**/api/auth/google/token', route => {\n      route.continue();\n    });\n\n    // Click sign in button on Google page\n    const googleSignInBtn = page.getByRole('button', { name: /sign in/i });\n    await googleSignInBtn.click();\n\n    // Wait for profile to update\n    await page.waitForResponse(response => \n      response.url().includes('/api/auth/google/token') && response.status() === 200\n    );\n\n    // Verify profile is updated with Google user details\n    const userName = page.getByText(/john doe/i);\n    await expect(userName).toBeVisible();\n\n    const userEmail = page.getByText(/john.doe@example.com/i);\n    await expect(userEmail).toBeVisible();\n\n    const profileAvatar = page.locator('[data-testid=\"profile-avatar\"]');\n    await expect(profileAvatar).toHaveAttribute('src', /google-avatar/);\n\n    // Verify connection status message\n    const connectedStatus = page.getByText(/connected with google/i);\n    await expect(connectedStatus).toBeVisible();\n  });\n\n  test('should handle Google authentication failure and display error message', async ({ page }) => {\n    // Verify profile page loads\n    const profileHeader = page.getByRole('heading', { name: /profile/i });\n    await expect(profileHeader).toBeVisible();\n\n    // Click Google connect button\n    const connectButton = page.getByRole('button', { name: /connect google/i });\n    await expect(connectButton).toBeVisible();\n    await connectButton.click();\n\n    // Verify Google authentication modal appears\n    const authModal = page.locator('[data-testid=\"google-auth-modal\"]');\n    await expect(authModal).toBeVisible();\n\n    // Mock failed Google authentication response\n    await page.route('**/api/auth/google/token', route => {\n      route.abort('failed');\n    });\n\n    // Click sign in button on Google page\n    const googleSignInBtn = page.getByRole('button', { name: /sign in/i });\n    await googleSignInBtn.click();\n\n    // Wait for error state\n    await page.waitForTimeout(500);\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/failed to connect with google/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify connect button is still visible for retry\n    const retryButton = page.getByRole('button', { name: /try again/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify profile details are not updated\n    const userName = page.getByText(/john doe/i);\n    await expect(userName).not.toBeVisible();\n\n    // Verify connection status shows error\n    const connectionStatus = page.getByText(/connection failed/i);\n    await expect(connectionStatus).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8072,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4573,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.346,
+      "feedback_used": ""
+    }
+  ]
+}

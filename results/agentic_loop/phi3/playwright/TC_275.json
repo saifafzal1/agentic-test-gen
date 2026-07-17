@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_275",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8016,
+  "total_latency_s": 43.31,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Count Reset', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should reset notification count to zero after reading all messages', async ({ page }) => {\n    // Verify initial notification count is displayed\n    const notificationCount = page.getByRole('heading', { name: /notifications/i });\n    await expect(notificationCount).toBeVisible();\n    const countText = page.getByText(/3 notifications/i);\n    await expect(countText).toBeVisible();\n\n    // Verify read button is visible\n    const readButton = page.getByRole('button', { name: /read all/i });\n    await expect(readButton).toBeVisible();\n\n    // Click read button to read all messages\n    await readButton.click();\n\n    // Verify notification count is reset to zero\n    await expect(countText).toContainText(/0 notifications/i);\n\n    // Verify read all button is disabled\n    await expect(readButton).toBeDisabled();\n\n    // Verify notification messages are no longer visible\n    const messages = page.getByRole('listitem');\n    await expect(messages).not.toBeVisible();\n\n    // Verify notification count is now zero\n    const countText = page.getByText(/0 notifications/i);\n    await expect(countText).toBeVisible();\n\n    // Verify notification icon is hidden\n    const notificationIcon = page.getByRole('img', { name: /notification/i });\n    await expect(notificationIcon).not.toBeVisible();\n  });\n\n  test('should not reset notification count if there are unread messages', async ({ page }) => {\n    // Verify initial notification count is displayed\n    const notificationCount = page.getByRole('heading', { name: /notifications/i });\n    await expect(notificationCount).toBeVisible();\n    const countText = page.getByText(/3 notifications/i);\n    await expect(countText).toBeVisible();\n\n    // Verify read all button is visible\n    const readButton = page.getByRole('button', { name: /read all/i });\n    await expect(readButton).toBeVisible();\n\n    // Verify notification messages are visible\n    const messages = page.getByRole('listitem');\n    await expect(messages).toBeVisible();\n\n    // Verify notification count is not zero\n    await expect(countText).toContainText(/3 notifications/i);\n\n    // Verify read all button is still enabled\n    await expect(readButton).toBeEnabled();\n\n    // Verify notification icon is visible\n    const notificationIcon = page.getByRole('img', { name: /notification/i });\n    await expect(notificationIcon).toBeVisible();\n\n    // Click read all button to read unread messages\n    await readButton.click();\n\n    // Verify notification count is still not zero\n    await expect(countText).toContainText(/3 notifications/i);\n\n    // Verify read all button is now disabled\n    await expect(readButton).toBeDisabled();\n\n    // Verify notification messages are still visible\n    await expect(messages).toBeVisible();\n\n    // Verify notification icon is still visible\n    await expect(notificationIcon).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8016,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4386,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 43.31,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_286",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7257,
+  "total_latency_s": 49.44,
+  "final_script": "describe('Google Account Connection to User Profile', () => {\n  beforeEach(() => {\n    cy.visit('/user-profile');\n  });\n\n  it('should successfully connect Google account to user profile', () => {\n    // Verify initial state: no Google account connected\n    cy.get('[data-testid=\"profile-name\"]').should('contain', 'No account connected');\n    cy.get('[data-testid=\"profile-email\"]').should('contain', 'No email');\n\n    // Intercept the Google OAuth API call\n    cy.intercept('POST', '/api/auth/google/login').as('googleLogin');\n\n    // Click the Google account button\n    cy.get('[data-testid=\"google-account-button\"]').click();\n\n    // Verify modal appears\n    cy.get('[data-testid=\"google-modal\"]').should('be.visible');\n\n    // Fill in Google OAuth form\n    cy.get('[data-testid=\"google-email-input\"]').type('user@example.com');\n    cy.get('[data-testid=\"google-password-input\"]').type('password123');\n\n    // Click the login button\n    cy.get('[data-testid=\"google-login-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@googleLogin');\n\n    // Verify successful connection\n    cy.get('[data-testid=\"profile-name\"]').should('contain', 'User@example.com');\n    cy.get('[data-testid=\"profile-email\"]').should('contain', 'user@example.com');\n    cy.get('[data-testid=\"profile-connected-status\"]').should('contain', 'Connected');\n\n    // Verify profile is updated\n    cy.get('[data-testid=\"profile-avatar\"]').should('be.visible');\n    cy.get('[data-testid=\"profile-avatar\"]').should('have.attr', 'src');\n  });\n\n  it('should handle failed Google account connection', () => {\n    // Intercept failed Google OAuth API call\n    cy.intercept('POST', '/api/auth/google/login', {\n      statusCode: 401,\n      body: { error: 'Unauthorized', error_description: 'Invalid credentials' }\n    }).as('googleLoginFailed');\n\n    // Click the Google account button\n    cy.get('[data-testid=\"google-account-button\"]').click();\n\n    // Verify modal appears\n    cy.get('[data-testid=\"google-modal\"]').should('be.visible');\n\n    // Fill in Google OAuth form\n    cy.get('[data-testid=\"google-email-input\"]').type('user@example.com');\n    cy.get('[data-testid=\"google-password-input\"]').type('password123');\n\n    // Click the login button\n    cy.get('[data-testid=\"google-login-button\"]').click();\n\n    // Wait for failed API response\n    cy.wait('@googleLoginFailed');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Failed to connect');\n\n    // Verify profile remains unchanged\n    cy.get('[data-testid=\"profile-name\"]').should('contain', 'No account connected');\n    cy.get('[data-testid=\"profile-email\"]').should('not.exist');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7257,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2857,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 49.44,
+      "feedback_used": ""
+    }
+  ]
+}

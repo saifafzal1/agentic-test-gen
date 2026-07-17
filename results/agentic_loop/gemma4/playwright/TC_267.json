@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_267",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.796,
+  "total_latency_s": 72.349,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Browser Push Notification for Urgent Alerts', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display browser push notification when urgent alert is received', async ({ page }) => {\n    // Intercept the push notification API call\n    await page.route('**/api/notifications/urgent', (route) => {\n      route.continue();\n    });\n\n    // Click the button to trigger an urgent alert\n    const alertButton = page.getByRole('button', { name: /trigger urgent alert/i });\n    await expect(alertButton).toBeVisible();\n    await alertButton.click();\n\n    // Wait for the notification to be processed\n    await page.waitForTimeout(500);\n\n    // Verify the notification appears in the browser\n    const notification = page.getByText(/urgent alert received/i);\n    await expect(notification).toBeVisible();\n\n    // Verify the notification has a close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify the notification has a dismiss action\n    const dismissButton = page.getByRole('button', { name: /dismiss/i });\n    await expect(dismissButton).toBeVisible();\n\n    // Verify the notification has a notification icon\n    const notificationIcon = page.getByRole('img', { name: /notification icon/i });\n    await expect(notificationIcon).toBeVisible();\n  });\n\n  test('should handle multiple urgent alerts and notification stacking', async ({ page }) => {\n    // Intercept the push notification API call\n    await page.route('**/api/notifications/urgent', (route) => {\n      route.continue();\n    });\n\n    // Trigger the first urgent alert\n    const alertButton1 = page.getByRole('button', { name: /trigger urgent alert/i });\n    await expect(alertButton1).toBeVisible();\n    await alertButton1.click();\n\n    // Wait for the first notification\n    await page.waitForTimeout(500);\n\n    // Verify the first notification is visible\n    const notification1 = page.getByText(/urgent alert received/i);\n    await expect(notification1).toBeVisible();\n\n    // Trigger a second urgent alert\n    const alertButton2 = page.getByRole('button', { name: /trigger urgent alert/i });\n    await expect(alertButton2).toBeVisible();\n    await alertButton2.click();\n\n    // Wait for the second notification\n    await page.waitForTimeout(500);\n\n    // Verify the second notification is visible and stacked\n    const notification2 = page.getByText(/second urgent alert received/i);\n    await expect(notification2).toBeVisible();\n\n    // Verify both notifications are visible\n    const allNotifications = page.getByText(/urgent alert received|second urgent alert received/i);\n    await expect(allNotifications).toHaveCount(2);\n\n    // Verify the notification stacking mechanism is working\n    const notificationContainer = page.locator('[data-testid=\"notification-container\"]');\n    await expect(notificationContainer).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.796,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4199,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.349,
+      "feedback_used": ""
+    }
+  ]
+}

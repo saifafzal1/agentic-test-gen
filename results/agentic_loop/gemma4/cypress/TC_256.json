@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_256",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7681,
+  "total_latency_s": 71.773,
+  "final_script": "describe('Checkout Form Card Expiry Validation', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should validate card expiry in MM/YY format and display error for invalid format', () => {\n    // Intercept the form submission API\n    cy.intercept('POST', '/api/checkout/submit').as('checkoutSubmit');\n\n    // Fill in form with valid card details\n    cy.get('[data-testid=\"card-number-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"card-expiry-input\"]').type('12/25');\n    cy.get('[data-testid=\"card-cvc-input\"]').type('123');\n    cy.get('[data-testid=\"card-holder-name-input\"]').type('John Doe');\n\n    // Submit the form\n    cy.get('[data-testid=\"submit-checkout-button\"]').click();\n\n    // Wait for API call\n    cy.wait('@checkoutSubmit');\n\n    // Verify success message\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Order placed successfully');\n\n    // Verify form is cleared or redirected\n    cy.get('[data-testid=\"card-number-input\"]').should('have.value', '');\n  });\n\n  it('should display error message when card expiry is in invalid format', () => {\n    // Intercept the form submission API\n    cy.intercept('POST', '/api/checkout/submit').as('checkoutSubmit');\n\n    // Fill in form with valid card details\n    cy.get('[data-testid=\"card-number-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"card-cvc-input\"]').type('123');\n    cy.get('[data-testid=\"card-holder-name-input\"]').type('John Doe');\n\n    // Attempt to submit with invalid expiry format (e.g., DD/MM/YY)\n    cy.get('[data-testid=\"card-expiry-input\"]').type('25/12');\n    cy.get('[data-testid=\"submit-checkout-button\"]').click();\n\n    // Wait for API call\n    cy.wait('@checkoutSubmit');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"expiry-error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Please enter expiry date in MM/YY format');\n\n    // Verify form is not submitted\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n\n    // Verify card expiry input still has the invalid value\n    cy.get('[data-testid=\"card-expiry-input\"]').should('have.value', '25/12');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7681,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.427,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.773,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_256",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7529,
+  "total_latency_s": 32.922,
+  "final_script": "describe('Checkout Form - Card Expiry Validation', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should validate card expiry in MM/YY format and display error message for invalid format', () => {\n    // Intercept the API call to validate card expiry\n    cy.intercept('POST', '/api/validate-card-expiry', {\n      statusCode: 200,\n      body: {\n        isValid: false,\n        error: 'Invalid expiry format. Please use MM/YY format.'\n      }\n    }).as('validateExpiry');\n\n    // Fill in the card expiry field with invalid format\n    cy.get('[data-testid=\"card-expiry-input\"]').type('12/3456');\n\n    // Submit the form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for the API validation\n    cy.wait('@validateExpiry');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"expiry-error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Invalid expiry format');\n\n    // Verify form is not submitted\n    cy.get('[data-testid=\"order-summary\"]').should('not.exist');\n  });\n\n  it('should validate card expiry in MM/YY format and allow submission with valid format', () => {\n    // Intercept the API call to validate card expiry\n    cy.intercept('POST', '/api/validate-card-expiry', {\n      statusCode: 200,\n      body: {\n        isValid: true,\n        error: null\n      }\n    }).as('validateExpiry');\n\n    // Fill in the card expiry field with valid format\n    cy.get('[data-testid=\"card-expiry-input\"]').type('12/23');\n\n    // Submit the form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for the API validation\n    cy.wait('@validateExpiry');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"success-message\"]')\n      .should('be.visible')\n      .should('contain', 'Card expiry validated successfully');\n\n    // Verify order summary appears\n    cy.get('[data-testid=\"order-summary\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7529,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3763,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 32.922,
+      "feedback_used": ""
+    }
+  ]
+}

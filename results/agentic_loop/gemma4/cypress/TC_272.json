@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_272",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7568,
+  "total_latency_s": 72.068,
+  "final_script": "describe('In-App Notifications Real-Time Update', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should display new notifications in real-time without page refresh', () => {\n    // Intercept the initial notification fetch\n    cy.intercept('GET', '/api/notifications').as('getNotifications');\n    cy.wait('@getNotifications');\n\n    // Verify initial notification count is 0\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '0');\n    cy.get('[data-testid=\"notification-list\"]').should('be.visible');\n\n    // Intercept the real-time notification push\n    cy.intercept('POST', '/api/notifications/push').as('pushNotification');\n\n    // Trigger a new notification via API call\n    cy.request('POST', '/api/notifications/push', {\n      message: 'New message received',\n      type: 'message'\n    }).as('newNotification');\n\n    // Wait for the push notification to be processed\n    cy.wait('@newNotification');\n\n    // Verify notification badge updates in real-time\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '1');\n\n    // Verify notification appears in the list without page reload\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('contain', 'New message received');\n\n    // Verify notification has correct styling\n    cy.get('[data-testid=\"notification-item\"]').should('have.class', 'notification-unread');\n  });\n\n  it('should handle multiple real-time notifications and mark them as read', () => {\n    // Intercept initial fetch\n    cy.intercept('GET', '/api/notifications').as('getNotifications');\n    cy.wait('@getNotifications');\n\n    // Intercept multiple push notifications\n    cy.intercept('POST', '/api/notifications/push').as('pushNotification1');\n    cy.intercept('POST', '/api/notifications/push').as('pushNotification2');\n\n    // Trigger first notification\n    cy.request('POST', '/api/notifications/push', {\n      message: 'First alert',\n      type: 'alert'\n    }).as('notification1');\n    cy.wait('@notification1');\n\n    // Verify first notification appears\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '1');\n    cy.get('[data-testid=\"notification-item\"]').should('contain', 'First alert');\n\n    // Trigger second notification\n    cy.request('POST', '/api/notifications/push', {\n      message: 'Second alert',\n      type: 'alert'\n    }).as('notification2');\n    cy.wait('@notification2');\n\n    // Verify notification badge updates to 2\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '2');\n    cy.get('[data-testid=\"notification-item\"]').should('have.length', 2);\n\n    // Click on the first notification to mark as read\n    cy.get('[data-testid=\"notification-item\"]').first().click();\n\n    // Verify notification is marked as read\n    cy.get('[data-testid=\"notification-item\"]').first().should('have.class', 'notification-read');\n\n    // Verify badge count decreases\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '1');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7568,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3893,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.068,
+      "feedback_used": ""
+    }
+  ]
+}

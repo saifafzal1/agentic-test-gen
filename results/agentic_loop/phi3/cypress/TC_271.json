@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_271",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7787,
+  "total_latency_s": 348.88,
+  "final_script": "describe('Snackbar Message on Clipboard Copy', () => {\n  beforeEach(() => {\n    cy.visit('/text-editor');\n  });\n\n  it('should display success snackbar message after copying text to clipboard', () => {\n    // Intercept the clipboard API\n    cy.intercept('POST', '/api/clipboard/copy').as('copyClipboard');\n\n    // Get the text to copy\n    cy.get('[data-testid=\"text-to-copy\"]').should('be.visible');\n    cy.get('[data-testid=\"text-to-copy\"]').should('contain', 'Hello, World!');\n\n    // Copy the text\n    cy.get('[data-testid=\"copy-button\"]').click();\n\n    // Wait for the clipboard API call\n    cy.wait('@copyClipboard');\n\n    // Verify snackbar is visible\n    cy.get('[data-testid=\"snackbar\"]').should('be.visible');\n    cy.get('[data-testid=\"snackbar-message\"]').should('contain', 'Text copied to clipboard');\n\n    // Verify snackbar has a success class\n    cy.get('[data-testid=\"snackbar-message\"]').should('have.class', 'success');\n\n    // Verify snackbar has a close button\n    cy.get('[data-testid=\"snackbar-close-btn\"]').should('be.visible');\n\n    // Verify snackbar is removed after clicking close\n    cy.get('[data-testid=\"snackbar-close-btn\"]').click();\n    cy.get('[data-testid=\"snackbar\"]').should('not.exist');\n  });\n\n  it('should not display snackbar when clipboard API fails', () => {\n    // Intercept the clipboard API with a failure\n    cy.intercept('POST', '/api/clipboard/copy', {\n      statusCode: 500,\n      body: { error: 'Internal server error' }\n    }).as('copyClipboardFail');\n\n    // Get the text to copy\n    cy.get('[data-testid=\"text-to-copy\"]').should('be.visible');\n    cy.get('[data-testid=\"text-to-copy\"]').should('contain', 'Hello, World!');\n\n    // Attempt to copy the text\n    cy.get('[data-testid=\"copy-button\"]').click();\n\n    // Wait for the failed clipboard API call\n    cy.wait('@copyClipboardFail');\n\n    // Verify snackbar is not displayed\n    cy.get('[data-testid=\"snackbar\"]').should('not.exist');\n\n    // Verify error message is displayed instead\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Failed to copy text');\n\n    // Verify error message has a failure class\n    cy.get('[data-testid=\"error-message\"]').should('have.class', 'error');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7787,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4623,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 348.88,
+      "feedback_used": ""
+    }
+  ]
+}

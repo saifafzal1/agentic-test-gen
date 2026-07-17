@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_270",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7583,
+  "total_latency_s": 1029.836,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Unread vs Read Notification Visibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should visually distinguish unread notifications from read ones', async ({ page }) => {\n    // Verify unread notification is visible and styled differently\n    const unreadNotification = page.getByRole('alert');\n    await expect(unreadNotification).toBeVisible();\n    await expect(unreadNotification).toHaveClass(/unread/);\n\n    // Verify read notification is not visible\n    const readNotification = page.getByRole('alert', { name: /read/i });\n    await expect(readNotification).not.toBeVisible();\n\n    // Verify unread notification has a distinct color\n    const unreadNotificationColor = page.getByRole('alert').evaluate((el) => getComputedStyle(el).backgroundColor);\n    await expect(unreadNotificationColor).toBe('rgb(255, 255, 0)');\n\n    // Verify read notification has a different color\n    const readNotificationColor = page.getByRole('alert', { name: /read/i }).evaluate((el) => getComputedStyle(el).backgroundColor);\n    await expect(readNotificationColor).toBe('rgb(0, 0, 0)');\n\n    // Verify unread notification has a distinct border\n    const unreadNotificationBorder = page.getByRole('alert').evaluate((el) => getComputedStyle(el).borderStyle);\n    await expect(unreadNotificationBorder).toBe('solid');\n\n    // Verify read notification has no border\n    const readNotificationBorder = page.getByRole('alert', { name: /read/i }).evaluate((el) => getComputedStyle(el).borderStyle);\n    await expect(readNotificationBorder).toBe('none');\n\n    // Verify unread notification has a distinct icon\n    const unreadNotificationIcon = page.getByRole('alert').evaluate((el) => getComputedStyle(el).backgroundImage);\n    await expect(unreadNotificationIcon).toContain('url(/icons/unread.svg)');\n\n    // Verify read notification has a different icon\n    const readNotificationIcon = page.getByRole('alert', { name: /read/i }).evaluate((el) => getComputedStyle(el).backgroundImage);\n    await expect(readNotificationIcon).toContain('url(/icons/read.svg)');\n\n    // Verify unread notification has a distinct font style\n    const unreadNotificationFont = page.getByRole('alert').evaluate((el) => getComputedStyle(el).fontWeight);\n    await expect(unreadNotificationFont).toBe('bold');\n\n    // Verify read notification has a normal font style\n    const readNotificationFont = page.getByRole('alert', { name: /read/i }).evaluate((el) => getComputedStyle(el).fontWeight);\n    await expect(readNotificationFont).toBe('normal');\n\n    // Verify unread notification has a distinct text color\n    const unreadNotificationTextColor = page.getByRole('alert').evaluate((el) => getComputedStyle(el).color);\n    await expect(unreadNotificationTextColor).toBe('rgb(255, 255, 0)');\n\n    // Verify read notification has a different text color\n    const readNotificationTextColor = page.getByRole('alert', { name: /read/i }).evaluate((el) => getComputedStyle(el).color);\n    await expect(readNotificationTextColor).toBe('rgb(0, 0, 0)');\n  });\n\n  test('should update notification status and style when toggled', async ({ page }) => {\n    // Verify initial state: unread notification visible with distinct style\n    const unreadNotification = page.getByRole('alert');\n    await expect(unreadNotification).toBeVisible();\n    await expect(unreadNotification).toHaveClass(/unread/);\n\n    // Verify initial read notification is not visible\n    const readNotification = page.getByRole('alert', { name: /read/i });\n    await expect(readNotification).not.toBeVisible();\n\n    // Toggle notification to read\n    const toggleButton = page.getByRole('button', { name: /mark as read/i });\n    await toggleButton.click();\n\n    // Verify read notification becomes visible\n    await expect(readNotification).toBeVisible();\n\n    // Verify unread notification is no longer visible\n    await expect(unreadNotification).not.toBeVisible();\n\n    // Verify read notification has distinct style\n    const readNotificationColor = page.getByRole('alert', { name: /read/i }).evaluate((el) => getComputedStyle(el).backgroundColor);\n    await expect(readNotificationColor).toBe('rgb(0, 0, 0)');\n\n    // Verify read notification has a distinct border\n    const readNotificationBorder = page.getByRole('alert', { name: /read/i }).evaluate((el) => getComputedStyle(el).borderStyle);\n    await expect(readNotificationBorder).toBe('solid');\n\n    // Verify read notification has a distinct icon\n    const readNotificationIcon = page.getByRole('alert', { name: /read/i }).evaluate((el) => getComputedStyle(el).backgroundImage);\n    await expect(readNotificationIcon).toContain('url(/icons/read.svg)');\n\n    // Verify read notification has a distinct font style\n    const readNotificationFont = page.getByRole('alert', { name: /read/i }).evaluate((el) => getComputedStyle(el).fontWeight);\n    await expect(readNotificationFont).toBe('normal');\n\n    // Verify read notification has a distinct text color\n    const readNotificationTextColor = page.getByRole('alert', { name: /read/i }).evaluate((el) => getComputedStyle(el).color);\n    await expect(readNotificationTextColor).toBe('rgb(0, 0, 0)');\n\n    // Verify unread notification is no longer visible\n    const unreadNotification = page.getByRole('alert');\n    await expect(unreadNotification).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4697,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.319,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 516.063,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7583,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.2944,
+        "missing_keywords": [],
+        "assertion_count": 24,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 513.773,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

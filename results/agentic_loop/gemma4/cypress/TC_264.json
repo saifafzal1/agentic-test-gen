@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_264",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7486,
+  "total_latency_s": 72.288,
+  "final_script": "describe('Mark All Notifications as Read', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should mark all notifications as read with a single click', () => {\n    // Verify notifications are visible and unread\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"unread-badge\"]').should('be.visible');\n\n    // Verify the \"Mark All as Read\" button is visible\n    cy.get('[data-testid=\"mark-all-as-read-button\"]').should('be.visible');\n    cy.get('[data-testid=\"mark-all-as-read-button\"]').should('contain', 'Mark All as Read');\n\n    // Click the button\n    cy.get('[data-testid=\"mark-all-as-read-button\"]').click();\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'All notifications marked as read');\n\n    // Verify button state changes\n    cy.get('[data-testid=\"mark-all-as-read-button\"]').should('be.disabled');\n    cy.get('[data-testid=\"mark-all-as-read-button\"]').should('contain', 'All read');\n\n    // Verify unread badge disappears from notifications\n    cy.get('[data-testid=\"unread-badge\"]').should('not.exist');\n    cy.get('[data-testid=\"notification-item\"]').should('have.length.greaterThan', 0);\n  });\n\n  it('should handle edge case when no notifications are present', () => {\n    // Navigate to notifications with no items\n    cy.visit('/notifications?empty=true');\n\n    // Verify empty state message is displayed\n    cy.get('[data-testid=\"empty-state-message\"]').should('be.visible');\n    cy.get('[data-testid=\"empty-state-message\"]').should('contain', 'No notifications');\n\n    // Verify \"Mark All as Read\" button does not appear or is disabled\n    cy.get('[data-testid=\"mark-all-as-read-button\"]').should('not.exist');\n\n    // Verify no unread badges are present\n    cy.get('[data-testid=\"unread-badge\"]').should('not.exist');\n\n    // Verify user can still interact with other notification features if available\n    cy.get('[data-testid=\"filter-notifications\"]').should('be.visible');\n    cy.get('[data-testid=\"filter-notifications\"]').click();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7486,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.362,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.288,
+      "feedback_used": ""
+    }
+  ]
+}

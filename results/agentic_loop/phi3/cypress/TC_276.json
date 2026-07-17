@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_276",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.6965,
+  "total_latency_s": 807.481,
+  "final_script": "describe('Update Display Name - User Profile', () => {\n  beforeEach(() => {\n    cy.visit('/user-profile');\n  });\n\n  it('should successfully update display name and reflect changes across the app', () => {\n    // Verify initial display name is shown\n    cy.get('[data-testid=\"display-name-input\"]').should('be.visible');\n    cy.get('[data-testid=\"display-name-input\"]').should('contain', 'John Doe');\n\n    // Intercept API call to update display name\n    cy.intercept('POST', '/api/user/update-display-name').as('updateDisplayName');\n\n    // Update display name\n    cy.get('[data-testid=\"display-name-input\"]').type('Jane Smith');\n    cy.get('[data-testid=\"update-display-name-button\"]').click();\n\n    // Wait for API call to complete\n    cy.wait('@updateDisplayName');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Display name updated successfully');\n\n    // Verify new display name is reflected in profile\n    cy.get('[data-testid=\"display-name-input\"]').should('contain', 'Jane Smith');\n\n    // Verify email is still visible and unchanged\n    cy.get('[data-testid=\"email-input\"]').should('contain', 'john.doe@example.com');\n\n    // Verify name is reflected in other parts of the app\n    cy.get('[data-testid=\"welcome-message\"]').should('contain', 'Welcome, Jane Smith');\n    cy.get('[data-testid=\"profile-card\"]').should('contain', 'Jane Smith');\n\n    // Verify name is reflected in notifications\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', 'Jane Smith');\n\n    // Verify name is reflected in search results\n    cy.get('[data-testid=\"search-results\"]').should('contain', 'Jane Smith');\n\n    // Verify name is reflected in user settings\n    cy.get('[data-testid=\"user-settings\"]').should('contain', 'Jane Smith');\n\n    // Verify name is reflected in user dashboard\n    cy.get('[data-testid=\"user-dashboard\"]').should('contain', 'Jane Smith');\n\n    // Verify name is reflected in team notifications\n    cy.get('[data-testid=\"team-notification\"]').should('contain', 'Jane Smith');\n\n    // Verify name is reflected in chat\n    cy.get('[data-testid=\"chat-message\"]').should('contain', 'Jane Smith');\n\n    // Verify name is reflected in profile picture\n    cy.get('[data-testid=\"profile-picture\"]').should('have.attr', 'src');\n\n    // Verify name is reflected in user profile URL\n    cy.url().should('include', '/user/jane-smith');\n  });\n\n  it('should handle empty display name input and show validation error', () => {\n    // Verify initial display name is shown\n    cy.get('[data-testid=\"display-name-input\"]').should('be.visible');\n    cy.get('[data-testid=\"display-name-input\"]').should('contain', 'John Doe');\n\n    // Intercept API call to update display name\n    cy.intercept('POST', '/api/user/update-display-name').as('updateDisplayName');\n\n    // Attempt to update with empty input\n    cy.get('[data-testid=\"display-name-input\"]').clear().type('');\n    cy.get('[data-testid=\"update-display-name-button\"]').click();\n\n    // Wait for API call to complete\n    cy.wait('@updateDisplayName');\n\n    // Verify validation error message appears\n    cy.get('[data-testid=\"validation-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"validation-error-message\"]').should('contain', 'Display name cannot be empty');\n\n    // Verify empty display name is not reflected\n    cy.get('[data-testid=\"display-name-input\"]').should('contain', 'John Doe');\n\n    // Verify success message does not appear\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n\n    // Verify error message is visible\n    cy.get('[data-testid=\"validation-error-message\"]').should('be.visible');\n\n    // Verify error message contains correct error\n    cy.get('[data-testid=\"validation-error-message\"]').should('contain', 'Display name cannot be empty');\n\n    // Verify user can retry with valid input\n    cy.get('[data-testid=\"display-name-input\"]').clear().type('Jane Smith');\n    cy.get('[data-testid=\"update-display-name-button\"]').click();\n\n    // Wait for API call to complete\n    cy.wait('@updateDisplayName');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Display name updated successfully');\n\n    // Verify validation error message is gone\n    cy.get('[data-testid=\"validation-error-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4285,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.2016,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 410.354,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.6965,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.1883,
+        "missing_keywords": [],
+        "assertion_count": 27,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 397.127,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_283",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.763,
+  "total_latency_s": 436.108,
+  "final_script": "describe('User Profile - Timezone Settings', () => {\n  beforeEach(() => {\n    cy.visit('/user-profile');\n  });\n\n  it('should successfully set timezone in profile settings', () => {\n    // Verify initial timezone is displayed\n    cy.get('[data-testid=\"current-timezone-display\"]').should('be.visible');\n    cy.get('[data-testid=\"current-timezone-display\"]').should('contain', 'UTC');\n\n    // Intercept API call to update timezone\n    cy.intercept('POST', '/api/user/update-timezone').as('updateTimezone');\n\n    // Find timezone dropdown and select a new timezone\n    cy.get('[data-testid=\"timezone-dropdown\"]').click();\n    cy.get('[data-testid=\"timezone-option\"]').click({ force: true });\n    cy.get('[data-testid=\"timezone-option\"]').should('contain', 'Europe/Paris');\n\n    // Verify timezone dropdown is still visible\n    cy.get('[data-testid=\"timezone-dropdown\"]').should('be.visible');\n\n    // Verify timezone is updated in profile settings\n    cy.get('[data-testid=\"current-timezone-display\"]').should('contain', 'Europe/Paris');\n\n    // Verify API call was made\n    cy.wait('@updateTimezone').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Timezone updated successfully');\n  });\n\n  it('should handle invalid timezone input and display error message', () => {\n    // Verify initial timezone is displayed\n    cy.get('[data-testid=\"current-timezone-display\"]').should('be.visible');\n    cy.get('[data-testid=\"current-timezone-display\"]').should('contain', 'UTC');\n\n    // Intercept API call to update timezone\n    cy.intercept('POST', '/api/user/update-timezone').as('updateTimezone');\n\n    // Attempt to set invalid timezone (e.g., non-existent timezone)\n    cy.get('[data-testid=\"timezone-dropdown\"]').click();\n    cy.get('[data-testid=\"timezone-option\"]').click({ force: true });\n    cy.get('[data-testid=\"timezone-option\"]').type('Invalid/Timezone');\n\n    // Verify invalid timezone is still visible\n    cy.get('[data-testid=\"timezone-dropdown\"]').should('be.visible');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid timezone format');\n\n    // Verify API call was not made\n    cy.wait('@updateTimezone').then((interception) => {\n      expect(interception.request.body.timezone).to.equal('Invalid/Timezone');\n      expect(interception.response.statusCode).to.equal(400);\n    });\n\n    // Verify success message is not displayed\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.763,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4101,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 436.108,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_282",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7513,
+  "total_latency_s": 546.457,
+  "final_script": "describe('Dark Mode Toggle from Preferences', () => {\n  beforeEach(() => {\n    cy.visit('/settings');\n  });\n\n  it('should successfully toggle dark mode from preferences and reflect change in UI', () => {\n    // Verify initial UI is light mode\n    cy.get('[data-testid=\"theme-toggle\"]').should('be.visible');\n    cy.get('[data-testid=\"theme-label\"]').should('contain', 'Light Mode');\n    cy.get('[data-testid=\"content-area\"]').should('have.class', 'light-theme');\n\n    // Intercept API call to save preference\n    cy.intercept('POST', '/api/user/preferences/theme').as('toggleDarkMode');\n\n    // Click the dark mode toggle button\n    cy.get('[data-testid=\"theme-toggle\"]').click();\n\n    // Verify API was called\n    cy.wait('@toggleDarkMode');\n\n    // Verify UI reflects dark mode\n    cy.get('[data-testid=\"theme-label\"]').should('contain', 'Dark Mode');\n    cy.get('[data-testid=\"content-area\"]').should('have.class', 'dark-theme');\n\n    // Verify dark mode styles are applied\n    cy.get('[data-testid=\"content-area\"]').should('have.css', 'background-color', '#121212');\n    cy.get('[data-testid=\"content-area\"]').should('have.css', 'color', '#ffffff');\n\n    // Verify theme persists on page reload\n    cy.reload();\n    cy.get('[data-testid=\"theme-label\"]').should('contain', 'Dark Mode');\n    cy.get('[data-testid=\"content-area\"]').should('have.class', 'dark-theme');\n  });\n\n  it('should not toggle dark mode if user has disabled it in preferences', () => {\n    // Set up user preference to disable dark mode\n    cy.intercept('POST', '/api/user/preferences/theme', {\n      statusCode: 200,\n      body: {\n        enabled: false,\n        theme: 'light'\n      }\n    }).as('disableDarkMode');\n\n    // Verify initial UI is light mode\n    cy.get('[data-testid=\"theme-toggle\"]').should('be.visible');\n    cy.get('[data-testid=\"theme-label\"]').should('contain', 'Light Mode');\n\n    // Attempt to toggle dark mode\n    cy.get('[data-testid=\"theme-toggle\"]').click();\n\n    // Verify API was called but no change in UI\n    cy.wait('@disableDarkMode');\n\n    // Verify UI remains light mode\n    cy.get('[data-testid=\"theme-label\"]').should('contain', 'Light Mode');\n    cy.get('[data-testid=\"content-area\"]').should('have.class', 'light-theme');\n\n    // Verify dark mode is still disabled\n    cy.get('[data-testid=\"theme-label\"]').should('contain', 'Dark Mode');\n    cy.get('[data-testid=\"content-area\"]').should('have.css', 'background-color', '#ffffff');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7513,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3709,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 546.457,
+      "feedback_used": ""
+    }
+  ]
+}

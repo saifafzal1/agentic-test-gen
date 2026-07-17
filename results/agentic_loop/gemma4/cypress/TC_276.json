@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_276",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7362,
+  "total_latency_s": 72.533,
+  "final_script": "describe('Update Display Name Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/profile');\n  });\n\n  it('should successfully update display name and reflect it across the app', () => {\n    // Verify initial display name\n    cy.get('[data-testid=\"display-name\"]').should('contain', 'John Doe');\n\n    // Click edit button\n    cy.get('[data-testid=\"edit-name-btn\"]').click();\n\n    // Verify input field appears\n    cy.get('[data-testid=\"name-input\"]').should('be.visible');\n\n    // Update display name\n    cy.get('[data-testid=\"name-input\"]').clear().type('Jane Smith');\n\n    // Click save button\n    cy.get('[data-testid=\"save-name-btn\"]').click();\n\n    // Verify success message\n    cy.get('[data-testid=\"success-toast\"]').should('be.visible').should('contain', 'Name updated successfully');\n\n    // Verify display name is updated\n    cy.get('[data-testid=\"display-name\"]').should('contain', 'Jane Smith');\n\n    // Verify name is reflected in other parts of the app (e.g., header)\n    cy.get('[data-testid=\"header-user-name\"]').should('contain', 'Jane Smith');\n  });\n\n  it('should handle empty or invalid display name input', () => {\n    // Verify initial display name\n    cy.get('[data-testid=\"display-name\"]').should('contain', 'John Doe');\n\n    // Click edit button\n    cy.get('[data-testid=\"edit-name-btn\"]').click();\n\n    // Attempt to save with empty name\n    cy.get('[data-testid=\"name-input\"]').clear().type('');\n    cy.get('[data-testid=\"save-name-btn\"]').click();\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-toast\"]').should('be.visible').should('contain', 'Display name cannot be empty');\n\n    // Verify display name was not updated\n    cy.get('[data-testid=\"display-name\"]').should('contain', 'John Doe');\n\n    // Attempt to save with only spaces\n    cy.get('[data-testid=\"name-input\"]').clear().type('   ');\n    cy.get('[data-testid=\"save-name-btn\"]').click();\n\n    // Verify error message persists\n    cy.get('[data-testid=\"error-toast\"]').should('be.visible').should('contain', 'Display name cannot be empty');\n\n    // Verify display name was not updated\n    cy.get('[data-testid=\"display-name\"]').should('contain', 'John Doe');\n\n    // Verify edit button is still visible\n    cy.get('[data-testid=\"edit-name-btn\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7362,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3206,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.533,
+      "feedback_used": ""
+    }
+  ]
+}

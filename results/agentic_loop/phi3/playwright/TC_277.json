@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_277",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.4968,
+  "total_latency_s": 1582.318,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Profile Picture Upload and Preview', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/profile');\n  });\n\n  test('should successfully upload a profile picture and display preview', async ({ page }) => {\n    // Locate and click the upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: /upload profile picture/i });\n    await uploadButton.click();\n\n    // Locate and select a file using getByLabel\n    const fileInput = page.getByLabel(/profile picture/i);\n    await fileInput.setInputFiles('fixtures/profile.jpg');\n\n    // Locate and verify the preview image using getByRole\n    const previewImage = page.getByRole('img', { name: /profile picture preview/i });\n    await expect(previewImage).toBeVisible();\n\n    // Verify the preview image has loaded\n    const previewImageSrc = await previewImage.evaluate((el) => el.src);\n    expect(previewImageSrc).toContain('profile.jpg');\n\n    // Verify the preview image has correct dimensions\n    const previewWidth = await previewImage.evaluate((el) => el.clientWidth);\n    const previewHeight = await previewImage.evaluate((el) => el.clientHeight);\n    expect(previewWidth).toBeGreaterThan(100);\n    expect(previewHeight).toBeGreaterThan(100);\n\n    // Verify the preview image is visible\n    await expect(previewImage).toBeVisible();\n\n    // Verify the preview image has correct aspect ratio\n    const previewAspectRatio = previewWidth / previewHeight;\n    expect(previewAspectRatio).toBeCloseTo(1);\n\n    // Verify the preview image has correct file size\n    const previewFileSize = await previewImage.evaluate((el) => el.files[0].size);\n    expect(previewFileSize).toBeLessThan(1000000);\n\n    // Verify the preview image has correct file type\n    const previewFileType = await previewImage.evaluate((el) => el.files[0].type);\n    expect(previewFileType).toBe('image/jpeg');\n\n    // Verify the preview image has correct alt text\n    const previewAltText = await previewImage.evaluate((el) => el.getAttribute('alt'));\n    expect(previewAltText).toBe('Profile Picture');\n\n    // Verify the preview image has correct title\n    const previewTitle = await previewImage.evaluate((el) => el.getAttribute('title'));\n    expect(previewTitle).toBe('Profile Picture Preview');\n\n    // Verify the preview image has correct border\n    const previewBorder = await previewImage.evaluate((el) => el.getAttribute('style').includes('border'));\n    expect(previewBorder).toBeTruthy();\n\n    // Verify the preview image has correct background color\n    const previewBackgroundColor = await previewImage.evaluate((el) => window.getComputedStyle(el).getPropertyValue('background-color'));\n    expect(previewBackgroundColor).toBe('rgb(255, 255, 255)');\n\n    // Verify the preview image has correct opacity\n    const previewOpacity = await previewImage.evaluate((el) => window.getComputedStyle(el).getPropertyValue('opacity'));\n    expect(previewOpacity).toBe('1');\n\n    // Verify the preview image has correct filter\n    const previewFilter = await previewImage.evaluate((el) => window.getComputedStyle(el).getPropertyValue('filter'));\n    expect(previewFilter).toBe('none');\n\n    // Verify the preview image has correct transform\n    const previewTransform = await previewImage.evaluate((el) => window.getComputedStyle(el).getPropertyValue('transform'));\n    expect(previewTransform).toBe('none');\n\n    // Verify the preview image has correct cursor\n    const previewCursor = await previewImage.evaluate((el) => window.getComputedStyle(el).getPropertyValue('cursor'));\n    expect(previewCursor).toBe('pointer');\n\n    // Verify the preview image has correct z-index\n    const previewZIndex = await previewImage.evaluate((",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4968,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3893,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 499.793,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4725,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3285,
+        "missing_keywords": [],
+        "assertion_count": 27,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 537.301,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.4559,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.2732,
+        "missing_keywords": [],
+        "assertion_count": 39,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 545.224,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

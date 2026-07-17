@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_287",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.5014,
+  "total_latency_s": 1443.441,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Active Sessions Management', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/user-profile');\n  });\n\n  test('should display all active sessions and allow user to log out of a specific one', async ({ page }) => {\n    // Verify active sessions list is visible\n    const sessionsList = page.getByRole('region', { name: /active sessions/i });\n    await expect(sessionsList).toBeVisible();\n\n    // Verify session details are displayed\n    const sessionName = page.getByText('Session 1');\n    await expect(sessionName).toBeVisible();\n\n    const sessionStatus = page.getByText('Active');\n    await expect(sessionStatus).toBeVisible();\n\n    // Verify logout button is present\n    const logoutButton = page.getByRole('button', { name: /logout/i });\n    await expect(logoutButton).toBeVisible();\n\n    // Verify logout button is disabled for all sessions\n    await expect(logoutButton).not.toBeDisabled();\n\n    // Click logout button for Session 1\n    await logoutButton.click();\n\n    // Verify logout confirmation modal appears\n    const confirmModal = page.getByRole('dialog', { name: /confirm logout/i });\n    await expect(confirmModal).toBeVisible();\n\n    // Verify logout button is now disabled for Session 1\n    await expect(logoutButton).toBeDisabled();\n\n    // Verify logout button is enabled for Session 2\n    const session2Name = page.getByText('Session 2');\n    await expect(session2Name).toBeVisible();\n\n    const session2LogoutButton = page.getByRole('button', { name: /logout/i });\n    await expect(session2LogoutButton).toBeDisabled();\n\n    // Click logout button for Session 2\n    await session2LogoutButton.click();\n\n    // Verify logout confirmation modal appears for Session 2\n    await expect(confirmModal).toBeVisible();\n\n    // Verify logout button is now disabled for Session 2\n    await expect(session2LogoutButton).toBeDisabled();\n\n    // Verify logout button is enabled for Session 3\n    const session3Name = page.getByText('Session 3');\n    await expect(session3Name).toBeVisible();\n\n    const session3LogoutButton = page.getByRole('button', { name: /logout/i });\n    await expect(session3LogoutButton).not.toBeDisabled();\n\n    // Verify logout button is disabled for Session 3\n    await expect(session3LogoutButton).toBeDisabled();\n\n    // Verify logout button is enabled for Session 4\n    const session4Name = page.getByText('Session 4');\n    await expect(session4Name).toBeVisible();\n\n    const session4LogoutButton = page.getByRole('button', { name: /logout/i });\n    await expect(session4LogoutButton).not.toBeDisabled();\n\n    // Verify logout button is disabled for Session 4\n    await expect(session4LogoutButton).toBeDisabled();\n\n    // Verify logout button is enabled for Session 5\n    const session5Name = page.getByText('Session 5');\n    await expect(session5Name).toBeVisible();\n\n    const session5LogoutButton = page.getByRole('button', { name: /logout/i });\n    await expect(session5LogoutButton).not.toBeDisabled();\n\n    // Verify logout button is disabled for Session 5\n    await expect(session5LogoutButton).toBeDisabled();\n\n    // Verify logout button is enabled for Session 6\n    const session6Name = page.getByText('Session 6');\n    await expect(session6Name).toBeVisible();\n\n    const session6LogoutButton = page.getByRole('button', { name: /logout/i });\n    await expect(session6LogoutButton).not.toBeDisabled();\n\n    // Verify logout button is disabled for Session 6\n    await expect(session6LogoutButton).toBeDis",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5014,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4245,
+        "missing_keywords": [],
+        "assertion_count": 23,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 353.955,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4576,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.2787,
+        "missing_keywords": [],
+        "assertion_count": 38,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 545.055,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.4424,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.2282,
+        "missing_keywords": [],
+        "assertion_count": 51,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 544.431,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

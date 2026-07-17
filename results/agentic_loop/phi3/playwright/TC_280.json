@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_280",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8056,
+  "total_latency_s": 37.018,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Password Change from Profile Settings', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/profile');\n  });\n\n  test('should successfully change password with valid input', async ({ page }) => {\n    // Verify initial password is displayed\n    const passwordInput = page.getByLabel('Current Password');\n    await expect(passwordInput).toBeVisible();\n\n    // Verify new password fields are visible\n    const newPasswordInput = page.getByLabel('New Password');\n    await expect(newPasswordInput).toBeVisible();\n\n    const confirmNewPasswordInput = page.getByLabel('Confirm New Password');\n    await expect(confirmNewPasswordInput).toBeVisible();\n\n    // Verify password change button is visible\n    const changePasswordButton = page.getByRole('button', { name: /change password/i });\n    await expect(changePasswordButton).toBeVisible();\n\n    // Fill in current password\n    await passwordInput.fill('123456');\n\n    // Fill in new password\n    await newPasswordInput.fill('NewSecurePassword123');\n\n    // Fill in confirm password\n    await confirmNewPasswordInput.fill('NewSecurePassword123');\n\n    // Click change password button\n    await changePasswordButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/password changed successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify profile page is still visible\n    await expect(page).toBeVisible();\n  });\n\n  test('should display error when new passwords do not match', async ({ page }) => {\n    // Verify initial password is displayed\n    const passwordInput = page.getByLabel('Current Password');\n    await expect(passwordInput).toBeVisible();\n\n    // Verify new password fields are visible\n    const newPasswordInput = page.getByLabel('New Password');\n    await expect(newPasswordInput).toBeVisible();\n\n    const confirmNewPasswordInput = page.getByLabel('Confirm New Password');\n    await expect(confirmNewPasswordInput).toBeVisible();\n\n    // Fill in current password\n    await passwordInput.fill('123456');\n\n    // Fill in new password\n    await newPasswordInput.fill('NewSecurePassword123');\n\n    // Fill in confirm password with a different value\n    await confirmNewPasswordInput.fill('WrongConfirmPassword');\n\n    // Click change password button\n    const changePasswordButton = page.getByRole('button', { name: /change password/i });\n    await expect(changePasswordButton).toBeVisible();\n    await changePasswordButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/passwords do not match/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify profile page is still visible\n    await expect(page).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8056,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3521,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 37.018,
+      "feedback_used": ""
+    }
+  ]
+}

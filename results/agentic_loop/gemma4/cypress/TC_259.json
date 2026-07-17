@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_259",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7897,
+  "total_latency_s": 71.792,
+  "final_script": "describe('Success Toast Notification on Record Save', () => {\n  beforeEach(() => {\n    cy.visit('/records');\n  });\n\n  it('should display success toast notification after successfully saving a record', () => {\n    // Intercept the save API call\n    cy.intercept('POST', '/api/records').as('saveRecord');\n\n    // Fill in the record form\n    cy.get('[data-testid=\"record-name-input\"]').type('New Project Alpha');\n    cy.get('[data-testid=\"record-description-input\"]').type('A complex new project');\n    cy.get('[data-testid=\"record-status-select\"]').select('Active');\n\n    // Click the save button\n    cy.get('[data-testid=\"save-record-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@saveRecord');\n\n    // Verify success toast appears\n    cy.get('[data-testid=\"success-toast\"]').should('be.visible');\n    cy.get('[data-testid=\"success-toast\"]').should('contain', 'Record saved successfully');\n\n    // Verify toast has correct styling and position\n    cy.get('[data-testid=\"success-toast\"]').should('have.css', 'opacity', '1');\n    cy.get('[data-testid=\"success-toast\"]').should('be.have.css', 'top', '0px');\n\n    // Verify toast has a close button and it works\n    cy.get('[data-testid=\"success-toast-close-button\"]').click();\n    cy.get('[data-testid=\"success-toast\"]').should('not.exist');\n\n    // Verify record is now visible in the list\n    cy.get('[data-testid=\"record-list\"]').should('contain', 'New Project Alpha');\n  });\n\n  it('should not display success toast when record save fails', () => {\n    // Intercept the save API call and mock a failure response\n    cy.intercept('POST', '/api/records', {\n      statusCode: 500,\n      body: { error: 'Internal server error' }\n    }).as('failedSaveRecord');\n\n    // Fill in the record form\n    cy.get('[data-testid=\"record-name-input\"]').type('Broken Record');\n    cy.get('[data-testid=\"record-description-input\"]').type('This record will fail to save');\n    cy.get('[data-testid=\"record-status-select\"]').select('Pending');\n\n    // Click the save button\n    cy.get('[data-testid=\"save-record-button\"]').click();\n\n    // Wait for the failed API call\n    cy.wait('@failedSaveRecord');\n\n    // Verify success toast does NOT appear\n    cy.get('[data-testid=\"success-toast\"]').should('not.exist');\n\n    // Verify error notification appears instead\n    cy.get('[data-testid=\"error-toast\"]').should('be.visible');\n    cy.get('[data-testid=\"error-toast\"]').should('contain', 'Failed to save record');\n\n    // Verify error toast has correct styling\n    cy.get('[data-testid=\"error-toast\"]').should('have.css', 'opacity', '1');\n    cy.get('[data-testid=\"error-toast\"]').should('have.css', 'background-color', 'rgb(255, 100, 15)');\n\n    // Verify form is still visible and editable\n    cy.get('[data-testid=\"record-name-input\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7897,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4988,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.792,
+      "feedback_used": ""
+    }
+  ]
+}

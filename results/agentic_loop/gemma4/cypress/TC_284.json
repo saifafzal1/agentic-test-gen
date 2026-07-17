@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_284",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7346,
+  "total_latency_s": 73.857,
+  "final_script": "describe('Account Deletion - Password Confirmation', () => {\n  beforeEach(() => {\n    cy.visit('/account/settings');\n  });\n\n  it('should successfully delete account after confirming password', () => {\n    // Verify account settings page is visible\n    cy.get('[data-testid=\"account-settings-page\"]').should('be.visible');\n    \n    // Click on delete account button\n    cy.get('[data-testid=\"delete-account-button\"]').click();\n    \n    // Verify confirmation modal appears\n    cy.get('[data-testid=\"delete-account-modal\"]').should('be.visible');\n    cy.get('[data-testid=\"confirm-password-input\"]').should('be.visible');\n    \n    // Enter correct password\n    cy.get('[data-testid=\"confirm-password-input\"]').type('ValidPassword123');\n    \n    // Click confirm delete button\n    cy.get('[data-testid=\"confirm-delete-button\"]').click();\n    \n    // Verify success message is displayed\n    cy.get('[data-testid=\"account-deleted-success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"account-deleted-success-message\"]').should('contain', 'Your account has been deleted');\n    \n    // Verify user is redirected to login page\n    cy.url().should('include', '/login');\n  });\n\n  it('should not delete account when password confirmation fails', () => {\n    // Verify account settings page is visible\n    cy.get('[data-testid=\"account-settings-page\"]').should('be.visible');\n    \n    // Click on delete account button\n    cy.get('[data-testid=\"delete-account-button\"]').click();\n    \n    // Verify confirmation modal appears\n    cy.get('[data-testid=\"delete-account-modal\"]').should('be.visible');\n    cy.get('[data-testid=\"confirm-password-input\"]').should('be.visible');\n    \n    // Enter incorrect password\n    cy.get('[data-testid=\"confirm-password-input\"]').type('WrongPassword123');\n    \n    // Click confirm delete button\n    cy.get('[data-testid=\"confirm-delete-button\"]').click();\n    \n    // Verify error message is displayed\n    cy.get('[data-testid=\"password-mismatch-error\"]').should('be.visible');\n    cy.get('[data-testid=\"password-mismatch-error\"]').should('contain', 'Incorrect password');\n    \n    // Verify account is NOT deleted (modal remains open)\n    cy.get('[data-testid=\"delete-account-modal\"]').should('be.visible');\n    \n    // Verify user is still on settings page\n    cy.url().should('include', '/account/settings');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7346,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3153,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.857,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_263",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.766,
+  "total_latency_s": 74.298,
+  "final_script": "describe('Notification Bell Badge Count', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should display badge count when notifications exist', () => {\n    // Intercept the API call to fetch notifications\n    cy.intercept('GET', '/api/notifications').as('getNotifications');\n    \n    // Click the notification bell icon\n    cy.get('[data-testid=\"notification-bell-icon\"]').click();\n    \n    // Wait for the API response\n    cy.wait('@getNotifications');\n    \n    // Verify the badge count is displayed\n    cy.get('[data-testid=\"notification-badge-count\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-badge-count\"]').should('contain', '3');\n    \n    // Verify the badge has the correct styling\n    cy.get('[data-testid=\"notification-badge-count\"]').should('have.class', 'badge-active');\n    \n    // Verify the notification dropdown is visible\n    cy.get('[data-testid=\"notification-dropdown\"]').should('be.visible');\n    \n    // Verify notification items are displayed\n    cy.get('[data-testid=\"notification-item\"]').should('have.length', 3);\n  });\n\n  it('should not display badge when no notifications exist', () => {\n    // Intercept the API call and return an empty array\n    cy.intercept('GET', '/api/notifications', {\n      statusCode: 200,\n      body: []\n    }).as('getNotificationsEmpty');\n    \n    // Click the notification bell icon\n    cy.get('[data-testid=\"notification-bell-icon\"]').click();\n    \n    // Wait for the API response\n    cy.wait('@getNotificationsEmpty');\n    \n    // Verify the badge count is not displayed\n    cy.get('[data-testid=\"notification-badge-count\"]').should('not.exist');\n    \n    // Verify the notification dropdown is still visible but empty\n    cy.get('[data-testid=\"notification-dropdown\"]').should('be.visible');\n    \n    // Verify no notification items are displayed\n    cy.get('[data-testid=\"notification-item\"]').should('not.exist');\n    \n    // Verify a \"No notifications\" message is shown\n    cy.get('[data-testid=\"no-notifications-message\"]').should('be.visible');\n    cy.get('[data-testid=\"no-notifications-message\"]').should('contain', 'No new notifications');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.766,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.42,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 74.298,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_264",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7648,
+  "total_latency_s": 33.602,
+  "final_script": "describe('Mark All Notifications as Read', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should mark all notifications as read with one click', () => {\n    // Verify initial state: 5 notifications visible\n    cy.get('[data-testid=\"notification-count\"]').should('contain', '5');\n    cy.get('[data-testid=\"notification-item\"]').should('have.length', 5);\n\n    // Verify notifications are not marked as read\n    cy.get('[data-testid=\"notification-item\"]').eq(0).should('have.class', 'unread');\n    cy.get('[data-testid=\"notification-item\"]').eq(1).should('have.class', 'unread');\n\n    // Click the mark all as read button\n    cy.get('[data-testid=\"mark-all-as-read-btn\"]').click();\n\n    // Verify all notifications are now marked as read\n    cy.get('[data-testid=\"notification-item\"]').each(($el, index, $list) => {\n      cy.wrap($el).should('have.class', 'read');\n    });\n\n    // Verify notification count is updated\n    cy.get('[data-testid=\"notification-count\"]').should('contain', '0');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'All notifications marked as read');\n  });\n\n  it('should handle edge case: no notifications available', () => {\n    // Verify initial state: 0 notifications visible\n    cy.get('[data-testid=\"notification-count\"]').should('contain', '0');\n\n    // Verify success message is not visible when no notifications are available\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n\n    // Click the mark all as read button\n    cy.get('[data-testid=\"mark-all-as-read-btn\"]').click();\n\n    // Verify success message still does not appear\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n\n    // Verify no notifications are marked as read\n    cy.get('[data-testid=\"notification-item\"]').should('not.exist');\n\n    // Verify notification count remains unchanged\n    cy.get('[data-testid=\"notification-count\"]').should('contain', '0');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7648,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4161,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 33.602,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_273",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7341,
+  "total_latency_s": 74.463,
+  "final_script": "describe('Notification Preferences Management', () => {\n  beforeEach(() => {\n    cy.visit('/settings');\n  });\n\n  it('should successfully manage notification preferences', () => {\n    // Verify settings page loads\n    cy.get('[data-testid=\"settings-page\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-preferences-section\"]').should('be.visible');\n\n    // Verify default notification settings are visible\n    cy.get('[data-testid=\"email-notifications-toggle\"]').should('have.attr', 'aria-checked', 'true');\n    cy.get('[data-testid=\"sms-notifications-toggle\"]').should('have.attr', 'aria-checked', 'true');\n    cy.get('[data-testid=\"push-notifications-toggle\"]').should('have.attr', 'aria-checked', 'true');\n\n    // Toggle email notifications off\n    cy.get('[data-testid=\"email-notifications-toggle\"]').click();\n    cy.get('[data-testid=\"email-notifications-toggle\"]').should('have.attr', 'aria-checked', 'false');\n    cy.get('[data-testid=\"email-notifications-label\"]').should('contain', 'Email notifications');\n\n    // Toggle SMS notifications on\n    cy.get('[data-testid=\"sms-notifications-toggle\"]').click();\n    cy.get('[data-testid=\"sms-notifications-toggle\"]').should('have.attr', 'aria-checked', 'true');\n\n    // Toggle push notifications off\n    cy.get('[data-testid=\"push-notifications-toggle\"]').click();\n    cy.get('[data-testid=\"push-notifications-toggle\"]').should('have.attr', 'aria-checked', 'false');\n\n    // Verify save button is visible and enabled\n    cy.get('[data-testid=\"save-preferences-button\"]').should('be.visible').should('not.be.disabled');\n\n    // Click save button\n    cy.get('[data-testid=\"save-preferences-button\"]').click();\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Preferences saved successfully');\n\n    // Verify settings page remains visible\n    cy.get('[data-testid=\"settings-page\"]').should('be.visible');\n  });\n\n  it('should handle edge case of disabling all notification types', () => {\n    // Verify initial state\n    cy.get('[data-testid=\"email-notifications-toggle\"]').should('have.attr', 'aria-checked', 'true');\n    cy.get('[data-testid=\"sms-notifications-toggle\"]').should('have.attr', 'aria-checked', 'true');\n    cy.get('[data-testid=\"push-notifications-toggle\"]').should('have.attr', 'aria-checked', 'true');\n\n    // Disable email notifications\n    cy.get('[data-testid=\"email-notifications-toggle\"]').click();\n    cy.get('[data-testid=\"email-notifications-toggle\"]').should('have.attr', 'aria-checked', 'false');\n\n    // Disable SMS notifications\n    cy.get('[data-testid=\"sms-notifications-toggle\"]').click();\n    cy.get('[data-testid=\"sms-notifications-toggle\"]').should('have.attr', 'aria-checked', 'false');\n\n    // Disable push notifications\n    cy.get('[data-testid=\"push-notifications-toggle\"]').click();\n    cy.get('[data-testid=\"push-notifications-toggle\"]').should('have.attr', 'aria-checked', 'false');\n\n    // Verify save button is still available\n    cy.get('[data-testid=\"save-preferences-button\"]').should('be.visible');\n\n    // Click save button\n    cy.get('[data-testid=\"save-preferences-button\"]').click();\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Preferences saved successfully');\n\n    // Verify all toggles are in off state\n    cy.get('[data-testid=\"email-notifications-toggle\"]').should('have.attr', 'aria-checked', 'false');\n    cy.get('[data-testid=\"sms-notifications-toggle\"]').should('have.attr', 'aria-checked', 'false');\n    cy.get('[data-testid=\"push-notifications-toggle\"]').should('have.attr', 'aria-checked', 'false');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7341,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3138,
+        "missing_keywords": [],
+        "assertion_count": 26,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 74.463,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_279",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7553,
+  "total_latency_s": 360.809,
+  "final_script": "describe('Email Address Change with Confirmation Step', () => {\n  beforeEach(() => {\n    cy.visit('/user/profile');\n  });\n\n  it('should successfully change email address with confirmation step', () => {\n    // Verify initial email is displayed\n    cy.get('[data-testid=\"current-email\"]').should('be.visible').should('contain', 'user@example.com');\n\n    // Intercept the API call to change email\n    cy.intercept('POST', '/api/user/change-email').as('changeEmail');\n\n    // Fill new email address\n    cy.get('[data-testid=\"new-email-input\"]').type('newuser@example.com');\n\n    // Verify email input is valid\n    cy.get('[data-testid=\"email-input\"]').should('have.value', 'newuser@example.com');\n\n    // Click the submit button\n    cy.get('[data-testid=\"change-email-button\"]').click();\n\n    // Wait for API call\n    cy.wait('@changeEmail').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify confirmation modal appears\n    cy.get('[data-testid=\"confirmation-modal\"]').should('be.visible');\n\n    // Verify confirmation message\n    cy.get('[data-testid=\"confirmation-message\"]').should('contain', 'Email address has been changed successfully');\n\n    // Verify old email is no longer displayed\n    cy.get('[data-testid=\"current-email\"]').should('not.exist');\n\n    // Verify new email is displayed\n    cy.get('[data-testid=\"new-email-input\"]').should('be.visible').should('contain', 'newuser@example.com');\n\n    // Verify success toast appears\n    cy.get('[data-testid=\"success-toast\"]').should('be.visible');\n    cy.get('[data-testid=\"success-toast\"]').should('contain', 'Email updated');\n  });\n\n  it('should display error when email validation fails', () => {\n    // Verify initial email is displayed\n    cy.get('[data-testid=\"current-email\"]').should('be.visible').should('contain', 'user@example.com');\n\n    // Fill invalid email address\n    cy.get('[data-testid=\"new-email-input\"]').type('invalid-email');\n\n    // Verify email input is still visible\n    cy.get('[data-testid=\"new-email-input\"]').should('have.value', 'invalid-email');\n\n    // Click the submit button\n    cy.get('[data-testid=\"change-email-button\"]').click();\n\n    // Wait for API call\n    cy.wait('@changeEmail').then((interception) => {\n      expect(interception.response.statusCode).to.equal(400);\n    });\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid email address');\n\n    // Verify confirmation modal does not appear\n    cy.get('[data-testid=\"confirmation-modal\"]').should('not.exist');\n\n    // Verify old email is still displayed\n    cy.get('[data-testid=\"current-email\"]').should('be.visible').should('contain', 'user@example.com');\n\n    // Verify success toast does not appear\n    cy.get('[data-testid=\"success-toast\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7553,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3843,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 360.809,
+      "feedback_used": ""
+    }
+  ]
+}

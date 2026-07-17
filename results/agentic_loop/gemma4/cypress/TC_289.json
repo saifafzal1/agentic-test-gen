@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_289",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7067,
+  "total_latency_s": 72.717,
+  "final_script": "describe('Language Preference Setting in Profile', () => {\n  beforeEach(() => {\n    cy.visit('/profile/settings');\n  });\n\n  it('should successfully set language preference to English', () => {\n    // Verify profile settings page is loaded\n    cy.get('[data-testid=\"profile-settings-page\"]').should('be.visible');\n    cy.get('[data-testid=\"language-label\"]').should('contain', 'Language');\n\n    // Verify current language is displayed\n    cy.get('[data-testid=\"current-language-display\"]').should('contain', 'Spanish');\n\n    // Open language dropdown\n    cy.get('[data-testid=\"language-dropdown-button\"]').click();\n\n    // Verify language options are visible\n    cy.get('[data-testid=\"language-option-en\"]').should('be.visible');\n    cy.get('[data-testid=\"language-option-es\"]').should('be.visible');\n    cy.get('[data-testid=\"language-option-fr\"]').should('be.visible');\n\n    // Select English\n    cy.get('[data-testid=\"language-option-en\"]').click();\n\n    // Verify language selection is updated\n    cy.get('[data-testid=\"current-language-display\"]').should('contain', 'English');\n\n    // Click save button\n    cy.get('[data-testid=\"save-settings-button\"]').click();\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Settings saved successfully');\n\n    // Verify page redirects or refreshes\n    cy.url().should('include', '/profile/settings');\n  });\n\n  it('should handle invalid language selection and display error message', () => {\n    // Verify profile settings page is loaded\n    cy.get('[data-testid=\"profile-settings-page\"]').should('be.visible');\n\n    // Open language dropdown\n    cy.get('[data-testid=\"language-dropdown-button\"]').click();\n\n    // Attempt to select an invalid option (e.g., a non-existent language)\n    cy.get('[data-testid=\"language-option-invalid\"]').should('not.exist');\n\n    // Verify error message appears when trying to save without valid selection\n    cy.get('[data-testid=\"save-settings-button\"]').click();\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Please select a valid language');\n\n    // Verify language selection did not change\n    cy.get('[data-testid=\"current-language-display\"]').should('contain', 'Spanish');\n\n    // Verify success message does not appear\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n\n    // Verify user can still interact with other settings\n    cy.get('[data-testid=\"email-input\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7067,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2222,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.717,
+      "feedback_used": ""
+    }
+  ]
+}

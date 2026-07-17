@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_274",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7296,
+  "total_latency_s": 72.224,
+  "final_script": "describe('Delete Single Notification', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should successfully delete a single notification when delete button is clicked', () => {\n    // Intercept the delete API call\n    cy.intercept('DELETE /api/notifications/*').as('deleteNotification');\n\n    // Verify notification list is visible and contains items\n    cy.get('[data-testid=\"notification-list\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('have.length.greaterThan', 0);\n\n    // Get the first notification item\n    cy.get('[data-testid=\"notification-item\"]').first().as('firstNotification');\n\n    // Verify notification content\n    cy.get('@firstNotification').should('contain', 'New message from John');\n    cy.get('@firstNotification').should('contain', '2 minutes ago');\n\n    // Click the delete button for the first notification\n    cy.get('@firstNotification').find('[data-testid=\"delete-button\"]').click();\n\n    // Verify delete confirmation modal appears\n    cy.get('[data-testid=\"delete-confirmation-modal\"]').should('be.visible');\n    cy.get('[data-testid=\"delete-confirmation-modal\"]').should('contain', 'Are you sure you want to delete this notification?');\n\n    // Click confirm delete button\n    cy.get('[data-testid=\"confirm-delete-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@deleteNotification');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Notification deleted successfully');\n\n    // Verify the notification is removed from the list\n    cy.get('[data-testid=\"notification-item\"]').should('not.exist');\n    cy.get('[data-testid=\"notification-list\"]').should('be.visible');\n  });\n\n  it('should handle error when deleting a notification', () => {\n    // Intercept the delete API call and mock an error response\n    cy.intercept('DELETE /api/notifications/*', {\n      statusCode: 500,\n      body: { error: 'Internal server error' }\n    }).as('deleteNotificationError');\n\n    // Verify notification list is visible\n    cy.get('[data-testid=\"notification-list\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('have.length.greaterThan', 0);\n\n    // Get the first notification item\n    cy.get('[data-testid=\"notification-item\"]').first().as('firstNotification');\n\n    // Click the delete button\n    cy.get('@firstNotification').find('[data-testid=\"delete-button\"]').click();\n\n    // Verify delete confirmation modal appears\n    cy.get('[data-testid=\"delete-confirmation-modal\"]').should('be.visible');\n\n    // Click confirm delete button\n    cy.get('[data-testid=\"confirm-delete-button\"]').click();\n\n    // Wait for the error API call\n    cy.wait('@deleteNotificationError');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Failed to delete notification');\n\n    // Verify notification still exists in the list\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').first().should('contain', 'New message from John');\n\n    // Verify error button is available to retry\n    cy.get('[data-testid=\"retry-delete-button\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7296,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2985,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.224,
+      "feedback_used": ""
+    }
+  ]
+}

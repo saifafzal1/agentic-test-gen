@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_269",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8185,
+  "total_latency_s": 357.987,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Panel Slide In', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should display notification panel with success message when triggered', async ({ page }) => {\n    // Verify notification panel is not visible initially\n    const notificationPanel = page.getByRole('region', { name: /notification/i });\n    await expect(notificationPanel).not.toBeVisible();\n\n    // Click the success notification button\n    const successButton = page.getByRole('button', { name: /success/i });\n    await expect(successButton).toBeVisible();\n    await successButton.click();\n\n    // Verify notification panel is now visible\n    await expect(notificationPanel).toBeVisible();\n\n    // Verify success message is displayed\n    const successMessage = page.getByText(/success message/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify close button is present\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify close button is clickable\n    await expect(closeButton).toBeEnabled();\n\n    // Verify notification panel slides in from the top\n    const notificationPanelStyle = page.getByRole('region', { name: /notification/i }).evaluate((el) => {\n      return window.getComputedStyle(el).getPropertyValue('transform');\n    });\n    await expect(notificationPanelStyle).toContain('translateY(-100%)');\n  });\n\n  test('should display error notification panel with error message when triggered', async ({ page }) => {\n    // Verify notification panel is not visible initially\n    const notificationPanel = page.getByRole('region', { name: /notification/i });\n    await expect(notificationPanel).not.toBeVisible();\n\n    // Click the error notification button\n    const errorButton = page.getByRole('button', { name: /error/i });\n    await expect(errorButton).toBeVisible();\n    await errorButton.click();\n\n    // Verify notification panel is now visible\n    await expect(notificationPanel).toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/error message/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify close button is present\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify close button is clickable\n    await expect(closeButton).toBeEnabled();\n\n    // Verify notification panel slides in from the top\n    const notificationPanelStyle = page.getByRole('region', { name: /notification/i }).evaluate((el) => {\n      return window.getComputedStyle(el).getPropertyValue('transform');\n    });\n    await expect(notificationPanelStyle).toContain('translateY(-100%)');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8185,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.495,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 357.987,
+      "feedback_used": ""
+    }
+  ]
+}

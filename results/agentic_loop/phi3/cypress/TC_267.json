@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_267",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7307,
+  "total_latency_s": 390.58,
+  "final_script": "describe('Browser Push Notification for Urgent Alerts', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should display push notification when urgent alert is received', () => {\n    // Mock push notification API\n    cy.intercept('POST', '/api/notifications/urgent').as('urgentNotification');\n\n    // Trigger urgent notification\n    cy.get('[data-testid=\"send-urgent-alert-btn\"]').click();\n\n    // Wait for the notification API call\n    cy.wait('@urgentNotification');\n\n    // Verify notification is displayed\n    cy.get('[data-testid=\"notification-container\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-title\"]').should('contain', 'Urgent Alert');\n    cy.get('[data-testid=\"notification-body\"]').should('contain', 'This is an urgent alert');\n\n    // Verify notification icon is visible\n    cy.get('[data-testid=\"notification-icon\"]').should('be.visible');\n\n    // Verify notification badge count\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '1');\n\n    // Verify notification dismiss button is present\n    cy.get('[data-testid=\"notification-dismiss-btn\"]').should('be.visible');\n\n    // Verify notification is dismissible\n    cy.get('[data-testid=\"notification-dismiss-btn\"]').click();\n\n    // Verify notification disappears\n    cy.get('[data-testid=\"notification-container\"]').should('not.exist');\n  });\n\n  it('should handle multiple urgent notifications and display count', () => {\n    // Mock multiple urgent notifications\n    cy.intercept('POST', '/api/notifications/urgent', {\n      statusCode: 200,\n      body: {\n        message: 'First urgent alert',\n        priority: 'high'\n      }\n    }).as('firstUrgentNotification');\n\n    cy.intercept('POST', '/api/notifications/urgent', {\n      statusCode: 200,\n      body: {\n        message: 'Second urgent alert',\n        priority: 'high'\n      }\n    }).as('secondUrgentNotification');\n\n    // Trigger first urgent notification\n    cy.get('[data-testid=\"send-urgent-alert-btn\"]').click();\n    cy.wait('@firstUrgentNotification');\n\n    // Trigger second urgent notification\n    cy.get('[data-testid=\"send-urgent-alert-btn\"]').click();\n    cy.wait('@secondUrgentNotification');\n\n    // Verify notification count is updated\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '2');\n\n    // Verify notification list is displayed\n    cy.get('[data-testid=\"notification-list\"]').should('be.visible');\n\n    // Verify notifications are listed with titles\n    cy.get('[data-testid=\"notification-item\"]').should('have.length', 2);\n    cy.get('[data-testid=\"notification-item\"]').first().should('contain', 'First urgent alert');\n    cy.get('[data-testid=\"notification-item\"]').eq(1).should('contain', 'Second urgent alert');\n\n    // Verify notification dismiss button is present for each item\n    cy.get('[data-testid=\"notification-item\"]').first().should('have.descendant', '[data-testid=\"notification-dismiss-btn\"]');\n    cy.get('[data-testid=\"notification-item\"]').eq(1).should('have.descendant', '[data-testid=\"notification-dismiss-btn\"]');\n\n    // Verify dismissing a notification updates the count\n    cy.get('[data-testid=\"notification-item\"]').first().click();\n    cy.get('[data-testid=\"notification-badge\"]').should('contain', '1');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7307,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3024,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 390.58,
+      "feedback_used": ""
+    }
+  ]
+}
