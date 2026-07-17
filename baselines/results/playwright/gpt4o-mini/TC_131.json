@@ -1,0 +1,13 @@
+{
+  "id": "TC_131",
+  "category": "modal_dialog",
+  "complexity": "simple",
+  "user_story": "As a user, I want focus to be trapped inside an open modal.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Dialog Focus Trap', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('http://your-application-url.com');\n    await page.getByRole('button', { name: 'Open Modal' }).click();\n  });\n\n  test('should keep focus inside the modal when tabbing', async ({ page }) => {\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n\n    const firstFocusable = await modal.getByRole('button', { name: 'First Button' });\n    await firstFocusable.focus();\n    await page.keyboard.press('Tab');\n\n    const secondFocusable = await modal.getByRole('button', { name: 'Second Button' });\n    await expect(secondFocusable).toBeFocused();\n  });\n\n  test('should return focus to the first element after last element is tabbed', async ({ page }) => {\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n\n    const lastFocusable = await modal.getByRole('button', { name: 'Last Button' });\n    await lastFocusable.focus();\n    await page.keyboard.press('Tab');\n\n    const firstFocusable = await modal.getByRole('button', { name: 'First Button' });\n    await expect(firstFocusable).toBeFocused();\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 288,
+  "latency_s": 4.17,
+  "timestamp": "2026-06-19T16:52:35.077752"
+}

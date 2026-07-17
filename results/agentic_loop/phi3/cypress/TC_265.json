@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_265",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7277,
+  "total_latency_s": 294.694,
+  "final_script": "describe('Notification Click Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should navigate to related content when clicking a notification', () => {\n    // Verify notification is visible\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('contain', 'New article published');\n\n    // Click the notification\n    cy.get('[data-testid=\"notification-item\"]').click();\n\n    // Verify navigation occurred\n    cy.url().should('include', '/article');\n\n    // Verify we are on the correct page\n    cy.get('[data-testid=\"article-title\"]').should('be.visible');\n    cy.get('[data-testid=\"article-title\"]').should('contain', 'New Article');\n\n    // Verify related content is displayed\n    cy.get('[data-testid=\"article-content\"]').should('be.visible');\n    cy.get('[data-testid=\"article-content\"]').should('contain', 'This is the article content');\n\n    // Verify navigation back button is present\n    cy.get('[data-testid=\"back-to-notifications-btn\"]').should('be.visible');\n  });\n\n  it('should handle edge case when notification is already open', () => {\n    // Open a notification\n    cy.get('[data-testid=\"notification-item\"]').click();\n\n    // Verify navigation occurred\n    cy.url().should('include', '/article');\n    cy.get('[data-testid=\"article-title\"]').should('be.visible');\n\n    // Click the notification again\n    cy.get('[data-testid=\"notification-item\"]').click();\n\n    // Verify navigation does not occur again\n    cy.url().should('include', '/article');\n\n    // Verify notification is still open\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n\n    // Verify related content is still displayed\n    cy.get('[data-testid=\"article-content\"]').should('be.visible');\n\n    // Verify back button is still present\n    cy.get('[data-testid=\"back-to-notifications-btn\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7277,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2923,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 294.694,
+      "feedback_used": ""
+    }
+  ]
+}

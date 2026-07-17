@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_067",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7623,
+  "total_latency_s": 71.474,
+  "final_script": "describe('Polling Stop on Page Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/polling-page');\n  });\n\n  it('should stop polling when user navigates away from the page', () => {\n    // Intercept the polling API endpoint\n    cy.intercept('GET', '/api/polling/data').as('pollingRequest');\n\n    // Verify initial polling is active\n    cy.wait('@pollingRequest');\n    cy.get('[data-testid=\"polling-status\"]').should('contain', 'Active');\n\n    // Navigate to another page\n    cy.get('[data-testid=\"nav-link\"]').click();\n    cy.url().should('not.include', '/polling-page');\n\n    // Verify polling has stopped by waiting for a timeout without intercepting\n    cy.intercept('GET', '/api/polling/data').as('pollingRequestAfterNav');\n    cy.wait(5000);\n\n    // Verify no more polling requests were made\n    cy.get('[data-testid=\"polling-status\"]').should('not.exist');\n    cy.get('[data-testid=\"polling-indicator\"]').should('not.exist');\n  });\n\n  it('should handle navigation back to page and resume polling', () => {\n    // Intercept the polling API endpoint\n    cy.intercept('GET', '/api/polling/data').as('pollingRequest1');\n\n    // Initial page load and polling starts\n    cy.wait('@pollingRequest1');\n    cy.get('[data-testid=\"polling-status\"]').should('contain', 'Active');\n\n    // Navigate away\n    cy.get('[data-testid=\"nav-link\"]').click();\n    cy.url().should('not.include', '/polling-page');\n\n    // Navigate back to the page\n    cy.get('[data-testid=\"back-to-polling\"]').click();\n    cy.url().should('include', '/polling-page');\n\n    // Verify polling resumes\n    cy.intercept('GET', '/api/polling/data').as('pollingRequestResume');\n    cy.wait('@pollingRequestResume');\n\n    cy.get('[data-testid=\"polling-status\"]').should('contain', 'Active');\n    cy.get('[data-testid=\"polling-indicator\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7623,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4078,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.474,
+      "feedback_used": ""
+    }
+  ]
+}

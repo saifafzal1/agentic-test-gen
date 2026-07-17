@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_087",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8211,
+  "total_latency_s": 49.272,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Comment on Record', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should successfully submit a comment on a record', async ({ page }) => {\n    // Verify the records list is visible\n    const recordsList = page.getByRole('region', { name: /records/i });\n    await expect(recordsList).toBeVisible();\n\n    // Select a record to comment on\n    const recordItem = page.getByRole('region', { name: /record 1/i });\n    await expect(recordItem).toBeVisible();\n    await recordItem.click();\n\n    // Verify the record details are visible\n    const recordDetails = page.getByRole('region', { name: /record 1 details/i });\n    await expect(recordDetails).toBeVisible();\n\n    // Fill out the comment form\n    const commentInput = page.getByLabel('Comment');\n    await expect(commentInput).toBeVisible();\n    await commentInput.fill('Great product!');\n\n    // Verify the comment textarea is visible and editable\n    const commentTextarea = page.getByLabel('Comment');\n    await expect(commentTextarea).toBeVisible();\n    await expect(commentTextarea).toBeEditable();\n\n    // Submit the comment\n    const submitButton = page.getByRole('button', { name: /submit comment/i });\n    await expect(submitButton).toBeVisible();\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/comment submitted successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify the comment is saved\n    const commentList = page.getByRole('region', { name: /comments/i });\n    await expect(commentList).toBeVisible();\n\n    // Verify the comment appears in the list\n    const commentItem = page.getByText('Great product!');\n    await expect(commentItem).toBeVisible();\n  });\n\n  test('should display error when commenting on a non-existent record', async ({ page }) => {\n    // Navigate to the records list\n    const recordsList = page.getByRole('region', { name: /records/i });\n    await expect(recordsList).toBeVisible();\n\n    // Click on a non-existent record\n    const nonExistentRecordItem = page.getByRole('region', { name: /record 999999999/i });\n    await expect(nonExistentRecordItem).toBeVisible();\n    await nonExistentRecordItem.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/record not found/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the comment form is still visible\n    const commentInput = page.getByLabel('Comment');\n    await expect(commentInput).toBeVisible();\n\n    // Attempt to submit an empty comment\n    const submitButton = page.getByRole('button', { name: /submit comment/i });\n    await expect(submitButton).toBeVisible();\n    await submitButton.click();\n\n    // Verify error message persists\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the comment list is still empty\n    const commentList = page.getByRole('region', { name: /comments/i });\n    await expect(commentList).toBeVisible();\n    const commentItem = page.getByText('Great product!');\n    await expect(commentItem).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8211,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4035,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 49.272,
+      "feedback_used": ""
+    }
+  ]
+}

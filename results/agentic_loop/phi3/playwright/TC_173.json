@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_173",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8325,
+  "total_latency_s": 355.274,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload - Unsupported File Type Error', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should display error message when uploading an unsupported file type', async ({ page }) => {\n    // Intercept the file upload API call\n    await page.route('**/api/upload', (route) => {\n      route.abort('Failed to process file');\n    });\n\n    // Set up a mock response for the upload API\n    await page.route('**/api/upload', (route) => {\n      route.continue();\n    });\n\n    // Set up a mock response for the file validation API\n    await page.route('**/api/validate-file', (route) => {\n      route.abort('Unsupported file type');\n    });\n\n    // Set up a mock response for the file preview API\n    await page.route('**/api/preview-file', (route) => {\n      route.abort('Unsupported file type');\n    });\n\n    // Locate and interact with the file input using getByLabel\n    const fileInput = page.getByLabel('Upload File');\n    await fileInput.setInputFiles('tests/fixtures/unsupported-file.txt');\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('Unsupported file type');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error icon is visible\n    const errorIcon = page.getByTestId('error-icon');\n    await expect(errorIcon).toBeVisible();\n\n    // Verify file preview is not displayed\n    const filePreview = page.getByTestId('file-preview');\n    await expect(filePreview).not.toBeVisible();\n\n    // Verify file upload button is disabled\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await expect(uploadButton).toBeDisabled();\n  });\n\n  test('should allow uploading supported file types and display preview', async ({ page }) => {\n    // Intercept the file upload API call\n    await page.route('**/api/upload', (route) => {\n      route.continue();\n    });\n\n    // Set up a mock response for the file validation API\n    await page.route('**/api/validate-file', (route) => {\n      route.continue();\n    });\n\n    // Set up a mock response for the file preview API\n    await page.route('**/api/preview-file', (route) => {\n      route.continue();\n    });\n\n    // Locate and interact with the file input using getByLabel\n    const fileInput = page.getByLabel('Upload File');\n    await fileInput.setInputFiles('tests/fixtures/supported-file.pdf');\n\n    // Verify error message is not displayed\n    const errorMessage = page.getByText('Unsupported file type');\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify file preview is displayed\n    const filePreview = page.getByTestId('file-preview');\n    await expect(filePreview).toBeVisible();\n\n    // Verify file preview contains correct file name\n    const previewText = page.getByText('Supported File.pdf');\n    await expect(previewText).toBeVisible();\n\n    // Verify file upload button is enabled\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await expect(uploadButton).toBeEnabled();\n\n    // Verify file preview has correct file icon\n    const fileIcon = page.getByTestId('file-icon');\n    await expect(fileIcon).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8325,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4416,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 355.274,
+      "feedback_used": ""
+    }
+  ]
+}

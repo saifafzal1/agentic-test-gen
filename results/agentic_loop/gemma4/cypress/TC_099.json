@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_099",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7215,
+  "total_latency_s": 72.51,
+  "final_script": "describe('Out of Stock Message on Add to Cart', () => {\n  beforeEach(() => {\n    cy.visit('/products/unavailable-item');\n  });\n\n  it('should display out of stock message when adding unavailable item to cart', () => {\n    // Verify product page loads\n    cy.get('[data-testid=\"product-name\"]').should('contain', 'Unavailable Item');\n    cy.get('[data-testid=\"price\"]').should('be.visible');\n\n    // Attempt to add to cart\n    cy.get('[data-testid=\"add-to-cart-button\"]').click();\n\n    // Verify out of stock message appears\n    cy.get('[data-testid=\"out-of-stock-message\"]')\n      .should('be.visible')\n      .should('contain', 'Out of Stock');\n\n    // Verify error styling is applied\n    cy.get('[data-testid=\"out-of-stock-message\"]')\n      .should('have.class', 'error-text');\n\n    // Verify cart icon does not update\n    cy.get('[data-testid=\"cart-count\"]').should('contain', '0');\n\n    // Verify user is not redirected\n    cy.url().should('include', '/products/unavailable-item');\n  });\n\n  it('should handle multiple attempts to add out of stock item', () => {\n    // First attempt\n    cy.get('[data-testid=\"add-to-cart-button\"]').click();\n    cy.get('[data-testid=\"out-of-stock-message\"]')\n      .should('be.visible')\n      .should('contain', 'Out of Stock');\n\n    // Second attempt\n    cy.get('[data-testid=\"add-to-cart-button\"]').click();\n    cy.get('[data-testid=\"out-of-stock-message\"]')\n      .should('be.visible')\n      .should('contain', 'Out of Stock');\n\n    // Verify message persists and does not change\n    cy.get('[data-testid=\"out-of-stock-message\"]')\n      .should('have.text', 'This item is currently out of stock');\n\n    // Verify cart count remains 0\n    cy.get('[data-testid=\"cart-count\"]').should('contain', '0');\n\n    // Verify disabled state of button after multiple attempts\n    cy.get('[data-testid=\"add-to-cart-button\"]')\n      .should('be.disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7215,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2717,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.51,
+      "feedback_used": ""
+    }
+  ]
+}

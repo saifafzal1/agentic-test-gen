@@ -1,0 +1,13 @@
+{
+  "id": "TC_030",
+  "category": "form_validation",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see a dropdown of matching options when typing in a search field.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Dropdown Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should display dropdown options when typing in the search field', async ({ page }) => {\n    const searchInput = page.getByRole('textbox', { name: /search/i });\n    await searchInput.fill('test');\n    await expect(page.getByRole('listbox')).toBeVisible();\n  });\n\n  test('should show relevant options in the dropdown', async ({ page }) => {\n    const searchInput = page.getByRole('textbox', { name: /search/i });\n    await searchInput.fill('test');\n    const dropdownOption = page.getByText(/test option 1/i); // Replace with actual option text\n    await expect(dropdownOption).toBeVisible();\n  });\n});",
+  "prompt_tokens": 137,
+  "completion_tokens": 197,
+  "latency_s": 3.88,
+  "timestamp": "2026-06-19T16:45:27.615825"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_074",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7597,
+  "total_latency_s": 118.008,
+  "final_script": "describe('Edit Existing Task Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/tasks');\n  });\n\n  it('should successfully edit an existing task by clicking Edit button', () => {\n    // Intercept the API call for fetching tasks\n    cy.intercept('GET', '/api/tasks').as('getTasks');\n    cy.wait('@getTasks');\n\n    // Verify task list is displayed\n    cy.get('[data-testid=\"task-item-1\"]').should('be.visible');\n    cy.get('[data-testid=\"task-title-1\"]').should('contain', 'Complete project report');\n\n    // Click Edit button for the first task\n    cy.get('[data-testid=\"edit-button-1\"]').click();\n\n    // Verify edit modal appears\n    cy.get('[data-testid=\"edit-modal\"]').should('be.visible');\n    cy.get('[data-testid=\"task-title-input\"]').should('have.value', 'Complete project report');\n    cy.get('[data-testid=\"task-description-textarea\"]').should('contain', 'Write a detailed project report');\n\n    // Update task title and description\n    cy.get('[data-testid=\"task-title-input\"]').clear().type('Finalize project report');\n    cy.get('[data-testid=\"task-description-textarea\"]').clear().type('Review and finalize the project report');\n\n    // Click Save button\n    cy.get('[data-testid=\"save-edit-button\"]').click();\n\n    // Verify API call for updating task\n    cy.intercept('PUT', '/api/tasks/1').as('updateTask');\n    cy.wait('@updateTask');\n\n    // Verify success message\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Task updated successfully');\n\n    // Verify modal closes\n    cy.get('[data-testid=\"edit-modal\"]').should('not.exist');\n\n    // Verify task title is updated in the list\n    cy.get('[data-testid=\"task-title-1\"]').should('contain', 'Finalize project report');\n  });\n\n  it('should handle validation when submitting an empty task title', () => {\n    // Intercept the API call for fetching tasks\n    cy.intercept('GET', '/api/tasks').as('getTasks');\n    cy.wait('@getTasks');\n\n    // Click Edit button for the first task\n    cy.get('[data-testid=\"edit-button-1\"]').click();\n\n    // Verify edit modal appears\n    cy.get('[data-testid=\"edit-modal\"]').should('be.visible');\n\n    // Clear task title input\n    cy.get('[data-testid=\"task-title-input\"]').clear();\n\n    // Attempt to save with empty title\n    cy.get('[data-testid=\"save-edit-button\"]').click();\n\n    // Verify validation error message appears\n    cy.get('[data-testid=\"validation-error\"]').should('be.visible').should('contain', 'Task title is required');\n\n    // Verify task was not updated\n    cy.get('[data-testid=\"task-title-input\"]').should('have.value', '');\n\n    // Verify modal is still open\n    cy.get('[data-testid=\"edit-modal\"]').should('be.visible');\n\n    // Verify no update API call was made\n    cy.get('@updateTask', { timeout: 100 }).should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7597,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.399,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 118.008,
+      "feedback_used": ""
+    }
+  ]
+}

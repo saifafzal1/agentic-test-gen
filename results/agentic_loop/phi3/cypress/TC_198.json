@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_198",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7359,
+  "total_latency_s": 105.28,
+  "final_script": "describe('Search Filter - Exclude Term', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should exclude a term from search results by prefixing with \"-\", and display only relevant results', () => {\n    // Setup: Intercept the search API call\n    cy.intercept('GET', '/api/search*', (req) => {\n      expect(req.url).to.include('/api/search');\n      expect(req.body.query).to.equal('apple');\n    }).as('searchRequest');\n\n    // Act: Perform search with excluded term\n    cy.get('[data-testid=\"search-input\"]').type('apple -red');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@searchRequest');\n\n    // Assert: Excluded term should not appear in results\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"result-item\"]').first().should('contain', 'apple');\n    cy.get('[data-testid=\"result-item\"]').first().should('not.contain', 'red');\n\n    // Assert: Excluded term should be displayed in the search input\n    cy.get('[data-testid=\"search-input\"]').should('contain', '-red');\n  });\n\n  it('should handle multiple excluded terms and display only relevant results', () => {\n    // Setup: Intercept the search API call\n    cy.intercept('GET', '/api/search*', (req) => {\n      expect(req.url).to.include('/api/search');\n      expect(req.body.query).to.equal('banana -yellow -ripe');\n    }).as('searchRequest');\n\n    // Act: Perform search with multiple excluded terms\n    cy.get('[data-testid=\"search-input\"]').type('banana -yellow -ripe');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@searchRequest');\n\n    // Assert: Excluded terms should not appear in results\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"result-item\"]').first().should('contain', 'banana');\n    cy.get('[data-testid=\"result-item\"]').first().should('not.contain', 'yellow');\n    cy.get('[data-testid=\"result-item\"]').first().should('not.contain', 'ripe');\n\n    // Assert: Excluded terms should be displayed in the search input\n    cy.get('[data-testid=\"search-input\"]').should('contain', '-yellow -ripe');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7359,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3198,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 105.28,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_243",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8103,
+  "total_latency_s": 71.957,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Video Player Responsive Resize on Tablet Viewports', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/video-player');\n  });\n\n  test('should resize video player proportionally when viewport width is reduced to tablet size', async ({ page }) => {\n    // Set viewport to tablet size (768px width)\n    await page.setViewportSize({ width: 720, height: 1020 });\n\n    // Verify video player is visible\n    const videoContainer = page.getByRole('region', { name: /video player/i });\n    await expect(videoContainer).toBeVisible();\n\n    // Verify video element exists and has correct aspect ratio class\n    const videoElement = page.getByRole('video');\n    await expect(videoElement).toBeVisible();\n    await expect(videoElement).toHaveClass(/aspect-ratio-16-9/);\n\n    // Verify video container has correct responsive class\n    const responsiveClass = page.getByRole('region', { name: /video player/i }).first().getAttribute('class');\n    expect(responsiveClass).toContain('responsive-video');\n\n    // Verify video width is set to 100% of container\n    const videoWidth = await videoElement.evaluate((el) => el.style.width);\n    expect(videoWidth).toBe('100%');\n\n    // Verify video height is calculated proportionally\n    const videoHeight = await videoElement.evaluate((el) => el.style.height);\n    expect(videoHeight).toBe('auto');\n  });\n\n  test('should maintain proportional aspect ratio when viewport is resized from desktop to tablet', async ({ page }) => {\n    // Set viewport to desktop size (1920px width)\n    await page.setViewportSize({ width: 1920, height: 1080 });\n\n    // Verify video player is visible and has correct aspect ratio\n    const videoContainer = page.getByRole('region', { name: /video player/i });\n    await expect(videoContainer).toBeVisible();\n\n    const videoElement = page.getByRole('video');\n    await expect(videoElement).toBeVisible();\n    await expect(videoElement).toHaveClass(/aspect-ratio-16-9/);\n\n    // Verify video width is 100%\n    const videoWidth = await videoElement.evaluate((el) => el.style.width);\n    expect(videoWidth).toBe('100%');\n\n    // Verify video height is calculated proportionally\n    const videoHeight = await videoElement.evaluate((el) => el.style.height);\n    expect(videoHeight).toBe('auto');\n\n    // Resize viewport to tablet size (768px width)\n    await page.setViewportSize({ width: 720, height: 1000 });\n\n    // Verify video element still exists and has correct aspect ratio\n    await expect(videoElement).toBeVisible();\n    await expect(videoElement).toHaveClass(/aspect-ratio-16-9/);\n\n    // Verify video width is still 100% of the new container width\n    const newVideoWidth = await videoElement.evaluate((el) => el.style.width);\n    expect(newVideoWidth).toBe('100%');\n\n    // Verify video height is still calculated proportionally\n    const newVideoHeight = await videoElement.evaluate((el) => el.style.height);\n    expect(newVideoHeight).toBe('auto');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8103,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4677,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.957,
+      "feedback_used": ""
+    }
+  ]
+}

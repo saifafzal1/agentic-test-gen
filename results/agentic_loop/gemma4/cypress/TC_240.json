@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_240",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7379,
+  "total_latency_s": 184.25,
+  "final_script": "describe('Checkout Form Mobile Vertical Stacking', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should stack checkout form fields vertically on mobile viewport', () => {\n    // Intercept API calls\n    cy.intercept('POST', '/api/checkout').as('checkoutSubmit');\n\n    // Set mobile viewport\n    cy.viewport('iphone-x');\n\n    // Verify form fields are visible\n    cy.get('[data-testid=\"email-input\"]').should('be.visible');\n    cy.get('[data-testid=\"first-name-input\"]').should('be.visible');\n    cy.get('[data-testid=\"last-name-input\"]').should('be.visible');\n    cy.get('[data-testid=\"address-input\"]').should('be.visible');\n    cy.get('[data-testid=\"phone-input\"]').should('be.visible');\n    cy.get('[data-testid=\"card-number-input\"]').should('be.visible');\n    cy.get('[data-testid=\"cvv-input\"]').should('be.visible');\n    cy.get('[data-testid=\"billing-zip-input\"]').should('be.visible');\n    cy.get('[data-testid=\"place-order-button\"]').should('be.visible');\n\n    // Verify vertical stacking by checking element positions\n    cy.get('[data-testid=\"email-input\"]').then(($email) => {\n      const emailTop = $email[0].getBoundingClientRect().top;\n      cy.get('[data-testid=\"first-name-input\"]').then(($firstName) => {\n        const firstNameTop = $firstName[0].getBoundingClientRect().top;\n        expect(firstNameTop).to.be.greaterThan(emailTop);\n      });\n    });\n\n    cy.get('[data-testid=\"first-name-input\"]').then(($firstName) => {\n      const firstNameBottom = $firstName[0].getBoundingClientRect().bottom;\n      cy.get('[data-testid=\"last-name-input\"]').then(($lastName) => {\n        const lastNameTop = $lastName[0].getBoundingClientRect().top;\n        expect(lastNameTop).to.be.greaterThan(firstNameBottom);\n      });\n    });\n\n    // Fill out form\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n    cy.get('[data-testid=\"first-name-input\"]').type('John');\n    cy.get('[data-testid=\"last-name-input\"]').type('Doe');\n    cy.get('[data-testid=\"address-input\"]').type('123 Main St');\n    cy.get('[data-testid=\"phone-input\"]').type('555-123-465');\n    cy.get('[data-testid=\"card-number-input\"]').type('1111111111111111');\n    cy.get('[data-testid=\"cvv-input\"]').type('123');\n    cy.get('[data-testid=\"billing-zip-input\"]').type('12346');\n\n    // Submit form\n    cy.get('[data-testid=\"place-order-button\"]').click();\n    cy.wait('@checkoutSubmit');\n\n    // Verify success message\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Order placed successfully');\n  });\n\n  it('should handle form submission with validation errors on mobile', () => {\n    // Set mobile viewport\n    cy.viewport('iphone-12');\n\n    // Verify form fields are visible\n    cy.get('[data-testid=\"email-input\"]').should('be.visible');\n    cy.get('[data-testid=\"first-name-input\"]').should('be.visible');\n    cy.get('[data-testid=\"last-name-input\"]').should('be.visible');\n    cy.get('[data-testid=\"address-input\"]').should('be.visible');\n    cy.get('[data-testid=\"phone-input\"]').should('be.visible');\n    cy.get('[data-testid=\"card-number-input\"]').should('be.visible');\n    cy.get('[data-testid=\"cvv-input\"]').should('be.visible');\n    cy.get('[data-testid=\"billing-zip-input\"]').should('be.visible');\n    cy.get('[data-testid=\"place-order-button\"]').should('be.visible');\n\n    // Attempt to submit with missing required fields\n    cy.get('[data-testid=\"place-order-button\"]').click();\n\n    // Verify validation error messages appear\n    cy.get('[data-testid=\"email-error\"]').should('be.visible');\n    cy.get('[data-testid=\"email-error\"]').should('contain', 'Email is required');\n    cy.get('[data-testid=\"first-name-error\"]').should('be.visible');\n    cy.get('[data-testid=\"first-name-error\"]').should('contain', 'First name is required');\n    cy.get('[data-testid=\"last-name-error\"]').should('be.visible');\n    cy.get('[data-testid=\"last-name-error\"]').should('contain', 'Last name is required');\n\n    // Verify form is still vertically stacked and not hidden\n    cy.get('[data-testid=\"email-input\"]').should('be.visible');\n    cy.get('[data-testid=\"first-name-input\"]').should('be.visible');\n    cy.get('[data-testid=\"last-name-input\"]').should('be.visible');\n\n    // Verify form is not submitted\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n    cy.get('[data-testid=\"error-summary\"]').should('be.visible');\n    cy.get('[data-testid=\"error-summary\"]').should('contain', 'Please fill out all required fields');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4506,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.2755,
+        "missing_keywords": [],
+        "assertion_count": 26,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.68,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7379,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3264,
+        "missing_keywords": [],
+        "assertion_count": 32,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 111.57,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

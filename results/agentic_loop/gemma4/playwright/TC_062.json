@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_062",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8716,
+  "total_latency_s": 114.166,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Stale Data Invalidation After Form Submission', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should invalidate stale data after successful form submission', async ({ page }) => {\n    // Intercept the initial data fetch\n    await page.route('**/api/data', (route) => {\n      route.continue();\n    });\n\n    // Verify initial stale data is displayed\n    const dataDisplay = page.getByRole('region', { name: /data display/i });\n    await expect(dataDisplay).toBeVisible();\n    const staleValue = page.getByText('Stale Value');\n    await expect(staleValue).toBeVisible();\n\n    // Fill out the form\n    const nameInput = page.getByLabel('Name');\n    await nameInput.fill('John Doe');\n\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('john@example.com');\n\n    // Submit the form\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Wait for API response and data refresh\n    await page.waitForResponse(response =>\n      response.url().includes('/api/data') && response.status() === 200\n    );\n\n    // Verify success message\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify stale data is replaced with fresh data\n    const freshValue = page.getByText('Fresh Value');\n    await expect(freshValue).toBeVisible();\n    await expect(staleValue).not.toBeVisible();\n  });\n\n  test('should handle form submission failure and keep stale data', async ({ page }) => {\n    // Intercept the form submission API\n    await page.route('**/api/submit', (route) => {\n      route.abort('failed');\n    });\n\n    // Fill out the form\n    const nameInput = page.getByLabel('Name');\n    await nameInput.fill('Jane Doe');\n\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('jane@example.com');\n\n    // Submit the form\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Wait for error response\n    await page.waitForResponse(response =>\n      response.url().includes('/api/submit') && response.status() === 500\n    );\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('Submission failed');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify stale data is still visible\n    const dataDisplay = page.getByRole('region', { name: /data display/i });\n    await expect(dataDisplay).toBeVisible();\n    const staleValue = page.getByText('Stale Value');\n    await expect(staleValue).toBeVisible();\n\n    // Verify fresh data is not displayed\n    const freshValue = page.getByText('Fresh Value');\n    await expect(freshValue).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8716,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5719,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 114.166,
+      "feedback_used": ""
+    }
+  ]
+}

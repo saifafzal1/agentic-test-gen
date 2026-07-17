@@ -1,0 +1,13 @@
+{
+  "id": "TC_197",
+  "category": "search_filter",
+  "complexity": "simple",
+  "user_story": "As a user, I want the search input to be focused when I press '/' on the keyboard.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Search Input Focus', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should focus the search input when \"/\" is pressed', () => {\n        cy.get('body').type('/');\n        cy.get('input[type=\"search\"]').should('be.focused');\n    });\n\n    it('should not focus the search input when other keys are pressed', () => {\n        cy.get('body').type('a');\n        cy.get('input[type=\"search\"]').should('not.be.focused');\n    });\n});",
+  "prompt_tokens": 114,
+  "completion_tokens": 120,
+  "latency_s": 1.93,
+  "timestamp": "2026-06-19T16:37:33.141258"
+}

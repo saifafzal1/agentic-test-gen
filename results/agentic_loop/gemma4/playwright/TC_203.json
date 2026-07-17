@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_203",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8538,
+  "total_latency_s": 72.565,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Filter List by Multiple Statuses', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/list');\n  });\n\n  test('should filter list by multiple statuses simultaneously', async ({ page }) => {\n    // Verify list is visible\n    const listContainer = page.getByRole('region', { name: /list/i });\n    await expect(listContainer).toBeVisible();\n\n    // Verify initial items are displayed\n    const initialItems = page.getByRole('listitem');\n    await expect(initialItems).toHaveCount(10);\n\n    // Open filter modal\n    const filterButton = page.getByRole('button', { name: /filter/i });\n    await filterButton.click();\n\n    // Verify filter modal is visible\n    const filterModal = page.getByRole('dialog', { name: /filter options/i });\n    await expect(filterModal).toBeVisible();\n\n    // Select 'Active' status filter\n    const activeStatusCheckbox = page.getByLabel(/active/i);\n    await activeStatusCheckbox.click();\n\n    // Select 'Pending' status filter\n    const pendingStatusCheckbox = page.getByLabel(/pending/i);\n    await pendingStatusCheckbox.click();\n\n    // Verify both checkboxes are checked\n    await expect(activeStatusCheckbox).toBeChecked();\n    await expect(pendingStatusCheckbox).toBeChecked();\n\n    // Apply filters\n    const applyButton = page.getByRole('button', { name: /apply filters/i });\n    await applyButton.click();\n\n    // Verify filter modal is closed\n    await expect(filterModal).not.toBeVisible();\n\n    // Verify list is updated with filtered items\n    const filteredItems = page.getByRole('listitem');\n    await expect(filteredItems).toHaveCount(5);\n\n    // Verify filtered items contain expected statuses\n    const item1 = page.getByRole('listitem').first();\n    const item2 = page.getByRole('listitem').nth(1);\n    const item3 = page.getByRole('listitem').nth(2);\n\n    const statusBadge1 = page.getByText('Active');\n    const statusBadge2 = page.getByText('Pending');\n    const statusBadge3 = page.getByText('Active');\n\n    await expect(statusBadge1).toBeVisible();\n    await expect(statusBadge2).toBeVisible();\n    await expect(statusBadge3).toBeVisible();\n  });\n\n  test('should handle no results when filtering with multiple statuses', async ({ page }) => {\n    // Open filter modal\n    const filterButton = page.getByRole('button', { name: /filter/i });\n    await filterButton.click();\n\n    // Select 'Archived' status filter\n    const archivedStatusCheckbox = page.getByLabel(/archived/i);\n    await archivedStatusCheckbox.click();\n\n    // Select 'Deleted' status filter\n    const deletedStatusCheckbox = page.getByLabel(/deleted/i);\n    await deletedStatusCheckbox.click();\n\n    // Apply filters\n    const applyButton = page.getByRole('button', { name: /apply filters/i });\n    await applyButton.click();\n\n    // Verify no results message is displayed\n    const noResultsMessage = page.getByText(/no results found/i);\n    await expect(noResultsMessage).toBeVisible();\n\n    // Verify list container is empty\n    const listContainer = page.getByRole('region', { name: /list/i });\n    const filteredItems = page.getByRole('listitem');\n    await expect(filteredItems).toHaveCount(0);\n\n    // Verify clear filters button is visible\n    const clearButton = page.getByRole('button', { name: /clear filters/i });\n    await expect(clearButton).toBeVisible();\n\n    // Clear filters\n    await clearButton.click();\n\n    // Verify filter modal is visible again\n    await expect(page.getByRole('dialog', { name: /filter options/i })).toBeVisible();\n\n    // Verify no status checkboxes are checked\n    await expect(archivedStatusCheckbox).not.toBeChecked();\n    await expect(deletedStatusCheckbox).not.toBeChecked();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8538,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5128,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.565,
+      "feedback_used": ""
+    }
+  ]
+}

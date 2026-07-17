@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_201",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7308,
+  "total_latency_s": 375.272,
+  "final_script": "describe('Search Tolerance for Minor Spelling Mistakes', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should find results with minor spelling mistakes', () => {\n    // Intercept the search API call\n    cy.intercept('GET', '/api/search*', (req) => {\n      expect(req.url).to.include('search');\n    }).as('searchRequest');\n\n    // Perform search with minor spelling mistake\n    cy.get('[data-testid=\"search-input\"]').type('appl');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@searchRequest');\n\n    // Verify results are displayed\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify first result is correct\n    cy.get('[data-testid=\"result-item\"]').first().should('contain', 'Apple');\n\n    // Verify search result contains correct title\n    cy.get('[data-testid=\"result-item\"]').first().should('have.css', 'title', 'Apple Inc.');\n  });\n\n  it('should handle multiple minor spelling mistakes and still return results', () => {\n    // Intercept the search API call\n    cy.intercept('GET', '/api/search*', (req) => {\n      expect(req.url).to.include('search');\n    }).as('searchRequest');\n\n    // Perform search with multiple minor spelling mistakes\n    cy.get('[data-testid=\"search-input\"]').type('aplpe');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@searchRequest');\n\n    // Verify results are displayed\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify first result is correct\n    cy.get('[data-testid=\"result-item\"]').first().should('contain', 'Apple');\n\n    // Verify search result contains correct title\n    cy.get('[data-testid=\"result-item\"]').first().should('have.css', 'title', 'Apple Inc.');\n\n    // Verify other results are also displayed\n    cy.get('[data-testid=\"result-item\"]').last().should('contain', 'Apple');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7308,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3028,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 375.272,
+      "feedback_used": ""
+    }
+  ]
+}

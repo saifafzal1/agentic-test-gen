@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_239",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8088,
+  "total_latency_s": 43.233,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mobile Landscape Orientation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should display app correctly in landscape orientation on mobile', async ({ page }) => {\n    // Set viewport to mobile landscape\n    await page.setViewportSize({ width: 375, height: 667 });\n\n    // Verify app container is visible\n    const appContainer = page.getByRole('main');\n    await expect(appContainer).toBeVisible();\n\n    // Verify navigation menu is visible and accessible\n    const navMenu = page.getByRole('navigation');\n    await expect(navMenu).toBeVisible();\n\n    // Verify logo is visible and correctly positioned\n    const logo = page.getByRole('img', { name: /logo/i });\n    await expect(logo).toBeVisible();\n\n    // Verify user profile section is visible\n    const userProfile = page.getByRole('region', { name: /user profile/i });\n    await expect(userProfile).toBeVisible();\n\n    // Verify search bar is visible and functional\n    const searchBar = page.getByRole('search');\n    await expect(searchBar).toBeVisible();\n\n    // Verify search results are visible\n    const searchResults = page.getByRole('region', { name: /search results/i });\n    await expect(searchResults).toBeVisible();\n\n    // Verify footer is visible\n    const footer = page.getByRole('contentinfo');\n    await expect(footer).toBeVisible();\n\n    // Verify app is responsive and not overflowing\n    await expect(page).toHaveResponsiveDimensions();\n  });\n\n  test('should handle orientation change to portrait on mobile', async ({ page }) => {\n    // Set viewport to mobile portrait\n    await page.setViewportSize({ width: 375, height: 600 });\n\n    // Verify app container is still visible\n    const appContainer = page.getByRole('main');\n    await expect(appContainer).toBeVisible();\n\n    // Verify navigation menu is still visible\n    const navMenu = page.getByRole('navigation');\n    await expect(navMenu).toBeVisible();\n\n    // Verify logo is still visible and correctly positioned\n    const logo = page.getByRole('img', { name: /logo/i });\n    await expect(logo).toBeVisible();\n\n    // Verify user profile section is still visible\n    const userProfile = page.getByRole('region', { name: /user profile/i });\n    await expect(userProfile).toBeVisible();\n\n    // Verify search bar is still visible and functional\n    const searchBar = page.getByRole('search');\n    await expect(searchBar).toBeVisible();\n\n    // Verify search results are still visible\n    const searchResults = page.getByRole('region', { name: /search results/i });\n    await expect(searchResults).toBeVisible();\n\n    // Verify footer is still visible\n    const footer = page.getByRole('contentinfo');\n    await expect(footer).toBeVisible();\n\n    // Verify app is responsive and not overflowing\n    await expect(page).toHaveResponsiveDimensions();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8088,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4628,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 43.233,
+      "feedback_used": ""
+    }
+  ]
+}

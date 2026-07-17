@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_284",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8507,
+  "total_latency_s": 72.361,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Account Deletion - Password Confirmation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/account/settings');\n  });\n\n  test('should successfully delete account after confirming password', async ({ page }) => {\n    // Verify account settings page is visible\n    const settingsHeader = page.getByRole('heading', { name: /account settings/i });\n    await expect(settingsHeader).toBeVisible();\n\n    // Click delete account button\n    const deleteButton = page.getByRole('button', { name: /delete account/i });\n    await deleteButton.click();\n\n    // Verify confirmation modal appears\n    const confirmModal = page.getByRole('dialog', { name: /confirm account deletion/i });\n    await expect(confirmModal).toBeVisible();\n\n    // Enter password in password input field\n    const passwordInput = page.getByLabel(/password/i);\n    await passwordInput.fill('ValidPassword123');\n\n    // Click confirm delete button\n    const confirmDeleteButton = page.getByRole('button', { name: /confirm deletion/i });\n    await confirmDeleteButton.click();\n\n    // Verify success message\n    const successMessage = page.getByText(/account deleted successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify user is redirected to login page\n    await expect(page).toHaveURL(/.*login/);\n  });\n\n  test('should prevent account deletion when password does not match', async ({ page }) => {\n    // Verify account settings page is visible\n    const settingsHeader = page.getByRole('heading', { name: /account settings/i });\n    await expect(settingsHeader).toBeVisible();\n\n    // Click delete account button\n    const deleteButton = page.getByRole('button', { name: /delete account/i });\n    await deleteButton.click();\n\n    // Verify confirmation modal appears\n    const confirmModal = page.getByRole('dialog', { name: /confirm account deletion/i });\n    await expect(confirmModal).toBeVisible();\n\n    // Enter incorrect password\n    const passwordInput = page.getByLabel(/password/i);\n    await passwordInput.fill('WrongPassword123');\n\n    // Click confirm delete button\n    const confirmDeleteButton = page.getByRole('button', { name: /confirm deletion/i });\n    await confirmDeleteButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/incorrect password/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify user remains on settings page\n    await expect(settingsHeader).toBeVisible();\n    await expect(page).toHaveURL(/.*account\\/settings/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8507,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5023,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.361,
+      "feedback_used": ""
+    }
+  ]
+}

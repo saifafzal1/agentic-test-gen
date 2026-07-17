@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_235",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7567,
+  "total_latency_s": 360.712,
+  "final_script": "describe('Bottom Sheet Dropdown Replacement on Mobile', () => {\n  beforeEach(() => {\n    cy.visit('/dropdown-page');\n  });\n\n  it('should display bottom sheet when mobile view is detected and replace dropdown with bottom sheet', () => {\n    // Set viewport to mobile dimensions\n    cy.viewport('iphone-x');\n\n    // Verify dropdown is visible\n    cy.get('[data-testid=\"dropdown-menu\"]').should('be.visible');\n\n    // Verify dropdown content is present\n    cy.get('[data-testid=\"dropdown-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify dropdown has a close button\n    cy.get('[data-testid=\"dropdown-close-btn\"]').should('be.visible');\n\n    // Verify bottom sheet container is hidden\n    cy.get('[data-testid=\"bottom-sheet-container\"]').should('not.exist');\n\n    // Intercept API call to fetch dropdown data\n    cy.intercept('GET', '/api/dropdown-data').as('fetchDropdownData');\n\n    // Trigger dropdown open\n    cy.get('[data-testid=\"dropdown-trigger\"]').click();\n\n    // Wait for API call\n    cy.wait('@fetchDropdownData');\n\n    // Verify bottom sheet container is now visible\n    cy.get('[data-testid=\"bottom-sheet-container\"]').should('be.visible');\n\n    // Verify bottom sheet has correct content\n    cy.get('[data-testid=\"bottom-sheet-content\"]').should('contain', 'Dropdown items');\n\n    // Verify dropdown is hidden\n    cy.get('[data-testid=\"dropdown-menu\"]').should('not.exist');\n\n    // Verify close button is visible\n    cy.get('[data-testid=\"dropdown-close-btn\"]').should('be.visible');\n\n    // Verify bottom sheet has close button\n    cy.get('[data-testid=\"bottom-sheet-close-btn\"]').should('be.visible');\n\n    // Verify bottom sheet is positioned correctly\n    cy.get('[data-testid=\"bottom-sheet-container\"]').should('have.css', 'bottom', '0');\n\n    // Verify bottom sheet is scrollable\n    cy.get('[data-testid=\"bottom-sheet-content\"]').should('be.scrollable');\n\n    // Verify dropdown menu is hidden when bottom sheet is open\n    cy.get('[data-testid=\"dropdown-menu\"]').should('not.exist');\n  });\n\n  it('should close bottom sheet when close button is clicked on mobile', () => {\n    // Set viewport to mobile dimensions\n    cy.viewport('iphone-x');\n\n    // Open bottom sheet\n    cy.get('[data-testid=\"dropdown-trigger\"]').click();\n\n    // Wait for API call\n    cy.wait('@fetchDropdownData');\n\n    // Verify bottom sheet is open\n    cy.get('[data-testid=\"bottom-sheet-container\"]').should('be.visible');\n\n    // Verify close button is visible\n    cy.get('[data-testid=\"bottom-sheet-close-btn\"]').should('be.visible');\n\n    // Click close button\n    cy.get('[data-testid=\"bottom-sheet-close-btn\"]').click();\n\n    // Verify bottom sheet is closed\n    cy.get('[data-testid=\"bottom-sheet-container\"]').should('not.exist');\n\n    // Verify dropdown menu is visible again\n    cy.get('[data-testid=\"dropdown-menu\"]').should('be.visible');\n\n    // Verify dropdown content is restored\n    cy.get('[data-testid=\"dropdown-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify dropdown close button is visible\n    cy.get('[data-testid=\"dropdown-close-btn\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7567,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.389,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 360.712,
+      "feedback_used": ""
+    }
+  ]
+}

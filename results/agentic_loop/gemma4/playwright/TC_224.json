@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_224",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8001,
+  "total_latency_s": 71.991,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Interactive Toast Notifications - Screen Reader Announcement', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/toast-notifications');\n  });\n\n  test('should announce toast notification content to screen readers when displayed', async ({ page }) => {\n    // Verify toast container is visible\n    const toastContainer = page.getByRole('region', { name: /toast container/i });\n    await expect(toastContainer).toBeVisible();\n\n    // Click button to trigger toast\n    const triggerButton = page.getByRole('button', { name: /show toast/i });\n    await triggerButton.click();\n\n    // Wait for toast to appear\n    const toast = page.getByRole('alert');\n    await expect(toast).toBeVisible();\n\n    // Verify toast content is announced\n    const toastMessage = page.getByText(/success/i);\n    await expect(toastMessage).toBeVisible();\n\n    // Verify toast has appropriate aria-live region\n    const liveRegion = page.locator('[aria-live=\"polite\"]');\n    await expect(liveRegion).toBeVisible();\n\n    // Verify toast has role=\"alert\"\n    await expect(toast).toHaveAttribute('role', 'alert');\n\n    // Verify toast has appropriate aria-describedby\n    const toastId = await toast.getAttribute('id');\n    const describedBy = page.locator(`[aria-describedby=\"${toastId}\"]`);\n    await expect(describedBy).toBeVisible();\n  });\n\n  test('should dismiss toast notification and announce dismissal to screen readers', async ({ page }) => {\n    // Click button to trigger toast\n    const triggerButton = page.getByRole('button', { name: /show toast/i });\n    await triggerButton.click();\n\n    // Wait for toast to appear\n    const toast = page.getByRole('alert');\n    await expect(toast).toBeVisible();\n\n    // Verify toast content is visible\n    const toastMessage = page.getByText(/success/i);\n    await expect(toastMessage).toBeVisible();\n\n    // Click close button on toast\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n\n    // Wait for toast to dismiss\n    await page.waitForTimeout(500);\n\n    // Verify toast is no longer visible\n    await expect(toast).not.toBeVisible();\n\n    // Verify toast container is still present\n    const toastContainer = page.getByRole('region', { name: /toast container/i });\n    await expect(toastContainer).toBeVisible();\n\n    // Verify aria-live region is still present\n    const liveRegion = page.locator('[aria-live=\"polite\"]');\n    await expect(liveRegion).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8001,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4335,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.991,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_047",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want a skip-to-content link for accessibility.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Skip to content link accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://yourwebsite.com');\n  });\n\n  test('should be visible on the page', async ({ page }) => {\n    const skipLink = page.getByText('Skip to content');\n    await expect(skipLink).toBeVisible();\n  });\n\n  test('should navigate to main content when clicked', async ({ page }) => {\n    const skipLink = page.getByText('Skip to content');\n    await skipLink.click();\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeVisible();\n    await expect(page.url()).toBe('https://yourwebsite.com#main-content'); // Adjust the URL as necessary\n  });\n});",
+  "prompt_tokens": 130,
+  "completion_tokens": 176,
+  "latency_s": 3.09,
+  "timestamp": "2026-06-19T16:46:37.928943"
+}

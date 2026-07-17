@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_071",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8458,
+  "total_latency_s": 80.683,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Conflict Error Message on Stale Record Save', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should display conflict error when saving a stale record', async ({ page }) => {\n    // Setup: intercept the initial GET request\n    await page.route('**/api/records/123', route => {\n      route.continue();\n    });\n\n    // Setup: intercept the PUT request with conflict response\n    await page.route('**/api/records/123', route => {\n      route.abort('failed');\n      route.continue();\n    });\n\n    // Get the record form using getByRole\n    const recordForm = page.getByRole('form', { name: /record form/i });\n    await expect(recordForm).toBeVisible();\n\n    // Fill in form fields using getByLabel\n    const titleInput = page.getByLabel(/title/i);\n    await titleInput.fill('Updated Title');\n\n    const descriptionInput = page.getByLabel(/description/i);\n    await descriptionInput.fill('Updated description');\n\n    // Get the save button using getByRole\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await expect(saveButton).toBeVisible();\n\n    // Click save button\n    await saveButton.click();\n\n    // Wait for error message to appear\n    const errorMessage = page.getByText(/conflict error: record has been modified by another user/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message styling\n    await expect(errorMessage).toHaveClass(/error-message/);\n\n    // Verify form is still visible\n    await expect(recordForm).toBeVisible();\n  });\n\n  test('should allow user to retry save after conflict error', async ({ page }) => {\n    // Setup: intercept the initial GET request\n    await page.route('**/api/records/123', route => {\n      route.continue();\n    });\n\n    // Setup: intercept the first PUT request with conflict response\n    let attempt = 0;\n    await page.route('**/api/records/123', route => {\n      attempt++;\n      if (attempt === 1) {\n        route.abort('failed');\n        route.continue();\n      } else {\n        route.continue();\n      }\n    });\n\n    // Get the record form using getByRole\n    const recordForm = page.getByRole('form', { name: /record form/i });\n    await expect(recordForm).toBeVisible();\n\n    // Fill in form fields using getByLabel\n    const titleInput = page.getByLabel(/title/i);\n    await titleInput.fill('New Title');\n\n    const descriptionInput = page.getByLabel(/description/i);\n    await descriptionInput.fill('New description');\n\n    // Get the save button using getByRole\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await expect(saveButton).toBeVisible();\n\n    // Click save button (first attempt - should fail)\n    await saveButton.click();\n\n    // Verify conflict error message appears\n    const errorMessage = page.getByText(/conflict error: record has been modified by another user/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify retry button is visible\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Click retry button\n    await retryButton.click();\n\n    // Wait for retry request to complete\n    await page.waitForResponse(response =>\n      response.url().includes('/api/records/123') && response.status() === 200\n    );\n\n    // Verify success message appears\n    const successMessage = page.getByText(/record saved successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify error message is no longer visible\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8458,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4858,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 80.683,
+      "feedback_used": ""
+    }
+  ]
+}

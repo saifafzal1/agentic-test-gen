@@ -1,0 +1,59 @@
+{
+  "tc_id": "TC_091",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 3,
+  "best_score": 0.8082,
+  "total_latency_s": 1082.687,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Field Validation Error Display', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should display specific validation error for each invalid field', async ({ page }) => {\n    // Intercept the API call to get form data\n    await page.route('**/api/form-data', (route) => {\n      route.abort('API call failed');\n    });\n\n    // Fill in the first field with invalid data\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('invalid-email');\n\n    // Verify error message appears for email field\n    const emailError = page.getByText('Please enter a valid email address');\n    await expect(emailError).toBeVisible();\n\n    // Fill in the second field with invalid data\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('short');\n\n    // Verify error message appears for password field\n    const passwordError = page.getByText('Password must be at least 8 characters long');\n    await expect(passwordError).toBeVisible();\n\n    // Fill in the third field with valid data\n    const confirmPasswordInput = page.getByLabel('Confirm Password');\n    await confirmPasswordInput.fill('longpassword123');\n\n    // Verify no error messages appear for valid fields\n    const emailError = page.getByText('Please enter a valid email address');\n    await expect(emailError).not.toBeVisible();\n\n    const passwordError = page.getByText('Password must be at least 8 characters long');\n    await expect(passwordError).not.toBeVisible();\n\n    // Fill in the fourth field with invalid data\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('');\n\n    // Verify error message appears for name field\n    const nameError = page.getByText('Name is required');\n    await expect(nameError).toBeVisible();\n\n    // Fill in the fifth field with valid data\n    const phoneInput = page.getByLabel('Phone Number');\n    await phoneInput.fill('123-456-7890');\n\n    // Verify no error messages appear for valid fields\n    const nameError = page.getByText('Name is required');\n    await expect(nameError).not.toBeVisible();\n\n    // Submit the form\n    const submitButton = page.getByRole('button', { name: 'Submit' });\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify error messages are cleared\n    const emailError = page.getByText('Please enter a valid email address');\n    await expect(emailError).not.toBeVisible();\n\n    const passwordError = page.getByText('Password must be at least 8 characters long');\n    await expect(passwordError).not.toBeVisible();\n\n    const nameError = page.getByText('Name is required');\n    await expect(nameError).not.toBeVisible();\n  });\n\n  test('should handle multiple validation errors and display all at once', async ({ page }) => {\n    // Intercept the API call to get form data\n    await page.route('**/api/form-data', (route) => {\n      route.abort('API call failed');\n    });\n\n    // Fill in all fields with invalid data\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('invalid-email');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('short');\n\n    const confirmPasswordInput = page.getByLabel('Confirm Password');\n    await confirmPasswordInput.fill('short');\n\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('');\n\n    const phoneInput = page.getByLabel('Phone Number');\n    await phoneInput.fill('');\n\n    // Verify all error messages appear\n    const emailError = page.getByText('Please enter a valid email address');\n    await expect(emailError).toBeVisible();\n\n    const passwordError = page.getByText('Password must be at least 8 characters long');\n    await expect(passwordError).toBeVisible();\n\n    const nameError = page.getByText('Name is required');\n    await expect(nameError).toBeVisible();\n\n    // Verify success message does not appear\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).not.toBeVisible();\n\n    // Submit the form\n    const submitButton = page.getByRole('button', { name: 'Submit' });\n    await submitButton.click();\n\n    // Verify error messages are cleared\n    const emailError = page.getByText('Please enter a valid email address');\n    await expect(emailError).not.toBeVisible();\n\n    const passwordError = page.getByText('Password must be at least 8 characters long');\n    await expect(passwordError).not.toBeVisible();\n\n    const nameError = page.getByText('Name is required');\n    await expect(nameError).not.toBeVisible();\n\n    // Verify success message does not appear\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4822,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3408,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 59.301,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.1018,
+        "syntax": 0.1,
+        "assertion": 0.0,
+        "rouge_l": 0.2059,
+        "missing_keywords": [
+          "expect("
+        ],
+        "assertion_count": 0,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2",
+        "complete": false
+      },
+      "latency_s": 522.993,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.8082,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3607,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 500.393,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2"
+    }
+  ]
+}

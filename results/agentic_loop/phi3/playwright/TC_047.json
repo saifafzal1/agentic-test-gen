@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_047",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8432,
+  "total_latency_s": 315.129,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Skip-to-Content Link Accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should navigate to main content when skip-to-content link is clicked', async ({ page }) => {\n    // Verify skip-to-content link is visible\n    const skipLink = page.getByRole('link', { name: /skip to main content/i });\n    await expect(skipLink).toBeVisible();\n\n    // Verify main content is not visible initially\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).not.toBeVisible();\n\n    // Click the skip-to-content link\n    await skipLink.click();\n\n    // Verify main content is now visible\n    await expect(mainContent).toBeVisible();\n\n    // Verify main content contains expected content\n    const mainHeading = page.getByRole('heading', { name: /main content/i });\n    await expect(mainHeading).toBeVisible();\n\n    const mainParagraph = page.getByText(/welcome to our site/i);\n    await expect(mainParagraph).toBeVisible();\n  });\n\n  test('should not navigate to main content when skip-to-content link is disabled', async ({ page }) => {\n    // Verify skip-to-content link is visible\n    const skipLink = page.getByRole('link', { name: /skip to main content/i });\n    await expect(skipLink).toBeVisible();\n\n    // Verify main content is not visible initially\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).not.toBeVisible();\n\n    // Verify skip-to-content link is disabled\n    await expect(skipLink).toHaveAttribute('aria-disabled', 'true');\n\n    // Verify main content remains hidden\n    await expect(mainContent).not.toBeVisible();\n\n    // Verify skip-to-content link is still visible\n    await expect(skipLink).toBeVisible();\n\n    // Verify skip-to-content link is still disabled\n    await expect(skipLink).toHaveAttribute('aria-disabled', 'true');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8432,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5772,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 315.129,
+      "feedback_used": ""
+    }
+  ]
+}

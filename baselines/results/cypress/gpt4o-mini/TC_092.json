@@ -1,0 +1,13 @@
+{
+  "id": "TC_092",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a user, I want an error to clear when I correct the invalid input.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Error State Handling', () => {\n    beforeEach(() => {\n        cy.visit('/your-page-url'); // Replace with your actual page URL\n    });\n\n    it('should clear the error message when the user corrects the invalid input', () => {\n        cy.get('input#your-input-id') // Replace with your actual input selector\n            .type('invalid input')\n            .blur(); // Simulate losing focus to trigger validation\n        cy.get('.error-message') // Replace with your actual error message selector\n            .should('be.visible')\n            .and('contain', 'Invalid input'); // Replace with your actual error message text\n\n        cy.get('input#your-input-id')\n            .clear()\n            .type('valid input') // Replace with valid input\n            .blur(); // Trigger validation again\n        cy.get('.error-message') // Replace with your actual error message selector\n            .should('not.exist'); // Ensure the error message is cleared\n    });\n\n    it('should not clear the error message if the input is still invalid', () => {\n        cy.get('input#your-input-id') // Replace with your actual input selector\n            .type('invalid input')\n            .blur(); // Trigger validation\n        cy.get('.error-message') // Replace with your actual error message selector\n            .should('be.visible');\n\n        cy.get('input#your-input-id')\n            .clear()\n            .type('another invalid input') // Still invalid input\n            .blur(); // Trigger validation again\n        cy.get('.error-message') // Replace with your actual error message selector\n            .should('be.visible'); // Ensure the error message remains\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 346,
+  "latency_s": 5.36,
+  "timestamp": "2026-06-19T16:31:17.330657"
+}

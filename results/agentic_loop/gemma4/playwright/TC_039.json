@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_039",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8072,
+  "total_latency_s": 185.046,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Navigation Menu Active Item Highlighting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/navigation');\n  });\n\n  test('should highlight the active menu item when navigating to a page', async ({ page }) => {\n    // Verify navigation bar is visible\n    const navBar = page.getByRole('navigation');\n    await expect(navBar).toBeVisible();\n\n    // Verify initial active state (Home should be highlighted)\n    const homeLink = page.getByRole('link', { name: 'Home' });\n    await expect(homeLink).toHaveClass(/active-menu-item/);\n\n    // Verify other links are not highlighted\n    const aboutLink = page.getByRole('link', { name: 'About' });\n    await expect(aboutLink).not.toHaveClass(/active-menu-item/);\n\n    // Click on About link\n    await aboutLink.click();\n\n    // Wait for navigation to complete\n    await page.waitForURL(/.*\\/about/);\n\n    // Verify About link is now highlighted\n    await expect(aboutLink).toHaveClass(/active-menu-item/);\n\n    // Verify Home link is no longer highlighted\n    await expect(homeLink).not.toHaveClass(/active-menu-item/);\n\n    // Verify page content reflects About section\n    const aboutContent = page.getByText('About Us');\n    await expect(aboutContent).toBeVisible();\n  });\n\n  test('should remove highlight when navigating back to a previously active page', async ({ page }) => {\n    // Navigate to About page first\n    const aboutLink = page.getByRole('link', { name: 'About' });\n    await aboutLink.click();\n    await page.waitForURL(/.*\\/about/);\n\n    // Verify About link is highlighted\n    await expect(aboutLink).toHaveClass(/active-menu-item/);\n\n    // Navigate to Contact page\n    const contactLink = page.getByRole('link', { name: 'Contact' });\n    await contactLink.click();\n    await page.waitForURL(/.*\\/contact/);\n\n    // Verify Contact link is highlighted\n    await expect(contactLink).toHaveClass(/active-menu-item/);\n\n    // Verify About link is no longer highlighted\n    await expect(aboutLink).not.toHaveClass(/active-menu-item/);\n\n    // Navigate back to About page\n    await aboutLink.click();\n    await page.waitForURL(/.*\\/about/);\n\n    // Verify About link is highlighted again\n    await expect(aboutLink).toHaveClass(/active-menu-item/);\n\n    // Verify Contact link is no longer highlighted\n    await expect(contactLink).not.toHaveClass(/active-menu-item/);\n\n    // Verify page content reflects About section\n    const aboutContent = page.getByText('About Us');\n    await expect(aboutContent).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5195,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4851,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 71.572,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8072,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4574,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 113.474,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

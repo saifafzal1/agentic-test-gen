@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_140",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.827,
+  "total_latency_s": 73.443,
+  "final_script": "describe('Popover Toggle Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/popover-page');\n  });\n\n  it('should toggle popover on button click', () => {\n    // Verify popover is initially closed\n    cy.get('[data-testid=\"popover-content\"]').should('not.be.visible');\n    cy.get('[data-testid=\"popover-button\"]').should('be.visible');\n\n    // Click the popover button to open it\n    cy.get('[data-testid=\"popover-button\"]').click();\n\n    // Verify popover is now visible\n    cy.get('[data-testid=\"popover-content\"]').should('be.visible');\n    cy.get('[data-testid=\"popover-title\"]').should('contain', 'Popover Content');\n\n    // Click the popover button again to close it\n    cy.get('[data-testid=\"popover-button\"]').click();\n\n    // Verify popover is now closed\n    cy.get('[data-testid=\"popover-content\"]').should('not.be.visible');\n  });\n\n  it('should close popover when clicking outside', () => {\n    // Open the popover\n    cy.get('[data-testid=\"popover-button\"]').click();\n    cy.get('[data-testid=\"popover-content\"]').should('be.visible');\n\n    // Click outside the popover area\n    cy.get('[data-testid=\"popover-button\"]').click();\n\n    // Verify popover is closed\n    cy.get('[data-testid=\"popover-content\"]').should('not.be.visible');\n\n    // Open popover again\n    cy.get('[data-testid=\"popover-button\"]').click();\n    cy.get('[data-testid=\"popover-content\"]').should('be.visible');\n\n    // Click outside again to close\n    cy.get('[data-testid=\"popover-button\"]').click();\n    cy.get('[data-testid=\"popover-content\"]').should('not.be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.827,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.6234,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.443,
+      "feedback_used": ""
+    }
+  ]
+}

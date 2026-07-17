@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_268",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8002,
+  "total_latency_s": 410.078,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notifications Filter by Type', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should filter notifications by type (info, warning, error) and display only matching notifications', async ({ page }) => {\n    // Verify initial notification list\n    const notificationList = page.getByRole('region', { name: /notifications/i });\n    await expect(notificationList).toBeVisible();\n\n    const notificationItems = page.locator('[data-testid=\"notification-item\"]');\n    await expect(notificationItems).toHaveCount(3);\n\n    // Verify all notifications are visible\n    const notificationCount = await notificationItems.count();\n    expect(notificationCount).toBeGreaterThan(0);\n\n    // Click filter button and select 'Info' type\n    const filterButton = page.getByRole('button', { name: /filter notifications/i });\n    await filterButton.click();\n\n    const infoFilter = page.getByRole('button', { name: /info/i });\n    await infoFilter.click();\n\n    // Verify only info notifications are visible\n    const infoNotifications = page.locator('[data-testid=\"notification-item\"][data-type=\"info\"]');\n    await expect(infoNotifications).toHaveCount(1);\n\n    // Verify warning notifications are not visible\n    const warningNotifications = page.locator('[data-testid=\"notification-item\"][data-type=\"warning\"]');\n    await expect(warningNotifications).toHaveCount(0);\n\n    // Verify error notifications are not visible\n    const errorNotifications = page.locator('[data-testid=\"notification-item\"][data-type=\"error\"]');\n    await expect(errorNotifications).toHaveCount(0);\n\n    // Verify notification list has correct count after filtering\n    const filteredNotificationCount = await notificationItems.count();\n    expect(filteredNotificationCount).toBe(1);\n\n    // Verify notification list contains correct text\n    const filteredNotificationText = await notificationItems.first().textContent();\n    expect(filteredNotificationText).toContain('Info');\n  });\n\n  test('should handle empty notification list after filtering', async ({ page }) => {\n    // Verify initial notification list\n    const notificationList = page.getByRole('region', { name: /notifications/i });\n    await expect(notificationList).toBeVisible();\n\n    // Verify notification items are visible\n    const notificationItems = page.locator('[data-testid=\"notification-item\"]');\n    await expect(notificationItems).toHaveCount(3);\n\n    // Click filter button and select 'Error' type\n    const filterButton = page.getByRole('button', { name: /filter notifications/i });\n    await filterButton.click();\n\n    const errorFilter = page.getByRole('button', { name: /error/i });\n    await errorFilter.click();\n\n    // Verify no error notifications are visible\n    const errorNotifications = page.locator('[data-testid=\"notification-item\"][data-type=\"error\"]');\n    await expect(errorNotifications).toHaveCount(0);\n\n    // Verify notification list is empty\n    const notificationCount = await notificationItems.count();\n    expect(notificationCount).toBe(0);\n\n    // Verify notification list has no text\n    const notificationText = await notificationItems.first().textContent();\n    expect(notificationText).toBe('');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8002,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4339,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 410.078,
+      "feedback_used": ""
+    }
+  ]
+}

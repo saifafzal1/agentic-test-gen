@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_198",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7544,
+  "total_latency_s": 72.959,
+  "final_script": "describe('Search Term Exclusion by Prefixing with \"-\"', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should exclude a search term when prefixed with \"-\" and return relevant results', () => {\n    // Intercept the search API call\n    cy.intercept('GET', '/api/search*').as('searchRequest');\n\n    // Perform search with exclusion\n    cy.get('[data-testid=\"search-input\"]').type('laptop -office');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for the search API call\n    cy.wait('@searchRequest');\n\n    // Verify results are displayed\n    cy.get('[data-testid=\"search-results-container\"]').should('be.visible');\n\n    // Verify results contain \"laptop\" but not \"office\"\n    cy.get('[data-testid=\"search-result-item\"]').should('contain', 'laptop');\n    cy.get('[data-testid=\"search-result-item\"]').should('not.contain', 'office');\n\n    // Verify the exclusion term is correctly processed\n    cy.get('[data-testid=\"search-term-display\"]').should('contain', 'laptop');\n    cy.get('[data-testid=\"search-term-display\"]').should('contain', '-office');\n\n    // Verify results are returned\n    cy.get('[data-testid=\"result-count\"]').should('contain', '1');\n  });\n\n  it('should handle multiple excluded terms and return no results when all terms are excluded', () => {\n    // Intercept the search API call\n    cy.intercept('GET', '/api/search*').as('searchRequest');\n\n    // Perform search with multiple exclusions\n    cy.get('[data-testid=\"search-input\"]').type('laptop -office -desk');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for the search API call\n    cy.wait('@searchRequest');\n\n    // Verify no results are displayed\n    cy.get('[data-testid=\"search-results-container\"]').should('be.visible');\n    cy.get('[data-testid=\"no-results-message\"]').should('be.visible');\n    cy.get('[data-testid=\"no-results-message\"]').should('contain', 'No results found');\n\n    // Verify the exclusion terms are correctly processed\n    cy.get('[data-testid=\"search-term-display\"]').should('contain', 'laptop');\n    cy.get('[data-testid=\"search-term-display\"]').should('contain', '-office');\n    cy.get('[data-testid=\"search-term-display\"]').should('contain', '-desk');\n\n    // Verify result count is zero\n    cy.get('[data-testid=\"result-count\"]').should('contain', '0');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7544,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3812,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.959,
+      "feedback_used": ""
+    }
+  ]
+}

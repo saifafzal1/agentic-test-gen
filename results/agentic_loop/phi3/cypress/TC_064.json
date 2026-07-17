@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_064",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7416,
+  "total_latency_s": 39.85,
+  "final_script": "describe('Search Results Update with Debounce', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should debounce search results and update as user types', () => {\n    // Setup: intercept the search API call\n    cy.intercept('GET', '/api/search*', (req) => {\n      expect(req.url).to.include('/api/search');\n      expect(req.body.query).to.equal('');\n    }).as('searchRequest');\n\n    // Verify initial state\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n    cy.get('[data-testid=\"search-results\"]').should('contain', 'No results found');\n\n    // Type a query\n    cy.get('[data-testid=\"search-input\"]').type('test');\n\n    // Wait for debounce timeout\n    cy.wait('@searchRequest', { timeout: 350 });\n\n    // Verify results are updated\n    cy.get('[data-testid=\"search-results\"]').should('contain', 'Test');\n\n    // Type more characters\n    cy.get('[data-testid=\"search-input\"]').type('testuser');\n\n    // Wait for debounce timeout\n    cy.wait('@searchRequest', { timeout: 350 });\n\n    // Verify results are updated with full query\n    cy.get('[data-testid=\"search-results\"]').should('contain', 'Test user');\n\n    // Verify no results are shown for empty input\n    cy.get('[data-testid=\"search-input\"]').clear().type('');\n    cy.wait('@searchRequest', { timeout: 350 });\n    cy.get('[data-testid=\"search-results\"]').should('contain', 'No results found');\n  });\n\n  it('should handle edge case: debounce timeout with no results', () => {\n    // Setup: intercept the search API call\n    cy.intercept('GET', '/api/search*', (req) => {\n      expect(req.url).to.include('/api/search');\n      expect(req.body.query).to.equal('');\n    }).as('searchRequest');\n\n    // Verify initial state\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n    cy.get('[data-testid=\"search-results\"]').should('contain', 'No results found');\n\n    // Type a query that should not return results\n    cy.get('[data-testid=\"search-input\"]').type('nonexistentuser');\n\n    // Wait for debounce timeout\n    cy.wait('@searchRequest', { timeout: 350 });\n\n    // Verify results are still empty\n    cy.get('[data-testid=\"search-results\"]').should('contain', 'No results found');\n\n    // Verify debounce works even with no results\n    cy.get('[data-testid=\"search-input\"]').clear().type('test');\n    cy.wait('@searchRequest', { timeout: 350 });\n    cy.get('[data-testid=\"search-results\"]').should('contain', 'Test');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7416,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3388,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 39.85,
+      "feedback_used": ""
+    }
+  ]
+}

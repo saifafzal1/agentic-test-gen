@@ -1,0 +1,13 @@
+{
+  "id": "TC_279",
+  "category": "user_profile",
+  "complexity": "medium",
+  "user_story": "As a user, I want to change my email address with a confirmation step.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Change Email Address', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/user_profile');\n    await page.getByRole('button', { name: 'Login' }).click();\n    await page.getByLabel('Email').fill('user@example.com');\n    await page.getByLabel('Password').fill('password123');\n    await page.getByRole('button', { name: 'Submit' }).click();\n  });\n\n  test('should display confirmation step after changing email', async ({ page }) => {\n    await page.getByLabel('New Email Address').fill('newemail@example.com');\n    await page.getByRole('button', { name: 'Change Email' }).click();\n    \n    const confirmationMessage = await page.getByText('Please confirm your new email address.');\n    expect(confirmationMessage).toBeVisible();\n  });\n\n  test('should successfully change email after confirmation', async ({ page }) => {\n    await page.getByLabel('New Email Address').fill('newemail@example.com');\n    await page.getByRole('button', { name: 'Change Email' }).click();\n    \n    await page.getByRole('button', { name: 'Confirm Email Change' }).click();\n    \n    const successMessage = await page.getByText('Your email address has been successfully changed.');\n    expect(successMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 298,
+  "latency_s": 7.1,
+  "timestamp": "2026-06-19T17:03:37.012756"
+}

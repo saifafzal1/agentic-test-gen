@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_265",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7431,
+  "total_latency_s": 72.025,
+  "final_script": "describe('Notification Click Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should navigate to related content when clicking a notification', () => {\n    // Verify notifications are visible\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('have.length.greaterThan', 0);\n\n    // Click on the first notification\n    cy.get('[data-testid=\"notification-item\"]').first().click();\n\n    // Verify navigation to related content\n    cy.url().should('include', '/content');\n    cy.get('[data-testid=\"content-title\"]').should('be.visible');\n    cy.get('[data-testid=\"content-title\"]').should('contain', 'Notification Details');\n\n    // Verify notification is marked as read\n    cy.get('[data-testid=\"notification-item\"]').first().should('have.class', 'read');\n    cy.get('[data-testid=\"notification-badge\"]').should('not.exist');\n  });\n\n  it('should handle clicking a notification with no related content', () => {\n    // Intercept API call for notification data\n    cy.intercept('GET', '/api/notifications/123').as('getNotification');\n\n    // Navigate to specific notification\n    cy.visit('/notifications/123');\n    cy.wait('@getNotification');\n\n    // Verify notification is displayed\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('contain', 'No related content');\n\n    // Click on the notification\n    cy.get('[data-testid=\"notification-item\"]').click();\n\n    // Verify user is on a generic notification view, not content page\n    cy.url().should('include', '/notifications');\n    cy.get('[data-testid=\"notification-details\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-details\"]').should('contain', 'No related content');\n\n    // Verify notification is still marked as unread\n    cy.get('[data-testid=\"notification-item\"]').should('not.have.class', 'read');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7431,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3435,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.025,
+      "feedback_used": ""
+    }
+  ]
+}

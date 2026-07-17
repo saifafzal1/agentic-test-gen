@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_193",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7158,
+  "total_latency_s": 354.771,
+  "final_script": "describe('Search Filter - No Results Message', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should display \"No results found\" when no items match search query', () => {\n    // Setup: Intercept the search API call\n    cy.intercept('GET', '/api/search*', (req) => {\n      req.reply((res) => {\n        res.body = {\n          results: [],\n          total: 0,\n          has_more: false,\n          next_page_token: null\n        };\n      });\n    }).as('searchResults');\n\n    // Perform search with no results\n    cy.get('[data-testid=\"search-input\"]').type('nonexistent product');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@searchResults');\n\n    // Verify \"No results found\" message is displayed\n    cy.get('[data-testid=\"no-results-message\"]')\n      .should('be.visible')\n      .should('contain', 'No results found');\n\n    // Verify search results container is empty\n    cy.get('[data-testid=\"search-results-container\"]')\n      .should('be.visible')\n      .should('have.length', 0);\n\n    // Verify no pagination links are shown\n    cy.get('[data-testid=\"next-page-link\"]')\n      .should('not.exist');\n\n    // Verify search input is cleared\n    cy.get('[data-testid=\"search-input\"]').should('have.value', '');\n  });\n\n  it('should handle empty search input gracefully', () => {\n    // Setup: Intercept the search API call\n    cy.intercept('GET', '/api/search*', (req) => {\n      req.reply((res) => {\n        res.body = {\n          results: [],\n          total: 0,\n          has_more: false,\n          next_page_token: null\n        };\n      });\n    }).as('searchResults');\n\n    // Verify \"No results found\" message is not displayed when search input is empty\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n    cy.get('[data-testid=\"search-input\"]').clear();\n\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@searchResults');\n\n    // Verify \"No results found\" message is not visible\n    cy.get('[data-testid=\"no-results-message\"]')\n      .should('not.exist');\n\n    // Verify search results container is still empty\n    cy.get('[data-testid=\"search-results-container\"]')\n      .should('be.visible')\n      .should('have.length', 0);\n\n    // Verify search input is cleared\n    cy.get('[data-testid=\"search-input\"]').should('have.value', '');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7158,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2527,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 354.771,
+      "feedback_used": ""
+    }
+  ]
+}

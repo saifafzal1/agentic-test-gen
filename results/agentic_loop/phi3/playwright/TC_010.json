@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_010",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8046,
+  "total_latency_s": 46.957,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Google OAuth Login Flow', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should successfully authenticate with Google OAuth and redirect to home page', async ({ page }) => {\n    // Verify login button is visible\n    const loginButton = page.getByRole('button', { name: /sign in with google/i });\n    await expect(loginButton).toBeVisible();\n\n    // Click login button\n    await loginButton.click();\n\n    // Verify Google OAuth modal appears\n    const authModal = page.locator('[data-testid=\"auth-modal\"]');\n    await expect(authModal).toBeVisible();\n\n    // Verify Google sign-in button is visible\n    const googleSignInButton = page.getByRole('button', { name: /sign in with google/i });\n    await expect(googleSignInButton).toBeVisible();\n\n    // Click Google sign-in button\n    await googleSignInButton.click();\n\n    // Verify user is redirected to home page\n    const homePage = page.getByRole('main');\n    await expect(homePage).toBeVisible();\n\n    // Verify welcome message is displayed\n    const welcomeMessage = page.getByText(/welcome, user name/i);\n    await expect(welcomeMessage).toBeVisible();\n\n    // Verify user profile icon is visible\n    const userProfileIcon = page.getByRole('img', { name: /user profile/i });\n    await expect(userProfileIcon).toBeVisible();\n\n    // Verify logout button is visible\n    const logoutButton = page.getByRole('button', { name: /log out/i });\n    await expect(logoutButton).toBeVisible();\n  });\n\n  test('should handle failed Google OAuth authentication and display error message', async ({ page }) => {\n    // Verify login button is visible\n    const loginButton = page.getByRole('button', { name: /sign in with google/i });\n    await expect(loginButton).toBeVisible();\n\n    // Click login button\n    await loginButton.click();\n\n    // Verify Google OAuth modal appears\n    const authModal = page.locator('[data-testid=\"auth-modal\"]');\n    await expect(authModal).toBeVisible();\n\n    // Verify Google sign-in button is visible\n    const googleSignInButton = page.getByRole('button', { name: /sign in with google/i });\n    await expect(googleSignInButton).toBeVisible();\n\n    // Click Google sign-in button\n    await googleSignInButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/error/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify login button is still visible for retry\n    await expect(loginButton).toBeVisible();\n\n    // Verify user is not redirected to home page\n    const homePage = page.getByRole('main');\n    await expect(homePage).not.toBeVisible();\n\n    // Verify retry button is visible\n    const retryButton = page.getByRole('button', { name: /try again/i });\n    await expect(retryButton).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8046,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4488,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 46.957,
+      "feedback_used": ""
+    }
+  ]
+}

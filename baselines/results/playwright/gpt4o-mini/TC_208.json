@@ -1,0 +1,13 @@
+{
+  "id": "TC_208",
+  "category": "accessibility",
+  "complexity": "complex",
+  "user_story": "As a screen reader user, I want form fields to have associated labels.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Accessibility - Form Fields Labels', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/form'); // Replace with the actual URL of the form\n  });\n\n  test('should have associated labels for input fields', async ({ page }) => {\n    const nameLabel = await page.getByLabel('Name');\n    const emailLabel = await page.getByLabel('Email');\n    \n    expect(await nameLabel.isVisible()).toBe(true);\n    expect(await emailLabel.isVisible()).toBe(true);\n  });\n\n  test('should read labels correctly with screen reader', async ({ page }) => {\n    const nameInput = await page.getByRole('textbox', { name: 'Name' });\n    const emailInput = await page.getByRole('textbox', { name: 'Email' });\n\n    await nameInput.focus();\n    await page.keyboard.press('Tab'); // Simulate screen reader navigation\n    await emailInput.focus();\n\n    const nameLabelText = await nameInput.evaluate(input => input.getAttribute('aria-label'));\n    const emailLabelText = await emailInput.evaluate(input => input.getAttribute('aria-label'));\n\n    expect(nameLabelText).toBe('Name');\n    expect(emailLabelText).toBe('Email');\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 274,
+  "latency_s": 4.03,
+  "timestamp": "2026-06-19T16:57:38.724387"
+}

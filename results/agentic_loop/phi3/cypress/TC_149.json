@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_149",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8069,
+  "total_latency_s": 269.821,
+  "final_script": "describe('Select All Rows with Header Checkbox', () => {\n  beforeEach(() => {\n    cy.visit('/table-list');\n  });\n\n  it('should select all rows when header checkbox is clicked', () => {\n    // Verify table header checkbox is visible\n    cy.get('[data-testid=\"table-header-checkbox\"]').should('be.visible');\n    // Verify all rows are initially unselected\n    cy.get('[data-testid=\"table-row\"]').each(($row) => {\n      cy.wrap($row).should('not.have.class', 'selected');\n    });\n\n    // Click the header checkbox to select all rows\n    cy.get('[data-testid=\"table-header-checkbox\"]').click();\n\n    // Verify all rows now have the 'selected' class\n    cy.get('[data-testid=\"table-row\"]').each(($row) => {\n      cy.wrap($row).should('have.class', 'selected');\n    });\n\n    // Verify selection status is reflected in UI\n    cy.get('[data-testid=\"selected-count\"]').should('contain', 'All rows selected');\n  });\n\n  it('should deselect all rows when header checkbox is unchecked', () => {\n    // Verify all rows are initially selected\n    cy.get('[data-testid=\"table-row\"]').each(($row) => {\n      cy.wrap($row).should('have.class', 'selected');\n    });\n\n    // Click the header checkbox to unselect all rows\n    cy.get('[data-testid=\"table-header-checkbox\"]').click();\n\n    // Verify all rows are now unselected\n    cy.get('[data-testid=\"table-row\"]').each(($row) => {\n      cy.wrap($row).should('not.have.class', 'selected');\n    });\n\n    // Verify selection status is updated in UI\n    cy.get('[data-testid=\"selected-count\"]').should('contain', '0 rows selected');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8069,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5563,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 269.821,
+      "feedback_used": ""
+    }
+  ]
+}

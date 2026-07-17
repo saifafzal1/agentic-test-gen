@@ -1,0 +1,13 @@
+{
+  "id": "TC_271",
+  "category": "notifications",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a snackbar message after copying text to clipboard.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Snackbar Notification', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-application-url.com');\n  });\n\n  test('should display snackbar message after copying text', async ({ page }) => {\n    await page.getByText('Copy Text Button').click();\n    const snackbar = page.getByRole('alert', { name: /copied to clipboard/i });\n    await expect(snackbar).toBeVisible();\n    await expect(snackbar).toHaveText('Copied to clipboard!');\n  });\n\n  test('should hide snackbar message after a timeout', async ({ page }) => {\n    await page.getByText('Copy Text Button').click();\n    const snackbar = page.getByRole('alert', { name: /copied to clipboard/i });\n    await expect(snackbar).toBeVisible();\n    await page.waitForTimeout(3000); // Assuming snackbar disappears after 3 seconds\n    await expect(snackbar).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 217,
+  "latency_s": 4.31,
+  "timestamp": "2026-06-19T17:03:00.683659"
+}

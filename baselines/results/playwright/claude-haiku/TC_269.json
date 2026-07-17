@@ -1,0 +1,13 @@
+{
+  "id": "TC_269",
+  "category": "notifications",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a notification panel slide in from the top.",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "```typescript\nimport { test, expect } from '@playwright/test';\n\ntest.describe('Notification Panel', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('http://localhost:3000');\n  });\n\n  test('should display notification panel sliding in from the top', async ({ page }) => {\n    // Trigger notification\n    const triggerButton = page.getByRole('button', { name: /show notification/i });\n    await triggerButton.click();\n\n    // Check notification panel is visible\n    const notificationPanel = page.getByRole('region', { name: /notification/i });\n    await expect(notificationPanel).toBeVisible();\n\n    // Verify it's positioned at the top\n    const boundingBox = await notificationPanel.boundingBox();\n    expect(boundingBox?.y).toBeLessThan(100);\n  });\n\n  test('should animate notification panel with slide-in effect', async ({ page }) => {\n    const triggerButton = page.getByRole('button', { name: /show notification/i });\n    await triggerButton.click();\n\n    const notificationPanel = page.getByRole('region', { name: /notification/i });\n\n    // Check for animation class or transform property\n    const hasAnimationClass = await notificationPanel.evaluate((el) => {\n      const classes = el.className;\n      const styles = window.getComputedStyle(el);\n      return classes.includes('slide') || styles.animation.includes('slide') || styles.transform !== 'none';\n    });\n\n    expect(hasAnimationClass).toBeTruthy();\n  });\n\n  test('should close notification panel when dismiss button is clicked', async ({ page }) => {\n    const triggerButton = page.getByRole('button', { name: /show notification/i });\n    await triggerButton.click();\n\n    const notificationPanel = page.getByRole('region', { name: /notification/i });\n    await expect(notificationPanel).toBeVisible();\n\n    const dismissButton = page.getByRole('button', { name: /close|dismiss/i });\n    await dismissButton.click();\n\n    await expect(notificationPanel).not.toBeVisible();\n  });\n\n  test('should display notification message content', async ({ page }) => {\n    const triggerButton = page.getByRole('button', { name: /show notification/i });\n    await triggerButton.click();\n\n    const notificationMessage = page.getByText(/notification message|success|error|warning/i);\n    await expect(notificationMessage).toBeVisible();\n  });\n});\n```",
+  "prompt_tokens": 143,
+  "completion_tokens": 621,
+  "latency_s": 7.36,
+  "timestamp": "2026-06-19T18:11:53.042262"
+}

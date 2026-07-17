@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_073",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7539,
+  "total_latency_s": 133.377,
+  "final_script": "describe('Create New Task Form', () => {\n  beforeEach(() => {\n    cy.visit('/tasks/new');\n  });\n\n  it('should successfully create a new task by filling out the form and clicking Save', () => {\n    // Verify form is visible\n    cy.get('[data-testid=\"task-form\"]').should('be.visible');\n    cy.get('[data-testid=\"task-title-input\"]').should('be.visible');\n    cy.get('[data-testid=\"task-description-textarea\"]').should('be.visible');\n    cy.get('[data-testid=\"task-priority-select\"]').should('be.visible');\n    cy.get('[data-testid=\"save-task-button\"]').should('be.visible');\n\n    // Fill in form fields\n    cy.get('[data-testid=\"task-title-input\"]').type('Complete Cypress Test Script');\n    cy.get('[data-testid=\"task-description-textarea\"]').type('This task involves creating a Cypress test script for a new task form.');\n    cy.get('[data-testid=\"task-priority-select\"]').select('High');\n\n    // Click Save button\n    cy.get('[data-testid=\"save-task-button\"]').click();\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Task created successfully');\n\n    // Verify task is redirected to task list\n    cy.url().should('include', '/tasks');\n\n    // Verify task appears in list\n    cy.get('[data-testid=\"task-list\"]').should('be.visible');\n    cy.get('[data-testid=\"task-item\"]').should('contain', 'Complete Cypress Test Script');\n    cy.get('[data-testid=\"task-item\"]').should('contain', 'High');\n  });\n\n  it('should display validation errors when required fields are left empty', () => {\n    // Verify form is visible\n    cy.get('[data-testid=\"task-form\"]').should('be.visible');\n\n    // Attempt to submit without filling any fields\n    cy.get('[data-testid=\"save-task-button\"]').click();\n\n    // Verify validation error messages appear\n    cy.get('[data-testid=\"validation-error-title\"]').should('be.visible');\n    cy.get('[data-testid=\"validation-error-title\"]').should('contain', 'Task title is required');\n    cy.get('[data-testid=\"validation-error-description\"]').should('be.visible');\n    cy.get('[data-testid=\"validation-error-description\"]').should('contain', 'Task description cannot be empty');\n\n    // Verify form is still on the new task page\n    cy.url().should('include', '/tasks/new');\n\n    // Verify save button is still enabled (or disabled if validation prevents submission)\n    cy.get('[data-testid=\"save-task-button\"]').should('be.visible');\n    cy.get('[data-testid=\"save-task-button\"]').should('not.be.disabled');\n\n    // Fill only title and submit to test description validation\n    cy.get('[data-testid=\"task-title-input\"]').type('Test with missing description');\n    cy.get('[data-testid=\"save-task-button\"]').click();\n\n    // Verify description error persists\n    cy.get('[data-testid=\"validation-error-description\"]').should('be.visible');\n    cy.get('[data-testid=\"validation-error-description\"]').should('contain', 'Task description cannot be empty');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7539,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3797,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 133.377,
+      "feedback_used": ""
+    }
+  ]
+}

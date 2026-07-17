@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_204",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.799,
+  "total_latency_s": 72.876,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Image Alt Text Accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/images');\n  });\n\n  test('should display descriptive alt text for all images', async ({ page }) => {\n    // Verify the first image has descriptive alt text\n    const firstImage = page.getByRole('img', { name: /first image/i });\n    await expect(firstImage).toBeVisible();\n    await expect(firstImage).toHaveAttribute('alt', /first image description/i);\n\n    // Verify the second image has descriptive alt text\n    const secondImage = page.getByRole('img', { name: /second image/i });\n    await expect(secondImage).toBeVisible();\n    await expect(secondImage).toHaveAttribute('alt', /second image description/i);\n\n    // Verify the third image has descriptive alt text\n    const thirdImage = page.getByRole('img', { name: /third image/i });\n    await expect(thirdImage).toBeVisible();\n    await expect(thirdImage).toHaveAttribute('alt', /third image description/i);\n\n    // Verify the fourth image has descriptive alt text\n    const fourthImage = page.getByRole('img', { name: /fourth image/i });\n    await expect(fourthImage).toBeVisible();\n    await expect(fourthImage).toHaveAttribute('alt', /fourth image description/i);\n\n    // Verify the fifth image has descriptive alt text\n    const fifthImage = page.getByRole('img', { name: /fifth image/i });\n    await expect(fifthImage).toBeVisible();\n    await expect(fifthImage).toHaveAttribute('alt', /fifth image description/i);\n  });\n\n  test('should handle images with empty alt text gracefully', async ({ page }) => {\n    // Verify the first image has descriptive alt text\n    const firstImage = page.getByRole('img', { name: /first image/i });\n    await expect(firstImage).toBeVisible();\n    await expect(firstImage).toHaveAttribute('alt', /first image description/i);\n\n    // Verify the second image has empty alt text\n    const secondImage = page.getByRole('img', { name: /second image/i });\n    await expect(secondImage).toBeVisible();\n    await expect(secondImage).toHaveAttribute('alt', '');\n\n    // Verify the third image has descriptive alt text\n    const thirdImage = page.getByRole('img', { name: /third image/i });\n    await expect(thirdImage).toBeVisible();\n    await expect(thirdImage).toHaveAttribute('alt', /third image description/i);\n\n    // Verify the fourth image has empty alt text\n    const fourthImage = page.getByRole('img', { name: /fourth image/i });\n    await expect(fourthImage).toBeVisible();\n    await expect(fourthImage).toHaveAttribute('alt', '');\n\n    // Verify the fifth image has descriptive alt text\n    const fifthImage = page.getByRole('img', { name: /fifth image/i });\n    await expect(fifthImage).toBeVisible();\n    await expect(fifthImage).toHaveAttribute('alt', /fifth image description/i);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.799,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4301,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.876,
+      "feedback_used": ""
+    }
+  ]
+}

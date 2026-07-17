@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_287",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.816,
+  "total_latency_s": 72.541,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Active Sessions Management', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/profile');\n  });\n\n  test('should display all active sessions and allow logout of specific sessions', async ({ page }) => {\n    // Verify profile page loads\n    const profileHeader = page.getByRole('heading', { name: /profile/i });\n    await expect(profileHeader).toBeVisible();\n\n    // Verify active sessions section is visible\n    const sessionsSection = page.getByRole('region', { name: /active sessions/i });\n    await expect(sessionsSection).toBeVisible();\n\n    // Verify session list is displayed\n    const sessionList = page.getByRole('list');\n    await expect(sessionList).toBeVisible();\n\n    // Verify session items are present\n    const sessionItems = page.getByRole('listitem');\n    await expect(sessionItems).toHaveCount(3);\n\n    // Verify session details are visible\n    const sessionDetails = page.getByText(/Chrome/i);\n    await expect(sessionDetails).toBeVisible();\n\n    const sessionLocation = page.getByText(/New York/i);\n    await expect(sessionLocation).toBeVisible();\n\n    // Verify logout button is visible for each session\n    const logoutButtons = page.getByRole('button', { name: /logout/i });\n    await expect(logoutButtons).toHaveCount(3);\n\n    // Logout of the first session\n    const firstLogoutButton = logoutButtons.first();\n    await firstLogoutButton.click();\n\n    // Verify logout confirmation modal appears\n    const logoutModal = page.getByRole('dialog', { name: /confirm logout/i });\n    await expect(logoutModal).toBeVisible();\n\n    // Confirm logout\n    const confirmLogoutButton = page.getByRole('button', { name: /confirm/i });\n    await confirmLogoutButton.click();\n\n    // Verify session is removed from list\n    await expect(sessionItems).toHaveCount(2);\n\n    // Verify success message appears\n    const successMessage = page.getByText(/session logged out successfully/i);\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should handle edge case of no active sessions', async ({ page }) => {\n    // Navigate to profile page\n    await page.goto('/profile');\n\n    // Intercept API call to clear sessions\n    await page.route('**/api/sessions', route => {\n      route.abort();\n    });\n\n    // Click button to clear all sessions\n    const clearSessionsButton = page.getByRole('button', { name: /clear all sessions/i });\n    await clearSessionsButton.click();\n\n    // Verify empty state message is displayed\n    const emptyStateMessage = page.getByText(/no active sessions found/i);\n    await expect(emptyStateMessage).toBeVisible();\n\n    // Verify session list is empty\n    const sessionList = page.getByRole('list');\n    await expect(sessionList).toHaveCount(0);\n\n    // Verify logout button is not visible\n    const logoutButtons = page.getByRole('button', { name: /logout/i });\n    await expect(logoutButtons).not.toBeVisible();\n\n    // Verify user can still access profile settings\n    const settingsLink = page.getByRole('link', { name: /settings/i });\n    await expect(settingsLink).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.816,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4867,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.541,
+      "feedback_used": ""
+    }
+  ]
+}

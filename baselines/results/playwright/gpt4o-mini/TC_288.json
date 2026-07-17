@@ -1,0 +1,13 @@
+{
+  "id": "TC_288",
+  "category": "user_profile",
+  "complexity": "medium",
+  "user_story": "As a user, I want to export my personal data as a JSON file.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Profile Data Export', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/user-profile');\n    await page.getByRole('button', { name: 'Login' }).click();\n    await page.getByLabel('Username').fill('testuser');\n    await page.getByLabel('Password').fill('password123');\n    await page.getByRole('button', { name: 'Submit' }).click();\n  });\n\n  test('should display export data button', async ({ page }) => {\n    const exportButton = page.getByRole('button', { name: 'Export Data' });\n    await expect(exportButton).toBeVisible();\n  });\n\n  test('should export personal data as JSON file', async ({ page }) => {\n    await page.getByRole('button', { name: 'Export Data' }).click();\n    const [download] = await Promise.all([\n      page.waitForEvent('download'),\n      page.getByRole('button', { name: 'Export Data' }).click(),\n    ]);\n    const path = await download.path();\n    expect(path).toBeTruthy();\n    expect(path.endsWith('.json')).toBe(true);\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 259,
+  "latency_s": 3.63,
+  "timestamp": "2026-06-19T17:04:12.866452"
+}

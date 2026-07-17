@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_124",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.4929,
+  "total_latency_s": 1261.305,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Long-Running Task Persistence Across Page Refreshes', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/tasks');\n  });\n\n  test('should persist long-running task state across page refreshes', async ({ page }) => {\n    // Setup: Intercept the API call to start a long-running task\n    await page.route('**/api/tasks/start', (route) => {\n      route.continue();\n    });\n\n    // Verify initial task state\n    const taskList = page.getByRole('region', { name: /tasks/i });\n    await expect(taskList).toBeVisible();\n\n    // Verify task is listed\n    const taskItem = page.getByRole('listitem', { name: /long-running task/i });\n    await expect(taskItem).toBeVisible();\n\n    // Verify task details are visible\n    const taskName = page.getByText(/long-running task/i);\n    await expect(taskName).toBeVisible();\n\n    // Verify progress bar is visible\n    const progressBar = page.getByRole('progressbar');\n    await expect(progressBar).toBeVisible();\n\n    // Verify task status is visible\n    const taskStatus = page.getByText(/in progress/i);\n    await expect(taskStatus).toBeVisible();\n\n    // Verify refresh button is visible\n    const refreshButton = page.getByRole('button', { name: /refresh/i });\n    await expect(refreshButton).toBeVisible();\n\n    // Start the long-running task\n    const startButton = page.getByRole('button', { name: /start/i });\n    await startButton.click();\n\n    // Wait for task to be visible\n    await page.waitForTimeout(500);\n\n    // Verify task is still listed after refresh\n    await page.reload();\n    await expect(taskList).toBeVisible();\n    await expect(taskItem).toBeVisible();\n\n    // Verify task details are still visible\n    await expect(taskName).toBeVisible();\n\n    // Verify progress bar is still visible\n    await expect(progressBar).toBeVisible();\n\n    // Verify task status is still visible\n    await expect(taskStatus).toBeVisible();\n\n    // Verify refresh button is still visible\n    await expect(refreshButton).toBeVisible();\n\n    // Verify task is still in progress after refresh\n    await expect(taskStatus).toContainText(/in progress/i);\n  });\n\n  test('should handle task cancellation during refresh', async ({ page }) => {\n    // Setup: Intercept the API call to start a long-running task\n    await page.route('**/api/tasks/start', (route) => {\n      route.continue();\n    });\n\n    // Verify initial task state\n    const taskList = page.getByRole('region', { name: /tasks/i });\n    await expect(taskList).toBeVisible();\n\n    // Verify task is listed\n    const taskItem = page.getByRole('listitem', { name: /long-running task/i });\n    await expect(taskItem).toBeVisible();\n\n    // Verify task details are visible\n    const taskName = page.getByText(/long-running task/i);\n    await expect(taskName).toBeVisible();\n\n    // Verify progress bar is visible\n    const progressBar = page.getByRole('progressbar');\n    await expect(progressBar).toBeVisible();\n\n    // Verify task status is visible\n    const taskStatus = page.getByText(/in progress/i);\n    await expect(taskStatus).toBeVisible();\n\n    // Verify refresh button is visible\n    const refreshButton = page.getByRole('button', { name: /refresh/i });\n    await expect(refreshButton).toBeVisible();\n\n    // Start the long-running task\n    const startButton = page.getByRole('button', { name: /start/i });\n    await startButton.click();\n\n    // Wait for task to be visible\n    await page.waitForTimeout(500);\n\n    // Verify task is still listed after initial refresh\n    await page.reload();\n    await expect(taskList).to",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4929,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3963,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 331.3,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4566,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.2753,
+        "missing_keywords": [],
+        "assertion_count": 47,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 437.633,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.442,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.2268,
+        "missing_keywords": [],
+        "assertion_count": 68,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 492.372,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

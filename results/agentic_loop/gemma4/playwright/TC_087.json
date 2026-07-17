@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_087",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8172,
+  "total_latency_s": 77.19,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Comment on Record', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should successfully add a comment to a record', async ({ page }) => {\n    // Locate and click on a record to open details\n    const recordItem = page.getByRole('button', { name: /record 1/i });\n    await recordItem.click();\n\n    // Verify record details are visible\n    const recordTitle = page.getByRole('heading', { name: /record 1/i });\n    await expect(recordTitle).toBeVisible();\n\n    // Locate and click the comment button\n    const commentButton = page.getByRole('button', { name: /add comment/i });\n    await commentButton.click();\n\n    // Verify comment form is visible\n    const commentForm = page.getByRole('form', { name: /add comment/i });\n    await expect(commentForm).toBeVisible();\n\n    // Locate and fill in the comment textarea\n    const commentTextarea = page.getByLabel(/comment/i);\n    await commentTextarea.fill('This is a test comment for record 1');\n\n    // Locate and click the submit button\n    const submitButton = page.getByRole('button', { name: /submit comment/i });\n    await submitButton.click();\n\n    // Wait for comment to be added\n    await page.waitForResponse(response => \n      response.url().includes('/api/comments') && response.status() === 201\n    );\n\n    // Verify success message appears\n    const successMessage = page.getByText(/comment added successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify comment is displayed in the comment list\n    const commentList = page.getByRole('region', { name: /comments/i });\n    const addedComment = page.getByText('This is a test comment for record 1');\n    await expect(addedComment).toBeVisible();\n  });\n\n  test('should display error when submitting an empty comment', async ({ page }) => {\n    // Locate and click on a record to open details\n    const recordItem = page.getByRole('button', { name: /record 2/i });\n    await recordItem.click();\n\n    // Verify record details are visible\n    const recordTitle = page.getByRole('heading', { name: /record 2/i });\n    await expect(recordTitle).toBeVisible();\n\n    // Locate and click the comment button\n    const commentButton = page.getByRole('button', { name: /add comment/i });\n    await commentButton.click();\n\n    // Verify comment form is visible\n    const commentForm = page.getByRole('form', { name: /add comment/i });\n    await expect(commentForm).toBeVisible();\n\n    // Verify comment textarea is empty\n    const commentTextarea = page.getByLabel(/comment/i);\n    await expect(commentTextarea).toHaveValue('');\n\n    // Locate and click the submit button without filling the textarea\n    const submitButton = page.getByRole('button', { name: /submit comment/i });\n    await submitButton.click();\n\n    // Wait for error response\n    await page.waitForResponse(response => \n      response.url().includes('/api/comments') && response.status() === 420\n    );\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/comment cannot be empty/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify comment list remains unchanged\n    const commentList = page.getByRole('region', { name: /comments/i });\n    const existingComment = page.getByText(/this is an existing comment/i);\n    await expect(existingComment).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8172,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3908,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 77.19,
+      "feedback_used": ""
+    }
+  ]
+}

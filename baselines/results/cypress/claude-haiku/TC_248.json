@@ -1,0 +1,13 @@
+{
+  "id": "TC_248",
+  "category": "payment_flow",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error when I enter an expired promo code.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Expired Promo Code Error', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n    cy.get('[data-testid=\"promo-code-input\"]').should('be.visible');\n  });\n\n  it('should display error message when entering an expired promo code', () => {\n    cy.get('[data-testid=\"promo-code-input\"]').type('EXPIRED2023');\n    cy.get('[data-testid=\"apply-promo-button\"]').click();\n    \n    cy.get('[data-testid=\"promo-error-message\"]')\n      .should('be.visible')\n      .and('contain', 'This promo code has expired');\n    \n    cy.get('[data-testid=\"discount-amount\"]').should('not.exist');\n  });\n\n  it('should clear error message when user corrects the promo code', () => {\n    cy.get('[data-testid=\"promo-code-input\"]').type('EXPIRED2023');\n    cy.get('[data-testid=\"apply-promo-button\"]').click();\n    \n    cy.get('[data-testid=\"promo-error-message\"]').should('be.visible');\n    \n    cy.get('[data-testid=\"promo-code-input\"]').clear().type('VALID2024');\n    cy.get('[data-testid=\"apply-promo-button\"]').click();\n    \n    cy.get('[data-testid=\"promo-error-message\"]').should('not.exist');\n    cy.get('[data-testid=\"discount-amount\"]').should('be.visible');\n  });\n\n  it('should handle multiple expired promo code attempts', () => {\n    const expiredCodes = ['EXPIRED2023', 'OLD2022', 'PAST2021'];\n    \n    expiredCodes.forEach((code) => {\n      cy.get('[data-testid=\"promo-code-input\"]').clear().type(code);\n      cy.get('[data-testid=\"apply-promo-button\"]').click();\n      \n      cy.get('[data-testid=\"promo-error-message\"]')\n        .should('be.visible')\n        .and('contain', 'This promo code has expired');\n    });\n  });\n\n  it('should display error immediately for empty promo code submission', () => {\n    cy.get('[data-testid=\"promo-code-input\"]').should('have.value', '');\n    cy.get('[data-testid=\"apply-promo-button\"]').click();\n    \n    cy.get('[data-testid=\"promo-error-message\"]')\n      .should('be.visible')\n      .and('contain', 'Please enter a promo code');\n  });\n});",
+  "prompt_tokens": 124,
+  "completion_tokens": 669,
+  "latency_s": 4.63,
+  "timestamp": "2026-06-19T17:31:42.057403"
+}

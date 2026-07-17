@@ -1,0 +1,13 @@
+{
+  "id": "TC_055",
+  "category": "navigation",
+  "complexity": "complex",
+  "user_story": "As a user, I want pagination controls to load the correct page of results.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Pagination Controls', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/results');\n  });\n\n  test('should load the first page of results by default', async ({ page }) => {\n    const results = await page.getByRole('list').locator('li');\n    expect(await results.count()).toBe(10); // Assuming 10 results per page\n    expect(await page.getByText('Page 1 of')).toBeVisible();\n  });\n\n  test('should navigate to the second page and load correct results', async ({ page }) => {\n    await page.getByRole('button', { name: 'Next' }).click();\n    const results = await page.getByRole('list').locator('li');\n    expect(await results.count()).toBe(10); // Assuming 10 results per page\n    expect(await page.getByText('Page 2 of')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 210,
+  "latency_s": 2.86,
+  "timestamp": "2026-06-19T16:47:05.793558"
+}

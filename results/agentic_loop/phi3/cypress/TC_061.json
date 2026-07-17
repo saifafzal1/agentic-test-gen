@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_061",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.755,
+  "total_latency_s": 339.881,
+  "final_script": "describe('Optimistic UI Updates on Like Post', () => {\n  beforeEach(() => {\n    cy.visit('/posts');\n  });\n\n  it('should display optimistic like count and update on successful API call', () => {\n    // Get a post to like\n    cy.get('[data-testid=\"post-card-1\"]').should('be.visible');\n    cy.get('[data-testid=\"like-button-1\"]').click();\n\n    // Verify optimistic UI is displayed\n    cy.get('[data-testid=\"like-count-1\"]').should('contain', '1');\n    cy.get('[data-testid=\"like-icon-1\"]').should('contain', '\ud83d\udc4d');\n\n    // Wait for API call\n    cy.intercept('POST', '/api/posts/1/like').as('likePost');\n    cy.wait('@likePost');\n\n    // Verify API call was successful\n    cy.get('[data-testid=\"like-count-1\"]').should('contain', '2');\n    cy.get('[data-testid=\"like-icon-1\"]').should('contain', '\ud83d\udc4d');\n\n    // Verify like button is disabled after first click\n    cy.get('[data-testid=\"like-button-1\"]').should('be.disabled');\n  });\n\n  it('should revert optimistic UI if API call fails', () => {\n    // Get a post to like\n    cy.get('[data-testid=\"post-card-2\"]').should('be.visible');\n    cy.get('[data-testid=\"like-button-2\"]').click();\n\n    // Verify optimistic UI is displayed\n    cy.get('[data-testid=\"like-count-2\"]').should('contain', '1');\n    cy.get('[data-testid=\"like-icon-2\"]').should('contain', '\ud83d\udc4d');\n\n    // Simulate API failure\n    cy.intercept('POST', '/api/posts/2/like', {\n      statusCode: 500,\n      body: { error: 'Server error' }\n    }).as('likePostFail');\n\n    // Wait for failed API call\n    cy.wait('@likePostFail');\n\n    // Verify optimistic UI is reverted\n    cy.get('[data-testid=\"like-count-2\"]').should('contain', '0');\n    cy.get('[data-testid=\"like-icon-2\"]').should('contain', '\ud83d\udc4e');\n\n    // Verify like button is enabled again\n    cy.get('[data-testid=\"like-button-2\"]').should('not.be.disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.755,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3832,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 339.881,
+      "feedback_used": ""
+    }
+  ]
+}

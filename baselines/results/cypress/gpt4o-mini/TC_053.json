@@ -1,0 +1,13 @@
+{
+  "id": "TC_053",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want keyboard arrow keys to navigate dropdown menu items.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Dropdown Menu Navigation with Keyboard Arrow Keys', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n        cy.get('.dropdown-toggle').click(); // Open the dropdown menu\n    });\n\n    it('should navigate to the next item using the down arrow key', () => {\n        cy.get('.dropdown-item').first().focus(); // Focus on the first item\n        cy.get('body').type('{downarrow}'); // Press down arrow key\n        cy.get('.dropdown-item').eq(1).should('have.class', 'focused'); // Check if the second item is focused\n    });\n\n    it('should wrap around to the last item using the down arrow key from the last item', () => {\n        cy.get('.dropdown-item').last().focus(); // Focus on the last item\n        cy.get('body').type('{downarrow}'); // Press down arrow key\n        cy.get('.dropdown-item').first().should('have.class', 'focused'); // Check if the first item is focused\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 223,
+  "latency_s": 4.0,
+  "timestamp": "2026-06-19T16:28:31.790075"
+}

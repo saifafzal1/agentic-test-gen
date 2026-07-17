@@ -1,0 +1,13 @@
+{
+  "id": "TC_155",
+  "category": "table_list",
+  "complexity": "simple",
+  "user_story": "As a user, I want an empty state illustration when a table has no data.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Empty State Illustration for Table', () => {\n    beforeEach(() => {\n        cy.visit('/table-list'); // Adjust the URL as necessary\n    });\n\n    it('should display an empty state illustration when the table has no data', () => {\n        // Assuming the table has a data attribute or class to check for empty state\n        cy.get('.table').should('not.exist'); // Ensure the table is not present\n        cy.get('.empty-state-illustration').should('be.visible'); // Check for empty state illustration\n        cy.get('.empty-state-message').should('contain', 'No data available'); // Check for appropriate message\n    });\n\n    it('should not display the empty state illustration when the table has data', () => {\n        // Simulate adding data to the table\n        cy.intercept('GET', '/api/table-data', { fixture: 'tableData.json' }).as('getTableData');\n        cy.visit('/table-list');\n        cy.wait('@getTableData');\n        \n        cy.get('.table').should('be.visible'); // Ensure the table is present\n        cy.get('.empty-state-illustration').should('not.exist'); // Ensure empty state illustration is not present\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 252,
+  "latency_s": 4.13,
+  "timestamp": "2026-06-19T16:35:19.784971"
+}

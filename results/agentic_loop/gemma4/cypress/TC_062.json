@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_062",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7951,
+  "total_latency_s": 71.19,
+  "final_script": "describe('Stale Data Invalidation After Form Submission', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n  });\n\n  it('should invalidate stale data after successful form submission', () => {\n    // Intercept the initial GET request to fetch stale data\n    cy.intercept('GET', '/api/data').as('getInitialData');\n    cy.wait('@getInitialData');\n\n    // Verify stale data is displayed\n    cy.get('[data-testid=\"data-value\"]').should('contain', 'Stale Data');\n\n    // Intercept the form submission API call\n    cy.intercept('POST', '/api/submit-form').as('submitForm');\n\n    // Fill out the form\n    cy.get('[data-testid=\"name-input\"]').type('John Doe');\n    cy.get('[data-testid=\"email-input\"]').type('john@example.com');\n    cy.get('[data-testid=\"message-input\"]').type('This is a test message');\n\n    // Submit the form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for the form submission API call\n    cy.wait('@submitForm');\n\n    // Intercept the data refresh call\n    cy.intercept('GET', '/api/data').as('getRefreshedData');\n    cy.wait('@getRefreshedData');\n\n    // Verify stale data is replaced with fresh data\n    cy.get('[data-testid=\"data-value\"]').should('contain', 'Fresh Data');\n    cy.get('[data-testid=\"data-timestamp\"]').should('be.visible');\n    cy.get('[data-testid=\"data-timestamp\"]').should('not.contain', 'Stale Data');\n  });\n\n  it('should handle form submission failure and not invalidate data', () => {\n    // Intercept the initial GET request to fetch stale data\n    cy.intercept('GET', '/api/data').as('getInitialData');\n    cy.wait('@getInitialData');\n\n    // Verify stale data is displayed\n    cy.get('[data-testid=\"data-value\"]').should('contain', 'Stale Data');\n\n    // Intercept the form submission API call and make it fail\n    cy.intercept('POST', '/api/submit-form', {\n      statusCode: 500,\n      body: { error: 'Server error' }\n    }).as('submitFormFailed');\n\n    // Fill out the form\n    cy.get('[data-testid=\"name-input\"]').type('Jane Doe');\n    cy.get('[data-testid=\"email-input\"]').type('jane@example.com');\n    cy.get('[data-testid=\"message-input\"]').type('Another test message');\n\n    // Submit the form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for the failed form submission API call\n    cy.wait('@submitFormFailed');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Server error');\n\n    // Verify stale data is still displayed\n    cy.get('[data-testid=\"data-value\"]').should('contain', 'Stale Data');\n    cy.get('[data-testid=\"data-timestamp\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7951,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5171,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.19,
+      "feedback_used": ""
+    }
+  ]
+}

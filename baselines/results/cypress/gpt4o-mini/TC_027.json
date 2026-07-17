@@ -1,0 +1,13 @@
+{
+  "id": "TC_027",
+  "category": "form_validation",
+  "complexity": "medium",
+  "user_story": "As a user, I want the ZIP code field to auto-format as I type.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('ZIP Code Auto-Formatting', () => {\n    beforeEach(() => {\n        cy.visit('/your-form-page-url'); // Replace with the actual URL of the form page\n    });\n\n    it('should auto-format ZIP code correctly as user types', () => {\n        const zipCode = '123456789';\n        cy.get('input[name=\"zipCode\"]')\n            .type(zipCode)\n            .should('have.value', '12345-6789'); // Assuming the format is 12345-6789\n    });\n\n    it('should not accept invalid ZIP code format', () => {\n        const invalidZipCode = '1234';\n        cy.get('input[name=\"zipCode\"]')\n            .type(invalidZipCode)\n            .should('have.value', ''); // Assuming the field clears invalid input\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 173,
+  "latency_s": 2.3,
+  "timestamp": "2026-06-19T16:26:51.972896"
+}

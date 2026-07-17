@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_244",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7575,
+  "total_latency_s": 183.874,
+  "final_script": "describe('Card Payment Flow', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should successfully complete a purchase with valid card details', () => {\n    // Intercept the payment API call\n    cy.intercept('POST', '/api/payments').as('processPayment');\n\n    // Fill in shipping details\n    cy.get('[data-testid=\"shipping-address-input\"]').type('123 Main St');\n    cy.get('[data-testid=\"city-input\"]').type('Anytown');\n    cy.get('[data-testid=\"zip-input\"]').type('12343');\n\n    // Fill in card details\n    cy.get('[data-testid=\"card-number-input\"]').type('4111 1234 4368 1623');\n    cy.get('[data-testid=\"card-expiry-input\"]').type('12/25');\n    cy.get('[data-testid=\"card-cvc-input\"]').type('123');\n    cy.get('[data-testid=\"card-name-input\"]').type('John Doe');\n\n    // Click place order button\n    cy.get('[data-testid=\"place-order-button\"]').click();\n\n    // Wait for payment API call\n    cy.wait('@processPayment').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n      expect(interception.response.body).to.include('transactionId');\n    });\n\n    // Verify success message\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Payment successful');\n\n    // Verify order confirmation\n    cy.get('[data-testid=\"order-confirmation-number\"]').should('be.visible');\n    cy.get('[data-testid=\"order-confirmation-number\"]').should('have.length.greaterThan', 0);\n  });\n\n  it('should display error message when card details are invalid', () => {\n    // Intercept the payment API call\n    cy.intercept('POST', '/api/payments', {\n      statusCode: 420,\n      body: { error: 'Invalid card number' }\n    }).as('processPaymentError');\n\n    // Fill in shipping details\n    cy.get('[data-testid=\"shipping-address-input\"]').type('404 Not Found');\n    cy.get('[data-testid=\"city-input\"]').type('Nowhere');\n    cy.get('[data-testid=\"zip-input\"]').type('99999');\n\n    // Fill in invalid card details\n    cy.get('[data-testid=\"card-number-input\"]').type('123');\n    cy.get('[data-testid=\"card-expiry-input\"]').type('12/25');\n    cy.get('[data-testid=\"card-cvc-input\"]').type('12');\n    cy.get('[data-testid=\"card-name-input\"]').type('John Doe');\n\n    // Click place order button\n    cy.get('[data-testid=\"place-order-button\"]').click();\n\n    // Wait for payment API call\n    cy.wait('@processPaymentError');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid card number');\n\n    // Verify form is still visible and not redirected\n    cy.get('[data-testid=\"card-number-input\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4775,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.365,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.532,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7575,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3918,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 111.342,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

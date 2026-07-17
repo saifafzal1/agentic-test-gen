@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_229",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7112,
+  "total_latency_s": 751.007,
+  "final_script": "describe('Image Responsive Scale Test', () => {\n  beforeEach(() => {\n    cy.visit('/images');\n  });\n\n  it('should scale images down to fit screen width on mobile devices', () => {\n    // Setup: Open the images page\n    cy.get('[data-testid=\"images-list\"]').should('be.visible');\n\n    // Verify initial state: images are displayed at full size\n    cy.get('[data-testid=\"image-item\"]').first().should('be.visible');\n    cy.get('[data-testid=\"image-item\"]').first().should('have.css', 'width', '100%');\n\n    // Intercept API call to load images\n    cy.intercept('GET', '/api/images').as('loadImages');\n\n    // Trigger image load\n    cy.get('[data-testid=\"load-more-button\"]').click();\n    cy.wait('@loadImages');\n\n    // Verify images are now scaled down\n    cy.get('[data-testid=\"image-item\"]').first().should('have.css', 'width', '50%');\n    cy.get('[data-testid=\"image-item\"]').first().should('have.css', 'height', 'auto');\n\n    // Verify image aspect ratio is maintained\n    cy.get('[data-testid=\"image-item\"]').first().should('have.css', 'aspect-ratio', '1/1');\n\n    // Verify image is still visible and not distorted\n    cy.get('[data-testid=\"image-item\"]').first().should('be.visible');\n    cy.get('[data-testid=\"image-item\"]').first().should('not.contain', 'loading');\n\n    // Verify image source is still correct\n    cy.get('[data-testid=\"image-item\"]').first().should('have.attr', 'src');\n  });\n\n  it('should handle edge case: images with very large dimensions', () => {\n    // Setup: Open the images page\n    cy.get('[data-testid=\"images-list\"]').should('be.visible');\n\n    // Intercept API call to load images\n    cy.intercept('GET', '/api/images').as('loadImages');\n\n    // Trigger image load\n    cy.get('[data-testid=\"load-more-button\"]').click();\n    cy.wait('@loadImages');\n\n    // Verify large image is scaled down appropriately\n    cy.get('[data-testid=\"image-item\"]').first().should('have.css', 'width', '50%');\n    cy.get('[data-testid=\"image-item\"]').first().should('have.css', 'height', 'auto');\n\n    // Verify aspect ratio is maintained\n    cy.get('[data-testid=\"image-item\"]').first().should('have.css', 'aspect-ratio', '1/1');\n\n    // Verify image is not stretched or squished\n    cy.get('[data-testid=\"image-item\"]').first().should('not.contain', 'stretched');\n    cy.get('[data-testid=\"image-item\"]').first().should('not.contain', 'squished');\n\n    // Verify image is still visible and not distorted\n    cy.get('[data-testid=\"image-item\"]').first().should('be.visible');\n    cy.get('[data-testid=\"image-item\"]').first().should('not.contain', 'loading');\n\n    // Verify image source is still correct\n    cy.get('[data-testid=\"image-item\"]').first().should('have.attr', 'src');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4254,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.1914,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 388.924,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7112,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2373,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 362.083,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

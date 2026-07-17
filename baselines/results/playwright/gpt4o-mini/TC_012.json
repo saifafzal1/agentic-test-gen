@@ -1,0 +1,13 @@
+{
+  "id": "TC_012",
+  "category": "authentication",
+  "complexity": "medium",
+  "user_story": "As a user, I want my session to expire after 30 minutes of inactivity.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Session Expiration', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/login');\n    await page.fill('input[name=\"username\"]', 'testuser');\n    await page.fill('input[name=\"password\"]', 'password123');\n    await page.click('button[type=\"submit\"]');\n    await expect(page.getByText('Welcome, testuser')).toBeVisible();\n  });\n\n  test('should expire session after 30 minutes of inactivity', async ({ page }) => {\n    await page.waitForTimeout(30 * 60 * 1000); // Wait for 30 minutes\n    await page.reload();\n    await expect(page.getByText('Your session has expired. Please log in again.')).toBeVisible();\n  });\n\n  test('should remain logged in if activity occurs before session expiration', async ({ page }) => {\n    await page.waitForTimeout(29 * 60 * 1000); // Wait for 29 minutes\n    await page.click('button#some-action'); // Simulate user activity\n    await expect(page.getByText('Welcome, testuser')).toBeVisible();\n    await page.waitForTimeout(1 * 60 * 1000); // Wait for 1 more minute\n    await page.reload();\n    await expect(page.getByText('Welcome, testuser')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 300,
+  "latency_s": 4.4,
+  "timestamp": "2026-06-19T16:44:09.900864"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_005",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8156,
+  "total_latency_s": 46.039,
+  "final_script": "describe('Password Reset Confirmation Message', () => {\n  beforeEach(() => {\n    cy.visit('/password-reset');\n  });\n\n  it('should display success confirmation message after successful password reset', () => {\n    // Intercept the password reset API call\n    cy.intercept('POST', '/api/auth/reset-password').as('resetPassword');\n\n    // Fill in the reset form\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n    cy.get('[data-testid=\"new-password-input\"]').type('NewSecurePassword123!');\n    cy.get('[data-testid=\"confirm-password-input\"]').type('NewSecurePassword123!');\n\n    // Submit the form\n    cy.get('[data-testid=\"reset-password-button\"]').click();\n\n    // Wait for the API response\n    cy.wait('@resetPassword');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Password reset successfully');\n\n    // Verify reset link is visible\n    cy.get('[data-testid=\"reset-link\"]').should('be.visible');\n    cy.get('[data-testid=\"reset-link\"]').should('contain', 'Reset Password');\n\n    // Verify email confirmation link is present\n    cy.get('[data-testid=\"email-confirmation-link\"]').should('be.visible');\n    cy.get('[data-testid=\"email-confirmation-link\"]').should('contain', 'Confirm Password Reset');\n  });\n\n  it('should not display success message if password reset fails', () => {\n    // Intercept the password reset API call with a failure response\n    cy.intercept('POST', '/api/auth/reset-password', {\n      statusCode: 500,\n      body: { error: 'Internal server error' }\n    }).as('resetPasswordFail');\n\n    // Fill in the reset form\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n    cy.get('[data-testid=\"new-password-input\"]').type('WeakPassword123');\n    cy.get('[data-testid=\"confirm-password-input\"]').type('WeakPassword123');\n\n    // Submit the form\n    cy.get('[data-testid=\"reset-password-button\"]').click();\n\n    // Wait for the failed API response\n    cy.wait('@resetPasswordFail');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Password reset failed');\n\n    // Verify success message does not appear\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n\n    // Verify reset link is not visible\n    cy.get('[data-testid=\"reset-link\"]').should('not.exist');\n\n    // Verify email confirmation link is not visible\n    cy.get('[data-testid=\"email-confirmation-link\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8156,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5854,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 46.039,
+      "feedback_used": ""
+    }
+  ]
+}

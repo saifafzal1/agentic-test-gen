@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_195",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7522,
+  "total_latency_s": 33.054,
+  "final_script": "describe('Save Search Query Feature', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should successfully save a search query and display saved queries list', () => {\n    // Intercept the API call to save the search\n    cy.intercept('POST', '/api/search/save').as('saveSearch');\n\n    // Find and fill search input\n    cy.get('[data-testid=\"search-input\"]').type('Cypress automation');\n\n    // Find and click save button\n    cy.get('[data-testid=\"save-search-btn\"]').click();\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Search saved successfully');\n\n    // Verify search query is stored\n    cy.get('[data-testid=\"saved-searches-list\"]').should('be.visible');\n    cy.get('[data-testid=\"saved-search-item\"]').should('contain', 'Cypress automation');\n\n    // Verify saved search item has a delete button\n    cy.get('[data-testid=\"saved-search-item\"]').first().should('have.css', 'button', {\n      'display': 'block',\n      'data-testid': 'delete-saved-search-btn'\n    });\n\n    // Verify search query appears in saved searches list\n    cy.get('[data-testid=\"saved-search-item\"]').first().should('contain', 'Cypress automation');\n  });\n\n  it('should handle edge case: saving an empty search query', () => {\n    // Intercept the API call to save the search\n    cy.intercept('POST', '/api/search/save').as('saveSearch');\n\n    // Find and clear search input\n    cy.get('[data-testid=\"search-input\"]').clear();\n\n    // Find and click save button\n    cy.get('[data-testid=\"save-search-btn\"]').click();\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Search saved successfully');\n\n    // Verify empty search is not stored\n    cy.get('[data-testid=\"saved-searches-list\"]').should('be.visible');\n    cy.get('[data-testid=\"saved-search-item\"]').should('not.exist');\n\n    // Verify no empty search items are displayed\n    cy.get('[data-testid=\"saved-search-item\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7522,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3739,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 33.054,
+      "feedback_used": ""
+    }
+  ]
+}

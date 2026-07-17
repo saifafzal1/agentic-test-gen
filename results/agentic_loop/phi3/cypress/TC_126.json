@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_126",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7736,
+  "total_latency_s": 50.916,
+  "final_script": "describe('Animated Transitions Between Async Page Loads', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should display loading spinner while async page loads and then fade in content', () => {\n    // Intercept the API call\n    cy.intercept('GET', '/api/page1').as('loadPage1');\n\n    // Click the button to load the first page\n    cy.get('[data-testid=\"load-page-btn\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@loadPage1');\n\n    // Verify loading spinner is visible\n    cy.get('[data-testid=\"loading-spinner\"]').should('be.visible');\n\n    // Verify spinner is animated\n    cy.get('[data-testid=\"loading-spinner\"]').should('have.class', 'spinner');\n\n    // Verify content container is initially empty\n    cy.get('[data-testid=\"page-content\"]').should('be.empty');\n\n    // Click the button to load the second page\n    cy.get('[data-testid=\"load-page-btn\"]').click();\n\n    // Intercept the second API call\n    cy.intercept('GET', '/api/page2').as('loadPage2');\n\n    // Wait for the second API call to complete\n    cy.wait('@loadPage2');\n\n    // Verify loading spinner is hidden\n    cy.get('[data-testid=\"loading-spinner\"]').should('not.exist');\n\n    // Verify content container is now visible\n    cy.get('[data-testid=\"page-content\"]').should('be.visible');\n\n    // Verify content is loaded\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Page 2');\n    cy.get('[data-testid=\"page-description\"]').should('contain', 'Welcome to Page 2');\n\n    // Verify animation fades in content\n    cy.get('[data-testid=\"page-content\"]').should('have.css', 'opacity', '1');\n  });\n\n  it('should handle failed async page loads with error state and retry button', () => {\n    // Intercept the API call with a 500 error\n    cy.intercept('GET', '/api/page3', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' }\n    }).as('loadPage3');\n\n    // Click the button to load the third page\n    cy.get('[data-testid=\"load-page-btn\"]').click();\n\n    // Wait for the failed API call\n    cy.wait('@loadPage3');\n\n    // Verify error state is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Failed to load page');\n\n    // Verify retry button is visible\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n\n    // Click the retry button\n    cy.get('[data-testid=\"retry-button\"]').click();\n\n    // Intercept the API call again\n    cy.intercept('GET', '/api/page3').as('loadPage3Retry');\n\n    // Wait for the retry API call\n    cy.wait('@loadPage3Retry');\n\n    // Verify error state is cleared\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n\n    // Verify loading spinner is visible again\n    cy.get('[data-testid=\"loading-spinner\"]').should('be.visible');\n\n    // Verify content container is empty\n    cy.get('[data-testid=\"page-content\"]').should('be.empty');\n\n    // Verify retry button is no longer visible\n    cy.get('[data-testid=\"retry-button\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7736,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4454,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 50.916,
+      "feedback_used": ""
+    }
+  ]
+}

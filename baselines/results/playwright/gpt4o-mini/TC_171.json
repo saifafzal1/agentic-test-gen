@@ -1,0 +1,13 @@
+{
+  "id": "TC_171",
+  "category": "file_upload",
+  "complexity": "medium",
+  "user_story": "As a user, I want to cancel an in-progress upload.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload Cancellation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload');\n  });\n\n  test('should allow user to cancel an in-progress upload', async ({ page }) => {\n    const filePath = 'path/to/file.txt';\n    await page.setInputFiles('input[type=\"file\"]', filePath);\n    await expect(page.getByText('Uploading...')).toBeVisible();\n\n    await page.getByRole('button', { name: 'Cancel Upload' }).click();\n    await expect(page.getByText('Upload cancelled')).toBeVisible();\n  });\n\n  test('should not show upload progress after cancellation', async ({ page }) => {\n    const filePath = 'path/to/file.txt';\n    await page.setInputFiles('input[type=\"file\"]', filePath);\n    await expect(page.getByText('Uploading...')).toBeVisible();\n\n    await page.getByRole('button', { name: 'Cancel Upload' }).click();\n    await expect(page.getByText('Uploading...')).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 130,
+  "completion_tokens": 235,
+  "latency_s": 3.09,
+  "timestamp": "2026-06-19T16:54:56.090695"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_263",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8472,
+  "total_latency_s": 72.548,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Bell Badge Count', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should display badge count when notifications exist', async ({ page }) => {\n    // Intercept the API call to mock notifications\n    await page.route('**/api/notifications', (route) => {\n      route.continue();\n    });\n\n    // Mock the response with 3 notifications\n    await page.route('**/api/notifications', (route) => {\n      route.abort();\n      route.continue({\n        status: 200,\n        contentType: 'application/json',\n        body: JSON.stringify({\n          notifications: [\n            { id: 1, message: 'New message', read: false },\n            { id: 2, message: 'System update', read: false },\n            { id: 3, message: 'Comment reply', read: false },\n          ],\n          count: 3,\n        }),\n      });\n    });\n\n    // Wait for the notifications to load\n    await page.waitForLoadState('networkidle');\n\n    // Verify the notification bell icon is visible\n    const notificationBell = page.getByRole('button', { name: /notifications/i });\n    await expect(notificationBell).toBeVisible();\n\n    // Verify the badge count is displayed\n    const badge = page.getByText('3');\n    await expect(badge).toBeVisible();\n\n    // Verify the badge has the correct styling (e.g., red background)\n    await expect(badge).toHaveCSS('background-color', 'rgb(255, 0, 0)');\n\n    // Verify the badge is positioned correctly on the icon\n    const badgeBoundingBox = await badge.boundingBox();\n    const bellBoundingBox = await notificationBell.boundingBox();\n    expect(badgeBoundingBox.x).toBeGreaterThan(bellBoundingBox.x);\n    expect(badgeBoundingBox.y).toBeGreaterThan(bellBoundingBox.y);\n  });\n\n  test('should not display badge when no notifications exist', async ({ page }) => {\n    // Intercept the API call to mock no notifications\n    await page.route('**/api/notifications', (route) => {\n      route.abort();\n      route.continue({\n        status: 200,\n        contentType: 'application/json',\n        body: JSON.stringify({\n          notifications: [],\n          count: 0,\n        }),\n      });\n    });\n\n    // Wait for the notifications to load\n    await page.waitForLoadState('networkidle');\n\n    // Verify the notification bell icon is visible\n    const notificationBell = page.getByRole('button', { name: /notifications/i });\n    await expect(notificationBell).toBeVisible();\n\n    // Verify the badge does not exist\n    const badge = page.getByText('0');\n    await expect(badge).not.toBeVisible();\n\n    // Verify the badge element is not present in the DOM\n    const badgeElement = page.locator('[data-testid=\"notification-badge\"]');\n    await expect(badgeElement).not.toBeVisible();\n\n    // Verify the notification bell has no badge styling\n    await expect(notificationBell).not.toHaveCSS('background-color', 'rgb(255, 0, 0)');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8472,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5908,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.548,
+      "feedback_used": ""
+    }
+  ]
+}

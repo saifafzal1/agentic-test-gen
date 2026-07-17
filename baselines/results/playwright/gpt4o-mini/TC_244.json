@@ -1,0 +1,13 @@
+{
+  "id": "TC_244",
+  "category": "payment_flow",
+  "complexity": "complex",
+  "user_story": "As a user, I want to enter my card details and complete a purchase successfully.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Payment Flow', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/checkout');\n  });\n\n  test('should display error for invalid card details', async ({ page }) => {\n    await page.fill(getByLabel('Card Number'), '1234 5678 9012 3456');\n    await page.fill(getByLabel('Expiry Date'), '12/23');\n    await page.fill(getByLabel('CVC'), '123');\n    await page.click(getByRole('button', { name: 'Complete Purchase' }));\n    \n    const errorMessage = await page.getByText('Invalid card details. Please try again.');\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should complete purchase with valid card details', async ({ page }) => {\n    await page.fill(getByLabel('Card Number'), '4111 1111 1111 1111');\n    await page.fill(getByLabel('Expiry Date'), '12/25');\n    await page.fill(getByLabel('CVC'), '123');\n    await page.click(getByRole('button', { name: 'Complete Purchase' }));\n    \n    const successMessage = await page.getByText('Thank you for your purchase!');\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 286,
+  "latency_s": 6.02,
+  "timestamp": "2026-06-19T17:00:14.958101"
+}

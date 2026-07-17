@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_177",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7209,
+  "total_latency_s": 310.805,
+  "final_script": "describe('File Download Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/files');\n  });\n\n  it('should successfully download a previously uploaded file', () => {\n    // Intercept the file download API call\n    cy.intercept('GET', '/api/files/download/12345').as('downloadFile');\n\n    // Verify file exists in the list\n    cy.get('[data-testid=\"file-item-12345\"]').should('be.visible');\n    cy.get('[data-testid=\"file-name-12345\"]').should('contain', 'Sample Document');\n\n    // Click the download button\n    cy.get('[data-testid=\"download-btn-12345\"]').click();\n\n    // Wait for the download to complete\n    cy.wait('@downloadFile');\n\n    // Verify download was initiated\n    cy.get('[data-testid=\"download-status-12345\"]').should('contain', 'Downloading');\n\n    // Verify download file appears in browser downloads\n    cy.get('[data-testid=\"download-file-12345\"]').should('be.visible');\n    cy.get('[data-testid=\"download-file-12345\"]').should('contain', 'Sample Document');\n\n    // Verify file is downloaded\n    cy.get('[data-testid=\"download-file-12345\"]').should('have.attr', 'download');\n\n    // Verify file is saved in the correct location\n    cy.get('[data-testid=\"download-file-12345\"]').should('have.attr', 'href');\n    cy.get('[data-testid=\"download-file-12345\"]').should('contain', '/downloads/Sample Document.pdf');\n\n    // Verify file is accessible\n    cy.get('[data-testid=\"download-file-12345\"]').should('be.visible');\n  });\n\n  it('should handle failed file download due to server error', () => {\n    // Intercept the file download API call with a 500 error\n    cy.intercept('GET', '/api/files/download/99999', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' }\n    }).as('downloadFileError');\n\n    // Verify file exists in the list\n    cy.get('[data-testid=\"file-item-99999\"]').should('be.visible');\n\n    // Click the download button\n    cy.get('[data-testid=\"download-btn-99999\"]').click();\n\n    // Wait for the failed download attempt\n    cy.wait('@downloadFileError');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Failed to download file');\n\n    // Verify download button is still clickable\n    cy.get('[data-testid=\"download-btn-99999\"]').should('be.visible');\n\n    // Verify file is not downloaded\n    cy.get('[data-testid=\"download-file-99999\"]').should('not.exist');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-btn-99999\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4467,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.2625,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 54.567,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7209,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2695,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 256.238,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

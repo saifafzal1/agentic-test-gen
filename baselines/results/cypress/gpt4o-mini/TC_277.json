@@ -1,0 +1,13 @@
+{
+  "id": "TC_277",
+  "category": "user_profile",
+  "complexity": "complex",
+  "user_story": "As a user, I want to upload a profile picture and see the preview.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Profile Picture Upload', () => {\n    beforeEach(() => {\n        cy.visit('/user/profile');\n    });\n\n    it('should upload a profile picture and display the preview', () => {\n        const fileName = 'profile-pic.jpg';\n        cy.fixture(fileName).then(fileContent => {\n            cy.get('input[type=\"file\"]').attachFile(fileName);\n            cy.get('.preview-image').should('be.visible');\n            cy.get('.preview-image').should('have.attr', 'src').and('include', fileName);\n        });\n    });\n\n    it('should show an error message when uploading an invalid file type', () => {\n        const invalidFileName = 'invalid-file.txt';\n        cy.fixture(invalidFileName).then(fileContent => {\n            cy.get('input[type=\"file\"]').attachFile(invalidFileName);\n            cy.get('.error-message').should('be.visible').and('contain', 'Invalid file type. Please upload a JPG or PNG image.');\n        });\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 206,
+  "latency_s": 2.89,
+  "timestamp": "2026-06-19T16:42:31.261227"
+}

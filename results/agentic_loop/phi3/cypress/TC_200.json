@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_200",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7262,
+  "total_latency_s": 382.423,
+  "final_script": "describe('Filter Tag Removal', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should remove individual filter tag when x icon is clicked', () => {\n    // Setup: Add filter tags\n    cy.get('[data-testid=\"add-filter-btn\"]').click();\n    cy.get('[data-testid=\"filter-tag-input\"]').type('price');\n    cy.get('[data-testid=\"add-filter-btn\"]').click();\n    cy.get('[data-testid=\"filter-tag-input\"]').type('brand');\n    cy.get('[data-testid=\"add-filter-btn\"]').click();\n\n    // Verify filter tags are applied\n    cy.get('[data-testid=\"filter-tags\"]').should('contain', 'price');\n    cy.get('[data-testid=\"filter-tags\"]').should('contain', 'brand');\n\n    // Verify search results are filtered\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"search-result-item\"]').should('have.class', 'filtered');\n\n    // Verify x icon is present for each filter\n    cy.get('[data-testid=\"filter-tag-input\"]').first().should('have.attr', 'aria-label', 'Remove price filter');\n    cy.get('[data-testid=\"filter-tag-input\"]').last().should('have.attr', 'aria-label', 'Remove brand filter');\n\n    // Click x icon to remove 'price' filter\n    cy.get('[data-testid=\"filter-tag-input\"]').first().within(() => {\n      cy.get('[data-testid=\"x-icon\"]').click();\n    });\n\n    // Verify 'price' filter is removed\n    cy.get('[data-testid=\"filter-tags\"]').should('not.contain', 'price');\n\n    // Verify search results are no longer filtered by 'price'\n    cy.get('[data-testid=\"search-result-item\"]').should('not.have.class', 'filtered');\n\n    // Verify 'brand' filter remains\n    cy.get('[data-testid=\"filter-tags\"]').should('contain', 'brand');\n\n    // Verify x icon is still present for 'brand' filter\n    cy.get('[data-testid=\"filter-tag-input\"]').last().within(() => {\n      cy.get('[data-testid=\"x-icon\"]').should('be.visible');\n    });\n  });\n\n  it('should not remove filter tag when x icon is clicked on empty filter', () => {\n    // Setup: Add filter tags\n    cy.get('[data-testid=\"add-filter-btn\"]').click();\n    cy.get('[data-testid=\"filter-tag-input\"]').type('price');\n    cy.get('[data-testid=\"add-filter-btn\"]').click();\n\n    // Verify filter tags are applied\n    cy.get('[data-testid=\"filter-tags\"]').should('contain', 'price');\n\n    // Verify x icon is present for 'price' filter\n    cy.get('[data-testid=\"filter-tag-input\"]').first().within(() => {\n      cy.get('[data-testid=\"x-icon\"]').should('be.visible');\n    });\n\n    // Click x icon on empty filter\n    cy.get('[data-testid=\"filter-tag-input\"]').first().within(() => {\n      cy.get('[data-testid=\"x-icon\"]').click();\n    });\n\n    // Verify filter tag is not removed (should still be visible)\n    cy.get('[data-testid=\"filter-tags\"]').should('contain', 'price');\n\n    // Verify x icon is still present\n    cy.get('[data-testid=\"filter-tag-input\"]').first().within(() => {\n      cy.get('[data-testid=\"x-icon\"]').should('be.visible');\n    });\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7262,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2873,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 382.423,
+      "feedback_used": ""
+    }
+  ]
+}

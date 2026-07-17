@@ -1,0 +1,13 @@
+{
+  "id": "TC_117",
+  "category": "async_await",
+  "complexity": "medium",
+  "user_story": "As a user, I want race conditions in search to be handled so only the latest result shows.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should display the latest search result', async ({ page }) => {\n    await page.fill(getByLabel('Search'), 'test query');\n    await page.click(getByRole('button', { name: 'Search' }));\n\n    // Simulate a delay for race condition\n    await page.waitForTimeout(100); // Adjust timeout as necessary\n\n    await page.fill(getByLabel('Search'), 'test query updated');\n    await page.click(getByRole('button', { name: 'Search' }));\n\n    const latestResult = await page.getByText('Expected latest result'); // Replace with actual expected text\n    await expect(latestResult).toBeVisible();\n  });\n\n  test('should not show outdated search results', async ({ page }) => {\n    await page.fill(getByLabel('Search'), 'initial query');\n    await page.click(getByRole('button', { name: 'Search' }));\n\n    // Simulate a delay for race condition\n    await page.waitForTimeout(100); // Adjust timeout as necessary\n\n    await page.fill(getByLabel('Search'), 'initial query updated');\n    await page.click(getByRole('button', { name: 'Search' }));\n\n    const outdatedResult = await page.getByText('Expected outdated result'); // Replace with actual outdated text\n    await expect(outdatedResult).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 138,
+  "completion_tokens": 330,
+  "latency_s": 4.07,
+  "timestamp": "2026-06-19T16:51:37.367163"
+}

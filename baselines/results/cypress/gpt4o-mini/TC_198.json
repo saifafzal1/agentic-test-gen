@@ -1,0 +1,13 @@
+{
+  "id": "TC_198",
+  "category": "search_filter",
+  "complexity": "medium",
+  "user_story": "As a user, I want to exclude a term from search by prefixing it with '-'.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Search Filter - Exclude Term', () => {\n    beforeEach(() => {\n        cy.visit('/search'); // Replace with the actual search page URL\n    });\n\n    it('should exclude the term when prefixed with \"-\"', () => {\n        cy.get('input[name=\"search\"]').type('apple -banana');\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.search-results').should('not.contain', 'banana');\n        cy.get('.search-results').should('contain', 'apple');\n    });\n\n    it('should return no results when all terms are excluded', () => {\n        cy.get('input[name=\"search\"]').type('-apple -banana');\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('.search-results').should('not.exist');\n    });\n});",
+  "prompt_tokens": 114,
+  "completion_tokens": 166,
+  "latency_s": 2.41,
+  "timestamp": "2026-06-19T16:37:35.856717"
+}

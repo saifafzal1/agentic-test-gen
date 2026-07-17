@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_260",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8323,
+  "total_latency_s": 188.907,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Error Toast Notification on Action Failure', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display error toast when an action fails', async ({ page }) => {\n    // Setup: intercept the API call to simulate failure\n    await page.route('**/api/user/profile', (route) => {\n      route.abort('failed');\n    });\n\n    // Get the action button using getByRole\n    const actionButton = page.getByRole('button', { name: /update profile/i });\n    await expect(actionButton).toBeVisible();\n\n    // Click the action button\n    await actionButton.click();\n\n    // Wait for the error toast to appear\n    const errorToast = page.getByText(/failed to update profile/i);\n    await expect(errorToast).toBeVisible();\n\n    // Verify the toast has an error icon\n    const errorIcon = page.getByRole('img', { name: /error/i });\n    await expect(errorIcon).toBeVisible();\n\n    // Verify the toast has a close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify the toast has a dismiss action\n    await closeButton.click();\n    await expect(errorToast).not.toBeVisible();\n  });\n\n  test('should not display error toast when action succeeds', async ({ page }) => {\n    // Setup: intercept the API call to simulate success\n    await page.route('**/api/user/profile', (route) => {\n      route.continue();\n    });\n\n    // Get the action button using getByRole\n    const actionButton = page.getByRole('button', { name: /update profile/i });\n    await expect(actionButton).toBeVisible();\n\n    // Click the action button\n    await actionButton.click();\n\n    // Wait for the success toast to appear\n    const successToast = page.getByText(/profile updated successfully/i);\n    await expect(successToast).toBeVisible();\n\n    // Verify the success toast has a success icon\n    const successIcon = page.getByRole('img', { name: /success/i });\n    await expect(successIcon).toBeVisible();\n\n    // Verify the success toast has a close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify the success toast has a dismiss action\n    await closeButton.click();\n    await expect(successToast).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5303,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.5211,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.589,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8323,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5409,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 116.318,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_229",
+  "category": "responsive",
+  "complexity": "complex",
+  "user_story": "As a mobile user, I want images to scale down to fit the screen width.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Image Scaling for Mobile Users', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should scale down images to fit the screen width on mobile', () => {\n        cy.viewport('iphone-6'); // Set viewport to mobile size\n        cy.get('img').each(($img) => {\n            const imgWidth = $img.width();\n            cy.wrap($img).invoke('attr', 'naturalWidth').then((naturalWidth) => {\n                expect(parseInt(naturalWidth)).to.be.greaterThan(imgWidth);\n            });\n        });\n    });\n\n    it('should not overflow the screen width with images on mobile', () => {\n        cy.viewport('iphone-6'); // Set viewport to mobile size\n        cy.get('img').each(($img) => {\n            cy.wrap($img).should('have.css', 'max-width').and('equal', '100%');\n        });\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 203,
+  "latency_s": 2.72,
+  "timestamp": "2026-06-19T16:39:23.631487"
+}

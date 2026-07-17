@@ -1,0 +1,44 @@
+{
+  "tc_id": "TC_107",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.864,
+  "total_latency_s": 274.96,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Image Upload - Error for Small Dimensions', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload');\n  });\n\n  test('should display error message when image dimensions are too small', async ({ page }) => {\n    // Setup: Intercept the API call to get image dimensions\n    await page.route('**/api/upload/validate-dimensions', (route) => {\n      route.abort('failed');\n    });\n\n    // Setup: Mock the API response for small image dimensions\n    await page.route('**/api/upload/validate-dimensions', (route) => {\n      route.continue();\n    });\n\n    // Setup: Mock the API response for successful validation\n    await page.route('**/api/upload/validate-dimensions', (route) => {\n      route.continue();\n    });\n\n    // Setup: Mock the API response for failed validation\n    await page.route('**/api/upload/validate-dimensions', (route) => {\n      route.abort('failed');\n    });\n\n    // Get the file input using getByLabel\n    const fileInput = page.getByLabel('Upload Image');\n    await expect(fileInput).toBeVisible();\n\n    // Get the error message using getByText\n    const errorMessage = page.getByText('Image dimensions are too small');\n    await expect(errorMessage).toBeVisible();\n\n    // Get the upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await expect(uploadButton).toBeVisible();\n\n    // Get the file preview using getByRole\n    const filePreview = page.getByRole('img', { name: /preview/i });\n    await expect(filePreview).toBeVisible();\n\n    // Verify error message is displayed\n    await expect(errorMessage).toContainText('too small');\n\n    // Verify upload button is disabled\n    await expect(uploadButton).toBeDisabled();\n\n    // Verify file preview is visible\n    await expect(filePreview).toBeVisible();\n  });\n\n  test('should not display error when image dimensions are valid', async ({ page }) => {\n    // Setup: Mock the API response for valid image dimensions\n    await page.route('**/api/upload/validate-dimensions', (route) => {\n      route.continue();\n    });\n\n    // Get the file input using getByLabel\n    const fileInput = page.getByLabel('Upload Image');\n    await expect(fileInput).toBeVisible();\n\n    // Get the error message using getByText\n    const errorMessage = page.getByText('Image dimensions are too small');\n    await expect(errorMessage).not.toBeVisible();\n\n    // Get the upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await expect(uploadButton).toBeVisible();\n\n    // Get the file preview using getByRole\n    const filePreview = page.getByRole('img', { name: /preview/i });\n    await expect(filePreview).toBeVisible();\n\n    // Verify error message is not displayed\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify upload button is enabled\n    await expect(uploadButton).not.toBeDisabled();\n\n    // Verify file preview is visible\n    await expect(filePreview).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.1395,
+        "syntax": 0.1,
+        "assertion": 0.0,
+        "rouge_l": 0.3317,
+        "missing_keywords": [
+          "expect("
+        ],
+        "assertion_count": 0,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2",
+        "complete": false
+      },
+      "latency_s": 57.897,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.864,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5467,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 217.063,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2"
+    }
+  ]
+}

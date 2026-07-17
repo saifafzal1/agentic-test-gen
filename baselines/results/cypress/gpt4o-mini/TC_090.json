@@ -1,0 +1,13 @@
+{
+  "id": "TC_090",
+  "category": "error_states",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see a friendly message when my internet connection drops.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Internet Connection Drop Message', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should display a friendly message when the internet connection drops', () => {\n        // Simulate dropping the internet connection\n        cy.intercept('GET', '**/*', { forceNetworkError: true }).as('networkError');\n        \n        // Trigger an action that requires internet connection\n        cy.get('button#fetchData').click(); // Replace with the actual button that fetches data\n\n        // Wait for the network error to occur\n        cy.wait('@networkError');\n\n        // Assert that the friendly message is displayed\n        cy.get('.error-message') // Replace with the actual selector for the error message\n          .should('be.visible')\n          .and('contain', 'Oops! It seems like your internet connection is down. Please check your connection and try again.');\n    });\n\n    it('should not display the message if the internet connection is stable', () => {\n        // Simulate a stable internet connection\n        cy.intercept('GET', '**/*', { statusCode: 200 }).as('stableConnection');\n\n        // Trigger an action that requires internet connection\n        cy.get('button#fetchData').click(); // Replace with the actual button that fetches data\n\n        // Wait for the stable connection response\n        cy.wait('@stableConnection');\n\n        // Assert that the friendly message is not displayed\n        cy.get('.error-message') // Replace with the actual selector for the error message\n          .should('not.exist');\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 330,
+  "latency_s": 4.77,
+  "timestamp": "2026-06-19T16:31:08.920403"
+}

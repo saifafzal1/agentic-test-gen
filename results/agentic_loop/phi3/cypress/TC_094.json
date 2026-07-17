@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_094",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.5073,
+  "total_latency_s": 1355.388,
+  "final_script": "describe('User Permissions - Edit Content', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should display permissions error when trying to edit another user\\'s content', () => {\n    // Navigate to user profile\n    cy.get('[data-testid=\"user-profile-link\"]').click();\n    cy.get('[data-testid=\"user-profile-name\"]').should('contain', 'John Doe');\n\n    // Attempt to edit another user's content\n    cy.get('[data-testid=\"edit-content-button\"]').click();\n    cy.get('[data-testid=\"edit-form\"]').should('be.visible');\n    cy.get('[data-testid=\"user-name-input\"]').type('Jane Smith');\n    cy.get('[data-testid=\"user-email-input\"]').type('jane.smith@example.com');\n    cy.get('[data-testid=\"save-button\"]').click();\n\n    // Verify permissions error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'You do not have permission to edit this user\\'s content');\n\n    // Verify error styling is applied\n    cy.get('[data-testid=\"error-message\"]').should('have.class', 'error');\n\n    // Verify edit form is still visible\n    cy.get('[data-testid=\"edit-form\"]').should('be.visible');\n  });\n\n  it('should handle successful edit when user has permission', () => {\n    // Navigate to user profile\n    cy.get('[data-testid=\"user-profile-link\"]').click();\n    cy.get('[data-testid=\"user-profile-name\"]').should('contain', 'John Doe');\n\n    // Attempt to edit own content\n    cy.get('[data-testid=\"edit-content-button\"]').click();\n    cy.get('[data-testid=\"edit-form\"]').should('be.visible');\n    cy.get('[data-testid=\"user-name-input\"]').type('John Doe');\n    cy.get('[data-testid=\"user-email-input\"]').type('john.doe@example.com');\n    cy.get('[data-testid=\"save-button\"]').click();\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Content updated successfully');\n\n    // Verify edit form is closed\n    cy.get('[data-testid=\"edit-form\"]').should('not.exist');\n\n    // Verify user is redirected to dashboard\n    cy.url().should('include', '/dashboard');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5071,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.4635,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 381.345,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.5073,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.4645,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 486.512,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.5073,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.4645,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 487.531,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

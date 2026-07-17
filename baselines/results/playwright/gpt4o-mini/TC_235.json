@@ -1,0 +1,13 @@
+{
+  "id": "TC_235",
+  "category": "responsive",
+  "complexity": "complex",
+  "user_story": "As a user, I want a bottom sheet to replace dropdowns on mobile.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Bottom Sheet Replacement for Dropdowns on Mobile', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-website-url.com');\n    await page.setViewportSize({ width: 375, height: 812 }); // Mobile viewport\n  });\n\n  test('should display bottom sheet when dropdown is clicked', async ({ page }) => {\n    await page.getByRole('button', { name: 'Open Dropdown' }).click();\n    const bottomSheet = page.getByRole('dialog', { name: 'Bottom Sheet' });\n    await expect(bottomSheet).toBeVisible();\n  });\n\n  test('should allow selection from bottom sheet', async ({ page }) => {\n    await page.getByRole('button', { name: 'Open Dropdown' }).click();\n    const bottomSheet = page.getByRole('dialog', { name: 'Bottom Sheet' });\n    await expect(bottomSheet).toBeVisible();\n\n    await bottomSheet.getByText('Option 1').click();\n    const selectedValue = page.getByLabel('Selected Value');\n    await expect(selectedValue).toHaveText('Option 1');\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 251,
+  "latency_s": 3.98,
+  "timestamp": "2026-06-19T16:59:33.047070"
+}

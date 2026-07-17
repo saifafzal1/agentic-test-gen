@@ -1,0 +1,13 @@
+{
+  "id": "TC_022",
+  "category": "form_validation",
+  "complexity": "complex",
+  "user_story": "As a user, I want currency fields to format with commas and two decimal places.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Currency Field Formatting', () => {\n    beforeEach(() => {\n        cy.visit('/your-form-page'); // Replace with your actual form page URL\n    });\n\n    it('should format currency field with commas and two decimal places on valid input', () => {\n        cy.get('input[name=\"currencyField\"]') // Replace with your actual input field selector\n            .type('1234567.89')\n            .blur(); // Trigger formatting on blur\n\n        cy.get('input[name=\"currencyField\"]')\n            .should('have.value', '1,234,567.89');\n    });\n\n    it('should not format currency field on invalid input', () => {\n        cy.get('input[name=\"currencyField\"]')\n            .type('invalid input')\n            .blur(); // Trigger formatting on blur\n\n        cy.get('input[name=\"currencyField\"]')\n            .should('have.value', 'invalid input');\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 191,
+  "latency_s": 2.55,
+  "timestamp": "2026-06-19T16:26:33.733712"
+}

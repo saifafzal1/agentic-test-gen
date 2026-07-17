@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_143",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8355,
+  "total_latency_s": 53.589,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Image Gallery Lightbox Modal', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/gallery');\n  });\n\n  test('should open lightbox when clicking an image in the gallery', async ({ page }) => {\n    // Verify lightbox is not visible initially\n    const lightbox = page.getByRole('dialog');\n    await expect(lightbox).not.toBeVisible();\n\n    // Verify gallery is visible\n    const gallery = page.getByRole('region', { name: /gallery/i });\n    await expect(gallery).toBeVisible();\n\n    // Get the first image in the gallery\n    const firstImage = page.locator('[data-testid=\"gallery-image-1\"]');\n    await expect(firstImage).toBeVisible();\n\n    // Click the first image to open lightbox\n    await firstImage.click();\n\n    // Verify lightbox is now visible\n    await expect(lightbox).toBeVisible();\n\n    // Verify lightbox has the correct title\n    const lightboxTitle = page.getByText('Image Details');\n    await expect(lightboxTitle).toBeVisible();\n\n    // Verify lightbox contains image details\n    const imageDetails = page.getByText('Sample Image');\n    await expect(imageDetails).toBeVisible();\n\n    // Verify close button is present\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify close button is clickable\n    await expect(closeButton).toBeEnabled();\n\n    // Close the lightbox\n    await closeButton.click();\n\n    // Verify lightbox is hidden\n    await expect(lightbox).not.toBeVisible();\n\n    // Verify gallery is still visible\n    await expect(gallery).toBeVisible();\n  });\n\n  test('should handle multiple clicks on the same image in the gallery', async ({ page }) => {\n    // Verify lightbox is not visible initially\n    const lightbox = page.getByRole('dialog');\n    await expect(lightbox).not.toBeVisible();\n\n    // Verify gallery is visible\n    const gallery = page.getByRole('region', { name: /gallery/i });\n    await expect(gallery).toBeVisible();\n\n    // Get the first image in the gallery\n    const firstImage = page.locator('[data-testid=\"gallery-image-1\"]');\n    await expect(firstImage).toBeVisible();\n\n    // Click the first image to open lightbox\n    await firstImage.click();\n\n    // Verify lightbox is now visible\n    await expect(lightbox).toBeVisible();\n\n    // Verify lightbox has the correct title\n    const lightboxTitle = page.getByText('Image Details');\n    await expect(lightboxTitle).toBeVisible();\n\n    // Verify lightbox contains image details\n    const imageDetails = page.getByText('Sample Image');\n    await expect(imageDetails).toBeVisible();\n\n    // Click the same image again to open lightbox\n    await firstImage.click();\n\n    // Verify lightbox is still visible\n    await expect(lightbox).toBeVisible();\n\n    // Verify lightbox title is still correct\n    await expect(lightboxTitle).toBeVisible();\n\n    // Verify lightbox contains the same image details\n    await expect(imageDetails).toBeVisible();\n\n    // Verify close button is still present\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Close the lightbox\n    await closeButton.click();\n\n    // Verify lightbox is hidden\n    await expect(lightbox).not.toBeVisible();\n\n    // Verify gallery is still visible\n    await expect(gallery).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8355,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5517,
+        "missing_keywords": [],
+        "assertion_count": 22,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 53.589,
+      "feedback_used": ""
+    }
+  ]
+}

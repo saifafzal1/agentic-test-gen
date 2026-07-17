@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_247",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8287,
+  "total_latency_s": 72.082,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Promo Code Application and Discounted Total', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/cart');\n  });\n\n  test('should successfully apply a valid promo code and display discounted total', async ({ page }) => {\n    // Verify initial cart total is visible\n    const initialTotal = page.getByRole('heading', { name: /cart total/i }).first();\n    await expect(initialTotal).toBeVisible();\n\n    // Verify initial total value\n    const initialTotalValue = page.getByText(/\\$\\d+\\.\\d{2}/).first();\n    await expect(initialTotalValue).toBeVisible();\n\n    // Locate and fill promo code input using getByLabel\n    const promoCodeInput = page.getByLabel('Promo Code');\n    await expect(promoCodeInput).toBeVisible();\n    await promoCodeInput.fill('SUMMER20');\n\n    // Locate and click apply button using getByRole\n    const applyButton = page.getByRole('button', { name: /apply promo code/i });\n    await expect(applyButton).toBeVisible();\n    await applyButton.click();\n\n    // Wait for API response and discount to be applied\n    await page.waitForResponse(response => \n      response.url().includes('/api/promo-code') && response.status() === 200\n    );\n\n    // Verify success message appears\n    const successMessage = page.getByText(/promo code applied successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify discount percentage is displayed\n    const discountText = page.getByText(/20% discount applied/i);\n    await expect(discountText).toBeVisible();\n\n    // Verify discounted total is displayed and is less than initial total\n    const discountedTotalValue = page.getByText(/\\$\\d+\\.\\d{2}/).last();\n    await expect(discountedTotalValue).toBeVisible();\n    \n    const initialTotalText = page.getByText(/\\$\\d+\\.\\d{2}/).first();\n    const initialTotalAmount = parseFloat(initialTotalText.textContent?.replace('$', '').replace(',', ''));\n    const discountedTotalAmount = parseFloat(discountedTotalValue.textContent?.replace('$', '').replace(',', ''));\n\n    expect(discountedTotalAmount).toBeLessThan(initialTotalAmount);\n    expect(discountedTotalAmount).toBeCloseTo(initialTotalAmount * 0.8, 2);\n  });\n\n  test('should display error message when applying an invalid promo code', async ({ page }) => {\n    // Locate and fill promo code input using getByLabel\n    const promoCodeInput = page.getByLabel('Promo Code');\n    await expect(promoCodeInput).toBeVisible();\n    await promoCodeInput.fill('INVALIDCODE123');\n\n    // Locate and click apply button using getByRole\n    const applyButton = page.getByRole('button', { name: /apply promo code/i });\n    await expect(applyButton).toBeVisible();\n    await applyButton.click();\n\n    // Wait for API response\n    await page.waitForResponse(response => \n      response.url().includes('/api/promo-code') && response.status() === 400\n    );\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/invalid promo code/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify discount message does not appear\n    const discountText = page.getByText(/promo code applied successfully/i);\n    await expect(discountText).not.toBeVisible();\n\n    // Verify total price remains unchanged\n    const initialTotalValue = page.getByText(/\\$\\d+\\.\\d{2}/).first();\n    await expect(initialTotalValue).toBeVisible();\n    \n    const totalAmount = parseFloat(initialTotalValue.textContent?.replace('$', '').replace(',', ''));\n    expect(totalAmount).toBeGreaterThan(0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8287,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4291,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.082,
+      "feedback_used": ""
+    }
+  ]
+}

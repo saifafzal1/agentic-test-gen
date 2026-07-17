@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_177",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7533,
+  "total_latency_s": 72.391,
+  "final_script": "describe('File Download Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/file-manager');\n  });\n\n  it('should successfully download a previously uploaded file', () => {\n    // Upload a file first\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/sample.pdf', { force: true });\n    cy.get('[data-testid=\"upload-button\"]').click();\n    cy.get('[data-testid=\"upload-success-message\"]').should('be.visible').should('contain', 'File uploaded successfully');\n\n    // Verify file appears in list\n    cy.get('[data-testid=\"file-list\"]').should('be.visible');\n    cy.get('[data-testid=\"file-item\"]').should('contain', 'sample.pdf');\n\n    // Click download button for the file\n    cy.get('[data-testid=\"file-item\"]').within(() => {\n      cy.get('[data-testid=\"download-button\"]').click();\n    });\n\n    // Verify download prompt or file download starts\n    cy.intercept('GET', '/api/files/download/sample.pdf').as('fileDownload');\n    cy.wait('@fileDownload');\n\n    // Verify download success message\n    cy.get('[data-testid=\"download-success-message\"]').should('be.visible').should('contain', 'File downloaded successfully');\n    cy.get('[data-testid=\"download-success-message\"]').should('contain', 'sample.pdf');\n  });\n\n  it('should handle download failure when file is not found', () => {\n    // Attempt to download a non-existent file\n    cy.get('[data-testid=\"file-list\"]').should('be.visible');\n    cy.get('[data-testid=\"file-item\"]').should('not.exist');\n\n    // Click download button on an empty state or non-existent file\n    cy.get('[data-testid=\"download-button\"]').click({ force: true });\n\n    // Verify error message appears\n    cy.get('[data-testid=\"download-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"download-error-message\"]').should('contain', 'File not found');\n\n    // Verify no success message appears\n    cy.get('[data-testid=\"download-success-message\"]').should('not.exist');\n\n    // Verify download button is disabled or remains clickable for retry\n    cy.get('[data-testid=\"download-button\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7533,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3777,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.391,
+      "feedback_used": ""
+    }
+  ]
+}

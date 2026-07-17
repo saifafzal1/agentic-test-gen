@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_049",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8278,
+  "total_latency_s": 71.418,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Browser Back Button Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should navigate back to previous page without losing app state', async ({ page }) => {\n    // Navigate to a page with complex state\n    await page.goto('/settings');\n    const settingsTitle = page.getByRole('heading', { name: /settings/i });\n    await expect(settingsTitle).toBeVisible();\n\n    // Verify initial state\n    const profileName = page.getByLabel(/profile name/i);\n    await expect(profileName).toHaveValue('John Doe');\n\n    // Navigate to another page\n    await page.goto('/profile');\n    const profileTitle = page.getByRole('heading', { name: /profile/i });\n    await expect(profileTitle).toBeVisible();\n\n    // Verify state is preserved\n    await expect(profileName).toHaveValue('John Doe');\n\n    // Navigate back using browser back button\n    await page.goBack();\n\n    // Verify we are back on settings page\n    await expect(settingsTitle).toBeVisible();\n\n    // Verify state is preserved after going back\n    await expect(profileName).toHaveValue('John Doe');\n\n    // Verify settings form is still visible\n    const settingsForm = page.getByRole('form');\n    await expect(settingsForm).toBeVisible();\n  });\n\n  test('should handle multiple back navigations and maintain correct state', async ({ page }) => {\n    // Navigate to page 1\n    await page.goto('/dashboard');\n    const dashboardTitle = page.getByRole('heading', { name: /dashboard/i });\n    await expect(dashboardTitle).toBeVisible();\n\n    // Navigate to page 2\n    await page.goto('/settings');\n    const settingsTitle = page.getByRole('heading', { name: /settings/i });\n    await expect(settingsTitle).toBeVisible();\n\n    // Navigate to page 3\n    await page.goto('/profile');\n    const profileTitle = page.getByRole('heading', { name: /profile/i });\n    await expect(profileTitle).toBeVisible();\n\n    // Verify state on page 3\n    const profileName = page.getByLabel(/profile name/i);\n    await expect(profileName).toHaveValue('Jane Smith');\n\n    // Navigate back to page 2\n    await page.goBack();\n    await expect(settingsTitle).toBeVisible();\n    await expect(profileName).toHaveValue('Jane Smith');\n\n    // Navigate back to page 1\n    await page.goBack();\n    await expect(dashboardTitle).toBeVisible();\n    await expect(profileName).toHaveValue('Jane Smith');\n\n    // Navigate back to page 2 again\n    await page.goBack();\n    await expect(settingsTitle).toBeVisible();\n    await expect(profileName).toHaveValue('Jane Smith');\n\n    // Navigate back to page 3 again\n    await page.goBack();\n    await expect(profileTitle).toBeVisible();\n    await expect(profileName).toHaveValue('Jane Smith');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8278,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4261,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.418,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_101",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7482,
+  "total_latency_s": 30.315,
+  "final_script": "describe('JavaScript Error Recovery', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should recover gracefully after a JavaScript error and display error message', () => {\n    // Trigger a JavaScript error by manipulating the DOM\n    cy.get('[data-testid=\"error-trigger\"]').then((el) => {\n      el.prop('innerHTML', '<script>throw new Error(\"Intentional JS error\");</script>');\n    });\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Uncaught');\n\n    // Verify app state is not lost\n    cy.get('[data-testid=\"dashboard-title\"]').should('be.visible');\n    cy.get('[data-testid=\"dashboard-content\"]').should('be.visible');\n\n    // Verify navigation is still possible\n    cy.get('[data-testid=\"dashboard-nav\"]').should('be.visible');\n    cy.get('[data-testid=\"dashboard-nav\"]').click();\n    cy.url().should('include', '/dashboard');\n  });\n\n  it('should not crash and handle multiple errors gracefully', () => {\n    // Trigger multiple JavaScript errors\n    cy.get('[data-testid=\"error-trigger\"]').then((el) => {\n      el.prop('innerHTML', '<script>throw new Error(\"First error\");</script>');\n      el.prop('innerHTML', '<script>throw new Error(\"Second error\");</script>');\n    });\n\n    // Verify error message is displayed for each error\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Uncaught');\n\n    // Verify app state is not lost\n    cy.get('[data-testid=\"dashboard-title\"]').should('be.visible');\n    cy.get('[data-testid=\"dashboard-content\"]').should('be.visible');\n\n    // Verify navigation is still possible\n    cy.get('[data-testid=\"dashboard-nav\"]').should('be.visible');\n    cy.get('[data-testid=\"dashboard-nav\"]').click();\n    cy.url().should('include', '/dashboard');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7482,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3607,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 30.315,
+      "feedback_used": ""
+    }
+  ]
+}

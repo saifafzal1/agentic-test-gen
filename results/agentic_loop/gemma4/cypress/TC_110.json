@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_110",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8715,
+  "total_latency_s": 72.483,
+  "final_script": "describe('Async Data Fetching - Non-Blocking Initial Render', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should render initial page content before async data is fetched', () => {\n    // Intercept the async data API call\n    cy.intercept('GET', '/api/user-data', (req) => {\n      req.reply((res) => {\n        res.delay(1000);\n        res.send({\n          statusCode: 200,\n          body: {\n            id: 1,\n            name: 'John Doe',\n            email: 'john@example.com'\n          }\n        });\n      });\n    }).as('fetchUserData');\n\n    // Verify initial page content is visible before API responds\n    cy.get('[data-testid=\"initial-page-title\"]').should('be.visible').should('contain', 'Dashboard');\n    cy.get('[data-testid=\"loading-spinner\"]').should('be.visible');\n    cy.get('[data-testid=\"user-data-card\"]').should('not.exist');\n\n    // Wait for the async API call to complete\n    cy.wait('@fetchUserData');\n\n    // Verify async data is now displayed\n    cy.get('[data-testid=\"loading-spinner\"]').should('not.exist');\n    cy.get('[data-testid=\"user-data-card\"]').should('be.visible');\n    cy.get('[data-testid=\"user-name\"]').should('contain', 'John Doe');\n    cy.get('[data-testid=\"user-email\"]').should('contain', 'john@example.com');\n  });\n\n  it('should handle async data fetch failure without blocking initial render', () => {\n    // Intercept the async data API call and simulate failure\n    cy.intercept('GET', '/api/user-data', {\n      statusCode: 500,\n      body: {\n        error: 'Internal Server Error'\n      }\n    }).as('fetchUserDataFailed');\n\n    // Verify initial page content is still rendered\n    cy.get('[data-testid=\"initial-page-title\"]').should('be.visible').should('contain', 'Dashboard');\n    cy.get('[data-testid=\"loading-spinner\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n\n    // Wait for the failed API call\n    cy.wait('@fetchUserDataFailed');\n\n    // Verify error state is displayed without blocking the page\n    cy.get('[data-testid=\"loading-spinner\"]').should('not.exist');\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Failed to load user data');\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n    cy.get('[data-testid=\"user-data-card\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8715,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.7717,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.483,
+      "feedback_used": ""
+    }
+  ]
+}

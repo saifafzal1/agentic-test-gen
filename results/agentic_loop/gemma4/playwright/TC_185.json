@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_185",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8258,
+  "total_latency_s": 75.364,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload - Folder Organisation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should upload files and organise them into folders', async ({ page }) => {\n    // Setup: intercept the API call\n    await page.route('**/api/files/upload', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the folder creation API call\n    await page.route('**/api/files/create-folder', (route) => {\n      route.continue();\n    });\n\n    // Upload file\n    const fileInput = page.getByLabel('Upload file');\n    await fileInput.setInputFiles('playwright/fixtures/sample.pdf');\n\n    // Click upload button\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await uploadButton.click();\n\n    // Wait for upload to complete\n    await page.waitForResponse(response => \n      response.url().includes('/api/files/upload') && response.status() === 200\n    );\n\n    // Verify file is uploaded and in the correct folder\n    const fileItem = page.getByText('sample.pdf');\n    await expect(fileItem).toBeVisible();\n\n    const folderName = page.getByText('Documents');\n    await expect(folderName).toBeVisible();\n\n    // Verify file is inside the folder\n    const folderContainer = page.locator('[data-testid=\"folder-container\"]');\n    await expect(folderContainer).toContainText('sample.pdf');\n\n    // Verify file has a folder icon\n    const fileIcon = page.locator('[data-testid=\"file-icon\"]');\n    await expect(fileIcon).toBeVisible();\n  });\n\n  test('should handle multiple file uploads and create multiple folders', async ({ page }) => {\n    // Setup: intercept the API call\n    await page.route('**/api/files/upload', (route) => {\n      route.continue();\n    });\n\n    // Upload multiple files\n    const fileInput = page.getByLabel('Upload file');\n    await fileInput.setInputFiles('playwright/fixtures/sample1.pdf', 'playwright/fixtures/sample2.pdf');\n\n    // Click upload button\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await uploadButton.click();\n\n    // Wait for upload to complete\n    await page.waitForResponse(response => \n      response.url().includes('/api/files/upload') && response.status() === 200\n    );\n\n    // Verify both files are uploaded\n    const file1 = page.getByText('sample1.pdf');\n    const file2 = page.getByText('sample2.pdf');\n    await expect(file1).toBeVisible();\n    await expect(file2).toBeVisible();\n\n    // Verify two folders are created\n    const folder1 = page.getByText('Documents');\n    const folder2 = page.getByText('Images');\n    await expect(folder1).toBeVisible();\n    await expect(folder2).toBeVisible();\n\n    // Verify both files are in their respective folders\n    const folderContainer = page.locator('[data-testid=\"folder-container\"]');\n    await expect(folderContainer).toContainText('sample1.pdf');\n    await expect(folderContainer).toContainText('sample2.pdf');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8258,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4193,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 75.364,
+      "feedback_used": ""
+    }
+  ]
+}

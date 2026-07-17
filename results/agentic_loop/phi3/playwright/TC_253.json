@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_253",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 3,
+  "best_score": 0.7482,
+  "total_latency_s": 1155.346,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Payment Processing Loading State', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should display loading state while payment is processing', async ({ page }) => {\n    // Intercept the payment API call\n    await page.route('**/api/payment/process', (route) => {\n      route.continue();\n    });\n\n    // Verify loading indicator is visible\n    const loadingIndicator = page.getByRole('status', { name: /processing/i });\n    await expect(loadingIndicator).toBeVisible();\n\n    // Verify payment form is visible\n    const paymentForm = page.getByRole('form', { name: /payment/i });\n    await expect(paymentForm).toBeVisible();\n\n    // Verify payment button is disabled\n    const paymentButton = page.getByRole('button', { name: /submit payment/i });\n    await expect(paymentButton).toBeDisabled();\n\n    // Verify success message is not visible\n    const successMessage = page.getByText(/successfully processed/i);\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify error message is not visible\n    const errorMessage = page.getByText(/error/i);\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify payment details are visible\n    const paymentDetails = page.getByRole('region', { name: /payment details/i });\n    await expect(paymentDetails).toBeVisible();\n\n    // Verify transaction ID is displayed\n    const transactionId = page.getByText(/txn id: \\d+/i);\n    await expect(transactionId).toBeVisible();\n\n    // Verify order summary is visible\n    const orderSummary = page.getByRole('region', { name: /order summary/i });\n    await expect(orderSummary).toBeVisible();\n\n    // Verify order confirmation button is visible\n    const orderConfirmationButton = page.getByRole('button', { name: /confirm order/i });\n    await expect(orderConfirmationButton).toBeVisible();\n\n    // Verify order confirmation button is disabled\n    await expect(orderConfirmationButton).toBeDisabled();\n\n    // Verify order details are displayed\n    const orderDetails = page.getByRole('region', { name: /order details/i });\n    await expect(orderDetails).toBeVisible();\n\n    // Verify order status is loading\n    const orderStatus = page.getByText(/order status: loading/i);\n    await expect(orderStatus).toBeVisible();\n\n    // Verify order status is updated to success\n    const orderStatusText = page.getByText(/order status: completed/i);\n    await expect(orderStatusText).toBeVisible();\n\n    // Verify order confirmation button is now enabled\n    await expect(orderConfirmationButton).not.toBeDisabled();\n\n    // Verify order confirmation button is clickable\n    await expect(orderConfirmationButton).toBeClickable();\n\n    // Click order confirmation button\n    await orderConfirmationButton.click();\n\n    // Verify success message is now visible\n    const successMessage = page.getByText(/order confirmed/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify payment button is now enabled\n    await expect(paymentButton).not.toBeDisabled();\n\n    // Verify order summary is updated\n    const orderSummaryText = page.getByText(/order summary: $ /i);\n    await expect(orderSummaryText).toBeVisible();\n\n    // Verify order details are still visible\n    await expect(orderDetails).toBeVisible();\n\n    // Verify transaction ID is still displayed\n    await expect(transactionId).toBeVisible();\n\n    // Verify order status is now completed\n    const orderStatusText = page.getByText(/order status: completed/i);\n    await expect(orderStatusText).toBeVisible();\n\n    // Verify order confirmation button is now disabled\n    await expect(orderConfirmationButton).toBeDisabled();\n\n    // Verify payment form is still visible\n    await expect(paymentForm).toBeVisible();\n\n    // Verify loading indicator is no longer visible\n    const loadingIndicator = page.getByRole('status', { name: /processing/i });\n    await expect(loadingIndicator).not.toBeVisible();\n  });\n\n  test('should display error state when payment fails', async ({ page }) => {\n    // Intercept the payment API call with an error response\n    await page.route('**/api/payment/process', (route) => {\n      route.abort('failed');\n    });\n\n    // Verify error message is visible\n    const errorMessage = page.getByText(/payment failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify loading indicator is not visible\n    const loadingIndicator = page.getByRole('status', { name: /processing/i });\n    await expect(loadingIndicator).not.toBeVisible();\n\n    // Verify payment form is still visible\n    const paymentForm = page.getByRole('form', { name: /payment/i });\n    await expect(paymentForm).toBeVisible();\n\n    // Verify payment button is still disabled\n    const paymentButton = page.getByRole('button', { name: /submit payment/i });\n    await expect(paymentButton).toBeDisabled();\n\n    // Verify error message is visible\n    const errorMessage = page.getByText(/payment failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify success message is not visible\n    const successMessage = page.getByText(/successfully processed/i);\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify error message contains error code\n    const errorCode = page.getByText(/error code: \\d+/i);\n    await expect(errorCode).toBeVisible();\n\n    // Verify order summary is still visible\n    const orderSummary = page.getByRole('region', { name: /order summary/i });\n    await expect(orderSummary).toBeVisible();\n\n    // Verify order confirmation button is still disabled\n    const orderConfirmationButton = page.getByRole('button', { name: /confirm order/i });\n    await expect(orderConfirmationButton).toBeDisabled();\n\n    // Verify order details are still visible\n    const orderDetails = page.getByRole('region', { name: /order details/i });\n    await expect(orderDetails).toBeVisible();\n\n    // Verify order status is loading\n    const orderStatus = page.getByText(/order status: loading/i);\n    await expect(orderStatus).toBeVisible();\n\n    // Verify order status is not updated to success\n    const orderStatusText = page.getByText(/order status: failed/i);\n    await expect(orderStatusText).toBeVisible();\n\n    // Verify error message is still visible\n    const errorMessage = page.getByText(/payment failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message is still visible\n    const errorCode = page.getByText(/error code: \\d+/i);\n    await expect(errorCode).toBeVisible();\n\n    // Verify payment button is still disabled\n    await expect(paymentButton).toBeDisabled();\n\n    // Verify order confirmation button is still disabled\n    await expect(orderConfirmationButton).toBeDisabled();\n\n    // Verify order summary is still visible\n    const orderSummary = page.getByRole('region', { name: /order summary/i });\n    await expect(orderSummary).toBeVisible();\n\n    // Verify order details are still visible\n    const orderDetails = page.getByRole('region', { name: /order details/i });\n    await expect(orderDetails).toBeVisible();\n\n    // Verify loading indicator is still not visible\n    const loadingIndicator = page.getByRole('status', { name: /processing/i });\n    await expect(loadingIndicator).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4891,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3835,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 55.297,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4639,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.2997,
+        "missing_keywords": [],
+        "assertion_count": 33,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 533.623,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.7482,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.2608,
+        "missing_keywords": [],
+        "assertion_count": 43,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 566.426,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

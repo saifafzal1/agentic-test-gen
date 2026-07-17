@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_107",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.776,
+  "total_latency_s": 287.56,
+  "final_script": "describe('Image Upload - Small Dimensions Error', () => {\n  beforeEach(() => {\n    cy.visit('/upload-image');\n  });\n\n  it('should display error message when image dimensions are too small', () => {\n    // Intercept the API call to upload image\n    cy.intercept('POST', '/api/upload/image', {\n      statusCode: 200,\n      body: {\n        error: 'Image dimensions are too small',\n        message: 'Minimum width and height are 100px'\n      }\n    }).as('uploadError');\n\n    // Attempt to upload a small image\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/small-image.jpg', { force: true });\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for the error response\n    cy.wait('@uploadError');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Image dimensions are too small');\n\n    // Verify error icon is visible\n    cy.get('[data-testid=\"error-icon\"]').should('be.visible');\n\n    // Verify success button is disabled\n    cy.get('[data-testid=\"success-button\"]').should('be.disabled');\n  });\n\n  it('should not display error when image dimensions are acceptable', () => {\n    // Intercept the API call to upload image\n    cy.intercept('POST', '/api/upload/image', {\n      statusCode: 200,\n      body: {\n        success: true,\n        message: 'Image uploaded successfully'\n      }\n    }).as('uploadSuccess');\n\n    // Attempt to upload a medium-sized image\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/medium-image.jpg', { force: true });\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for the success response\n    cy.wait('@uploadSuccess');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Image uploaded successfully');\n\n    // Verify error message is not displayed\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n\n    // Verify success button is enabled\n    cy.get('[data-testid=\"success-button\"]').should('be.enabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.776,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4533,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 287.56,
+      "feedback_used": ""
+    }
+  ]
+}

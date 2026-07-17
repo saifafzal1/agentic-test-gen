@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_153",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7479,
+  "total_latency_s": 628.248,
+  "final_script": "describe('Column Visibility Toggle in Table List', () => {\n  beforeEach(() => {\n    cy.visit('/table-list');\n  });\n\n  it('should toggle column visibility from settings menu and update table display', () => {\n    // Verify initial table state with all columns visible\n    cy.get('[data-testid=\"table-container\"]').should('be.visible');\n    cy.get('[data-testid=\"column-name-1\"]').should('be.visible');\n    cy.get('[data-testid=\"column-name-2\"]').should('be.visible');\n    cy.get('[data-testid=\"column-name-3\"]').should('be.visible');\n\n    // Verify settings menu is visible\n    cy.get('[data-testid=\"settings-menu\"]').should('be.visible');\n\n    // Click on the settings menu\n    cy.get('[data-testid=\"settings-menu\"]').click();\n\n    // Verify column visibility toggle button is visible\n    cy.get('[data-testid=\"toggle-column-btn\"]').should('be.visible');\n\n    // Click on the toggle button for column 2\n    cy.get('[data-testid=\"toggle-column-btn\"]').click();\n\n    // Verify column 2 is now hidden\n    cy.get('[data-testid=\"column-name-2\"]').should('not.be.visible');\n\n    // Verify column 1 and 3 are still visible\n    cy.get('[data-testid=\"column-name-1\"]').should('be.visible');\n    cy.get('[data-testid=\"column-name-3\"]').should('be.visible');\n\n    // Verify table data is still displayed correctly\n    cy.get('[data-testid=\"table-row-1\"]').should('be.visible');\n    cy.get('[data-testid=\"table-row-2\"]').should('be.visible');\n\n    // Verify settings menu is still visible\n    cy.get('[data-testid=\"settings-menu\"]').should('be.visible');\n\n    // Click on the settings menu again to toggle column 3\n    cy.get('[data-testid=\"settings-menu\"]').click();\n\n    // Verify column 3 is now visible again\n    cy.get('[data-testid=\"column-name-3\"]').should('be.visible');\n\n    // Verify column 2 remains hidden\n    cy.get('[data-testid=\"column-name-2\"]').should('not.be.visible');\n\n    // Verify table data is still displayed correctly\n    cy.get('[data-testid=\"table-row-1\"]').should('be.visible');\n    cy.get('[data-testid=\"table-row-2\"]').should('be.visible');\n\n    // Verify settings menu is still visible\n    cy.get('[data-testid=\"settings-menu\"]').should('be.visible');\n  });\n\n  it('should handle edge case where all columns are hidden and cannot be toggled', () => {\n    // Verify initial table state with all columns visible\n    cy.get('[data-testid=\"table-container\"]').should('be.visible');\n    cy.get('[data-testid=\"column-name-1\"]').should('be.visible');\n    cy.get('[data-testid=\"column-name-2\"]').should('be.visible');\n    cy.get('[data-testid=\"column-name-3\"]').should('be.visible');\n\n    // Click on the settings menu\n    cy.get('[data-testid=\"settings-menu\"]').click();\n\n    // Verify column visibility toggle button is visible\n    cy.get('[data-testid=\"toggle-column-btn\"]').should('be.visible');\n\n    // Click on the toggle button for column 1\n    cy.get('[data-testid=\"toggle-column-btn\"]').click();\n\n    // Verify column 1 is now hidden\n    cy.get('[data-testid=\"column-name-1\"]').should('not.be.visible');\n\n    // Verify column 2 and 3 are still visible\n    cy.get('[data-testid=\"column-name-2\"]').should('be.visible');\n    cy.get('[data-testid=\"column-name-3\"]').should('be.visible');\n\n    // Verify table data is still displayed correctly\n    cy.get('[data-testid=\"table-row-1\"]').should('be.visible');\n    cy.get('[data-testid=\"table-row-2\"]').should('be.visible');\n\n    // Click on the settings menu again to try to toggle column 2\n    cy.get('[data-testid=\"settings-menu\"]').click();\n\n    // Verify column 2 is still visible (cannot be toggled)\n    cy.get('[data-testid=\"column-name-2\"]').should('be.visible');\n\n    // Verify column 3 is still visible\n    cy.get('[data-testid=\"column-name-3\"]').should('be.visible');\n\n    // Verify settings menu is still visible\n    cy.get('[data-testid=\"settings-menu\"]').should('be.visible');\n\n    // Verify no error message is displayed when all columns are hidden\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4842,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3874,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 308.688,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7479,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3598,
+        "missing_keywords": [],
+        "assertion_count": 31,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 319.56,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

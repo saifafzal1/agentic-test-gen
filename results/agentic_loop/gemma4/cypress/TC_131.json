@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_131",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.778,
+  "total_latency_s": 73.318,
+  "final_script": "describe('Modal Focus Trapping', () => {\n  beforeEach(() => {\n    cy.visit('/modal-page');\n  });\n\n  it('should trap focus inside the modal when open', () => {\n    // Open the modal\n    cy.get('[data-testid=\"open-modal-button\"]').click();\n    \n    // Verify modal is visible\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n    \n    // Verify focus is on the first interactive element inside the modal\n    cy.get('[data-testid=\"modal-input\"]').should('have.focus');\n    \n    // Tab through modal elements\n    cy.get('[data-testid=\"modal-input\"]').tab();\n    cy.get('[data-testid=\"modal-button\"]').should('have.focus');\n    \n    // Tab again - focus should wrap back to the first element\n    cy.get('[data-testid=\"modal-button\"]').tab();\n    cy.get('[data-testid=\"modal-input\"]').should('have.focus');\n    \n    // Tab again - focus should wrap to the last element\n    cy.get('[data-testid=\"modal-input\"]').tab();\n    cy.get('[data-testid=\"modal-button\"]').should('have.focus');\n  });\n\n  it('should trap focus when modal is closed', () => {\n    // Open the modal\n    cy.get('[data-testid=\"open-modal-button\"]').click();\n    \n    // Verify modal is visible\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n    \n    // Close the modal using the close button\n    cy.get('[data-testid=\"modal-close-button\"]').click();\n    \n    // Verify modal is no longer visible\n    cy.get('[data-testid=\"modal-dialog\"]').should('not.exist');\n    \n    // Verify focus returns to the element that opened the modal\n    cy.get('[data-testid=\"open-modal-button\"]').should('have.focus');\n    \n    // Verify focus is not trapped in the background\n    cy.get('[data-testid=\"modal-input\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.778,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4601,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.318,
+      "feedback_used": ""
+    }
+  ]
+}

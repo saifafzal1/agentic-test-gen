@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_103",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.5014,
+  "total_latency_s": 1071.046,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Session Expired Message on Token Timeout', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display session expired message when token times out', async ({ page }) => {\n    // Setup: Mock API response to simulate token expiration\n    await page.route('**/api/auth/token', async (route) => {\n      await route.abort('failed');\n    });\n\n    // Intercept the initial token request\n    await page.route('**/api/auth/token', async (route) => {\n      await route.continue();\n    });\n\n    // Verify initial token is displayed\n    const tokenDisplay = page.getByText('Token: abc123');\n    await expect(tokenDisplay).toBeVisible();\n\n    // Verify session expired message is not visible initially\n    const sessionExpiredMessage = page.getByText('Session expired');\n    await expect(sessionExpiredMessage).not.toBeVisible();\n\n    // Verify session expiration button is visible\n    const sessionExpireButton = page.getByRole('button', { name: /expire session/i });\n    await expect(sessionExpireButton).toBeVisible();\n\n    // Click session expire button to trigger token expiration\n    await sessionExpireButton.click();\n\n    // Wait for token expiration response\n    await page.waitForTimeout(100);\n\n    // Verify session expired message is now visible\n    await expect(sessionExpiredMessage).toBeVisible();\n\n    // Verify user is redirected to login page\n    const loginPage = page.getByRole('dialog', { name: /login/i });\n    await expect(loginPage).toBeVisible();\n\n    // Verify login form is visible\n    const loginForm = page.getByRole('form');\n    await expect(loginForm).toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('Session expired');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify retry button is visible\n    const retryButton = page.getByRole('button', { name: /retry session/i });\n    await expect(retryButton).toBeVisible();\n  });\n\n  test('should handle session expiration gracefully when user tries to access protected page', async ({ page }) => {\n    // Setup: Mock API response to simulate token expiration\n    await page.route('**/api/protected-page', async (route) => {\n      await route.abort('failed');\n    });\n\n    // Intercept the initial token request\n    await page.route('**/api/auth/token', async (route) => {\n      await route.continue();\n    });\n\n    // Verify initial token is displayed\n    const tokenDisplay = page.getByText('Token: abc123');\n    await expect(tokenDisplay).toBeVisible();\n\n    // Verify session expired message is not visible initially\n    const sessionExpiredMessage = page.getByText('Session expired');\n    await expect(sessionExpiredMessage).not.toBeVisible();\n\n    // Verify session expiration button is visible\n    const sessionExpireButton = page.getByRole('button', { name: /expire session/i });\n    await expect(sessionExpireButton).toBeVisible();\n\n    // Click session expire button to trigger token expiration\n    await sessionExpireButton.click();\n\n    // Wait for token expiration response\n    await page.waitForTimeout(100);\n\n    // Verify session expired message is now visible\n    await expect(sessionExpiredMessage).toBeVisible();\n\n    // Verify user is redirected to login page\n    const loginPage = page.getByRole('dialog', { name: /login/i });\n    await expect(loginPage).toBeVisible();\n\n    // Verify login form is visible\n    const loginForm = page.getByRole('form');\n    await expect(loginForm).toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('Session expired');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify retry button is visible\n    const re",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5014,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4248,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 55.927,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4526,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.2621,
+        "missing_keywords": [],
+        "assertion_count": 52,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 500.788,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.4394,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.2178,
+        "missing_keywords": [],
+        "assertion_count": 74,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 514.331,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

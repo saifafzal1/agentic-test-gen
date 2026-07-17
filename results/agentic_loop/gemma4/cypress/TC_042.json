@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_042",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7917,
+  "total_latency_s": 71.632,
+  "final_script": "describe('Tab Navigation URL Hash Update', () => {\n  beforeEach(() => {\n    cy.visit('/page-with-tabs');\n  });\n\n  it('should update URL hash when switching between tabs', () => {\n    // Verify initial state\n    cy.url().should('include', '#overview');\n    cy.get('[data-testid=\"tab-overview\"]').should('have.class', 'active');\n    cy.get('[data-testid=\"tab-details\"]').should('not.have.class', 'active');\n\n    // Click on details tab\n    cy.get('[data-testid=\"tab-details\"]').click();\n\n    // Verify URL hash updated\n    cy.url().should('include', '#details');\n    cy.get('[data-testid=\"tab-details\"]').should('have.class', 'active');\n    cy.get('[data-testid=\"tab-overview\"]').should('not.have.class', 'active');\n\n    // Click on overview tab\n    cy.get('[data-testid=\"tab-overview\"]').click();\n\n    // Verify URL hash updated back\n    cy.url().should('include', '#overview');\n    cy.get('[data-testid=\"tab-overview\"]').should('have.class', 'active');\n    cy.get('[data-testid=\"tab-details\"]').should('not.have.class', 'active');\n  });\n\n  it('should handle hash changes and maintain tab state on page reload', () => {\n    // Navigate to details tab and verify hash\n    cy.get('[data-testid=\"tab-details\"]').click();\n    cy.url().should('include', '#details');\n\n    // Reload the page\n    cy.reload();\n\n    // Verify tab state is preserved after reload\n    cy.get('[data-testid=\"tab-details\"]').should('have.class', 'active');\n    cy.url().should('include', '#details');\n\n    // Verify content is visible\n    cy.get('[data-testid=\"details-content\"]').should('be.visible');\n\n    // Navigate to overview tab and verify hash updates\n    cy.get('[data-testid=\"tab-overview\"]').click();\n    cy.url().should('include', '#overview');\n    cy.get('[data-testid=\"tab-overview\"]').should('have.class', 'active');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7917,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5056,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.632,
+      "feedback_used": ""
+    }
+  ]
+}

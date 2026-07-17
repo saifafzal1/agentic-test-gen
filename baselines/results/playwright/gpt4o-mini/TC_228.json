@@ -1,0 +1,13 @@
+{
+  "id": "TC_228",
+  "category": "responsive",
+  "complexity": "medium",
+  "user_story": "As a tablet user, I want the layout to switch to a two-column grid.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Responsive Layout', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should display layout in a single column on mobile', async ({ page }) => {\n    await page.setViewportSize({ width: 600, height: 800 });\n    const layout = await page.getByRole('main');\n    expect(await layout.evaluate(el => getComputedStyle(el).gridTemplateColumns)).toBe('1fr');\n  });\n\n  test('should display layout in a two-column grid on tablet', async ({ page }) => {\n    await page.setViewportSize({ width: 800, height: 1280 });\n    const layout = await page.getByRole('main');\n    expect(await layout.evaluate(el => getComputedStyle(el).gridTemplateColumns)).toBe('repeat(2, 1fr)');\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 202,
+  "latency_s": 3.14,
+  "timestamp": "2026-06-19T16:59:01.385801"
+}

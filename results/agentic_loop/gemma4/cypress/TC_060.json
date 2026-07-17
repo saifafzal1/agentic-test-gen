@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_060",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.779,
+  "total_latency_s": 71.207,
+  "final_script": "describe('Retry Button on Network Timeout', () => {\n  beforeEach(() => {\n    cy.visit('/api/data');\n  });\n\n  it('should display retry button when network request times out and allow retry', () => {\n    // Intercept the initial API call and force it to fail with a timeout\n    cy.intercept('GET', '/api/data', {\n      forceNetworkError: true,\n      delay: 1000\n    }).as('initialRequest');\n\n    // Trigger the API call\n    cy.get('[data-testid=\"load-data-button\"]').click();\n\n    // Wait for the failed request\n    cy.wait('@initialRequest');\n\n    // Verify error message and retry button are displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Network request timed out');\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n\n    // Click the retry button\n    cy.get('[data-testid=\"retry-button\"]').click();\n\n    // Intercept the retry request and make it succeed\n    cy.intercept('GET', '/api/data', {\n      statusCode: 200,\n      body: { data: 'Successfully loaded data' }\n    }).as('retryRequest');\n\n    // Wait for the successful retry\n    cy.wait('@retryRequest');\n\n    // Verify data is loaded successfully\n    cy.get('[data-testid=\"data-container\"]').should('be.visible').should('contain', 'Successfully loaded data');\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n  });\n\n  it('should disable retry button when request is in progress', () => {\n    // Intercept the initial API call and make it take a long time\n    cy.intercept('GET', '/api/data', {\n      delay: 5000\n    }).as('longRequest');\n\n    // Trigger the API call\n    cy.get('[data-testid=\"load-data-button\"]').click();\n\n    // Verify retry button is initially visible\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n\n    // Wait for the request to start\n    cy.wait('@longRequest', { timeout: 1000 });\n\n    // Verify retry button is disabled while request is in progress\n    cy.get('[data-testid=\"retry-button\"]').should('be.disabled');\n\n    // Verify loading indicator is visible\n    cy.get('[data-testid=\"loading-indicator\"]').should('be.visible');\n\n    // Wait for the request to complete (or timeout)\n    cy.wait('@longRequest', { timeout: 6000 });\n\n    // Verify retry button is re-enabled after request finishes\n    cy.get('[data-testid=\"retry-button\"]').should('not.be.disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.779,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4634,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.207,
+      "feedback_used": ""
+    }
+  ]
+}

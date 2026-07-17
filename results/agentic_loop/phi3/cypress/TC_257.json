@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_257",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7699,
+  "total_latency_s": 280.654,
+  "final_script": "describe('Total Price Update on Quantity Change', () => {\n  beforeEach(() => {\n    cy.visit('/cart');\n  });\n\n  it('should update total price when quantity is increased', () => {\n    // Verify initial state\n    cy.get('[data-testid=\"product-item\"]').first().should('be.visible');\n    cy.get('[data-testid=\"product-name\"]').should('contain', 'Sample Product');\n    cy.get('[data-testid=\"product-price\"]').should('contain', '$10.00');\n    cy.get('[data-testid=\"quantity-input\"]').should('be.visible');\n    cy.get('[data-testid=\"quantity-input\"]').type('2');\n    cy.get('[data-testid=\"update-button\"]').click();\n\n    // Verify total price is updated\n    cy.get('[data-testid=\"total-price\"]').should('contain', '$20.00');\n    cy.get('[data-testid=\"total-price\"]').should('be.visible');\n\n    // Verify quantity is updated\n    cy.get('[data-testid=\"quantity-input\"]').should('have.value', '2');\n  });\n\n  it('should update total price when quantity is decreased', () => {\n    // Verify initial state\n    cy.get('[data-testid=\"product-item\"]').first().should('be.visible');\n    cy.get('[data-testid=\"product-name\"]').should('contain', 'Sample Product');\n    cy.get('[data-testid=\"product-price\"]').should('contain', '$10.00');\n    cy.get('[data-testid=\"quantity-input\"]').should('be.visible');\n    cy.get('[data-testid=\"quantity-input\"]').type('3');\n    cy.get('[data-testid=\"update-button\"]').click();\n\n    // Verify total price is updated\n    cy.get('[data-testid=\"total-price\"]').should('contain', '$30.00');\n\n    // Verify quantity is decreased\n    cy.get('[data-testid=\"quantity-input\"]').should('have.value', '3');\n\n    // Verify total price is still visible\n    cy.get('[data-testid=\"total-price\"]').should('be.visible');\n  });\n\n  it('should handle edge case when quantity is set to zero', () => {\n    // Verify initial state\n    cy.get('[data-testid=\"product-item\"]').first().should('be.visible');\n    cy.get('[data-testid=\"product-name\"]').should('contain', 'Sample Product');\n    cy.get('[data-testid=\"product-price\"]').should('contain', '$10.00');\n    cy.get('[data-testid=\"quantity-input\"]').should('be.visible');\n\n    // Verify total price is initially correct\n    cy.get('[data-testid=\"total-price\"]').should('contain', '$10.00');\n\n    // Set quantity to zero\n    cy.get('[data-testid=\"quantity-input\"]').type('0');\n    cy.get('[data-testid=\"update-button\"]').click();\n\n    // Verify total price is updated to zero\n    cy.get('[data-testid=\"total-price\"]').should('contain', '$0.00');\n\n    // Verify quantity input is still visible\n    cy.get('[data-testid=\"quantity-input\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7699,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.433,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 280.654,
+      "feedback_used": ""
+    }
+  ]
+}

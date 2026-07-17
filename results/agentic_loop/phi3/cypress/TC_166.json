@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_166",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7469,
+  "total_latency_s": 350.596,
+  "final_script": "describe('Row Badge Count Display', () => {\n  beforeEach(() => {\n    cy.visit('/table-list');\n  });\n\n  it('should display badge count for selected rows', () => {\n    // Intercept the API call to get table data\n    cy.intercept('GET', '/api/table-data').as('getTableData');\n    cy.wait('@getTableData');\n\n    // Verify table is visible\n    cy.get('[data-testid=\"table-container\"]').should('be.visible');\n\n    // Select the first row\n    cy.get('[data-testid=\"row-1\"]').click();\n\n    // Verify row is selected\n    cy.get('[data-testid=\"row-1\"]').should('have.class', 'selected');\n\n    // Verify badge count is displayed\n    cy.get('[data-testid=\"badge-count\"]').should('be.visible');\n    cy.get('[data-testid=\"badge-count\"]').should('contain', '1');\n\n    // Select the second row\n    cy.get('[data-testid=\"row-2\"]').click();\n\n    // Verify multiple rows are selected\n    cy.get('[data-testid=\"row-1\"]').should('have.class', 'selected');\n    cy.get('[data-testid=\"row-2\"]').should('have.class', 'selected');\n\n    // Verify badge count updates\n    cy.get('[data-testid=\"badge-count\"]').should('contain', '2');\n\n    // Verify badge count is displayed for all selected rows\n    cy.get('[data-testid=\"badge-count\"]').should('be.visible');\n    cy.get('[data-testid=\"badge-count\"]').should('contain', '2');\n  });\n\n  it('should not display badge count when no rows are selected', () => {\n    // Intercept the API call to get table data\n    cy.intercept('GET', '/api/table-data').as('getTableData');\n    cy.wait('@getTableData');\n\n    // Verify table is visible\n    cy.get('[data-testid=\"table-container\"]').should('be.visible');\n\n    // Verify no rows are selected\n    cy.get('[data-testid=\"row-1\"]').should('not.have.class', 'selected');\n\n    // Verify badge count is not displayed\n    cy.get('[data-testid=\"badge-count\"]').should('not.exist');\n\n    // Verify no badge count text is present\n    cy.get('[data-testid=\"no-selection-message\"]').should('be.visible');\n    cy.get('[data-testid=\"no-selection-message\"]').should('contain', 'Select rows to see badge count');\n\n    // Verify no badge count is shown when no rows are selected\n    cy.get('[data-testid=\"badge-count\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7469,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3565,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 350.596,
+      "feedback_used": ""
+    }
+  ]
+}

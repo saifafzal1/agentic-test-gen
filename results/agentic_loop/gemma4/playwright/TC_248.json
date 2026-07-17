@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_248",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8627,
+  "total_latency_s": 71.961,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Promo Code Validation - Expired Code', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/promo-code');\n  });\n\n  test('should display error message when entering an expired promo code', async ({ page }) => {\n    // Verify promo code input field is visible\n    const promoInput = page.getByLabel('Promo Code');\n    await expect(promoInput).toBeVisible();\n\n    // Verify submit button is visible\n    const submitButton = page.getByRole('button', { name: /apply/i });\n    await expect(submitButton).toBeVisible();\n\n    // Enter an expired promo code\n    await promoInput.fill('EXPIRED2023');\n\n    // Click apply button\n    await submitButton.click();\n\n    // Wait for error message to appear\n    const errorMessage = page.getByText(/This promo code has expired/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message has appropriate styling (e.g, red text)\n    await expect(errorMessage).toHaveCSS('color', 'rgb(252, 12, 40)');\n\n    // Verify promo code input field retains the value\n    await expect(promoInput).toHaveValue('EXPIRED2023');\n\n    // Verify discount field does not show a value\n    const discountDisplay = page.getByText(/\\$0.00/);\n    await expect(discountDisplay).toBeVisible();\n  });\n\n  test('should allow user to correct and re-apply a valid promo code after expired attempt', async ({ page }) => {\n    // Enter an expired promo code and submit\n    const promoInput = page.getByLabel('Promo Code');\n    await promoInput.fill('EXPIRED2023');\n    const submitButton = page.getByRole('button', { name: /apply/i });\n    await submitButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/This promo code has expired/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Clear the expired promo code\n    await promoInput.clear();\n\n    // Enter a valid promo code\n    await promoInput.fill('VALID2024');\n\n    // Click apply button again\n    await submitButton.click();\n\n    // Verify error message is no longer visible\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/Promo code applied successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify discount is applied\n    const discountDisplay = page.getByText(/\\$10.00/);\n    await expect(discountDisplay).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8627,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5424,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.961,
+      "feedback_used": ""
+    }
+  ]
+}

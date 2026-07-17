@@ -1,0 +1,13 @@
+{
+  "id": "TC_204",
+  "category": "accessibility",
+  "complexity": "medium",
+  "user_story": "As a screen reader user, I want all images to have descriptive alt text.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Accessibility Tests for Images', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('check that all images have descriptive alt text', async ({ page }) => {\n    const images = await page.locator('img').all();\n    for (const image of images) {\n      const altText = await image.getAttribute('alt');\n      expect(altText).not.toBeNull();\n      expect(altText).not.toBe('');\n    }\n  });\n\n  test('check that images with specific roles have descriptive alt text', async ({ page }) => {\n    const decorativeImages = await page.getByRole('img', { name: '' }).all();\n    for (const image of decorativeImages) {\n      const altText = await image.getAttribute('alt');\n      expect(altText).toBe('');\n    }\n    \n    const informativeImages = await page.getByRole('img', { name: /.+/ }).all();\n    for (const image of informativeImages) {\n      const altText = await image.getAttribute('alt');\n      expect(altText).not.toBeNull();\n      expect(altText).not.toBe('');\n    }\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 273,
+  "latency_s": 4.0,
+  "timestamp": "2026-06-19T16:57:18.169527"
+}

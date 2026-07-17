@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_211",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7964,
+  "total_latency_s": 74.608,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dynamic Content Updates Announcement', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dynamic-content');\n  });\n\n  test('should announce dynamic content updates using aria-live regions', async ({ page }) => {\n    // Verify initial content is visible\n    const initialContent = page.getByText('Initial content');\n    await expect(initialContent).toBeVisible();\n\n    // Verify aria-live region exists\n    const liveRegion = page.locator('[aria-live=\"polite\"]');\n    await expect(liveRegion).toBeVisible();\n\n    // Verify aria-live region has appropriate role\n    await expect(liveRegion).toHaveAttribute('role', 'status');\n\n    // Trigger dynamic content update\n    const updateButton = page.getByRole('button', { name: /update content/i });\n    await updateButton.click();\n\n    // Wait for content update to complete\n    await page.waitForTimeout(500);\n\n    // Verify new content is displayed\n    const updatedContent = page.getByText('Updated content');\n    await expect(updatedContent).toBeVisible();\n\n    // Verify old content is replaced\n    await expect(initialContent).not.toBeVisible();\n\n    // Verify live region content is updated\n    await expect(liveRegion).toContainText('Content updated');\n\n    // Verify screen reader announcement text is present\n    const announcementText = page.getByText('Content updated');\n    await expect(announcementText).toBeVisible();\n  });\n\n  test('should handle multiple dynamic updates and maintain announcement integrity', async ({ page }) => {\n    // Trigger first update\n    const updateButton = page.getByRole('button', { name: /update content/i });\n    await updateButton.click();\n\n    // Wait for first update\n    await page.waitForTimeout(500);\n\n    // Verify first update announcement\n    const liveRegion = page.locator('[aria-live=\"polite\"]');\n    await expect(liveRegion).toContainText('Content updated');\n\n    // Trigger second update\n    await updateButton.click();\n\n    // Wait for second update\n    await page.waitForTimeout(500);\n\n    // Verify second update announcement\n    await expect(liveRegion).toContainText('Content updated');\n\n    // Verify content reflects second update\n    const secondContent = page.getByText('Second update');\n    await expect(secondContent).toBeVisible();\n\n    // Verify first update content is gone\n    const firstContent = page.getByText('Initial content');\n    await expect(firstContent).not.toBeVisible();\n\n    // Verify live region does not contain both announcements\n    const liveRegionText = await liveRegion.textContent();\n    expect(liveRegionText).not.toContain('Content updated');\n    expect(liveRegionText).toContain('Second update');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7964,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4214,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 74.608,
+      "feedback_used": ""
+    }
+  ]
+}

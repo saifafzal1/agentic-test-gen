@@ -1,0 +1,13 @@
+{
+  "id": "TC_181",
+  "category": "file_upload",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a success checkmark when a file is fully uploaded.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload Success Checkmark', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/upload'); // Replace with the actual URL\n  });\n\n  test('should display success checkmark after file upload', async ({ page }) => {\n    const filePath = 'path/to/your/file.txt'; // Replace with the actual file path\n    await page.getByLabel('Upload File').setInputFiles(filePath);\n    await page.getByRole('button', { name: 'Upload' }).click();\n    \n    // Wait for the success checkmark to appear\n    const checkmark = page.getByRole('img', { name: 'Success Checkmark' });\n    await expect(checkmark).toBeVisible();\n  });\n\n  test('should not display success checkmark if upload fails', async ({ page }) => {\n    const invalidFilePath = 'path/to/your/invalidfile.txt'; // Replace with an invalid file path\n    await page.getByLabel('Upload File').setInputFiles(invalidFilePath);\n    await page.getByRole('button', { name: 'Upload' }).click();\n    \n    // Check that the success checkmark is not visible\n    const checkmark = page.getByRole('img', { name: 'Success Checkmark' });\n    await expect(checkmark).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 299,
+  "latency_s": 4.03,
+  "timestamp": "2026-06-19T16:55:42.157117"
+}

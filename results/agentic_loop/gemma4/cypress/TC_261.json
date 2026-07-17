@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_261",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7763,
+  "total_latency_s": 71.816,
+  "final_script": "describe('Notification Dismissal', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should dismiss a notification by clicking the close button', () => {\n    // Verify notification is visible\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-title\"]').should('contain', 'New Message');\n    cy.get('[data-testid=\"notification-body\"]').should('contain', 'You have a new message');\n    cy.get('[data-testid=\"close-button\"]').should('be.visible');\n\n    // Click the close button to dismiss the notification\n    cy.get('[data-testid=\"close-button\"]').click();\n\n    // Verify notification is no longer visible\n    cy.get('[data-testid=\"notification-item\"]').should('not.exist');\n    cy.get('[data-testid=\"notification-list\"]').should('be.visible');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"dismissal-success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"dismissal-success-message\"]').should('contain', 'Notification dismissed');\n  });\n\n  it('should handle multiple notifications and dismiss only the targeted one', () => {\n    // Verify multiple notifications are present\n    cy.get('[data-testid=\"notification-item\"]').should('have.length', 3);\n    cy.get('[data-testid=\"notification-title\"]').first().should('contain', 'New Message');\n    cy.get('[data-testid=\"notification-title\"]').eq(1).should('contain', 'System Update');\n    cy.get('[data-testid=\"notification-title\"]').eq(2).should('contain', 'Reminder');\n\n    // Dismiss the first notification\n    cy.get('[data-testid=\"notification-item\"]').first().find('[data-testid=\"close-button\"]').click();\n\n    // Verify only the first notification is dismissed\n    cy.get('[data-testid=\"notification-item\"]').should('have.length', 2);\n    cy.get('[data-testid=\"notification-item\"]').first().should('not.exist');\n    cy.get('[data-testid=\"notification-item\"]').eq(0).should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').eq(1).should('be.visible');\n\n    // Verify the second notification is still visible\n    cy.get('[data-testid=\"notification-title\"]').eq(1).should('contain', 'System Update');\n\n    // Dismiss the second notification\n    cy.get('[data-testid=\"notification-item\"]').eq(1).find('[data-testid=\"close-button\"]').click();\n\n    // Verify only the second notification is dismissed\n    cy.get('[data-testid=\"notification-item\"]').should('have.length', 1);\n    cy.get('[data-testid=\"notification-item\"]').eq(0).should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').eq(1).should('not.exist');\n\n    // Verify the third notification remains\n    cy.get('[data-testid=\"notification-item\"]').eq(0).should('be.visible');\n    cy.get('[data-testid=\"notification-title\"]').eq(0).should('contain', 'Reminder');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7763,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4543,
+        "missing_keywords": [],
+        "assertion_count": 22,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.816,
+      "feedback_used": ""
+    }
+  ]
+}

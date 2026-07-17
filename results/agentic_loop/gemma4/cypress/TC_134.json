@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_134",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7695,
+  "total_latency_s": 73.643,
+  "final_script": "describe('Alert Dialog Blocking Page Interaction', () => {\n  beforeEach(() => {\n    cy.visit('/alert-dialog');\n  });\n\n  it('should display alert dialog and block interaction with page behind it', () => {\n    // Verify page is visible before dialog appears\n    cy.get('[data-testid=\"page-content\"]').should('be.visible');\n    cy.get('[data-testid=\"page-content\"]').should('contain', 'Page Content');\n\n    // Click button to trigger alert dialog\n    cy.get('[data-testid=\"open-alert-button\"]').click();\n\n    // Verify alert dialog is visible\n    cy.get('[data-testid=\"alert-dialog\"]').should('be.visible');\n    cy.get('[data-testid=\"alert-title\"]').should('contain', 'Alert');\n    cy.get('[data-testid=\"alert-message\"]').should('contain', 'This is an alert');\n\n    // Verify page content is obscured by dialog overlay\n    cy.get('[data-testid=\"page-content\"]').should('have.css', 'pointer-events', 'none');\n\n    // Verify dialog has close button\n    cy.get('[data-testid=\"close-alert-button\"]').should('be.visible');\n\n    // Verify page content is not clickable while dialog is open\n    cy.get('[data-testid=\"page-content\"]').should('not.be.clickable');\n\n    // Close the alert dialog\n    cy.get('[data-testid=\"close-alert-button\"]').click();\n\n    // Verify dialog is no longer visible\n    cy.get('[data-testid=\"alert-dialog\"]').should('not.exist');\n\n    // Verify page content is now interactive again\n    cy.get('[data-testid=\"page-content\"]').should('be.visible');\n    cy.get('[data-testid=\"page-content\"]').should('be.clickable');\n  });\n\n  it('should prevent interaction with page when alert dialog is open and focus is trapped', () => {\n    // Trigger alert dialog\n    cy.get('[data-testid=\"open-alert-button\"]').click();\n\n    // Verify alert dialog is visible\n    cy.get('[data-testid=\"alert-dialog\"]').should('be.visible');\n\n    // Attempt to interact with page content while dialog is open\n    cy.get('[data-testid=\"page-content\"]').click({ force: true });\n\n    // Verify page content was not interacted with (no navigation or state change)\n    cy.get('[data-testid=\"page-content\"]').should('contain', 'Page Content');\n\n    // Verify focus is trapped within the alert dialog\n    cy.get('[data-testid=\"alert-dialog\"]').should('have.focus');\n\n    // Verify close button is the only interactive element\n    cy.get('[data-testid=\"close-alert-button\"]').should('be.visible');\n    cy.get('[data-testid=\"alert-title\"]').should('be.visible');\n\n    // Close the alert dialog\n    cy.get('[data-testid=\"close-alert-button\"]').click();\n\n    // Verify dialog is closed\n    cy.get('[data-testid=\"alert-dialog\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7695,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4317,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.643,
+      "feedback_used": ""
+    }
+  ]
+}

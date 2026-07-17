@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_157",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.783,
+  "total_latency_s": 72.286,
+  "final_script": "describe('Table Row Context Menu - Right Click', () => {\n  beforeEach(() => {\n    cy.visit('/table');\n  });\n\n  it('should display context menu when right-clicking a table row', () => {\n    // Locate the first table row\n    cy.get('[data-testid=\"table-row-1\"]').as('firstRow');\n\n    // Right-click on the first table row\n    cy.get('@firstRow').rightclick();\n\n    // Verify context menu appears\n    cy.get('[data-testid=\"context-menu\"]').should('be.visible');\n\n    // Verify context menu contains expected options\n    cy.get('[data-testid=\"context-menu\"]').should('contain', 'Edit Row');\n    cy.get('[data-testid=\"context-menu\"]').should('contain', 'Delete Row');\n    cy.get('[data-testid=\"context-menu\"]').should('contain', 'View Details');\n\n    // Verify context menu is positioned correctly relative to the row\n    cy.get('[data-testid=\"context-menu\"]').should('have.css', 'top');\n    cy.get('[data-testid=\"context-menu\"]').should('have.css', 'left');\n\n    // Verify row is still visible and interactive\n    cy.get('@firstRow').should('be.visible');\n    cy.get('@firstRow').should('contain', 'Row 1');\n  });\n\n  it('should close context menu when clicking outside of it', () => {\n    // Locate the first table row and right-click\n    cy.get('[data-testid=\"table-row-1\"]').rightclick();\n\n    // Verify context menu is visible\n    cy.get('[data-testid=\"context-menu\"]').should('be.visible');\n\n    // Click on a different element on the page (outside the context menu)\n    cy.get('[data-testid=\"table-header\"]').click();\n\n    // Verify context menu is closed\n    cy.get('[data-testid=\"context-menu\"]').should('not.exist');\n\n    // Verify the table row is still visible\n    cy.get('[data-testid=\"table-row-1\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.783,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4768,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.286,
+      "feedback_used": ""
+    }
+  ]
+}

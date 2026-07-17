@@ -1,0 +1,13 @@
+{
+  "id": "TC_286",
+  "category": "user_profile",
+  "complexity": "complex",
+  "user_story": "As a user, I want to connect my Google account to my profile.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('User Profile - Connect Google Account', () => {\n    beforeEach(() => {\n        cy.visit('/user-profile');\n        cy.login(); // Assuming there's a custom command for login\n    });\n\n    it('should successfully connect Google account', () => {\n        cy.get('button[data-testid=\"connect-google\"]').click();\n        cy.url().should('include', 'google.com');\n        \n        // Simulate Google login\n        cy.get('input[type=\"email\"]').type('user@example.com');\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('input[type=\"password\"]').type('password123');\n        cy.get('button[type=\"submit\"]').click();\n        \n        // After successful login, redirect back to the app\n        cy.url().should('include', '/user-profile');\n        cy.get('.connected-accounts').should('contain', 'Google Account Connected');\n    });\n\n    it('should handle Google account connection failure', () => {\n        cy.get('button[data-testid=\"connect-google\"]').click();\n        cy.url().should('include', 'google.com');\n        \n        // Simulate Google login with incorrect credentials\n        cy.get('input[type=\"email\"]').type('user@example.com');\n        cy.get('button[type=\"submit\"]').click();\n        cy.get('input[type=\"password\"]').type('wrongpassword');\n        cy.get('button[type=\"submit\"]').click();\n        \n        // Expect an error message\n        cy.get('.error-message').should('contain', 'Invalid credentials');\n        cy.url().should('include', 'google.com'); // Should remain on Google login page\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 326,
+  "latency_s": 4.25,
+  "timestamp": "2026-06-19T16:43:01.070422"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_043",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.788,
+  "total_latency_s": 121.312,
+  "final_script": "describe('Sidebar Collapse and Expand Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should collapse and expand the sidebar on click', () => {\n    // Verify sidebar is visible by default\n    cy.get('[data-testid=\"sidebar-menu\"]').should('be.visible');\n    cy.get('[data-testid=\"sidebar-menu\"]').should('have.class', 'collapsed');\n\n    // Click the sidebar toggle button to collapse\n    cy.get('[data-testid=\"sidebar-toggle\"]').click();\n\n    // Verify sidebar is now collapsed\n    cy.get('[data-testid=\"sidebar-menu\"]').should('not.have.class', 'collapsed');\n    cy.get('[data-testid=\"sidebar-menu\"]').should('be.visible');\n\n    // Click the toggle button again to expand\n    cy.get('[data-testid=\"sidebar-toggle\"]').click();\n\n    // Verify sidebar is now expanded\n    cy.get('[data-testid=\"sidebar-menu\"]').should('have.class', 'collapsed');\n    cy.get('[data-testid=\"sidebar-menu\"]').should('be.visible');\n\n    // Verify toggle button reflects current state\n    cy.get('[data-testid=\"sidebar-toggle\"]').should('have.attr', 'aria-expanded', 'true');\n  });\n\n  it('should handle edge case when sidebar is already expanded', () => {\n    // Verify sidebar is expanded by default\n    cy.get('[data-testid=\"sidebar-menu\"]').should('have.class', 'collapsed');\n\n    // Click the toggle button to collapse\n    cy.get('[data-testid=\"sidebar-toggle\"]').click();\n\n    // Verify sidebar is collapsed\n    cy.get('[data-testid=\"sidebar-menu\"]').should('not.have.class', 'collapsed');\n\n    // Click the toggle button again to expand\n    cy.get('[data-testid=\"sidebar-toggle\"]').click();\n\n    // Verify sidebar is expanded\n    cy.get('[data-testid=\"sidebar-menu\"]').should('have.class', 'collapsed');\n\n    // Verify toggle button reflects current state\n    cy.get('[data-testid=\"sidebar-toggle\"]').should('have.attr', 'aria-expanded', 'true');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.788,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4933,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 121.312,
+      "feedback_used": ""
+    }
+  ]
+}

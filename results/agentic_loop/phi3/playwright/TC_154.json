@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_154",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7856,
+  "total_latency_s": 814.393,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Loading State', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should display loading state while data is being fetched', async ({ page }) => {\n    // Set up intercept for table data API\n    await page.route('**/api/table-data', (route) => {\n      route.abort('API call timed out');\n    });\n\n    // Verify loading state is visible\n    const loadingIndicator = page.getByRole('status', { name: /loading/i });\n    await expect(loadingIndicator).toBeVisible();\n\n    // Verify table header is visible\n    const tableHeader = page.getByRole('heading', { name: /table data/i });\n    await expect(tableHeader).toBeVisible();\n\n    // Verify table body is empty\n    const tableBody = page.getByRole('region', { name: /table body/i });\n    await expect(tableBody).toBeEmpty();\n\n    // Verify loading message is displayed\n    const loadingMessage = page.getByText(/data is being fetched/i);\n    await expect(loadingMessage).toBeVisible();\n\n    // Verify table is initially disabled\n    const tableContainer = page.getByRole('region', { name: /table list/i });\n    await expect(tableContainer).toBeDisabled();\n\n    // Trigger data fetch\n    const fetchButton = page.getByRole('button', { name: /fetch data/i });\n    await fetchButton.click();\n\n    // Wait for loading state to be visible\n    await page.waitForTimeout(500);\n\n    // Verify loading state disappears\n    await expect(loadingIndicator).not.toBeVisible();\n\n    // Verify table is now enabled\n    await expect(tableContainer).not.toBeDisabled();\n\n    // Verify table body is populated with data\n    const tableRows = page.locator('[data-testid=\"table-row\"]');\n    await expect(tableRows).toHaveCount(3);\n\n    // Verify table has data\n    const tableData = page.getByText(/item 1/i);\n    await expect(tableData).toBeVisible();\n\n    // Verify table has pagination controls\n    const pageControl = page.getByRole('button', { name: /page 1/i });\n    await expect(pageControl).toBeVisible();\n\n    // Verify table has sorting controls\n    const sortControl = page.getByRole('button', { name: /sort by name/i });\n    await expect(sortControl).toBeVisible();\n\n    // Verify table has export button\n    const exportButton = page.getByRole('button', { name: /export/i });\n    await expect(exportButton).toBeVisible();\n\n    // Verify export button is disabled initially\n    await expect(exportButton).toBeDisabled();\n\n    // Verify export button is enabled after data is loaded\n    await expect(exportButton).not.toBeDisabled();\n  });\n\n  test('should handle API failure and display error state', async ({ page }) => {\n    // Set up intercept for table data API with error response\n    await page.route('**/api/table-data', (route) => {\n      route.abort('API error');\n    });\n\n    // Verify loading state is visible\n    const loadingIndicator = page.getByRole('status', { name: /loading/i });\n    await expect(loadingIndicator).toBeVisible();\n\n    // Verify table header is visible\n    const tableHeader = page.getByRole('heading', { name: /table data/i });\n    await expect(tableHeader).toBeVisible();\n\n    // Verify table body is empty\n    const tableBody = page.getByRole('region', { name: /table body/i });\n    await expect(tableBody).toBeEmpty();\n\n    // Verify loading message is displayed\n    const loadingMessage = page.getByText(/data is being fetched/i);\n    await expect(loadingMessage).toBeVisible();\n\n    // Verify error state is displayed\n    const errorMessage = page.getByText(/failed to load data/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify table is initially disabled\n    const tableContainer = page.getByRole('region', { name: /table list/i });\n    await expect(tableContainer).toBeDisabled();\n\n    // Trigger data fetch\n    const fetchButton = page.getByRole('button', { name: /fetch data/i });\n    await fetchButton.click();\n\n    // Wait for error state to be visible\n    await page.waitForTimeout(500);\n\n    // Verify loading state disappears\n    await expect(loadingIndicator).not.toBeVisible();\n\n    // Verify error message is visible\n    await expect(errorMessage).toBeVisible();\n\n    // Verify table is still disabled\n    await expect(tableContainer).toBeDisabled();\n\n    // Verify error message contains retry button\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify retry button is enabled\n    await expect(retryButton).not.toBeDisabled();\n\n    // Verify error message contains error code\n    const errorCode = page.getByText(/500/i);\n    await expect(errorCode).toBeVisible();\n\n    // Verify error message contains user-friendly message\n    const userMessage = page.getByText(/unable to load data at this time/i);\n    await expect(userMessage).toBeVisible();\n\n    // Verify export button is disabled due to error\n    const exportButton = page.getByRole('button', { name: /export/i });\n    await expect(exportButton).toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4871,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3769,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 325.976,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7856,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3855,
+        "missing_keywords": [],
+        "assertion_count": 28,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 488.417,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

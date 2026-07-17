@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_045",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7994,
+  "total_latency_s": 558.18,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Internal Links Open in Same Tab', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should open internal links in the same tab', async ({ page }) => {\n    // Verify initial page content\n    const header = page.getByRole('banner');\n    await expect(header).toBeVisible();\n\n    const navLink = page.getByRole('navigation').first();\n    await expect(navLink).toBeVisible();\n\n    // Click on an internal link\n    const aboutLink = page.getByRole('link', { name: /about/i });\n    await expect(aboutLink).toBeVisible();\n    await aboutLink.click();\n\n    // Verify about page content is visible\n    const aboutContent = page.getByText(/about us/i);\n    await expect(aboutContent).toBeVisible();\n\n    // Verify URL remains the same\n    const currentUrl = page.url();\n    await expect(currentUrl).toContain('/');\n\n    // Verify navigation is not duplicated\n    const navLinkCount = page.getByRole('navigation').count();\n    await expect(navLinkCount).toBe(1);\n\n    // Verify back button navigates to home\n    const backButton = page.getByRole('button', { name: /back/i });\n    await expect(backButton).toBeVisible();\n    await backButton.click();\n\n    // Verify home page content is visible\n    const homeContent = page.getByText(/home/i);\n    await expect(homeContent).toBeVisible();\n\n    // Verify URL is still the same\n    const homeUrl = page.url();\n    await expect(homeUrl).toContain('/');\n\n    // Verify navigation is not duplicated\n    const navLinkCount = page.getByRole('navigation').count();\n    await expect(navLinkCount).toBe(1);\n  });\n\n  test('should handle deep internal links and maintain tab focus', async ({ page }) => {\n    // Navigate to a deep internal link\n    const deepLink = page.getByRole('link', { name: /deep link/i });\n    await expect(deepLink).toBeVisible();\n    await deepLink.click();\n\n    // Verify deep link content is visible\n    const deepContent = page.getByText(/deep link content/i);\n    await expect(deepContent).toBeVisible();\n\n    // Verify URL remains the same\n    const deepUrl = page.url();\n    await expect(deepUrl).toContain('/deep-link');\n\n    // Verify navigation is not duplicated\n    const navLinkCount = page.getByRole('navigation').count();\n    await expect(navLinkCount).toBe(1);\n\n    // Verify tab focus is maintained\n    const tabFocus = page.getByRole('tab');\n    await expect(tabFocus).toBeVisible();\n\n    // Verify back button navigates to previous page\n    const backButton = page.getByRole('button', { name: /back/i });\n    await expect(backButton).toBeVisible();\n    await backButton.click();\n\n    // Verify home page content is visible\n    const homeContent = page.getByText(/home/i);\n    await expect(homeContent).toBeVisible();\n\n    // Verify URL is still the same\n    const homeUrl = page.url();\n    await expect(homeUrl).toContain('/');\n\n    // Verify navigation is not duplicated\n    const navLinkCount = page.getByRole('navigation').count();\n    await expect(navLinkCount).toBe(1);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7994,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4313,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 558.18,
+      "feedback_used": ""
+    }
+  ]
+}

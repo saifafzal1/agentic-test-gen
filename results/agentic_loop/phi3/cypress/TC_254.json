@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_254",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 3,
+  "best_score": 0.7537,
+  "total_latency_s": 1199.226,
+  "final_script": "describe('Itemised Receipt After Checkout', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should display itemised receipt with correct details after successful checkout', () => {\n    // Intercept the checkout API call\n    cy.intercept('POST', '/api/checkout/complete').as('checkoutComplete');\n\n    // Add items to cart\n    cy.get('[data-testid=\"add-to-cart-button\"]').first().click();\n    cy.get('[data-testid=\"product-1\"]').first().click();\n    cy.get('[data-testid=\"add-to-cart-button\"]').first().click();\n    cy.get('[data-testid=\"product-2\"]').first().click();\n\n    // Verify items are added\n    cy.get('[data-testid=\"cart-item-count\"]').should('contain', '2');\n\n    // Proceed to checkout\n    cy.get('[data-testid=\"checkout-button\"]').click();\n\n    // Verify checkout form is visible\n    cy.get('[data-testid=\"checkout-form\"]').should('be.visible');\n\n    // Fill in shipping details\n    cy.get('[data-testid=\"shipping-address-input\"]').type('123 Main St');\n    cy.get('[data-testid=\"shipping-city-input\"]').type('Anytown');\n    cy.get('[data-testid=\"shipping-state-input\"]').type('CA');\n    cy.get('[data-testid=\"shipping-zip-code-input\"]').type('90210');\n\n    // Verify shipping details are filled\n    cy.get('[data-testid=\"shipping-address-input\"]').should('have.value', '123 Main St');\n\n    // Verify billing details are pre-filled\n    cy.get('[data-testid=\"billing-address-input\"]').should('have.value', '123 Main St');\n\n    // Verify payment method selection\n    cy.get('[data-testid=\"payment-method-select\"]').click();\n    cy.get('[data-testid=\"credit-card-input\"]').click();\n\n    // Verify payment details are visible\n    cy.get('[data-testid=\"payment-details-section\"]').should('be.visible');\n\n    // Fill in payment details\n    cy.get('[data-testid=\"card-number-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"expiry-date-input\"]').type('12/25');\n    cy.get('[data-testid=\"cvv-input\"]').type('123');\n\n    // Verify payment details are filled\n    cy.get('[data-testid=\"card-number-input\"]').should('have.value', '4111111111111111');\n\n    // Verify checkout button is enabled\n    cy.get('[data-testid=\"checkout-button\"]').should('be.enabled');\n\n    // Click checkout button\n    cy.get('[data-testid=\"checkout-button\"]').click();\n\n    // Wait for API call to complete\n    cy.wait('@checkoutComplete');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Checkout successful');\n\n    // Verify receipt is displayed\n    cy.get('[data-testid=\"receipt-section\"]').should('be.visible');\n    cy.get('[data-testid=\"receipt-item-1\"]').should('contain', 'Product 1');\n    cy.get('[data-testid=\"receipt-item-2\"]').should('contain', 'Product 2');\n\n    // Verify total amount is displayed\n    cy.get('[data-testid=\"total-amount\"]').should('be.visible');\n    cy.get('[data-testid=\"total-amount\"]').should('contain', '$150.00');\n\n    // Verify order number is displayed\n    cy.get('[data-testid=\"order-number\"]').should('be.visible');\n    cy.get('[data-testid=\"order-number\"]').should('contain', 'ORD-123456');\n\n    // Verify confirmation button is visible\n    cy.get('[data-testid=\"confirm-order-button\"]').should('be.visible');\n  });\n\n  it('should display error message when checkout fails', () => {\n    // Intercept the failed checkout API call\n    cy.intercept('POST', '/api/checkout/complete', {\n      statusCode: 500,\n      body: { error: 'Internal server error' }\n    }).as('checkoutFailed');\n\n    // Add items to cart\n    cy.get('[data-testid=\"add-to-cart-button\"]').first().click();\n    cy.get('[data-testid=\"product-1\"]').first().click();\n    cy.get('[data-testid=\"add-to-cart-button\"]').first().click();\n    cy.get('[data-testid=\"product-2\"]').first().click();\n\n    // Verify items are added\n    cy.get('[data-testid=\"cart-item-count\"]').should('contain', '2');\n\n    // Proceed to checkout\n    cy.get('[data-testid=\"checkout-button\"]').click();\n\n    // Verify checkout form is visible\n    cy.get('[data-testid=\"checkout-form\"]').should('be.visible');\n\n    // Fill in shipping and billing details\n    cy.get('[data-testid=\"shipping-address-input\"]').type('123 Main St');\n    cy.get('[data-testid=\"shipping-city-input\"]').type('Anytown');\n    cy.get('[data-testid=\"shipping-state-input\"]').type('CA');\n    cy.get('[data-testid=\"shipping-zip-code-input\"]').type('90210');\n\n    cy.get('[data-testid=\"billing-address-input\"]').type('123 Main St');\n\n    // Verify payment details are filled\n    cy.get('[data-testid=\"card-number-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"expiry-date-input\"]').type('12/25');\n    cy.get('[data-testid=\"cvv-input\"]').type('123');\n\n    // Verify checkout button is enabled\n    cy.get('[data-testid=\"checkout-button\"]').should('be.enabled');\n\n    // Click checkout button\n    cy.get('[data-testid=\"checkout-button\"]').click();\n\n    // Wait for API call to complete\n    cy.wait('@checkoutFailed');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Checkout failed');\n\n    // Verify success message is not displayed\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n\n    // Verify receipt is not displayed\n    cy.get('[data-testid=\"receipt-section\"]').should('not.exist');\n\n    // Verify order number is not displayed\n    cy.get('[data-testid=\"order-number\"]').should('not.exist');\n\n    // Verify confirmation button is not visible\n    cy.get('[data-testid=\"confirm-order-button\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4762,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3607,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 56.673,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4854,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3913,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 552.959,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.7537,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.379,
+        "missing_keywords": [],
+        "assertion_count": 26,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 589.594,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

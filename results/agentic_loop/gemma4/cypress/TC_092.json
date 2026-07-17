@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_092",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7746,
+  "total_latency_s": 72.273,
+  "final_script": "describe('Error Clearing on Input Correction', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n  });\n\n  it('should clear error message when invalid input is corrected', () => {\n    // Intercept the form submission API\n    cy.intercept('POST', '/api/submit-form').as('formSubmit');\n\n    // Fill form with invalid email\n    cy.get('[data-testid=\"email-input\"]').type('invalid-email');\n\n    // Submit form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for API call\n    cy.wait('@formSubmit');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"email-error\"]').should('be.visible');\n    cy.get('[data-testid=\"email-error\"]').should('contain', 'Please enter a valid email address');\n\n    // Correct the invalid input\n    cy.get('[data-testid=\"email-input\"]').clear().type('valid.user@example.com');\n\n    // Verify error message is cleared\n    cy.get('[data-testid=\"email-error\"]').should('not.exist');\n\n    // Verify input field is no longer marked as invalid\n    cy.get('[data-testid=\"email-input\"]').should('have.class', 'valid-input');\n\n    // Submit form again to verify successful submission\n    cy.get('[data-testid=\"submit-button\"]').click();\n    cy.wait('@formSubmit');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Form submitted successfully');\n  });\n\n  it('should clear error when multiple fields have errors and one is corrected', () => {\n    // Intercept form submission API\n    cy.intercept('POST', '/api/submit-form').as('formSubmit');\n\n    // Fill form with invalid email and password\n    cy.get('[data-testid=\"email-input\"]').type('invalid-email');\n    cy.get('[data-testid=\"password-input\"]').type('short');\n\n    // Submit form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for API call\n    cy.wait('@formSubmit');\n\n    // Verify both errors are displayed\n    cy.get('[data-testid=\"email-error\"]').should('be.visible');\n    cy.get('[data-testid=\"password-error\"]').should('be.visible');\n\n    // Correct the email input\n    cy.get('[data-testid=\"email-input\"]').clear().type('valid.user@example.com');\n\n    // Verify email error is cleared\n    cy.get('[data-testid=\"email-error\"]').should('not.exist');\n\n    // Verify password error still exists\n    cy.get('[data-testid=\"password-error\"]').should('be.visible');\n    cy.get('[data-testid=\"password-error\"]').should('contain', 'Password must be at least 8 characters');\n\n    // Verify email input is now valid\n    cy.get('[data-testid=\"email-input\"]').should('have.class', 'valid-input');\n\n    // Correct the password input\n    cy.get('[data-testid=\"password-input\"]').clear().type('ValidPassword123');\n\n    // Verify password error is cleared\n    cy.get('[data-testid=\"password-error\"]').should('not.exist');\n\n    // Verify both fields are now valid\n    cy.get('[data-testid=\"email-input\"]').should('have.class', 'valid-input');\n    cy.get('[data-testid=\"password-input\"]').should('have.class', 'valid-input');\n\n    // Submit form again\n    cy.get('[data-testid=\"submit-button\"]').click();\n    cy.wait('@formSubmit');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7746,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4485,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.273,
+      "feedback_used": ""
+    }
+  ]
+}

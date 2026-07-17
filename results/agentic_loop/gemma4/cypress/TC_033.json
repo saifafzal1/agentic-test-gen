@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_033",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7733,
+  "total_latency_s": 71.437,
+  "final_script": "describe('Form Submit Button Disabled Until All Required Fields Are Filled', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n  });\n\n  it('should disable submit button when required fields are empty', () => {\n    // Verify submit button is disabled initially\n    cy.get('[data-testid=\"submit-button\"]').should('be.disabled');\n    cy.get('[data-testid=\"submit-button\"]').should('contain', 'Submit');\n\n    // Attempt to submit with empty fields\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify form submission is prevented\n    cy.get('[data-testid=\"form\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please fill out all required fields');\n\n    // Verify submit button remains disabled\n    cy.get('[data-testid=\"submit-button\"]').should('be.disabled');\n  });\n\n  it('should enable submit button when all required fields are filled', () => {\n    // Fill in all required fields\n    cy.get('[data-testid=\"name-input\"]').type('John Doe');\n    cy.get('[data-testid=\"email-input\"]').type('john@example.com');\n    cy.get('[data-testid=\"phone-input\"]').type('555-123-465');\n\n    // Verify submit button is now enabled\n    cy.get('[data-testid=\"submit-button\"]').should('not.be.disabled');\n    cy.get('[data-testid=\"submit-button\"]').should('contain', 'Submit');\n\n    // Submit the form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify form submission success\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Form submitted successfully');\n\n    // Verify form is cleared or redirected\n    cy.get('[data-testid=\"form\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7733,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4444,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.437,
+      "feedback_used": ""
+    }
+  ]
+}

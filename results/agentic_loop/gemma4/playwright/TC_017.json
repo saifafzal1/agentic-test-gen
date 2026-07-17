@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_017",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8633,
+  "total_latency_s": 71.133,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Page Mobile View', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should display login page correctly on mobile viewport', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 667 });\n    \n    const emailInput = page.getByLabel('Email Address');\n    const passwordInput = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    const errorMessage = page.getByText(/invalid credentials/i);\n    \n    await expect(emailInput).toBeVisible();\n    await expect(passwordInput).toBeVisible();\n    await expect(loginButton).toBeVisible();\n    \n    await expect(errorMessage).not.toBeVisible();\n    \n    await emailInput.fill('test@example.com');\n    await passwordInput.fill('Password123');\n    \n    await loginButton.click();\n    \n    await expect(page).toHaveURL(/.*dashboard/);\n  });\n\n  test('should handle mobile login form validation and error states', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 667 });\n    \n    const emailInput = page.getByLabel('Email Address');\n    const passwordInput = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    const errorMessage = page.getByText(/invalid credentials/i);\n    \n    await expect(emailInput).toBeVisible();\n    await expect(passwordInput).toBeVisible();\n    \n    await emailInput.fill('test@example.com');\n    await passwordInput.fill('wrongpassword');\n    \n    await loginButton.click();\n    \n    await expect(errorMessage).toBeVisible();\n    \n    await expect(emailInput).toHaveValue('test@example.com');\n    await expect(passwordInput).toHaveValue('wrongpassword');\n    \n    await passwordInput.clear();\n    await passwordInput.fill('Password123');\n    \n    await loginButton.click();\n    \n    await expect(page).toHaveURL(/.*dashboard/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8633,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5443,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.133,
+      "feedback_used": ""
+    }
+  ]
+}

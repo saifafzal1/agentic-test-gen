@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_018",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8505,
+  "total_latency_s": 71.393,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Validation - Required Fields Highlighting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should highlight required fields when submitting an empty form', async ({ page }) => {\n    // Verify form is visible\n    const form = page.getByRole('form');\n    await expect(form).toBeVisible();\n\n    // Verify required fields have validation attribute\n    const nameInput = page.getByLabel('Full Name');\n    const emailInput = page.getByLabel('Email Address');\n    const phoneInput = page.getByLabel('Phone Number');\n    const submitButton = page.getByRole('button', { name: 'Submit' });\n\n    await expect(nameInput).toBeVisible();\n    await expect(emailInput).toBeVisible();\n    await expect(phoneInput).toBeVisible();\n    await expect(submitButton).toBeVisible();\n\n    // Submit empty form\n    await submitButton.click();\n\n    // Verify error messages appear for all required fields\n    const nameError = page.getByText('Full Name is required');\n    const emailError = page.getByText('Email Address is required');\n    const phoneError = page.getByText('Phone Number is required');\n    await expect(nameError).toBeVisible();\n    await expect(emailError).toBeVisible();\n    await expect(phoneError).toBeVisible();\n\n    // Verify required fields are highlighted with error styling\n    await expect(nameInput).toHaveClass(/error-highlight/);\n    await expect(emailInput).toHaveClass(/error-highlight/);\n    await expect(phoneInput).toHaveClass(/error-highlight/);\n\n    // Verify form submission was prevented\n    await expect(page).not.toContainText('Form submitted successfully');\n  });\n\n  test('should clear error highlights when required fields are filled', async ({ page }) => {\n    // Verify form is visible\n    const form = page.getByRole('form');\n    await expect(form).toBeVisible();\n\n    // Fill in all required fields\n    const nameInput = page.getByLabel('Full Name');\n    const emailInput = page.getByLabel('Email Address');\n    const phoneInput = page.getByLabel('Phone Number');\n    const submitButton = page.getByRole('button', { name: 'Submit' });\n\n    await nameInput.fill('John Doe');\n    await emailInput.fill('john@example.com');\n    await phoneInput.fill('123-462-101');\n\n    // Verify error messages are not visible\n    const nameError = page.getByText('Full Name is required');\n    const emailError = page.getByText('Email Address is required');\n    const phoneError = page.getByText('Phone Number is required');\n    await expect(nameError).not.toBeVisible();\n    await expect(emailError).not.toBeVisible();\n    await expect(phoneError).not.toBeVisible();\n\n    // Verify required fields are not highlighted\n    await expect(nameInput).not.toHaveClass(/error-highlight/);\n    await expect(emailInput).not.toHaveClass(/error-highlight/);\n    await expect(phoneInput).not.toHaveClass(/error-highlight/);\n\n    // Submit the form with valid data\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify form is cleared\n    await expect(nameInput).toHaveValue('');\n    await expect(emailInput).toHaveValue('');\n    await expect(phoneInput).toHaveValue('');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8505,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5016,
+        "missing_keywords": [],
+        "assertion_count": 23,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.393,
+      "feedback_used": ""
+    }
+  ]
+}

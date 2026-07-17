@@ -1,0 +1,13 @@
+{
+  "id": "TC_263",
+  "category": "notifications",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a badge count on the notification bell icon.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Notification Badge Count', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Adjust the URL to your application's homepage\n    });\n\n    it('should display the correct badge count on the notification bell icon', () => {\n        // Assuming the notification bell has a data attribute for testing\n        cy.get('[data-testid=\"notification-bell\"]').should('exist');\n        cy.get('[data-testid=\"notification-badge\"]').should('exist').and('contain', '3'); // Example count\n    });\n\n    it('should not display a badge when there are no notifications', () => {\n        // Simulate no notifications\n        cy.intercept('GET', '/api/notifications', []).as('getNotifications');\n        cy.wait('@getNotifications');\n\n        cy.get('[data-testid=\"notification-bell\"]').should('exist');\n        cy.get('[data-testid=\"notification-badge\"]').should('not.exist');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 188,
+  "latency_s": 3.59,
+  "timestamp": "2026-06-19T16:41:41.613945"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_182",
+  "category": "file_upload",
+  "complexity": "simple",
+  "user_story": "As a user, I want to paste an image from the clipboard into the upload area.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Image Upload from Clipboard', () => {\n    beforeEach(() => {\n        cy.visit('/upload'); // Replace with the actual URL of the upload page\n    });\n\n    it('should successfully upload an image from the clipboard', () => {\n        cy.get('input[type=\"file\"]').then(($input) => {\n            const clipboardImage = new ClipboardEvent('paste', {\n                clipboardData: new DataTransfer()\n            });\n            const file = new File([''], 'image.png', { type: 'image/png' });\n            clipboardImage.clipboardData.setData('Files', [file]);\n            document.dispatchEvent(clipboardImage);\n        });\n\n        cy.get('.upload-area').trigger('paste');\n        cy.get('.upload-area').should('contain', 'image.png'); // Adjust based on how the UI reflects the upload\n    });\n\n    it('should show an error message when pasting a non-image file', () => {\n        cy.get('input[type=\"file\"]').then(($input) => {\n            const clipboardText = new ClipboardEvent('paste', {\n                clipboardData: new DataTransfer()\n            });\n            clipboardText.clipboardData.setData('text/plain', 'This is not an image');\n            document.dispatchEvent(clipboardText);\n        });\n\n        cy.get('.upload-area').trigger('paste');\n        cy.get('.error-message').should('be.visible').and('contain', 'Please paste a valid image'); // Adjust based on actual error message\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 300,
+  "latency_s": 3.83,
+  "timestamp": "2026-06-19T16:36:41.752643"
+}

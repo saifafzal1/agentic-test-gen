@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_050",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7275,
+  "total_latency_s": 23.762,
+  "final_script": "describe('Deep Link Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should load the correct page when deep linking with valid path', () => {\n    // Navigate to deep link\n    cy.visit('/dashboard/users/123');\n\n    // Verify page title is set correctly\n    cy.title().should('include', 'User Profile - Dashboard');\n\n    // Verify user profile section is visible\n    cy.get('[data-testid=\"user-profile-section\"]').should('be.visible');\n\n    // Verify user details are displayed\n    cy.get('[data-testid=\"user-name\"]').should('contain', 'John Doe');\n    cy.get('[data-testid=\"user-email\"]').should('contain', 'john.doe@example.com');\n\n    // Verify navigation back to dashboard works\n    cy.go('back');\n    cy.url().should('include', '/dashboard');\n  });\n\n  it('should handle invalid deep link paths and redirect to 404 page', () => {\n    // Attempt to navigate to an invalid deep link\n    cy.visit('/dashboard/users/abc123');\n\n    // Verify redirection to 404 page\n    cy.url().should('include', '/404');\n\n    // Verify 404 page title is set\n    cy.title().should('include', '404 - Page Not Found');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid user ID');\n\n    // Verify navigation back to dashboard works\n    cy.go('back');\n    cy.url().should('include', '/dashboard');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7275,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2917,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 23.762,
+      "feedback_used": ""
+    }
+  ]
+}

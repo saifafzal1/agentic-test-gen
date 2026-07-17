@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_255",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7138,
+  "total_latency_s": 447.027,
+  "final_script": "describe('Billing Address Change During Checkout', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should successfully update billing address during checkout', () => {\n    // Navigate to checkout page\n    cy.get('[data-testid=\"checkout-button\"]').click();\n\n    // Verify initial billing address is displayed\n    cy.get('[data-testid=\"billing-address-input\"]').should('be.visible');\n    cy.get('[data-testid=\"billing-address-input\"]').should('contain', '123 Main St');\n\n    // Fill in new billing address\n    cy.get('[data-testid=\"billing-address-input\"]').type('456 Elm St');\n    cy.get('[data-testid=\"billing-address-input\"]').type('Apt 101');\n    cy.get('[data-testid=\"billing-address-input\"]').type('New York');\n    cy.get('[data-testid=\"billing-city-input\"]').type('New York');\n    cy.get('[data-testid=\"billing-state-input\"]').type('NY');\n    cy.get('[data-testid=\"billing-zip-input\"]').type('10001');\n\n    // Verify address fields are updated\n    cy.get('[data-testid=\"billing-address-input\"]').should('contain', '456 Elm St');\n    cy.get('[data-testid=\"billing-city-input\"]').should('contain', 'New York');\n    cy.get('[data-testid=\"billing-state-input\"]').should('contain', 'NY');\n\n    // Verify address validation is passed\n    cy.get('[data-testid=\"billing-address-validation-message\"]').should('not.exist');\n\n    // Proceed to checkout\n    cy.get('[data-testid=\"continue-button\"]').click();\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Billing address updated successfully');\n\n    // Verify order summary reflects new address\n    cy.get('[data-testid=\"order-summary\"]').should('be.visible');\n    cy.get('[data-testid=\"order-summary\"]').should('contain', 'New billing address');\n\n    // Verify order can be completed\n    cy.get('[data-testid=\"complete-order-button\"]').click();\n\n    // Verify order confirmation page is displayed\n    cy.get('[data-testid=\"order-confirmation-page\"]').should('be.visible');\n  });\n\n  it('should display error when billing address is invalid', () => {\n    // Navigate to checkout page\n    cy.get('[data-testid=\"checkout-button\"]').click();\n\n    // Fill in invalid billing address\n    cy.get('[data-testid=\"billing-address-input\"]').type('1234567890');\n    cy.get('[data-testid=\"billing-address-input\"]').type('Apt 101');\n    cy.get('[data-testid=\"billing-city-input\"]').type('Invalid City');\n    cy.get('[data-testid=\"billing-state-input\"]').type('NY');\n    cy.get('[data-testid=\"billing-zip-input\"]').type('10001');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"billing-address-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"billing-address-error-message\"]').should('contain', 'Please enter a valid address');\n\n    // Verify address fields are not updated\n    cy.get('[data-testid=\"billing-address-input\"]').should('contain', '1234567890');\n\n    // Verify validation error persists\n    cy.get('[data-testid=\"billing-address-validation-message\"]').should('be.visible');\n\n    // Attempt to proceed with invalid address\n    cy.get('[data-testid=\"continue-button\"]').click();\n\n    // Verify error message is still visible\n    cy.get('[data-testid=\"billing-address-error-message\"]').should('be.visible');\n\n    // Verify order cannot be completed\n    cy.get('[data-testid=\"complete-order-button\"]').should('be.disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4288,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.2025,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 164.31,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7138,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2458,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 282.717,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

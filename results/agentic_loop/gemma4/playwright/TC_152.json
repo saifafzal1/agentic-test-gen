@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_152",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8356,
+  "total_latency_s": 72.68,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Expand Row to See Nested Details', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table');\n  });\n\n  test('should expand a row and display nested details', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Get the expand button for the first row\n    const expandButton = page.getByRole('button', { name: /expand row/i }).first();\n    await expect(expandButton).toBeVisible();\n\n    // Click the expand button\n    await expandButton.click();\n\n    // Verify nested details container is visible\n    const nestedDetails = page.getByRole('region', { name: /nested details/i });\n    await expect(nestedDetails).toBeVisible();\n\n    // Verify nested details contain expected content\n    const detailContent = page.getByText('Nested item 1');\n    await expect(detailContent).toBeVisible();\n\n    const detailCount = page.getByText(/nested item/i).count();\n    expect(detailCount).toBeGreaterThan(0);\n\n    // Verify expand button text changes to collapse\n    const collapseButton = page.getByRole('button', { name: /collapse row/i });\n    await expect(collapseButton).toBeVisible();\n  });\n\n  test('should collapse an expanded row and hide nested details', async ({ page }) => {\n    // Get the expand button for the first row\n    const expandButton = page.getByRole('button', { name: /expand row/i }).first();\n    await expect(expandButton).toBeVisible();\n\n    // Click to expand the row\n    await expandButton.click();\n\n    // Verify nested details are visible\n    const nestedDetails = page.getByRole('region', { name: /nested details/i });\n    await expect(nestedDetails).toBeVisible();\n\n    // Get the collapse button\n    const collapseButton = page.getByRole('button', { name: /collapse row/i });\n    await expect(collapseButton).toBeVisible();\n\n    // Click the collapse button\n    await collapseButton.click();\n\n    // Verify nested details are no longer visible\n    await expect(nestedDetails).not.toBeVisible();\n\n    // Verify expand button text reverts\n    const expandButtonAfterCollapse = page.getByRole('button', { name: /expand row/i }).first();\n    await expect(expandButtonAfterCollapse).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8356,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5521,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.68,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_284",
+  "category": "user_profile",
+  "complexity": "simple",
+  "user_story": "As a user, I want to delete my account after confirming with my password.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('User Account Deletion', () => {\n    beforeEach(() => {\n        cy.visit('/login');\n        cy.get('input[name=\"username\"]').type('testuser');\n        cy.get('input[name=\"password\"]').type('password123');\n        cy.get('button[type=\"submit\"]').click();\n        cy.visit('/profile');\n    });\n\n    it('should delete the account after confirming with the password (happy path)', () => {\n        cy.get('button.delete-account').click();\n        cy.get('input[name=\"confirm-password\"]').type('password123');\n        cy.get('button.confirm-delete').click();\n        cy.get('.notification').should('contain', 'Your account has been deleted successfully.');\n        cy.url().should('eq', Cypress.config().baseUrl + '/login');\n    });\n\n    it('should show an error message if the password is incorrect (edge case)', () => {\n        cy.get('button.delete-account').click();\n        cy.get('input[name=\"confirm-password\"]').type('wrongpassword');\n        cy.get('button.confirm-delete').click();\n        cy.get('.error-message').should('contain', 'Incorrect password. Please try again.');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 237,
+  "latency_s": 2.89,
+  "timestamp": "2026-06-19T16:42:51.935951"
+}

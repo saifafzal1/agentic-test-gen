@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_028",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8684,
+  "total_latency_s": 49.117,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Success Feedback on Form Submission', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should display success feedback after valid form submission', async ({ page }) => {\n    // Intercept the form submission API\n    await page.route('**/api/form-submit', (route) => {\n      route.continue();\n    });\n\n    // Fill in the form using getByLabel\n    const nameInput = page.getByLabel('Name');\n    await nameInput.fill('John Doe');\n\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('john.doe@example.com');\n\n    const messageInput = page.getByLabel('Message');\n    await messageInput.fill('Hello, this is a test message.');\n\n    // Submit the form\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Wait for success feedback to appear\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify success feedback is displayed\n    await expect(successMessage).toContainText('Form submitted successfully');\n\n    // Verify success icon appears\n    const successIcon = page.getByRole('img', { name: /success/i });\n    await expect(successIcon).toBeVisible();\n\n    // Verify form is cleared\n    const nameInputAfter = page.getByLabel('Name');\n    await expect(nameInputAfter).toHaveValue('');\n\n    // Verify form is not visible\n    const formContainer = page.locator('[data-testid=\"form-container\"]');\n    await expect(formContainer).not.toBeVisible();\n  });\n\n  test('should display error feedback when form submission fails', async ({ page }) => {\n    // Intercept the form submission API with a failure response\n    await page.route('**/api/form-submit', (route) => {\n      route.abort('failed');\n    });\n\n    // Fill in the form using getByLabel\n    const nameInput = page.getByLabel('Name');\n    await nameInput.fill('Jane Doe');\n\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('jane.doe@example.com');\n\n    const messageInput = page.getByLabel('Message');\n    await messageInput.fill('This is a test message with an error.');\n\n    // Submit the form\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Wait for error feedback to appear\n    const errorMessage = page.getByText('Form submission failed');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error feedback is displayed\n    await expect(errorMessage).toContainText('Form submission failed');\n\n    // Verify error icon appears\n    const errorIcon = page.getByRole('img', { name: /error/i });\n    await expect(errorIcon).toBeVisible();\n\n    // Verify form is still visible\n    const formContainer = page.locator('[data-testid=\"form-container\"]');\n    await expect(formContainer).toBeVisible();\n\n    // Verify form fields are still filled\n    await expect(nameInput).toHaveValue('Jane Doe');\n    await expect(emailInput).toHaveValue('jane.doe@example.com');\n    await expect(messageInput).toHaveValue('This is a test message with an error.');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8684,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5615,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 49.117,
+      "feedback_used": ""
+    }
+  ]
+}

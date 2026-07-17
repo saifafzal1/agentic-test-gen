@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_111",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7966,
+  "total_latency_s": 268.974,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Multiple Concurrent API Calls - Data Display', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display data after multiple concurrent API calls resolve', async ({ page }) => {\n    // Setup intercepts for API calls\n    await page.route('**/api/data/items', (route) => {\n      route.continue();\n    });\n    await page.route('**/api/data/stats', (route) => {\n      route.continue();\n    });\n\n    // Get initial data\n    const itemsList = page.getByRole('region', { name: /items list/i });\n    await expect(itemsList).toBeVisible();\n\n    // Get initial stats\n    const statsContainer = page.getByRole('region', { name: /stats/i });\n    await expect(statsContainer).toBeVisible();\n\n    // Trigger multiple concurrent API calls\n    const itemsButton = page.getByRole('button', { name: /load items/i });\n    await expect(itemsButton).toBeVisible();\n    await itemsButton.click();\n\n    const statsButton = page.getByRole('button', { name: /load stats/i });\n    await expect(statsButton).toBeVisible();\n    await statsButton.click();\n\n    // Wait for API calls to resolve\n    await page.waitForTimeout(500);\n\n    // Verify data is displayed\n    const itemsListItems = page.getByText(/item 1/i);\n    await expect(itemsListItems).toBeVisible();\n\n    const itemsListCount = page.getByText(/10 items/i);\n    await expect(itemsListCount).toBeVisible();\n\n    const statsText = page.getByText(/total revenue: $1000/i);\n    await expect(statsText).toBeVisible();\n\n    // Verify stats are displayed\n    const statsValue = page.getByText(/total revenue: $1000/i);\n    await expect(statsValue).toBeVisible();\n\n    // Verify loading spinner is gone\n    const spinner = page.getByRole('status', { name: /loading/i });\n    await expect(spinner).not.toBeVisible();\n  });\n\n  test('should handle API call failures and display error state', async ({ page }) => {\n    // Setup intercepts for API calls\n    await page.route('**/api/data/items', (route) => {\n      route.abort('failed');\n    });\n    await page.route('**/api/data/stats', (route) => {\n      route.fulfill({\n        status: 200,\n        contentType: 'application/json',\n        body: JSON.stringify({ totalRevenue: 1000 })\n      });\n    });\n\n    // Get initial stats\n    const statsContainer = page.getByRole('region', { name: /stats/i });\n    await expect(statsContainer).toBeVisible();\n\n    // Trigger concurrent API calls\n    const itemsButton = page.getByRole('button', { name: /load items/i });\n    await expect(itemsButton).toBeVisible();\n    await itemsButton.click();\n\n    const statsButton = page.getByRole('button', { name: /load stats/i });\n    await expect(statsButton).toBeVisible();\n    await statsButton.click();\n\n    // Wait for API calls to resolve\n    await page.waitForTimeout(500);\n\n    // Verify error state is displayed for items\n    const errorMessage = page.getByText(/failed to load items/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify stats are displayed\n    const statsText = page.getByText(/total revenue: $1000/i);\n    await expect(statsText).toBeVisible();\n\n    // Verify loading spinner is gone\n    const spinner = page.getByRole('status', { name: /loading/i });\n    await expect(spinner).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7966,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4219,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 268.974,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_114",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7826,
+  "total_latency_s": 43.958,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Lazy-loaded Components Smooth Loading', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/lazy-components');\n  });\n\n  test('should load lazy-loaded components smoothly without layout shift', async ({ page }) => {\n    // Verify initial state - no lazy-loaded components should be visible\n    const lazyComponentContainer = page.getByRole('region', { name: /lazy-loaded content/i });\n    await expect(lazyComponentContainer).toBeVisible();\n\n    // Verify initial content is empty\n    const lazyComponentContent = page.getByText(/loading/i);\n    await expect(lazyComponentContent).toBeVisible();\n\n    // Verify initial layout is stable\n    const layoutStability = page.getByRole('heading', { name: /Layout Stability/i });\n    await expect(layoutStability).toBeVisible();\n\n    // Trigger lazy loading by scrolling\n    await page.evaluate(() => {\n      window.scrollBy(0, 1000);\n    });\n\n    // Wait for lazy-loaded component to load\n    await page.waitForTimeout(500);\n\n    // Verify lazy-loaded component appears smoothly\n    await expect(lazyComponentContainer).toBeVisible();\n\n    // Verify content is now visible\n    const lazyComponentContent = page.getByText(/content/i);\n    await expect(lazyComponentContent).toBeVisible();\n\n    // Verify no layout shift occurred\n    const layoutStability = page.getByRole('heading', { name: /Layout Stability/i });\n    await expect(layoutStability).toBeVisible();\n\n    // Verify smooth transition\n    const transitionClass = page.getByTestId('transition-class');\n    await expect(transitionClass).toBeVisible();\n  });\n\n  test('should handle failed lazy-loaded component loading gracefully', async ({ page }) => {\n    // Trigger lazy loading by scrolling\n    await page.evaluate(() => {\n      window.scrollBy(0, 1000);\n    });\n\n    // Wait for lazy-loaded component to load\n    await page.waitForTimeout(500);\n\n    // Simulate failed loading by intercepting network request\n    await page.route('**/lazy-component-data', route => {\n      route.abort('Failed to load');\n    });\n\n    // Verify error state is displayed\n    const errorState = page.getByText(/error/i);\n    await expect(errorState).toBeVisible();\n\n    // Verify loading indicator is still visible\n    const loadingIndicator = page.getByText(/loading/i);\n    await expect(loadingIndicator).toBeVisible();\n\n    // Verify layout remains stable\n    const layoutStability = page.getByRole('heading', { name: /Layout Stability/i });\n    await expect(layoutStability).toBeVisible();\n\n    // Verify user is notified of error\n    const errorMessage = page.getByText(/Failed to load component/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify user can retry or navigate away\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify navigation away button is available\n    const navigationButton = page.getByRole('button', { name: /navigate away/i });\n    await expect(navigationButton).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7826,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3752,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 43.958,
+      "feedback_used": ""
+    }
+  ]
+}

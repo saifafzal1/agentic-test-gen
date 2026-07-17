@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_085",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7889,
+  "total_latency_s": 42.598,
+  "final_script": "describe('CSV Import Feature', () => {\n  beforeEach(() => {\n    cy.visit('/records/import');\n  });\n\n  it('should successfully import records from a valid CSV file', () => {\n    // Setup: intercept the file upload API\n    cy.intercept('POST', '/api/records/import').as('importCsv');\n\n    // Get the file input element\n    cy.get('[data-testid=\"csv-file-input\"]').selectFile('cypress/fixtures/valid_records.csv', { force: true });\n\n    // Verify file is selected\n    cy.get('[data-testid=\"file-preview\"]').should('be.visible');\n    cy.get('[data-testid=\"file-preview\"]').should('contain', 'valid_records.csv');\n\n    // Verify import button is enabled\n    cy.get('[data-testid=\"import-button\"]').should('be.visible');\n\n    // Click import button\n    cy.get('[data-testid=\"import-button\"]').click();\n\n    // Wait for API call\n    cy.wait('@importCsv');\n\n    // Verify success message\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Records imported successfully');\n\n    // Verify records are displayed\n    cy.get('[data-testid=\"records-list\"]').should('be.visible');\n    cy.get('[data-testid=\"records-list\"]').should('contain', '10 records');\n\n    // Verify records have correct data\n    cy.get('[data-testid=\"record-item\"]').first().should('contain', 'John Doe');\n    cy.get('[data-testid=\"record-item\"]').last().should('contain', 'Jane Smith');\n  });\n\n  it('should handle invalid CSV file and display error message', () => {\n    // Setup: intercept the file upload API\n    cy.intercept('POST', '/api/records/import').as('importCsv');\n\n    // Get the file input element\n    cy.get('[data-testid=\"csv-file-input\"]').selectFile('cypress/fixtures/invalid_records.csv', { force: true });\n\n    // Verify file is selected\n    cy.get('[data-testid=\"file-preview\"]').should('be.visible');\n    cy.get('[data-testid=\"file-preview\"]').should('contain', 'invalid_records.csv');\n\n    // Verify import button is enabled\n    cy.get('[data-testid=\"import-button\"]').should('be.visible');\n\n    // Click import button\n    cy.get('[data-testid=\"import-button\"]').click();\n\n    // Wait for API call\n    cy.wait('@importCsv');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid CSV file format');\n\n    // Verify import button is disabled\n    cy.get('[data-testid=\"import-button\"]').should('be.disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7889,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4964,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 42.598,
+      "feedback_used": ""
+    }
+  ]
+}

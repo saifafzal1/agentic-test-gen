@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_079",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8342,
+  "total_latency_s": 76.884,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Restore Archived Record', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should successfully restore an archived record', async ({ page }) => {\n    // Verify record list is visible\n    const recordList = page.getByRole('region', { name: /record list/i });\n    await expect(recordList).toBeVisible();\n\n    // Locate and click on the archived record\n    const archivedRecord = page.getByRole('button', { name: /archived record 123/i });\n    await expect(archivedRecord).toBeVisible();\n    await archivedRecord.click();\n\n    // Verify record details page is displayed\n    const recordDetails = page.getByRole('region', { name: /record details/i });\n    await expect(recordDetails).toBeVisible();\n\n    // Verify record is marked as archived\n    const statusBadge = page.getByText('Archived');\n    await expect(statusBadge).toBeVisible();\n\n    // Click restore button\n    const restoreButton = page.getByRole('button', { name: /restore/i });\n    await expect(restoreButton).toBeVisible();\n    await restoreButton.click();\n\n    // Verify restore confirmation modal appears\n    const confirmModal = page.getByRole('dialog', { name: /confirm restore/i });\n    await expect(confirmModal).toBeVisible();\n\n    // Click confirm restore\n    const confirmRestoreButton = page.getByRole('button', { name: /confirm restore/i });\n    await expect(confirmRestoreButton).toBeVisible();\n    await confirmRestoreButton.click();\n\n    // Verify success message\n    const successMessage = page.getByText('Record restored successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify status badge is updated to active\n    const activeStatusBadge = page.getByText('Active');\n    await expect(activeStatusBadge).toBeVisible();\n\n    // Verify record is no longer in archive list\n    const archiveList = page.getByRole('region', { name: /archived records/i });\n    await expect(archiveList).not.toBeVisible();\n  });\n\n  test('should handle restore failure when record is locked', async ({ page }) => {\n    // Locate and click on a locked archived record\n    const lockedRecord = page.getByRole('button', { name: /locked record 456/i });\n    await expect(lockedRecord).toBeVisible();\n    await lockedRecord.click();\n\n    // Verify record details page is displayed\n    const recordDetails = page.getByRole('region', { name: /record details/i });\n    await expect(recordDetails).toBeVisible();\n\n    // Verify locked status is visible\n    const lockedStatus = page.getByText('Locked');\n    await expect(lockedStatus).toBeVisible();\n\n    // Attempt to click restore button\n    const restoreButton = page.getByRole('button', { name: /restore/i });\n    await expect(restoreButton).toBeVisible();\n    await restoreButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText('Cannot restore locked record');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify restore confirmation modal does not appear\n    const confirmModal = page.getByRole('dialog', { name: /confirm restore/i });\n    await expect(confirmModal).not.toBeVisible();\n\n    // Verify record status remains locked\n    const lockedStatusAfterAttempt = page.getByText('Locked');\n    await expect(lockedStatusAfterAttempt).toBeVisible();\n\n    // Verify user can navigate away from the record details\n    const backButton = page.getByRole('button', { name: /back to list/i });\n    await expect(backButton).toBeVisible();\n    await backButton.click();\n\n    // Verify record list is visible again\n    await expect(recordList).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8342,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5474,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 76.884,
+      "feedback_used": ""
+    }
+  ]
+}

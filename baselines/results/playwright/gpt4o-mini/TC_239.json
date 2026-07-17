@@ -1,0 +1,13 @@
+{
+  "id": "TC_239",
+  "category": "responsive",
+  "complexity": "simple",
+  "user_story": "As a user, I want the app to look correct in landscape orientation on mobile.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Responsive Design - Landscape Orientation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-app-url.com');\n    await page.setViewportSize({ width: 800, height: 600 }); // Landscape orientation\n  });\n\n  test('should display header correctly in landscape orientation', async ({ page }) => {\n    const header = page.getByRole('heading', { name: /app header/i });\n    await expect(header).toBeVisible();\n    await expect(header).toHaveCSS('font-size', '24px'); // Example assertion\n  });\n\n  test('should display main content correctly in landscape orientation', async ({ page }) => {\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeVisible();\n    await expect(mainContent).toHaveCSS('flex-direction', 'row'); // Example assertion\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 199,
+  "latency_s": 5.39,
+  "timestamp": "2026-06-19T16:59:54.459619"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_088",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.823,
+  "total_latency_s": 43.72,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Mention in Comments', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/comments');\n  });\n\n  test('should allow user to mention another user by typing @ and selecting from suggestions', async ({ page }) => {\n    // Verify initial state: no mentions\n    const commentInput = page.getByLabel('Comment');\n    await expect(commentInput).toBeVisible();\n\n    const submitButton = page.getByRole('button', { name: 'Post Comment' });\n    await expect(submitButton).toBeVisible();\n\n    const commentList = page.getByRole('region', { name: 'Comments' });\n    await expect(commentList).toBeVisible();\n\n    // Type a comment\n    await commentInput.fill('This is a test comment');\n\n    // Type @ and wait for suggestions\n    const mentionInput = page.getByLabel('Mention');\n    await mentionInput.fill('@');\n    await page.waitForSelector('[data-testid=\"mention-suggestion\"]');\n\n    // Select a suggestion\n    const suggestion = page.getByRole('option', { name: 'John Doe' });\n    await suggestion.click();\n\n    // Verify mention is inserted\n    await expect(commentInput).toContainText('@John Doe');\n\n    // Verify comment is submitted\n    await submitButton.click();\n\n    // Verify comment appears in list\n    await expect(commentList).toContainText('This is a test comment');\n\n    // Verify mention appears in list\n    await expect(commentList).toContainText('@John Doe');\n\n    // Verify mention is highlighted\n    await expect(suggestion).toBeVisible();\n  });\n\n  test('should handle mentioning a user with special characters', async ({ page }) => {\n    // Verify initial state: no mentions\n    const commentInput = page.getByLabel('Comment');\n    await expect(commentInput).toBeVisible();\n\n    const submitButton = page.getByRole('button', { name: 'Post Comment' });\n    await expect(submitButton).toBeVisible();\n\n    const commentList = page.getByRole('region', { name: 'Comments' });\n    await expect(commentList).toBeVisible();\n\n    // Type a comment with special characters\n    await commentInput.fill('This is a test comment with @special characters: @$%^&*');\n\n    // Type @ and wait for suggestions\n    const mentionInput = page.getByLabel('Mention');\n    await mentionInput.fill('@');\n    await page.waitForSelector('[data-testid=\"mention-suggestion\"]');\n\n    // Select a suggestion\n    const suggestion = page.getByRole('option', { name: 'Jane Smith' });\n    await suggestion.click();\n\n    // Verify mention is inserted\n    await expect(commentInput).toContainText('@Jane Smith');\n\n    // Verify comment is submitted\n    await submitButton.click();\n\n    // Verify comment appears in list\n    await expect(commentList).toContainText('This is a test comment with @special characters: @$%^&*');\n\n    // Verify mention appears in list\n    await expect(commentList).toContainText('@Jane Smith');\n\n    // Verify mention is highlighted\n    await expect(suggestion).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.823,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4101,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 43.72,
+      "feedback_used": ""
+    }
+  ]
+}

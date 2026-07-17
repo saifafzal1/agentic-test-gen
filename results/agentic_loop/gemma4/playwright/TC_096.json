@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_096",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8911,
+  "total_latency_s": 76.846,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Coupon Code Validation Error Message', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/coupon-validation');\n  });\n\n  test('should display error message when invalid coupon code is entered', async ({ page }) => {\n    // Locate and fill coupon input using getByLabel\n    const couponInput = page.getByLabel('Coupon Code');\n    await couponInput.fill('INVALIDCODE123');\n\n    // Locate and click submit button using getByRole\n    const submitButton = page.getByRole('button', { name: /apply coupon/i });\n    await submitButton.click();\n\n    // Wait for error message to appear\n    await page.waitForTimeout(500);\n\n    // Verify error message is visible and contains expected text\n    const errorMessage = page.getByText(/invalid coupon code/i);\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).toContainText('The coupon code you entered is invalid.');\n\n    // Verify error message has appropriate styling (e.g, red color)\n    const errorBox = page.locator('[data-testid=\"error-message\"]');\n    await expect(errorBox).toHaveCSS('color', 'rgb(255, 0, 0)');\n\n    // Verify coupon input still has the invalid value\n    await expect(couponInput).toHaveValue('INVALIDCODE123');\n  });\n\n  test('should clear error message when valid coupon code is entered', async ({ page }) => {\n    // Enter invalid coupon code first\n    const couponInput = page.getByLabel('Coupon Code');\n    await couponInput.fill('INVALIDCODE123');\n    const submitButton = page.getByRole('button', { name: /apply coupon/i });\n    await submitButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/invalid coupon code/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Clear the input field\n    await couponInput.clear();\n\n    // Enter valid coupon code\n    await couponInput.fill('VALIDCODE123');\n\n    // Click submit button again\n    await submitButton.click();\n\n    // Wait for success state\n    await page.waitForTimeout(500);\n\n    // Verify error message is no longer visible\n    const errorBox = page.locator('[data-testid=\"error-message\"]');\n    await expect(errorBox).not.toBeVisible();\n\n    // Verify success message is displayed\n    const successMessage = page.getByText(/coupon applied successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify coupon input now contains the valid code\n    await expect(couponInput).toHaveValue('VALIDCODE123');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8911,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.6369,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 76.846,
+      "feedback_used": ""
+    }
+  ]
+}

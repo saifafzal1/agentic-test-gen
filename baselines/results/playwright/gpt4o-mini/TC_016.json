@@ -1,0 +1,13 @@
+{
+  "id": "TC_016",
+  "category": "authentication",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a CAPTCHA on the login form after 3 failed attempts.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Form CAPTCHA', () => {\n  const username = 'testUser';\n  const password = 'wrongPassword';\n\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should display CAPTCHA after 3 failed login attempts', async ({ page }) => {\n    for (let i = 0; i < 3; i++) {\n      await page.getByLabel('Username').fill(username);\n      await page.getByLabel('Password').fill(password);\n      await page.getByRole('button', { name: 'Login' }).click();\n      await expect(page.getByText('Invalid username or password')).toBeVisible();\n    }\n    \n    await page.getByLabel('Username').fill(username);\n    await page.getByLabel('Password').fill(password);\n    await page.getByRole('button', { name: 'Login' }).click();\n    \n    await expect(page.getByRole('img', { name: 'CAPTCHA' })).toBeVisible();\n  });\n\n  test('should not display CAPTCHA before 3 failed attempts', async ({ page }) => {\n    await page.getByLabel('Username').fill(username);\n    await page.getByLabel('Password').fill(password);\n    await page.getByRole('button', { name: 'Login' }).click();\n    await expect(page.getByText('Invalid username or password')).toBeVisible();\n\n    await page.getByLabel('Username').fill(username);\n    await page.getByLabel('Password').fill(password);\n    await page.getByRole('button', { name: 'Login' }).click();\n    await expect(page.getByText('Invalid username or password')).toBeVisible();\n\n    await page.getByLabel('Username').fill(username);\n    await page.getByLabel('Password').fill(password);\n    await page.getByRole('button', { name: 'Login' }).click();\n    await expect(page.getByRole('img', { name: 'CAPTCHA' })).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 427,
+  "latency_s": 6.04,
+  "timestamp": "2026-06-19T16:44:27.169177"
+}

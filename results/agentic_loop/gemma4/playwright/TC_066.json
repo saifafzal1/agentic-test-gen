@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_066",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7952,
+  "total_latency_s": 187.429,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('403 Forbidden Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display access denied page when receiving 403 error', async ({ page }) => {\n    // Intercept the API call and respond with 403\n    await page.route('**/api/user/profile', (route) => {\n      route.abort('failed');\n      route.continue();\n    });\n\n    // Click the button that triggers the API call\n    const profileButton = page.getByRole('button', { name: /view profile/i });\n    await profileButton.click();\n\n    // Wait for the error state to render\n    await page.waitForTimeout(500);\n\n    // Verify the access denied page is visible\n    const accessDeniedPage = page.getByText(/access denied/i);\n    await expect(accessDeniedPage).toBeVisible();\n\n    // Verify the error message contains the correct text\n    const errorMessage = page.getByText(/you do not have permission/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the user is redirected to the login page\n    const loginLink = page.getByRole('link', { name: /login/i });\n    await expect(loginLink).toBeVisible();\n\n    // Verify the profile content is not visible\n    const profileContent = page.getByText(/user profile details/i);\n    await expect(profileContent).not.toBeVisible();\n  });\n\n  test('should handle multiple 403 errors gracefully and show error state', async ({ page }) => {\n    // Intercept the API call and respond with 403\n    await page.route('**/api/user/settings', (route) => {\n      route.abort('failed');\n      route.continue();\n    });\n\n    // Click the settings button\n    const settingsButton = page.getByRole('button', { name: /settings/i });\n    await settingsButton.click();\n\n    // Verify the settings page is visible\n    const settingsPage = page.getByText(/settings/i);\n    await expect(settingsPage).toBeVisible();\n\n    // Verify the error message appears\n    const errorMessage = page.getByText(/access denied/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the error state is displayed\n    const errorContainer = page.locator('[data-testid=\"error-state\"]');\n    await expect(errorContainer).toBeVisible();\n\n    // Verify the user can navigate away from the error page\n    const dashboardLink = page.getByRole('link', { name: /dashboard/i });\n    await dashboardLink.click();\n\n    // Verify the user is back on the dashboard\n    await expect(page).toHaveURL(/.*dashboard/);\n\n    // Verify the error message is no longer visible\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.497,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4098,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.955,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7952,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4173,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 114.474,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

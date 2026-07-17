@@ -1,0 +1,13 @@
+{
+  "id": "TC_036",
+  "category": "form_validation",
+  "complexity": "medium",
+  "user_story": "As a user, I want to go back to a previous step in a multi-step form without losing data.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Multi-step Form Navigation', () => {\n    beforeEach(() => {\n        cy.visit('/multi-step-form');\n    });\n\n    it('should retain data when navigating back to a previous step', () => {\n        // Fill out the first step\n        cy.get('input[name=\"firstName\"]').type('John');\n        cy.get('input[name=\"lastName\"]').type('Doe');\n        cy.get('button.next').click();\n\n        // Fill out the second step\n        cy.get('input[name=\"email\"]').type('john.doe@example.com');\n        cy.get('button.prev').click(); // Go back to the first step\n\n        // Verify that the first step data is still present\n        cy.get('input[name=\"firstName\"]').should('have.value', 'John');\n        cy.get('input[name=\"lastName\"]').should('have.value', 'Doe');\n    });\n\n    it('should not retain data if the form is reset', () => {\n        // Fill out the first step\n        cy.get('input[name=\"firstName\"]').type('Jane');\n        cy.get('input[name=\"lastName\"]').type('Smith');\n        cy.get('button.next').click();\n\n        // Reset the form\n        cy.get('button.reset').click();\n\n        // Verify that the first step data is cleared\n        cy.get('input[name=\"firstName\"]').should('have.value', '');\n        cy.get('input[name=\"lastName\"]').should('have.value', '');\n    });\n});",
+  "prompt_tokens": 116,
+  "completion_tokens": 302,
+  "latency_s": 4.16,
+  "timestamp": "2026-06-19T16:27:25.530920"
+}

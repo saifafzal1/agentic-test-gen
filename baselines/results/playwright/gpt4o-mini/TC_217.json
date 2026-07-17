@@ -1,0 +1,13 @@
+{
+  "id": "TC_217",
+  "category": "accessibility",
+  "complexity": "complex",
+  "user_story": "As a user, I want loading states to be communicated to assistive technology.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Loading States Accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should announce loading state to assistive technology', async ({ page }) => {\n    await page.getByRole('button', { name: 'Load Data' }).click();\n    const loadingMessage = await page.getByText('Loading, please wait...');\n\n    await expect(loadingMessage).toBeVisible();\n    await expect(loadingMessage).toHaveAttribute('aria-live', 'polite');\n  });\n\n  test('should remove loading state when data is loaded', async ({ page }) => {\n    await page.getByRole('button', { name: 'Load Data' }).click();\n    await page.waitForTimeout(2000); // Simulate loading time\n\n    const loadingMessage = await page.getByText('Loading, please wait...');\n    await expect(loadingMessage).not.toBeVisible();\n    const dataMessage = await page.getByText('Data loaded successfully.');\n    await expect(dataMessage).toBeVisible();\n    await expect(dataMessage).toHaveAttribute('aria-live', 'assertive');\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 262,
+  "latency_s": 7.22,
+  "timestamp": "2026-06-19T16:58:19.067268"
+}

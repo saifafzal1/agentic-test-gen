@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_081",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8258,
+  "total_latency_s": 339.952,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Inline Editing on Table Row', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table');\n  });\n\n  test('should enable inline editing on table row and update data without modal', async ({ page }) => {\n    // Verify initial table state\n    const rows = page.locator('[data-testid=\"table-row\"]');\n    await expect(rows).toHaveCount(5);\n\n    // Verify initial data\n    const firstRow = page.locator('[data-testid=\"table-row-1\"]');\n    await expect(firstRow).toContainText('John Doe');\n    await expect(firstRow).toContainText('john@example.com');\n\n    // Click on the first row to enable inline editing\n    await firstRow.click();\n\n    // Verify editable state\n    const nameInput = page.getByLabel('Name');\n    await expect(nameInput).toBeVisible();\n    await expect(nameInput).toHaveValue('John Doe');\n\n    const emailInput = page.getByLabel('Email');\n    await expect(emailInput).toBeVisible();\n    await expect(emailInput).toHaveValue('john@example.com');\n\n    // Update name\n    await nameInput.fill('Jane Doe');\n    await expect(nameInput).toHaveValue('Jane Doe');\n\n    // Update email\n    await emailInput.fill('jane.doe@example.com');\n    await expect(emailInput).toHaveValue('jane.doe@example.com');\n\n    // Verify changes are reflected\n    await expect(firstRow).toContainText('Jane Doe');\n    await expect(firstRow).toContainText('jane.doe@example.com');\n\n    // Verify save button is enabled\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await expect(saveButton).toBeVisible();\n\n    // Click save button\n    await saveButton.click();\n\n    // Verify success message\n    const successMessage = page.getByText('Row updated successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify table is still visible\n    await expect(rows).toHaveCount(5);\n  });\n\n  test('should handle empty row and prevent editing', async ({ page }) => {\n    // Verify initial table state\n    const rows = page.locator('[data-testid=\"table-row\"]');\n    await expect(rows).toHaveCount(5);\n\n    // Click on the first row to enable inline editing\n    const firstRow = page.locator('[data-testid=\"table-row-1\"]');\n    await firstRow.click();\n\n    // Verify editable state\n    const nameInput = page.getByLabel('Name');\n    await expect(nameInput).toBeVisible();\n\n    // Attempt to edit empty row\n    await nameInput.fill('');\n\n    // Verify editable state is still visible\n    await expect(nameInput).toBeVisible();\n\n    // Verify save button is disabled\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await expect(saveButton).toBeDisabled();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('Cannot edit empty row');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify table is still visible\n    await expect(rows).toHaveCount(5);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8258,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4192,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 339.952,
+      "feedback_used": ""
+    }
+  ]
+}

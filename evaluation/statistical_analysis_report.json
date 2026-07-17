@@ -1,0 +1,560 @@
+{
+  "descriptive": {
+    "gpt4o-mini/cypress": {
+      "n": 279,
+      "mean": 0.3039,
+      "std": 0.0714
+    },
+    "claude-haiku/cypress": {
+      "n": 279,
+      "mean": 0.2937,
+      "std": 0.0747
+    },
+    "phi3/cypress": {
+      "n": 279,
+      "mean": 0.3832,
+      "std": 0.0859
+    },
+    "gemma4/cypress": {
+      "n": 279,
+      "mean": 0.4409,
+      "std": 0.1072
+    },
+    "gpt4o-mini/playwright": {
+      "n": 279,
+      "mean": 0.3389,
+      "std": 0.0665
+    },
+    "claude-haiku/playwright": {
+      "n": 279,
+      "mean": 0.3411,
+      "std": 0.065
+    },
+    "phi3/playwright": {
+      "n": 279,
+      "mean": 0.4323,
+      "std": 0.0666
+    },
+    "gemma4/playwright": {
+      "n": 279,
+      "mean": 0.4867,
+      "std": 0.0757
+    }
+  },
+  "anova_all_combos": {
+    "F": 225.6303,
+    "p": 1.0084903261654486e-253,
+    "significant": true
+  },
+  "anova_by_framework": {
+    "cypress": {
+      "F": 182.8974,
+      "p": 2.1832332317861227e-96,
+      "significant": true
+    },
+    "playwright": {
+      "F": 311.7219,
+      "p": 7.741215939352172e-147,
+      "significant": true
+    }
+  },
+  "anova_group_collapsed": {
+    "F": 1091.2022,
+    "p": 3.843118870152488e-195,
+    "significant": true
+  },
+  "wilcoxon": {
+    "gemma4 vs claude-haiku [cypress]": {
+      "n": 279,
+      "mean_diff": 0.1472,
+      "W": 1521.0,
+      "p": 1.171375847664375e-40,
+      "significant": true
+    },
+    "gemma4 vs claude-haiku [playwright]": {
+      "n": 279,
+      "mean_diff": 0.1456,
+      "W": 157.5,
+      "p": 9.005252095426121e-47,
+      "significant": true
+    },
+    "gemma4 vs gpt4o-mini [cypress]": {
+      "n": 279,
+      "mean_diff": 0.1369,
+      "W": 1998.5,
+      "p": 1.275049211888926e-38,
+      "significant": true
+    },
+    "gemma4 vs gpt4o-mini [playwright]": {
+      "n": 279,
+      "mean_diff": 0.1478,
+      "W": 656.0,
+      "p": 1.742084247340665e-44,
+      "significant": true
+    },
+    "phi3 vs claude-haiku [cypress]": {
+      "n": 279,
+      "mean_diff": 0.0895,
+      "W": 5078.0,
+      "p": 8.761439435176359e-27,
+      "significant": true
+    },
+    "phi3 vs claude-haiku [playwright]": {
+      "n": 279,
+      "mean_diff": 0.0913,
+      "W": 2174.5,
+      "p": 6.960148637708358e-38,
+      "significant": true
+    },
+    "phi3 vs gpt4o-mini [cypress]": {
+      "n": 279,
+      "mean_diff": 0.0792,
+      "W": 5904.0,
+      "p": 5.438726257932512e-24,
+      "significant": true
+    },
+    "phi3 vs gpt4o-mini [playwright]": {
+      "n": 279,
+      "mean_diff": 0.0935,
+      "W": 3201.0,
+      "p": 9.891526793720201e-34,
+      "significant": true
+    },
+    "gemma4 vs phi3 [cypress]": {
+      "n": 279,
+      "mean_diff": 0.0577,
+      "W": 6241.5,
+      "p": 6.764458367152023e-23,
+      "significant": true
+    },
+    "gemma4 vs phi3 [playwright]": {
+      "n": 279,
+      "mean_diff": 0.0543,
+      "W": 3669.5,
+      "p": 6.419239895075135e-32,
+      "significant": true
+    }
+  },
+  "chi_square_syntax_vs_group": {
+    "contingency": [
+      [
+        1110,
+        1110
+      ],
+      [
+        6,
+        6
+      ]
+    ],
+    "chi2": 0.0,
+    "dof": 1,
+    "p": 1.0,
+    "significant": false
+  },
+  "error_matrix_syntax_by_category": {
+    "accessibility": {
+      "claude-haiku/cypress": 100.0,
+      "claude-haiku/playwright": 100.0,
+      "gemma4/cypress": 100.0,
+      "gemma4/playwright": 100.0,
+      "gpt4o-mini/cypress": 100.0,
+      "gpt4o-mini/playwright": 100.0,
+      "phi3/cypress": 95.2,
+      "phi3/playwright": 100.0
+    },
+    "api_response_handling": {
+      "claude-haiku/cypress": 100.0,
+      "claude-haiku/playwright": 100.0,
+      "gemma4/cypress": 100.0,
+      "gemma4/playwright": 100.0,
+      "gpt4o-mini/cypress": 100.0,
+      "gpt4o-mini/playwright": 100.0,
+      "phi3/cypress": 100.0,
+      "phi3/playwright": 100.0
+    },
+    "async_await": {
+      "claude-haiku/cypress": 94.7,
+      "claude-haiku/playwright": 100.0,
+      "gemma4/cypress": 100.0,
+      "gemma4/playwright": 100.0,
+      "gpt4o-mini/cypress": 100.0,
+      "gpt4o-mini/playwright": 100.0,
+      "phi3/cypress": 100.0,
+      "phi3/playwright": 100.0
+    },
+    "authentication": {
+      "claude-haiku/cypress": 100.0,
+      "claude-haiku/playwright": 100.0,
+      "gemma4/cypress": 100.0,
+      "gemma4/playwright": 100.0,
+      "gpt4o-mini/cypress": 100.0,
+      "gpt4o-mini/playwright": 100.0,
+      "phi3/cypress": 94.1,
+      "phi3/playwright": 100.0
+    },
+    "crud_operations": {
+      "claude-haiku/cypress": 87.5,
+      "claude-haiku/playwright": 100.0,
+      "gemma4/cypress": 100.0,
+      "gemma4/playwright": 100.0,
+      "gpt4o-mini/cypress": 100.0,
+      "gpt4o-mini/playwright": 100.0,
+      "phi3/cypress": 87.5,
+      "phi3/playwright": 100.0
+    },
+    "error_states": {
+      "claude-haiku/cypress": 100.0,
+      "claude-haiku/playwright": 100.0,
+      "gemma4/cypress": 100.0,
+      "gemma4/playwright": 100.0,
+      "gpt4o-mini/cypress": 100.0,
+      "gpt4o-mini/playwright": 100.0,
+      "phi3/cypress": 95.0,
+      "phi3/playwright": 100.0
+    },
+    "file_upload": {
+      "claude-haiku/cypress": 100.0,
+      "claude-haiku/playwright": 100.0,
+      "gemma4/cypress": 100.0,
+      "gemma4/playwright": 100.0,
+      "gpt4o-mini/cypress": 100.0,
+      "gpt4o-mini/playwright": 100.0,
+      "phi3/cypress": 100.0,
+      "phi3/playwright": 100.0
+    },
+    "form_validation": {
+      "claude-haiku/cypress": 95.0,
+      "claude-haiku/playwright": 100.0,
+      "gemma4/cypress": 100.0,
+      "gemma4/playwright": 100.0,
+      "gpt4o-mini/cypress": 100.0,
+      "gpt4o-mini/playwright": 100.0,
+      "phi3/cypress": 95.0,
+      "phi3/playwright": 100.0
+    },
+    "modal_dialog": {
+      "claude-haiku/cypress": 100.0,
+      "claude-haiku/playwright": 100.0,
+      "gemma4/cypress": 100.0,
+      "gemma4/playwright": 100.0,
+      "gpt4o-mini/cypress": 100.0,
+      "gpt4o-mini/playwright": 100.0,
+      "phi3/cypress": 100.0,
+      "phi3/playwright": 100.0
+    },
+    "navigation": {
+      "claude-haiku/cypress": 100.0,
+      "claude-haiku/playwright": 100.0,
+      "gemma4/cypress": 100.0,
+      "gemma4/playwright": 100.0,
+      "gpt4o-mini/cypress": 100.0,
+      "gpt4o-mini/playwright": 100.0,
+      "phi3/cypress": 100.0,
+      "phi3/playwright": 100.0
+    },
+    "notifications": {
+      "claude-haiku/cypress": 100.0,
+      "claude-haiku/playwright": 100.0,
+      "gemma4/cypress": 100.0,
+      "gemma4/playwright": 100.0,
+      "gpt4o-mini/cypress": 100.0,
+      "gpt4o-mini/playwright": 100.0,
+      "phi3/cypress": 100.0,
+      "phi3/playwright": 100.0
+    },
+    "payment_flow": {
+      "claude-haiku/cypress": 86.7,
+      "claude-haiku/playwright": 100.0,
+      "gemma4/cypress": 100.0,
+      "gemma4/playwright": 100.0,
+      "gpt4o-mini/cypress": 100.0,
+      "gpt4o-mini/playwright": 100.0,
+      "phi3/cypress": 100.0,
+      "phi3/playwright": 100.0
+    },
+    "responsive": {
+      "claude-haiku/cypress": 100.0,
+      "claude-haiku/playwright": 100.0,
+      "gemma4/cypress": 100.0,
+      "gemma4/playwright": 100.0,
+      "gpt4o-mini/cypress": 100.0,
+      "gpt4o-mini/playwright": 100.0,
+      "phi3/cypress": 100.0,
+      "phi3/playwright": 100.0
+    },
+    "search_filter": {
+      "claude-haiku/cypress": 100.0,
+      "claude-haiku/playwright": 100.0,
+      "gemma4/cypress": 100.0,
+      "gemma4/playwright": 100.0,
+      "gpt4o-mini/cypress": 100.0,
+      "gpt4o-mini/playwright": 100.0,
+      "phi3/cypress": 100.0,
+      "phi3/playwright": 100.0
+    },
+    "table_list": {
+      "claude-haiku/cypress": 100.0,
+      "claude-haiku/playwright": 100.0,
+      "gemma4/cypress": 100.0,
+      "gemma4/playwright": 100.0,
+      "gpt4o-mini/cypress": 100.0,
+      "gpt4o-mini/playwright": 100.0,
+      "phi3/cypress": 100.0,
+      "phi3/playwright": 100.0
+    },
+    "user_profile": {
+      "claude-haiku/cypress": 100.0,
+      "claude-haiku/playwright": 100.0,
+      "gemma4/cypress": 100.0,
+      "gemma4/playwright": 100.0,
+      "gpt4o-mini/cypress": 100.0,
+      "gpt4o-mini/playwright": 100.0,
+      "phi3/cypress": 100.0,
+      "phi3/playwright": 100.0
+    }
+  },
+  "error_matrix_rouge_by_category": {
+    "accessibility": {
+      "claude-haiku/cypress": 0.2387,
+      "claude-haiku/playwright": 0.3026,
+      "gemma4/cypress": 0.3592,
+      "gemma4/playwright": 0.4441,
+      "gpt4o-mini/cypress": 0.2557,
+      "gpt4o-mini/playwright": 0.3239,
+      "phi3/cypress": 0.3197,
+      "phi3/playwright": 0.4027
+    },
+    "api_response_handling": {
+      "claude-haiku/cypress": 0.3157,
+      "claude-haiku/playwright": 0.3445,
+      "gemma4/cypress": 0.4701,
+      "gemma4/playwright": 0.4779,
+      "gpt4o-mini/cypress": 0.3213,
+      "gpt4o-mini/playwright": 0.3616,
+      "phi3/cypress": 0.3695,
+      "phi3/playwright": 0.4176
+    },
+    "async_await": {
+      "claude-haiku/cypress": 0.2906,
+      "claude-haiku/playwright": 0.3212,
+      "gemma4/cypress": 0.4826,
+      "gemma4/playwright": 0.4929,
+      "gpt4o-mini/cypress": 0.2968,
+      "gpt4o-mini/playwright": 0.3155,
+      "phi3/cypress": 0.4431,
+      "phi3/playwright": 0.4499
+    },
+    "authentication": {
+      "claude-haiku/cypress": 0.3062,
+      "claude-haiku/playwright": 0.3561,
+      "gemma4/cypress": 0.5145,
+      "gemma4/playwright": 0.5037,
+      "gpt4o-mini/cypress": 0.32,
+      "gpt4o-mini/playwright": 0.3614,
+      "phi3/cypress": 0.4335,
+      "phi3/playwright": 0.4215
+    },
+    "crud_operations": {
+      "claude-haiku/cypress": 0.2751,
+      "claude-haiku/playwright": 0.3543,
+      "gemma4/cypress": 0.4543,
+      "gemma4/playwright": 0.4955,
+      "gpt4o-mini/cypress": 0.3118,
+      "gpt4o-mini/playwright": 0.3284,
+      "phi3/cypress": 0.3669,
+      "phi3/playwright": 0.4308
+    },
+    "error_states": {
+      "claude-haiku/cypress": 0.3116,
+      "claude-haiku/playwright": 0.3258,
+      "gemma4/cypress": 0.4649,
+      "gemma4/playwright": 0.4696,
+      "gpt4o-mini/cypress": 0.2992,
+      "gpt4o-mini/playwright": 0.3346,
+      "phi3/cypress": 0.3796,
+      "phi3/playwright": 0.4358
+    },
+    "file_upload": {
+      "claude-haiku/cypress": 0.27,
+      "claude-haiku/playwright": 0.3383,
+      "gemma4/cypress": 0.4418,
+      "gemma4/playwright": 0.5152,
+      "gpt4o-mini/cypress": 0.2961,
+      "gpt4o-mini/playwright": 0.355,
+      "phi3/cypress": 0.4015,
+      "phi3/playwright": 0.4493
+    },
+    "form_validation": {
+      "claude-haiku/cypress": 0.2966,
+      "claude-haiku/playwright": 0.3343,
+      "gemma4/cypress": 0.4672,
+      "gemma4/playwright": 0.4825,
+      "gpt4o-mini/cypress": 0.3114,
+      "gpt4o-mini/playwright": 0.3609,
+      "phi3/cypress": 0.379,
+      "phi3/playwright": 0.4472
+    },
+    "modal_dialog": {
+      "claude-haiku/cypress": 0.3198,
+      "claude-haiku/playwright": 0.3159,
+      "gemma4/cypress": 0.5209,
+      "gemma4/playwright": 0.5774,
+      "gpt4o-mini/cypress": 0.309,
+      "gpt4o-mini/playwright": 0.3594,
+      "phi3/cypress": 0.4472,
+      "phi3/playwright": 0.5139
+    },
+    "navigation": {
+      "claude-haiku/cypress": 0.2871,
+      "claude-haiku/playwright": 0.3815,
+      "gemma4/cypress": 0.444,
+      "gemma4/playwright": 0.4894,
+      "gpt4o-mini/cypress": 0.3062,
+      "gpt4o-mini/playwright": 0.3303,
+      "phi3/cypress": 0.4002,
+      "phi3/playwright": 0.443
+    },
+    "notifications": {
+      "claude-haiku/cypress": 0.3142,
+      "claude-haiku/playwright": 0.3631,
+      "gemma4/cypress": 0.3972,
+      "gemma4/playwright": 0.4653,
+      "gpt4o-mini/cypress": 0.3032,
+      "gpt4o-mini/playwright": 0.3261,
+      "phi3/cypress": 0.3704,
+      "phi3/playwright": 0.4219
+    },
+    "payment_flow": {
+      "claude-haiku/cypress": 0.289,
+      "claude-haiku/playwright": 0.3557,
+      "gemma4/cypress": 0.4266,
+      "gemma4/playwright": 0.4582,
+      "gpt4o-mini/cypress": 0.3164,
+      "gpt4o-mini/playwright": 0.3189,
+      "phi3/cypress": 0.3778,
+      "phi3/playwright": 0.3899
+    },
+    "responsive": {
+      "claude-haiku/cypress": 0.2724,
+      "claude-haiku/playwright": 0.3319,
+      "gemma4/cypress": 0.3292,
+      "gemma4/playwright": 0.439,
+      "gpt4o-mini/cypress": 0.2903,
+      "gpt4o-mini/playwright": 0.326,
+      "phi3/cypress": 0.3148,
+      "phi3/playwright": 0.4074
+    },
+    "search_filter": {
+      "claude-haiku/cypress": 0.3015,
+      "claude-haiku/playwright": 0.377,
+      "gemma4/cypress": 0.4267,
+      "gemma4/playwright": 0.4975,
+      "gpt4o-mini/cypress": 0.3104,
+      "gpt4o-mini/playwright": 0.3472,
+      "phi3/cypress": 0.3798,
+      "phi3/playwright": 0.437
+    },
+    "table_list": {
+      "claude-haiku/cypress": 0.3055,
+      "claude-haiku/playwright": 0.3387,
+      "gemma4/cypress": 0.4742,
+      "gemma4/playwright": 0.5181,
+      "gpt4o-mini/cypress": 0.3153,
+      "gpt4o-mini/playwright": 0.3375,
+      "phi3/cypress": 0.4046,
+      "phi3/playwright": 0.4251
+    },
+    "user_profile": {
+      "claude-haiku/cypress": 0.3168,
+      "claude-haiku/playwright": 0.3249,
+      "gemma4/cypress": 0.3643,
+      "gemma4/playwright": 0.459,
+      "gpt4o-mini/cypress": 0.3162,
+      "gpt4o-mini/playwright": 0.3366,
+      "phi3/cypress": 0.3335,
+      "phi3/playwright": 0.4096
+    }
+  },
+  "anova_by_category": {
+    "accessibility": {
+      "F": 26.4164,
+      "p": 8.073573818162255e-24,
+      "significant": true
+    },
+    "api_response_handling": {
+      "F": 12.9517,
+      "p": 2.5058554757468514e-12,
+      "significant": true
+    },
+    "async_await": {
+      "F": 25.1253,
+      "p": 3.5796415189179933e-22,
+      "significant": true
+    },
+    "authentication": {
+      "F": 14.7374,
+      "p": 5.4795874511254116e-14,
+      "significant": true
+    },
+    "crud_operations": {
+      "F": 20.1047,
+      "p": 1.2017031607808167e-17,
+      "significant": true
+    },
+    "error_states": {
+      "F": 20.4805,
+      "p": 3.2237109746444904e-19,
+      "significant": true
+    },
+    "file_upload": {
+      "F": 16.0108,
+      "p": 9.92878166155678e-15,
+      "significant": true
+    },
+    "form_validation": {
+      "F": 15.2523,
+      "p": 5.049615856271616e-15,
+      "significant": true
+    },
+    "modal_dialog": {
+      "F": 27.874,
+      "p": 1.761298332704141e-23,
+      "significant": true
+    },
+    "navigation": {
+      "F": 18.9967,
+      "p": 8.192610574517397e-18,
+      "significant": true
+    },
+    "notifications": {
+      "F": 9.5388,
+      "p": 1.6779178554432902e-09,
+      "significant": true
+    },
+    "payment_flow": {
+      "F": 10.5541,
+      "p": 3.879753587768773e-10,
+      "significant": true
+    },
+    "responsive": {
+      "F": 14.5169,
+      "p": 8.244687476578121e-14,
+      "significant": true
+    },
+    "search_filter": {
+      "F": 17.109,
+      "p": 4.256506083752609e-16,
+      "significant": true
+    },
+    "table_list": {
+      "F": 23.341,
+      "p": 3.4951768726540577e-20,
+      "significant": true
+    },
+    "user_profile": {
+      "F": 6.9372,
+      "p": 1.1135729204465389e-06,
+      "significant": true
+    }
+  }
+}

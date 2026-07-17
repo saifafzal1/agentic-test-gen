@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_237",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7174,
+  "total_latency_s": 486.928,
+  "final_script": "describe('Pinch-to-Zoom on Product Images', () => {\n  beforeEach(() => {\n    cy.visit('/products');\n  });\n\n  it('should enable pinch-to-zoom on product images and allow zooming in and out', () => {\n    // Verify initial state: product image is visible without zoom\n    cy.get('[data-testid=\"product-image\"]').should('be.visible');\n    cy.get('[data-testid=\"product-image\"]').should('have.css', 'width', '100%');\n\n    // Intercept the zoom event\n    cy.intercept('POST', '/api/zoom/pinch').as('zoomPinch');\n\n    // Perform pinch-to-zoom gesture\n    cy.get('[data-testid=\"product-image\"]').trigger('touchmove', {\n      deltaX: 50,\n      deltaY: 50,\n      scale: 1.2,\n      rotation: 0,\n      touches: [{ identifier: 1, clientX: 100, clientY: 100 }]\n    });\n\n    // Wait for zoom API call\n    cy.wait('@zoomPinch');\n\n    // Verify zoom state\n    cy.get('[data-testid=\"product-image\"]').should('have.css', 'width', '120%');\n    cy.get('[data-testid=\"product-image\"]').should('have.css', 'height', '120%');\n\n    // Verify zoom controls are visible\n    cy.get('[data-testid=\"zoom-controls\"]').should('be.visible');\n\n    // Verify zoom level is displayed\n    cy.get('[data-testid=\"zoom-level\"]').should('contain', '120%');\n\n    // Verify zoomed image is still clickable\n    cy.get('[data-testid=\"product-image\"]').click();\n\n    // Verify navigation to product details\n    cy.url().should('include', '/products/123');\n  });\n\n  it('should disable zoom when image is already at maximum zoom level', () => {\n    // Intercept zoom API call\n    cy.intercept('POST', '/api/zoom/pinch').as('zoomPinch');\n\n    // Zoom in to maximum level\n    cy.get('[data-testid=\"product-image\"]').trigger('touchmove', {\n      deltaX: 50,\n      deltaY: 50,\n      scale: 2,\n      rotation: 0,\n      touches: [{ identifier: 1, clientX: 100, clientY: 100 }]\n    });\n\n    // Wait for zoom API call\n    cy.wait('@zoomPinch');\n\n    // Verify zoom level is at maximum\n    cy.get('[data-testid=\"zoom-level\"]').should('contain', '200%');\n\n    // Attempt to zoom in further\n    cy.get('[data-testid=\"product-image\"]').trigger('touchmove', {\n      deltaX: 50,\n      deltaY: 50,\n      scale: 3,\n      rotation: 0,\n      touches: [{ identifier: 1, clientX: 100, clientY: 100 }]\n    });\n\n    // Wait for zoom API call\n    cy.wait('@zoomPinch');\n\n    // Verify zoom level remains at maximum\n    cy.get('[data-testid=\"zoom-level\"]').should('contain', '200%');\n\n    // Verify zoom controls are still visible\n    cy.get('[data-testid=\"zoom-controls\"]').should('be.visible');\n\n    // Verify zoom controls are disabled\n    cy.get('[data-testid=\"zoom-controls\"]').should('have.css', 'opacity', '0.5');\n\n    // Verify zoomed image is still clickable\n    cy.get('[data-testid=\"product-image\"]').click();\n\n    // Verify navigation to product details\n    cy.url().should('include', '/products/123');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7174,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.258,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 486.928,
+      "feedback_used": ""
+    }
+  ]
+}

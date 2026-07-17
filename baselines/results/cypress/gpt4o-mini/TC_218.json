@@ -1,0 +1,13 @@
+{
+  "id": "TC_218",
+  "category": "accessibility",
+  "complexity": "simple",
+  "user_story": "As a user with motor impairment, I want click targets to be at least 44x44px.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Accessibility Click Targets', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should have click targets that are at least 44x44px', () => {\n        cy.get('button, a, input[type=\"button\"], input[type=\"submit\"]').each(($el) => {\n            const width = $el.width();\n            const height = $el.height();\n            expect(width).to.be.gte(44);\n            expect(height).to.be.gte(44);\n        });\n    });\n\n    it('should not have any click targets smaller than 44x44px', () => {\n        cy.get('button, a, input[type=\"button\"], input[type=\"submit\"]').each(($el) => {\n            const width = $el.width();\n            const height = $el.height();\n            if (width < 44 || height < 44) {\n                throw new Error(`Click target ${$el.prop('outerHTML')} is smaller than 44x44px`);\n            }\n        });\n    });\n});",
+  "prompt_tokens": 114,
+  "completion_tokens": 223,
+  "latency_s": 2.99,
+  "timestamp": "2026-06-19T16:38:52.332397"
+}

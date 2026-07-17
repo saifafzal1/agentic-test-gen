@@ -1,0 +1,13 @@
+{
+  "id": "TC_259",
+  "category": "notifications",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a success toast notification after saving a record.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Success Toast Notification', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should display success toast notification after saving a record', async ({ page }) => {\n    await page.fill(getByLabel('Record Name'), 'Test Record'); // Replace with actual label\n    await page.click(getByRole('button', { name: 'Save' })); // Replace with actual button name\n\n    const toast = await page.getByRole('alert', { name: 'Success' }); // Replace with actual alert role and name\n    await expect(toast).toBeVisible();\n    await expect(toast).toHaveText('Record saved successfully!'); // Replace with actual success message\n  });\n\n  test('should not display success toast notification if save fails', async ({ page }) => {\n    await page.fill(getByLabel('Record Name'), ''); // Simulate invalid input\n    await page.click(getByRole('button', { name: 'Save' })); // Replace with actual button name\n\n    const toast = page.getByRole('alert', { name: 'Success' }); // Replace with actual alert role and name\n    await expect(toast).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 282,
+  "latency_s": 5.19,
+  "timestamp": "2026-06-19T17:01:45.226713"
+}

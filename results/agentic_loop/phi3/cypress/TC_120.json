@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_120",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7652,
+  "total_latency_s": 328.8,
+  "final_script": "describe('WebSocket Real-time UI Updates', () => {\n  beforeEach(() => {\n    cy.visit('/websocket-test');\n  });\n\n  it('should establish WebSocket connection and update UI in real-time', () => {\n    // Verify initial state\n    cy.get('[data-testid=\"message-list\"]').should('be.visible');\n    cy.get('[data-testid=\"message-list\"]').should('contain', 'No messages');\n\n    // Intercept WebSocket connection\n    cy.intercept('GET', '/api/websocket').as('websocketConnect');\n\n    // Trigger WebSocket connection\n    cy.get('[data-testid=\"connect-button\"]').click();\n\n    // Wait for WebSocket connection\n    cy.wait('@websocketConnect');\n\n    // Verify connection is established\n    cy.get('[data-testid=\"connection-status\"]').should('be.visible');\n    cy.get('[data-testid=\"connection-status\"]').should('contain', 'Connected');\n\n    // Verify UI updates with real-time data\n    cy.get('[data-testid=\"message-list\"]').should('contain', 'Welcome to WebSocket Test');\n    cy.get('[data-testid=\"message-list\"]').should('contain', 'Initial message');\n\n    // Verify WebSocket message is received and displayed\n    cy.get('[data-testid=\"message-list\"]').should('contain', 'Real-time message');\n\n    // Verify WebSocket disconnect button works\n    cy.get('[data-testid=\"disconnect-button\"]').click();\n\n    // Wait for WebSocket disconnect\n    cy.wait('@websocketDisconnect');\n\n    // Verify connection is closed\n    cy.get('[data-testid=\"connection-status\"]').should('contain', 'Disconnected');\n\n    // Verify UI updates to reflect disconnection\n    cy.get('[data-testid=\"message-list\"]').should('contain', 'Disconnected');\n  });\n\n  it('should handle WebSocket connection errors and update UI accordingly', () => {\n    // Intercept WebSocket connection with error\n    cy.intercept('GET', '/api/websocket', {\n      statusCode: 500,\n      body: { error: 'Server error' }\n    }).as('websocketError');\n\n    // Attempt to connect\n    cy.get('[data-testid=\"connect-button\"]').click();\n\n    // Wait for error\n    cy.wait('@websocketError');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'WebSocket connection failed');\n\n    // Verify UI does not update with real-time data\n    cy.get('[data-testid=\"message-list\"]').should('not.contain', 'Real-time message');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n\n    // Verify retry button works\n    cy.get('[data-testid=\"retry-button\"]').click();\n\n    // Wait for WebSocket connection to retry\n    cy.wait('@websocketConnect');\n\n    // Verify connection is re-established\n    cy.get('[data-testid=\"connection-status\"]').should('contain', 'Reconnected');\n\n    // Verify UI updates with real-time data\n    cy.get('[data-testid=\"message-list\"]').should('contain', 'Reconnected');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7652,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4175,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 328.8,
+      "feedback_used": ""
+    }
+  ]
+}

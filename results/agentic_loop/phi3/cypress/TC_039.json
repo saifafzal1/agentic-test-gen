@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_039",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.76,
+  "total_latency_s": 257.003,
+  "final_script": "describe('Navigation Bar Active Menu Item Highlighting', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should highlight active menu item in navigation bar', () => {\n    // Navigate to the home page\n    cy.get('[data-testid=\"nav-link-home\"]').click();\n    \n    // Verify home page is loaded\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Home');\n    \n    // Verify home menu item is highlighted\n    cy.get('[data-testid=\"nav-link-home\"]').should('have.css', 'color', 'rgb(255, 255, 255)');\n    cy.get('[data-testid=\"nav-link-home\"]').should('have.css', 'font-weight', 'bold');\n    \n    // Navigate to the about page\n    cy.get('[data-testid=\"nav-link-about\"]').click();\n    \n    // Verify about page is loaded\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'About');\n    \n    // Verify about menu item is now highlighted\n    cy.get('[data-testid=\"nav-link-about\"]').should('have.css', 'color', 'rgb(255, 255, 255)');\n    cy.get('[data-testid=\"nav-link-about\"]').should('have.css', 'font-weight', 'bold');\n    \n    // Navigate back to home\n    cy.get('[data-testid=\"nav-link-home\"]').click();\n    \n    // Verify home menu item is highlighted again\n    cy.get('[data-testid=\"nav-link-home\"]').should('have.css', 'color', 'rgb(255, 255, 255)');\n    cy.get('[data-testid=\"nav-link-home\"]').should('have.css', 'font-weight', 'bold');\n  });\n\n  it('should not highlight menu item when page is not active', () => {\n    // Navigate to a non-existent page\n    cy.get('[data-testid=\"nav-link-contact\"]').click();\n    \n    // Verify page does not load (error message appears)\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    \n    // Verify contact menu item is not highlighted\n    cy.get('[data-testid=\"nav-link-contact\"]').should('not.have.css', 'color', 'rgb(255, 255, 255)');\n    cy.get('[data-testid=\"nav-link-contact\"]').should('not.have.css', 'font-weight', 'bold');\n    \n    // Navigate back to home\n    cy.get('[data-testid=\"nav-link-home\"]').click();\n    \n    // Verify home menu item is highlighted\n    cy.get('[data-testid=\"nav-link-home\"]').should('have.css', 'color', 'rgb(255, 255, 255)');\n    cy.get('[data-testid=\"nav-link-home\"]').should('have.css', 'font-weight', 'bold');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.76,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 257.003,
+      "feedback_used": ""
+    }
+  ]
+}

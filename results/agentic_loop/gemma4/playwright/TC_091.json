@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_091",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.82,
+  "total_latency_s": 76.93,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Field Validation Error States', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should display specific validation error for each invalid field', async ({ page }) => {\n    // Fill in valid data\n    await page.getByLabel('Full Name').fill('John Doe');\n    await page.getByLabel('Email Address').fill('john@example.com');\n    await page.getByLabel('Phone Number').fill('123456777');\n\n    // Clear all fields\n    await page.getByLabel('Full Name').clear();\n    await page.getByLabel('Email Address').clear();\n    await page.getByLabel('Phone Number').clear();\n\n    // Submit with all fields empty\n    await page.getByRole('button', { name: /submit/i }).click();\n\n    // Verify validation errors are displayed for all fields\n    const fullNameError = page.getByText('Full Name is required');\n    await expect(fullNameError).toBeVisible();\n\n    const emailError = page.getByText('Email Address is required');\n    await expect(emailError).toBeVisible();\n\n    const phoneError = page.getByText('Phone Number is required');\n    await expect(phoneError).toBeVisible();\n\n    // Verify error messages are associated with the correct fields\n    await expect(fullNameError).toBeCloseTo(page.getByLabel('Full Name'));\n    await expect(emailError).toBeCloseTo(page.getByLabel('Email Address'));\n    await expect(phoneError).toBeCloseTo(page.getByLabel('Phone Number'));\n\n    // Verify submit button is disabled\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeDisabled();\n  });\n\n  test('should display specific validation error for each invalid field when submitting with invalid data', async ({ page }) => {\n    // Fill in invalid data\n    await page.getByLabel('Full Name').fill('John Doe');\n    await page.getByLabel('Email Address').fill('invalid-email');\n    await page.getByLabel('Phone Number').fill('not a phone number');\n\n    // Submit the form\n    await page.getByRole('button', { name: /submit/i }).click();\n\n    // Verify specific validation errors are displayed\n    const fullNameError = page.getByText('Full Name is required');\n    await expect(fullNameError).not.toBeVisible();\n\n    const emailError = page.getByText('Please enter a valid email address');\n    await expect(emailError).toBeVisible();\n\n    const phoneError = page.getByText('Please enter a valid phone number');\n    await expect(phoneError).toBeVisible();\n\n    // Verify submit button remains disabled\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeDisabled();\n\n    // Verify error messages are associated with the correct fields\n    await expect(emailError).toBeCloseTo(page.getByLabel('Email Address'));\n    await expect(phoneError).toBeCloseTo(page.getByLabel('Phone Number'));\n\n    // Verify form does not submit\n    const form = page.locator('[data-testid=\"form\"]');\n    await expect(form).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.82,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 76.93,
+      "feedback_used": ""
+    }
+  ]
+}

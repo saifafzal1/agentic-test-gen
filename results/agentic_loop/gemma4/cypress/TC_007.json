@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_007",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8163,
+  "total_latency_s": 71.028,
+  "final_script": "describe('Remember Me Checkbox - Authentication', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should successfully log in and set remember me cookie when checkbox is checked', () => {\n    // Intercept login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n\n    // Fill in login form\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('SecurePassword123');\n\n    // Check remember me checkbox\n    cy.get('[data-testid=\"remember-me-checkbox\"]').click();\n\n    // Submit login form\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@loginRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify successful login\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"welcome-message\"]').should('be.visible');\n    cy.get('[data-testid=\"welcome-message\"]').should('contain', 'Welcome back');\n\n    // Verify remember me cookie is set\n    cy.getCookie('rememberMe').should('exist');\n    cy.getCookie('rememberMe').then((cookie) => {\n      expect(cookie.value).to.equal('true');\n    });\n  });\n\n  it('should not set remember me cookie when checkbox is unchecked', () => {\n    // Intercept login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n\n    // Fill in login form\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('SecurePassword123');\n\n    // Verify remember me checkbox is unchecked by default\n    cy.get('[data-testid=\"remember-me-checkbox\"]').should('not.be.checked');\n\n    // Submit login form\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@loginRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify successful login\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"welcome-message\"]').should('be.visible');\n\n    // Verify remember me cookie is NOT set\n    cy.getCookie('rememberMe').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8163,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5875,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.028,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_003",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8184,
+  "total_latency_s": 71.006,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Logout Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should successfully log out a user and redirect to login page', async ({ page }) => {\n    // Setup: intercept login API\n    await page.route('**/api/auth/login', route => {\n      route.continue();\n    });\n\n    // Login with valid credentials\n    const emailInput = page.getByLabel('Email');\n    const passwordInput = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: /sign in/i });\n\n    await emailInput.fill('user@example.com');\n    await passwordInput.fill('Password123!');\n    await loginButton.click();\n\n    // Wait for navigation and verify user is logged in\n    await page.waitForURL('**/dashboard');\n    const welcomeMessage = page.getByText(/Welcome back/i);\n    await expect(welcomeMessage).toBeVisible();\n\n    // Perform logout\n    const logoutButton = page.getByRole('button', { name: /logout/i });\n    await expect(logoutButton).toBeVisible();\n    await logoutButton.click();\n\n    // Verify logout success and redirect to login\n    await page.waitForURL('**/login');\n    await expect(page).toHaveURL(/.*\\/login/);\n    await expect(welcomeMessage).not.toBeVisible();\n    await expect(logoutButton).not.toBeVisible();\n  });\n\n  test('should handle logout when session is already expired', async ({ page }) => {\n    // Setup: intercept logout API\n    await page.route('**/api/auth/logout', route => {\n      route.abort('failed');\n    });\n\n    // Navigate to dashboard directly (simulating expired session)\n    await page.goto('/dashboard');\n    const welcomeMessage = page.getByText(/Welcome back/i);\n    await expect(welcomeMessage).toBeVisible();\n\n    // Attempt to log out\n    const logoutButton = page.getByRole('button', { name: /logout/i });\n    await expect(logoutButton).toBeVisible();\n    await logoutButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/session expired/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify user is redirected to login page\n    await page.waitForURL('**/login');\n    await expect(page).toHaveURL(/.*\\/login/);\n    await expect(welcomeMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8184,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3947,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.006,
+      "feedback_used": ""
+    }
+  ]
+}

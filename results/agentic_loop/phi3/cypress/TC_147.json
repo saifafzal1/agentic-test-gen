@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_147",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7557,
+  "total_latency_s": 38.646,
+  "final_script": "describe('Table Sorting by Column Headers', () => {\n  beforeEach(() => {\n    cy.visit('/table-list');\n  });\n\n  it('should sort table by clicking column headers in ascending order', () => {\n    // Verify initial table state\n    cy.get('[data-testid=\"table-container\"]').should('be.visible');\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 0);\n\n    // Click the first column header to sort by Name\n    cy.get('[data-testid=\"table-header-name\"]').click();\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 0);\n\n    // Verify table is now sorted by Name in ascending order\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', 'Alice');\n    cy.get('[data-testid=\"table-row\"]').last().should('contain', 'Zoe');\n\n    // Click the same column header again to toggle sort order\n    cy.get('[data-testid=\"table-header-name\"]').click();\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', 'Zoe');\n    cy.get('[data-testid=\"table-row\"]').last().should('contain', 'Alice');\n  });\n\n  it('should sort table by clicking column headers in descending order', () => {\n    // Verify initial table state\n    cy.get('[data-testid=\"table-container\"]').should('be.visible');\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 0);\n\n    // Click the first column header to sort by Name in ascending order\n    cy.get('[data-testid=\"table-header-name\"]').click();\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 0);\n\n    // Verify table is now sorted by Name in ascending order\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', 'Alice');\n    cy.get('[data-testid=\"table-row\"]').last().should('contain', 'Zoe');\n\n    // Click the same column header again to toggle sort order to descending\n    cy.get('[data-testid=\"table-header-name\"]').click();\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', 'Zoe');\n    cy.get('[data-testid=\"table-row\"]').last().should('contain', 'Alice');\n\n    // Verify table is now sorted by Name in descending order\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', 'Zoe');\n    cy.get('[data-testid=\"table-row\"]').last().should('contain', 'Alice');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7557,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3855,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 38.646,
+      "feedback_used": ""
+    }
+  ]
+}

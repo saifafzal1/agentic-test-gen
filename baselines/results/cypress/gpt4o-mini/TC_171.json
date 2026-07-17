@@ -1,0 +1,13 @@
+{
+  "id": "TC_171",
+  "category": "file_upload",
+  "complexity": "medium",
+  "user_story": "As a user, I want to cancel an in-progress upload.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('File Upload Cancellation', () => {\n    beforeEach(() => {\n        cy.visit('/upload'); // Replace with the actual URL of the upload page\n    });\n\n    it('should successfully cancel an in-progress upload', () => {\n        const fileName = 'test-file.txt'; // Replace with an actual file name\n        cy.fixture(fileName).as('fileToUpload');\n\n        cy.get('input[type=\"file\"]').attachFile(this.fileToUpload);\n        cy.get('.upload-progress').should('be.visible');\n\n        cy.get('.cancel-upload-button').click();\n        cy.get('.upload-progress').should('not.exist');\n        cy.get('.upload-status').should('contain', 'Upload cancelled');\n    });\n\n    it('should not allow cancellation if no upload is in progress', () => {\n        cy.get('.cancel-upload-button').should('be.disabled');\n        cy.get('.upload-status').should('not.exist');\n    });\n});",
+  "prompt_tokens": 107,
+  "completion_tokens": 190,
+  "latency_s": 3.08,
+  "timestamp": "2026-06-19T16:36:04.245795"
+}

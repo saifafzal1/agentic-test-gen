@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_172",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7823,
+  "total_latency_s": 72.402,
+  "final_script": "describe('File Upload Queue - Remove File Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/file-upload');\n  });\n\n  it('should successfully remove a file from the upload queue before submission', () => {\n    // Intercept the file upload API endpoint\n    cy.intercept('POST', '/api/files/upload').as('fileUpload');\n\n    // Upload a file\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/sample-file.pdf');\n\n    // Verify file appears in queue\n    cy.get('[data-testid=\"upload-queue-item\"]').should('be.visible');\n    cy.get('[data-testid=\"upload-queue-item\"]').should('contain', 'sample-file.pdf');\n\n    // Verify remove button is visible\n    cy.get('[data-testid=\"remove-file-button\"]').should('be.visible');\n\n    // Click remove button\n    cy.get('[data-testid=\"remove-file-button\"]').click();\n\n    // Verify file is removed from queue\n    cy.get('[data-testid=\"upload-queue-item\"]').should('not.exist');\n\n    // Verify queue is empty\n    cy.get('[data-testid=\"upload-queue\"]').should('not.contain', 'sample-file.pdf');\n\n    // Verify remove button is no longer visible\n    cy.get('[data-testid=\"remove-file-button\"]').should('not.exist');\n\n    // Verify submit button is enabled\n    cy.get('[data-testid=\"submit-upload-button\"]').should('not.be.disabled');\n\n    // Submit the empty queue\n    cy.get('[data-testid=\"submit-upload-button\"]').click();\n\n    // Verify API call is not made\n    cy.wait('@fileUpload', { timeout: 1000 }).then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n  });\n\n  it('should handle removing the last file and display appropriate message', () => {\n    // Upload two files\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/document1.pdf');\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/document2.pdf');\n\n    // Verify both files are in queue\n    cy.get('[data-testid=\"upload-queue-item\"]').should('have.length', 2);\n    cy.get('[data-testid=\"upload-queue-item\"]').first().should('contain', 'document1.pdf');\n    cy.get('[data-testid=\"upload-queue-item\"]').eq(1).should('contain', 'document2.pdf');\n\n    // Remove the first file\n    cy.get('[data-testid=\"upload-queue-item\"]').first().find('[data-testid=\"remove-file-button\"]').click();\n\n    // Verify first file is removed\n    cy.get('[data-testid=\"upload-queue-item\"]').should('have.length', 1);\n    cy.get('[data-testid=\"upload-queue-item\"]').first().should('contain', 'document2.pdf');\n\n    // Remove the last file\n    cy.get('[data-testid=\"upload-queue-item\"]').first().find('[data-testid=\"remove-file-button\"]').click();\n\n    // Verify queue is empty\n    cy.get('[data-testid=\"upload-queue-item\"]').should('not.exist');\n\n    // Verify empty state message is displayed\n    cy.get('[data-testid=\"empty-queue-message\"]').should('be.visible');\n    cy.get('[data-testid=\"empty-queue-message\"]').should('contain', 'No files in upload queue');\n\n    // Verify submit button is disabled when queue is empty\n    cy.get('[data-testid=\"submit-upload-button\"]').should('be.disabled');\n\n    // Attempt to submit with empty queue\n    cy.get('[data-testid=\"submit-upload-button\"]').click();\n\n    // Verify no API call is made\n    cy.intercept('POST', '/api/files/upload').as('fileUpload');\n    cy.wait('@fileUpload', { timeout: 1000 }).then((interception) => {\n      expect(interception).to.not.exist;\n    });\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7823,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4743,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.402,
+      "feedback_used": ""
+    }
+  ]
+}

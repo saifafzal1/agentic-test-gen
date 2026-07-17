@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_200",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8183,
+  "total_latency_s": 1026.997,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Filter Tag Removal', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should remove individual filter tag by clicking x icon', async ({ page }) => {\n    // Verify initial filter tags are displayed\n    const filterTags = page.getByRole('region', { name: /filter tags/i });\n    await expect(filterTags).toBeVisible();\n\n    // Verify initial filter count\n    const filterCount = page.getByText('Apply filters (0)');\n    await expect(filterCount).toBeVisible();\n\n    // Verify initial search results\n    const searchResults = page.getByRole('region', { name: /search results/i });\n    await expect(searchResults).toBeVisible();\n\n    // Click first filter tag to apply\n    const firstFilterTag = page.getByRole('button', { name: /filter by category/i });\n    await firstFilterTag.click();\n\n    // Verify filter count is updated\n    await expect(filterCount).toContainText('Apply filters (1)');\n\n    // Verify search results are updated\n    await expect(searchResults).toContainText('Category: Books');\n\n    // Click x icon to remove filter\n    const removeFilterIcon = page.getByRole('button', { name: /remove/i });\n    await removeFilterIcon.click();\n\n    // Verify filter count is back to zero\n    await expect(filterCount).toContainText('Apply filters (0)');\n\n    // Verify search results are restored\n    await expect(searchResults).toContainText('All results');\n  });\n\n  test('should handle removing all filter tags and clear search', async ({ page }) => {\n    // Apply multiple filters\n    const firstFilterTag = page.getByRole('button', { name: /filter by category/i });\n    await firstFilterTag.click();\n\n    const secondFilterTag = page.getByRole('button', { name: /filter by author/i });\n    await secondFilterTag.click();\n\n    // Verify filter count is updated\n    const filterCount = page.getByText('Apply filters (2)');\n    await expect(filterCount).toBeVisible();\n\n    // Verify search results are filtered\n    const searchResults = page.getByRole('region', { name: /search results/i });\n    await expect(searchResults).toContainText('Category: Books');\n\n    // Click x icon on first filter\n    const removeFirstFilterIcon = page.getByRole('button', { name: /remove/i });\n    await removeFirstFilterIcon.click();\n\n    // Verify filter count is updated\n    await expect(filterCount).toContainText('Apply filters (1)');\n\n    // Click x icon on second filter\n    const removeSecondFilterIcon = page.getByRole('button', { name: /remove/i });\n    await removeSecondFilterIcon.click();\n\n    // Verify filter count is back to zero\n    await expect(filterCount).toContainText('Apply filters (0)');\n\n    // Verify search results are restored\n    await expect(searchResults).toContainText('All results');\n\n    // Verify search input is cleared\n    const searchInput = page.getByLabel(/search/i);\n    await expect(searchInput).toHaveValue('');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4816,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3588,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 498.854,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8183,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3943,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 528.143,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

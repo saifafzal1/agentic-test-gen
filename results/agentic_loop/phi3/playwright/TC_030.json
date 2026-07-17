@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_030",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8396,
+  "total_latency_s": 36.429,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Field Dropdown Matching Options', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should display matching options in dropdown as user types', async ({ page }) => {\n    // Locate search input using getByLabel\n    const searchInput = page.getByLabel('Search');\n    await expect(searchInput).toBeVisible();\n\n    // Type a query to trigger dropdown\n    await searchInput.fill('playwright');\n    await page.waitForTimeout(100);\n\n    // Verify dropdown is visible\n    const dropdown = page.getByRole('listbox');\n    await expect(dropdown).toBeVisible();\n\n    // Verify dropdown contains expected options\n    const options = dropdown.locator('[data-testid=\"dropdown-option\"]');\n    await expect(options).toHaveCount(3);\n\n    // Verify first option is visible\n    const firstOption = options.first();\n    await expect(firstOption).toBeVisible();\n    await expect(firstOption).toContainText('Playwright Test Framework');\n\n    // Verify second option is visible\n    const secondOption = options.nth(1);\n    await expect(secondOption).toBeVisible();\n    await expect(secondOption).toContainText('Playwright API');\n\n    // Verify third option is visible\n    const thirdOption = options.nth(2);\n    await expect(thirdOption).toBeVisible();\n    await expect(thirdOption).toContainText('Playwright Playwright');\n\n    // Verify dropdown is responsive to user interaction\n    await firstOption.click();\n    await expect(firstOption).toBeSelected();\n\n    // Verify dropdown closes when clicking outside\n    await page.click(page.locator('[data-testid=\"dropdown-close\"]'));\n    await expect(dropdown).not.toBeVisible();\n  });\n\n  test('should handle empty search input and display no results', async ({ page }) => {\n    // Locate search input using getByLabel\n    const searchInput = page.getByLabel('Search');\n    await expect(searchInput).toBeVisible();\n\n    // Clear search input\n    await searchInput.fill('');\n    await page.waitForTimeout(100);\n\n    // Verify dropdown is hidden\n    const dropdown = page.getByRole('listbox');\n    await expect(dropdown).not.toBeVisible();\n\n    // Verify no results message is displayed\n    const noResultsMessage = page.getByText('No results found');\n    await expect(noResultsMessage).toBeVisible();\n\n    // Verify search input is still visible\n    await expect(searchInput).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8396,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4652,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 36.429,
+      "feedback_used": ""
+    }
+  ]
+}

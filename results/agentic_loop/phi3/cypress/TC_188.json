@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_188",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7636,
+  "total_latency_s": 393.381,
+  "final_script": "describe('Search Results Sorting', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should sort search results by relevance, price, and date', () => {\n    // Setup: Perform a search\n    cy.get('[data-testid=\"search-input\"]').type('laptop');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Verify search results are displayed\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"search-result-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify relevance sort button is visible\n    cy.get('[data-testid=\"sort-relevance-btn\"]').should('be.visible');\n\n    // Click relevance sort button\n    cy.get('[data-testid=\"sort-relevance-btn\"]').click();\n\n    // Verify results are now sorted by relevance\n    cy.get('[data-testid=\"search-result-item\"]').first().should('contain', 'Laptop');\n    cy.get('[data-testid=\"search-result-item\"]').last().should('contain', 'Laptop');\n\n    // Verify price sort button is visible\n    cy.get('[data-testid=\"sort-price-btn\"]').should('be.visible');\n\n    // Click price sort button\n    cy.get('[data-testid=\"sort-price-btn\"]').click();\n\n    // Verify results are now sorted by price\n    cy.get('[data-testid=\"search-result-item\"]').first().should('contain', 'Laptop');\n    cy.get('[data-testid=\"search-result-item\"]').last().should('contain', 'Laptop');\n\n    // Verify date sort button is visible\n    cy.get('[data-testid=\"sort-date-btn\"]').should('be.visible');\n\n    // Click date sort button\n    cy.get('[data-testid=\"sort-date-btn\"]').click();\n\n    // Verify results are now sorted by date\n    cy.get('[data-testid=\"search-result-item\"]').first().should('contain', 'Laptop');\n    cy.get('[data-testid=\"search-result-item\"]').last().should('contain', 'Laptop');\n  });\n\n  it('should handle edge case when no results are found', () => {\n    // Setup: Perform a search for an unavailable product\n    cy.get('[data-testid=\"search-input\"]').type('nonexistent product');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Verify no results are displayed\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"search-result-item\"]').should('not.exist');\n\n    // Verify no sort options are available\n    cy.get('[data-testid=\"sort-relevance-btn\"]').should('not.exist');\n    cy.get('[data-testid=\"sort-price-btn\"]').should('not.exist');\n    cy.get('[data-testid=\"sort-date-btn\"]').should('not.exist');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"no-results-message\"]').should('be.visible');\n    cy.get('[data-testid=\"no-results-message\"]').should('contain', 'No results found');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4892,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.4039,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 55.309,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7636,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4122,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 338.072,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

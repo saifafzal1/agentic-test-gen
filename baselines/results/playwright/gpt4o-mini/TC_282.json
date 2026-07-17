@@ -1,0 +1,13 @@
+{
+  "id": "TC_282",
+  "category": "user_profile",
+  "complexity": "medium",
+  "user_story": "As a user, I want to toggle dark mode from my preferences.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Profile Preferences', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/user-profile');\n  });\n\n  test('should toggle dark mode on', async ({ page }) => {\n    const darkModeToggle = page.getByRole('checkbox', { name: /dark mode/i });\n    await darkModeToggle.check();\n    const body = page.locator('body');\n    await expect(body).toHaveClass(/dark-mode/);\n  });\n\n  test('should toggle dark mode off', async ({ page }) => {\n    const darkModeToggle = page.getByRole('checkbox', { name: /dark mode/i });\n    await darkModeToggle.uncheck();\n    const body = page.locator('body');\n    await expect(body).not.toHaveClass(/dark-mode/);\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 181,
+  "latency_s": 2.81,
+  "timestamp": "2026-06-19T17:03:45.058017"
+}

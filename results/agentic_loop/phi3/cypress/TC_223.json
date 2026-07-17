@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_223",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7351,
+  "total_latency_s": 42.308,
+  "final_script": "describe('Document Language Declaration in HTML Tag', () => {\n  beforeEach(() => {\n    cy.visit('/document-language');\n  });\n\n  it('should display the correct document language in the HTML tag', () => {\n    // Setup: intercept the API call to get document language\n    cy.intercept('GET', '/api/document/language', {\n      statusCode: 200,\n      body: {\n        language: 'en-US'\n      }\n    }).as('getDocumentLanguage');\n\n    // Verify the page loads\n    cy.get('[data-testid=\"page-title\"]').should('be.visible').should('contain', 'Document Language');\n\n    // Wait for the API call to complete\n    cy.wait('@getDocumentLanguage');\n\n    // Verify the document language is declared in the HTML tag\n    cy.get('[data-testid=\"html-tag\"]').should('contain', '<html lang=\"en-US\">');\n\n    // Verify the language attribute is present in the body tag\n    cy.get('[data-testid=\"body-tag\"]').should('contain', 'lang=\"en-US\"');\n\n    // Verify the language is displayed in a language selector dropdown\n    cy.get('[data-testid=\"language-selector\"]').should('be.visible');\n    cy.get('[data-testid=\"language-selector\"]').should('contain', 'English (United States)');\n\n    // Verify the page content is localized\n    cy.get('[data-testid=\"content-section\"]').should('be.visible');\n    cy.get('[data-testid=\"content-section\"]').should('contain', 'Welcome to our document');\n  });\n\n  it('should handle document language change and update HTML tag', () => {\n    // Setup: intercept the API call to change document language\n    cy.intercept('POST', '/api/document/language', {\n      statusCode: 200,\n      body: {\n        language: 'fr-FR'\n      }\n    }).as('changeDocumentLanguage');\n\n    // Verify initial language is set\n    cy.get('[data-testid=\"html-tag\"]').should('contain', '<html lang=\"en-US\">');\n\n    // Change the language via API call\n    cy.get('[data-testid=\"language-selector\"]').click();\n    cy.get('[data-testid=\"fr-FR-option\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@changeDocumentLanguage');\n\n    // Verify the HTML tag reflects the new language\n    cy.get('[data-testid=\"html-tag\"]').should('contain', '<html lang=\"fr-FR\">');\n\n    // Verify the language attribute is updated in the body tag\n    cy.get('[data-testid=\"body-tag\"]').should('contain', 'lang=\"fr-FR\"');\n\n    // Verify the language selector reflects the new language\n    cy.get('[data-testid=\"language-selector\"]').should('contain', 'French (France)');\n\n    // Verify the page content is now localized in French\n    cy.get('[data-testid=\"content-section\"]').should('be.visible');\n    cy.get('[data-testid=\"content-section\"]').should('contain', 'Bienvenue sur notre document');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7351,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3171,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 42.308,
+      "feedback_used": ""
+    }
+  ]
+}

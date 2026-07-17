@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_088",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8003,
+  "total_latency_s": 77.059,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Mention in Comment', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/comments');\n  });\n\n  test('should successfully mention another user in a comment', async ({ page }) => {\n    // Setup: Navigate to comment section\n    await page.goto('/comments');\n    \n    // Setup: Get user input field by role\n    const commentInput = page.getByRole('textbox', { name: /comment/i });\n    await expect(commentInput).toBeVisible();\n    \n    // Setup: Get submit button by role\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeVisible();\n    \n    // Action: Type comment with mention\n    await commentInput.fill('Hey @johnDoe, can you review this?');\n    \n    // Action: Verify mention suggestion appears\n    const mentionSuggestion = page.getByText('johnDoe');\n    await expect(mentionSuggestion).toBeVisible();\n    \n    // Action: Select mention from suggestion\n    await mentionSuggestion.click();\n    \n    // Action: Verify mention is correctly formatted\n    await expect(commentInput).toContainText('@johnDoe');\n    \n    // Action: Submit comment\n    await submitButton.click();\n    \n    // Verification: Comment is posted\n    const postedComment = page.getByText('Hey @johnDoe, can you review this?');\n    await expect(postedComment).toBeVisible();\n    \n    // Verification: Mention is clickable and displays user info\n    const mentionLink = page.getByText('@johnDoe');\n    await expect(mentionLink).toBeVisible();\n    await expect(mentionLink).toHaveAttribute('href', '/users/johnDoe');\n    \n    // Verification: User profile card appears on hover\n    await mentionLink.hover();\n    const profileCard = page.getByText('John Doe');\n    await expect(profileCard).toBeVisible();\n  });\n\n  test('should handle invalid mention format and prevent submission', async ({ page }) => {\n    // Setup: Navigate to comment section\n    await page.goto('/comments');\n    \n    // Setup: Get comment input field by role\n    const commentInput = page.getByRole('textbox', { name: /comment/i });\n    await expect(commentInput).toBeVisible();\n    \n    // Setup: Get submit button by role\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeVisible();\n    \n    // Action: Type invalid mention format\n    await commentInput.fill('Hey @invalid-mention');\n    \n    // Action: Verify no mention suggestion appears\n    const mentionSuggestion = page.getByText('invalid-mention');\n    await expect(mentionSuggestion).not.toBeVisible();\n    \n    // Action: Attempt to submit with invalid mention\n    await submitButton.click();\n    \n    // Verification: Error message is displayed\n    const errorMessage = page.getByText('Invalid mention format');\n    await expect(errorMessage).toBeVisible();\n    \n    // Verification: Comment is not posted\n    const postedComment = page.getByText('Hey @invalid-mention');\n    await expect(postedComment).not.toBeVisible();\n    \n    // Action: Clear input and verify error clears\n    await commentInput.clear();\n    await expect(errorMessage).not.toBeVisible();\n    \n    // Action: Submit valid comment\n    await commentInput.fill('This is a valid comment.');\n    await submitButton.click();\n    \n    // Verification: Valid comment is posted\n    const validComment = page.getByText('This is a valid comment.');\n    await expect(validComment).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8003,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4342,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 77.059,
+      "feedback_used": ""
+    }
+  ]
+}

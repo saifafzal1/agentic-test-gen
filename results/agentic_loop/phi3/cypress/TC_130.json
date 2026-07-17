@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_130",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8145,
+  "total_latency_s": 361.998,
+  "final_script": "describe('Modal Backdrop Close Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/modal');\n  });\n\n  it('should close modal when clicking backdrop', () => {\n    // Open modal\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Verify modal content is visible\n    cy.get('[data-testid=\"modal-content\"]').should('be.visible');\n\n    // Click backdrop to close modal\n    cy.get('[data-testid=\"modal-backdrop\"]').click();\n\n    // Verify modal is closed\n    cy.get('[data-testid=\"modal-dialog\"]').should('not.exist');\n\n    // Verify modal close button is still visible\n    cy.get('[data-testid=\"modal-close-btn\"]').should('be.visible');\n\n    // Verify page content is still accessible\n    cy.get('[data-testid=\"page-content\"]').should('be.visible');\n  });\n\n  it('should not close modal when clicking outside backdrop', () => {\n    // Open modal\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Verify modal content is visible\n    cy.get('[data-testid=\"modal-content\"]').should('be.visible');\n\n    // Click outside backdrop (e.g., on page footer)\n    cy.get('[data-testid=\"page-footer\"]').click();\n\n    // Verify modal is still open\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Verify modal close button is still visible\n    cy.get('[data-testid=\"modal-close-btn\"]').should('be.visible');\n\n    // Verify page content is still accessible\n    cy.get('[data-testid=\"page-content\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8145,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5817,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 361.998,
+      "feedback_used": ""
+    }
+  ]
+}

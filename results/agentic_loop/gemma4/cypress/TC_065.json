@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_065",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.765,
+  "total_latency_s": 71.967,
+  "final_script": "describe('401 Error Handling - Redirect to Login', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should redirect to login when API returns 401 Unauthorized', () => {\n    // Intercept the protected API endpoint\n    cy.intercept('GET', '/api/user/profile', {\n      statusCode: 401,\n      body: { error: 'Unauthorized' }\n    }).as('unauthorizedRequest');\n\n    // Attempt to access a protected resource\n    cy.get('[data-testid=\"profile-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@unauthorizedRequest');\n\n    // Verify redirect to login page\n    cy.url().should('include', '/login');\n\n    // Verify login form is visible\n    cy.get('[data-testid=\"login-form\"]').should('be.visible');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Unauthorized');\n  });\n\n  it('should handle multiple 401 errors and maintain redirect to login', () => {\n    // Intercept the first API call with 401\n    cy.intercept('GET', '/api/user/settings', {\n      statusCode: 401,\n      body: { error: 'Unauthorized' }\n    }).as('firstUnauthorized');\n\n    // Intercept the second API call with 401\n    cy.intercept('GET', '/api/user/preferences', {\n      statusCode: 401,\n      body: { error: 'Unauthorized' }\n    }).as('secondUnauthorized');\n\n    // First API call triggers redirect\n    cy.get('[data-testid=\"settings-button\"]').click();\n    cy.wait('@firstUnauthorized');\n\n    // Verify redirect to login\n    cy.url().should('include', '/login');\n\n    // Navigate back to dashboard (simulating user returning)\n    cy.visit('/dashboard');\n\n    // Second API call should also trigger redirect\n    cy.get('[data-testid=\"preferences-button\"]').click();\n    cy.wait('@secondUnauthorized');\n\n    // Verify still on login page\n    cy.url().should('include', '/login');\n    cy.get('[data-testid=\"login-form\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.765,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4167,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.967,
+      "feedback_used": ""
+    }
+  ]
+}

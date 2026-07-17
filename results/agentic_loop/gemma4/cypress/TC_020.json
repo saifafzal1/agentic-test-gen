@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_020",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8071,
+  "total_latency_s": 71.352,
+  "final_script": "describe('Password Confirmation Mismatch Error', () => {\n  beforeEach(() => {\n    cy.visit('/registration');\n  });\n\n  it('should display password mismatch error when confirmation password does not match', () => {\n    cy.get('[data-testid=\"password-input\"]').type('Password123!');\n    cy.get('[data-testid=\"confirm-password-input\"]').type('Password123');\n    cy.get('[data-testid=\"password-input\"]').type('DifferentPassword!');\n    cy.get('[data-testid=\"confirm-password-input\"]').type('Password123');\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    cy.get('[data-testid=\"password-mismatch-error\"]')\n      .should('be.visible')\n      .should('contain', 'Passwords and confirmation passwords do not match');\n    cy.get('[data-testid=\"form\"]').should('not.have.class', 'success');\n  });\n\n  it('should not display error when passwords match', () => {\n    cy.get('[data-testid=\"password-input\"]').type('SecurePass123!');\n    cy.get('[data-testid=\"confirm-password-input\"]').type('SecurePass123!');\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    cy.get('[data-testid=\"password-mismatch-error\"]').should('not.exist');\n    cy.get('[data-testid=\"form\"]').should('have.class', 'success');\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8071,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5571,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.352,
+      "feedback_used": ""
+    }
+  ]
+}

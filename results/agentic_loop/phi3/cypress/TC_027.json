@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_027",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.758,
+  "total_latency_s": 533.54,
+  "final_script": "describe('ZIP Code Auto-Formatting Field', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n  });\n\n  it('should auto-format ZIP code as user types', () => {\n    // Intercept the API call for validation\n    cy.intercept('POST', '/api/validate-zip').as('validateZip');\n\n    // Get the ZIP code input field\n    cy.get('[data-testid=\"zip-input\"]').should('be.visible');\n\n    // Type a partial ZIP code\n    cy.get('[data-testid=\"zip-input\"]').type('1234');\n\n    // Verify the auto-formatted ZIP code appears\n    cy.get('[data-testid=\"zip-input\"]').should('have.value', '1234');\n\n    // Type more digits\n    cy.get('[data-testid=\"zip-input\"]').type('56789');\n\n    // Verify the auto-formatted ZIP code is complete\n    cy.get('[data-testid=\"zip-input\"]').should('have.value', '123456789');\n\n    // Verify the input is still editable\n    cy.get('[data-testid=\"zip-input\"]').type('1234567890');\n\n    // Verify the auto-formatting still works\n    cy.get('[data-testid=\"zip-input\"]').should('have.value', '1234567890');\n\n    // Verify the validation API is called\n    cy.wait('@validateZip').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n  });\n\n  it('should handle invalid ZIP code format and display error message', () => {\n    // Intercept the API call for validation\n    cy.intercept('POST', '/api/validate-zip').as('validateZip');\n\n    // Get the ZIP code input field\n    cy.get('[data-testid=\"zip-input\"]').should('be.visible');\n\n    // Type an invalid ZIP code format\n    cy.get('[data-testid=\"zip-input\"]').type('abc123');\n\n    // Verify the auto-formatted ZIP code is not complete\n    cy.get('[data-testid=\"zip-input\"]').should('have.value', 'abc123');\n\n    // Verify the validation API is called\n    cy.wait('@validateZip').then((interception) => {\n      expect(interception.response.statusCode).to.equal(400);\n    });\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"zip-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"zip-error-message\"]').should('contain', 'Invalid ZIP code format');\n\n    // Verify the input still allows further typing\n    cy.get('[data-testid=\"zip-input\"]').type('1234567890');\n\n    // Verify the error message disappears\n    cy.get('[data-testid=\"zip-error-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.758,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3933,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 533.54,
+      "feedback_used": ""
+    }
+  ]
+}

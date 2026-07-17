@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_159",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8116,
+  "total_latency_s": 72.645,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Row Selection Highlighting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should highlight selected table rows with a different background color', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify table header is visible\n    const header = page.getByRole('columnheader', { name: 'Name' });\n    await expect(header).toBeVisible();\n\n    // Select the first row by clicking the checkbox\n    const firstRowCheckbox = page.getByRole('checkbox', { name: 'Select row 1' });\n    await firstRowCheckbox.click();\n\n    // Verify the first row is highlighted\n    const firstRow = page.locator('[data-testid=\"table-row-1\"]');\n    await expect(firstRow).toHaveClass(/selected-row/);\n\n    // Verify the background color is applied\n    const firstRowBg = await firstRow.evaluate((el) => window.getComputedStyle(el).backgroundColor);\n    expect(firstRowBg).not.toBe('rgba(0, 0, 0, 0)');\n\n    // Select the third row\n    const thirdRowCheckbox = page.getByRole('checkbox', { name: 'Select row 3' });\n    await thirdRowCheckbox.click();\n\n    // Verify the third row is highlighted\n    const thirdRow = page.locator('[data-testid=\"table-row-3\"]');\n    await expect(thirdRow).toHaveClass(/selected-row/);\n\n    // Verify both rows are highlighted\n    const allSelectedRows = page.locator('[data-testid=\"table-row-1\"], [data-testid=\"table-row-3\"]');\n    await expect(allSelectedRows).toHaveClass(/selected-row/);\n\n    // Verify the selection count is updated\n    const selectionCount = page.getByText('2 selected');\n    await expect(selectionCount).toBeVisible();\n  });\n\n  test('should unhighlight a row when selection is deselected', async ({ page }) => {\n    // Select the second row\n    const secondRowCheckbox = page.getByRole('checkbox', { name: 'Select row 2' });\n    await secondRowCheckbox.click();\n\n    // Verify the second row is highlighted\n    const secondRow = page.locator('[data-testid=\"table-row-2\"]');\n    await expect(secondRow).toHaveClass(/selected-row/);\n\n    // Verify the selection count is updated\n    const selectionCount = page.getByText('1 selected');\n    await expect(selectionCount).toBeVisible();\n\n    // Deselect the second row\n    await secondRowCheckbox.click();\n\n    // Verify the second row is no longer highlighted\n    await expect(secondRow).not.toHaveClass(/selected-row/);\n\n    // Verify the selection count is reset\n    const noSelectionText = page.getByText('No rows selected');\n    await expect(noSelectionText).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8116,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.472,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.645,
+      "feedback_used": ""
+    }
+  ]
+}

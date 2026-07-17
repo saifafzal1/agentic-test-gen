@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_008",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8541,
+  "total_latency_s": 71.24,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Loading Spinner', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should display loading spinner while login request is processing', async ({ page }) => {\n    // Intercept the login API request\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('blockedbyclient');\n    });\n\n    // Get email input by label and fill with valid email\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('user@example.com');\n\n    // Get password input by label and fill with valid password\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('Password123');\n\n    // Get login button by role and click it\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await loginButton.click();\n\n    // Wait for the loading spinner to appear\n    const loadingSpinner = page.getByRole('status', { name: /loading/i });\n    await expect(loadingSpinner).toBeVisible();\n\n    // Verify loading spinner has correct class\n    await expect(loadingSpinner).toHaveClass(/loading-spinner/);\n\n    // Verify login button is disabled during loading\n    await expect(loginButton).toBeDisabled();\n\n    // Wait for the loading spinner to disappear\n    await page.waitForTimeout(1000);\n    await expect(loadingSpinner).not.toBeVisible();\n\n    // Verify login button is enabled after loading\n    await expect(loginButton).not.toBeDisabled();\n  });\n\n  test('should hide loading spinner when login request fails', async ({ page }) => {\n    // Intercept the login API request and respond with an error\n    await page.route('**/api/auth/login', (route) => {\n      route.fulfill({\n        status: 401,\n        contentType: 'application/json',\n        body: JSON.stringify({ error: 'Invalid credentials' }),\n      });\n    });\n\n    // Get email input by label and fill with valid email\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('user@example.com');\n\n    // Get password input by label and fill with invalid password\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('wrongpassword');\n\n    // Get login button by role and click it\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await loginButton.click();\n\n    // Wait for loading spinner to appear\n    const loadingSpinner = page.getByRole('status', { name: /loading/i });\n    await expect(loadingSpinner).toBeVisible();\n\n    // Wait for the error response\n    await page.waitForTimeout(1500);\n\n    // Verify loading spinner is hidden after error\n    await expect(loadingSpinner).not.toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/invalid credentials/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify login button is enabled after error\n    await expect(loginButton).not.toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8541,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5135,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.24,
+      "feedback_used": ""
+    }
+  ]
+}

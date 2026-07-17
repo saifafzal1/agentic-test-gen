@@ -1,0 +1,13 @@
+{
+  "id": "TC_248",
+  "category": "payment_flow",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error when I enter an expired promo code.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Payment Flow - Expired Promo Code', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should display error message for expired promo code', async ({ page }) => {\n    await page.fill(getByLabel('Promo Code'), 'EXPIREDCODE123');\n    await page.click(getByRole('button', { name: 'Apply' }));\n    const errorMessage = await page.getByText('This promo code has expired.');\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should not apply discount with expired promo code', async ({ page }) => {\n    await page.fill(getByLabel('Promo Code'), 'EXPIREDCODE123');\n    await page.click(getByRole('button', { name: 'Apply' }));\n    const totalAmount = await page.getByText('Total Amount: $100');\n    await expect(totalAmount).toBeVisible();\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 208,
+  "latency_s": 3.51,
+  "timestamp": "2026-06-19T17:00:39.875835"
+}

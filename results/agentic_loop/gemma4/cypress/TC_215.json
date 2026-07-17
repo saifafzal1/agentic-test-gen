@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_215",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.708,
+  "total_latency_s": 77.703,
+  "final_script": "describe('Reading Order - Visual Order Match', () => {\n  beforeEach(() => {\n    cy.visit('/page');\n  });\n\n  it('should display page content in visual reading order', () => {\n    // Verify the first element is visible and in the expected position\n    cy.get('[data-testid=\"header\"]').should('be.visible');\n    cy.get('[data-testid=\"header\"]').should('have.css', 'top', '0px');\n\n    // Verify the second element appears after the first\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n    cy.get('[data-testid=\"main-content\"]').should('have.css', 'top', '60px');\n\n    // Verify the third element appears after the second\n    cy.get('[data-testid=\"sidebar\"]').should('be.visible');\n    cy.get('[data-testid=\"sidebar\"]').should('have.css', 'top', '100px');\n\n    // Verify the fourth element appears after the third\n    cy.get('[data-testid=\"footer\"]').should('be.visible');\n    cy.get('[data-testid=\"footer\"]').should('have.css', 'top', '500px');\n\n    // Verify the elements are in the correct sequence\n    cy.get('[data-testid=\"header\"]').should('be.first');\n    cy.get('[data-testid=\"main-content\"]').should('have.next', '[data-testid=\"sidebar\"]');\n    cy.get('[data-testid=\"sidebar\"]').should('have.next', '[data-testid=\"footer\"]');\n  });\n\n  it('should handle complex layouts with correct reading order', () => {\n    // Verify the main content is visible\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n\n    // Verify the sidebar is visible and appears after main content\n    cy.get('[data-testid=\"sidebar\"]').should('be.visible');\n    cy.get('[data-testid=\"sidebar\"]').should('have.css', 'top', '100px');\n\n    // Verify the footer is visible and appears after sidebar\n    cy.get('[data-testid=\"footer\"]').should('be.visible');\n    cy.get('[data-testid=\"footer\"]').should('have.css', 'top', '550px');\n\n    // Verify the navigation menu is visible and appears before main content\n    cy.get('[data-testid=\"nav-menu\"]').should('be.visible');\n    cy.get('[data-testid=\"nav-menu\"]').should('have.css', 'top', '0px');\n\n    // Verify the navigation menu is the first element\n    cy.get('[data-testid=\"nav-menu\"]').should('be.first');\n\n    // Verify the main content is the second element\n    cy.get('[data-testid=\"main-content\"]').should('have.next', '[data-testid=\"sidebar\"]');\n\n    // Verify the sidebar is the third element\n    cy.get('[data-testid=\"sidebar\"]').should('have.next', '[data-testid=\"footer\"]');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.708,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2266,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 77.703,
+      "feedback_used": ""
+    }
+  ]
+}

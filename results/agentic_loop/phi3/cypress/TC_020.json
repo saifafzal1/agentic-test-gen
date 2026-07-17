@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_020",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.737,
+  "total_latency_s": 400.299,
+  "final_script": "describe('Password Confirmation Mismatch Error', () => {\n  beforeEach(() => {\n    cy.visit('/password-reset');\n  });\n\n  it('should display confirmation password mismatch error when passwords do not match', () => {\n    // Intercept the API call to validate password\n    cy.intercept('POST', '/api/validate-password').as('validatePassword');\n\n    // Fill in the reset form with valid email\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n\n    // Fill in the password fields\n    cy.get('[data-testid=\"password-input\"]').type('SecurePassword123');\n    cy.get('[data-testid=\"confirm-password-input\"]').type('IncorrectPassword123');\n\n    // Submit the form\n    cy.get('[data-testid=\"reset-password-form\"]').submit();\n\n    // Wait for the API validation response\n    cy.wait('@validatePassword').then((interception) => {\n      expect(interception.response.statusCode).to.equal(400);\n    });\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"password-mismatch-error\"]')\n      .should('be.visible')\n      .should('contain', 'Passwords do not match');\n\n    // Verify error message is styled appropriately\n    cy.get('[data-testid=\"password-mismatch-error\"]')\n      .should('have.class', 'error');\n\n    // Verify form is still visible and user can retry\n    cy.get('[data-testid=\"reset-password-form\"]').should('be.visible');\n  });\n\n  it('should clear error message when passwords match', () => {\n    // Intercept the API call to validate password\n    cy.intercept('POST', '/api/validate-password').as('validatePassword');\n\n    // Fill in the reset form with valid email\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n\n    // Fill in the password fields with matching values\n    cy.get('[data-testid=\"password-input\"]').type('SecurePassword123');\n    cy.get('[data-testid=\"confirm-password-input\"]').type('SecurePassword123');\n\n    // Submit the form\n    cy.get('[data-testid=\"reset-password-form\"]').submit();\n\n    // Wait for the API validation response\n    cy.wait('@validatePassword').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify error message is cleared\n    cy.get('[data-testid=\"password-mismatch-error\"]')\n      .should('not.exist');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"success-message\"]')\n      .should('be.visible')\n      .should('contain', 'Password reset link sent to email');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.737,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3233,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 400.299,
+      "feedback_used": ""
+    }
+  ]
+}

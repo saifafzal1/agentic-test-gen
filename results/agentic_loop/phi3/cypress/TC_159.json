@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_159",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7465,
+  "total_latency_s": 646.492,
+  "final_script": "describe('Table Row Highlighting', () => {\n  beforeEach(() => {\n    cy.visit('/table-list');\n  });\n\n  it('should highlight selected rows with a different colour', () => {\n    // Verify table is visible\n    cy.get('[data-testid=\"table-container\"]').should('be.visible');\n\n    // Verify initial row state\n    cy.get('[data-testid=\"table-row-1\"]').should('have.css', 'background-color', 'transparent');\n\n    // Click on the first row to select it\n    cy.get('[data-testid=\"table-row-1\"]').click();\n\n    // Verify first row is highlighted\n    cy.get('[data-testid=\"table-row-1\"]').should('have.css', 'background-color', 'rgba(255, 255, 0, 0.2)');\n\n    // Verify second row is not highlighted\n    cy.get('[data-testid=\"table-row-2\"]').should('have.css', 'background-color', 'transparent');\n\n    // Click on the second row to select it\n    cy.get('[data-testid=\"table-row-2\"]').click();\n\n    // Verify second row is highlighted\n    cy.get('[data-testid=\"table-row-2\"]').should('have.css', 'background-color', 'rgba(255, 255, 0, 0.2)');\n\n    // Verify first row is no longer highlighted\n    cy.get('[data-testid=\"table-row-1\"]').should('not.have.css', 'background-color', 'rgba(255, 255, 0, 0.2)');\n\n    // Verify table row data is still visible\n    cy.get('[data-testid=\"table-row-1\"]').should('contain', 'Row 1 Data');\n\n    // Verify row selection is cleared when clicking on a non-selected row\n    cy.get('[data-testid=\"table-row-3\"]').click();\n\n    // Verify only the third row is highlighted\n    cy.get('[data-testid=\"table-row-3\"]').should('have.css', 'background-color', 'rgba(255, 255, 0, 0.2)');\n\n    // Verify other rows are not highlighted\n    cy.get('[data-testid=\"table-row-1\"]').should('not.have.css', 'background-color', 'rgba(255, 255, 0, 0.2)');\n    cy.get('[data-testid=\"table-row-2\"]').should('not.have.css', 'background-color', 'rgba(255, 255, 0, 0.2)');\n  });\n\n  it('should not highlight rows when clicking on disabled or non-selectable elements', () => {\n    // Verify table is visible\n    cy.get('[data-testid=\"table-container\"]').should('be.visible');\n\n    // Verify first row is highlighted\n    cy.get('[data-testid=\"table-row-1\"]').should('have.css', 'background-color', 'rgba(255, 255, 0, 0.2)');\n\n    // Click on a disabled row (e.g., row with data-testid=\"table-row-disabled\")\n    cy.get('[data-testid=\"table-row-disabled\"]').click();\n\n    // Verify disabled row is not highlighted\n    cy.get('[data-testid=\"table-row-disabled\"]').should('not.have.css', 'background-color', 'rgba(255, 255, 0, 0.2)');\n\n    // Verify other rows remain highlighted\n    cy.get('[data-testid=\"table-row-1\"]').should('have.css', 'background-color', 'rgba(255, 255, 0, 0.2)');\n    cy.get('[data-testid=\"table-row-2\"]').should('have.css', 'background-color', 'rgba(255, 255, 0, 0.2)');\n\n    // Verify clicking on a non-selectable element (e.g., row with data-testid=\"table-row-non-selectable\")\n    cy.get('[data-testid=\"table-row-non-selectable\"]').click();\n\n    // Verify non-selectable row is not highlighted\n    cy.get('[data-testid=\"table-row-non-selectable\"]').should('not.have.css', 'background-color', 'rgba(255, 255, 0, 0.2)');\n\n    // Verify other rows remain highlighted\n    cy.get('[data-testid=\"table-row-1\"]').should('have.css', 'background-color', 'rgba(255, 255, 0, 0.2)');\n    cy.get('[data-testid=\"table-row-2\"]').should('have.css', 'background-color', 'rgba(255, 255, 0, 0.2)');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4735,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3518,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 324.014,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7465,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3551,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 322.478,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

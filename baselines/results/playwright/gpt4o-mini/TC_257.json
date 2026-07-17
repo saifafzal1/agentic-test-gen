@@ -1,0 +1,13 @@
+{
+  "id": "TC_257",
+  "category": "payment_flow",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see the total price update when I change the quantity.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Payment Flow - Total Price Update', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/cart');\n  });\n\n  test('should update total price when quantity is increased', async ({ page }) => {\n    await page.getByLabel('Quantity').fill('2');\n    await page.getByRole('button', { name: 'Update' }).click();\n    const totalPrice = await page.getByText('Total Price: $').innerText();\n    expect(totalPrice).toBe('$40.00'); // Assuming the price for 2 items is $40.00\n  });\n\n  test('should update total price when quantity is decreased', async ({ page }) => {\n    await page.getByLabel('Quantity').fill('1');\n    await page.getByRole('button', { name: 'Update' }).click();\n    const totalPrice = await page.getByText('Total Price: $').innerText();\n    expect(totalPrice).toBe('$20.00'); // Assuming the price for 1 item is $20.00\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 241,
+  "latency_s": 3.78,
+  "timestamp": "2026-06-19T17:01:35.084347"
+}

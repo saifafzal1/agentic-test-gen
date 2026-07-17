@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_186",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8211,
+  "total_latency_s": 73.258,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Product Search by Keyword', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/products');\n  });\n\n  test('should display instant search results as user types a keyword', async ({ page }) => {\n    // Verify search input is visible and accessible\n    const searchInput = page.getByPlaceholder('Search products...');\n    await expect(searchInput).toBeVisible();\n\n    // Verify search button is visible\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await expect(searchButton).toBeVisible();\n\n    // Type keyword into search input\n    await searchInput.fill('laptop');\n\n    // Wait for instant results to appear\n    await page.waitForResponse(response => \n      response.url().includes('/api/products/search') && response.status() === 200\n    );\n\n    // Verify search results container is visible\n    const resultsContainer = page.getByTestId('search-results');\n    await expect(resultsContainer).toBeVisible();\n\n    // Verify results list is populated\n    const resultItems = page.getByTestId('product-item');\n    await expect(resultItems).toHaveCount(2);\n\n    // Verify results contain the keyword\n    const firstResult = page.getByText('laptop');\n    await expect(firstResult).toBeVisible();\n\n    // Verify result items have product names\n    const resultNames = page.getByRole('heading', { name: /laptop/i });\n    await expect(resultNames).toHaveCount(2);\n  });\n\n  test('should handle no results found and display appropriate message', async ({ page }) => {\n    // Type a non-existent keyword\n    const searchInput = page.getByPlaceholder('Search products...');\n    await searchInput.fill('xyz123nonexistentproduct');\n\n    // Wait for API response\n    await page.waitForResponse(response => \n      response.url().includes('/api/products/search') && response.status() === 200\n    );\n\n    // Verify no results message is displayed\n    const noResultsMessage = page.getByText('No products found');\n    await expect(noResultsMessage).toBeVisible();\n\n    // Verify results container is visible but empty\n    const resultsContainer = page.getByTestId('search-results');\n    await expect(resultsContainer).toBeVisible();\n    \n    const resultItems = page.getByTestId('product-item');\n    await expect(resultItems).toHaveCount(0);\n\n    // Verify search input still retains the value\n    await expect(searchInput).toHaveValue('xyz123nonexistentproduct');\n\n    // Verify user can clear the search input\n    const clearButton = page.getByRole('button', { name: /clear/i });\n    await clearButton.click();\n    await expect(searchInput).toHaveValue('');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8211,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5037,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.258,
+      "feedback_used": ""
+    }
+  ]
+}

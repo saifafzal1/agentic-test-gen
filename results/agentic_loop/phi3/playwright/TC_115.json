@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_115",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7884,
+  "total_latency_s": 1059.033,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Debounced Search Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should trigger search only after user stops typing for 300ms', async ({ page }) => {\n    // Setup: intercept the search API call\n    await page.route('**/api/search', (route) => {\n      route.continue();\n    });\n\n    // Verify search input exists\n    const searchInput = page.getByPlaceholder('Search...');\n    await expect(searchInput).toBeVisible();\n\n    // Verify search results container exists\n    const searchResults = page.getByRole('region', { name: /search results/i });\n    await expect(searchResults).toBeVisible();\n\n    // Verify initial state\n    const resultsCount = page.getByText('0 results');\n    await expect(resultsCount).toBeVisible();\n\n    // Type quickly to trigger search\n    await searchInput.fill('test');\n    await page.waitForTimeout(100);\n\n    // Verify search results are not displayed yet\n    await expect(resultsCount).not.toBeVisible();\n\n    // Type more characters to trigger search\n    await searchInput.fill('test123');\n    await page.waitForTimeout(100);\n\n    // Verify search results are still not displayed\n    await expect(resultsCount).not.toBeVisible();\n\n    // Type pause for 300ms\n    await page.waitForTimeout(300);\n\n    // Verify search results container is now visible\n    await expect(searchResults).toBeVisible();\n\n    // Verify results count is displayed\n    const resultsCountDisplay = page.getByText('1 result');\n    await expect(resultsCountDisplay).toBeVisible();\n\n    // Verify search results are displayed\n    const resultItem = page.getByText('Test Result');\n    await expect(resultItem).toBeVisible();\n\n    // Verify search input is cleared\n    await expect(searchInput).toHaveValue('');\n\n    // Verify search debounce logic by typing again\n    await searchInput.fill('test456');\n    await page.waitForTimeout(100);\n\n    // Verify search results are still visible\n    await expect(searchResults).toBeVisible();\n\n    // Verify search results count is updated\n    const updatedResultsCount = page.getByText('1 result');\n    await expect(updatedResultsCount).toBeVisible();\n\n    // Verify search results are displayed\n    const updatedResultItem = page.getByText('Test Result');\n    await expect(updatedResultItem).toBeVisible();\n  });\n\n  test('should handle empty search input gracefully', async ({ page }) => {\n    // Verify search input exists\n    const searchInput = page.getByPlaceholder('Search...');\n    await expect(searchInput).toBeVisible();\n\n    // Verify search results container exists\n    const searchResults = page.getByRole('region', { name: /search results/i });\n    await expect(searchResults).toBeVisible();\n\n    // Verify initial state\n    const resultsCount = page.getByText('0 results');\n    await expect(resultsCount).toBeVisible();\n\n    // Verify no results are displayed for empty input\n    const noResultsMessage = page.getByText('No results found');\n    await expect(noResultsMessage).toBeVisible();\n\n    // Verify search input is cleared when empty\n    await expect(searchInput).toHaveValue('');\n\n    // Verify no results are displayed after clearing\n    await expect(searchResults).toBeVisible();\n\n    // Verify no results message is still visible\n    await expect(noResultsMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7884,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3946,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 1059.033,
+      "feedback_used": ""
+    }
+  ]
+}

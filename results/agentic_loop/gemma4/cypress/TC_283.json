@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_283",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7669,
+  "total_latency_s": 73.787,
+  "final_script": "describe('Timezone Setting in Profile Settings', () => {\n  beforeEach(() => {\n    cy.visit('/profile/settings');\n  });\n\n  it('should successfully set timezone in profile settings', () => {\n    // Verify timezone dropdown is visible and has default value\n    cy.get('[data-testid=\"timezone-select\"]').should('be.visible');\n    cy.get('[data-testid=\"timezone-select\"]').should('have.value', 'America/New_York');\n\n    // Select a new timezone from the dropdown\n    cy.get('[data-testid=\"timezone-select\"]').select('Europe/London');\n\n    // Verify the selected value is displayed\n    cy.get('[data-testid=\"timezone-display\"]').should('contain', 'Europe/London');\n\n    // Click save button\n    cy.get('[data-testid=\"save-profile-btn\"]').click();\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Timezone updated successfully');\n\n    // Verify timezone is persisted after refresh\n    cy.reload();\n    cy.get('[data-testid=\"timezone-select\"]').should('have.value', 'Europe/London');\n  });\n\n  it('should handle invalid timezone selection and prevent save', () => {\n    // Verify timezone dropdown is visible\n    cy.get('[data-testid=\"timezone-select\"]').should('be.visible');\n\n    // Attempt to select an invalid timezone (e.g., empty string or non-existent option)\n    cy.get('[data-testid=\"timezone-select\"]').select('Invalid/Timezone');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please select a valid timezone');\n\n    // Verify save button is disabled or does not submit\n    cy.get('[data-testid=\"save-profile-btn\"]').should('be.disabled');\n\n    // Attempt to click save button\n    cy.get('[data-testid=\"save-profile-btn\"]').click();\n\n    // Verify error message persists\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n\n    // Verify timezone was not updated\n    cy.get('[data-testid=\"timezone-display\"]').should('contain', 'America/New_York');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7669,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.423,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.787,
+      "feedback_used": ""
+    }
+  ]
+}

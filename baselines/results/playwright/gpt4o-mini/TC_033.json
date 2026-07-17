@@ -1,0 +1,13 @@
+{
+  "id": "TC_033",
+  "category": "form_validation",
+  "complexity": "medium",
+  "user_story": "As a user, I want the submit button to be disabled until all required fields are filled.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/form'); // Replace with the actual URL\n  });\n\n  test('Submit button should be disabled initially', async ({ page }) => {\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeDisabled();\n  });\n\n  test('Submit button should be enabled when all required fields are filled', async ({ page }) => {\n    await page.getByLabel('First Name').fill('John');\n    await page.getByLabel('Last Name').fill('Doe');\n    await page.getByLabel('Email').fill('john.doe@example.com');\n\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeEnabled();\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 198,
+  "latency_s": 4.16,
+  "timestamp": "2026-06-19T16:45:42.704775"
+}

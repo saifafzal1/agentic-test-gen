@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_272",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7991,
+  "total_latency_s": 46.374,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('In-app Notifications - Real-time Updates', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should update notifications in real-time without page refresh', async ({ page }) => {\n    // Verify initial state\n    const notificationCount = page.getByRole('region', { name: /notifications/i }).count();\n    await expect(notificationCount).toBeGreaterThan(0);\n\n    // Mock notification API response\n    await page.route('**/api/notifications', (route) => {\n      route.continue();\n    });\n\n    // Trigger notification update\n    const updateButton = page.getByRole('button', { name: /update notifications/i });\n    await updateButton.click();\n\n    // Wait for real-time update\n    await page.waitForTimeout(500);\n\n    // Verify notifications are updated\n    const updatedCount = page.getByRole('region', { name: /notifications/i }).count();\n    await expect(updatedCount).toBeGreaterThan(notificationCount);\n\n    // Verify notification content is updated\n    const notification = page.getByText(/new notification/i);\n    await expect(notification).toBeVisible();\n\n    // Verify notification count is correct\n    const notificationCountDisplay = page.getByText(/3 notifications/i);\n    await expect(notificationCountDisplay).toBeVisible();\n\n    // Verify notification details are displayed\n    const notificationDetails = page.getByText(/urgent message/i);\n    await expect(notificationDetails).toBeVisible();\n\n    // Verify notification action button is present\n    const actionButton = page.getByRole('button', { name: /view/i });\n    await expect(actionButton).toBeVisible();\n  });\n\n  test('should handle multiple notifications and display all', async ({ page }) => {\n    // Mock multiple notification API responses\n    await page.route('**/api/notifications', (route) => {\n      route.continue();\n    });\n\n    // Trigger multiple notifications\n    const firstUpdateButton = page.getByRole('button', { name: /update notifications/i });\n    await firstUpdateButton.click();\n\n    const secondUpdateButton = page.getByRole('button', { name: /update notifications/i });\n    await secondUpdateButton.click();\n\n    // Wait for real-time updates\n    await page.waitForTimeout(1000);\n\n    // Verify all notifications are displayed\n    const notificationCount = page.getByRole('region', { name: /notifications/i }).count();\n    await expect(notificationCount).toBeGreaterThan(0);\n\n    // Verify notification count is correct\n    const notificationCountDisplay = page.getByText(/5 notifications/i);\n    await expect(notificationCountDisplay).toBeVisible();\n\n    // Verify each notification is visible\n    const notifications = page.getByText(/new notification/i);\n    const notificationCount = notifications.count();\n    await expect(notificationCount).toBeGreaterThan(0);\n\n    // Verify notification details are displayed for each notification\n    const notificationDetails = page.getByText(/urgent message/i);\n    await expect(notificationDetails).toBeVisible();\n\n    // Verify notification action buttons are present for each notification\n    const actionButtons = page.getByRole('button', { name: /view/i });\n    await expect(actionButtons).toHaveCount(notificationCount);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7991,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4302,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 46.374,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_075",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.808,
+  "total_latency_s": 46.577,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Task Deletion with Confirmation Dialog', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/tasks');\n  });\n\n  test('should delete a task with confirmation dialog and update task list', async ({ page }) => {\n    // Verify initial task list is displayed\n    const taskList = page.getByRole('region', { name: /tasks/i });\n    await expect(taskList).toBeVisible();\n\n    // Verify task item exists\n    const taskItem = page.getByText('Sample Task');\n    await expect(taskItem).toBeVisible();\n\n    // Verify delete button is present\n    const deleteButton = page.getByRole('button', { name: /delete/i });\n    await expect(deleteButton).toBeVisible();\n\n    // Click delete button to open confirmation dialog\n    await deleteButton.click();\n\n    // Verify confirmation dialog is visible\n    const confirmationDialog = page.locator('[data-testid=\"confirmation-dialog\"]');\n    await expect(confirmationDialog).toBeVisible();\n\n    // Verify confirm button is present\n    const confirmButton = page.getByRole('button', { name: /confirm/i });\n    await expect(confirmButton).toBeVisible();\n\n    // Click confirm button to delete task\n    await confirmButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/task deleted/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify task item is removed from list\n    await expect(taskItem).not.toBeVisible();\n\n    // Verify task list is updated\n    const updatedTaskList = page.getByRole('region', { name: /tasks/i });\n    await expect(updatedTaskList).toBeVisible();\n\n    // Verify remaining tasks are displayed\n    const remainingTasks = page.getByText('Remaining Tasks');\n    await expect(remainingTasks).toBeVisible();\n  });\n\n  test('should handle deletion of non-existent task with error message', async ({ page }) => {\n    // Verify initial task list is displayed\n    const taskList = page.getByRole('region', { name: /tasks/i });\n    await expect(taskList).toBeVisible();\n\n    // Verify task item does not exist\n    const nonExistentTaskItem = page.getByText('Non-Existent Task');\n    await expect(nonExistentTaskItem).not.toBeVisible();\n\n    // Verify delete button is present for existing task\n    const deleteButton = page.getByRole('button', { name: /delete/i });\n    await expect(deleteButton).toBeVisible();\n\n    // Click delete button to open confirmation dialog\n    await deleteButton.click();\n\n    // Verify confirmation dialog is visible\n    const confirmationDialog = page.locator('[data-testid=\"confirmation-dialog\"]');\n    await expect(confirmationDialog).toBeVisible();\n\n    // Verify confirm button is present\n    const confirmButton = page.getByRole('button', { name: /confirm/i });\n    await expect(confirmButton).toBeVisible();\n\n    // Click confirm button to delete non-existent task\n    await confirmButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/task not found/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify delete button is still available for other tasks\n    await expect(deleteButton).toBeVisible();\n\n    // Verify task list is still displayed\n    await expect(taskList).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.808,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.46,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 46.577,
+      "feedback_used": ""
+    }
+  ]
+}

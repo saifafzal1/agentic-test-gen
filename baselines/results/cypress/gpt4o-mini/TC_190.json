@@ -1,0 +1,13 @@
+{
+  "id": "TC_190",
+  "category": "search_filter",
+  "complexity": "complex",
+  "user_story": "As a user, I want to clear all applied filters with a single button.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Filter Clearing Functionality', () => {\n    beforeEach(() => {\n        cy.visit('/search'); // Adjust the URL to your application's search page\n        // Apply some filters to test clearing functionality\n        cy.get('[data-testid=\"filter-category\"]').select('Electronics');\n        cy.get('[data-testid=\"filter-price\"]').type('100');\n        cy.get('[data-testid=\"filter-brand\"]').check('BrandA');\n        cy.get('[data-testid=\"apply-filters\"]').click();\n    });\n\n    it('should clear all applied filters successfully', () => {\n        cy.get('[data-testid=\"clear-filters\"]').click();\n        cy.get('[data-testid=\"filter-category\"]').should('have.value', '');\n        cy.get('[data-testid=\"filter-price\"]').should('be.empty');\n        cy.get('[data-testid=\"filter-brand\"]').should('not.be.checked');\n    });\n\n    it('should not display any filters after clearing', () => {\n        cy.get('[data-testid=\"clear-filters\"]').click();\n        cy.get('[data-testid=\"active-filters\"]').should('not.exist');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 222,
+  "latency_s": 3.75,
+  "timestamp": "2026-06-19T16:37:11.874589"
+}

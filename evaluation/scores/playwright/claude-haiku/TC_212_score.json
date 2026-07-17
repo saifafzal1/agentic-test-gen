@@ -1,0 +1,37 @@
+{
+  "id": "TC_212",
+  "model": "claude-haiku",
+  "framework": "playwright",
+  "category": "accessibility",
+  "complexity": "simple",
+  "rouge_l": {
+    "precision": 0.2888,
+    "recall": 0.4132,
+    "f1": 0.34
+  },
+  "token_f1": {
+    "precision": 0.3056,
+    "recall": 0.3901,
+    "f1": 0.3427
+  },
+  "quality": {
+    "keyword_hits": {
+      "test.describe(": true,
+      "test(": true,
+      "page.goto(": true,
+      "getByRole(": true,
+      "getByLabel(": false,
+      "getByText(": false,
+      "expect(": true,
+      "test.beforeEach(": true,
+      "await ": true
+    },
+    "keyword_score": 0.7778,
+    "line_count": 93,
+    "char_count": 4245,
+    "no_fences": false
+  },
+  "latency_s": 9.95,
+  "prompt_tokens": 140,
+  "completion_tokens": 1694
+}

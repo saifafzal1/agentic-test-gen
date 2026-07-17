@@ -1,0 +1,13 @@
+{
+  "id": "TC_260",
+  "category": "notifications",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error toast notification when an action fails.",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "```typescript\nimport { test, expect } from '@playwright/test';\n\ntest.describe('Error Toast Notification', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('http://localhost:3000');\n  });\n\n  test('should display error toast when action fails', async ({ page }) => {\n    // Click button that triggers a failing action\n    await page.getByRole('button', { name: /trigger error/i }).click();\n\n    // Wait for and verify error toast appears\n    const errorToast = page.getByRole('alert');\n    await expect(errorToast).toBeVisible();\n    \n    // Verify error message content\n    await expect(errorToast).toContainText(/error|failed/i);\n  });\n\n  test('should display error toast with correct message text', async ({ page }) => {\n    // Click button that triggers a specific error\n    await page.getByRole('button', { name: /submit form/i }).click();\n\n    // Verify error toast is visible with specific message\n    const errorToast = page.getByRole('alert');\n    await expect(errorToast).toBeVisible();\n    await expect(errorToast).toContainText('Something went wrong');\n  });\n\n  test('should dismiss error toast when close button is clicked', async ({ page }) => {\n    // Trigger error action\n    await page.getByRole('button', { name: /trigger error/i }).click();\n\n    // Verify toast is visible\n    const errorToast = page.getByRole('alert');\n    await expect(errorToast).toBeVisible();\n\n    // Click close button on toast\n    await page.getByRole('button', { name: /close|dismiss/i }).click();\n\n    // Verify toast is no longer visible\n    await expect(errorToast).not.toBeVisible();\n  });\n\n  test('should auto-dismiss error toast after timeout', async ({ page }) => {\n    // Trigger error action\n    await page.getByRole('button', { name: /trigger error/i }).click();\n\n    // Verify toast is visible\n    const errorToast = page.getByRole('alert');\n    await expect(errorToast).toBeVisible();\n\n    // Wait for auto-dismiss timeout (typically 5 seconds)\n    await expect(errorToast).not.toBeVisible({ timeout: 6000 });\n  });\n});\n```",
+  "prompt_tokens": 143,
+  "completion_tokens": 569,
+  "latency_s": 3.79,
+  "timestamp": "2026-06-19T18:10:49.466199"
+}

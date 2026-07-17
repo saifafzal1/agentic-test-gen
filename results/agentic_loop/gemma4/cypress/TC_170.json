@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_170",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.716,
+  "total_latency_s": 72.07,
+  "final_script": "describe('File Upload Progress Bar', () => {\n  beforeEach(() => {\n    cy.visit('/file-upload');\n  });\n\n  it('should display progress bar for each file during upload', () => {\n    // Intercept the upload API call\n    cy.intercept('POST', '/api/files/upload').as('fileUpload');\n\n    // Select a file from the file input\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/sample.pdf', { force: true });\n\n    // Verify file name is displayed\n    cy.get('[data-testid=\"file-name-display\"]').should('contain', 'sample.pdf');\n\n    // Click upload button\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for the upload API call\n    cy.wait('@fileUpload');\n\n    // Verify progress bar is visible and shows progress\n    cy.get('[data-testid=\"progress-bar\"]').should('be.visible');\n    cy.get('[data-testid=\"progress-bar\"]').should('have.attr', 'style', 'width: 10%;');\n\n    // Verify progress text is updated\n    cy.get('[data-testid=\"progress-text\"]').should('contain', '0%');\n\n    // Verify upload success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'File uploaded successfully');\n\n    // Verify progress bar is hidden after completion\n    cy.get('[data-testid=\"progress-bar\"]').should('not.exist');\n  });\n\n  it('should handle multiple file uploads with individual progress bars', () => {\n    // Intercept upload API calls for multiple files\n    cy.intercept('POST', '/api/files/upload').as('fileUpload1');\n    cy.intercept('POST', '/api/files/upload').as('fileUpload2');\n\n    // Select first file\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/document1.docx', { force: true });\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for first file upload\n    cy.wait('@fileUpload1');\n\n    // Verify first progress bar is visible\n    cy.get('[data-testid=\"progress-bar-1\"]').should('be.visible');\n    cy.get('[data-testid=\"progress-text-1\"]').should('contain', '10%');\n\n    // Select second file\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/image.png', { force: true });\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for second file upload\n    cy.wait('@fileUpload2');\n\n    // Verify second progress bar is visible\n    cy.get('[data-testid=\"progress-bar-2\"]').should('be.visible');\n    cy.get('[data-testid=\"progress-text-2\"]').should('contain', '50%');\n\n    // Verify both files have success messages\n    cy.get('[data-testid=\"success-message-1\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message-2\"]').should('be.visible');\n\n    // Verify both progress bars are hidden\n    cy.get('[data-testid=\"progress-bar-1\"]').should('not.exist');\n    cy.get('[data-testid=\"progress-bar-2\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.716,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2532,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.07,
+      "feedback_used": ""
+    }
+  ]
+}

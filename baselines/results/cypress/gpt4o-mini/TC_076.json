@@ -1,0 +1,13 @@
+{
+  "id": "TC_076",
+  "category": "crud_operations",
+  "complexity": "complex",
+  "user_story": "As a user, I want to view the details of a single item by clicking on it.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('View Item Details', () => {\n    beforeEach(() => {\n        cy.visit('/items'); // Adjust the URL to your application's item listing page\n    });\n\n    it('should display item details when an item is clicked', () => {\n        cy.get('.item').first().click(); // Assuming items have a class of 'item'\n        cy.url().should('include', '/items/'); // Check if the URL changes to the item details page\n        cy.get('.item-details').should('be.visible'); // Assuming item details have a class of 'item-details'\n        cy.get('.item-title').should('exist'); // Check if the item title is displayed\n        cy.get('.item-description').should('exist'); // Check if the item description is displayed\n    });\n\n    it('should show a 404 error when an invalid item is accessed', () => {\n        cy.visit('/items/invalid-id'); // Replace 'invalid-id' with a non-existent item ID\n        cy.get('.error-message').should('be.visible'); // Assuming there's an error message for invalid items\n        cy.get('.error-message').should('contain', 'Item not found'); // Check for specific error message\n    });\n});",
+  "prompt_tokens": 113,
+  "completion_tokens": 249,
+  "latency_s": 4.23,
+  "timestamp": "2026-06-19T16:30:09.531856"
+}

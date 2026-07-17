@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_014",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8295,
+  "total_latency_s": 42.693,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Form Keyboard Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should navigate and submit login form using keyboard', async ({ page }) => {\n    // Verify login form is visible\n    const loginForm = page.getByRole('form');\n    await expect(loginForm).toBeVisible();\n\n    // Verify input fields are accessible by keyboard\n    const emailInput = page.getByLabel('Email Address');\n    await expect(emailInput).toBeVisible();\n    const passwordInput = page.getByLabel('Password');\n    await expect(passwordInput).toBeVisible();\n\n    // Verify login button is visible and accessible\n    const loginButton = page.getByRole('button', { name: /sign in/i });\n    await expect(loginButton).toBeVisible();\n\n    // Focus email input using Tab\n    await emailInput.press('Tab');\n    await expect(emailInput).toHaveFocus();\n\n    // Type email address\n    await emailInput.fill('user@example.com');\n\n    // Focus password input using Tab\n    await passwordInput.press('Tab');\n    await expect(passwordInput).toHaveFocus();\n\n    // Type password\n    await passwordInput.fill('password123');\n\n    // Focus login button using Tab\n    await loginButton.press('Tab');\n    await expect(loginButton).toHaveFocus();\n\n    // Press Enter to submit form\n    await loginButton.press('Enter');\n\n    // Verify success message appears\n    const successMessage = page.getByText('Login successful');\n    await expect(successMessage).toBeVisible();\n\n    // Verify user is redirected to dashboard\n    const dashboard = page.getByRole('main');\n    await expect(dashboard).toBeVisible();\n  });\n\n  test('should handle focus trapping within the form', async ({ page }) => {\n    // Verify login form is visible\n    const loginForm = page.getByRole('form');\n    await expect(loginForm).toBeVisible();\n\n    // Focus email input using Tab\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.press('Tab');\n    await expect(emailInput).toHaveFocus();\n\n    // Tab through password input\n    await passwordInput.press('Tab');\n    await expect(passwordInput).toHaveFocus();\n\n    // Tab through login button\n    await loginButton.press('Tab');\n    await expect(loginButton).toHaveFocus();\n\n    // Press Enter to submit form\n    await loginButton.press('Enter');\n\n    // Verify success message appears\n    const successMessage = page.getByText('Login successful');\n    await expect(successMessage).toBeVisible();\n\n    // Verify user is redirected to dashboard\n    const dashboard = page.getByRole('main');\n    await expect(dashboard).toBeVisible();\n\n    // Verify form is still focused after submission\n    await expect(loginForm).toHaveFocus();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8295,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4315,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 42.693,
+      "feedback_used": ""
+    }
+  ]
+}

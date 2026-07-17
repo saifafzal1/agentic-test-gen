@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_289",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8029,
+  "total_latency_s": 46.584,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Profile Settings - Language Preference', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/profile');\n  });\n\n  test('should successfully set language preference and display selected language', async ({ page }) => {\n    // Verify language selection dropdown is visible\n    const languageDropdown = page.getByRole('combobox', { name: /language/i });\n    await expect(languageDropdown).toBeVisible();\n\n    // Verify default language is selected\n    const defaultLanguageLabel = page.getByText(/default/i);\n    await expect(defaultLanguageLabel).toBeVisible();\n\n    // Verify language options are available\n    const spanCount = page.locator('[data-testid=\"language-option-count\"]').count();\n    expect(spanCount).toBeGreaterThan(0);\n\n    // Set language preference to Spanish\n    const spanishOption = page.getByRole('option', { name: /spanish/i });\n    await expect(spanishOption).toBeVisible();\n    await spanishOption.click();\n\n    // Verify language preference is set\n    const selectedLanguageLabel = page.getByText(/espa\u00f1ol/i);\n    await expect(selectedLanguageLabel).toBeVisible();\n\n    // Verify language is applied to the page\n    const pageLanguage = page.getByTestId('page-language');\n    await expect(pageLanguage).toContainText('espa\u00f1ol');\n\n    // Verify language preference is saved\n    const settingsButton = page.getByRole('button', { name: /save settings/i });\n    await expect(settingsButton).toBeVisible();\n    await settingsButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/language preference saved/i);\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should handle invalid language input and display error message', async ({ page }) => {\n    // Verify language dropdown is visible\n    const languageDropdown = page.getByRole('combobox', { name: /language/i });\n    await expect(languageDropdown).toBeVisible();\n\n    // Verify default language is selected\n    const defaultLanguageLabel = page.getByText(/default/i);\n    await expect(defaultLanguageLabel).toBeVisible();\n\n    // Verify language options are available\n    const spanCount = page.locator('[data-testid=\"language-option-count\"]').count();\n    expect(spanCount).toBeGreaterThan(0);\n\n    // Set invalid language preference (e.g., \"xyz\")\n    const invalidOption = page.getByRole('option', { name: /xyz/i });\n    await expect(invalidOption).toBeVisible();\n    await invalidOption.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/invalid language/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify language dropdown is still visible\n    await expect(languageDropdown).toBeVisible();\n\n    // Verify default language is still selected\n    await expect(defaultLanguageLabel).toBeVisible();\n\n    // Verify user can clear the invalid selection\n    const clearButton = page.getByRole('button', { name: /clear/i });\n    await expect(clearButton).toBeVisible();\n    await clearButton.click();\n\n    // Verify error message disappears\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify default language is selected again\n    await expect(defaultLanguageLabel).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8029,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4431,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 46.584,
+      "feedback_used": ""
+    }
+  ]
+}

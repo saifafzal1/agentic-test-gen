@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_191",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7567,
+  "total_latency_s": 26.282,
+  "final_script": "describe('Search Suggestions Feature', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should display search suggestions for recently searched terms', () => {\n    // Intercept the search API call\n    cy.intercept('GET', '/api/search/suggestions*').as('getSearchSuggestions');\n\n    // Perform a search\n    cy.get('[data-testid=\"search-input\"]').type('cypress');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for the API response\n    cy.wait('@getSearchSuggestions');\n\n    // Verify suggestions are displayed\n    cy.get('[data-testid=\"suggestion-list\"]').should('be.visible');\n    cy.get('[data-testid=\"suggestion-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify suggestion text is correct\n    cy.get('[data-testid=\"suggestion-item\"]').first().should('contain', 'Cypress');\n\n    // Verify suggestion link works\n    cy.get('[data-testid=\"suggestion-item\"]').first().click();\n    cy.url().should('include', '/search/cypress');\n  });\n\n  it('should not display suggestions when no recent search terms exist', () => {\n    // Clear search history\n    cy.intercept('GET', '/api/search/suggestions*').as('getSearchSuggestions');\n    cy.get('[data-testid=\"search-input\"]').clear().type('');\n\n    // Perform a search without typing anything\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for the API response\n    cy.wait('@getSearchSuggestions');\n\n    // Verify no suggestions are displayed\n    cy.get('[data-testid=\"suggestion-list\"]').should('not.exist');\n\n    // Verify search input is still visible\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7567,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3891,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 26.282,
+      "feedback_used": ""
+    }
+  ]
+}

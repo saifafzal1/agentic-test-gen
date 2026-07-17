@@ -1,0 +1,13 @@
+{
+  "id": "TC_124",
+  "category": "async_await",
+  "complexity": "complex",
+  "user_story": "As a user, I want a long-running task to persist across page refreshes.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Long-running task persistence', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('http://localhost:3000'); // Replace with the actual URL\n  });\n\n  test('should start a long-running task and persist across refresh', async ({ page }) => {\n    await page.getByRole('button', { name: 'Start Task' }).click();\n    await expect(page.getByText('Task is running...')).toBeVisible();\n\n    await page.reload();\n    \n    await expect(page.getByText('Task is running...')).toBeVisible();\n  });\n\n  test('should show task completion after refresh', async ({ page }) => {\n    await page.getByRole('button', { name: 'Start Task' }).click();\n    await expect(page.getByText('Task is running...')).toBeVisible();\n\n    // Simulate waiting for the task to complete\n    await page.waitForTimeout(5000); // Adjust timeout as necessary\n    await expect(page.getByText('Task completed!')).toBeVisible();\n\n    await page.reload();\n    \n    await expect(page.getByText('Task completed!')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 255,
+  "latency_s": 2.93,
+  "timestamp": "2026-06-19T16:52:07.886382"
+}

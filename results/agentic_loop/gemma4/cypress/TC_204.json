@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_204",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7266,
+  "total_latency_s": 72.841,
+  "final_script": "describe('Image Alt Text Accessibility', () => {\n  beforeEach(() => {\n    cy.visit('/images');\n  });\n\n  it('should display descriptive alt text for all images', () => {\n    // Verify the first image has descriptive alt text\n    cy.get('[alt=\"A photo of a golden retriever playing in a park\"]').should('be.visible');\n    cy.get('[alt=\"A photo of a golden retriever playing in a park\"]').should('have.attr', 'alt');\n    cy.get('[alt=\"A photo of a golden retriever playing in a park\"]').should('contain', 'golden retriever');\n\n    // Verify the second image has descriptive alt text\n    cy.get('[alt=\"A close-up of a steaming cup of coffee\"]').should('be.visible');\n    cy.get('[alt=\"A close-up of a steaming cup of coffee\"]').should('have.attr', 'alt');\n    cy.get('[alt=\"A close-up of a steaming cup of coffee\"]').should('contain', 'coffee');\n\n    // Verify the third image has descriptive alt text\n    cy.get('[alt=\"A abstract watercolor painting of a mountain landscape\"]').should('be.visible');\n    cy.get('[alt=\"An abstract watercolor painting of a mountain landscape\"]').should('have.attr', 'alt');\n    cy.get('[alt=\"An abstract watercolor painting of a mountain landscape\"]').should('contain', 'mountain');\n\n    // Verify all images have alt attributes\n    cy.get('[alt]').should('have.length.greaterThan', 0);\n  });\n\n  it('should handle empty alt text for decorative images', () => {\n    // Verify decorative image has empty alt text\n    cy.get('[alt=\"\"]').should('be.visible');\n    cy.get('[alt=\"\"]').should('have.attr', 'alt', '');\n\n    // Verify image with no alt attribute is not present\n    cy.get('[alt=\"\"]').should('not.exist');\n\n    // Verify image with descriptive alt text is still present\n    cy.get('[alt=\"A photo of a golden retriever playing in a park\"]').should('be.visible');\n    cy.get('[alt=\"A photo of a golden retriever playing in a park\"]').should('have.attr', 'alt');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7266,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2888,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.841,
+      "feedback_used": ""
+    }
+  ]
+}

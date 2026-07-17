@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_219",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7532,
+  "total_latency_s": 52.228,
+  "final_script": "describe('Video Captions Accessibility', () => {\n  beforeEach(() => {\n    cy.visit('/videos');\n  });\n\n  it('should display captions when video is played', () => {\n    // Intercept the API call to fetch video details\n    cy.intercept('GET', '/api/videos/123').as('getVideo');\n    cy.wait('@getVideo');\n\n    // Get the first video element\n    cy.get('[data-testid=\"video-container\"]').first().should('be.visible');\n    cy.get('[data-testid=\"video-player\"]').should('be.visible');\n\n    // Verify caption button is visible\n    cy.get('[data-testid=\"caption-toggle\"]').should('be.visible');\n\n    // Verify captions are initially hidden\n    cy.get('[data-testid=\"video-captions\"]').should('not.exist');\n\n    // Click the caption button to toggle captions\n    cy.get('[data-testid=\"caption-toggle\"]').click();\n\n    // Verify captions are now visible\n    cy.get('[data-testid=\"video-captions\"]').should('be.visible');\n\n    // Verify caption text is displayed\n    cy.get('[data-testid=\"video-captions\"]').should('contain', 'Video caption text');\n\n    // Verify caption controls are present\n    cy.get('[data-testid=\"caption-play-pause\"]').should('be.visible');\n    cy.get('[data-testid=\"caption-volume-control\"]').should('be.visible');\n\n    // Verify caption playback controls are functional\n    cy.get('[data-testid=\"caption-play-pause\"]').click();\n    cy.get('[data-testid=\"caption-play-pause\"]').should('be.visible');\n\n    // Verify captions are synchronized with video\n    cy.get('[data-testid=\"video-player\"]').should('be.visible');\n    cy.get('[data-testid=\"video-player\"]').should('have.attr', 'currentTime', '10');\n  });\n\n  it('should hide captions when video is paused or closed', () => {\n    // Intercept the API call to fetch video details\n    cy.intercept('GET', '/api/videos/123').as('getVideo');\n    cy.wait('@getVideo');\n\n    // Get the first video element\n    cy.get('[data-testid=\"video-container\"]').first().should('be.visible');\n\n    // Verify captions are visible\n    cy.get('[data-testid=\"video-captions\"]').should('be.visible');\n\n    // Verify caption controls are visible\n    cy.get('[data-testid=\"caption-play-pause\"]').should('be.visible');\n\n    // Click the pause button to pause video\n    cy.get('[data-testid=\"caption-play-pause\"]').click();\n\n    // Verify captions are still visible\n    cy.get('[data-testid=\"video-captions\"]').should('be.visible');\n\n    // Verify captions are still synchronized with video\n    cy.get('[data-testid=\"video-player\"]').should('have.attr', 'currentTime', '10');\n\n    // Verify captions are still visible when video is paused\n    cy.get('[data-testid=\"caption-play-pause\"]').click();\n    cy.get('[data-testid=\"caption-play-pause\"]').should('be.visible');\n\n    // Verify captions are hidden when video is closed\n    cy.get('[data-testid=\"video-close-button\"]').click();\n    cy.get('[data-testid=\"video-container\"]').should('not.exist');\n    cy.get('[data-testid=\"video-captions\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7532,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3773,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 52.228,
+      "feedback_used": ""
+    }
+  ]
+}

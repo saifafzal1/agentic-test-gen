@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_195",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8272,
+  "total_latency_s": 60.302,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Save Search Query Feature', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should save a search query successfully and display saved queries', async ({ page }) => {\n    // Setup: Fill in search input using getByLabel\n    const searchInput = page.getByLabel('Search');\n    await searchInput.fill('Playwright automation');\n\n    // Setup: Click save button using getByRole\n    const saveButton = page.getByRole('button', { name: /save search/i });\n    await saveButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Search saved successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify saved queries are displayed\n    const savedQueriesList = page.getByRole('list', { name: /saved searches/i });\n    await expect(savedQueriesList).toBeVisible();\n\n    // Verify saved query is listed\n    const savedQueryItem = page.getByText('Playwright automation');\n    await expect(savedQueryItem).toBeVisible();\n\n    // Verify search results are displayed\n    const searchResults = page.getByRole('region', { name: /search results/i });\n    await expect(searchResults).toBeVisible();\n\n    // Verify results contain expected content\n    const resultItem = page.getByText('Playwright automation');\n    await expect(resultItem).toBeVisible();\n\n    // Verify search input is cleared\n    await expect(searchInput).toHaveValue('');\n  });\n\n  test('should handle saving multiple queries and display all saved queries', async ({ page }) => {\n    // Setup: Fill in first search input\n    const searchInput1 = page.getByLabel('Search');\n    await searchInput1.fill('Playwright automation');\n\n    // Setup: Click save button for first query\n    const saveButton1 = page.getByRole('button', { name: /save search/i });\n    await saveButton1.click();\n\n    // Verify success message for first query\n    const successMessage1 = page.getByText('Search saved successfully');\n    await expect(successMessage1).toBeVisible();\n\n    // Setup: Fill in second search input\n    const searchInput2 = page.getByLabel('Search');\n    await searchInput2.fill('Playwright test scripts');\n\n    // Setup: Click save button for second query\n    const saveButton2 = page.getByRole('button', { name: /save search/i });\n    await saveButton2.click();\n\n    // Verify success message for second query\n    const successMessage2 = page.getByText('Search saved successfully');\n    await expect(successMessage2).toBeVisible();\n\n    // Verify saved queries list contains both queries\n    const savedQueriesList = page.getByRole('list', { name: /saved searches/i });\n    await expect(savedQueriesList).toBeVisible();\n\n    const savedQueryItem1 = page.getByText('Playwright automation');\n    await expect(savedQueryItem1).toBeVisible();\n\n    const savedQueryItem2 = page.getByText('Playwright test scripts');\n    await expect(savedQueryItem2).toBeVisible();\n\n    // Verify search results are displayed for both queries\n    const searchResults = page.getByRole('region', { name: /search results/i });\n    await expect(searchResults).toBeVisible();\n\n    // Verify results contain expected content for both queries\n    const resultItem1 = page.getByText('Playwright automation');\n    await expect(resultItem1).toBeVisible();\n\n    const resultItem2 = page.getByText('Playwright test scripts');\n    await expect(resultItem2).toBeVisible();\n\n    // Verify search input is cleared after saving\n    await expect(searchInput1).toHaveValue('');\n    await expect(searchInput2).toHaveValue('');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8272,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4242,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 60.302,
+      "feedback_used": ""
+    }
+  ]
+}

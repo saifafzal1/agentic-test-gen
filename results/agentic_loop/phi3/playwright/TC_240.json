@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_240",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8014,
+  "total_latency_s": 492.753,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mobile Checkout Form Stacking', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should stack checkout form vertically on mobile screens', async ({ page }) => {\n    // Set viewport to mobile size\n    await page.setViewportSize({ width: 375, height: 812 });\n\n    // Verify form is stacked vertically\n    const cartItemCount = page.getByRole('heading', { name: /cart items/i });\n    await expect(cartItemCount).toBeVisible();\n\n    const shippingAddress = page.getByRole('fieldset', { name: /shipping address/i });\n    await expect(shippingAddress).toBeVisible();\n\n    const billingAddress = page.getByRole('fieldset', { name: /billing address/i });\n    await expect(billingAddress).toBeVisible();\n\n    const shippingInfo = page.getByRole('fieldset', { name: /shipping info/i });\n    await expect(shippingInfo).toBeVisible();\n\n    const shippingMethod = page.getByRole('fieldset', { name: /shipping method/i });\n    await expect(shippingMethod).toBeVisible();\n\n    const paymentDetails = page.getByRole('fieldset', { name: /payment details/i });\n    await expect(paymentDetails).toBeVisible();\n\n    const checkoutButton = page.getByRole('button', { name: /checkout/i });\n    await expect(checkoutButton).toBeVisible();\n\n    // Verify form elements are stacked vertically\n    const formLayout = page.getByRole('form');\n    await expect(formLayout).toHaveClass(/stacked-vertical/);\n\n    // Verify form is responsive and stacks correctly\n    await page.evaluate(() => {\n      window.innerWidth = 375;\n      window.innerHeight = 812;\n    });\n\n    const formLayoutAfterResize = page.getByRole('form');\n    await expect(formLayoutAfterResize).toHaveClass(/stacked-vertical/);\n  });\n\n  test('should maintain form layout on tablet screens', async ({ page }) => {\n    // Set viewport to tablet size\n    await page.setViewportSize({ width: 768, height: 1024 });\n\n    // Verify form is still stacked vertically\n    const cartItemCount = page.getByRole('heading', { name: /cart items/i });\n    await expect(cartItemCount).toBeVisible();\n\n    const shippingAddress = page.getByRole('fieldset', { name: /shipping address/i });\n    await expect(shippingAddress).toBeVisible();\n\n    const billingAddress = page.getByRole('fieldset', { name: /billing address/i });\n    await expect(billingAddress).toBeVisible();\n\n    const shippingInfo = page.getByRole('fieldset', { name: /shipping info/i });\n    await expect(shippingInfo).toBeVisible();\n\n    const shippingMethod = page.getByRole('fieldset', { name: /shipping method/i });\n    await expect(shippingMethod).toBeVisible();\n\n    const paymentDetails = page.getByRole('fieldset', { name: /payment details/i });\n    await expect(paymentDetails).toBeVisible();\n\n    const checkoutButton = page.getByRole('button', { name: /checkout/i });\n    await expect(checkoutButton).toBeVisible();\n\n    // Verify form is responsive and maintains layout\n    const formLayout = page.getByRole('form');\n    await expect(formLayout).toHaveClass(/stacked-vertical/);\n\n    // Verify form elements are still stacked vertically\n    const formLayoutAfterResize = page.getByRole('form');\n    await expect(formLayoutAfterResize).toHaveClass(/stacked-vertical/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5182,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4608,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 55.185,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8014,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4379,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 437.568,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_199",
+  "category": "search_filter",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a tag for each active filter above the results.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Active Filters Display', () => {\n    beforeEach(() => {\n        cy.visit('/search'); // Adjust the URL to match the application\n        cy.get('.filter-input').type('example filter'); // Simulate entering a filter\n        cy.get('.filter-submit').click(); // Simulate submitting the filter\n    });\n\n    it('should display a tag for each active filter above the results', () => {\n        cy.get('.active-filters').should('exist'); // Check if active filters section exists\n        cy.get('.active-filters .filter-tag').should('have.length.greaterThan', 0); // Ensure there are active filter tags\n        cy.get('.active-filters .filter-tag').first().should('contain', 'example filter'); // Check the content of the first filter tag\n    });\n\n    it('should not display any filter tags when no filters are applied', () => {\n        cy.get('.clear-filters').click(); // Simulate clearing all filters\n        cy.get('.active-filters').should('not.exist'); // Ensure active filters section does not exist\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 228,
+  "latency_s": 2.78,
+  "timestamp": "2026-06-19T16:37:38.944659"
+}

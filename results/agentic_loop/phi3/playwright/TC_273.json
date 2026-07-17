@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_273",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7986,
+  "total_latency_s": 891.916,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Preferences Management', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/settings');\n  });\n\n  test('should successfully update notification preferences and save changes', async ({ page }) => {\n    // Verify notification settings page is visible\n    const settingsContainer = page.getByRole('region', { name: /settings/i });\n    await expect(settingsContainer).toBeVisible();\n\n    // Verify notification preferences section is visible\n    const notificationSection = page.getByRole('region', { name: /notifications/i });\n    await expect(notificationSection).toBeVisible();\n\n    // Verify notification toggle button is visible and enabled\n    const notificationToggle = page.getByRole('button', { name: /notifications/i });\n    await expect(notificationToggle).toBeVisible();\n\n    // Verify notification count is displayed\n    const notificationCount = page.getByText(/notifications/i);\n    await expect(notificationCount).toBeVisible();\n\n    // Verify notification types are listed\n    const notificationTypes = page.getByRole('list', { name: /notification types/i });\n    await expect(notificationTypes).toBeVisible();\n\n    // Verify all notification types are listed\n    const notificationTypeItems = page.getByRole('listitem', { name: /notification types/i });\n    const count = await notificationTypeItems.count();\n    expect(count).toBeGreaterThan(0);\n\n    // Verify settings are initially saved\n    const settingsStatus = page.getByText(/saved/i);\n    await expect(settingsStatus).toBeVisible();\n\n    // Click notification toggle to enable notifications\n    await notificationToggle.click();\n\n    // Verify toggle is now active\n    await expect(notificationToggle).toHaveAttribute('aria-pressed', 'true');\n\n    // Verify notification count is updated\n    await expect(notificationCount).toContainText('1');\n\n    // Verify settings are still saved\n    await expect(settingsStatus).toBeVisible();\n\n    // Click save button\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await saveButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/notifications updated/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify settings are still saved\n    await expect(settingsStatus).toBeVisible();\n  });\n\n  test('should handle invalid notification preferences and display error message', async ({ page }) => {\n    // Verify notification settings page is visible\n    const settingsContainer = page.getByRole('region', { name: /settings/i });\n    await expect(settingsContainer).toBeVisible();\n\n    // Verify notification preferences section is visible\n    const notificationSection = page.getByRole('region', { name: /notifications/i });\n    await expect(notificationSection).toBeVisible();\n\n    // Verify notification toggle button is visible and enabled\n    const notificationToggle = page.getByRole('button', { name: /notifications/i });\n    await expect(notificationToggle).toBeVisible();\n\n    // Verify notification count is displayed\n    const notificationCount = page.getByText(/notifications/i);\n    await expect(notificationCount).toBeVisible();\n\n    // Verify notification types are listed\n    const notificationTypeItems = page.getByRole('listitem', { name: /notification types/i });\n    await expect(notificationTypeItems).toBeVisible();\n\n    // Verify settings are initially saved\n    const settingsStatus = page.getByText(/saved/i);\n    await expect(settingsStatus).toBeVisible();\n\n    // Click notification toggle to disable notifications\n    await notificationToggle.click();\n\n    // Verify toggle is now inactive\n    await expect(notificationToggle).toHaveAttribute('aria-pressed', 'false');\n\n    // Verify notification count is updated\n    await expect(notificationCount).toContainText('0');\n\n    // Verify settings are still saved\n    await expect(settingsStatus).toBeVisible();\n\n    // Click save button with invalid settings\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await saveButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/invalid settings/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify settings are still saved\n    await expect(settingsStatus).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4878,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3594,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 370.894,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7986,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4288,
+        "missing_keywords": [],
+        "assertion_count": 23,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 521.022,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

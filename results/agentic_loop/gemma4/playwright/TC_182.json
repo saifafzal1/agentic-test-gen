@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_182",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7928,
+  "total_latency_s": 72.545,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Image Paste from Clipboard to Upload Area', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload');\n  });\n\n  test('should successfully paste an image from clipboard into upload area', async ({ page }) => {\n    // Setup: intercept the file upload API\n    await page.route('**/api/upload', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the file read API\n    await page.route('**/api/file/read', (route) => {\n      route.continue();\n    });\n\n    // Get the upload area by role\n    const uploadArea = page.getByRole('region', { name: /upload area/i });\n    await expect(uploadArea).toBeVisible();\n\n    // Get the paste button by role\n    const pasteButton = page.getByRole('button', { name: /paste/i });\n    await expect(pasteButton).toBeVisible();\n\n    // Click the paste button\n    await pasteButton.click();\n\n    // Wait for the file to be processed\n    await page.waitForTimeout(500);\n\n    // Verify the image preview appears\n    const imagePreview = page.getByRole('img', { name: /image preview/i });\n    await expect(imagePreview).toBeVisible();\n\n    // Verify the image has a valid source\n    const imgSrc = await imagePreview.getAttribute('src');\n    expect(imgSrc).toContain('data:image');\n\n    // Verify the upload area shows the file name\n    const fileNameDisplay = page.getByText(/image.png/i);\n    await expect(fileNameDisplay).toBeVisible();\n\n    // Verify the upload button is enabled\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await expect(uploadButton).toBeEnabled();\n  });\n\n  test('should handle clipboard paste with invalid or unsupported file types', async ({ page }) => {\n    // Setup: intercept the file upload API\n    await page.route('**/api/upload', (route) => {\n      route.continue();\n    });\n\n    // Get the upload area by role\n    const uploadArea = page.getByRole('region', { name: /upload area/i });\n    await expect(uploadArea).toBeVisible();\n\n    // Get the paste button by role\n    const pasteButton = page.getByRole('button', { name: /paste/i });\n    await expect(pasteButton).toBeVisible();\n\n    // Click the paste button\n    await pasteButton.click();\n\n    // Wait for file processing\n    await page.waitForTimeout(500);\n\n    // Verify error message appears for invalid file type\n    const errorMessage = page.getByText(/invalid file type/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify image preview does not appear\n    const imagePreview = page.getByRole('img', { name: /image preview/i });\n    await expect(imagePreview).not.toBeVisible();\n\n    // Verify upload button remains disabled\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await expect(uploadButton).toBeDisabled();\n\n    // Verify error message is cleared when user clicks clear\n    const clearButton = page.getByRole('button', { name: /clear/i });\n    await clearButton.click();\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7928,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4094,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.545,
+      "feedback_used": ""
+    }
+  ]
+}

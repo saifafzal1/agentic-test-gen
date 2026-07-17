@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_007",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8324,
+  "total_latency_s": 71.182,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Remember Me Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should keep user logged in when \"Remember Me\" is checked', async ({ page }) => {\n    // Verify login form is visible\n    const loginForm = page.getByRole('form', { name: /login/i });\n    await expect(loginForm).toBeVisible();\n\n    // Fill in email and password fields using getByLabel\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('user@example.com');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('Password123');\n\n    // Check \"Remember Me\" checkbox using getByRole\n    const rememberMeCheckbox = page.getByRole('checkbox', { name: /remember me/i });\n    await expect(rememberMeCheckbox).toBeVisible();\n    await rememberMeCheckbox.check();\n\n    // Click login button using getByRole\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await loginButton.click();\n\n    // Verify successful login\n    await expect(page).toHaveURL(/.*dashboard/);\n    const welcomeMessage = page.getByText(/welcome/i);\n    await expect(welcomeMessage).toBeVisible();\n\n    // Verify user is logged in\n    const userProfile = page.getByRole('link', { name: /profile/i });\n    await expect(userProfile).toBeVisible();\n\n    // Verify \"Remember Me\" checkbox is checked\n    await expect(rememberMeCheckbox).toBeChecked();\n  });\n\n  test('should not keep user logged in when \"Remember Me\" is unchecked', async ({ page }) => {\n    // Verify login form is visible\n    const loginForm = page.getByRole('form', { name: /login/i });\n    await expect(loginForm).toBeVisible();\n\n    // Fill in email and password fields using getByLabel\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('user@example.com');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('Password123');\n\n    // Verify \"Remember Me\" checkbox is visible\n    const rememberMeCheckbox = page.getByRole('checkbox', { name: /remember me/i });\n    await expect(rememberMeCheckbox).toBeVisible();\n\n    // Verify \"Remember Me\" checkbox is unchecked by default\n    await expect(rememberMeCheckbox).not.toBeChecked();\n\n    // Click login button using getByRole\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await loginButton.click();\n\n    // Verify successful login\n    await expect(page).toHaveURL(/.*dashboard/);\n    const welcomeMessage = page.getByText(/welcome/i);\n    await expect(welcomeMessage).toBeVisible();\n\n    // Verify user is logged in\n    const userProfile = page.getByRole('link', { name: /profile/i });\n    await expect(userProfile).toBeVisible();\n\n    // Verify \"Remember Me\" checkbox is unchecked\n    await expect(rememberMeCheckbox).not.toBeChecked();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8324,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4413,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.182,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_279",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.84,
+  "total_latency_s": 41.712,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Email Address Change with Confirmation Step', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/profile');\n  });\n\n  test('should successfully change email address with confirmation step', async ({ page }) => {\n    // Setup: Fill in current email\n    const emailInput = page.getByLabel('Current Email Address');\n    await emailInput.fill('user@example.com');\n\n    // Setup: Fill in new email\n    const newEmailInput = page.getByLabel('New Email Address');\n    await newEmailInput.fill('newuser@example.com');\n\n    // Setup: Click change button\n    const changeButton = page.getByRole('button', { name: /change email/i });\n    await changeButton.click();\n\n    // Verify confirmation modal appears\n    const confirmationModal = page.locator('[data-testid=\"confirmation-modal\"]');\n    await expect(confirmationModal).toBeVisible();\n\n    // Verify confirmation button is visible\n    const confirmButton = page.getByRole('button', { name: /confirm/i });\n    await expect(confirmButton).toBeVisible();\n\n    // Verify cancel button is visible\n    const cancelButton = page.getByRole('button', { name: /cancel/i });\n    await expect(cancelButton).toBeVisible();\n\n    // Verify email input fields are populated\n    await expect(emailInput).toHaveValue('newuser@example.com');\n    await expect(newEmailInput).toHaveValue('newuser@example.com');\n\n    // Verify success message is displayed\n    const successMessage = page.getByText(/email address changed successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify user is redirected to profile page\n    await expect(page).toHaveURL(/profile/);\n  });\n\n  test('should display error when confirmation fails', async ({ page }) => {\n    // Setup: Fill in current email\n    const emailInput = page.getByLabel('Current Email Address');\n    await emailInput.fill('user@example.com');\n\n    // Setup: Fill in new email\n    const newEmailInput = page.getByLabel('New Email Address');\n    await newEmailInput.fill('invalid-email');\n\n    // Setup: Click change button\n    const changeButton = page.getByRole('button', { name: /change email/i });\n    await changeButton.click();\n\n    // Verify confirmation modal appears\n    const confirmationModal = page.locator('[data-testid=\"confirmation-modal\"]');\n    await expect(confirmationModal).toBeVisible();\n\n    // Verify confirmation button is visible\n    const confirmButton = page.getByRole('button', { name: /confirm/i });\n    await expect(confirmButton).toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/invalid email address/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify user is not redirected\n    await expect(page).toHaveURL(/profile/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.84,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4666,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 41.712,
+      "feedback_used": ""
+    }
+  ]
+}

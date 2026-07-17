@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_156",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.5214,
+  "total_latency_s": 341.369,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Row Numbering', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should display row numbers in the first column of a table', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify row number column header exists\n    const rowNumberHeader = page.getByRole('columnheader', { name: /row number/i });\n    await expect(rowNumberHeader).toBeVisible();\n\n    // Verify row number column has at least 1 row\n    const rowNumberColumn = page.locator('[data-testid=\"row-number-column\"]');\n    const rowCount = await rowNumberColumn.locator('tr').count();\n    expect(rowCount).toBeGreaterThan(0);\n\n    // Verify row numbers are displayed\n    const firstRowNumber = page.locator('[data-testid=\"row-number-cell\"]').first();\n    const firstRowNumberText = await firstRowNumber.textContent();\n    expect(firstRowNumberText).toContain('1');\n\n    const lastRowNumber = page.locator('[data-testid=\"row-number-cell\"]').last();\n    const lastRowNumberText = await lastRowNumber.textContent();\n    expect(lastRowNumberText).toContain(String(rowCount);\n  });\n\n  test('should handle edge case with empty table and not display row numbers', async ({ page }) => {\n    // Navigate to empty table view\n    await page.goto('/table-list/empty');\n\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify no row number column header exists\n    const rowNumberHeader = page.getByRole('columnheader', { name: /row number/i });\n    await expect(rowNumberHeader).not.toBeVisible();\n\n    // Verify no row number cells exist\n    const rowNumberCells = page.locator('[data-testid=\"row-number-cell\"]');\n    const cellCount = await rowNumberCells.count();\n    expect(cellCount).toBe(0);\n\n    // Verify empty state message is displayed\n    const emptyMessage = page.getByText(/no data available/i);\n    await expect(emptyMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5214,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4915,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.395,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.5178,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4793,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 110.298,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.5178,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4793,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 158.676,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

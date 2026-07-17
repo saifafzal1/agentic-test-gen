@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_282",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7981,
+  "total_latency_s": 780.058,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dark Mode Toggle Preferences', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/settings');\n  });\n\n  test('should successfully toggle dark mode from preferences and apply to the app', async ({ page }) => {\n    // Verify dark mode is disabled by default\n    const darkModeToggle = page.getByRole('button', { name: /dark mode/i });\n    await expect(darkModeToggle).toBeVisible();\n    await expect(darkModeToggle).toHaveAttribute('aria-pressed', 'false');\n\n    // Verify the app is in light mode\n    const appBackground = page.getByTestId('app-background');\n    await expect(appBackground).toHaveStyle('background-color: #ffffff');\n\n    // Verify the toggle button is disabled when dark mode is disabled\n    await expect(darkModeToggle).toHaveAttribute('disabled', 'true');\n\n    // Click the dark mode toggle button to enable dark mode\n    await darkModeToggle.click();\n\n    // Verify the toggle button is now enabled\n    await expect(darkModeToggle).not.toHaveAttribute('disabled', 'true');\n\n    // Verify the toggle button is now active\n    await expect(darkModeToggle).toHaveAttribute('aria-pressed', 'true');\n\n    // Verify the app background color changes to dark mode\n    await expect(appBackground).toHaveStyle('background-color: #000000');\n\n    // Verify the toggle button text changes to reflect the active state\n    const toggleText = page.getByText(/dark mode/i);\n    await expect(toggleText).toContainText('enabled');\n\n    // Verify the toggle button is visible and accessible\n    await expect(darkModeToggle).toBeVisible();\n\n    // Verify the toggle button is still accessible using getByRole\n    const toggleButton = page.getByRole('button', { name: /dark mode/i });\n    await expect(toggleButton).toBeVisible();\n  });\n\n  test('should revert to light mode when dark mode is disabled from preferences', async ({ page }) => {\n    // Verify dark mode is enabled by default\n    const darkModeToggle = page.getByRole('button', { name: /dark mode/i });\n    await expect(darkModeToggle).toBeVisible();\n    await expect(darkModeToggle).toHaveAttribute('aria-pressed', 'true');\n\n    // Verify the app is in dark mode\n    const appBackground = page.getByTestId('app-background');\n    await expect(appBackground).toHaveStyle('background-color: #000000');\n\n    // Verify the toggle button is enabled\n    await expect(darkModeToggle).not.toHaveAttribute('disabled', 'true');\n\n    // Click the dark mode toggle button to disable dark mode\n    await darkModeToggle.click();\n\n    // Verify the toggle button is now disabled\n    await expect(darkModeToggle).toHaveAttribute('disabled', 'true');\n\n    // Verify the toggle button is now inactive\n    await expect(darkModeToggle).not.toHaveAttribute('aria-pressed', 'true');\n\n    // Verify the app background color reverts to light mode\n    await expect(appBackground).toHaveStyle('background-color: #ffffff');\n\n    // Verify the toggle button text reverts to reflect the disabled state\n    const toggleText = page.getByText(/dark mode/i);\n    await expect(toggleText).toContainText('disabled');\n\n    // Verify the toggle button is still visible and accessible\n    await expect(darkModeToggle).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4798,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3528,
+        "missing_keywords": [],
+        "assertion_count": 24,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 308.295,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7981,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.427,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 471.763,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

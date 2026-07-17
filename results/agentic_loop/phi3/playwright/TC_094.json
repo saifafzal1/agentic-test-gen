@@ -1,0 +1,59 @@
+{
+  "tc_id": "TC_094",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.5143,
+  "total_latency_s": 1458.673,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Permissions - Edit Content', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display permissions error when editing another user\\'s content', async ({ page }) => {\n    // Setup: Navigate to user profile page\n    await page.getByRole('button', { name: /view user/i }).click();\n    const userProfilePage = page.getByRole('region', { name: /user profile/i });\n    await expect(userProfilePage).toBeVisible();\n\n    // Intercept API call to get user details\n    await page.route('**/api/users/12345/details', (route) => {\n      route.abort('failed');\n    });\n\n    // Verify error message is visible\n    const errorMessage = page.getByText(/permission denied/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify edit button is disabled\n    const editButton = page.getByRole('button', { name: /edit content/i });\n    await expect(editButton).toBeDisabled();\n\n    // Verify error icon is visible\n    const errorIcon = page.getByRole('img', { name: /error/i });\n    await expect(errorIcon).toBeVisible();\n\n    // Verify user profile details are not displayed\n    await expect(userProfilePage).not.toBeVisible();\n  });\n\n  test('should allow editing own content without permission error', async ({ page }) => {\n    // Setup: Navigate to user profile page\n    await page.getByRole('button', { name: /view user/i }).click();\n    const userProfilePage = page.getByRole('region', { name: /user profile/i });\n    await expect(userProfilePage).toBeVisible();\n\n    // Intercept API call to get user details\n    await page.route('**/api/users/12345/details', (route) => {\n      route.continue();\n    });\n\n    // Verify user details are displayed\n    const userName = page.getByText(/John Doe/i);\n    await expect(userName).toBeVisible();\n\n    // Verify edit button is enabled\n    const editButton = page.getByRole('button', { name: /edit content/i });\n    await expect(editButton).toBeEnabled();\n\n    // Verify edit button is visible\n    await expect(editButton).toBeVisible();\n\n    // Verify edit button is clickable\n    await expect(editButton).toBeClickable();\n\n    // Verify edit form is visible\n    const editForm = page.getByRole('form', { name: /edit content/i });\n    await expect(editForm).toBeVisible();\n\n    // Verify form fields are present\n    const titleInput = page.getByLabel(/title/i);\n    await expect(titleInput).toBeVisible();\n\n    const contentInput = page.getByLabel(/content/i);\n    await expect(contentInput).toBeVisible();\n\n    // Verify save button is visible\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await expect(saveButton).toBeVisible();\n\n    // Verify save button is clickable\n    await expect(saveButton).toBeClickable();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/content saved successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify edit button is now disabled\n    await expect(editButton).toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5143,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4475,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 402.892,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.301,
+        "syntax": 0.185,
+        "assertion": 0.5,
+        "rouge_l": 0.2566,
+        "missing_keywords": [],
+        "assertion_count": 1,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Insufficient assertions \u2014 found 1 in 1 block(s), need at least 2",
+        "complete": false
+      },
+      "latency_s": 502.211,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.1035,
+        "syntax": 0.115,
+        "assertion": 0.0,
+        "rouge_l": 0.1917,
+        "missing_keywords": [
+          "expect("
+        ],
+        "assertion_count": 0,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2",
+        "complete": false
+      },
+      "latency_s": 553.57,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Insufficient assertions \u2014 found 1 in 1 block(s), need at least 2"
+    }
+  ]
+}

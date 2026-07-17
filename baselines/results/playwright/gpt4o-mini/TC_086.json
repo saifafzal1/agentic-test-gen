@@ -1,0 +1,13 @@
+{
+  "id": "TC_086",
+  "category": "crud_operations",
+  "complexity": "simple",
+  "user_story": "As a user, I want to mark a record as favourite.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mark record as favourite', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should mark a record as favourite', async ({ page }) => {\n    await page.getByText('Record Title 1').click();\n    await page.getByRole('button', { name: 'Mark as Favourite' }).click();\n    const favouriteMessage = await page.getByText('Record marked as favourite');\n    await expect(favouriteMessage).toBeVisible();\n  });\n\n  test('should show favourite status on record list', async ({ page }) => {\n    await page.getByText('Record Title 1').click();\n    await page.getByRole('button', { name: 'Mark as Favourite' }).click();\n    await page.goto('/records');\n    const favouriteIndicator = await page.getByText('\u2605 Record Title 1');\n    await expect(favouriteIndicator).toBeVisible();\n  });\n});",
+  "prompt_tokens": 130,
+  "completion_tokens": 210,
+  "latency_s": 3.08,
+  "timestamp": "2026-06-19T16:49:21.847375"
+}

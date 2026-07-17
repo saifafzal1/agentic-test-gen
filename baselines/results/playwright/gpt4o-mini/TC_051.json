@@ -1,0 +1,13 @@
+{
+  "id": "TC_051",
+  "category": "navigation",
+  "complexity": "medium",
+  "user_story": "As a user, I want the mobile hamburger menu to open and close correctly.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mobile Hamburger Menu', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should open the hamburger menu when clicked', async ({ page }) => {\n    const hamburgerMenu = page.getByRole('button', { name: /menu/i });\n    await hamburgerMenu.click();\n    \n    const menu = page.getByRole('navigation');\n    await expect(menu).toBeVisible();\n  });\n\n  test('should close the hamburger menu when clicked again', async ({ page }) => {\n    const hamburgerMenu = page.getByRole('button', { name: /menu/i });\n    await hamburgerMenu.click(); // Open the menu\n    await hamburgerMenu.click(); // Close the menu\n    \n    const menu = page.getByRole('navigation');\n    await expect(menu).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 199,
+  "latency_s": 3.15,
+  "timestamp": "2026-06-19T16:46:52.593881"
+}

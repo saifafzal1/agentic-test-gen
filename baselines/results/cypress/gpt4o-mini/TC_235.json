@@ -1,0 +1,13 @@
+{
+  "id": "TC_235",
+  "category": "responsive",
+  "complexity": "complex",
+  "user_story": "As a user, I want a bottom sheet to replace dropdowns on mobile.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Bottom Sheet Functionality', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n        cy.viewport('iphone-6'); // Simulate mobile viewport\n    });\n\n    it('should display the bottom sheet when the button is clicked', () => {\n        cy.get('[data-testid=\"open-bottom-sheet\"]').click(); // Replace with the actual selector\n        cy.get('[data-testid=\"bottom-sheet\"]').should('be.visible'); // Check if bottom sheet is visible\n    });\n\n    it('should close the bottom sheet when the close button is clicked', () => {\n        cy.get('[data-testid=\"open-bottom-sheet\"]').click(); // Open the bottom sheet\n        cy.get('[data-testid=\"close-bottom-sheet\"]').click(); // Replace with the actual selector\n        cy.get('[data-testid=\"bottom-sheet\"]').should('not.be.visible'); // Check if bottom sheet is closed\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 193,
+  "latency_s": 3.55,
+  "timestamp": "2026-06-19T16:39:43.460096"
+}

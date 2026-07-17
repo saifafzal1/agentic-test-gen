@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_010",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7523,
+  "total_latency_s": 424.204,
+  "final_script": "describe('Google OAuth Login Flow', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should successfully authenticate with Google OAuth and redirect to dashboard', () => {\n    // Intercept the Google OAuth API call\n    cy.intercept('POST', '/api/auth/google/callback').as('googleAuth');\n\n    // Click the Google OAuth button\n    cy.get('[data-testid=\"google-login-button\"]').click();\n\n    // Verify the login modal appears\n    cy.get('[data-testid=\"login-modal\"]').should('be.visible');\n\n    // Fill in the Google OAuth form\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('correctpassword');\n\n    // Click the login button\n    cy.get('[data-testid=\"google-login-submit\"]').click();\n\n    // Wait for the Google OAuth callback\n    cy.wait('@googleAuth');\n\n    // Verify successful authentication\n    cy.get('[data-testid=\"user-profile\"]').should('be.visible');\n    cy.get('[data-testid=\"user-name\"]').should('contain', 'User');\n\n    // Verify redirection to dashboard\n    cy.url().should('include', '/dashboard');\n\n    // Verify dashboard is visible\n    cy.get('[data-testid=\"dashboard-header\"]').should('be.visible');\n  });\n\n  it('should handle failed Google OAuth login attempt and show error message', () => {\n    // Intercept the Google OAuth API call\n    cy.intercept('POST', '/api/auth/google/callback').as('googleAuth');\n\n    // Click the Google OAuth button\n    cy.get('[data-testid=\"google-login-button\"]').click();\n\n    // Verify the login modal appears\n    cy.get('[data-testid=\"login-modal\"]').should('be.visible');\n\n    // Fill in the Google OAuth form with invalid credentials\n    cy.get('[data-testid=\"email-input\"]').type('invalid-email');\n    cy.get('[data-testid=\"password-input\"]').type('wrongpassword');\n\n    // Click the login button\n    cy.get('[data-testid=\"google-login-submit\"]').click();\n\n    // Wait for the failed Google OAuth callback\n    cy.wait('@googleAuth', { timeout: 5000 });\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid credentials');\n\n    // Verify login modal is still visible\n    cy.get('[data-testid=\"login-modal\"]').should('be.visible');\n\n    // Verify user is not redirected to dashboard\n    cy.url().should('not.include', '/dashboard');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7523,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3744,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 424.204,
+      "feedback_used": ""
+    }
+  ]
+}

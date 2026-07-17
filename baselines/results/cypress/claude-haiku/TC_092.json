@@ -1,0 +1,13 @@
+{
+  "id": "TC_092",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a user, I want an error to clear when I correct the invalid input.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Error State - Clear on Valid Input', () => {\n  beforeEach(() => {\n    cy.visit('http://localhost:3000');\n    cy.get('input[name=\"email\"]').as('emailInput');\n    cy.get('[data-testid=\"error-message\"]').as('errorMessage');\n  });\n\n  it('should display error for invalid input and clear when corrected', () => {\n    // Enter invalid email\n    cy.get('@emailInput').type('invalid-email');\n    cy.get('@emailInput').blur();\n\n    // Verify error is displayed\n    cy.get('@errorMessage')\n      .should('be.visible')\n      .and('contain', 'Please enter a valid email');\n\n    // Clear input and enter valid email\n    cy.get('@emailInput').clear().type('user@example.com');\n    cy.get('@emailInput').blur();\n\n    // Verify error is cleared\n    cy.get('@errorMessage').should('not.exist');\n    cy.get('@emailInput').should('have.css', 'border-color').and('not.include', 'red');\n  });\n\n  it('should handle multiple corrections and error state transitions', () => {\n    // First invalid input\n    cy.get('@emailInput').type('abc');\n    cy.get('@emailInput').blur();\n    cy.get('@errorMessage').should('be.visible');\n\n    // Correct to valid input\n    cy.get('@emailInput').clear().type('test@domain.com');\n    cy.get('@emailInput').blur();\n    cy.get('@errorMessage').should('not.exist');\n\n    // Invalid input again\n    cy.get('@emailInput').clear().type('invalid@');\n    cy.get('@emailInput').blur();\n    cy.get('@errorMessage').should('be.visible');\n\n    // Final correction\n    cy.get('@emailInput').clear().type('final@example.com');\n    cy.get('@emailInput').blur();\n    cy.get('@errorMessage').should('not.exist');\n  });\n\n  it('should clear error immediately on input change for real-time validation', () => {\n    // Enter invalid input\n    cy.get('@emailInput').type('invalid');\n    cy.get('@emailInput').blur();\n    cy.get('@errorMessage').should('be.visible');\n\n    // Start typing correction\n    cy.get('@emailInput').type('@example.com');\n\n    // Error should clear on valid input\n    cy.get('@errorMessage').should('not.exist');\n  });\n});",
+  "prompt_tokens": 122,
+  "completion_tokens": 597,
+  "latency_s": 4.43,
+  "timestamp": "2026-06-19T17:14:53.643337"
+}

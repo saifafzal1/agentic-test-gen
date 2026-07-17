@@ -1,0 +1,13 @@
+{
+  "id": "TC_137",
+  "category": "modal_dialog",
+  "complexity": "simple",
+  "user_story": "As a user, I want the page behind a modal to not scroll when the modal is open.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Modal Dialog Scroll Behavior', () => {\n    beforeEach(() => {\n        cy.visit('/your-page-url'); // Replace with the actual URL of the page\n        cy.get('.open-modal-button').click(); // Replace with the actual selector to open the modal\n    });\n\n    it('should not allow the background page to scroll when the modal is open', () => {\n        cy.get('body').should('have.css', 'overflow', 'hidden'); // Check if body overflow is hidden\n        cy.get('.modal').should('be.visible'); // Ensure the modal is visible\n    });\n\n    it('should allow the background page to scroll when the modal is closed', () => {\n        cy.get('.close-modal-button').click(); // Replace with the actual selector to close the modal\n        cy.get('body').should('not.have.css', 'overflow', 'hidden'); // Check if body overflow is not hidden\n    });\n});",
+  "prompt_tokens": 114,
+  "completion_tokens": 192,
+  "latency_s": 2.49,
+  "timestamp": "2026-06-19T16:34:22.404095"
+}

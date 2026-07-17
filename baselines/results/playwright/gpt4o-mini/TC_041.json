@@ -1,0 +1,13 @@
+{
+  "id": "TC_041",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want a 404 page to appear for invalid URLs.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('404 Page Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('http://example.com'); // Replace with the actual base URL\n  });\n\n  test('should display 404 page for invalid URL', async ({ page }) => {\n    await page.goto('http://example.com/invalid-url'); // Replace with an invalid URL\n    const heading = await page.getByRole('heading', { name: /404 Not Found/i });\n    await expect(heading).toBeVisible();\n  });\n\n  test('should have a link to go back to home on 404 page', async ({ page }) => {\n    await page.goto('http://example.com/invalid-url'); // Replace with an invalid URL\n    const homeLink = await page.getByRole('link', { name: /Home/i });\n    await expect(homeLink).toBeVisible();\n    await homeLink.click();\n    await expect(page).toHaveURL('http://example.com/'); // Replace with the actual home URL\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 228,
+  "latency_s": 3.56,
+  "timestamp": "2026-06-19T16:46:17.377197"
+}

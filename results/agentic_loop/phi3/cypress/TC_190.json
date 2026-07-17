@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_190",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7808,
+  "total_latency_s": 40.884,
+  "final_script": "describe('Clear All Filters Button', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should clear all applied filters when clear button is clicked', () => {\n    // Apply multiple filters\n    cy.get('[data-testid=\"filter-input-category\"]').type('books');\n    cy.get('[data-testid=\"filter-input-author\"]').type('J.K. Rowling');\n    cy.get('[data-testid=\"filter-input-price\"]').type('10');\n    cy.get('[data-testid=\"apply-filters-btn\"]').click();\n\n    // Verify filters are applied\n    cy.get('[data-testid=\"filter-results-count\"]').should('contain', '3 results');\n    cy.get('[data-testid=\"filter-category\"]').should('contain', 'books');\n    cy.get('[data-testid=\"filter-author\"]').should('contain', 'J.K. Rowling');\n    cy.get('[data-testid=\"filter-price\"]').should('contain', '10');\n\n    // Click clear button\n    cy.get('[data-testid=\"clear-filters-btn\"]').click();\n\n    // Verify filters are cleared\n    cy.get('[data-testid=\"filter-results-count\"]').should('contain', '0 results');\n    cy.get('[data-testid=\"filter-category\"]').should('not.exist');\n    cy.get('[data-testid=\"filter-author\"]').should('not.exist');\n    cy.get('[data-testid=\"filter-price\"]').should('not.exist');\n\n    // Verify page is still visible\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n  });\n\n  it('should not clear filters when clear button is disabled', () => {\n    // Apply filters\n    cy.get('[data-testid=\"filter-input-category\"]').type('books');\n    cy.get('[data-testid=\"filter-input-author\"]').type('J.K. Rowling');\n    cy.get('[data-testid=\"filter-input-price\"]').type('10');\n    cy.get('[data-testid=\"apply-filters-btn\"]').click();\n\n    // Verify filters are applied\n    cy.get('[data-testid=\"filter-results-count\"]').should('contain', '3 results');\n\n    // Disable clear button\n    cy.get('[data-testid=\"clear-filters-btn\"]').should('be.visible');\n    cy.get('[data-testid=\"clear-filters-btn\"]').click();\n    cy.get('[data-testid=\"clear-filters-btn\"]').should('be.disabled');\n\n    // Verify clear button is disabled\n    cy.get('[data-testid=\"clear-filters-btn\"]').should('have.attr', 'disabled');\n\n    // Verify filters are still applied\n    cy.get('[data-testid=\"filter-results-count\"]').should('contain', '3 results');\n\n    // Verify page is still visible\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7808,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4693,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 40.884,
+      "feedback_used": ""
+    }
+  ]
+}

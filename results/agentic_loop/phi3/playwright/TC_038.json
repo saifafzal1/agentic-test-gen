@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_038",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8118,
+  "total_latency_s": 25.862,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Home Page Navigation via Logo', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should navigate to home page when logo is clicked', async ({ page }) => {\n    // Verify logo is visible\n    const logo = page.getByRole('img', { name: /logo/i });\n    await expect(logo).toBeVisible();\n\n    // Verify home page content is visible\n    const homeTitle = page.getByRole('heading', { name: /home/i });\n    await expect(homeTitle).toBeVisible();\n\n    // Verify navigation link is visible\n    const navLink = page.getByRole('link', { name: /home/i });\n    await expect(navLink).toBeVisible();\n\n    // Click the logo using getByRole\n    await logo.click();\n\n    // Verify navigation link is no longer visible\n    await expect(navLink).not.toBeVisible();\n\n    // Verify home page content is still visible\n    await expect(homeTitle).toBeVisible();\n  });\n\n  test('should handle logo click when home page is already active', async ({ page }) => {\n    // Navigate to home page\n    await page.goto('/');\n\n    // Verify home page content is visible\n    const homeTitle = page.getByRole('heading', { name: /home/i });\n    await expect(homeTitle).toBeVisible();\n\n    // Verify navigation link is visible\n    const navLink = page.getByRole('link', { name: /home/i });\n    await expect(navLink).toBeVisible();\n\n    // Click the logo using getByRole\n    await page.getByRole('img', { name: /logo/i }).click();\n\n    // Verify navigation link is still visible (should not disappear)\n    await expect(navLink).toBeVisible();\n\n    // Verify home page content is still visible\n    await expect(homeTitle).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8118,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4726,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 25.862,
+      "feedback_used": ""
+    }
+  ]
+}

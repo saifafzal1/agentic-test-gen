@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_011",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.844,
+  "total_latency_s": 71.056,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Password Strength Indicator', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/signup');\n  });\n\n  test('should display password strength indicator with appropriate feedback', async ({ page }) => {\n    // Verify password input field is visible\n    const passwordInput = page.getByLabel('Password');\n    await expect(passwordInput).toBeVisible();\n\n    // Verify strength indicator is visible\n    const strengthIndicator = page.getByRole('status', { name: /password strength/i });\n    await expect(strengthIndicator).toBeVisible();\n\n    // Set weak password\n    await passwordInput.fill('password123');\n    const weakIndicator = page.getByText('Weak');\n    await expect(weakIndicator).toBeVisible();\n\n    // Set medium password\n    await passwordInput.fill('Password123');\n    const mediumIndicator = page.getByText('Medium');\n    await expect(mediumIndicator).toBeVisible();\n\n    // Set strong password\n    await passwordInput.fill('P@ssword123!');\n    const strongIndicator = page.getByText('Strong');\n    await expect(strongIndicator).toBeVisible();\n\n    // Verify password confirmation field is visible\n    const confirmPasswordInput = page.getByLabel('Confirm Password');\n    await expect(confirmPasswordInput).toBeVisible();\n  });\n\n  test('should handle edge cases for password strength indicator', async ({ page }) => {\n    // Verify password input field is visible\n    const passwordInput = page.getByLabel('Password');\n    await expect(passwordInput).toBeVisible();\n\n    // Set empty password\n    await passwordInput.fill('');\n    const emptyIndicator = page.getByText('Too short');\n    await expect(emptyIndicator).toBeVisible();\n\n    // Set password with special characters only\n    await passwordInput.fill('!#$%^&*');\n    const weakIndicator = page.getByText('Weak');\n    await expect(weakIndicator).toBeVisible();\n\n    // Set password with numbers only\n    await passwordInput.fill('12349');\n    const weakIndicator2 = page.getByText('Weak');\n    await expect(weakIndicator2).toBeVisible();\n\n    // Set password with mixed case and special characters\n    await passwordInput.fill('P@ssword123!');\n    const strongIndicator = page.getByText('Strong');\n    await expect(strongIndicator).toBeVisible();\n\n    // Verify error message appears when passwords do not match\n    const confirmPasswordInput = page.getByLabel('Confirm Password');\n    await confirmPasswordInput.fill('wrongpassword');\n    const errorMsg = page.getByText('Passwords and confirmations do not match');\n    await expect(errorMsg).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.844,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.48,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.056,
+      "feedback_used": ""
+    }
+  ]
+}

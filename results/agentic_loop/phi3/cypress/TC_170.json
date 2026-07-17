@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_170",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7501,
+  "total_latency_s": 46.024,
+  "final_script": "describe('File Upload Progress Bar', () => {\n  beforeEach(() => {\n    cy.visit('/file-upload');\n  });\n\n  it('should display progress bar and update as file is uploaded', () => {\n    // Intercept the file upload API call\n    cy.intercept('POST', '/api/upload/file', {\n      statusCode: 200,\n      body: {\n        fileId: '12345',\n        fileSize: 1024 * 1024,\n        status: 'success'\n      }\n    }).as('uploadFile');\n\n    // Select file input and upload\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/test-file.pdf', { force: true });\n\n    // Verify progress bar is visible\n    cy.get('[data-testid=\"progress-bar\"]').should('be.visible');\n    cy.get('[data-testid=\"progress-bar\"]').should('have.class', 'progress-bar');\n\n    // Verify initial progress is 0%\n    cy.get('[data-testid=\"progress-bar\"]').should('have.attr', 'aria-valuenow', '0');\n\n    // Wait for file upload API call\n    cy.wait('@uploadFile');\n\n    // Verify progress bar updates\n    cy.get('[data-testid=\"progress-bar\"]').should('have.attr', 'aria-valuenow', '50');\n\n    // Verify progress bar reaches 100%\n    cy.get('[data-testid=\"progress-bar\"]').should('have.attr', 'aria-valuenow', '100');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'File uploaded successfully');\n\n    // Verify file is listed in uploads\n    cy.get('[data-testid=\"uploads-list\"]').should('be.visible');\n    cy.get('[data-testid=\"upload-item\"]').should('contain', 'test-file.pdf');\n  });\n\n  it('should handle file upload interruption and show error state', () => {\n    // Intercept the file upload API call\n    cy.intercept('POST', '/api/upload/file', {\n      statusCode: 500,\n      body: {\n        error: 'Server error occurred during upload'\n      }\n    }).as('uploadFileError');\n\n    // Select file input and upload\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/test-file.pdf', { force: true });\n\n    // Verify progress bar is visible\n    cy.get('[data-testid=\"progress-bar\"]').should('be.visible');\n\n    // Wait for file upload API call\n    cy.wait('@uploadFileError');\n\n    // Verify progress bar does not reach 100%\n    cy.get('[data-testid=\"progress-bar\"]').should('have.attr', 'aria-valuenow', '50');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Upload failed');\n\n    // Verify file is not listed in uploads\n    cy.get('[data-testid=\"uploads-list\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7501,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3671,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 46.024,
+      "feedback_used": ""
+    }
+  ]
+}

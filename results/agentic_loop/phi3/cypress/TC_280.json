@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_280",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7326,
+  "total_latency_s": 410.339,
+  "final_script": "describe('Password Change from Profile Settings', () => {\n  beforeEach(() => {\n    cy.visit('/profile');\n  });\n\n  it('should successfully change password with valid input', () => {\n    // Verify initial password is displayed\n    cy.get('[data-testid=\"current-password-input\"]').should('be.visible');\n    cy.get('[data-testid=\"current-password-input\"]').type('oldPassword123');\n\n    // Verify password change button is enabled\n    cy.get('[data-testid=\"change-password-button\"]').should('be.visible');\n\n    // Click change password button\n    cy.get('[data-testid=\"change-password-button\"]').click();\n\n    // Verify password fields are visible\n    cy.get('[data-testid=\"new-password-input\"]').should('be.visible');\n    cy.get('[data-testid=\"new-password-input\"]').type('NewSecurePassword123');\n\n    cy.get('[data-testid=\"confirm-password-input\"]').should('be.visible');\n    cy.get('[data-testid=\"confirm-password-input\"]').type('NewSecurePassword123');\n\n    // Verify password strength validation\n    cy.get('[data-testid=\"password-strength-indicator\"]').should('be.visible');\n    cy.get('[data-testid=\"password-strength-indicator\"]').should('contain', 'Strong');\n\n    // Verify password change button is enabled\n    cy.get('[data-testid=\"change-password-button\"]').should('be.visible');\n\n    // Click change password button\n    cy.get('[data-testid=\"change-password-button\"]').click();\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Password changed successfully');\n\n    // Verify old password field is cleared\n    cy.get('[data-testid=\"current-password-input\"]').should('not.exist');\n\n    // Verify profile page is still visible\n    cy.get('[data-testid=\"profile-header\"]').should('be.visible');\n  });\n\n  it('should display error when confirm password does not match', () => {\n    // Verify initial password is displayed\n    cy.get('[data-testid=\"current-password-input\"]').should('be.visible');\n    cy.get('[data-testid=\"current-password-input\"]').type('oldPassword123');\n\n    // Verify password change button is enabled\n    cy.get('[data-testid=\"change-password-button\"]').should('be.visible');\n\n    // Click change password button\n    cy.get('[data-testid=\"change-password-button\"]').click();\n\n    // Verify new password fields are visible\n    cy.get('[data-testid=\"new-password-input\"]').should('be.visible');\n    cy.get('[data-testid=\"new-password-input\"]').type('NewSecurePassword123');\n\n    // Verify confirm password field is visible\n    cy.get('[data-testid=\"confirm-password-input\"]').should('be.visible');\n\n    // Type different password in confirm field\n    cy.get('[data-testid=\"confirm-password-input\"]').type('IncorrectPassword123');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Passwords do not match');\n\n    // Verify password change button is disabled\n    cy.get('[data-testid=\"change-password-button\"]').should('be.disabled');\n\n    // Verify old password field is still visible\n    cy.get('[data-testid=\"current-password-input\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7326,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3088,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 410.339,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_049",
+  "category": "navigation",
+  "complexity": "complex",
+  "user_story": "As a user, I want to use the browser Back button without breaking the app state.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Browser Back Button Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com');\n    await page.getByRole('link', { name: 'Navigate to Page 1' }).click();\n    await page.getByRole('link', { name: 'Navigate to Page 2' }).click();\n  });\n\n  test('should maintain app state after using the back button', async ({ page }) => {\n    await page.goBack();\n    const page1Header = await page.getByText('Page 1 Header');\n    await expect(page1Header).toBeVisible();\n    \n    await page.goBack();\n    const homeHeader = await page.getByText('Home Header');\n    await expect(homeHeader).toBeVisible();\n  });\n\n  test('should return to Page 2 after going forward', async ({ page }) => {\n    await page.goBack();\n    await page.goForward();\n    const page2Header = await page.getByText('Page 2 Header');\n    await expect(page2Header).toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 237,
+  "latency_s": 3.44,
+  "timestamp": "2026-06-19T16:46:45.772402"
+}

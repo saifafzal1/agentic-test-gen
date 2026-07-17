@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_223",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8244,
+  "total_latency_s": 26.878,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Document Language Declaration', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/document-page');\n  });\n\n  test('should display document language in HTML tag when set', async ({ page }) => {\n    // Set document language using getByRole\n    const languageLabel = page.getByRole('heading', { name: /Document Language/i });\n    await expect(languageLabel).toBeVisible();\n\n    // Set language using getByRole\n    const languageInput = page.getByLabel(/document language/i);\n    await languageInput.fill('en-US');\n\n    // Verify language is set in HTML tag\n    const languageTag = page.getByText(/lang=\"en-US\"/i);\n    await expect(languageTag).toBeVisible();\n\n    // Verify language is displayed in the page title\n    const pageTitle = page.getByRole('heading', { name: /Document Title/i });\n    await expect(pageTitle).toContainText('en-US');\n\n    // Verify language is reflected in the page content\n    const content = page.getByText(/Welcome to the document/i);\n    await expect(content).toBeVisible();\n  });\n\n  test('should handle invalid language codes gracefully', async ({ page }) => {\n    // Set invalid language using getByRole\n    const languageInput = page.getByLabel(/document language/i);\n    await languageInput.fill('invalid-lang');\n\n    // Verify language tag is not set\n    const languageTag = page.getByText(/lang=\"en-US\"/i);\n    await expect(languageTag).not.toBeVisible();\n\n    // Verify default language is used\n    const defaultLanguageTag = page.getByText(/lang=\"en\"/i);\n    await expect(defaultLanguageTag).toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/Invalid language code/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify page content is still accessible\n    const content = page.getByText(/Welcome to the document/i);\n    await expect(content).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8244,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4147,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 26.878,
+      "feedback_used": ""
+    }
+  ]
+}

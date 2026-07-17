@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_268",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8117,
+  "total_latency_s": 183.753,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Filtering by Type', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should filter notifications by type (info, warning, error)', async ({ page }) => {\n    // Verify notifications container is visible\n    const notificationsContainer = page.getByRole('region', { name: /notifications/i });\n    await expect(notificationsContainer).toBeVisible();\n\n    // Verify filter buttons are visible\n    const filterButtons = page.getByRole('button', { name: /filter by type/i });\n    await expect(filterButtons).toBeVisible();\n\n    // Click on 'info' filter button\n    const infoFilterButton = page.getByRole('button', { name: /info/i });\n    await infoFilterButton.click();\n\n    // Verify 'info' filter is active\n    await expect(infoFilterButton).toHaveClass(/active/);\n\n    // Verify only info notifications are displayed\n    const infoNotifications = page.getByRole('alert', { name: /info/i });\n    const errorNotifications = page.getByRole('alert', { name: /error/i });\n    const warningNotifications = page.getByRole('alert', { name: /warning/i });\n\n    await expect(infoNotifications).toBeVisible();\n    await expect(errorNotifications).not.toBeVisible();\n    await expect(warningNotifications).not.toBeVisible();\n\n    // Click on 'warning' filter button\n    const warningFilterButton = page.getByRole('button', { name: /warning/i });\n    await warningFilterButton.click();\n\n    // Verify 'warning' filter is active\n    await expect(warningFilterButton).toHaveClass(/active/);\n\n    // Verify only warning notifications are displayed\n    await expect(infoNotifications).not.toBeVisible();\n    await expect(warningNotifications).toBeVisible();\n    await expect(errorNotifications).not.toBeVisible();\n\n    // Click on 'error' filter button\n    const errorFilterButton = page.getByRole('button', { name: /error/i });\n    await errorFilterButton.click();\n\n    // Verify 'error' filter is active\n    await expect(errorFilterButton).toHaveClass(/active/);\n\n    // Verify only error notifications are displayed\n    await expect(infoNotifications).not.toBeVisible();\n    await expect(warningNotifications).not.toBeVisible();\n    await expect(errorNotifications).toBeVisible();\n  });\n\n  test('should handle filter button clicks when no notifications exist', async ({ page }) => {\n    // Navigate to notifications page\n    await page.goto('/notifications');\n\n    // Clear existing notifications\n    const clearButton = page.getByRole('button', { name: /clear all/i });\n    await clearButton.click();\n\n    // Verify notifications container is empty\n    const notificationsContainer = page.getByRole('region', { name: /notifications/i });\n    await expect(notificationsContainer).toBeVisible();\n\n    const noNotificationsMessage = page.getByText(/no notifications found/i);\n    await expect(noNotificationsMessage).toBeVisible();\n\n    // Click on 'info' filter button\n    const infoFilterButton = page.getByRole('button', { name: /info/i });\n    await infoFilterButton.click();\n\n    // Verify 'info' filter is active\n    await expect(infoFilterButton).toHaveClass(/active/);\n\n    // Verify no notifications are displayed\n    await expect(noNotificationsMessage).toBeVisible();\n\n    // Click on 'warning' filter button\n    const warningFilterButton = page.getByRole('button', { name: /warning/i });\n    await warningFilterButton.click();\n\n    // Verify 'warning' filter is active\n    await expect(warningFilterButton).toHaveClass(/active/);\n\n    // Verify no notifications are displayed\n    await expect(noNotificationsMessage).toBeVisible();\n\n    // Click on 'error' filter button\n    const errorFilterButton = page.getByRole('button', { name: /error/i });\n    await errorFilterButton.click();\n\n    // Verify 'error' filter is active\n    await expect(errorFilterButton).toHaveClass(/active/);\n\n    // Verify no notifications are displayed\n    await expect(noNotificationsMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.497,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.41,
+        "missing_keywords": [],
+        "assertion_count": 28,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.363,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8117,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4723,
+        "missing_keywords": [],
+        "assertion_count": 22,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 111.39,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

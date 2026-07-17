@@ -1,0 +1,13 @@
+{
+  "id": "TC_258",
+  "category": "payment_flow",
+  "complexity": "medium",
+  "user_story": "As a user, I want to be redirected to an error page if payment times out.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Payment Flow - Timeout Redirection', () => {\n    beforeEach(() => {\n        cy.visit('/payment'); // Navigate to the payment page\n    });\n\n    it('should redirect to error page on payment timeout (happy path)', () => {\n        // Simulate a payment timeout\n        cy.intercept('POST', '/api/payment', {\n            statusCode: 408,\n            body: { message: 'Payment timeout' },\n        }).as('paymentTimeout');\n\n        cy.get('button#submit-payment').click(); // Trigger payment submission\n        cy.wait('@paymentTimeout'); // Wait for the payment request to complete\n\n        // Assert that the user is redirected to the error page\n        cy.url().should('include', '/error');\n        cy.get('h1').should('contain', 'Payment Error');\n        cy.get('p').should('contain', 'Your payment has timed out. Please try again.');\n    });\n\n    it('should not redirect if payment is successful', () => {\n        // Simulate a successful payment\n        cy.intercept('POST', '/api/payment', {\n            statusCode: 200,\n            body: { message: 'Payment successful' },\n        }).as('paymentSuccess');\n\n        cy.get('button#submit-payment').click(); // Trigger payment submission\n        cy.wait('@paymentSuccess'); // Wait for the payment request to complete\n\n        // Assert that the user is not redirected and remains on the payment page\n        cy.url().should('include', '/payment');\n        cy.get('.success-message').should('contain', 'Payment processed successfully.');\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 327,
+  "latency_s": 14.53,
+  "timestamp": "2026-06-19T16:41:22.926002"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_158",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7775,
+  "total_latency_s": 35.643,
+  "final_script": "describe('Table Row Highlight on Hover', () => {\n  beforeEach(() => {\n    cy.visit('/table');\n  });\n\n  it('should highlight a row when hovering over it', () => {\n    // Get the first row\n    cy.get('[data-testid=\"table-row-1\"]').should('be.visible');\n    \n    // Hover over the row\n    cy.get('[data-testid=\"table-row-1\"]').should('be.visible');\n    cy.get('[data-testid=\"table-row-1\"]').trigger('mouseover');\n    \n    // Verify the row is highlighted\n    cy.get('[data-testid=\"table-row-1\"]').should('have.class', 'highlighted');\n    \n    // Verify the background color has changed\n    cy.get('[data-testid=\"table-row-1\"]').should('have.css', 'background-color', 'rgba(255, 255, 255, 0.1)');\n    \n    // Verify the text color has changed\n    cy.get('[data-testid=\"table-row-1\"]').should('have.css', 'color', 'rgba(0, 0, 0, 0.8)');\n    \n    // Verify the row is still visible\n    cy.get('[data-testid=\"table-row-1\"]').should('be.visible');\n  });\n\n  it('should unhighlight a row when hovering off of it', () => {\n    // Get the first row\n    cy.get('[data-testid=\"table-row-1\"]').should('be.visible');\n    \n    // Hover over the row\n    cy.get('[data-testid=\"table-row-1\"]').trigger('mouseover');\n    \n    // Verify the row is highlighted\n    cy.get('[data-testid=\"table-row-1\"]').should('have.class', 'highlighted');\n    \n    // Hover off the row\n    cy.get('[data-testid=\"table-row-1\"]').trigger('mouseout');\n    \n    // Verify the row is no longer highlighted\n    cy.get('[data-testid=\"table-row-1\"]').should('not.have.class', 'highlighted');\n    \n    // Verify the background color has reverted\n    cy.get('[data-testid=\"table-row-1\"]').should('have.css', 'background-color', '');\n    \n    // Verify the text color has reverted\n    cy.get('[data-testid=\"table-row-1\"]').should('have.css', 'color', '');\n    \n    // Verify the row is still visible\n    cy.get('[data-testid=\"table-row-1\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7775,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4582,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 35.643,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_055",
+  "category": "navigation",
+  "complexity": "complex",
+  "user_story": "As a user, I want pagination controls to load the correct page of results.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Pagination Controls', () => {\n    beforeEach(() => {\n        cy.visit('/results'); // Adjust the URL to the actual page\n    });\n\n    it('should load the correct page of results when clicking the next button', () => {\n        cy.get('.pagination .next').click();\n        cy.url().should('include', 'page=2'); // Adjust based on actual URL structure\n        cy.get('.results').should('have.length', 10); // Assuming 10 results per page\n        cy.get('.results').first().should('contain', 'Expected Result on Page 2'); // Adjust based on expected content\n    });\n\n    it('should not allow navigation to a non-existent page', () => {\n        cy.get('.pagination .next').click(); // Go to page 2\n        cy.get('.pagination .next').click(); // Go to page 3\n        cy.get('.pagination .next').click(); // Go to page 4\n        cy.get('.pagination .next').click(); // Attempt to go to page 5 (non-existent)\n        cy.get('.pagination .next').should('be.disabled'); // Ensure the next button is disabled\n        cy.get('.results').should('have.length', 0); // Assuming no results on non-existent page\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 268,
+  "latency_s": 3.36,
+  "timestamp": "2026-06-19T16:28:42.009907"
+}

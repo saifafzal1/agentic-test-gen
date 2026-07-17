@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_283",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8326,
+  "total_latency_s": 72.399,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Timezone Setting in Profile Settings', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/profile/settings');\n  });\n\n  test('should successfully set timezone and display confirmation message', async ({ page }) => {\n    // Verify profile settings page is loaded\n    const settingsHeader = page.getByRole('heading', { name: /profile settings/i });\n    await expect(settingsHeader).toBeVisible();\n\n    // Verify timezone setting is visible\n    const timezoneLabel = page.getByLabel(/timezone/i);\n    await expect(timezoneLabel).toBeVisible();\n\n    // Verify timezone dropdown exists and is not disabled\n    const timezoneSelect = page.getByRole('combobox', { name: /timezone/i });\n    await expect(timezoneSelect).toBeVisible();\n    await expect(timezoneSelect).not.toBeDisabled();\n\n    // Set timezone to 'America/New_York'\n    await timezoneSelect.selectOption('America/New_York');\n\n    // Click save button\n    const saveButton = page.getByRole('button', { name: /save changes/i });\n    await expect(saveButton).toBeVisible();\n    await saveButton.click();\n\n    // Wait for confirmation message to appear\n    const confirmationMessage = page.getByText(/timezone updated successfully/i);\n    await expect(confirmationMessage).toBeVisible();\n\n    // Verify timezone value is displayed correctly\n    const currentTimezoneDisplay = page.getByText('America/New_York');\n    await expect(currentTimezoneDisplay).toBeVisible();\n\n    // Verify timezone dropdown reflects the selected value\n    await expect(timezoneSelect).toHaveValue('America/New_York');\n  });\n\n  test('should handle timezone setting with invalid input and display error', async ({ page }) => {\n    // Verify timezone setting is visible\n    const timezoneLabel = page.getByLabel(/timezone/i);\n    await expect(timezoneLabel).toBeVisible();\n\n    // Attempt to set timezone with invalid value\n    const timezoneSelect = page.getByRole('combobox', { name: /timezone/i });\n    await timezoneSelect.selectOption('Invalid/Timezone');\n\n    // Click save button\n    const saveButton = page.getByRole('button', { name: /save changes/i });\n    await saveButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/invalid timezone value/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify confirmation message does not appear\n    const successMessage = page.getByText(/timezone updated successfully/i);\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify timezone dropdown retains previous valid value\n    await expect(timezoneSelect).not.toHaveValue('Invalid/Timezone');\n\n    // Verify save button is still enabled for retry\n    await expect(saveButton).not.toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8326,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4421,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.399,
+      "feedback_used": ""
+    }
+  ]
+}

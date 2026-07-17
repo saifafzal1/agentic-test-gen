@@ -1,0 +1,13 @@
+{
+  "id": "TC_021",
+  "category": "form_validation",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see a tooltip explaining password requirements.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Password Requirements Tooltip', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/login'); // Replace with the actual URL\n  });\n\n  test('should display tooltip on password field focus', async ({ page }) => {\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.focus();\n    const tooltip = page.getByText('Password must be at least 8 characters long, include an uppercase letter, a number, and a special character.');\n    await expect(tooltip).toBeVisible();\n  });\n\n  test('should not display tooltip when password field is not focused', async ({ page }) => {\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.blur();\n    const tooltip = page.getByText('Password must be at least 8 characters long, include an uppercase letter, a number, and a special character.');\n    await expect(tooltip).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 215,
+  "latency_s": 3.34,
+  "timestamp": "2026-06-19T16:44:48.718040"
+}

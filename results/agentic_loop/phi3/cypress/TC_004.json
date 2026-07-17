@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_004",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.755,
+  "total_latency_s": 340.604,
+  "final_script": "describe('Protected Page Authentication Redirect', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should redirect unauthenticated user to login when accessing protected page', () => {\n    // Intercept the protected page request\n    cy.intercept('GET', '/api/dashboard').as('dashboardRequest');\n\n    // Attempt to access the protected page without authentication\n    cy.get('[data-testid=\"dashboard-link\"]').click();\n\n    // Wait for the intercepted request\n    cy.wait('@dashboardRequest');\n\n    // Verify the user is redirected to login page\n    cy.url().should('include', '/login');\n    cy.get('[data-testid=\"login-page\"]').should('be.visible');\n\n    // Verify login page contains appropriate error message\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please log in to access this page');\n\n    // Verify login button is visible\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n  });\n\n  it('should handle edge case where user is already logged in and tries to access protected page', () => {\n    // Mock successful authentication\n    cy.intercept('POST', '/api/auth/login', {\n      statusCode: 200,\n      body: { token: 'valid-token' }\n    }).as('loginSuccess');\n\n    // Mock protected page request\n    cy.intercept('GET', '/api/dashboard').as('dashboardRequest');\n\n    // Login as a user\n    cy.get('[data-testid=\"login-form\"]').within(() => {\n      cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n      cy.get('[data-testid=\"password-input\"]').type('password123');\n      cy.get('[data-testid=\"login-button\"]').click();\n    });\n\n    // Wait for login success\n    cy.wait('@loginSuccess');\n\n    // Verify user is redirected to dashboard\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"dashboard-content\"]').should('be.visible');\n\n    // Verify user is not redirected back to login\n    cy.url().should('not.include', '/login');\n\n    // Verify protected page content is displayed\n    cy.get('[data-testid=\"dashboard-title\"]').should('contain', 'Dashboard');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.755,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3834,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 340.604,
+      "feedback_used": ""
+    }
+  ]
+}

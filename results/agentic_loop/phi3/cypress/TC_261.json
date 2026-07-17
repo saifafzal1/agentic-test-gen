@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_261",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7621,
+  "total_latency_s": 27.971,
+  "final_script": "describe('Notification Dismissal', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should successfully dismiss a notification by clicking the close button', () => {\n    // Verify notification is displayed\n    cy.get('[data-testid=\"notification-list\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('contain', 'New message');\n\n    // Click the close button\n    cy.get('[data-testid=\"notification-close-btn\"]').click();\n\n    // Verify notification is removed from the list\n    cy.get('[data-testid=\"notification-list\"]').should('contain', 'New message');\n\n    // Verify notification count is decremented\n    cy.get('[data-testid=\"notification-count\"]').should('contain', '1');\n\n    // Verify notification is removed from the DOM\n    cy.get('[data-testid=\"notification-item\"]').should('not.exist');\n  });\n\n  it('should not dismiss a notification when close button is disabled', () => {\n    // Verify notification is displayed\n    cy.get('[data-testid=\"notification-list\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('contain', 'System update');\n\n    // Click the close button\n    cy.get('[data-testid=\"notification-close-btn\"]').click();\n\n    // Verify notification remains visible (close button is disabled)\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n\n    // Verify notification count remains unchanged\n    cy.get('[data-testid=\"notification-count\"]').should('contain', '1');\n\n    // Verify close button is disabled\n    cy.get('[data-testid=\"notification-close-btn\"]').should('have.attr', 'disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7621,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.407,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 27.971,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_064",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7914,
+  "total_latency_s": 632.519,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Results Update with Debounce', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should update search results as user types with debounce', async ({ page }) => {\n    // Setup API interception for search endpoint\n    await page.route('**/api/search', (route) => {\n      route.continue();\n    });\n\n    // Get search input by role\n    const searchInput = page.getByRole('textbox', { name: /search/i });\n    await expect(searchInput).toBeVisible();\n\n    // Get search results container by role\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n\n    // Get search results list by role\n    const resultsList = page.getByRole('list', { name: /search results/i });\n    await expect(resultsList).toBeVisible();\n\n    // Get search result item by role\n    const resultItem = page.getByRole('listitem', { name: /result/i });\n    await expect(resultItem).toBeVisible();\n\n    // Verify initial state\n    await expect(resultsList).toHaveCount(0);\n\n    // Type a query\n    await searchInput.fill('playwright');\n\n    // Wait for debounce\n    await page.waitForTimeout(300);\n\n    // Verify results are displayed\n    await expect(resultsList).toHaveCount(1);\n\n    // Verify result item contains expected text\n    await expect(resultItem).toContainText('playwright');\n\n    // Type more characters to trigger multiple updates\n    await searchInput.fill('playwright test');\n\n    // Wait for debounce\n    await page.waitForTimeout(300);\n\n    // Verify results are updated\n    await expect(resultsList).toHaveCount(2);\n\n    // Verify result item contains expected text\n    await expect(resultItem).toContainText('playwright test');\n\n    // Verify search input is still visible\n    await expect(searchInput).toBeVisible();\n  });\n\n  test('should handle empty search query and display no results', async ({ page }) => {\n    // Setup API interception for search endpoint\n    await page.route('**/api/search', (route) => {\n      route.continue();\n    });\n\n    // Get search input by role\n    const searchInput = page.getByRole('textbox', { name: /search/i });\n    await expect(searchInput).toBeVisible();\n\n    // Get search results container by role\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n\n    // Get search results list by role\n    const resultsList = page.getByRole('list', { name: /search results/i });\n    await expect(resultsList).toBeVisible();\n\n    // Get search result item by role\n    const resultItem = page.getByRole('listitem', { name: /result/i });\n    await expect(resultItem).toBeVisible();\n\n    // Verify initial state\n    await expect(resultsList).toHaveCount(0);\n\n    // Clear search input\n    await searchInput.fill('');\n\n    // Wait for debounce\n    await page.waitForTimeout(300);\n\n    // Verify no results are displayed\n    await expect(resultsList).toHaveCount(0);\n\n    // Verify search input is still visible\n    await expect(searchInput).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4737,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3323,
+        "missing_keywords": [],
+        "assertion_count": 22,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 316.15,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7914,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4046,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 316.369,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

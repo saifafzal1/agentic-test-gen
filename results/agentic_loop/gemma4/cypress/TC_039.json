@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_039",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7748,
+  "total_latency_s": 71.614,
+  "final_script": "describe('Navigation Menu Active Item Highlighting', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should highlight the active menu item when navigating to a page', () => {\n    // Verify initial state - Dashboard should be active\n    cy.get('[data-testid=\"nav-menu-item-dashboard\"]').should('have.class', 'active');\n    cy.get('[data-testid=\"nav-menu-item-dashboard\"]').should('be.visible');\n\n    // Click on another menu item\n    cy.get('[data-testid=\"nav-menu-item-settings\"]').click();\n\n    // Verify Settings is now active\n    cy.get('[data-testid=\"nav-menu-item-settings\"]').should('have.class', 'active');\n    cy.get('[data-testid=\"nav-menu-item-settings\"]').should('be.visible');\n\n    // Verify Dashboard is no longer active\n    cy.get('[data-testid=\"nav-menu-item-dashboard\"]').should('not.have.class', 'active');\n\n    // Navigate back to Dashboard\n    cy.get('[data-testid=\"nav-menu-item-dashboard\"]').click();\n\n    // Verify Dashboard is active again\n    cy.get('[data-testid=\"nav-menu-item-dashboard\"]').should('have.class', 'active');\n    cy.get('[data-testid=\"nav-menu-item-dashboard\"]').should('be.visible');\n  });\n\n  it('should handle multiple active menu items and edge cases', () => {\n    // Navigate to Settings\n    cy.get('[data-testid=\"nav-menu-item-settings\"]').click();\n    cy.get('[data-testid=\"nav-menu-item-settings\"]').should('have.class', 'active');\n\n    // Navigate to Profile\n    cy.get('[data-testid=\"nav-menu-item-profile\"]').click();\n    cy.get('[data-testid=\"nav-menu-item-profile\"]').should('have.class', 'active');\n    cy.get('[data-testid=\"nav-menu-item-settings\"]').should('not.have.class', 'active');\n\n    // Edge case: Click on an inactive item that is already active (should not change state)\n    cy.get('[data-testid=\"nav-menu-item-profile\"]').click();\n    cy.get('[data-testid=\"nav-menu-item-profile\"]').should('have.class', 'active');\n\n    // Edge case: Click on a non-existent or disabled menu item (should not cause error)\n    cy.get('[data-testid=\"nav-menu-item-disabled\"]').should('be.disabled');\n    cy.get('[data-testid=\"nav-menu-item-disabled\"]').click({ force: true });\n    cy.get('[data-testid=\"nav-menu-item-profile\"]').should('have.class', 'active');\n\n    // Verify all other items are not active\n    cy.get('[data-testid=\"nav-menu-item-dashboard\"]').should('not.have.class', 'active');\n    cy.get('[data-testid=\"nav-menu-item-settings\"]').should('not.have.class', 'active');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7748,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4492,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.614,
+      "feedback_used": ""
+    }
+  ]
+}

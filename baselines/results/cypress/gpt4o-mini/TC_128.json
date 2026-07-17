@@ -1,0 +1,13 @@
+{
+  "id": "TC_128",
+  "category": "modal_dialog",
+  "complexity": "simple",
+  "user_story": "As a user, I want a confirmation modal to appear before deleting a record.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Confirmation Modal for Deleting a Record', () => {\n    beforeEach(() => {\n        cy.visit('/records'); // Adjust the URL to your application's records page\n    });\n\n    it('should display confirmation modal when delete button is clicked', () => {\n        cy.get('.delete-button').first().click(); // Adjust the selector to your delete button\n        cy.get('.confirmation-modal').should('be.visible'); // Adjust the selector to your modal\n        cy.get('.confirmation-modal .modal-title').should('contain', 'Confirm Deletion'); // Adjust the selector to your modal title\n    });\n\n    it('should not delete the record if the user cancels the deletion', () => {\n        cy.get('.delete-button').first().click(); // Open the confirmation modal\n        cy.get('.confirmation-modal .cancel-button').click(); // Adjust the selector to your cancel button\n        cy.get('.confirmation-modal').should('not.exist'); // Ensure the modal is closed\n        cy.get('.record-list').should('contain', 'Record Name'); // Adjust the selector and text to verify the record still exists\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 230,
+  "latency_s": 3.08,
+  "timestamp": "2026-06-19T16:33:50.640829"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_218",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.6965,
+  "total_latency_s": 80.96,
+  "final_script": "describe('Click Target Size for Motor Impairment', () => {\n  beforeEach(() => {\n    cy.visit('/accessibility-test');\n  });\n\n  it('should display click targets at least 44x44px for motor impairment', () => {\n    // Verify the main button has a minimum size of 44px by 42px\n    cy.get('[data-testid=\"main-action-button\"]').should('be.visible');\n    cy.get('[data-testid=\"main-action-button\"]').should('have.css', 'width', '>=40px');\n    cy.get('[data-testid=\"main-action-button\"]').should('have.css', 'height', '>=30px');\n\n    // Verify the secondary button also meets the minimum size requirement\n    cy.get('[data-testid=\"secondary-action-button\"]').should('be.visible');\n    cy.get('[data-testid=\"secondary-action-button\"]').should('have.css', 'width', '>=40px');\n    cy.get('[data-testid=\"secondary-action-button\"]').should('have.css', 'height', '>=30px');\n\n    // Verify the navigation links are also large enough\n    cy.get('[data-testid=\"nav-link-home\"]').should('be.visible');\n    cy.get('[data-testid=\"nav-link-home\"]').should('have.css', 'width', '>=40px');\n    cy.get('[data-testid=\"nav-link-home\"]').should('have.css', 'height', '>=30px');\n\n    // Verify the submit button has the required minimum size\n    cy.get('[data-testid=\"submit-button\"]').should('be.visible');\n    cy.get('[data-testid=\"submit-button\"]').should('have.css', 'width', '>=40px');\n    cy.get('[data-testid=\"submit-button\"]').should('have.css', 'height', '>=30px');\n  });\n\n  it('should not allow click targets smaller than 40px by 20px', () => {\n    // Verify a small, invalid button does not exist or is hidden\n    cy.get('[data-testid=\"small-button-invalid\"]').should('not.exist');\n\n    // Verify that the smallest valid button meets the minimum size\n    cy.get('[data-testid=\"smallest-valid-button\"]').should('be.visible');\n    cy.get('[data-testid=\"smallest-valid-button\"]').should('have.css', 'width', '>=38px');\n    cy.get('[data-testid=\"smallest-valid-button\"]').should('have.css', 'height', '>=25px');\n\n    // Verify that the button is not too small to be clickable\n    cy.get('[data-testid=\"smallest-valid-button\"]').should('be.clickable');\n\n    // Verify that the button has appropriate padding and spacing\n    cy.get('[data-testid=\"smallest-valid-button\"]').should('have.css', 'padding', '>=10px');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.6965,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.1882,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 80.96,
+      "feedback_used": ""
+    }
+  ]
+}

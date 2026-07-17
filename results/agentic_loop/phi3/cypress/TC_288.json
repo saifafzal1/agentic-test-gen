@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_288",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7772,
+  "total_latency_s": 399.09,
+  "final_script": "describe('Export Personal Data as JSON File', () => {\n  beforeEach(() => {\n    cy.visit('/user-profile');\n  });\n\n  it('should successfully export personal data as a JSON file', () => {\n    // Verify export button is visible\n    cy.get('[data-testid=\"export-button\"]').should('be.visible');\n\n    // Click export button\n    cy.get('[data-testid=\"export-button\"]').click();\n\n    // Verify download dialog appears\n    cy.get('[data-testid=\"download-dialog\"]').should('be.visible');\n\n    // Verify download button is present\n    cy.get('[data-testid=\"download-button\"]').should('be.visible');\n\n    // Click download button\n    cy.get('[data-testid=\"download-button\"]').click();\n\n    // Verify file download dialog closes\n    cy.get('[data-testid=\"download-dialog\"]').should('not.exist');\n\n    // Verify file appears in downloads folder\n    cy.get('[data-testid=\"downloaded-file\"]').should('be.visible');\n    cy.get('[data-testid=\"downloaded-file\"]').should('contain', 'personal-data.json');\n\n    // Verify file size is reasonable\n    cy.get('[data-testid=\"downloaded-file\"]').should('have.attr', 'size', '>= 1000');\n\n    // Verify file contains expected data\n    cy.get('[data-testid=\"downloaded-file\"]').then((file) => {\n      const fileContent = file.get('text/plain');\n      expect(fileContent).to.include('name');\n      expect(fileContent).to.include('email');\n      expect(fileContent).to.include('phone');\n    });\n  });\n\n  it('should handle export failure and display error message', () => {\n    // Mock API to simulate export failure\n    cy.intercept('POST', '/api/export-data', {\n      statusCode: 500,\n      body: { error: 'Internal server error' }\n    }).as('exportFailed');\n\n    // Click export button\n    cy.get('[data-testid=\"export-button\"]').click();\n\n    // Verify download dialog appears\n    cy.get('[data-testid=\"download-dialog\"]').should('be.visible');\n\n    // Click download button\n    cy.get('[data-testid=\"download-button\"]').click();\n\n    // Verify download dialog closes\n    cy.get('[data-testid=\"download-dialog\"]').should('not.exist');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Failed to export data');\n\n    // Verify export button is still available\n    cy.get('[data-testid=\"export-button\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7772,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4573,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 399.09,
+      "feedback_used": ""
+    }
+  ]
+}

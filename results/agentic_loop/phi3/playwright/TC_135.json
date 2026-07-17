@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_135",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8155,
+  "total_latency_s": 457.818,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Drawer/Slide-in Panel from Right', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should open drawer panel from right with correct animation and visibility', async ({ page }) => {\n    // Verify initial state: drawer should be closed\n    const drawer = page.getByRole('button', { name: /open drawer/i });\n    await expect(drawer).not.toBeVisible();\n\n    // Verify main content is visible\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeVisible();\n\n    // Click drawer button to open drawer\n    await drawer.click();\n\n    // Verify drawer is now visible and has correct position\n    await expect(drawer).toBeVisible();\n    const drawerPosition = page.getByRole('region', { name: /drawer/i }).boundingBox();\n    expect(drawerPosition.x).toBeGreaterThan(0);\n    expect(drawerPosition.y).toBeLessThan(0);\n\n    // Verify drawer has correct animation\n    const drawerAnimation = page.getByRole('region', { name: /drawer/i }).shadowRoot().shadowBoundingBox();\n    expect(drawerAnimation).toHaveProperty('transform', /translate(-100%, 0)/);\n\n    // Verify drawer content is visible\n    const drawerContent = page.getByRole('region', { name: /drawer content/i });\n    await expect(drawerContent).toBeVisible();\n\n    // Verify main content is still visible\n    await expect(mainContent).toBeVisible();\n\n    // Verify drawer is closed when clicking outside\n    const closeButton = page.getByRole('button', { name: /close drawer/i });\n    await expect(closeButton).toBeVisible();\n    await closeButton.click();\n\n    // Verify drawer is closed\n    await expect(drawer).not.toBeVisible();\n    await expect(drawerContent).not.toBeVisible();\n  });\n\n  test('should handle drawer panel closing with animation and visibility', async ({ page }) => {\n    // Open drawer\n    const drawer = page.getByRole('button', { name: /open drawer/i });\n    await drawer.click();\n\n    // Verify drawer is open\n    const drawerPosition = page.getByRole('region', { name: /drawer/i }).boundingBox();\n    expect(drawerPosition.x).toBeGreaterThan(0);\n    expect(drawerPosition.y).toBeLessThan(0);\n\n    // Verify drawer content is visible\n    const drawerContent = page.getByRole('region', { name: /drawer content/i });\n    await expect(drawerContent).toBeVisible();\n\n    // Verify main content is still visible\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeVisible();\n\n    // Verify drawer has correct animation\n    const drawerAnimation = page.getByRole('region', { name: /drawer/i }).shadowRoot().shadowBoundingBox();\n    expect(drawerAnimation).toHaveProperty('transform', /translate(-100%, 0)/);\n\n    // Close drawer by clicking close button\n    const closeButton = page.getByRole('button', { name: /close drawer/i });\n    await closeButton.click();\n\n    // Verify drawer is closed\n    await expect(drawer).not.toBeVisible();\n    await expect(drawerContent).not.toBeVisible();\n\n    // Verify main content is visible again\n    await expect(mainContent).toBeVisible();\n\n    // Verify drawer has correct position when closed\n    const closedDrawerPosition = page.getByRole('region', { name: /drawer/i }).boundingBox();\n    expect(closedDrawerPosition.x).toBeLessThan(0);\n    expect(closedDrawerPosition.y).toBeLessThan(0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8155,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4848,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 457.818,
+      "feedback_used": ""
+    }
+  ]
+}

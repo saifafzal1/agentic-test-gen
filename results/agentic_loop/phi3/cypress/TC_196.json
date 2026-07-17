@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_196",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7343,
+  "total_latency_s": 795.053,
+  "final_script": "describe('Filtered Search URL Sharing', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should successfully share a filtered search URL with another user', () => {\n    // Setup: Navigate to search page and perform a search\n    cy.get('[data-testid=\"search-input\"]').type('laptop');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Verify search results are displayed\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('contain', 'laptop');\n\n    // Apply a filter (e.g., price range)\n    cy.get('[data-testid=\"price-filter\"]').click();\n    cy.get('[data-testid=\"price-range-selector\"]').click();\n    cy.get('[data-testid=\"price-range-option\"]').eq(1).click();\n\n    // Verify filter is applied\n    cy.get('[data-testid=\"filter-status\"]').should('contain', 'Price: $1000 - $2000');\n\n    // Share the filtered search URL\n    cy.get('[data-testid=\"share-button\"]').click();\n\n    // Verify share modal appears\n    cy.get('[data-testid=\"share-modal\"]').should('be.visible');\n\n    // Fill share form with recipient's email\n    cy.get('[data-testid=\"recipient-email-input\"]').type('test@example.com');\n\n    // Verify share button is enabled\n    cy.get('[data-testid=\"share-button\"]').should('be.visible');\n\n    // Click share button\n    cy.get('[data-testid=\"share-button\"]').click();\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Search URL shared successfully');\n\n    // Verify URL is visible in the success message\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'https://example.com/search?q=laptop&price=1000-2000');\n  });\n\n  it('should handle edge case when sharing a filtered search URL fails', () => {\n    // Setup: Navigate to search page and perform a search\n    cy.get('[data-testid=\"search-input\"]').type('laptop');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Verify search results are displayed\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n\n    // Apply a filter\n    cy.get('[data-testid=\"price-filter\"]').click();\n    cy.get('[data-testid=\"price-range-option\"]').eq(1).click();\n\n    // Verify filter is applied\n    cy.get('[data-testid=\"filter-status\"]').should('contain', 'Price: $1000 - $2000');\n\n    // Attempt to share the filtered search URL\n    cy.get('[data-testid=\"share-button\"]').click();\n\n    // Verify share modal appears\n    cy.get('[data-testid=\"share-modal\"]').should('be.visible');\n\n    // Fill share form with invalid recipient's email (e.g., no '@')\n    cy.get('[data-testid=\"recipient-email-input\"]').type('invalid-email');\n\n    // Verify share button is disabled\n    cy.get('[data-testid=\"share-button\"]').should('be.disabled');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid recipient email');\n\n    // Verify success message does not appear\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.471,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3432,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 421.164,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7343,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3144,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 373.889,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

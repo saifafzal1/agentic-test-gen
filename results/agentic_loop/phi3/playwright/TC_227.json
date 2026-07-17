@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_227",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 3,
+  "best_score": 0.7914,
+  "total_latency_s": 707.445,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mobile Touch Target Accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/mobile-app');\n  });\n\n  test('should have large enough touch targets for easy tapping on mobile devices', async ({ page }) => {\n    // Set viewport to mobile dimensions\n    await page.setViewportSize({ width: 375, height: 667 });\n\n    // Verify touch targets are visible and large enough\n    const button = page.getByRole('button', { name: /submit/i });\n    await expect(button).toBeVisible();\n    await expect(button).toHaveAttribute('aria-label', 'Submit form');\n\n    const input = page.getByLabel(/email/i);\n    await expect(input).toBeVisible();\n    await expect(input).toHaveAttribute('aria-label', 'Email address');\n\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeVisible();\n    await expect(submitButton).toHaveAttribute('aria-label', 'Submit form');\n\n    // Verify touch target size using getBoundingClientRect\n    const buttonRect = await button.boundingBox();\n    expect(buttonRect.width).toBeGreaterThan(44);\n    expect(buttonRect.height).toBeGreaterThan(44);\n\n    const inputRect = await input.boundingBox();\n    expect(inputRect.width).toBeGreaterThan(44);\n    expect(inputRect.height).toBeGreaterThan(44);\n\n    // Verify touch target is not too close to edge\n    const buttonEdge = buttonRect.left;\n    const buttonEdgeRight = buttonRect.right;\n    const inputEdge = inputRect.left;\n    const inputEdgeRight = inputRect.right;\n\n    expect(buttonEdge).toBeGreaterThan(0);\n    expect(buttonEdgeRight).toBeLessThan(page.viewport().width);\n    expect(inputEdge).toBeGreaterThan(0);\n    expect(inputEdgeRight).toBeLessThan(page.viewport().width);\n\n    // Verify touch targets have sufficient padding\n    const buttonPadding = buttonRect.width - buttonRect.width / 2;\n    const inputPadding = inputRect.width - inputRect.width / 2;\n    expect(buttonPadding).toBeGreaterThan(10);\n    expect(inputPadding).toBeGreaterThan(10);\n\n    // Verify touch targets have sufficient margin\n    const buttonMargin = buttonRect.top - buttonRect.height / 2;\n    const inputMargin = inputRect.top - inputRect.height / 2;\n    expect(buttonMargin).toBeGreaterThan(10);\n    expect(inputMargin).toBeGreaterThan(10);\n\n    // Verify touch targets are not overlapping\n    const buttonOverlap = buttonRect.bottom - buttonRect.height / 2;\n    const inputOverlap = inputRect.bottom - inputRect.height / 2;\n    expect(buttonOverlap).toBeLessThan(inputRect.top);\n    expect(inputOverlap).toBeLessThan(buttonRect.top);\n\n    // Verify touch targets are not too close to each other\n    const buttonToInputDistance = buttonRect.right - inputRect.left;\n    expect(buttonToInputDistance).toBeGreaterThan(10);\n\n    // Verify touch targets are accessible by keyboard\n    const buttonKeyboardAccessible = await button.isKeyboardFocused();\n    const inputKeyboardAccessible = await input.isKeyboardFocused();\n    expect(buttonKeyboardAccessible).toBe(true);\n    expect(inputKeyboardAccessible).toBe(true);\n\n    // Verify error state is visible and accessible\n    const errorMessage = page.getByText(/error/i);\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).toHaveAttribute('aria-live', 'polite');\n  });\n\n  test('should handle touch targets with complex layouts and nested elements', async ({ page }) => {\n    // Set viewport to mobile dimensions\n    await page.setViewportSize({ width: 375, height: 667 });\n\n    // Navigate to complex form page\n    await page.goto('/complex-form');\n\n    // Verify nested touch targets are accessible\n    const nestedInput = page.getByLabel(/nested email/i);\n    await expect(nestedInput).toBeVisible();\n    await expect(nestedInput).toHaveAttribute('aria-label', 'Nested email address');\n\n    const nestedSubmitButton = page.getByRole('button', { name: /submit/i });\n    await expect(nestedSubmitButton).toBeVisible();\n    await expect(nestedSubmitButton).toHaveAttribute('aria-label', 'Submit form with nested fields');\n\n    // Verify nested touch targets have sufficient padding and margin\n    const nestedInputRect = await nestedInput.boundingBox();\n    const nestedInputPadding = nestedInputRect.width - nestedInputRect.width / 2;\n    const nestedInputMargin = nestedInputRect.top - nestedInputRect.height / 2;\n    expect(nestedInputPadding).toBeGreaterThan(10);\n    expect(nestedInputMargin).toBeGreaterThan(10);\n\n    // Verify nested touch targets are not overlapping\n    const nestedButtonRect = await nestedSubmitButton.boundingBox();\n    const nestedButtonOverlap = nestedButtonRect.bottom - nestedButtonRect.height / 2;\n    const nestedInputOverlap = nestedInputRect.bottom - nestedInputRect.height / 2;\n    expect(nestedButtonOverlap).toBeLessThan(nestedInputRect.top);\n    expect(nestedInputOverlap).toBeLessThan(nestedButtonRect.top);\n\n    // Verify nested touch targets are not too close to each other\n    const nestedButtonToInputDistance = nestedButtonRect.right - nestedInputRect.left;\n    expect(nestedButtonToInputDistance).toBeGreaterThan(10);\n\n    // Verify nested touch targets are accessible by keyboard\n    const nestedButtonKeyboardAccessible = await nestedSubmitButton.isKeyboardFocused();\n    const nestedInputKeyboardAccessible = await nestedInput.isKeyboardFocused();\n    expect(nestedButtonKeyboardAccessible).toBe(true);\n    expect(nestedInputKeyboardAccessible).toBe(true);\n\n    // Verify error state is visible and accessible for nested form\n    const nestedErrorMessage = page.getByText(/nested error/i);\n    await expect(nestedErrorMessage).toBeVisible();\n    await expect(nestedErrorMessage).toHaveAttribute('aria-live', 'polite');\n\n    // Verify error message is visible when nested input is invalid\n    await nestedInput.fill('invalid-email');\n    await expect(nestedErrorMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4942,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3806,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 56.141,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.473,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3102,
+        "missing_keywords": [],
+        "assertion_count": 34,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 310.595,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.7914,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3046,
+        "missing_keywords": [],
+        "assertion_count": 39,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 340.709,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

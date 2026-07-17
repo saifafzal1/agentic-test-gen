@@ -1,0 +1,13 @@
+{
+  "id": "TC_280",
+  "category": "user_profile",
+  "complexity": "complex",
+  "user_story": "As a user, I want to change my password from the profile settings page.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Profile - Change Password', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/profile');\n    await page.getByRole('button', { name: 'Edit Profile' }).click();\n  });\n\n  test('should display change password form', async ({ page }) => {\n    await page.getByText('Change Password').click();\n    const changePasswordHeading = await page.getByText('Change Your Password');\n    await expect(changePasswordHeading).toBeVisible();\n  });\n\n  test('should successfully change password', async ({ page }) => {\n    await page.getByLabel('Current Password').fill('oldPassword123');\n    await page.getByLabel('New Password').fill('newPassword123');\n    await page.getByLabel('Confirm New Password').fill('newPassword123');\n    await page.getByRole('button', { name: 'Save Changes' }).click();\n    \n    const successMessage = await page.getByText('Your password has been changed successfully.');\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 232,
+  "latency_s": 4.62,
+  "timestamp": "2026-06-19T17:03:41.943409"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_026",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.77,
+  "total_latency_s": 71.371,
+  "final_script": "describe('Email Field Inline Validation', () => {\n  beforeEach(() => {\n    cy.visit('/signup');\n  });\n\n  it('should display inline validation error when email format is invalid', () => {\n    cy.get('[data-testid=\"email-input\"]').type('invalid-email');\n    cy.get('[data-testid=\"email-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"email-error-message\"]').should('contain', 'Please enter a valid email address');\n    cy.get('[data-testid=\"email-input\"]').should('have.class', 'input-error');\n  });\n\n  it('should clear inline validation error when email format becomes valid', () => {\n    cy.get('[data-testid=\"email-input\"]').type('invalid-email');\n    cy.get('[data-testid=\"email-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"email-input\"]').should('have.class', 'input-error');\n    cy.get('[data-testid=\"email-input\"]').clear().type('user@example.com');\n    cy.get('[data-testid=\"email-error-message\"]').should('not.exist');\n    cy.get('[data-testid=\"email-input\"]').should('not.have.class', 'input-error');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.77,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4333,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.371,
+      "feedback_used": ""
+    }
+  ]
+}

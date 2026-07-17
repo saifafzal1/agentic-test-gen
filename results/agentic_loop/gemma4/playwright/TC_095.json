@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_095",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8443,
+  "total_latency_s": 77.096,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload - Unsupported File Type Error', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should display error message when uploading an unsupported file type', async ({ page }) => {\n    // Setup: intercept the upload API call\n    await page.route('**/api/upload', (route) => {\n      route.abort('failed');\n    });\n\n    // Setup: intercept the error response\n    await page.route('**/api/upload', (route) => {\n      route.continue({\n        status: 400,\n        body: JSON.stringify({ error: 'Unsupported file type. Only PDF and DOCX are allowed.' }),\n      });\n    });\n\n    // Action: select an unsupported file\n    const fileInput = page.getByLabel('Upload file');\n    await fileInput.setInputFiles('fixtures/unsupported-file.pdf');\n\n    // Action: click upload button\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await uploadButton.click();\n\n    // Wait for error message to appear\n    await page.waitForTimeout(500);\n\n    // Assertion: verify error message is displayed\n    const errorMessage = page.getByText(/Unsupported file type/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Assertion: verify error message contains specific details\n    await expect(errorMessage).toContainText('Only PDF and DOCX are allowed.');\n\n    // Assertion: verify upload success message does not appear\n    const successMessage = page.getByText(/File uploaded successfully/i);\n    await expect(successMessage).not.toBeVisible();\n  });\n\n  test('should allow upload of supported file type and clear error message', async ({ page }) => {\n    // Setup: intercept the upload API call\n    await page.route('**/api/upload', (route) => {\n      route.continue({\n        status: 200,\n        body: JSON.stringify({ success: true, message: 'File uploaded successfully' }),\n      });\n    });\n\n    // Action: select a supported file\n    const fileInput = page.getByLabel('Upload file');\n    await fileInput.setInputFiles('fixtures/supported-document.pdf');\n\n    // Action: click upload button\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await uploadButton.click();\n\n    // Wait for success response\n    await page.waitForTimeout(500);\n\n    // Assertion: verify success message is displayed\n    const successMessage = page.getByText(/File uploaded successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Assertion: verify error message is not visible\n    const errorMessage = page.getByText(/Unsupported file type/i);\n    await expect(errorMessage).not.toBeVisible();\n\n    // Assertion: verify file name is displayed\n    const fileNameDisplay = page.getByText('supported-document.pdf');\n    await expect(fileNameDisplay).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8443,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4808,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 77.096,
+      "feedback_used": ""
+    }
+  ]
+}

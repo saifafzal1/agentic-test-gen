@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_268",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7472,
+  "total_latency_s": 726.264,
+  "final_script": "describe('Notification Filtering by Type', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should filter notifications by type and display only selected notifications', () => {\n    // Setup: Add multiple notifications of different types\n    cy.get('[data-testid=\"add-notification-button\"]').click();\n    cy.get('[data-testid=\"notification-form\"]').within(() => {\n      cy.get('[data-testid=\"notification-type-info\"]').click();\n      cy.get('[data-testid=\"notification-title-test\"]').type('Test Info');\n      cy.get('[data-testid=\"notification-body-test\"]').type('This is an informational notification');\n      cy.get('[data-testid=\"notification-send-button\"]').click();\n    });\n\n    cy.get('[data-testid=\"add-notification-button\"]').click();\n    cy.get('[data-testid=\"notification-form\"]').within(() => {\n      cy.get('[data-testid=\"notification-type-warning\"]').click();\n      cy.get('[data-testid=\"notification-title-test\"]').type('Test Warning');\n      cy.get('[data-testid=\"notification-body-test\"]').type('This is a warning notification');\n      cy.get('[data-testid=\"notification-send-button\"]').click();\n    });\n\n    cy.get('[data-testid=\"add-notification-button\"]').click();\n    cy.get('[data-testid=\"notification-form\"]').within(() => {\n      cy.get('[data-testid=\"notification-type-error\"]').click();\n      cy.get('[data-testid=\"notification-title-test\"]').type('Test Error');\n      cy.get('[data-testid=\"notification-body-test\"]').type('This is an error notification');\n      cy.get('[data-testid=\"notification-send-button\"]').click();\n    });\n\n    // Verify notifications are displayed\n    cy.get('[data-testid=\"notification-list\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('have.length.greaterThan', 0);\n\n    // Filter by type\n    cy.get('[data-testid=\"filter-button\"]').click();\n    cy.get('[data-testid=\"filter-type-info\"]').click();\n\n    // Verify only info notifications are displayed\n    cy.get('[data-testid=\"notification-item\"]').should('have.length.equal', 1);\n    cy.get('[data-testid=\"notification-item\"]').first().should('contain', 'Test Info');\n\n    // Verify warning notifications are not displayed\n    cy.get('[data-testid=\"notification-item\"]').should('not.contain', 'Test Warning');\n\n    // Filter by type again\n    cy.get('[data-testid=\"filter-button\"]').click();\n    cy.get('[data-testid=\"filter-type-error\"]').click();\n\n    // Verify only error notifications are displayed\n    cy.get('[data-testid=\"notification-item\"]').should('have.length.equal', 1);\n    cy.get('[data-testid=\"notification-item\"]').first().should('contain', 'Test Error');\n\n    // Verify info and warning notifications are not displayed\n    cy.get('[data-testid=\"notification-item\"]').should('not.have.length.greaterThan', 1);\n  });\n\n  it('should handle empty notification list after filtering', () => {\n    // Setup: Add multiple notifications\n    cy.get('[data-testid=\"add-notification-button\"]').click();\n    cy.get('[data-testid=\"notification-form\"]').within(() => {\n      cy.get('[data-testid=\"notification-type-info\"]').click();\n      cy.get('[data-testid=\"notification-title-test\"]').type('Test Info');\n      cy.get('[data-testid=\"notification-body-test\"]').type('This is an informational notification');\n      cy.get('[data-testid=\"notification-send-button\"]').click();\n    });\n\n    cy.get('[data-testid=\"add-notification-button\"]').click();\n    cy.get('[data-testid=\"notification-form\"]').within(() => {\n      cy.get('[data-testid=\"notification-type-warning\"]').click();\n      cy.get('[data-testid=\"notification-title-test\"]').type('Test Warning');\n      cy.get('[data-testid=\"notification-body-test\"]').type('This is a warning notification');\n      cy.get('[data-testid=\"notification-send-button\"]').click();\n    });\n\n    // Filter by type\n    cy.get('[data-testid=\"filter-button\"]').click();\n    cy.get('[data-testid=\"filter-type-error\"]').click();\n\n    // Verify no notifications are displayed\n    cy.get('[data-testid=\"notification-list\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('not.exist');\n\n    // Verify empty state message is displayed\n    cy.get('[data-testid=\"empty-notifications-message\"]').should('be.visible');\n    cy.get('[data-testid=\"empty-notifications-message\"]').should('contain', 'No notifications found');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4637,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3188,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 343.826,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7472,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3575,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 382.438,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

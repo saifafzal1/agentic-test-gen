@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_221",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7272,
+  "total_latency_s": 32.469,
+  "final_script": "describe('Form Autocomplete Attribute Tests', () => {\n  beforeEach(() => {\n    cy.visit('/form-page');\n  });\n\n  it('should set correct autocomplete attribute on input fields', () => {\n    // Intercept the API call for autocomplete suggestions\n    cy.intercept('GET', '/api/autocomplete/search*').as('getAutocomplete');\n\n    // Fill in the first input field\n    cy.get('[data-testid=\"first-name-input\"]').type('John');\n    cy.get('[data-testid=\"first-name-input\"]').should('have.attr', 'autocomplete', 'name');\n\n    // Fill in the second input field\n    cy.get('[data-testid=\"last-name-input\"]').type('Doe');\n    cy.get('[data-testid=\"last-name-input\"]').should('have.attr', 'autocomplete', 'name');\n\n    // Verify the API was called with the correct query\n    cy.wait('@getAutocomplete').then((interception) => {\n      expect(interception.response.body.length).to.be.greaterThan(0);\n    });\n\n    // Verify the autocomplete attribute is set for both fields\n    cy.get('[data-testid=\"first-name-input\"]').should('have.attr', 'autocomplete', 'name');\n    cy.get('[data-testid=\"last-name-input\"]').should('have.attr', 'autocomplete', 'name');\n  });\n\n  it('should handle edge case when autocomplete is disabled', () => {\n    // Intercept the API call for autocomplete suggestions\n    cy.intercept('GET', '/api/autocomplete/search*').as('getAutocomplete');\n\n    // Fill in a disabled input field\n    cy.get('[data-testid=\"email-input\"]').type('john.doe@example.com');\n\n    // Verify the autocomplete attribute is not set on a disabled field\n    cy.get('[data-testid=\"email-input\"]').should('not.have.attr', 'autocomplete');\n\n    // Verify the API was not called for the disabled field\n    cy.wait('@getAutocomplete').then((interception) => {\n      expect(interception.response.body.length).to.equal(0);\n    });\n\n    // Verify the form still submits without autocomplete interference\n    cy.get('[data-testid=\"submit-button\"]').click();\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7272,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2906,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 32.469,
+      "feedback_used": ""
+    }
+  ]
+}

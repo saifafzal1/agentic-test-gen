@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_233",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8368,
+  "total_latency_s": 71.811,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Fullscreen on Small Viewports', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/modal-page');\n  });\n\n  test('should display modal as full screen on small viewports', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 667 });\n    \n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n    \n    const modalContainer = page.locator('[data-testid=\"modal-container\"]');\n    await expect(modalContainer).toBeVisible();\n    \n    const modalContent = page.locator('[data-testid=\"modal-content\"]');\n    await expect(modalContent).toBeVisible();\n    \n    const modalHeader = page.locator('[data-testid=\"modal-header\"]');\n    await expect(modalHeader).toBeVisible();\n    \n    const modalBody = page.locator('[data-testid=\"modal-body\"]');\n    await expect(modalBody).toBeVisible();\n    \n    const modalFooter = page.locator('[data-testid=\"modal-footer\"]');\n    await expect(modalFooter).toBeVisible();\n    \n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n    \n    const modalOverlay = page.locator('[data-testid=\"modal-overlay\"]');\n    await expect(modalOverlay).toBeVisible();\n    \n    const modalContainerBoundingBox = await modalContainer.boundingBox();\n    const viewportBoundingBox = await page.locator('body').boundingBox();\n    \n    expect(modalContainerBoundingBox.width).toBeGreaterThan(viewportBoundingBox.width * 0.9);\n    expect(modalContainerBoundingBox.height).toBeGreaterThan(viewportBoundingBox.height * 0.9);\n  });\n\n  test('should not display modal as full screen on large viewports', async ({ page }) => {\n    await page.setViewportSize({ width: 1200, height: 800 });\n    \n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n    \n    const modalContainer = page.locator('[data-testid=\"modal-container\"]');\n    await expect(modalContainer).toBeVisible();\n    \n    const modalContent = page.locator('[data-testid=\"modal-content\"]');\n    await expect(modalContent).toBeVisible();\n    \n    const modalHeader = page.locator('[data-testid=\"modal-header\"]');\n    await expect(modalHeader).toBeVisible();\n    \n    const modalBody = page.locator('[data-testid=\"modal-body\"]');\n    await expect(modalBody).toBeVisible();\n    \n    const modalFooter = page.locator('[data-testid=\"modal-footer\"]');\n    await expect(modalFooter).toBeVisible();\n    \n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n    \n    const modalOverlay = page.locator('[data-testid=\"modal-overlay\"]');\n    await expect(modalOverlay).toBeVisible();\n    \n    const modalContainerBoundingBox = await modalContainer.boundingBox();\n    const viewportBoundingBox = await page.locator('body').boundingBox();\n    \n    expect(modalContainerBoundingBox.width).toBeLessThan(viewportBoundingBox.width * 0.9);\n    expect(modalContainerBoundingBox.height).toBeLessThan(viewportBoundingBox.height * 0.9);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8368,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5561,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.811,
+      "feedback_used": ""
+    }
+  ]
+}

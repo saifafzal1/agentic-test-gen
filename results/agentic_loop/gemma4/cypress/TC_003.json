@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_003",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7874,
+  "total_latency_s": 86.479,
+  "final_script": "describe('User Logout Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('SecurePassword123!');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n    cy.wait('@loginRequest');\n    cy.get('[data-testid=\"dashboard-header\"]').should('be.visible');\n  });\n\n  it('should successfully log out a user and redirect to login page', () => {\n    cy.get('[data-testid=\"user-menu-button\"]').click();\n    cy.get('[data-testid=\"logout-button\"]').click();\n    cy.intercept('POST', '/api/auth/logout').as('logoutRequest');\n    cy.wait('@logoutRequest');\n    cy.url().should('eq', '/login');\n    cy.get('[data-testid=\"login-form\"]').should('be.visible');\n    cy.get('[data-testid=\"user-menu-button\"]').should('not.exist');\n    cy.get('[data-testid=\"logout-message\"]').should('contain', 'You have been logged out');\n  });\n\n  it('should handle logout when user session is already expired', () => {\n    cy.visit('/dashboard');\n    cy.intercept('GET', '/api/user/profile', { statusCode: 401, body: { error: 'Session expired' } }).as('expiredSession');\n    cy.wait('@expiredSession');\n    cy.get('[data-testid=\"user-menu-button\"]').should('be.visible');\n    cy.get('[data-testid=\"logout-button\"]').click();\n    cy.intercept('POST', '/api/auth/logout').as('logoutRequest');\n    cy.wait('@logoutRequest');\n    cy.url().should('eq', '/login');\n    cy.get('[data-testid=\"login-form\"]').should('be.visible');\n    cy.get('[data-testid=\"logout-message\"]').should('contain', 'You have been logged out');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7874,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4914,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 86.479,
+      "feedback_used": ""
+    }
+  ]
+}

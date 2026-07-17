@@ -1,0 +1,13 @@
+{
+  "id": "TC_097",
+  "category": "error_states",
+  "complexity": "complex",
+  "user_story": "As a user, I want a clear error if I try to register with an already-used email.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('User Registration', () => {\n    beforeEach(() => {\n        cy.visit('/register');\n    });\n\n    it('should display an error message for already-used email', () => {\n        const usedEmail = 'test@example.com';\n\n        // Simulate registration with an already-used email\n        cy.get('input[name=\"email\"]').type(usedEmail);\n        cy.get('input[name=\"password\"]').type('Password123');\n        cy.get('input[name=\"confirmPassword\"]').type('Password123');\n        cy.get('button[type=\"submit\"]').click();\n\n        // Assert that the error message is displayed\n        cy.get('.error-message').should('be.visible')\n            .and('contain', 'Email is already in use');\n    });\n\n    it('should not allow registration with an invalid email format', () => {\n        const invalidEmail = 'invalid-email-format';\n\n        // Simulate registration with an invalid email format\n        cy.get('input[name=\"email\"]').type(invalidEmail);\n        cy.get('input[name=\"password\"]').type('Password123');\n        cy.get('input[name=\"confirmPassword\"]').type('Password123');\n        cy.get('button[type=\"submit\"]').click();\n\n        // Assert that the error message is displayed\n        cy.get('.error-message').should('be.visible')\n            .and('contain', 'Please enter a valid email address');\n    });\n});",
+  "prompt_tokens": 114,
+  "completion_tokens": 280,
+  "latency_s": 3.62,
+  "timestamp": "2026-06-19T16:31:35.166231"
+}

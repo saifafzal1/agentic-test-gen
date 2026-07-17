@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_029",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8114,
+  "total_latency_s": 71.258,
+  "final_script": "describe('Form Data Persistence on Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/form-page');\n  });\n\n  it('should persist form data when user navigates away and returns', () => {\n    // Fill form with valid data\n    cy.get('[data-testid=\"name-input\"]').type('John Doe');\n    cy.get('[data-testid=\"email-input\"]').type('john@example.com');\n    cy.get('[data-testid=\"message-textarea\"]').type('This is a test message');\n\n    // Verify data is present before navigation\n    cy.get('[data-testid=\"name-input\"]').should('have.value', 'John Doe');\n    cy.get('[data-testid=\"email-input\"]').should('have.value', 'john@example.com');\n\n    // Navigate away from the page\n    cy.get('[data-testid=\"nav-link\"]').click();\n    cy.get('[data-testid=\"dashboard-header\"]').should('be.visible');\n\n    // Navigate back to the form page\n    cy.get('[data-testid=\"nav-back-link\"]').click();\n\n    // Verify form data is still persisted\n    cy.get('[data-testid=\"name-input\"]').should('have.value', 'John Doe');\n    cy.get('[data-testid=\"email-input\"]').should('have.value', 'john@example.com');\n    cy.get('[data-testid=\"message-textarea\"]').should('have.value', 'This is a test message');\n\n    // Verify form is still in a valid state\n    cy.get('[data-testid=\"submit-button\"]').should('be.visible');\n  });\n\n  it('should clear form data when user navigates away and returns without saving', () => {\n    // Fill form with data\n    cy.get('[data-testid=\"name-input\"]').type('Jane Smith');\n    cy.get('[data-testid=\"email-input\"]').type('jane@example.com');\n\n    // Navigate away from the page\n    cy.get('[data-testid=\"nav-link\"]').click();\n    cy.get('[data-testid=\"dashboard-header\"]').should('be.visible');\n\n    // Navigate back to the form page\n    cy.get('[data-testid=\"nav-back-link\"]').click();\n\n    // Verify form data is NOT persisted (or is cleared)\n    cy.get('[data-testid=\"name-input\"]').should('have.value', '');\n    cy.get('[data-testid=\"email-input\"]').should('have.value', '');\n\n    // Verify form is empty and ready for new input\n    cy.get('[data-testid=\"name-input\"]').should('be.empty');\n    cy.get('[data-testid=\"email-input\"]').should('be.empty');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8114,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5714,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.258,
+      "feedback_used": ""
+    }
+  ]
+}

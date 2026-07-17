@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_136",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8172,
+  "total_latency_s": 72.048,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Content Independent Scrolling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/modal-page');\n  });\n\n  test('should scroll modal content independently when it overflows', async ({ page }) => {\n    // Open modal\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modal = page.locator('[data-testid=\"modal-dialog\"]');\n    await expect(modal).toBeVisible();\n\n    // Verify modal content is scrollable\n    const modalContent = page.locator('[data-testid=\"modal-content\"]');\n    const scrollbar = page.locator('[data-testid=\"modal-scrollbar\"]');\n    await expect(scrollbar).toBeVisible();\n\n    // Scroll modal content to the bottom\n    await modalContent.evaluate((el) => {\n      el.scrollTop = el.scrollHeight;\n    });\n\n    // Verify scrollbar is at the bottom\n    await expect(scrollbar).toHaveAttribute('style', /bottom: 0px/);\n\n    // Verify modal container is not scrolled\n    const modalContainer = page.locator('[data-testid=\"modal-container\"]');\n    const containerScrollTop = await modalContainer.evaluate((el) => el.scrollTop);\n    expect(containerScrollTop).toBe(0);\n\n    // Verify modal content is visible\n    const contentText = page.locator('[data-testid=\"modal-content\"]').textContent();\n    expect(contentText).toContain('End of content');\n  });\n\n  test('should not scroll modal content when it does not overflow', async ({ page }) => {\n    // Open modal\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modal = page.locator('[data-testid=\"modal-dialog\"]');\n    await expect(modal).toBeVisible();\n\n    // Verify modal content is not scrollable\n    const modalContent = page.locator('[data-testid=\"modal-content\"]');\n    const scrollbar = page.locator('[data-testid=\"modal-scrollbar\"]');\n    await expect(scrollbar).not.toBeVisible();\n\n    // Verify modal container is not scrolled\n    const modalContainer = page.locator('[data-testid=\"modal-container\"]');\n    const containerScrollTop = await modalContainer.evaluate((el) => el.scrollTop);\n    expect(containerScrollTop).toBe(0);\n\n    // Verify modal content is fully visible\n    const contentText = page.locator('[data-testid=\"modal-content\"]').textContent();\n    expect(contentText).toContain('Start of content');\n    expect(contentText).toContain('End of content');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8172,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4906,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.048,
+      "feedback_used": ""
+    }
+  ]
+}

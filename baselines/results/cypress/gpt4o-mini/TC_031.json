@@ -1,0 +1,13 @@
+{
+  "id": "TC_031",
+  "category": "form_validation",
+  "complexity": "complex",
+  "user_story": "As a user, I want file upload to reject files larger than 5MB.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('File Upload Validation', () => {\n    beforeEach(() => {\n        cy.visit('/upload'); // Replace with the actual URL of the upload page\n    });\n\n    it('should accept a file smaller than 5MB', () => {\n        const fileName = 'small-file.txt'; // Ensure this file is < 5MB\n        cy.fixture(fileName).then(fileContent => {\n            cy.get('input[type=\"file\"]').attachFile(fileName);\n            cy.get('button[type=\"submit\"]').click();\n            cy.get('.success-message').should('be.visible').and('contain', 'File uploaded successfully');\n        });\n    });\n\n    it('should reject a file larger than 5MB', () => {\n        const fileName = 'large-file.txt'; // Ensure this file is > 5MB\n        cy.fixture(fileName).then(fileContent => {\n            cy.get('input[type=\"file\"]').attachFile(fileName);\n            cy.get('button[type=\"submit\"]').click();\n            cy.get('.error-message').should('be.visible').and('contain', 'File size exceeds 5MB limit');\n        });\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 233,
+  "latency_s": 3.48,
+  "timestamp": "2026-06-19T16:27:08.381267"
+}

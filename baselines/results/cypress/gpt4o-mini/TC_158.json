@@ -1,0 +1,13 @@
+{
+  "id": "TC_158",
+  "category": "table_list",
+  "complexity": "simple",
+  "user_story": "As a user, I want to highlight a row on hover.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Table Row Highlight on Hover', () => {\n    beforeEach(() => {\n        cy.visit('/your-table-page-url'); // Replace with the actual URL of the page containing the table\n    });\n\n    it('should highlight the row on hover', () => {\n        cy.get('table tbody tr').first().trigger('mouseover');\n        cy.get('table tbody tr').first().should('have.class', 'highlight'); // Replace 'highlight' with the actual class used for highlighting\n    });\n\n    it('should not highlight any row when not hovered', () => {\n        cy.get('table tbody tr').first().should('not.have.class', 'highlight'); // Replace 'highlight' with the actual class used for highlighting\n    });\n});",
+  "prompt_tokens": 107,
+  "completion_tokens": 151,
+  "latency_s": 2.31,
+  "timestamp": "2026-06-19T16:35:29.122290"
+}

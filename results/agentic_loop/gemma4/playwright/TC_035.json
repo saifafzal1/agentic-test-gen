@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_035",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8505,
+  "total_latency_s": 189.541,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Multi-Step Form Progress Indicator', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/multi-step-form');\n  });\n\n  test('should display progress indicator and update on each step', async ({ page }) => {\n    // Verify initial state\n    const progressIndicator = page.getByTestId('progress-indicator');\n    await expect(progressIndicator).toBeVisible();\n    const step1 = page.getByRole('button', { name: /step 1/i });\n    await expect(step1).toBeVisible();\n    const step2 = page.getByRole('button', { name: /step 2/i });\n    await expect(step2).toBeVisible();\n    const step3 = page.getByRole('button', { name: /step 3/i });\n    await expect(step3).toBeVisible();\n\n    // Fill in step 1\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('John Doe');\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('john@example.com');\n    const nextButton = page.getByRole('button', { name: /next/i });\n    await nextButton.click();\n\n    // Verify progress indicator updated to step 2\n    await expect(progressIndicator).toContainText('Step 2 of 3');\n    await expect(step1).toHaveAttribute('aria-current', 'step');\n    await expect(step2).toHaveAttribute('aria-current', 'step');\n\n    // Fill in step 2\n    const phoneInput = page.getByLabel('Phone Number');\n    await phoneInput.fill('555-1234');\n    const addressInput = page.getByLabel('Address');\n    await addressInput.fill('123 Main St');\n    await nextButton.click();\n\n    // Verify progress indicator updated to step 3\n    await expect(progressIndicator).toContainText('Step 3 of 3');\n    await expect(step2).toHaveAttribute('aria-current', 'step');\n    await expect(step3).toHaveAttribute('aria-current', 'step');\n\n    // Fill in step 3 and submit\n    const countrySelect = page.getByLabel('Country');\n    await countrySelect.selectOption('USA');\n    const termsCheckbox = page.getByLabel('I agree to terms');\n    await termsCheckbox.click();\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify success message\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should handle navigation back and forward with progress indicator', async ({ page }) => {\n    // Navigate to step 2\n    const step1 = page.getByRole('button', { name: /step 1/i });\n    await step1.click();\n    const nextButton = page.getByRole('button', { name: /next/i });\n    await nextButton.click();\n\n    // Verify progress indicator is on step 2\n    const progressIndicator = page.getByTestId('progress-indicator');\n    await expect(progressIndicator).toContainText('Step 2 of 3');\n\n    // Navigate back to step 1\n    const backButton = page.getByRole('button', { name: /back/i });\n    await backButton.click();\n\n    // Verify progress indicator updated to step 1\n    await expect(progressIndicator).toContainText('Step 1 of 3');\n    await expect(step1).toHaveAttribute('aria-current', 'step');\n    await expect(step2).not.toHaveAttribute('aria-current', 'step');\n\n    // Navigate forward to step 2\n    await nextButton.click();\n\n    // Verify progress indicator updated to step 2\n    await expect(progressIndicator).toContainText('Step 2 of 3');\n    await expect(step2).toHaveAttribute('aria-current', 'step');\n\n    // Navigate to step 3\n    await nextButton.click();\n\n    // Verify progress indicator updated to step 3\n    await expect(progressIndicator).toContainText('Step 3 of 3');\n    await expect(step3).toHaveAttribute('aria-current', 'step');\n\n    // Verify form data is retained when navigating back and forth\n    const nameInput = page.getByLabel('Full Name');\n    await expect(nameInput).toHaveValue('John Doe');\n    const emailInput = page.getByLabel('Email Address');\n    await expect(emailInput).toHaveValue('john@example.com');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5242,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4807,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 70.903,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8505,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5015,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 118.638,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

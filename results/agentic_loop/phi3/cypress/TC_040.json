@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_040",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7376,
+  "total_latency_s": 28.259,
+  "final_script": "describe('Footer Navigation Links', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should navigate to correct page when footer link is clicked', () => {\n    // Verify footer is visible\n    cy.get('[data-testid=\"footer-nav\"]').should('be.visible');\n\n    // Verify footer contains navigation links\n    cy.get('[data-testid=\"footer-nav\"]').should('contain', 'Home');\n    cy.get('[data-testid=\"footer-nav\"]').should('contain', 'About');\n    cy.get('[data-testid=\"footer-nav\"]').should('contain', 'Contact');\n\n    // Click the Home link\n    cy.get('[data-testid=\"footer-nav\"]').find('[data-testid=\"nav-link-home\"]').click();\n\n    // Verify navigation occurred\n    cy.url().should('include', '/');\n\n    // Verify page title is correct\n    cy.title().should('equal', 'Home');\n\n    // Verify footer is still visible\n    cy.get('[data-testid=\"footer-nav\"]').should('be.visible');\n  });\n\n  it('should handle edge case when footer link is disabled', () => {\n    // Verify footer is visible\n    cy.get('[data-testid=\"footer-nav\"]').should('be.visible');\n\n    // Verify disabled link is present\n    cy.get('[data-testid=\"footer-nav\"]').find('[data-testid=\"nav-link-contact\"]').should('be.visible');\n\n    // Verify disabled link has appropriate class\n    cy.get('[data-testid=\"nav-link-contact\"]').should('have.class', 'disabled');\n\n    // Verify disabled link is not clickable\n    cy.get('[data-testid=\"nav-link-contact\"]').should('not.be.visible');\n\n    // Verify other links are clickable\n    cy.get('[data-testid=\"nav-link-home\"]').click();\n    cy.url().should('include', '/');\n\n    // Verify footer is still visible\n    cy.get('[data-testid=\"footer-nav\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7376,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3253,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 28.259,
+      "feedback_used": ""
+    }
+  ]
+}

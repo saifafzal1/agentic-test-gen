@@ -1,0 +1,13 @@
+{
+  "id": "TC_102",
+  "category": "error_states",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see an error if I submit a form with a future date in a past-date field.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Form Submission with Past-Date Field', () => {\n    beforeEach(() => {\n        cy.visit('/form-page'); // Replace with the actual URL of the form page\n    });\n\n    it('should display an error when a future date is submitted in the past-date field', () => {\n        const futureDate = new Date();\n        futureDate.setDate(futureDate.getDate() + 1); // Set to tomorrow's date\n\n        cy.get('input[name=\"past-date\"]').type(futureDate.toISOString().split('T')[0]); // Input future date\n        cy.get('form').submit(); // Submit the form\n\n        cy.get('.error-message') // Replace with the actual selector for the error message\n            .should('be.visible')\n            .and('contain', 'Please enter a valid past date.'); // Replace with the actual error message\n    });\n\n    it('should not display an error when a valid past date is submitted', () => {\n        const pastDate = new Date();\n        pastDate.setDate(pastDate.getDate() - 1); // Set to yesterday's date\n\n        cy.get('input[name=\"past-date\"]').type(pastDate.toISOString().split('T')[0]); // Input past date\n        cy.get('form').submit(); // Submit the form\n\n        cy.get('.error-message') // Replace with the actual selector for the error message\n            .should('not.exist'); // Ensure no error message is displayed\n    });\n});",
+  "prompt_tokens": 119,
+  "completion_tokens": 307,
+  "latency_s": 4.4,
+  "timestamp": "2026-06-19T16:31:55.762492"
+}

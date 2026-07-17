@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_193",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8161,
+  "total_latency_s": 53.175,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Filter - No Results Message', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should display \"No results found\" when no items match search query', async ({ page }) => {\n    // Set up API interception for search endpoint\n    await page.route('**/api/search', (route) => {\n      route.abort('no results');\n    });\n\n    // Set up intercept for no results response\n    await page.route('**/api/search', (route) => {\n      route.continue();\n    });\n\n    // Set up intercept for successful search response\n    await page.route('**/api/search', (route) => {\n      route.continue();\n    });\n\n    // Set up intercept for error response\n    await page.route('**/api/search', (route) => {\n      route.abort('error');\n    });\n\n    // Perform search with no results\n    const searchInput = page.getByLabel('Search');\n    await searchInput.fill('nonexistent item');\n\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await searchButton.click();\n\n    // Wait for results to load\n    await page.waitForResponse(response => response.url().includes('/search') && response.status() === 200);\n\n    // Verify no results message is displayed\n    const noResultsMessage = page.getByText('No results found');\n    await expect(noResultsMessage).toBeVisible();\n\n    // Verify search input is still visible\n    await expect(searchInput).toBeVisible();\n\n    // Verify search button is still visible\n    await expect(searchButton).toBeVisible();\n\n    // Verify search results container is empty\n    const resultsContainer = page.locator('[data-testid=\"search-results-container\"]');\n    await expect(resultsContainer).toHaveCount(0);\n  });\n\n  test('should handle error state when search API fails', async ({ page }) => {\n    // Set up API interception for search endpoint\n    await page.route('**/api/search', (route) => {\n      route.abort('error');\n    });\n\n    // Set up intercept for successful search response\n    await page.route('**/api/search', (route) => {\n      route.continue();\n    });\n\n    // Set up intercept for no results response\n    await page.route('**/api/search', (route) => {\n      route.continue();\n    });\n\n    // Perform search with error condition\n    const searchInput = page.getByLabel('Search');\n    await searchInput.fill('error test');\n\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await searchButton.click();\n\n    // Wait for error state to be displayed\n    await page.waitForResponse(response => response.url().includes('/search') && response.status() === 500);\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('Search failed');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify search input is still visible\n    await expect(searchInput).toBeVisible();\n\n    // Verify search button is still visible\n    await expect(searchButton).toBeVisible();\n\n    // Verify error state is active\n    const errorState = page.getByRole('status');\n    await expect(errorState).toBeVisible();\n\n    // Verify no results message is not displayed\n    const noResultsMessage = page.getByText('No results found');\n    await expect(noResultsMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8161,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3871,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 53.175,
+      "feedback_used": ""
+    }
+  ]
+}

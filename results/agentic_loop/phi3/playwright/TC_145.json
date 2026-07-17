@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_145",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7993,
+  "total_latency_s": 307.599,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Cookie Consent Banner - Acceptance', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/settings');\n  });\n\n  test('should hide cookie consent banner after user accepts cookies', async ({ page }) => {\n    // Verify consent banner is visible\n    const consentBanner = page.getByRole('alert');\n    await expect(consentBanner).toBeVisible();\n\n    // Verify consent button is visible and enabled\n    const acceptButton = page.getByRole('button', { name: /accept/i });\n    await expect(acceptButton).toBeVisible();\n\n    // Verify consent text is visible\n    const consentText = page.getByText(/we use cookies to improve your experience/i);\n    await expect(consentText).toBeVisible();\n\n    // Verify consent banner has a close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Click accept button\n    await acceptButton.click();\n\n    // Verify consent banner is no longer visible\n    await expect(consentBanner).not.toBeVisible();\n\n    // Verify consent text is no longer visible\n    await expect(consentText).not.toBeVisible();\n\n    // Verify consent banner close button is still visible\n    await expect(closeButton).toBeVisible();\n\n    // Verify consent banner is not visible after closing\n    await expect(consentBanner).not.toBeVisible();\n\n    // Verify consent banner is not visible after navigating away\n    await page.goto('/dashboard');\n    await expect(consentBanner).not.toBeVisible();\n  });\n\n  test('should not hide cookie consent banner if user rejects cookies', async ({ page }) => {\n    // Verify consent banner is visible\n    const consentBanner = page.getByRole('alert');\n    await expect(consentBanner).toBeVisible();\n\n    // Verify consent button is visible and enabled\n    const acceptButton = page.getByRole('button', { name: /accept/i });\n    await expect(acceptButton).toBeVisible();\n\n    // Verify consent text is visible\n    const consentText = page.getByText(/we use cookies to improve your experience/i);\n    await expect(consentText).toBeVisible();\n\n    // Verify consent banner has a close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Click reject button\n    const rejectButton = page.getByRole('button', { name: /reject/i });\n    await rejectButton.click();\n\n    // Verify consent banner remains visible\n    await expect(consentBanner).toBeVisible();\n\n    // Verify consent text is still visible\n    await expect(consentText).toBeVisible();\n\n    // Verify consent banner close button is still visible\n    await expect(closeButton).toBeVisible();\n\n    // Verify consent banner is still visible after navigating away\n    await page.goto('/dashboard');\n    await expect(consentBanner).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7993,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4311,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 307.599,
+      "feedback_used": ""
+    }
+  ]
+}

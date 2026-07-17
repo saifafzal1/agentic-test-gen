@@ -1,0 +1,13 @@
+{
+  "id": "TC_024",
+  "category": "form_validation",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see a character count on a textarea limited to 500 characters.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Character Count Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should display character count for textarea', async ({ page }) => {\n    const textarea = page.getByRole('textbox', { name: /your textarea label/i });\n    await textarea.fill('This is a test input to check character count.');\n\n    const characterCount = page.getByText(/character count/i);\n    await expect(characterCount).toHaveText('Character count: 38'); // Adjust based on input length\n  });\n\n  test('should not allow more than 500 characters', async ({ page }) => {\n    const textarea = page.getByRole('textbox', { name: /your textarea label/i });\n    const longText = 'A'.repeat(501);\n    await textarea.fill(longText);\n\n    const characterCount = page.getByText(/character count/i);\n    await expect(characterCount).toHaveText('Character count: 500'); // Ensure it caps at 500\n    await expect(textarea).toHaveValue(longText.slice(0, 500)); // Ensure textarea value is capped\n  });\n});",
+  "prompt_tokens": 137,
+  "completion_tokens": 264,
+  "latency_s": 3.88,
+  "timestamp": "2026-06-19T16:45:03.151015"
+}

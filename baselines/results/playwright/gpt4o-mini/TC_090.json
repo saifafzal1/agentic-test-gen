@@ -1,0 +1,13 @@
+{
+  "id": "TC_090",
+  "category": "error_states",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see a friendly message when my internet connection drops.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Internet Connection Drop', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('http://your-application-url.com');\n  });\n\n  test('should display friendly message when internet connection drops', async ({ page }) => {\n    // Simulate internet connection drop\n    await page.evaluate(() => {\n      window.dispatchEvent(new Event('offline'));\n    });\n\n    // Check for the friendly message\n    const message = await page.getByText('It seems you are offline. Please check your internet connection.');\n    await expect(message).toBeVisible();\n  });\n\n  test('should not display friendly message when internet is connected', async ({ page }) => {\n    // Simulate internet connection restored\n    await page.evaluate(() => {\n      window.dispatchEvent(new Event('online'));\n    });\n\n    // Check that the friendly message is not visible\n    const message = await page.getByText('It seems you are offline. Please check your internet connection.');\n    await expect(message).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 223,
+  "latency_s": 4.08,
+  "timestamp": "2026-06-19T16:49:40.526463"
+}

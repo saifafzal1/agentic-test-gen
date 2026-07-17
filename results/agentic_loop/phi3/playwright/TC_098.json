@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_098",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7823,
+  "total_latency_s": 948.117,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Error Boundary - UI Crash Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should catch UI crash and display fallback screen', async ({ page }) => {\n    // Setup: intercept the API call to simulate a crash\n    await page.route('**/api/data', (route) => {\n      route.abort('API crash');\n    });\n\n    // Intercept the API call to simulate a successful response\n    await page.route('**/api/data', (route) => {\n      route.continue();\n    });\n\n    // Verify the error boundary is visible\n    const errorBoundary = page.getByTestId('error-boundary');\n    await expect(errorBoundary).toBeVisible();\n\n    // Verify fallback content is displayed\n    const fallbackContent = page.getByTestId('fallback-content');\n    await expect(fallbackContent).toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('Oops, something went wrong');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify navigation button is present\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify navigation button is clickable\n    await expect(retryButton).toBeEnabled();\n\n    // Click the retry button to navigate away from the error\n    await retryButton.click();\n\n    // Verify navigation to the dashboard is successful\n    const dashboard = page.getByTestId('dashboard');\n    await expect(dashboard).toBeVisible();\n\n    // Verify error boundary is no longer visible\n    await expect(errorBoundary).not.toBeVisible();\n\n    // Verify fallback content is no longer visible\n    await expect(fallbackContent).not.toBeVisible();\n  });\n\n  test('should handle multiple error boundaries and display appropriate fallbacks', async ({ page }) => {\n    // Setup: intercept multiple API calls to simulate different errors\n    await page.route('**/api/data/user', (route) => {\n      route.abort('User data error');\n    });\n\n    await page.route('**/api/data/settings', (route) => {\n      route.abort('Settings error');\n    });\n\n    // Verify error boundaries are visible for both errors\n    const userErrorBoundary = page.getByTestId('user-error-boundary');\n    await expect(userErrorBoundary).toBeVisible();\n\n    const settingsErrorBoundary = page.getByTestId('settings-error-boundary');\n    await expect(settingsErrorBoundary).toBeVisible();\n\n    // Verify fallback content is displayed for user error\n    const userFallbackContent = page.getByTestId('user-fallback-content');\n    await expect(userFallbackContent).toBeVisible();\n\n    // Verify fallback content is displayed for settings error\n    const settingsFallbackContent = page.getByTestId('settings-fallback-content');\n    await expect(settingsFallbackContent).toBeVisible();\n\n    // Verify error messages are displayed for both errors\n    const userErrorMessage = page.getByText('User data error');\n    await expect(userErrorMessage).toBeVisible();\n\n    const settingsErrorMessage = page.getByText('Settings error');\n    await expect(settingsErrorMessage).toBeVisible();\n\n    // Verify navigation buttons are present for both errors\n    const userRetryButton = page.getByRole('button', { name: /retry user data/i });\n    await expect(userRetryButton).toBeVisible();\n\n    const settingsRetryButton = page.getByRole('button', { name: /retry settings/i });\n    await expect(settingsRetryButton).toBeVisible();\n\n    // Verify navigation buttons are clickable\n    await expect(userRetryButton).toBeEnabled();\n    await expect(settingsRetryButton).toBeEnabled();\n\n    // Click the retry buttons to navigate away from the errors\n    await userRetryButton.click();\n    await settingsRetryButton.click();\n\n    // Verify navigation to the dashboard is successful\n    const dashboard = page.getByTestId('dashboard');\n    await expect(dashboard).toBeVisible();\n\n    // Verify error boundaries are no longer visible\n    await expect(userErrorBoundary).not.toBeVisible();\n    await expect(settingsErrorBoundary).not.toBeVisible();\n\n    // Verify fallback content is no longer visible\n    await expect(userFallbackContent).not.toBeVisible();\n    await expect(settingsFallbackContent).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.498,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4135,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 475.988,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7823,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3742,
+        "missing_keywords": [],
+        "assertion_count": 23,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 472.129,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

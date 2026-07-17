@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_232",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7975,
+  "total_latency_s": 71.993,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Data Table Responsive Stacking', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/data-table');\n  });\n\n  test('should stack data table rows vertically on small screens', async ({ page }) => {\n    // Set viewport to small screen size\n    await page.setViewportSize({ width: 375, height: 800 });\n\n    // Verify table container is visible\n    const tableContainer = page.getByRole('region', { name: /data table/i });\n    await expect(tableContainer).toBeVisible();\n\n    // Verify table header is visible\n    const tableHeader = page.getByRole('heading', { name: /data table/i });\n    await expect(tableHeader).toBeVisible();\n\n    // Verify first row is visible\n    const firstRow = page.getByRole('row', { name: /john doe/i });\n    await expect(firstRow).toBeVisible();\n\n    // Verify first row contains all expected data cells\n    const firstCell = page.getByRole('cell', { name: /john doe/i });\n    await expect(firstCell).toBeVisible();\n    const firstCellAge = page.getByRole('cell', { name: /35/i });\n    await expect(firstCellAge).toBeVisible();\n    const firstCellEmail = page.getByRole('cell', { name: /john@example.com/i });\n    await expect(firstCellEmail).toBeVisible();\n\n    // Verify table is stacked vertically (rows are full width)\n    const rowElements = page.locator('[data-testid=\"table-row\"]');\n    const rowCount = await rowElements.count();\n    expect(rowCount).toBeGreaterThan(0);\n\n    // Verify each row takes up full width\n    for (let i = 0; i < rowCount; i++) {\n      const row = rowElements.nth(i);\n      const rowWidth = await row.evaluate((el) => el.offsetWidth);\n      expect(rowWidth).toBe(window.innerWidth);\n    }\n\n    // Verify table is not using horizontal scroll\n    const scrollBar = page.locator('[data-testid=\"table-scroll-bar\"]');\n    await expect(scrollBar).not.toBeVisible();\n  });\n\n  test('should display data table in responsive stacked format on small screens', async ({ page }) => {\n    // Set viewport to small screen size\n    await page.setViewportSize({ width: 375, height: 800 });\n\n    // Verify table container is visible\n    const tableContainer = page.getByRole('region', { name: /data table/i });\n    await expect(tableContainer).toBeVisible();\n\n    // Verify table header is visible\n    const tableHeader = page.getByRole('heading', { name: /data table/i });\n    await expect(tableHeader).toBeVisible();\n\n    // Verify first row is visible and contains all data\n    const firstRow = page.getByRole('row', { name: /john doe/i });\n    await expect(firstRow).toBeVisible();\n\n    // Verify all data cells are visible and not truncated\n    const allCells = page.getByRole('cell');\n    const cellCount = await allCells.count();\n    expect(cellCount).toBeGreaterThan(0);\n\n    // Verify each cell has full content\n    for (let i = 0; i < cellCount; i++) {\n      const cell = allCells.nth(i);\n      const cellText = await cell.textContent();\n      expect(cellText).not.toContain('...');\n    }\n\n    // Verify table is not horizontally scrollable\n    const scrollBar = page.locator('[data-testid=\"table-scroll-bar\"]');\n    await expect(scrollBar).not.toBeVisible();\n\n    // Verify table is not using horizontal overflow\n    const tableElement = page.locator('[data-testid=\"data-table\"]');\n    const tableWidth = await tableElement.evaluate((el) => el.offsetWidth);\n    expect(tableWidth).toBeLessThanOrEqual(window.innerWidth);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7975,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4249,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.993,
+      "feedback_used": ""
+    }
+  ]
+}

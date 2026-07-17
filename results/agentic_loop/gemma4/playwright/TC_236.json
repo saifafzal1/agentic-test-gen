@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_236",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8186,
+  "total_latency_s": 71.955,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Homepage Hero Section - Mobile Responsiveness', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should display mobile-specific hero content when viewport is small', async ({ page }) => {\n    // Set viewport to mobile size\n    await page.setViewportSize({ width: 375, height: 667 });\n\n    // Verify mobile hero title is visible\n    const mobileTitle = page.getByRole('heading', { name: /mobile hero title/i });\n    await expect(mobileTitle).toBeVisible();\n\n    // Verify mobile hero description is visible\n    const mobileDescription = page.getByText(/short mobile description/i);\n    await expect(mobileDescription).toBeVisible();\n\n    // Verify mobile CTA button is visible and clickable\n    const mobileCta = page.getByRole('button', { name: /get started/i });\n    await expect(mobileCta).toBeVisible();\n    await expect(mobileCta).toBeEnabled();\n\n    // Verify desktop hero title is NOT visible\n    const desktopTitle = page.getByRole('heading', { name: /desktop hero title/i });\n    await expect(desktopTitle).not.toBeVisible();\n  });\n\n  test('should display desktop hero content when viewport is large', async ({ page }) => {\n    // Set viewport to desktop size\n    await page.setViewportSize({ width: 1920, height: 1000 });\n\n    // Verify desktop hero title is visible\n    const desktopTitle = page.getByRole('heading', { name: /desktop hero title/i });\n    await expect(desktopTitle).toBeVisible();\n\n    // Verify desktop hero description is visible\n    const desktopDescription = page.getByText(/detailed desktop description/i);\n    await expect(desktopDescription).toBeVisible();\n\n    // Verify desktop CTA button is visible and clickable\n    const desktopCta = page.getByRole('button', { name: /explore features/i });\n    await expect(desktopCta).toBeVisible();\n    await expect(desktopCta).toBeEnabled();\n\n    // Verify mobile hero title is NOT visible\n    const mobileTitle = page.getByRole('heading', { name: /mobile hero title/i });\n    await expect(mobileTitle).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8186,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4955,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.955,
+      "feedback_used": ""
+    }
+  ]
+}

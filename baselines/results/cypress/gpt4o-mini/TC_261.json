@@ -1,0 +1,13 @@
+{
+  "id": "TC_261",
+  "category": "notifications",
+  "complexity": "medium",
+  "user_story": "As a user, I want to dismiss a notification by clicking the close button.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Notification Dismissal', () => {\n    beforeEach(() => {\n        cy.visit('/notifications'); // Adjust the URL as necessary\n    });\n\n    it('should dismiss the notification when the close button is clicked', () => {\n        cy.get('.notification').should('be.visible'); // Ensure the notification is visible\n        cy.get('.notification .close-button').click(); // Click the close button\n        cy.get('.notification').should('not.exist'); // Verify the notification is dismissed\n    });\n\n    it('should not dismiss the notification if the close button is not clicked', () => {\n        cy.get('.notification').should('be.visible'); // Ensure the notification is visible\n        cy.get('.notification').should('exist'); // Verify the notification still exists\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 160,
+  "latency_s": 2.16,
+  "timestamp": "2026-06-19T16:41:31.432566"
+}

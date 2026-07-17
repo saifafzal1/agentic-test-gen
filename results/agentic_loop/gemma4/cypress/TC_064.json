@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_064",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7349,
+  "total_latency_s": 72.078,
+  "final_script": "describe('Search Results Debounce Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should update search results only after 300ms debounce delay', () => {\n    // Intercept the search API call\n    cy.intercept('GET', '/api/search*').as('searchRequest');\n\n    // Type first search term\n    cy.get('[data-testid=\"search-input\"]').type('apple');\n\n    // Wait for debounce delay\n    cy.wait(350);\n\n    // Verify API call was made\n    cy.wait('@searchRequest');\n\n    // Verify results are displayed\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('contain', 'Apple');\n\n    // Type second search term\n    cy.get('[data-testid=\"search-input\"]').clear().type('banana');\n\n    // Wait for debounce delay\n    cy.wait(350);\n\n    // Verify second API call was made\n    cy.wait('@searchRequest');\n\n    // Verify results are updated\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('contain', 'Banana');\n  });\n\n  it('should not trigger API call for rapid typing within debounce window', () => {\n    // Intercept the search API call\n    cy.intercept('GET', '/api/search*').as('searchRequest');\n\n    // Type multiple characters rapidly\n    cy.get('[data-testid=\"search-input\"]').type('apple');\n\n    // Wait for debounce delay\n    cy.wait(350);\n\n    // Verify only one API call was made\n    cy.wait('@searchRequest');\n\n    // Verify results are displayed\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('contain', 'Apple');\n\n    // Clear and type again rapidly\n    cy.get('[data-testid=\"search-input\"]').clear().type('orange');\n\n    // Wait for debounce delay\n    cy.wait(350);\n\n    // Verify second API call was made\n    cy.wait('@searchRequest');\n\n    // Verify results are updated\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('contain', 'Orange');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7349,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3164,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.078,
+      "feedback_used": ""
+    }
+  ]
+}

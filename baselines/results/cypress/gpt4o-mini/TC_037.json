@@ -1,0 +1,13 @@
+{
+  "id": "TC_037",
+  "category": "form_validation",
+  "complexity": "complex",
+  "user_story": "As a user, I want to receive a confirmation email after form submission.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Form Submission Confirmation Email', () => {\n    beforeEach(() => {\n        cy.visit('/form-page'); // Replace with the actual form page URL\n    });\n\n    it('should send a confirmation email after successful form submission', () => {\n        cy.get('input[name=\"name\"]').type('John Doe');\n        cy.get('input[name=\"email\"]').type('john.doe@example.com');\n        cy.get('textarea[name=\"message\"]').type('This is a test message.');\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.get('.success-message').should('be.visible').and('contain', 'Thank you for your submission!');\n        cy.wait(2000); // Wait for the email to be sent\n\n        cy.request('GET', '/api/emails') // Replace with the actual API endpoint to check emails\n            .its('body')\n            .should('deep.include', {\n                to: 'john.doe@example.com',\n                subject: 'Confirmation of your submission',\n                body: 'Thank you for your submission!'\n            });\n    });\n\n    it('should not send a confirmation email if the form is submitted with an invalid email', () => {\n        cy.get('input[name=\"name\"]').type('John Doe');\n        cy.get('input[name=\"email\"]').type('invalid-email');\n        cy.get('textarea[name=\"message\"]').type('This is a test message.');\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.get('.error-message').should('be.visible').and('contain', 'Please enter a valid email address.');\n        cy.wait(2000); // Wait for the email to be processed\n\n        cy.request('GET', '/api/emails') // Replace with the actual API endpoint to check emails\n            .its('body')\n            .should('not.deep.include', {\n                to: 'invalid-email',\n                subject: 'Confirmation of your submission',\n                body: 'Thank you for your submission!'\n            });\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 403,
+  "latency_s": 5.51,
+  "timestamp": "2026-06-19T16:27:31.344188"
+}

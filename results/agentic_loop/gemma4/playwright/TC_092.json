@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_092",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8278,
+  "total_latency_s": 77.23,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Error Clearing on Input Correction', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should clear error message when invalid input is corrected', async ({ page }) => {\n    // Locate and fill with invalid email\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('invalid-email');\n\n    // Verify error message appears\n    const errorMessage = page.getByText('Please enter a valid email address');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error state is applied to input\n    await expect(emailInput).toHaveAttribute('data-error');\n\n    // Correct the invalid input\n    await emailInput.fill('valid.user@example.com');\n\n    // Verify error message is cleared\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify error state is removed from input\n    await expect(emailInput).not.toHaveAttribute('data-error');\n\n    // Verify input value is correct\n    await expect(emailInput).toHaveValue('valid.user@example.com');\n  });\n\n  test('should clear error when user deletes all invalid characters', async ({ page }) => {\n    // Locate and fill with invalid phone number\n    const phoneInput = page.getByLabel('Phone Number');\n    await phoneInput.fill('123-invalid');\n\n    // Verify error message appears\n    const errorMessage = page.getByText('Please enter a valid phone number');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error state is applied to input\n    await expect(phoneInput).toHaveAttribute('data-error');\n\n    // Clear all invalid characters by deleting\n    await phoneInput.press('Backspace');\n    await phoneInput.press('Backspace');\n    await phoneInput.press('Backspace');\n    await phoneInput.press('Backspace');\n    await phoneInput.press('Backspace');\n\n    // Verify error message is cleared\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify error state is removed from input\n    await expect(phoneInput).not.toHaveAttribute('data-error');\n\n    // Verify input is empty\n    await expect(phoneInput).toHaveValue('');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8278,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5261,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 77.23,
+      "feedback_used": ""
+    }
+  ]
+}

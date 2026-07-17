@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_066",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8014,
+  "total_latency_s": 303.815,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('403 Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display access denied page when API returns 403 status', async ({ page }) => {\n    // Setup intercept for API call\n    await page.route('**/api/user/profile', (route) => {\n      route.abort('failed');\n    });\n\n    // Attempt to access a protected route\n    const profileButton = page.getByRole('button', { name: /profile/i });\n    await profileButton.click();\n\n    // Verify access denied page is displayed\n    const accessDeniedMessage = page.getByText(/access denied/i);\n    await expect(accessDeniedMessage).toBeVisible();\n\n    // Verify error status is displayed\n    const errorStatus = page.getByText(/403 Forbidden/i);\n    await expect(errorStatus).toBeVisible();\n\n    // Verify navigation is blocked\n    const backButton = page.getByRole('button', { name: /back/i });\n    await expect(backButton).not.toBeVisible();\n\n    // Verify user is not logged in\n    const userName = page.getByText(/user name/i);\n    await expect(userName).not.toBeVisible();\n\n    // Verify error page has proper title\n    const errorPageTitle = page.getByText(/access denied/i);\n    await expect(errorPageTitle).toBeVisible();\n  });\n\n  test('should handle 403 error with custom error page', async ({ page }) => {\n    // Setup intercept for API call\n    await page.route('**/api/user/profile', (route) => {\n      route.abort('failed');\n    });\n\n    // Setup intercept for custom error page\n    await page.route('**/error/403', (route) => {\n      route.continue();\n    });\n\n    // Attempt to access a protected route\n    const profileButton = page.getByRole('button', { name: /profile/i });\n    await profileButton.click();\n\n    // Verify custom error page is displayed\n    const errorPageTitle = page.getByText(/custom error/i);\n    await expect(errorPageTitle).toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/access denied/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify navigation is blocked\n    const backButton = page.getByRole('button', { name: /back/i });\n    await expect(backButton).not.toBeVisible();\n\n    // Verify user is not logged in\n    const userName = page.getByText(/user name/i);\n    await expect(userName).not.toBeVisible();\n\n    // Verify error page has proper title\n    await expect(errorPageTitle).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8014,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.438,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 303.815,
+      "feedback_used": ""
+    }
+  ]
+}

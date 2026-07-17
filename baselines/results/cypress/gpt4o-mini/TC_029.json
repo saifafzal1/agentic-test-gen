@@ -1,0 +1,13 @@
+{
+  "id": "TC_029",
+  "category": "form_validation",
+  "complexity": "simple",
+  "user_story": "As a user, I want form data to persist if I accidentally navigate away.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Form Data Persistence', () => {\n    beforeEach(() => {\n        cy.visit('/form-page'); // Replace with the actual URL of the form page\n    });\n\n    it('should retain form data when navigating away and returning', () => {\n        cy.get('input[name=\"username\"]').type('testuser');\n        cy.get('input[name=\"email\"]').type('testuser@example.com');\n        cy.get('input[name=\"password\"]').type('password123');\n\n        // Simulate navigating away\n        cy.visit('/another-page'); // Replace with the actual URL of another page\n\n        // Navigate back to the form page\n        cy.visit('/form-page');\n\n        // Assert that the form data is still present\n        cy.get('input[name=\"username\"]').should('have.value', 'testuser');\n        cy.get('input[name=\"email\"]').should('have.value', 'testuser@example.com');\n        cy.get('input[name=\"password\"]').should('have.value', 'password123');\n    });\n\n    it('should not retain form data if the form is reset', () => {\n        cy.get('input[name=\"username\"]').type('testuser');\n        cy.get('input[name=\"email\"]').type('testuser@example.com');\n        cy.get('input[name=\"password\"]').type('password123');\n\n        // Simulate resetting the form\n        cy.get('button[type=\"reset\"]').click(); // Assuming there is a reset button\n\n        // Assert that the form fields are empty\n        cy.get('input[name=\"username\"]').should('have.value', '');\n        cy.get('input[name=\"email\"]').should('have.value', '');\n        cy.get('input[name=\"password\"]').should('have.value', '');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 350,
+  "latency_s": 5.24,
+  "timestamp": "2026-06-19T16:27:01.447540"
+}

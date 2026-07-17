@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_253",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7519,
+  "total_latency_s": 72.443,
+  "final_script": "describe('Payment Processing Loading State', () => {\n  beforeEach(() => {\n    cy.visit('/payment');\n  });\n\n  it('should display loading state while payment is processing', () => {\n    // Intercept the payment API call\n    cy.intercept('POST', '/api/payment/process').as('processPayment');\n\n    // Click the pay button\n    cy.get('[data-testid=\"pay-button\"]').click();\n\n    // Verify loading indicator appears\n    cy.get('[data-testid=\"loading-spinner\"]').should('be.visible');\n    cy.get('[data-testid=\"loading-text\"]').should('contain', 'Processing payment');\n\n    // Verify pay button is disabled during processing\n    cy.get('[data-testid=\"pay-button\"]').should('be.disabled');\n\n    // Wait for the API call to complete\n    cy.wait('@processPayment');\n\n    // Verify loading indicator disappears after successful payment\n    cy.get('[data-testid=\"loading-spinner\"]').should('not.exist');\n    cy.get('[data-testid=\"loading-text\"]').should('not.exist');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Payment successful');\n\n    // Verify user is redirected to confirmation page\n    cy.url().should('include', '/payment/success');\n  });\n\n  it('should handle payment processing timeout and display error state', () => {\n    // Intercept the payment API call and delay the response\n    cy.intercept('POST', '/api/payment/process', (req) => {\n      req.reply((res) => {\n        res.delay(10000); // Simulate timeout\n        res.send({ statusCode: 200, body: { success: true } });\n      });\n    }).as('processPaymentTimeout');\n\n    // Click the pay button\n    cy.get('[data-testid=\"pay-button\"]').click();\n\n    // Verify loading indicator appears\n    cy.get('[data-testid=\"loading-spinner\"]').should('be.visible');\n\n    // Wait for the timeout to occur\n    cy.wait('@processPaymentTimeout', { timeout: 15000 });\n\n    // Verify error state is displayed after timeout\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Payment timed out');\n\n    // Verify loading indicator is removed\n    cy.get('[data-testid=\"loading-spinner\"]').should('not.exist');\n\n    // Verify pay button is re-enabled\n    cy.get('[data-testid=\"pay-button\"]').should('not.be.disabled');\n\n    // Verify user is still on payment page\n    cy.url().should('include', '/payment');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7519,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3729,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.443,
+      "feedback_used": ""
+    }
+  ]
+}

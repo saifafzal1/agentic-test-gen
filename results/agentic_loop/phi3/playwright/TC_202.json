@@ -1,0 +1,59 @@
+{
+  "tc_id": "TC_202",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 3,
+  "best_score": 0.837,
+  "total_latency_s": 1278.744,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Term Highlighting in Result Snippets', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should highlight search terms in result snippets', async ({ page }) => {\n    // Set up search input using getByLabel\n    const searchInput = page.getByLabel('Search');\n    await searchInput.fill('playwright automation');\n\n    // Set up search button using getByRole\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await searchButton.click();\n\n    // Wait for search results to load\n    await page.waitForSelector('[data-testid=\"search-results\"]');\n\n    // Verify search results are visible\n    const resultsContainer = page.getByTestId('search-results');\n    await expect(resultsContainer).toBeVisible();\n\n    // Verify search term is highlighted in the first result snippet\n    const firstResultSnippet = page.getByTestId('result-snippet-1');\n    await expect(firstResultSnippet).toContainText('playwright automation');\n\n    // Verify highlighting is applied using getByRole\n    const highlightedTerm = page.getByRole('heading', { name: /playwright automation/i });\n    await expect(highlightedTerm).toBeVisible();\n\n    // Verify highlighted term is styled differently\n    await expect(highlightedTerm).toHaveClass(/highlighted-term/);\n\n    // Verify search term is highlighted in the second result snippet\n    const secondResultSnippet = page.getByTestId('result-snippet-2');\n    await expect(secondResultSnippet).toContainText('playwright automation');\n\n    // Verify highlighting is applied using getByRole\n    const secondHighlightedTerm = page.getByRole('heading', { name: /playwright automation/i });\n    await expect(secondHighlightedTerm).toBeVisible();\n\n    // Verify highlighted term is styled differently\n    await expect(secondHighlightedTerm).toHaveClass(/highlighted-term/);\n\n    // Verify search term is not highlighted in a non-result snippet\n    const nonResultSnippet = page.getByTestId('non-result-snippet');\n    await expect(nonResultSnippet).not.toContainText('playwright automation');\n\n    // Verify search term is highlighted in the last result snippet\n    const lastResultSnippet = page.getByTestId('result-snippet-last');\n    await expect(lastResultSnippet).toContainText('playwright automation');\n\n    // Verify highlighted term is styled differently\n    const lastHighlightedTerm = page.getByRole('heading', { name: /playwright automation/i });\n    await expect(lastHighlightedTerm).toHaveClass(/highlighted-term/);\n  });\n\n  test('should handle search term with special characters and spaces', async ({ page }) => {\n    // Set up search input using getByLabel\n    const searchInput = page.getByLabel('Search');\n    await searchInput.fill('playwright automation with spaces & special chars');\n\n    // Set up search button using getByRole\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await searchButton.click();\n\n    // Wait for search results to load\n    await page.waitForSelector('[data-testid=\"search-results\"]');\n\n    // Verify search results are visible\n    const resultsContainer = page.getByTestId('search-results');\n    await expect(resultsContainer).toBeVisible();\n\n    // Verify search term is highlighted in the first result snippet\n    const firstResultSnippet = page.getByTestId('result-snippet-1');\n    await expect(firstResultSnippet).toContainText('playwright automation with spaces & special chars');\n\n    // Verify highlighted term is styled differently\n    const firstHighlightedTerm = page.getByRole('heading', { name: /playwright automation with spaces & special chars/i });\n    await expect(firstHighlightedTerm).toHaveClass(/highlighted-term/);\n\n    // Verify search term is highlighted in the second result snippet\n    const secondResultSnippet = page.getByTestId('result-snippet-2');\n    await expect(secondResultSnippet).toContainText('playwright automation with spaces & special chars');\n\n    // Verify highlighted term is styled differently\n    const secondHighlightedTerm = page.getByRole('heading', { name: /playwright automation with spaces & special chars/i });\n    await expect(secondHighlightedTerm).toHaveClass(/highlighted-term/);\n\n    // Verify search term is not highlighted in a non-result snippet\n    const nonResultSnippet = page.getByTestId('non-result-snippet');\n    await expect(nonResultSnippet).not.toContainText('playwright automation with spaces & special chars');\n\n    // Verify search term is highlighted in the last result snippet\n    const lastResultSnippet = page.getByTestId('result-snippet-last');\n    await expect(lastResultSnippet).toContainText('playwright automation with spaces & special chars');\n\n    // Verify highlighted term is styled differently\n    const lastHighlightedTerm = page.getByRole('heading', { name: /playwright automation with spaces & special chars/i });\n    await expect(lastHighlightedTerm).toHaveClass(/highlighted-term/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5375,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.525,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 56.151,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.1166,
+        "syntax": 0.1,
+        "assertion": 0.0,
+        "rouge_l": 0.2552,
+        "missing_keywords": [
+          "expect("
+        ],
+        "assertion_count": 0,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2",
+        "complete": false
+      },
+      "latency_s": 602.668,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.837,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4566,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 619.925,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2"
+    }
+  ]
+}

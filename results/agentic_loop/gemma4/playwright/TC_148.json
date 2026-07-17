@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_148",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8663,
+  "total_latency_s": 187.502,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Row Filtering by Search Input', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should filter table rows correctly when user types in search input', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify initial row count\n    const initialRows = page.getByRole('row').count();\n    expect(initialRows).toBeGreaterThan(0);\n\n    // Get search input by label\n    const searchInput = page.getByLabel('Search table');\n    await expect(searchInput).toBeVisible();\n\n    // Type search term\n    await searchInput.fill('John');\n\n    // Wait for filter to apply\n    await page.waitForTimeout(500);\n\n    // Verify filtered rows are displayed\n    const filteredRows = page.getByRole('row');\n    const rowCount = await filteredRows.count();\n    expect(rowCount).toBeLessThan(initialRows);\n\n    // Verify filtered rows contain search term\n    const allRows = page.locator('[data-testid=\"table-row\"]');\n    const rowsWithJohn = await allRows.filter({ hasText: /John/i }).count();\n    expect(rowsWithJohn).toBeGreaterThan(0);\n\n    // Verify non-matching rows are hidden\n    const rowsWithoutJohn = await allRows.filter({ hasText: /Jane/i }).count();\n    expect(rowsWithoutJohn).toBe(0);\n\n    // Verify search input retains value\n    await expect(searchInput).toHaveValue('John');\n  });\n\n  test('should clear filter when search input is emptied and display all rows', async ({ page }) => {\n    // Get search input by label\n    const searchInput = page.getByLabel('Search table');\n    await expect(searchInput).toBeVisible();\n\n    // Type search term\n    await searchInput.fill('Alice');\n\n    // Wait for filter to apply\n    await page.waitForTimeout(500);\n\n    // Verify filtered rows are displayed\n    const filteredRows = page.getByRole('row');\n    const rowCountAfterFilter = await filteredRows.count();\n    expect(rowCountAfterFilter).toBeLessThan(10);\n\n    // Clear search input\n    await searchInput.clear();\n    await searchInput.fill('');\n\n    // Wait for filter to clear\n    await page.waitForTimeout(500);\n\n    // Verify all rows are displayed again\n    const allRows = page.getByRole('row');\n    const rowCountAfterClear = await allRows.count();\n    expect(rowCountAfterClear).toBeGreaterThan(10);\n\n    // Verify search input is empty\n    await expect(searchInput).toHaveValue('');\n\n    // Verify table header is visible\n    const tableHeader = page.getByRole('columnheader');\n    await expect(tableHeader).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5252,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.504,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.473,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8663,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5543,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 115.029,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

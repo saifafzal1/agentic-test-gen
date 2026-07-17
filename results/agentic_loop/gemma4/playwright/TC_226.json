@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_226",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.82,
+  "total_latency_s": 71.866,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mobile Navigation Collapse to Hamburger Menu', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/mobile-page');\n  });\n\n  test('should collapse navigation into hamburger menu on mobile viewport', async ({ page }) => {\n    // Set viewport to mobile size\n    await page.setViewportSize({ width: 375, height: 862 });\n\n    // Verify navigation links are visible before collapse\n    const navLinks = page.getByRole('navigation').getByText('Home');\n    await expect(navLinks).toBeVisible();\n\n    // Verify hamburger menu button is visible\n    const hamburgerButton = page.getByRole('button', { name: /menu/i });\n    await expect(hamburgerButton).toBeVisible();\n\n    // Click hamburger menu button\n    await hamburgerButton.click();\n\n    // Verify menu overlay appears\n    const menuOverlay = page.locator('[data-testid=\"menu-overlay\"]');\n    await expect(menuOverlay).toBeVisible();\n\n    // Verify menu items are now visible in overlay\n    const menuItems = page.getByRole('menuitem');\n    await expect(menuItems).toHaveCount(5);\n\n    // Verify menu items are accessible\n    const homeMenuItem = page.getByRole('menuitem', { name: /home/i });\n    await expect(homeMenuItem).toBeVisible();\n\n    // Verify menu overlay has correct styling\n    const overlayStyle = await menuOverlay.evaluate((el) => window.getComputedStyle(el).display);\n    expect(overlayStyle).toBe('block');\n  });\n\n  test('should expand navigation from hamburger menu and close on click', async ({ page }) => {\n    // Set viewport to mobile size\n    await page.setViewportSize({ width: 375, height: 860 });\n\n    // Click hamburger menu button to open menu\n    const hamburgerButton = page.getByRole('button', { name: /menu/i });\n    await hamburgerButton.click();\n\n    // Verify menu overlay is visible\n    const menuOverlay = page.locator('[data-testid=\"menu-overlay\"]');\n    await expect(menuOverlay).toBeVisible();\n\n    // Click home menu item\n    const homeMenuItem = page.getByRole('menuitem', { name: /home/i });\n    await homeMenuItem.click();\n\n    // Verify menu overlay closes\n    await expect(menuOverlay).not.toBeVisible();\n\n    // Verify user is navigated to home page\n    await expect(page).toHaveURL(/.*\\/home/);\n\n    // Click hamburger menu button again to reopen menu\n    await hamburgerButton.click();\n    await expect(menuOverlay).toBeVisible();\n\n    // Click settings menu item\n    const settingsMenuItem = page.getByRole('menuitem', { name: /settings/i });\n    await settingsMenuItem.click();\n\n    // Verify menu overlay closes after navigation\n    await expect(menuOverlay).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.82,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.866,
+      "feedback_used": ""
+    }
+  ]
+}

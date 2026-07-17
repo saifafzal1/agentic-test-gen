@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_140",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7864,
+  "total_latency_s": 38.079,
+  "final_script": "describe('Popover Toggle on Button Click', () => {\n  beforeEach(() => {\n    cy.visit('/popover-toggle');\n  });\n\n  it('should toggle popover on button click and display content when visible', () => {\n    // Verify popover is not visible initially\n    cy.get('[data-testid=\"popover-button\"]').should('be.visible');\n    cy.get('[data-testid=\"popover-content\"]').should('not.exist');\n\n    // Click the button to open popover\n    cy.get('[data-testid=\"popover-button\"]').click();\n\n    // Verify popover is now visible\n    cy.get('[data-testid=\"popover-content\"]').should('be.visible');\n\n    // Verify popover content is displayed\n    cy.get('[data-testid=\"popover-content\"]').should('contain', 'Popover content');\n\n    // Verify close button is present\n    cy.get('[data-testid=\"popover-close-button\"]').should('be.visible');\n\n    // Click close button to hide popover\n    cy.get('[data-testid=\"popover-close-button\"]').click();\n\n    // Verify popover is hidden\n    cy.get('[data-testid=\"popover-content\"]').should('not.exist');\n\n    // Verify button is still visible\n    cy.get('[data-testid=\"popover-button\"]').should('be.visible');\n  });\n\n  it('should not toggle popover when button is disabled', () => {\n    // Verify popover is not visible initially\n    cy.get('[data-testid=\"popover-button\"]').should('be.visible');\n    cy.get('[data-testid=\"popover-content\"]').should('not.exist');\n\n    // Disable button\n    cy.get('[data-testid=\"popover-button\"]').should('be.visible');\n    cy.get('[data-testid=\"popover-button\"]').click();\n\n    // Verify button is now disabled\n    cy.get('[data-testid=\"popover-button\"]').should('have.attr', 'disabled');\n\n    // Verify popover is still not visible\n    cy.get('[data-testid=\"popover-content\"]').should('not.exist');\n\n    // Verify button is still visible but disabled\n    cy.get('[data-testid=\"popover-button\"]').should('be.visible');\n    cy.get('[data-testid=\"popover-button\"]').should('have.attr', 'disabled');\n\n    // Click disabled button - should not toggle popover\n    cy.get('[data-testid=\"popover-button\"]').click();\n\n    // Verify popover is still not visible\n    cy.get('[data-testid=\"popover-content\"]').should('not.exist');\n\n    // Verify button is still disabled\n    cy.get('[data-testid=\"popover-button\"]').should('have.attr', 'disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7864,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.488,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 38.079,
+      "feedback_used": ""
+    }
+  ]
+}

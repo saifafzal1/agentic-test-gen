@@ -1,0 +1,13 @@
+{
+  "id": "TC_264",
+  "category": "notifications",
+  "complexity": "medium",
+  "user_story": "As a user, I want to mark all notifications as read with one click.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Notifications', () => {\n    beforeEach(() => {\n        cy.visit('/notifications');\n        cy.login(); // Assuming there's a custom command for login\n    });\n\n    it('should mark all notifications as read successfully', () => {\n        cy.get('.notification').should('have.class', 'unread').then((notifications) => {\n            const unreadCount = notifications.length;\n            cy.get('.mark-all-read-button').click();\n            cy.get('.notification').should('have.class', 'read');\n            cy.get('.notification').should('have.length', unreadCount);\n        });\n    });\n\n    it('should display a message if there are no unread notifications', () => {\n        cy.get('.notification').each(($el) => {\n            cy.wrap($el).invoke('remove'); // Simulate all notifications being read\n        });\n        cy.get('.mark-all-read-button').click();\n        cy.get('.no-unread-notifications-message').should('be.visible').and('contain', 'No unread notifications');\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 208,
+  "latency_s": 3.24,
+  "timestamp": "2026-06-19T16:41:45.156942"
+}

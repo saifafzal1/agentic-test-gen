@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_037",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8588,
+  "total_latency_s": 51.929,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Submission with Confirmation Email', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should successfully submit form and send confirmation email', async ({ page }) => {\n    // Setup intercept for form submission API\n    await page.route('**/api/form/submit', (route) => {\n      route.continue();\n    });\n\n    // Fill out form fields using getByLabel\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('John Doe');\n\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('john.doe@example.com');\n\n    const messageInput = page.getByLabel('Message');\n    await messageInput.fill('Hello, this is a test message');\n\n    // Submit form using getByRole\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Wait for success message\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify confirmation email is sent\n    const emailSentNotification = page.getByText('Confirmation email sent');\n    await expect(emailSentNotification).toBeVisible();\n\n    // Verify email content\n    const emailBody = page.getByText('Thank you for your message, John Doe');\n    await expect(emailBody).toBeVisible();\n\n    // Verify email subject\n    const emailSubject = page.getByText('Confirmation - Your Message');\n    await expect(emailSubject).toBeVisible();\n\n    // Verify email was sent to the correct address\n    const emailFrom = page.getByText('john.doe@example.com');\n    await expect(emailFrom).toBeVisible();\n  });\n\n  test('should handle form submission failure and display error message', async ({ page }) => {\n    // Setup intercept for form submission API with error response\n    await page.route('**/api/form/submit', (route) => {\n      route.abort('failed');\n    });\n\n    // Fill out form fields using getByLabel\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('Jane Smith');\n\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('jane.smith@example.com');\n\n    const messageInput = page.getByLabel('Message');\n    await messageInput.fill('This is a test message with an error');\n\n    // Submit form using getByRole\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Wait for error message\n    const errorMessage = page.getByText('Form submission failed');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error details\n    const errorDetail = page.getByText('Email address is required');\n    await expect(errorDetail).toBeVisible();\n\n    // Verify form fields are still visible\n    const nameInput = page.getByLabel('Full Name');\n    await expect(nameInput).toBeVisible();\n\n    const emailInput = page.getByLabel('Email Address');\n    await expect(emailInput).toBeVisible();\n\n    // Verify email was not sent\n    const emailSentNotification = page.getByText('Confirmation email sent');\n    await expect(emailSentNotification).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8588,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5292,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 51.929,
+      "feedback_used": ""
+    }
+  ]
+}

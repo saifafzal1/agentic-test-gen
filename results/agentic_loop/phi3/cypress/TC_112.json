@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_112",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7894,
+  "total_latency_s": 285.791,
+  "final_script": "describe('Async Image Upload with Progress Percentage', () => {\n  beforeEach(() => {\n    cy.visit('/upload-image');\n  });\n\n  it('should display progress percentage during async image upload', () => {\n    // Intercept the upload API call\n    cy.intercept('POST', '/api/upload/image', {\n      statusCode: 200,\n      body: {\n        message: 'Image uploaded successfully',\n        fileId: '12345'\n      }\n    }).as('uploadImage');\n\n    // Get the upload input and file selector\n    cy.get('[data-testid=\"upload-input\"]').selectFile('cypress/fixtures/test-image.jpg', {\n      force: true\n    });\n\n    // Verify progress bar is visible\n    cy.get('[data-testid=\"progress-bar\"]').should('be.visible');\n\n    // Verify progress percentage is displayed\n    cy.get('[data-testid=\"progress-percentage\"]').should('contain', '0%');\n\n    // Wait for the upload to start\n    cy.wait('@uploadImage');\n\n    // Verify progress percentage updates\n    cy.get('[data-testid=\"progress-percentage\"]').should('contain', '25%');\n\n    // Verify progress bar is now partially filled\n    cy.get('[data-testid=\"progress-bar\"]').should('have.css', 'width', '25%');\n\n    // Wait for the upload to complete\n    cy.wait('@uploadImage');\n\n    // Verify progress percentage reaches 100%\n    cy.get('[data-testid=\"progress-percentage\"]').should('contain', '100%');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Image uploaded successfully');\n\n    // Verify file ID is displayed\n    cy.get('[data-testid=\"file-id\"]').should('contain', '12345');\n  });\n\n  it('should handle upload failure and display error message', () => {\n    // Intercept the upload API call with error response\n    cy.intercept('POST', '/api/upload/image', {\n      statusCode: 500,\n      body: {\n        error: 'Server error during upload'\n      }\n    }).as('uploadImageError');\n\n    // Get the upload input and file selector\n    cy.get('[data-testid=\"upload-input\"]').selectFile('cypress/fixtures/test-image.jpg', {\n      force: true\n    });\n\n    // Verify progress bar is visible\n    cy.get('[data-testid=\"progress-bar\"]').should('be.visible');\n\n    // Wait for the upload to start\n    cy.wait('@uploadImageError');\n\n    // Verify progress percentage updates\n    cy.get('[data-testid=\"progress-percentage\"]').should('contain', '50%');\n\n    // Verify progress bar is now partially filled\n    cy.get('[data-testid=\"progress-bar\"]').should('have.css', 'width', '50%');\n\n    // Wait for the upload to fail\n    cy.wait('@uploadImageError');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Upload failed');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n\n    // Verify file ID is not displayed\n    cy.get('[data-testid=\"file-id\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7894,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4979,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 285.791,
+      "feedback_used": ""
+    }
+  ]
+}

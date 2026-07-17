@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_045",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7494,
+  "total_latency_s": 137.136,
+  "final_script": "describe('Internal Links - Same Tab Opening', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should open internal links in the same tab', () => {\n    // Verify initial page is loaded\n    cy.get('[data-testid=\"dashboard-header\"]').should('be.visible');\n\n    // Click on an internal link\n    cy.get('[data-testid=\"dashboard-settings-link\"]').click();\n\n    // Verify the same tab is active\n    cy.get('[data-testid=\"dashboard-header\"]').should('be.visible');\n    cy.get('[data-testid=\"dashboard-settings-panel\"]').should('be.visible');\n\n    // Verify the URL has changed to the internal link\n    cy.url().should('include', '/dashboard/settings');\n\n    // Verify the content of the new tab matches the expected content\n    cy.get('[data-testid=\"settings-title\"]').should('contain', 'Settings');\n    cy.get('[data-testid=\"settings-description\"]').should('contain', 'Manage your account settings');\n\n    // Verify the back button returns to the original tab\n    cy.get('[data-testid=\"dashboard-settings-back-button\"]').click();\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"dashboard-header\"]').should('be.visible');\n  });\n\n  it('should handle internal links with query parameters', () => {\n    // Verify initial page is loaded\n    cy.get('[data-testid=\"dashboard-header\"]').should('be.visible');\n\n    // Click on an internal link with query parameters\n    cy.get('[data-testid=\"dashboard-reports-link\"]').click();\n\n    // Verify the same tab is active\n    cy.get('[data-testid=\"dashboard-header\"]').should('be.visible');\n    cy.get('[data-testid=\"dashboard-reports-panel\"]').should('be.visible');\n\n    // Verify the URL has changed to include query parameters\n    cy.url().should('include', '/dashboard/reports');\n\n    // Verify the content of the new tab matches the expected content\n    cy.get('[data-testid=\"reports-title\"]').should('contain', 'Reports');\n    cy.get('[data-testid=\"reports-description\"]').should('contain', 'View and generate reports');\n\n    // Verify the back button returns to the original tab\n    cy.get('[data-testid=\"dashboard-reports-back-button\"]').click();\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"dashboard-header\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7494,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3646,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 137.136,
+      "feedback_used": ""
+    }
+  ]
+}

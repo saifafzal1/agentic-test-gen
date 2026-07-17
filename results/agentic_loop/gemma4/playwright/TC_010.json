@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_010",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8013,
+  "total_latency_s": 71.15,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Google OAuth Login', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should successfully log in using Google OAuth', async ({ page }) => {\n    // Verify login page is visible\n    const loginPage = page.getByRole('main');\n    await expect(loginPage).toBeVisible();\n\n    // Click Google login button using getByRole\n    const googleButton = page.getByRole('button', { name: /Sign in with Google/i });\n    await expect(googleButton).toBeVisible();\n    await googleButton.click();\n\n    // Wait for Google OAuth redirect\n    await page.waitForURL(/accounts\\.google\\.com/);\n\n    // Verify Google consent screen is visible\n    const consentScreen = page.getByRole('dialog', { name: /Sign in to Google/i });\n    await expect(consentScreen).toBeVisible();\n\n    // Click \"Allow\" button using getByRole\n    const allowButton = page.getByRole('button', { name: /Allow/i });\n    await expect(allowButton).toBeVisible();\n    await allowButton.click();\n\n    // Wait for successful authentication redirect\n    await page.waitForURL(/.*\\/dashboard/);\n\n    // Verify user is logged in and redirected to dashboard\n    const dashboardHeader = page.getByRole('heading', { name: /Dashboard/i });\n    await expect(dashboardHeader).toBeVisible();\n\n    // Verify user profile picture is displayed\n    const profilePic = page.getByRole('img', { name: /User profile picture/i });\n    await expect(profilePic).toBeVisible();\n\n    // Verify welcome message is displayed\n    const welcomeMessage = page.getByText(/Welcome back/i);\n    await expect(welcomeMessage).toBeVisible();\n  });\n\n  test('should handle Google OAuth failure and display error message', async ({ page }) => {\n    // Click Google login button using getByRole\n    const googleButton = page.getByRole('button', { name: /Sign in with Google/i });\n    await expect(googleButton).toBeVisible();\n    await googleButton.click();\n\n    // Wait for Google OAuth redirect\n    await page.waitForURL(/accounts\\.google\\.com/);\n\n    // Intercept the Google API call and simulate failure\n    await page.route('**/oauth2/v3/userinfo', route => {\n      route.abort('failed');\n    });\n\n    // Click \"Allow\" button using getByRole\n    const allowButton = page.getByRole('button', { name: /Allow/i });\n    await expect(allowButton).toBeVisible();\n    await allowButton.click();\n\n    // Wait for error handling\n    await page.waitForTimeout(500);\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/Google authentication failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify user is still on the login page\n    const loginPage = page.getByRole('main');\n    await expect(loginPage).toBeVisible();\n\n    // Verify Google login button is still available\n    const googleButton = page.getByRole('button', { name: /Sign in with Google/i });\n    await expect(googleButton).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8013,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4377,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.15,
+      "feedback_used": ""
+    }
+  ]
+}

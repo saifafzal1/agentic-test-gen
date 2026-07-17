@@ -1,0 +1,13 @@
+{
+  "id": "TC_069",
+  "category": "api_response_handling",
+  "complexity": "medium",
+  "user_story": "As a user, I want API responses cached so repeat visits are instant.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('API Response Caching', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com');\n  });\n\n  test('should cache API response on first visit', async ({ page }) => {\n    const response = await page.request.get('/api/data');\n    expect(response.ok()).toBeTruthy();\n\n    const cachedResponse = await page.request.get('/api/data');\n    expect(cachedResponse.ok()).toBeTruthy();\n    expect(cachedResponse.headers()['x-cache']).toBe('HIT');\n  });\n\n  test('should return instant response on repeat visits', async ({ page }) => {\n    const firstResponse = await page.request.get('/api/data');\n    expect(firstResponse.ok()).toBeTruthy();\n\n    const secondResponse = await page.request.get('/api/data');\n    expect(secondResponse.ok()).toBeTruthy();\n    expect(secondResponse.headers()['x-cache']).toBe('HIT');\n    \n    const firstData = await firstResponse.json();\n    const secondData = await secondResponse.json();\n    expect(firstData).toEqual(secondData);\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 237,
+  "latency_s": 3.28,
+  "timestamp": "2026-06-19T16:48:09.612738"
+}

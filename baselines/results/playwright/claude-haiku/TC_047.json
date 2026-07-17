@@ -1,0 +1,13 @@
+{
+  "id": "TC_047",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want a skip-to-content link for accessibility.",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "```typescript\nimport { test, expect } from '@playwright/test';\n\ntest.describe('Skip-to-content link accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should have a skip-to-content link visible on page load', async ({ page }) => {\n    const skipLink = page.getByRole('link', { name: /skip to content/i });\n    await expect(skipLink).toBeVisible();\n  });\n\n  test('should have skip-to-content link with correct href attribute', async ({ page }) => {\n    const skipLink = page.getByRole('link', { name: /skip to content/i });\n    const href = await skipLink.getAttribute('href');\n    expect(href).toBeTruthy();\n    expect(href).toMatch(/^#/);\n  });\n\n  test('should focus skip-to-content link when tabbing from start', async ({ page }) => {\n    await page.keyboard.press('Tab');\n    const skipLink = page.getByRole('link', { name: /skip to content/i });\n    await expect(skipLink).toBeFocused();\n  });\n\n  test('should navigate to main content when skip link is clicked', async ({ page }) => {\n    const skipLink = page.getByRole('link', { name: /skip to content/i });\n    const href = await skipLink.getAttribute('href');\n    \n    await skipLink.click();\n    \n    const mainContent = page.locator(href || '#main-content');\n    await expect(mainContent).toBeFocused();\n  });\n\n  test('should have skip-to-content link before navigation elements', async ({ page }) => {\n    const skipLink = page.getByRole('link', { name: /skip to content/i });\n    const nav = page.getByRole('navigation').first();\n    \n    const skipLinkBox = await skipLink.boundingBox();\n    const navBox = await nav.boundingBox();\n    \n    expect(skipLinkBox).toBeTruthy();\n    expect(navBox).toBeTruthy();\n    \n    if (skipLinkBox && navBox) {\n      expect(skipLinkBox.y).toBeLessThanOrEqual(navBox.y);\n    }\n  });\n});\n```",
+  "prompt_tokens": 142,
+  "completion_tokens": 558,
+  "latency_s": 4.09,
+  "timestamp": "2026-06-19T17:42:37.870854"
+}

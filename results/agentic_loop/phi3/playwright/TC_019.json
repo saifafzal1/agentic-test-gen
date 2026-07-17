@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_019",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8169,
+  "total_latency_s": 515.705,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Phone Number Field Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/contact-form');\n  });\n\n  test('should accept only numeric input in phone number field', async ({ page }) => {\n    // Locate and interact with phone number input using getByLabel\n    const phoneInput = page.getByLabel('Phone Number');\n    await expect(phoneInput).toBeVisible();\n    \n    // Set up intercept to capture and verify API call\n    await page.route('**/api/contact-form/validate-phone', (route) => {\n      route.continue();\n    });\n    \n    // Attempt to enter a valid numeric phone number\n    await phoneInput.fill('1234567890');\n    await expect(phoneInput).toHaveValue('1234567890');\n    \n    // Verify validation API is called\n    await expect(page).toHaveReceivedCount(1, 'request', /contact-form\\/validate-phone/);\n    \n    // Verify success message appears\n    const successMessage = page.getByText('Phone number validated successfully');\n    await expect(successMessage).toBeVisible();\n    \n    // Verify error message is not visible\n    const errorMessage = page.getByText('Invalid phone number');\n    await expect(errorMessage).not.toBeVisible();\n  });\n\n  test('should reject non-numeric input in phone number field', async ({ page }) => {\n    // Locate and interact with phone number input using getByLabel\n    const phoneInput = page.getByLabel('Phone Number');\n    await expect(phoneInput).toBeVisible();\n    \n    // Set up intercept to capture and verify API call\n    await page.route('**/api/contact-form/validate-phone', (route) => {\n      route.continue();\n    });\n    \n    // Attempt to enter a non-numeric value\n    await phoneInput.fill('abc123');\n    \n    // Verify validation API is called\n    await expect(page).toHaveReceivedCount(1, 'request', /contact-form\\/validate-phone/);\n    \n    // Verify error message appears\n    const errorMessage = page.getByText('Invalid phone number');\n    await expect(errorMessage).toBeVisible();\n    \n    // Verify success message is not visible\n    const successMessage = page.getByText('Phone number validated successfully');\n    await expect(successMessage).not.toBeVisible();\n    \n    // Verify input is still present and retains non-numeric value\n    await expect(phoneInput).toHaveValue('abc123');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8169,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4895,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 515.705,
+      "feedback_used": ""
+    }
+  ]
+}

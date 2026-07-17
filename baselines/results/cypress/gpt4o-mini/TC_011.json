@@ -1,0 +1,13 @@
+{
+  "id": "TC_011",
+  "category": "authentication",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a password strength indicator when setting a new password.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Password Strength Indicator', () => {\n    beforeEach(() => {\n        cy.visit('/signup'); // Adjust the URL to your signup page\n    });\n\n    it('should display the password strength indicator when a new password is entered', () => {\n        cy.get('input[name=\"password\"]').type('StrongPassword123!');\n        cy.get('.password-strength-indicator').should('be.visible');\n        cy.get('.password-strength-indicator').should('contain', 'Strong');\n    });\n\n    it('should indicate weak password strength for a short password', () => {\n        cy.get('input[name=\"password\"]').type('123');\n        cy.get('.password-strength-indicator').should('be.visible');\n        cy.get('.password-strength-indicator').should('contain', 'Weak');\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 160,
+  "latency_s": 2.29,
+  "timestamp": "2026-06-19T16:25:57.201801"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_136",
+  "category": "modal_dialog",
+  "complexity": "complex",
+  "user_story": "As a user, I want modal content to scroll independently when it overflows.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Dialog Scrolling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n    await page.getByRole('button', { name: 'Open Modal' }).click(); // Adjust the button name as necessary\n  });\n\n  test('should display modal with scrollable content', async ({ page }) => {\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n\n    const content = modal.locator('.modal-content'); // Adjust the selector based on your modal's content\n    await expect(content).toHaveCSS('overflow-y', 'auto');\n  });\n\n  test('should scroll modal content independently', async ({ page }) => {\n    const modal = page.getByRole('dialog');\n    const scrollableContent = modal.locator('.modal-scrollable'); // Adjust the selector based on your modal's scrollable content\n\n    await scrollableContent.evaluate((el) => {\n      el.scrollTop = el.scrollHeight; // Scroll to the bottom\n    });\n\n    await expect(scrollableContent).toHaveCSS('scrollTop', '100'); // Adjust the expected value based on your content height\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 268,
+  "latency_s": 3.41,
+  "timestamp": "2026-06-19T16:52:52.942034"
+}

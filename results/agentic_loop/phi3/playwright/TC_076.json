@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_076",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8144,
+  "total_latency_s": 390.604,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Item Detail View', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/items');\n  });\n\n  test('should display item details when clicking on an item', async ({ page }) => {\n    // Verify the list of items is visible\n    const itemList = page.getByRole('region', { name: /items/i });\n    await expect(itemList).toBeVisible();\n\n    // Get the first item using getByRole\n    const firstItem = page.getByRole('listitem', { name: /item 1/i });\n    await expect(firstItem).toBeVisible();\n\n    // Get the item details button using getByRole\n    const detailsButton = page.getByRole('button', { name: /view details/i });\n    await expect(detailsButton).toBeVisible();\n\n    // Click the details button to open the modal\n    await detailsButton.click();\n\n    // Verify the modal is visible\n    const detailsModal = page.getByRole('dialog', { name: /item details/i });\n    await expect(detailsModal).toBeVisible();\n\n    // Verify the item details are displayed\n    const itemName = page.getByText(/item 1/i);\n    await expect(itemName).toBeVisible();\n\n    const itemDescription = page.getByText(/description of item 1/i);\n    await expect(itemDescription).toBeVisible();\n\n    const itemPrice = page.getByText(/price: $100/i);\n    await expect(itemPrice).toBeVisible();\n\n    // Verify the close button is present\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify the item details modal has a close button\n    await expect(detailsModal).toContainText(/close/i);\n  });\n\n  test('should handle empty item list and display error message', async ({ page }) => {\n    // Verify the item list is empty\n    const itemList = page.getByRole('region', { name: /items/i });\n    await expect(itemList).toBeEmpty();\n\n    // Verify the error message is visible\n    const errorMessage = page.getByText(/no items found/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the error message has a close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify the error message is displayed\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8144,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4814,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 390.604,
+      "feedback_used": ""
+    }
+  ]
+}

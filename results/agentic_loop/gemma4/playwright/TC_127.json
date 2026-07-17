@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_127",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8865,
+  "total_latency_s": 72.049,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async Form Submission - Disable Submit Button', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should disable submit button while form submission is in progress', async ({ page }) => {\n    // Intercept the form submission API call\n    await page.route('**/api/submit-form', (route) => {\n      route.abort('blockedbyclient');\n    });\n\n    // Fill in form fields using getByLabel\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('John Doe');\n\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('john@example.com');\n\n    const messageInput = page.getByLabel('Message');\n    await messageInput.fill('This is a test message');\n\n    // Click submit button using getByRole\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify submit button is disabled\n    await expect(submitButton).toBeDisabled();\n\n    // Verify loading state is visible\n    const loadingIndicator = page.getByRole('status', { name: /submitting/i });\n    await expect(loadingIndicator).toBeVisible();\n\n    // Wait for the async operation to complete\n    await page.waitForTimeout(1000);\n\n    // Verify submit button is re-enabled\n    await expect(submitButton).not.toBeDisabled();\n\n    // Verify success message is displayed\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should handle form submission failure and re-enable submit button', async ({ page }) => {\n    // Intercept the form submission API call and simulate failure\n    await page.route('**/api/submit-form', (route) => {\n      route.abort('blockedbyclient');\n    });\n\n    // Fill in form fields using getByLabel\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('Jane Smith');\n\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('jane@example.com');\n\n    const messageInput = page.getByLabel('Message');\n    await messageInput.fill('Another test message');\n\n    // Click submit button using getByRole\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify submit button is disabled\n    await expect(submitButton).toBeDisabled();\n\n    // Verify loading state is visible\n    const loadingIndicator = page.getByRole('status', { name: /submitting/i });\n    await expect(loadingIndicator).toBeVisible();\n\n    // Wait for the async operation to complete\n    await page.waitForTimeout(1000);\n\n    // Verify submit button is re-enabled\n    await expect(submitButton).not.toBeDisabled();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('Submission failed');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify form fields are still populated\n    await expect(nameInput).toHaveValue('Jane Smith');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8865,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.6218,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.049,
+      "feedback_used": ""
+    }
+  ]
+}

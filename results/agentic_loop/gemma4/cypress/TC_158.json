@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_158",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7593,
+  "total_latency_s": 72.515,
+  "final_script": "describe('Table Row Hover Highlight', () => {\n  beforeEach(() => {\n    cy.visit('/table');\n  });\n\n  it('should highlight a row when hovered over', () => {\n    // Verify table is visible\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n    \n    // Verify rows exist\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 0);\n    \n    // Hover over the first row\n    cy.get('[data-testid=\"table-row:first\"]').trigger('mouseenter');\n    \n    // Verify the first row has the highlight class\n    cy.get('[data-testid=\"table-row:first\"]').should('have.class', 'row-highlighted');\n    \n    // Verify the highlight style is applied\n    cy.get('[data-testid=\"table-row:first\"]').should('have.css', 'background-color', 'rgb(245, 245, 255)');\n    \n    // Verify other rows do not have the highlight class\n    cy.get('[data-testid=\"table-row\"]').not('[data-testid=\"table-row:first\"]').should('not.have.class', 'row-highlighted');\n    \n    // Hover over the second row\n    cy.get('[data-testid=\"table-row:second\"]').trigger('mouseenter');\n    \n    // Verify the second row is highlighted\n    cy.get('[data-testid=\"table-row:second\"]').should('have.class', 'row-highlighted');\n    \n    // Verify the first row is no longer highlighted\n    cy.get('[data-testid=\"table-row:first\"]').should('not.have.class', 'row-highlighted');\n  });\n\n  it('should remove highlight when mouse leaves row', () => {\n    // Hover over the first row\n    cy.get('[data-testid=\"table-row:first\"]').trigger('mouseenter');\n    \n    // Verify first row is highlighted\n    cy.get('[data-testid=\"table-row:first\"]').should('have.class', 'row-highlighted');\n    \n    // Move mouse out of the row\n    cy.get('[data-testid=\"table-row:first\"]').trigger('mouseleave');\n    \n    // Verify highlight class is removed\n    cy.get('[data-testid=\"table-row:first\"]').should('not.have.class', 'row-highlighted');\n    \n    // Verify background color is reset\n    cy.get('[data-testid=\"table-row:first\"]').should('have.css', 'background-color', 'rgb(255, 257, 260)');\n    \n    // Hover over the third row\n    cy.get('[data-testid=\"table-row:third\"]').trigger('mouseenter');\n    \n    // Verify third row is highlighted\n    cy.get('[data-testid=\"table-row:third\"]').should('have.class', 'row-highlighted');\n    \n    // Verify first row is not highlighted\n    cy.get('[data-testid=\"table-row:first\"]').should('not.have.class', 'row-highlighted');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7593,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3977,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.515,
+      "feedback_used": ""
+    }
+  ]
+}

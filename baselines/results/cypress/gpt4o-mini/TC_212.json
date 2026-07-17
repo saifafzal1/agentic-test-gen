@@ -1,0 +1,13 @@
+{
+  "id": "TC_212",
+  "category": "accessibility",
+  "complexity": "simple",
+  "user_story": "As a user, I want all icon buttons to have accessible names.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Icon Button Accessibility', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should have accessible names for all icon buttons', () => {\n        cy.get('button[aria-label]').each(($button) => {\n            const label = $button.attr('aria-label');\n            expect(label).to.exist;\n            expect(label).to.not.be.empty;\n        });\n    });\n\n    it('should not have any icon buttons without accessible names', () => {\n        cy.get('button:not([aria-label])').should('have.length', 0);\n    });\n});",
+  "prompt_tokens": 107,
+  "completion_tokens": 131,
+  "latency_s": 2.17,
+  "timestamp": "2026-06-19T16:38:29.028741"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_004",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8339,
+  "total_latency_s": 74.526,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Protected Page Access - Unauthenticated User', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should redirect unauthenticated user to login page when accessing protected route', async ({ page }) => {\n    // Intercept the protected page request and return a 4 unauthorized response\n    await page.route('/dashboard', (route) => {\n      route.abort('failed');\n    });\n\n    // Navigate to the protected page\n    await page.goto('/dashboard');\n\n    // Verify the login page is displayed\n    const loginPage = page.getByRole('main');\n    await expect(loginPage).toBeVisible();\n\n    // Verify the login form is visible\n    const loginForm = page.getByLabel('Login');\n    await expect(loginForm).toBeVisible();\n\n    // Verify the redirect URL is correct\n    const redirectLink = page.getByRole('link', { name: /login/i });\n    await expect(redirectLink).toBeVisible();\n\n    // Verify the login button is visible\n    const loginButton = page.getByRole('button', { name: /sign in/i });\n    await expect(loginButton).toBeVisible();\n  });\n\n  test('should allow authenticated user to access protected page without redirect', async ({ page }) => {\n    // Set up authentication by intercepting the login API\n    await page.route('/api/auth/login', (route) => {\n      route.continue();\n    });\n\n    // Intercept the protected page API and return a success response\n    await page.route('/api/dashboard/data', (route) => {\n      route.continue();\n    });\n\n    // Navigate to the login page\n    await page.goto('/login');\n\n    // Fill in credentials using getByLabel\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('user@example.com');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('Password123');\n\n    // Click the login button using getByRole\n    const loginButton = page.getByRole('button', { name: /sign in/i });\n    await loginButton.click();\n\n    // Wait for navigation to dashboard\n    await page.waitForURL('/dashboard');\n\n    // Verify the dashboard page is displayed\n    const dashboardPage = page.getByRole('main');\n    await expect(dashboardPage).toBeVisible();\n\n    // Verify the welcome message is visible\n    const welcomeMessage = page.getByText(/Welcome back/i);\n    await expect(welcomeMessage).toBeVisible();\n\n    // Verify the user profile link is visible\n    const profileLink = page.getByRole('link', { name: /profile/i });\n    await expect(profileLink).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8339,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4462,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 74.526,
+      "feedback_used": ""
+    }
+  ]
+}

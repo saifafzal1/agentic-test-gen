@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_206",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7975,
+  "total_latency_s": 72.954,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Focus Indicators on Interactive Elements', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/interactive-elements');\n  });\n\n  test('should display focus indicator when navigating with keyboard', async ({ page }) => {\n    // Verify focus indicator is visible on the first interactive element\n    const firstButton = page.getByRole('button', { name: /submit/i });\n    await expect(firstButton).toBeVisible();\n    await expect(firstButton).toHaveCSS('box-shadow', /0 0 0 2px rgba(0, 153, 255, 1)/);\n\n    // Navigate to the second interactive element using Tab\n    const secondLink = page.getByRole('link', { name: /about/i });\n    await secondLink.focus();\n    await expect(secondLink).toHaveCSS('box-shadow', /0 0 0 2px rgba(0, 153, 255, 1)/);\n\n    // Navigate to the third interactive element using Tab\n    const thirdInput = page.getByLabel(/email/i);\n    await thirdInput.focus();\n    await expect(thirdInput).toHaveCSS('box-shadow', /0 0 0 2px rgba(0, 153, 255, 1)/);\n\n    // Verify focus indicator is visible on the fourth interactive element\n    const fourthDropdown = page.getByRole('combobox', { name: /options/i });\n    await fourthDropdown.focus();\n    await expect(fourthDropdown).toHaveCSS('box-shadow', /0 0 0 2px rgba(0, 153, 255, 1)/);\n  });\n\n  test('should remove focus indicator when element loses focus', async ({ page }) => {\n    // Focus on the first button\n    const firstButton = page.getByRole('button', { name: /submit/i });\n    await firstButton.focus();\n    await expect(firstButton).toHaveCSS('box-shadow', /0 0 0 2px rgba(0, 153, 255, 1)/);\n\n    // Tab to the second link\n    const secondLink = page.getByRole('link', { name: /about/i });\n    await secondLink.focus();\n    await expect(secondLink).toHaveCSS('box-shadow', /0 0 0 2px rgba(0, 153, 255, 1)/);\n\n    // Tab back to the first button\n    await firstButton.focus();\n    await expect(firstButton).toHaveCSS('box-shadow', /0 0 0 2px rgba(0, 153, 255, 1)/);\n\n    // Press Enter to submit the form\n    await firstButton.click();\n    await expect(firstButton).not.toHaveCSS('box-shadow', /0 0 0 2px rgba(0, 153, 255, 1)/);\n\n    // Verify focus is removed from the button after submission\n    await expect(firstButton).not.toHaveCSS('box-shadow', /0 0 0 2px rgba(0, 153, 255, 1)/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7975,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3249,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.954,
+      "feedback_used": ""
+    }
+  ]
+}

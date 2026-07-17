@@ -1,0 +1,13 @@
+{
+  "id": "TC_185",
+  "category": "file_upload",
+  "complexity": "simple",
+  "user_story": "As a user, I want uploaded files to be organised into folders.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload and Organization', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/upload');\n  });\n\n  test('should upload a file and create a folder', async ({ page }) => {\n    await page.getByLabel('Upload File').setInputFiles('path/to/file.txt');\n    await page.getByRole('button', { name: 'Create Folder' }).click();\n    await page.getByLabel('Folder Name').fill('My Documents');\n    await page.getByRole('button', { name: 'Save' }).click();\n\n    const folder = await page.getByText('My Documents');\n    await expect(folder).toBeVisible();\n  });\n\n  test('should verify file is inside the created folder', async ({ page }) => {\n    await page.getByText('My Documents').click();\n    const uploadedFile = await page.getByText('file.txt');\n    await expect(uploadedFile).toBeVisible();\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 217,
+  "latency_s": 3.45,
+  "timestamp": "2026-06-19T16:56:03.744302"
+}

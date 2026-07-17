@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_290",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8091,
+  "total_latency_s": 375.881,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Profile Update Confirmation Message', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/profile');\n  });\n\n  test('should display confirmation message after successful profile update', async ({ page }) => {\n    // Setup: Fill in new profile details using getByLabel\n    const firstNameInput = page.getByLabel('First Name');\n    await firstNameInput.fill('John');\n\n    const lastNameInput = page.getByLabel('Last Name');\n    await lastNameInput.fill('Doe');\n\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('john.doe@example.com');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('NewPassword123');\n\n    // Verify update button is visible and enabled\n    const updateButton = page.getByRole('button', { name: /update profile/i });\n    await expect(updateButton).toBeVisible();\n\n    // Click update button\n    await updateButton.click();\n\n    // Verify confirmation modal is visible\n    const confirmationModal = page.getByRole('dialog');\n    await expect(confirmationModal).toBeVisible();\n\n    // Verify confirmation message contains expected text\n    const confirmationText = page.getByText(/Your profile has been updated successfully/i);\n    await expect(confirmationText).toBeVisible();\n\n    // Verify success message\n    const successMessage = page.getByText(/Profile updated successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify user is redirected to profile page\n    const profilePage = page.getByRole('main');\n    await expect(profilePage).toBeVisible();\n\n    // Verify updated profile details are displayed\n    const updatedFirstName = page.getByText('John');\n    await expect(updatedFirstName).toBeVisible();\n\n    const updatedLastName = page.getByText('Doe');\n    await expect(updatedLastName).toBeVisible();\n\n    const updatedEmail = page.getByText('john.doe@example.com');\n    await expect(updatedEmail).toBeVisible();\n  });\n\n  test('should not display confirmation message if update fails', async ({ page }) => {\n    // Setup: Fill in invalid email using getByLabel\n    const firstNameInput = page.getByLabel('First Name');\n    await firstNameInput.fill('Jane');\n\n    const lastNameInput = page.getByLabel('Last Name');\n    await lastNameInput.fill('Smith');\n\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('invalid-email');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('SecurePassword123');\n\n    // Verify update button is visible and enabled\n    const updateButton = page.getByRole('button', { name: /update profile/i });\n    await expect(updateButton).toBeVisible();\n\n    // Click update button\n    await updateButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/Email address is invalid/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify confirmation modal is not visible\n    const confirmationModal = page.getByRole('dialog');\n    await expect(confirmationModal).not.toBeVisible();\n\n    // Verify user is not redirected\n    const profilePage = page.getByRole('main');\n    await expect(profilePage).toBeVisible();\n\n    // Verify error message is displayed\n    const errorText = page.getByText(/Email address is invalid/i);\n    await expect(errorText).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8091,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3636,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 375.881,
+      "feedback_used": ""
+    }
+  ]
+}

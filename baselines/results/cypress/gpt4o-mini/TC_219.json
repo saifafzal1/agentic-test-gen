@@ -1,0 +1,13 @@
+{
+  "id": "TC_219",
+  "category": "accessibility",
+  "complexity": "medium",
+  "user_story": "As a user, I want videos to have captions.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Video Captions Accessibility', () => {\n    beforeEach(() => {\n        cy.visit('/video-page'); // Replace with the actual URL of the video page\n    });\n\n    it('should display captions when the video is played', () => {\n        cy.get('video').should('exist').then(($video) => {\n            $video[0].play();\n            cy.get('.caption').should('be.visible');\n        });\n    });\n\n    it('should not display captions when captions are turned off', () => {\n        cy.get('.caption-toggle').click(); // Assuming there's a toggle for captions\n        cy.get('video').should('exist').then(($video) => {\n            $video[0].play();\n            cy.get('.caption').should('not.be.visible');\n        });\n    });\n});",
+  "prompt_tokens": 104,
+  "completion_tokens": 164,
+  "latency_s": 2.54,
+  "timestamp": "2026-06-19T16:38:55.178273"
+}

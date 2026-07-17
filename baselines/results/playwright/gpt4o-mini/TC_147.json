@@ -1,0 +1,13 @@
+{
+  "id": "TC_147",
+  "category": "table_list",
+  "complexity": "medium",
+  "user_story": "As a user, I want to sort a table by clicking column headers.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Sorting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/table'); // Replace with the actual URL\n  });\n\n  test('should sort the table by clicking the first column header', async ({ page }) => {\n    const firstColumnHeader = page.getByRole('columnheader', { name: 'First Column' });\n    await firstColumnHeader.click();\n    \n    const firstRowFirstColumn = page.getByRole('row', { name: 'Row 1' }).getByRole('cell', { name: 'Value A' });\n    const secondRowFirstColumn = page.getByRole('row', { name: 'Row 2' }).getByRole('cell', { name: 'Value B' });\n    \n    await expect(firstRowFirstColumn).toBeVisible();\n    await expect(secondRowFirstColumn).toBeVisible();\n  });\n\n  test('should sort the table by clicking the second column header', async ({ page }) => {\n    const secondColumnHeader = page.getByRole('columnheader', { name: 'Second Column' });\n    await secondColumnHeader.click();\n    \n    const firstRowSecondColumn = page.getByRole('row', { name: 'Row 1' }).getByRole('cell', { name: 'Value C' });\n    const secondRowSecondColumn = page.getByRole('row', { name: 'Row 2' }).getByRole('cell', { name: 'Value D' });\n    \n    await expect(firstRowSecondColumn).toBeVisible();\n    await expect(secondRowSecondColumn).toBeVisible();\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 354,
+  "latency_s": 6.43,
+  "timestamp": "2026-06-19T16:53:34.168634"
+}

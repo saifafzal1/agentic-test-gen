@@ -1,0 +1,13 @@
+{
+  "id": "TC_241",
+  "category": "responsive",
+  "complexity": "complex",
+  "user_story": "As a user, I want the dashboard sidebar to become a bottom nav bar on mobile.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Dashboard Sidebar Responsiveness', () => {\n    beforeEach(() => {\n        cy.visit('/dashboard');\n        cy.viewport('iphone-6'); // Simulate mobile viewport\n    });\n\n    it('should display the bottom nav bar on mobile', () => {\n        cy.get('.sidebar').should('not.exist'); // Sidebar should not be visible\n        cy.get('.bottom-nav').should('be.visible'); // Bottom nav bar should be visible\n    });\n\n    it('should navigate to the correct page when bottom nav items are clicked', () => {\n        cy.get('.bottom-nav .nav-item').first().click(); // Click the first nav item\n        cy.url().should('include', '/first-page'); // Verify URL changes to first page\n\n        cy.get('.bottom-nav .nav-item').eq(1).click(); // Click the second nav item\n        cy.url().should('include', '/second-page'); // Verify URL changes to second page\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 199,
+  "latency_s": 3.99,
+  "timestamp": "2026-06-19T16:40:05.727164"
+}

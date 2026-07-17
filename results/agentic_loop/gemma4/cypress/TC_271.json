@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_271",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7892,
+  "total_latency_s": 72.156,
+  "final_script": "describe('Snackbar Notification on Copy to Clipboard', () => {\n  beforeEach(() => {\n    cy.visit('/clipboard-test');\n  });\n\n  it('should display snackbar message after successfully copying text to clipboard', () => {\n    // Verify clipboard button is visible\n    cy.get('[data-testid=\"copy-button\"]').should('be.visible');\n    // Verify text area is visible and contains text\n    cy.get('[data-testid=\"text-area\"]').should('be.visible').should('have.length.greaterThan', 0);\n    // Verify copy button is enabled\n    cy.get('[data-testid=\"copy-button\"]').should('not.be.disabled');\n    // Click copy button\n    cy.get('[data-testid=\"copy-button\"]').click();\n    // Wait for snackbar to appear\n    cy.get('[data-testid=\"snackbar\"]').should('be.visible');\n    // Verify snackbar contains correct message\n    cy.get('[data-testid=\"snackbar\"]').should('contain', 'Text copied to clipboard');\n    // Verify snackbar has success styling (e.g., green background)\n    cy.get('[data-testid=\"snackbar\"]').should('have.class', 'snackbar-success');\n    // Verify snackbar auto-hides after a delay\n    cy.get('[data-testid=\"snackbar\"]').should('be.visible');\n    cy.wait(3000);\n    cy.get('[data-testid=\"snackbar\"]').should('not.exist');\n  });\n\n  it('should not display snackbar when copy fails due to browser restrictions', () => {\n    // Intercept clipboard API call to simulate failure\n    cy.intercept('POST', '/api/clipboard/copy', {\n      statusCode: 500,\n      body: { error: 'Clipboard access denied' }\n    }).as('copyFailure');\n    // Click copy button\n    cy.get('[data-testid=\"copy-button\"]').click();\n    // Wait for API call\n    cy.wait('@copyFailure');\n    // Verify snackbar does not appear\n    cy.get('[data-testid=\"snackbar\"]').should('not.exist');\n    // Verify error message is displayed instead\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Failed to copy text');\n    // Verify error has appropriate styling\n    cy.get('[data-testid=\"error-message\"]').should('have.class', 'error-text');\n    // Verify copy button remains enabled for retry\n    cy.get('[data-testid=\"copy-button\"]').should('not.be.disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7892,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4974,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.156,
+      "feedback_used": ""
+    }
+  ]
+}

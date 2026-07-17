@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_052",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8008,
+  "total_latency_s": 28.69,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Sticky Header Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should keep header visible while scrolling', async ({ page }) => {\n    // Verify header is visible initially\n    const header = page.getByRole('banner');\n    await expect(header).toBeVisible();\n\n    // Verify header has correct sticky class\n    const stickyClass = page.getByRole('heading').first().getAttribute('class');\n    expect(stickyClass).toContain('sticky-header');\n\n    // Scroll down to test stickiness\n    await page.evaluate(() => {\n      window.scrollTo(0, window.innerHeight);\n    });\n\n    // Verify header is still visible after scrolling\n    await expect(header).toBeVisible();\n\n    // Verify header is positioned at the top of the viewport\n    const headerPosition = page.getByRole('heading').first().getBoundingClientRect();\n    expect(headerPosition.top).toBeLessThanOrEqual(0);\n\n    // Scroll back up to test header visibility\n    await page.evaluate(() => {\n      window.scrollTo(0, 0);\n    });\n\n    // Verify header is still visible after scrolling back up\n    await expect(header).toBeVisible();\n  });\n\n  test('should update header content on route change', async ({ page }) => {\n    // Verify initial header content\n    const header = page.getByRole('banner');\n    await expect(header).toContainText('Dashboard');\n\n    // Navigate to a different route\n    await page.route('**/settings', route => {\n      route.continue();\n    });\n\n    // Verify header content updates to reflect new route\n    const headerContent = page.getByRole('heading').first().textContent();\n    expect(headerContent).toContainText('Settings');\n\n    // Verify sticky class is still present\n    const stickyClass = page.getByRole('heading').first().getAttribute('class');\n    expect(stickyClass).toContain('sticky-header');\n\n    // Verify header is still visible after route change\n    await expect(header).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8008,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4361,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 28.69,
+      "feedback_used": ""
+    }
+  ]
+}

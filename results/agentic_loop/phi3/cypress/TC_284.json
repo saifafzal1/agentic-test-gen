@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_284",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7011,
+  "total_latency_s": 401.696,
+  "final_script": "describe('Account Deletion Confirmation', () => {\n  beforeEach(() => {\n    cy.visit('/account');\n  });\n\n  it('should successfully delete account after confirming with password', () => {\n    // Navigate to account page\n    cy.get('[data-testid=\"account-nav\"]').click();\n\n    // Verify account details are visible\n    cy.get('[data-testid=\"account-name\"]').should('be.visible').should('contain', 'John Doe');\n    cy.get('[data-testid=\"account-email\"]').should('be.visible').should('contain', 'john.doe@example.com');\n\n    // Click delete button\n    cy.get('[data-testid=\"delete-account-btn\"]').click();\n\n    // Verify confirmation modal appears\n    cy.get('[data-testid=\"confirm-delete-modal\"]').should('be.visible');\n\n    // Verify modal contains correct text\n    cy.get('[data-testid=\"confirm-delete-text\"]').should('contain', 'Are you sure you want to delete your account?');\n\n    // Fill in password field\n    cy.get('[data-testid=\"confirm-password-input\"]').type('Password123');\n\n    // Verify password field is valid\n    cy.get('[data-testid=\"confirm-password-input\"]').should('have.value', 'Password123');\n\n    // Click confirm button\n    cy.get('[data-testid=\"confirm-delete-btn\"]').click();\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Account deleted successfully');\n\n    // Verify user is redirected to login page\n    cy.url().should('include', '/login');\n\n    // Verify account details are no longer visible\n    cy.get('[data-testid=\"account-name\"]').should('not.exist');\n    cy.get('[data-testid=\"account-email\"]').should('not.exist');\n  });\n\n  it('should prevent account deletion with incorrect password', () => {\n    // Navigate to account page\n    cy.get('[data-testid=\"account-nav\"]').click();\n\n    // Verify account details are visible\n    cy.get('[data-testid=\"account-name\"]').should('be.visible').should('contain', 'Jane Smith');\n\n    // Click delete button\n    cy.get('[data-testid=\"delete-account-btn\"]').click();\n\n    // Verify confirmation modal appears\n    cy.get('[data-testid=\"confirm-delete-modal\"]').should('be.visible');\n\n    // Fill in password field with incorrect value\n    cy.get('[data-testid=\"confirm-password-input\"]').type('wrongpassword');\n\n    // Verify modal still shows\n    cy.get('[data-testid=\"confirm-delete-modal\"]').should('be.visible');\n\n    // Click confirm button\n    cy.get('[data-testid=\"confirm-delete-btn\"]').click();\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Incorrect password');\n\n    // Verify account details are still visible\n    cy.get('[data-testid=\"account-name\"]').should('be.visible').should('contain', 'Jane Smith');\n\n    // Verify user is not redirected\n    cy.url().should('include', '/account');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7011,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2038,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 401.696,
+      "feedback_used": ""
+    }
+  ]
+}

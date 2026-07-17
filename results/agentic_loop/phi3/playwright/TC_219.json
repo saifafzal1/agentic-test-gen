@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_219",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8194,
+  "total_latency_s": 32.975,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Video Captions Accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/videos');\n  });\n\n  test('should display captions when video is played', async ({ page }) => {\n    // Locate and click the first video using getByRole\n    const videoContainer = page.getByRole('region', { name: /video/i });\n    await videoContainer.click();\n\n    // Verify caption container is visible\n    const captionContainer = page.getByRole('region', { name: /captions/i });\n    await expect(captionContainer).toBeVisible();\n\n    // Verify caption text is present\n    const captionText = page.getByText(/caption text/i);\n    await expect(captionText).toBeVisible();\n\n    // Verify caption controls are accessible\n    const captionControls = page.getByRole('button', { name: /close/i });\n    await expect(captionControls).toBeVisible();\n\n    // Verify caption controls are functional\n    const captionClose = page.getByRole('button', { name: /close/i });\n    await captionClose.click();\n    await expect(captionContainer).not.toBeVisible();\n  });\n\n  test('should hide captions when video is paused or closed', async ({ page }) => {\n    // Locate and click the first video using getByRole\n    const videoContainer = page.getByRole('region', { name: /video/i });\n    await videoContainer.click();\n\n    // Verify caption container is visible\n    const captionContainer = page.getByRole('region', { name: /captions/i });\n    await expect(captionContainer).toBeVisible();\n\n    // Verify caption text is present\n    const captionText = page.getByText(/caption text/i);\n    await expect(captionText).toBeVisible();\n\n    // Verify caption controls are accessible\n    const captionControls = page.getByRole('button', { name: /close/i });\n    await expect(captionControls).toBeVisible();\n\n    // Verify captions are hidden when video is paused\n    const pauseButton = page.getByRole('button', { name: /pause/i });\n    await pauseButton.click();\n    await expect(captionContainer).not.toBeVisible();\n\n    // Verify captions are hidden when video is closed\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n    await expect(captionContainer).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8194,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4982,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 32.975,
+      "feedback_used": ""
+    }
+  ]
+}

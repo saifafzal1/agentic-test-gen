@@ -1,0 +1,13 @@
+{
+  "id": "TC_227",
+  "category": "responsive",
+  "complexity": "simple",
+  "user_story": "As a mobile user, I want touch targets to be large enough to tap easily.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Touch Target Size Validation', () => {\n  beforeEach(() => {\n    cy.visit('/')\n    cy.viewport('iphone-x')\n  })\n\n  it('should have touch targets with minimum 44x44px size on mobile', () => {\n    cy.get('button, a, input[type=\"checkbox\"], input[type=\"radio\"]').each(($element) => {\n      cy.wrap($element).then(($el) => {\n        const width = $el.outerWidth()\n        const height = $el.outerHeight()\n        \n        expect(width).to.be.at.least(44, `Button width ${width}px is less than 44px`)\n        expect(height).to.be.at.least(44, `Button height ${height}px is less than 44px`)\n      })\n    })\n  })\n\n  it('should have adequate spacing between touch targets', () => {\n    cy.get('button, a').each(($element, index) => {\n      cy.wrap($element).then(($el) => {\n        const rect = $el[0].getBoundingClientRect()\n        const minSpacing = 8\n        \n        if (index > 0) {\n          cy.get('button, a').eq(index - 1).then(($prevEl) => {\n            const prevRect = $prevEl[0].getBoundingClientRect()\n            const verticalGap = rect.top - (prevRect.top + prevRect.height)\n            const horizontalGap = rect.left - (prevRect.left + prevRect.width)\n            \n            const hasAdequateSpacing = verticalGap >= minSpacing || horizontalGap >= minSpacing\n            expect(hasAdequateSpacing).to.be.true\n          })\n        }\n      })\n    })\n  })\n\n  it('should maintain touch target size on landscape orientation', () => {\n    cy.viewport('iphone-x', 'landscape')\n    \n    cy.get('button, a, input[type=\"checkbox\"], input[type=\"radio\"]').each(($element) => {\n      cy.wrap($element).then(($el) => {\n        const width = $el.outerWidth()\n        const height = $el.outerHeight()\n        \n        expect(width).to.be.at.least(44)\n        expect(height).to.be.at.least(44)\n      })\n    })\n  })\n\n  it('should have clickable form inputs with proper sizing', () => {\n    cy.get('input[type=\"text\"], input[type=\"email\"], input[type=\"password\"], textarea, select').each(($element) => {\n      cy.wrap($element).then(($el) => {\n        const height = $el.outerHeight()\n        expect(height).to.be.at.least(44, `Input height ${height}px is less than 44px`)\n      })\n    })\n  })\n})",
+  "prompt_tokens": 120,
+  "completion_tokens": 705,
+  "latency_s": 5.06,
+  "timestamp": "2026-06-19T17:29:25.443629"
+}

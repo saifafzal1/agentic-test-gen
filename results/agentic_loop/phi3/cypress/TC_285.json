@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_285",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7446,
+  "total_latency_s": 751.044,
+  "final_script": "describe('Public Profile Page - Shared Information Display', () => {\n  beforeEach(() => {\n    cy.visit('/user/profile');\n  });\n\n  it('should display public profile page with shared information when logged in', () => {\n    // Setup: Login as a user\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('password123');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Verify login success\n    cy.get('[data-testid=\"welcome-message\"]').should('be.visible');\n    cy.get('[data-testid=\"user-name\"]').should('contain', 'User');\n\n    // Verify public profile page is visible\n    cy.get('[data-testid=\"profile-header\"]').should('be.visible');\n    cy.get('[data-testid=\"profile-name\"]').should('contain', 'User');\n\n    // Verify shared information is displayed\n    cy.get('[data-testid=\"profile-bio\"]').should('be.visible');\n    cy.get('[data-testid=\"profile-bio\"]').should('contain', 'Cypress QA automation engineer');\n\n    cy.get('[data-testid=\"profile-location\"]').should('be.visible');\n    cy.get('[data-testid=\"profile-location\"]').should('contain', 'New York');\n\n    cy.get('[data-testid=\"profile-avatar\"]').should('be.visible');\n    cy.get('[data-testid=\"profile-avatar\"]').should('have.attr', 'src');\n\n    // Verify social media links are present\n    cy.get('[data-testid=\"profile-social-links\"]').should('be.visible');\n    cy.get('[data-testid=\"profile-linkedin-icon\"]').should('be.visible');\n    cy.get('[data-testid=\"profile-linkedin-icon\"]').should('have.attr', 'href');\n\n    // Verify contact information is displayed\n    cy.get('[data-testid=\"profile-email\"]').should('be.visible');\n    cy.get('[data-testid=\"profile-email\"]').should('contain', 'user@example.com');\n\n    // Verify profile settings are visible\n    cy.get('[data-testid=\"profile-settings-button\"]').should('be.visible');\n\n    // Verify footer is present\n    cy.get('[data-testid=\"profile-footer\"]').should('be.visible');\n\n    // Verify no error messages are displayed\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n\n    // Verify page title\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'User Profile');\n\n    // Verify navigation links are visible\n    cy.get('[data-testid=\"profile-nav-links\"]').should('be.visible');\n\n    // Verify profile page is fully loaded\n    cy.get('[data-testid=\"loading-spinner\"]').should('not.exist');\n  });\n\n  it('should display error message when user is not logged in', () => {\n    // Setup: Attempt to access profile page without logging in\n    cy.visit('/user/profile');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please log in to view your profile');\n\n    // Verify login button is still visible\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n\n    // Verify profile header is not visible\n    cy.get('[data-testid=\"profile-header\"]').should('not.exist');\n\n    // Verify no shared information is displayed\n    cy.get('[data-testid=\"profile-bio\"]').should('not.exist');\n\n    // Verify no social media links are visible\n    cy.get('[data-testid=\"profile-social-links\"]').should('not.exist');\n\n    // Verify no contact information is displayed\n    cy.get('[data-testid=\"profile-email\"]').should('not.exist');\n\n    // Verify profile settings are not visible\n    cy.get('[data-testid=\"profile-settings-button\"]').should('not.exist');\n\n    // Verify page title is still present\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'User Profile');\n\n    // Verify navigation links are still visible\n    cy.get('[data-testid=\"profile-nav-links\"]').should('be.visible');\n\n    // Verify page is still fully loaded\n    cy.get('[data-testid=\"loading-spinner\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4678,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3325,
+        "missing_keywords": [],
+        "assertion_count": 22,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 372.664,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7446,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3486,
+        "missing_keywords": [],
+        "assertion_count": 32,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 378.38,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

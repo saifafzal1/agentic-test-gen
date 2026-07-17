@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_232",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 3,
+  "best_score": 0.7174,
+  "total_latency_s": 772.708,
+  "final_script": "describe('Data Tables Responsive Stacking on Small Screens', () => {\n  beforeEach(() => {\n    cy.visit('/data-tables');\n  });\n\n  it('should stack data tables vertically on small screens', () => {\n    // Verify initial state: data tables are horizontal on medium screens\n    cy.get('[data-testid=\"data-table-container\"]').should('be.visible');\n    cy.get('[data-testid=\"data-table-1\"]').should('be.visible');\n    cy.get('[data-testid=\"data-table-2\"]').should('be.visible');\n    cy.get('[data-testid=\"data-table-1\"]').should('have.css', 'width', '600px');\n    cy.get('[data-testid=\"data-table-2\"]').should('have.css', 'width', '600px');\n\n    // Navigate to mobile view\n    cy.viewport('iphone-x');\n\n    // Verify data tables stack vertically\n    cy.get('[data-testid=\"data-table-container\"]').should('have.css', 'flex-direction', 'column');\n    cy.get('[data-testid=\"data-table-1\"]').should('have.css', 'flex-basis', '100%');\n    cy.get('[data-testid=\"data-table-2\"]').should('have.css', 'flex-basis', '100%');\n\n    // Verify table headers are visible and not overlapping\n    cy.get('[data-testid=\"data-table-1\"]').get('[data-testid=\"table-header\"]').should('be.visible');\n    cy.get('[data-testid=\"data-table-2\"]').get('[data-testid=\"table-header\"]').should('be.visible');\n\n    // Verify table rows are visible and not overlapping\n    cy.get('[data-testid=\"data-table-1\"]').get('[data-testid=\"table-row\"]').should('be.visible');\n    cy.get('[data-testid=\"data-table-2\"]').get('[data-testid=\"table-row\"]').should('be.visible');\n\n    // Verify pagination controls are visible and functional\n    cy.get('[data-testid=\"data-table-pagination\"]').should('be.visible');\n    cy.get('[data-testid=\"data-table-pagination-button\"]').should('be.visible');\n    cy.get('[data-testid=\"data-table-pagination-button\"]').click();\n    cy.get('[data-testid=\"data-table-pagination-button\"]').should('be.visible');\n\n    // Verify sorting functionality is still available\n    cy.get('[data-testid=\"data-table-sort-button\"]').should('be.visible');\n    cy.get('[data-testid=\"data-table-sort-button\"]').click();\n    cy.get('[data-testid=\"data-table-sort-button\"]').should('be.visible');\n\n    // Verify search functionality is still available\n    cy.get('[data-testid=\"data-table-search-input\"]').should('be.visible');\n    cy.get('[data-testid=\"data-table-search-input\"]').type('test');\n    cy.get('[data-testid=\"data-table-search-input\"]').should('have.value', 'test');\n\n    // Verify table footer is visible and displays correct information\n    cy.get('[data-testid=\"data-table-footer\"]').should('be.visible');\n    cy.get('[data-testid=\"data-table-footer\"]').should('contain', 'Total Records');\n\n    // Navigate back to medium screen\n    cy.viewport('desktop');\n\n    // Verify data tables are horizontal again\n    cy.get('[data-testid=\"data-table-container\"]').should('have.css', 'flex-direction', 'row');\n    cy.get('[data-testid=\"data-table-1\"]').should('have.css', 'width', '600px');\n    cy.get('[data-testid=\"data-table-2\"]').should('have.css', 'width', '600px');\n  });\n\n  it('should handle edge case: data tables overflow container on small screens', () => {\n    // Navigate to small screen\n    cy.viewport('iphone-x');\n\n    // Load data tables with large datasets\n    cy.intercept('GET', '/api/data-tables/1').as('loadDataTables');\n    cy.wait('@loadDataTables');\n\n    // Verify data tables are stacked vertically\n    cy.get('[data-testid=\"data-table-container\"]').should('have.css', 'flex-direction', 'column');\n\n    // Verify overflow is handled gracefully\n    cy.get('[data-testid=\"data-table-1\"]').should('have.css', 'overflow-y', 'auto');\n    cy.get('[data-testid=\"data-table-2\"]').should('have.css', 'overflow-y', 'auto');\n\n    // Verify scrollable content is available\n    cy.get('[data-testid=\"data-table-1\"]').scrollTo('bottom');\n    cy.get('[data-testid=\"data-table-1\"]').should('be.visible');\n\n    // Verify pagination controls are still visible and functional\n    cy.get('[data-testid=\"data-table-pagination\"]').should('be.visible');\n    cy.get('[data-testid=\"data-table-pagination-button\"]').should('be.visible');\n\n    // Verify sorting functionality is still available\n    cy.get('[data-testid=\"data-table-sort-button\"]').should('be.visible');\n    cy.get('[data-testid=\"data-table-sort-button\"]').click();\n    cy.get('[data-testid=\"data-table-sort-button\"]').should('be.visible');\n\n    // Verify search functionality is still available\n    cy.get('[data-testid=\"data-table-search-input\"]').should('be.visible');\n    cy.get('[data-testid=\"data-table-search-input\"]').type('test');\n    cy.get('[data-testid=\"data-table-search-input\"]').should('have.value', 'test');\n\n    // Verify table footer is still visible and displays correct information\n    cy.get('[data-testid=\"data-table-footer\"]').should('be.visible');\n    cy.get('[data-testid=\"data-table-footer\"]').should('contain', 'Total Records');\n\n    // Navigate back to medium screen\n    cy.viewport('desktop');\n\n    // Verify data tables are horizontal again\n    cy.get('[data-testid=\"data-table-container\"]').should('have.css', 'flex-direction', 'row');\n    cy.get('[data-testid=\"data-table-1\"]').should('have.css', 'width', '600px');\n    cy.get('[data-testid=\"data-table-2\"]').should('have.css', 'width', '600px');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4565,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.2951,
+        "missing_keywords": [],
+        "assertion_count": 28,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 54.199,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4484,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.2681,
+        "missing_keywords": [],
+        "assertion_count": 33,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 357.49,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.7174,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2581,
+        "missing_keywords": [],
+        "assertion_count": 39,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 361.019,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

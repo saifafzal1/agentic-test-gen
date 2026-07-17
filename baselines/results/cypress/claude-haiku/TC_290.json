@@ -1,0 +1,13 @@
+{
+  "id": "TC_290",
+  "category": "user_profile",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a confirmation message after updating my profile.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('User Profile Update Confirmation', () => {\n  beforeEach(() => {\n    cy.visit('/profile');\n    cy.login('testuser@example.com', 'password123');\n  });\n\n  it('should display confirmation message after successfully updating profile', () => {\n    cy.get('[data-testid=\"profile-form\"]').should('be.visible');\n    \n    cy.get('[data-testid=\"first-name-input\"]').clear().type('John');\n    cy.get('[data-testid=\"last-name-input\"]').clear().type('Doe');\n    cy.get('[data-testid=\"email-input\"]').clear().type('john.doe@example.com');\n    \n    cy.get('[data-testid=\"save-profile-button\"]').click();\n    \n    cy.get('[data-testid=\"confirmation-message\"]')\n      .should('be.visible')\n      .and('contain', 'Profile updated successfully');\n    \n    cy.get('[data-testid=\"confirmation-message\"]')\n      .should('have.class', 'success-alert');\n  });\n\n  it('should display error message when updating profile with invalid email', () => {\n    cy.get('[data-testid=\"profile-form\"]').should('be.visible');\n    \n    cy.get('[data-testid=\"first-name-input\"]').clear().type('Jane');\n    cy.get('[data-testid=\"email-input\"]').clear().type('invalid-email');\n    \n    cy.get('[data-testid=\"save-profile-button\"]').click();\n    \n    cy.get('[data-testid=\"error-message\"]')\n      .should('be.visible')\n      .and('contain', 'Please enter a valid email address');\n    \n    cy.get('[data-testid=\"confirmation-message\"]').should('not.exist');\n  });\n\n  it('should dismiss confirmation message when close button is clicked', () => {\n    cy.get('[data-testid=\"first-name-input\"]').clear().type('Alice');\n    cy.get('[data-testid=\"save-profile-button\"]').click();\n    \n    cy.get('[data-testid=\"confirmation-message\"]').should('be.visible');\n    \n    cy.get('[data-testid=\"close-confirmation-button\"]').click();\n    \n    cy.get('[data-testid=\"confirmation-message\"]').should('not.be.visible');\n  });\n\n  it('should auto-dismiss confirmation message after 5 seconds', () => {\n    cy.get('[data-testid=\"first-name-input\"]').clear().type('Bob');\n    cy.get('[data-testid=\"save-profile-button\"]').click();\n    \n    cy.get('[data-testid=\"confirmation-message\"]').should('be.visible');\n    \n    cy.wait(5000);\n    \n    cy.get('[data-testid=\"confirmation-message\"]').should('not.be.visible');\n  });\n});",
+  "prompt_tokens": 121,
+  "completion_tokens": 713,
+  "latency_s": 4.59,
+  "timestamp": "2026-06-19T17:36:29.057155"
+}

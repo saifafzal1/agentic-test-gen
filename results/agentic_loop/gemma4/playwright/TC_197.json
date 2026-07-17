@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_197",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.862,
+  "total_latency_s": 72.614,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Input Focus on Keyboard Slash', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should focus search input when pressing / on keyboard', async ({ page }) => {\n    // Verify search input is visible and not focused initially\n    const searchInput = page.getByPlaceholder('Search...');\n    await expect(searchInput).toBeVisible();\n    await expect(searchInput).not.toBeFocused();\n\n    // Press / key\n    await page.keyboard.press('/');\n\n    // Verify search input is now focused\n    await expect(searchInput).toBeFocused();\n\n    // Verify search input has the correct value\n    await expect(searchInput).toHaveValue('/');\n\n    // Verify search button is enabled\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await expect(searchButton).toBeEnabled();\n  });\n\n  test('should not focus search input when pressing other keys', async ({ page }) => {\n    // Verify search input is visible and not focused initially\n    const searchInput = page.getByPlaceholder('Search...');\n    await expect(searchInput).toBeVisible();\n    await expect(searchInput).not.toBeFocused();\n\n    // Press Enter key\n    await page.keyboard.press('Enter');\n\n    // Verify search input is still not focused\n    await expect(searchInput).not.toBeFocused();\n\n    // Verify search input is empty\n    await expect(searchInput).toHaveValue('');\n\n    // Press Shift key\n    await page.keyboard.press('Shift');\n\n    // Verify search input is still not focused\n    await expect(searchInput).not.toBeFocused();\n\n    // Verify search input is empty\n    await expect(searchInput).toHaveValue('');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.862,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.64,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.614,
+      "feedback_used": ""
+    }
+  ]
+}

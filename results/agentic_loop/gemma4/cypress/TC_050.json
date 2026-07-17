@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_050",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7758,
+  "total_latency_s": 71.308,
+  "final_script": "describe('Deep Links Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should load correct page when navigating via deep link', () => {\n    cy.visit('/products/electronics');\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Electronics Products');\n    cy.get('[data-testid=\"product-list\"]').should('be.visible');\n    cy.get('[data-testid=\"product-card\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"breadcrumb\"]').should('contain', 'Home > Products > Electronics');\n  });\n\n  it('should handle invalid deep link gracefully', () => {\n    cy.visit('/products/invalid-category');\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Page not found');\n    cy.get('[data-testid=\"home-button\"]').should('be.visible');\n    cy.get('[data-testid=\"home-button\"]').click();\n    cy.url().should('eq', Cypress.config().baseUrl + '/');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7758,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4528,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.308,
+      "feedback_used": ""
+    }
+  ]
+}

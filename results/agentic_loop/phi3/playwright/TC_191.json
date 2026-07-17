@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_191",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7868,
+  "total_latency_s": 587.083,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Suggestions Feature', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should display search suggestions for recently searched terms', async ({ page }) => {\n    // Set up API interception for search API\n    await page.route('**/api/search', (route) => {\n      route.continue();\n    });\n\n    // Perform a search using getByRole\n    const searchInput = page.getByRole('searchbox');\n    await searchInput.fill('playwright');\n\n    // Wait for suggestions to appear\n    const suggestionsList = page.getByRole('listbox');\n    await expect(suggestionsList).toBeVisible();\n\n    // Verify suggestions are displayed\n    const suggestionItems = page.locator('[data-testid=\"suggestion-item\"]');\n    await expect(suggestionItems).toHaveCount(3);\n\n    // Verify each suggestion contains the correct text\n    const suggestion1 = page.getByText('Playwright Test Library');\n    await expect(suggestion1).toBeVisible();\n\n    const suggestion2 = page.getByText('Playwright Playwright');\n    await expect(suggestion2).toBeVisible();\n\n    const suggestion3 = page.getByText('Playwright Playwright Playwright');\n    await expect(suggestion3).toBeVisible();\n\n    // Verify suggestion items have correct roles\n    const suggestion1Role = page.getByRole('option');\n    await expect(suggestion1Role).toBeVisible();\n\n    const suggestion2Role = page.getByRole('option');\n    await expect(suggestion2Role).toBeVisible();\n\n    const suggestion3Role = page.getByRole('option');\n    await expect(suggestion3Role).toBeVisible();\n\n    // Verify suggestion items have correct data attributes\n    const suggestion1Data = page.locator('[data-testid=\"suggestion-item\"]').first();\n    await expect(suggestion1Data).toHaveAttribute('data-testid', 'suggestion-item-1');\n\n    const suggestion2Data = page.locator('[data-testid=\"suggestion-item\"]').nth(1);\n    await expect(suggestion2Data).toHaveAttribute('data-testid', 'suggestion-item-2');\n\n    const suggestion3Data = page.locator('[data-testid=\"suggestion-item\"]').nth(2);\n    await expect(suggestion3Data).toHaveAttribute('data-testid', 'suggestion-item-3');\n\n    // Verify suggestion list is visible and contains items\n    await expect(suggestionsList).toBeVisible();\n    await expect(suggestionItems).toHaveCount(3);\n\n    // Verify search input is still visible\n    await expect(searchInput).toBeVisible();\n  });\n\n  test('should clear search suggestions when user clears input', async ({ page }) => {\n    // Set up API interception for search API\n    await page.route('**/api/search', (route) => {\n      route.continue();\n    });\n\n    // Perform a search using getByRole\n    const searchInput = page.getByRole('searchbox');\n    await searchInput.fill('playwright');\n\n    // Wait for suggestions to appear\n    const suggestionsList = page.getByRole('listbox');\n    await expect(suggestionsList).toBeVisible();\n\n    // Verify suggestions are displayed\n    const suggestionItems = page.locator('[data-testid=\"suggestion-item\"]');\n    await expect(suggestionItems).toHaveCount(3);\n\n    // Clear search input using getByRole\n    const clearButton = page.getByRole('button', { name: /clear/i });\n    await clearButton.click();\n\n    // Verify suggestions are cleared\n    await expect(suggestionsList).not.toBeVisible();\n\n    // Verify search input is empty\n    await expect(searchInput).toHaveValue('');\n\n    // Verify no suggestions are displayed\n    const suggestionItems = page.locator('[data-testid=\"suggestion-item\"]');\n    await expect(suggestionItems).toHaveCount(0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4707,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3224,
+        "missing_keywords": [],
+        "assertion_count": 24,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 58.759,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7868,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3894,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 528.324,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

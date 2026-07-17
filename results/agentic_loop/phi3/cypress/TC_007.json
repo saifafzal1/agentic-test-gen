@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_007",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7386,
+  "total_latency_s": 397.035,
+  "final_script": "describe('Remember Me Login Feature', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should successfully log in with Remember Me checked and persist session', () => {\n    // Intercept the login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n\n    // Verify login page is visible\n    cy.get('[data-testid=\"login-page\"]').should('be.visible');\n\n    // Fill in email and password\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('SecurePassword123!');\n\n    // Verify Remember Me checkbox is visible\n    cy.get('[data-testid=\"remember-me-checkbox\"]').should('be.visible');\n\n    // Check Remember Me option\n    cy.get('[data-testid=\"remember-me-checkbox\"]').click();\n\n    // Verify checkbox is checked\n    cy.get('[data-testid=\"remember-me-checkbox\"]').should('have.value', 'on');\n\n    // Click login button\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for login API response\n    cy.wait('@loginRequest');\n\n    // Verify successful login redirect\n    cy.url().should('include', '/dashboard');\n\n    // Verify session cookie is set\n    cy.get('[data-testid=\"session-cookie\"]').should('be.present');\n\n    // Verify remember me cookie is set\n    cy.get('[data-testid=\"remember-me-cookie\"]').should('be.present');\n\n    // Verify user is logged in\n    cy.get('[data-testid=\"user-name\"]').should('contain', 'user@example.com');\n  });\n\n  it('should log out and clear session when user clicks logout button', () => {\n    // Intercept the logout API call\n    cy.intercept('POST', '/api/auth/logout').as('logoutRequest');\n\n    // Verify login page is visible\n    cy.get('[data-testid=\"login-page\"]').should('be.visible');\n\n    // Fill in email and password\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('SecurePassword123!');\n\n    // Click login button\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for login API response\n    cy.wait('@loginRequest');\n\n    // Verify successful login redirect\n    cy.url().should('include', '/dashboard');\n\n    // Verify session cookie is set\n    cy.get('[data-testid=\"session-cookie\"]').should('be.present');\n\n    // Verify remember me cookie is set\n    cy.get('[data-testid=\"remember-me-cookie\"]').should('be.present');\n\n    // Verify user is logged in\n    cy.get('[data-testid=\"user-name\"]').should('contain', 'user@example.com');\n\n    // Click logout button\n    cy.get('[data-testid=\"logout-button\"]').click();\n\n    // Wait for logout API response\n    cy.wait('@logoutRequest');\n\n    // Verify logout was successful\n    cy.url().should('include', '/login');\n\n    // Verify session cookie is cleared\n    cy.get('[data-testid=\"session-cookie\"]').should('not.exist');\n\n    // Verify remember me cookie is cleared\n    cy.get('[data-testid=\"remember-me-cookie\"]').should('not.exist');\n\n    // Verify user is logged out\n    cy.get('[data-testid=\"user-name\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4789,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3697,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 56.424,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7386,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3285,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 340.611,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

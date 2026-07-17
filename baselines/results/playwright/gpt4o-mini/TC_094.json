@@ -1,0 +1,13 @@
+{
+  "id": "TC_094",
+  "category": "error_states",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a permissions error if I try to edit another user's content.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Permissions Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n    await page.fill('input[name=\"username\"]', 'user1');\n    await page.fill('input[name=\"password\"]', 'password1');\n    await page.click('button[type=\"submit\"]');\n    await page.waitForNavigation();\n  });\n\n  test('should display permissions error when trying to edit another user\\'s content', async ({ page }) => {\n    await page.goto('/content/user2');\n    await page.click(getByRole('button', { name: /edit/i }));\n    await expect(page.getByText(/you do not have permission to edit this content/i)).toBeVisible();\n  });\n\n  test('should not display permissions error when editing own content', async ({ page }) => {\n    await page.goto('/content/user1');\n    await page.click(getByRole('button', { name: /edit/i }));\n    await expect(page.getByText(/edit your content/i)).toBeVisible();\n  });\n});",
+  "prompt_tokens": 137,
+  "completion_tokens": 228,
+  "latency_s": 3.5,
+  "timestamp": "2026-06-19T16:49:58.616375"
+}

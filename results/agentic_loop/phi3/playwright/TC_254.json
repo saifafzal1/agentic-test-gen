@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_254",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.4644,
+  "total_latency_s": 1148.44,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Itemised Receipt After Checkout', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should display an itemised receipt with correct details after successful checkout', async ({ page }) => {\n    // Intercept the API call to get cart items\n    await page.route('**/api/cart/items', (route) => {\n      route.continue();\n    });\n\n    // Intercept the API call to get cart total\n    await page.route('**/api/cart/total', (route) => {\n      route.continue();\n    });\n\n    // Intercept the API call to get payment success\n    await page.route('**/api/payment/success', (route) => {\n      route.continue();\n    });\n\n    // Verify the cart items are listed\n    const itemList = page.getByRole('region', { name: /cart items/i });\n    await expect(itemList).toBeVisible();\n\n    const item1 = page.getByRole('heading', { name: /Item 1/i });\n    await expect(item1).toBeVisible();\n\n    const item2 = page.getByRole('heading', { name: /Item 2/i });\n    await expect(item2).toBeVisible();\n\n    const item3 = page.getByRole('heading', { name: /Item 3/i });\n    await expect(item3).toBeVisible();\n\n    // Verify item details are displayed\n    const item1Details = page.getByText(/Item 1 - $/i);\n    await expect(item1Details).toBeVisible();\n\n    const item2Details = page.getByText(/Item 2 - $/i);\n    await expect(item2Details).toBeVisible();\n\n    const item3Details = page.getByText(/Item 3 - $/i);\n    await expect(item3Details).toBeVisible();\n\n    // Verify total amount is displayed\n    const total = page.getByText(/Total: $/i);\n    await expect(total).toBeVisible();\n\n    // Verify payment success message\n    const successMessage = page.getByText(/Payment successful/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify receipt button is visible and clickable\n    const receiptButton = page.getByRole('button', { name: /view receipt/i });\n    await expect(receiptButton).toBeVisible();\n\n    // Click the receipt button\n    await receiptButton.click();\n\n    // Verify receipt page is displayed\n    const receiptPage = page.getByRole('region', { name: /receipt/i });\n    await expect(receiptPage).toBeVisible();\n\n    // Verify receipt details are displayed\n    const receiptDetails = page.getByText(/Item 1 - $/i);\n    await expect(receiptDetails).toBeVisible();\n\n    const receiptDetails2 = page.getByText(/Item 2 - $/i);\n    await expect(receiptDetails2).toBeVisible();\n\n    const receiptDetails3 = page.getByText(/Item 3 - $/i);\n    await expect(receiptDetails3).toBeVisible();\n\n    // Verify total amount is displayed on receipt page\n    const receiptTotal = page.getByText(/Total: $/i);\n    await expect(receiptTotal).toBeVisible();\n\n    // Verify receipt is formatted correctly\n    const receiptTable = page.getByRole('region', { name: /receipt table/i });\n    await expect(receiptTable).toBeVisible();\n\n    // Verify discounts are displayed if applicable\n    const discount = page.getByText(/Discount: $/i);\n    await expect(discount).toBeVisible();\n  });\n\n  test('should display an error message when checkout fails', async ({ page }) => {\n    // Intercept the API call to get cart items\n    await page.route('**/api/cart/items', (route) => {\n      route.continue();\n    });\n\n    // Intercept the API call to get cart total\n    await page.route('**/api/cart",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4644,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3012,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 56.351,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4589,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.263,
+        "missing_keywords": [],
+        "assertion_count": 22,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 521.391,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.447,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.2235,
+        "missing_keywords": [],
+        "assertion_count": 38,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 570.698,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

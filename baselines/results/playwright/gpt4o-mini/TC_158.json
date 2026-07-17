@@ -1,0 +1,13 @@
+{
+  "id": "TC_158",
+  "category": "table_list",
+  "complexity": "simple",
+  "user_story": "As a user, I want to highlight a row on hover.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Row Highlight on Hover', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should highlight row on hover', async ({ page }) => {\n    const row = page.getByRole('row', { name: 'Row Name' }); // Replace 'Row Name' with the actual row name\n    await row.hover();\n    const highlightedRow = await row.evaluate((element) => {\n      return window.getComputedStyle(element).backgroundColor;\n    });\n    expect(highlightedRow).toBe('rgba(255, 255, 0, 1)'); // Replace with the actual highlight color\n  });\n\n  test('should not highlight row when not hovered', async ({ page }) => {\n    const row = page.getByRole('row', { name: 'Row Name' }); // Replace 'Row Name' with the actual row name\n    const defaultRowColor = await row.evaluate((element) => {\n      return window.getComputedStyle(element).backgroundColor;\n    });\n    expect(defaultRowColor).not.toBe('rgba(255, 255, 0, 1)'); // Replace with the actual highlight color\n  });\n});",
+  "prompt_tokens": 130,
+  "completion_tokens": 274,
+  "latency_s": 3.92,
+  "timestamp": "2026-06-19T16:54:14.669599"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_249",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8666,
+  "total_latency_s": 72.02,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Save Card Details for Future Purchases', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/payment');\n  });\n\n  test('should successfully save card details and display confirmation message', async ({ page }) => {\n    // Intercept the API call to mock a successful response\n    await page.route('**/api/payment/save-card', (route) => {\n      route.continue();\n    });\n\n    // Fill in card number using getByLabel\n    const cardNumberInput = page.getByLabel('Card Number');\n    await cardNumberInput.fill('4120111101110001');\n\n    // Fill in expiry date using getByLabel\n    const expiryDateInput = page.getByLabel('Expiry Date');\n    await expiryDateInput.fill('12/25');\n\n    // Fill in CVV using getByLabel\n    const cvvInput = page.getByLabel('CVV');\n    await cvvInput.fill('123');\n\n    // Click the save button using getByRole\n    const saveButton = page.getByRole('button', { name: /save card/i });\n    await saveButton.click();\n\n    // Wait for the API response\n    await page.waitForResponse(response =>\n      response.url().includes('/api/payment/save-card') && response.status() === 200\n    );\n\n    // Verify success message appears\n    const successMessage = page.getByText('Card saved successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify card details are displayed in saved cards section\n    const savedCardDisplay = page.getByText('Visa ending in 1111');\n    await expect(savedCardDisplay).toBeVisible();\n\n    // Verify confirmation modal is visible\n    const confirmationModal = page.locator('[data-testid=\"confirmation-modal\"]');\n    await expect(confirmationModal).toBeVisible();\n  });\n\n  test('should display error message when saving card with invalid details', async ({ page }) => {\n    // Intercept the API call to mock a validation error\n    await page.route('**/api/payment/save-card', (route) => {\n      route.abort('failed');\n    });\n\n    // Fill in card number using getByLabel\n    const cardNumberInput = page.getByLabel('Card Number');\n    await cardNumberInput.fill('123');\n\n    // Fill in expiry date using getByLabel\n    const expiryDateInput = page.getByLabel('Expiry Date');\n    await expiryDateInput.fill('12/25');\n\n    // Fill in CVV using getByLabel\n    const cvvInput = page.getByLabel('CVV');\n    await cvvInput.fill('123');\n\n    // Click the save button using getByRole\n    const saveButton = page.getByRole('button', { name: /save card/i });\n    await saveButton.click();\n\n    // Wait for the error response\n    await page.waitForResponse(response =>\n      response.url().includes('/api/payment/save-card') && response.status() === 400\n    );\n\n    // Verify error message appears\n    const errorMessage = page.getByText('Invalid card details');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error styling is applied\n    const errorContainer = page.locator('[data-testid=\"error-container\"]');\n    await expect(errorContainer).toHaveClass(/error-message/);\n\n    // Verify card details are not saved\n    const savedCardDisplay = page.getByText('Visa ending in 1111');\n    await expect(savedCardDisplay).not.toBeVisible();\n\n    // Verify save button is still enabled for retry\n    await expect(saveButton).toBeEnabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8666,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5554,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.02,
+      "feedback_used": ""
+    }
+  ]
+}

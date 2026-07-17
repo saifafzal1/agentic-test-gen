@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_236",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7121,
+  "total_latency_s": 72.356,
+  "final_script": "describe('Homepage Hero Section - Mobile Responsiveness', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should display mobile-optimized hero section on small screens', () => {\n    cy.viewport('iphone-x');\n    cy.get('[data-testid=\"hero-section\"]').should('be.visible');\n    cy.get('[data-testid=\"hero-title\"]').should('contain', 'Welcome to our site');\n    cy.get('[data-testid=\"hero-subtitle\"]').should('contain', 'Discover amazing products');\n    cy.get('[data-testid=\"hero-cta-button\"]').should('be.visible');\n    cy.get('[data-testid=\"hero-cta-button\"]').should('contain', 'Shop Now');\n    cy.get('[data-testid=\"hero-image\"]').should('be.visible');\n    cy.get('[data-testid=\"hero-image\"]').should('have.attr', 'src');\n    cy.get('[data-testid=\"hero-image\"]').should('have.attr', 'srcset');\n    cy.get('[data-testid=\"hero-image\"]').should('have.attr', 'srcset_by');\n  });\n\n  it('should handle mobile hero section with different content and layout', () => {\n    cy.viewport('iphone-12');\n    cy.get('[data-testid=\"hero-section\"]').should('be.visible');\n    cy.get('[data-testid=\"hero-title\"]').should('have.length', 1);\n    cy.get('[data-testid=\"hero-subtitle\"]').should('have.length', 1);\n    cy.get('[data-testid=\"hero-cta-button\"]').should('be.visible');\n    cy.get('[data-testid=\"hero-cta-button\"]').should('have.length', 1);\n    cy.get('[data-testid=\"hero-image\"]').should('be.visible');\n    cy.get('[data-testid=\"hero-image\"]').should('have.attr', 'srcset');\n    cy.get('[data-testid=\"hero-image\"]').should('have.attr', 'srcset_by');\n    cy.get('[data-testid=\"hero-image\"]').should('have.attr', 'srcset_sizes');\n    cy.get('[data-testid=\"hero-image\"]').should('have.attr', 'srcset_sizes');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7121,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2403,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.356,
+      "feedback_used": ""
+    }
+  ]
+}

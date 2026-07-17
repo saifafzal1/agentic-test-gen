@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_154",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8001,
+  "total_latency_s": 31.964,
+  "final_script": "describe('Table Loading State', () => {\n  beforeEach(() => {\n    cy.visit('/table-data');\n  });\n\n  it('should display loading state while data is being fetched', () => {\n    // Intercept the API call\n    cy.intercept('GET', '/api/table-data').as('fetchData');\n\n    // Verify loading indicator is visible\n    cy.get('[data-testid=\"table-loading-indicator\"]').should('be.visible');\n    cy.get('[data-testid=\"table-loading-indicator\"]').should('contain', 'Loading...');\n\n    // Verify table is empty\n    cy.get('[data-testid=\"table-row\"]').should('have.length', 0);\n\n    // Verify table header is visible\n    cy.get('[data-testid=\"table-header\"]').should('be.visible');\n\n    // Trigger the API call\n    cy.wait('@fetchData');\n\n    // Verify loading indicator disappears\n    cy.get('[data-testid=\"table-loading-indicator\"]').should('not.exist');\n\n    // Verify table rows are populated\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 0);\n\n    // Verify table data is displayed\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', 'John Doe');\n  });\n\n  it('should handle error state when data fetch fails', () => {\n    // Intercept the API call with error response\n    cy.intercept('GET', '/api/table-data', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' }\n    }).as('fetchDataError');\n\n    // Verify loading indicator is visible\n    cy.get('[data-testid=\"table-loading-indicator\"]').should('be.visible');\n\n    // Trigger the API call\n    cy.wait('@fetchDataError');\n\n    // Verify loading indicator disappears\n    cy.get('[data-testid=\"table-loading-indicator\"]').should('not.exist');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"table-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"table-error-message\"]').should('contain', 'Failed to load data');\n\n    // Verify table rows are empty\n    cy.get('[data-testid=\"table-row\"]').should('have.length', 0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8001,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5337,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 31.964,
+      "feedback_used": ""
+    }
+  ]
+}

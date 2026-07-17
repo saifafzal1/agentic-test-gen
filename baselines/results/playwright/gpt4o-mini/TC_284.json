@@ -1,0 +1,13 @@
+{
+  "id": "TC_284",
+  "category": "user_profile",
+  "complexity": "simple",
+  "user_story": "As a user, I want to delete my account after confirming with my password.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Account Deletion', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/user-profile');\n    await page.fill('input[name=\"username\"]', 'testuser');\n    await page.fill('input[name=\"password\"]', 'password123');\n    await page.click('button[type=\"submit\"]');\n  });\n\n  test('should display delete account option', async ({ page }) => {\n    await expect(page.getByText('Delete Account')).toBeVisible();\n  });\n\n  test('should delete account after password confirmation', async ({ page }) => {\n    await page.click('button:has-text(\"Delete Account\")');\n    await page.fill('input[name=\"confirmPassword\"]', 'password123');\n    await page.click('button[type=\"submit\"]');\n    await expect(page.getByText('Account deleted successfully')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 192,
+  "latency_s": 2.97,
+  "timestamp": "2026-06-19T17:03:55.548627"
+}

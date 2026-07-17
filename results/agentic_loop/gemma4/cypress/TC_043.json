@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_043",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7884,
+  "total_latency_s": 71.698,
+  "final_script": "describe('Sidebar Collapse/Expand Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should collapse and expand sidebar on click', () => {\n    // Verify sidebar is initially visible and expanded\n    cy.get('[data-testid=\"sidebar\"]').should('be.visible');\n    cy.get('[data-testid=\"sidebar-menu-item\"]').should('be.visible');\n    cy.get('[data-testid=\"sidebar-toggle-button\"]').should('be.visible');\n\n    // Click to collapse sidebar\n    cy.get('[data-testid=\"sidebar-toggle-button\"]').click();\n\n    // Verify sidebar is collapsed\n    cy.get('[data-testid=\"sidebar\"]').should('have.attr', 'data-collapsed', 'true');\n    cy.get('[data-testid=\"sidebar-menu-item\"]').should('not.exist');\n    cy.get('[data-testid=\"sidebar-content\"]').should('be.visible');\n\n    // Click to expand sidebar\n    cy.get('[data-testid=\"sidebar-toggle-button\"]').click();\n\n    // Verify sidebar is expanded\n    cy.get('[data-testid=\"sidebar\"]').should('not.have.attr', 'data-collapsed');\n    cy.get('[data-testid=\"sidebar-menu-item\"]').should('be.visible');\n    cy.get('[data-testid=\"sidebar-content\"]').should('be.visible');\n  });\n\n  it('should handle multiple clicks and maintain state', () => {\n    // Verify sidebar is expanded\n    cy.get('[data-testid=\"sidebar\"]').should('not.have.attr', 'data-collapsed');\n\n    // Collapse sidebar\n    cy.get('[data-testid=\"sidebar-toggle-button\"]').click();\n    cy.get('[data-testid=\"sidebar\"]').should('have.attr', 'data-collapsed', 'true');\n\n    // Click again to expand\n    cy.get('[data-testid=\"sidebar-toggle-button\"]').click();\n    cy.get('[data-testid=\"sidebar\"]').should('not.have.attr', 'data-collapsed');\n\n    // Click a third time to collapse\n    cy.get('[data-testid=\"sidebar-toggle-button\"]').click();\n    cy.get('[data-testid=\"sidebar\"]').should('have.attr', 'data-collapsed', 'true');\n\n    // Verify sidebar toggle button text changes on each state change\n    cy.get('[data-testid=\"sidebar-toggle-button\"]').should('contain', 'Collapse');\n    cy.get('[data-testid=\"sidebar-toggle-button\"]').click();\n    cy.get('[data-testid=\"sidebar-toggle-button\"]').should('contain', 'Expand');\n    cy.get('[data-testid=\"sidebar-toggle-button\"]').click();\n    cy.get('[data-testid=\"sidebar-toggle-button\"]').should('contain', 'Collapse');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7884,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4947,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.698,
+      "feedback_used": ""
+    }
+  ]
+}

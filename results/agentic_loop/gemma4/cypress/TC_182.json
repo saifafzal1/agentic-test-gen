@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_182",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.742,
+  "total_latency_s": 72.345,
+  "final_script": "describe('Image Upload - Paste from Clipboard', () => {\n  beforeEach(() => {\n    cy.visit('/upload');\n  });\n\n  it('should successfully paste an image from clipboard into upload area', () => {\n    // Setup: intercept the file upload API\n    cy.intercept('POST', '/api/upload').as('uploadImage');\n\n    // Get the upload area element\n    cy.get('[data-testid=\"upload-area\"]').should('be.visible');\n\n    // Simulate clipboard content with an image file\n    cy.window().then((win) => {\n      const imageFile = new File([new Uint8Array(0), 'image/png'], 'clipboard-image.png', { type: 'image/png' });\n      win.clipboardData = {\n        files: [imageFile]\n      };\n    });\n\n    // Trigger paste event in the upload area\n    cy.get('[data-testid=\"upload-area\"]').trigger('paste');\n\n    // Verify the image preview appears\n    cy.get('[data-testid=\"image-preview\"]').should('be.visible');\n    cy.get('[data-testid=\"image-preview img\"]').should('have.attr', 'src');\n\n    // Verify the upload button is enabled\n    cy.get('[data-testid=\"upload-button\"]').should('not.be.disabled');\n\n    // Verify the upload API was called\n    cy.get('[data-testid=\"upload-button\"]').click();\n    cy.wait('@uploadImage');\n\n    // Verify success message\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Image uploaded successfully');\n  });\n\n  it('should handle pasting invalid or non-image data from clipboard', () => {\n    // Setup: intercept the upload API\n    cy.intercept('POST', '/api/upload').as('uploadImage');\n\n    // Get the upload area element\n    cy.get('[data-testid=\"upload-area\"]').should('be.visible');\n\n    // Simulate clipboard content with plain text\n    cy.window().then((win) => {\n      win.clipboardData = {\n        files: [new File(['this is not an image'], 'text-file.txt', { type: 'text/plain' })]\n      };\n    });\n\n    // Trigger paste event\n    cy.get('[data-testid=\"upload-area\"]').trigger('paste');\n\n    // Verify no image preview appears\n    cy.get('[data-testid=\"image-preview\"]').should('not.exist');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid file type');\n\n    // Verify upload button remains disabled\n    cy.get('[data-testid=\"upload-button\"]').should('be.disabled');\n\n    // Verify upload API was not called\n    cy.get('[data-testid=\"upload-button\"]').click({ force: true });\n    cy.get('@uploadImage').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.742,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3399,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.345,
+      "feedback_used": ""
+    }
+  ]
+}

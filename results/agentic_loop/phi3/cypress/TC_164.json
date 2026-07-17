@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_164",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7686,
+  "total_latency_s": 45.644,
+  "final_script": "describe('Column Sort Direction Indication', () => {\n  beforeEach(() => {\n    cy.visit('/table-list');\n  });\n\n  it('should display correct arrow icon for ascending sort on first column', () => {\n    // Verify initial state: no sort indicators\n    cy.get('[data-testid=\"table-header-first-column\"]').should('be.visible');\n    cy.get('[data-testid=\"sort-arrow-first-column\"]').should('not.exist');\n\n    // Click first column header to initiate sort\n    cy.get('[data-testid=\"table-header-first-column\"]').click();\n\n    // Verify arrow icon appears and is pointing up\n    cy.get('[data-testid=\"sort-arrow-first-column\"]').should('be.visible');\n    cy.get('[data-testid=\"sort-arrow-first-column\"]').should('contain', '\u2191');\n\n    // Verify table is now sorted in ascending order\n    cy.get('[data-testid=\"table-row-first-column\"]').first().should('contain', 'A');\n    cy.get('[data-testid=\"table-row-first-column\"]').last().should('contain', 'Z');\n  });\n\n  it('should display correct arrow icon for descending sort on last column', () => {\n    // Verify initial state: no sort indicators\n    cy.get('[data-testid=\"table-header-last-column\"]').should('be.visible');\n    cy.get('[data-testid=\"sort-arrow-last-column\"]').should('not.exist');\n\n    // Click last column header to initiate sort\n    cy.get('[data-testid=\"table-header-last-column\"]').click();\n\n    // Verify arrow icon appears and is pointing down\n    cy.get('[data-testid=\"sort-arrow-last-column\"]').should('be.visible');\n    cy.get('[data-testid=\"sort-arrow-last-column\"]').should('contain', '\u2193');\n\n    // Verify table is now sorted in descending order\n    cy.get('[data-testid=\"table-row-last-column\"]').first().should('contain', 'Z');\n    cy.get('[data-testid=\"table-row-last-column\"]').last().should('contain', 'A');\n  });\n\n  it('should toggle sort direction when clicking the same column header again', () => {\n    // Click first column header to initiate ascending sort\n    cy.get('[data-testid=\"table-header-first-column\"]').click();\n    cy.get('[data-testid=\"sort-arrow-first-column\"]').should('be.visible');\n    cy.get('[data-testid=\"sort-arrow-first-column\"]').should('contain', '\u2191');\n\n    // Click the same column header again to toggle sort direction\n    cy.get('[data-testid=\"table-header-first-column\"]').click();\n\n    // Verify arrow icon changes to point down\n    cy.get('[data-testid=\"sort-arrow-first-column\"]').should('contain', '\u2193');\n\n    // Verify table is now sorted in descending order\n    cy.get('[data-testid=\"table-row-first-column\"]').first().should('contain', 'Z');\n    cy.get('[data-testid=\"table-row-first-column\"]').last().should('contain', 'A');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7686,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4286,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 45.644,
+      "feedback_used": ""
+    }
+  ]
+}

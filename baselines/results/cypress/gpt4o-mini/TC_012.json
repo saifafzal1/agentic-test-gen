@@ -1,0 +1,13 @@
+{
+  "id": "TC_012",
+  "category": "authentication",
+  "complexity": "medium",
+  "user_story": "As a user, I want my session to expire after 30 minutes of inactivity.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Session Expiration Test', () => {\n    beforeEach(() => {\n        cy.visit('/login');\n        cy.get('input[name=\"username\"]').type('testuser');\n        cy.get('input[name=\"password\"]').type('password123');\n        cy.get('button[type=\"submit\"]').click();\n        cy.url().should('include', '/dashboard');\n    });\n\n    it('should remain logged in during activity', () => {\n        cy.get('h1').should('contain', 'Welcome to your dashboard');\n        cy.wait(1000); // Simulate user activity\n        cy.get('button#refresh').click(); // Simulate another action\n        cy.url().should('include', '/dashboard');\n    });\n\n    it('should log out after 30 minutes of inactivity', () => {\n        cy.wait(1800000); // Wait for 30 minutes\n        cy.reload(); // Reload the page to check session status\n        cy.url().should('include', '/login');\n        cy.get('.alert').should('contain', 'Your session has expired. Please log in again.');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 225,
+  "latency_s": 3.66,
+  "timestamp": "2026-06-19T16:26:01.163483"
+}

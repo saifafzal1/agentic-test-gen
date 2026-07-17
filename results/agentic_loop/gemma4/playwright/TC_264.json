@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_264",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.802,
+  "total_latency_s": 72.555,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mark All Notifications as Read', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should mark all notifications as read with a single click', async ({ page }) => {\n    // Verify notifications are visible\n    const notificationItems = page.getByRole('region', { name: /notification/i });\n    await expect(notificationItems).toBeVisible();\n\n    // Verify unread count is displayed\n    const unreadCount = page.getByText('3');\n    await expect(unreadCount).toBeVisible();\n\n    // Verify \"Mark All as Read\" button is visible and enabled\n    const markAllButton = page.getByRole('button', { name: /mark all as read/i });\n    await expect(markAllButton).toBeVisible();\n    await expect(markAllButton).not.toBeDisabled();\n\n    // Click the \"Mark All as Read\" button\n    await markAllButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('All notifications marked as read');\n    await expect(successMessage).toBeVisible();\n\n    // Verify unread count is updated to 0\n    const updatedUnreadCount = page.getByText('0');\n    await expect(updatedUnreadCount).toBeVisible();\n\n    // Verify notification items are no longer marked as unread\n    const notificationItemsAfter = page.getByRole('region', { name: /notification/i });\n    await expect(notificationItemsAfter).toHaveCount(3);\n\n    // Verify each notification item has the read status indicator\n    const notificationReadIndicators = page.getByRole('status', { name: /read/i });\n    await expect(notificationReadIndicators).toHaveCount(3);\n  });\n\n  test('should handle case with no notifications', async ({ page }) => {\n    // Navigate to notifications page\n    await page.goto('/notifications');\n\n    // Verify \"No notifications\" message is displayed\n    const noNotificationsMessage = page.getByText('No notifications');\n    await expect(noNotificationsMessage).toBeVisible();\n\n    // Verify \"Mark All as Read\" button is not visible\n    const markAllButton = page.getByRole('button', { name: /mark all as read/i });\n    await expect(markAllButton).not.toBeVisible();\n\n    // Verify unread count is 0\n    const unreadCount = page.getByText('0');\n    await expect(unreadCount).toBeVisible();\n\n    // Verify empty state is displayed\n    const emptyState = page.getByRole('status', { name: /empty/i });\n    await expect(emptyState).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.802,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4399,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.555,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_023",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.883,
+  "total_latency_s": 47.769,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Registration Form Email Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/register');\n  });\n\n  test('should display error message when submitting form with invalid email', async ({ page }) => {\n    // Setup: Fill in valid form fields\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('John Doe');\n\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('john.doe@example.com');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('SecurePassword123');\n\n    const confirmPasswordInput = page.getByLabel('Confirm Password');\n    await confirmPasswordInput.fill('SecurePassword123');\n\n    // Intercept the form submission API\n    await page.route('**/api/register', (route) => {\n      route.abort('Validation failed');\n    });\n\n    // Submit the form\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText('Please enter a valid email address');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify form is still visible\n    const form = page.locator('[data-testid=\"registration-form\"]');\n    await expect(form).toBeVisible();\n\n    // Verify error message is displayed\n    const errorList = page.getByText('Invalid email address');\n    await expect(errorList).toBeVisible();\n  });\n\n  test('should not display error message when submitting form with valid email', async ({ page }) => {\n    // Setup: Fill in valid form fields\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('Jane Smith');\n\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('jane.smith@example.com');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('SecurePassword123');\n\n    const confirmPasswordInput = page.getByLabel('Confirm Password');\n    await confirmPasswordInput.fill('SecurePassword123');\n\n    // Intercept the form submission API\n    await page.route('**/api/register', (route) => {\n      route.continue();\n    });\n\n    // Submit the form\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Registration successful');\n    await expect(successMessage).toBeVisible();\n\n    // Verify form is no longer visible\n    const form = page.locator('[data-testid=\"registration-form\"]');\n    await expect(form).not.toBeVisible();\n\n    // Verify error message is not displayed\n    const errorMessage = page.getByText('Please enter a valid email address');\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.883,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.6101,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 47.769,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_131",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7533,
+  "total_latency_s": 375.289,
+  "final_script": "describe('Modal Focus Trapping', () => {\n  beforeEach(() => {\n    cy.visit('/modal');\n  });\n\n  it('should trap focus inside open modal when clicking outside', () => {\n    // Open modal\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Verify modal is visible\n    cy.get('[data-testid=\"modal-title\"]').should('contain', 'Modal Title');\n    cy.get('[data-testid=\"modal-body\"]').should('be.visible');\n\n    // Click outside modal to test focus trapping\n    cy.get('[data-testid=\"background-content\"]').click();\n\n    // Verify focus is still inside modal\n    cy.get('[data-testid=\"modal-close-btn\"]').should('have.focus');\n    cy.get('[data-testid=\"modal-body\"]').should('have.focus');\n\n    // Close modal\n    cy.get('[data-testid=\"modal-close-btn\"]').click();\n    cy.get('[data-testid=\"modal-dialog\"]').should('not.exist');\n  });\n\n  it('should not trap focus when modal is closed', () => {\n    // Open modal\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Click outside modal to test focus behavior\n    cy.get('[data-testid=\"background-content\"]').click();\n\n    // Verify focus is not trapped outside modal\n    cy.get('[data-testid=\"modal-close-btn\"]').should('not.have.focus');\n    cy.get('[data-testid=\"modal-body\"]').should('not.have.focus');\n\n    // Close modal\n    cy.get('[data-testid=\"modal-close-btn\"]').click();\n    cy.get('[data-testid=\"modal-dialog\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7533,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3776,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 375.289,
+      "feedback_used": ""
+    }
+  ]
+}

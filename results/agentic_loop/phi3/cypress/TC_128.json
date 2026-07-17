@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_128",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7287,
+  "total_latency_s": 289.032,
+  "final_script": "describe('Confirmation Modal Before Deletion', () => {\n  beforeEach(() => {\n    cy.visit('/records');\n  });\n\n  it('should display confirmation modal when user attempts to delete a record', () => {\n    // Get the delete button for the first record\n    cy.get('[data-testid=\"record-delete-btn-1\"]').click();\n\n    // Verify confirmation modal appears\n    cy.get('[data-testid=\"confirmation-modal\"]').should('be.visible');\n    cy.get('[data-testid=\"confirm-delete-btn\"]').should('be.visible');\n    cy.get('[data-testid=\"confirm-delete-btn\"]').click();\n\n    // Verify record is deleted\n    cy.get('[data-testid=\"record-1\"]').should('not.exist');\n    cy.get('[data-testid=\"confirmation-modal\"]').should('not.exist');\n  });\n\n  it('should not display confirmation modal when record is already deleted', () => {\n    // Delete the first record\n    cy.get('[data-testid=\"record-delete-btn-1\"]').click();\n    cy.get('[data-testid=\"confirmation-modal\"]').should('be.visible');\n    cy.get('[data-testid=\"confirm-delete-btn\"]').click();\n    cy.get('[data-testid=\"record-1\"]').should('not.exist');\n\n    // Attempt to delete a non-existent record\n    cy.get('[data-testid=\"record-delete-btn-2\"]').click();\n\n    // Verify confirmation modal does not appear\n    cy.get('[data-testid=\"confirmation-modal\"]').should('not.exist');\n    cy.get('[data-testid=\"confirm-delete-btn\"]').should('not.be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7287,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2956,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 289.032,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_095",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7753,
+  "total_latency_s": 412.429,
+  "final_script": "describe('File Upload - Unsupported File Type Error', () => {\n  beforeEach(() => {\n    cy.visit('/file-upload');\n  });\n\n  it('should display error message when uploading unsupported file type', () => {\n    // Intercept the file upload API call\n    cy.intercept('POST', '/api/upload', {\n      statusCode: 400,\n      body: {\n        error: 'Unsupported file type',\n        message: 'Only PDF, DOCX, and JPG files are allowed.'\n      }\n    }).as('uploadError');\n\n    // Attempt to upload an unsupported file type (e.g., .txt)\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/unsupported-file.txt', { force: true });\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Unsupported file type');\n\n    // Verify error summary is visible\n    cy.get('[data-testid=\"error-summary\"]').should('be.visible');\n    cy.get('[data-testid=\"error-summary\"]').should('contain', 'File type');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n\n    // Verify file input is cleared\n    cy.get('[data-testid=\"file-input\"]').should('have.value', '');\n\n    // Verify upload button is disabled\n    cy.get('[data-testid=\"upload-button\"]').should('be.disabled');\n  });\n\n  it('should handle multiple unsupported file types in a row', () => {\n    // Intercept the file upload API call\n    cy.intercept('POST', '/api/upload', {\n      statusCode: 400,\n      body: {\n        error: 'Unsupported file type',\n        message: 'Only PDF, DOCX, and JPG files are allowed.'\n      }\n    }).as('uploadError');\n\n    // Attempt to upload multiple unsupported file types\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/unsupported-file.txt', { force: true });\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/unsupported-file.docx', { force: true });\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/unsupported-file.jpg', { force: true });\n\n    // Verify error message is displayed for each file\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Unsupported file type');\n\n    // Verify error summary is updated with multiple errors\n    cy.get('[data-testid=\"error-summary\"]').should('be.visible');\n    cy.get('[data-testid=\"error-summary\"]').should('contain', 'File type');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n\n    // Verify file input is cleared\n    cy.get('[data-testid=\"file-input\"]').should('have.value', '');\n\n    // Verify upload button is disabled\n    cy.get('[data-testid=\"upload-button\"]').should('be.disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7753,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4508,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 412.429,
+      "feedback_used": ""
+    }
+  ]
+}

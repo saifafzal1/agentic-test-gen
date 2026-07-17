@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_226",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7761,
+  "total_latency_s": 40.571,
+  "final_script": "describe('Mobile Navigation Collapse - Hamburger Menu', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should display hamburger menu on mobile viewport and toggle navigation links when clicked', () => {\n    // Set viewport to mobile\n    cy.viewport('iphone-x');\n\n    // Verify hamburger menu button is visible\n    cy.get('[data-testid=\"hamburger-menu-btn\"]').should('be.visible');\n    cy.get('[data-testid=\"hamburger-menu-btn\"]').should('contain', 'Menu');\n\n    // Verify navigation links are collapsed\n    cy.get('[data-testid=\"nav-link-home\"]').should('not.exist');\n    cy.get('[data-testid=\"nav-link-about\"]').should('not.exist');\n    cy.get('[data-testid=\"nav-link-services\"]').should('not.exist');\n    cy.get('[data-testid=\"nav-link-contact\"]').should('not.exist');\n\n    // Click hamburger menu button\n    cy.get('[data-testid=\"hamburger-menu-btn\"]').click();\n\n    // Verify navigation links are now visible\n    cy.get('[data-testid=\"nav-link-home\"]').should('be.visible');\n    cy.get('[data-testid=\"nav-link-about\"]').should('be.visible');\n    cy.get('[data-testid=\"nav-link-services\"]').should('be.visible');\n    cy.get('[data-testid=\"nav-link-contact\"]').should('be.visible');\n\n    // Verify navigation links are clickable\n    cy.get('[data-testid=\"nav-link-home\"]').click();\n    cy.url().should('include', '/');\n\n    // Verify hamburger menu button is hidden\n    cy.get('[data-testid=\"hamburger-menu-btn\"]').should('not.exist');\n  });\n\n  it('should handle edge case when hamburger menu is clicked multiple times', () => {\n    // Set viewport to mobile\n    cy.viewport('iphone-x');\n\n    // Verify hamburger menu button is visible\n    cy.get('[data-testid=\"hamburger-menu-btn\"]').should('be.visible');\n\n    // Click hamburger menu button twice\n    cy.get('[data-testid=\"hamburger-menu-btn\"]').click();\n    cy.get('[data-testid=\"hamburger-menu-btn\"]').click();\n\n    // Verify navigation links are still visible after multiple clicks\n    cy.get('[data-testid=\"nav-link-home\"]').should('be.visible');\n    cy.get('[data-testid=\"nav-link-about\"]').should('be.visible');\n    cy.get('[data-testid=\"nav-link-services\"]').should('be.visible');\n    cy.get('[data-testid=\"nav-link-contact\"]').should('be.visible');\n\n    // Verify hamburger menu button is still hidden\n    cy.get('[data-testid=\"hamburger-menu-btn\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7761,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4536,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 40.571,
+      "feedback_used": ""
+    }
+  ]
+}

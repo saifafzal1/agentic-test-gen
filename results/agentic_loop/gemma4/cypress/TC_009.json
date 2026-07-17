@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_009",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7916,
+  "total_latency_s": 71.218,
+  "final_script": "describe('Account Lockout After Failed Login Attempts', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should lock an account after 5 failed login attempts', () => {\n    // Attempt 1\n    cy.get('[data-testid=\"email-input\"]').type('testuser@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('wrongpassword123');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Invalid credentials');\n    cy.get('[data-testid=\"attempts-counter\"]').should('contain', '1');\n\n    // Attempt 2\n    cy.get('[data-testid=\"password-input\"]').clear().type('wrongpassword123');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Invalid credentials');\n    cy.get('[data-testid=\"attempts-counter\"]').should('contain', '2');\n\n    // Attempt 3\n    cy.get('[data-testid=\"password-input\"]').clear().type('wrongpassword123');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Invalid credentials');\n    cy.get('[data-testid=\"attempts-counter\"]').should('contain', '3');\n\n    // Attempt 4\n    cy.get('[data-testid=\"password-input\"]').clear().type('wrongpassword123');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Invalid credentials');\n    cy.get('[data-testid=\"attempts-counter\"]').should('contain', '4');\n\n    // Attempt 5 - Account should now be locked\n    cy.get('[data-testid=\"password-input\"]').clear().type('wrongpassword123');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Account locked');\n    cy.get('[data-testid=\"account-status\"]').should('contain', 'Locked');\n    cy.get('[data-testid=\"reset-password-link\"]').should('be.visible');\n  });\n\n  it('should allow login with correct credentials before account is locked', () => {\n    // Attempt 1 (Wrong password)\n    cy.get('[data-testid=\"email-input\"]').type('testuser@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('wrongpassword123');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Invalid credentials');\n    cy.get('[data-testid=\"attempts-counter\"]').should('contain', '1');\n\n    // Attempt 2 (Wrong password)\n    cy.get('[data-testid=\"password-input\"]').clear().type('wrongpassword123');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Invalid credentials');\n    cy.get('[data-testid=\"attempts-counter\"]').should('contain', '2');\n\n    // Attempt 3 (Correct password - should succeed and reset counter)\n    cy.get('[data-testid=\"password-input\"]').clear().type('correctpassword123');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"welcome-message\"]').should('be.visible').should('contain', 'Welcome');\n    cy.get('[data-testid=\"attempts-counter\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7916,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5052,
+        "missing_keywords": [],
+        "assertion_count": 26,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.218,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_120",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.803,
+  "total_latency_s": 50.763,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('WebSocket Real-time UI Updates', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should update UI in real-time when WebSocket receives new data', async ({ page }) => {\n    // Setup: Open WebSocket connection\n    const ws = page.waitForResponse(response => response.url().includes('/ws/data'));\n    await page.route('**/ws/data', route => {\n      route.continue();\n    });\n\n    // Verify initial state\n    const dataTable = page.getByRole('table', { name: /data table/i });\n    await expect(dataTable).toBeVisible();\n\n    // Verify initial data\n    const tableRows = page.locator('[data-testid=\"data-row\"]');\n    await expect(tableRows).toHaveCount(3);\n\n    // Send WebSocket message to trigger update\n    const updateButton = page.getByRole('button', { name: /update data/i });\n    await updateButton.click();\n\n    // Wait for WebSocket response\n    await expect(ws).toBefulfilled();\n\n    // Verify UI updates\n    const updatedRows = page.locator('[data-testid=\"data-row\"]');\n    await expect(updatedRows).toHaveCount(5);\n\n    // Verify new data is displayed\n    const newDataRow = page.getByText(/New Data/i);\n    await expect(newDataRow).toBeVisible();\n\n    // Verify UI is responsive\n    const loadingIndicator = page.getByRole('status');\n    await expect(loadingIndicator).toBeVisible();\n\n    // Verify error state is not set\n    const errorMessage = page.getByText(/error/i);\n    await expect(errorMessage).not.toBeVisible();\n  });\n\n  test('should handle WebSocket disconnection and reconnect', async ({ page }) => {\n    // Setup: Open WebSocket connection\n    const ws = page.waitForResponse(response => response.url().includes('/ws/data'));\n    await page.route('**/ws/data', route => {\n      route.continue();\n    });\n\n    // Verify initial state\n    const dataTable = page.getByRole('table', { name: /data table/i });\n    await expect(dataTable).toBeVisible();\n\n    // Verify initial data\n    const tableRows = page.locator('[data-testid=\"data-row\"]');\n    await expect(tableRows).toHaveCount(3);\n\n    // Simulate WebSocket disconnection\n    await page.route('**/ws/data', route => {\n      route.abort();\n    });\n\n    // Wait for disconnection\n    await page.waitForTimeout(100);\n\n    // Verify UI remains responsive\n    const loadingIndicator = page.getByRole('status');\n    await expect(loadingIndicator).toBeVisible();\n\n    // Verify error state is not set\n    const errorMessage = page.getByText(/error/i);\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify data is still displayed\n    const dataRow = page.getByText(/Data 1/i);\n    await expect(dataRow).toBeVisible();\n\n    // Reconnect WebSocket\n    await page.route('**/ws/data', route => {\n      route.continue();\n    });\n\n    // Verify UI updates after reconnection\n    const updatedRows = page.locator('[data-testid=\"data-row\"]');\n    await expect(updatedRows).toHaveCount(3);\n\n    // Verify new data is displayed\n    const newDataRow = page.getByText(/New Data/i);\n    await expect(newDataRow).toBeVisible();\n\n    // Verify error state is cleared\n    const errorMessage = page.getByText(/error/i);\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.803,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4434,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 50.763,
+      "feedback_used": ""
+    }
+  ]
+}

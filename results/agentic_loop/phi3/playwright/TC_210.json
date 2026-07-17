@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_210",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8031,
+  "total_latency_s": 43.617,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('ARIA Landmarks for Page Regions', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/landmarks-demo');\n  });\n\n  test('should correctly apply ARIA landmarks to page regions', async ({ page }) => {\n    // Verify main content region has role=\"main\"\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeVisible();\n    await expect(mainContent).toHaveAttribute('aria-label', 'Main content area');\n\n    // Verify navigation region has role=\"navigation\"\n    const navRegion = page.getByRole('navigation');\n    await expect(navRegion).toBeVisible();\n    await expect(navRegion).toHaveAttribute('aria-label', 'Navigation');\n\n    // Verify search region has role=\"search\"\n    const searchRegion = page.getByRole('search');\n    await expect(searchRegion).toBeVisible();\n    await expect(searchRegion).toHaveAttribute('aria-label', 'Search');\n\n    // Verify footer region has role=\"contentinfo\"\n    const footerRegion = page.getByRole('contentinfo');\n    await expect(footerRegion).toBeVisible();\n    await expect(footerRegion).toHaveAttribute('aria-label', 'Footer');\n\n    // Verify page has role=\"document\"\n    const pageRegion = page.getByRole('document');\n    await expect(pageRegion).toBeVisible();\n    await expect(pageRegion).toHaveAttribute('aria-label', 'Document');\n\n    // Verify page has role=\"banner\"\n    const bannerRegion = page.getByRole('banner');\n    await expect(bannerRegion).toBeVisible();\n    await expect(bannerRegion).toHaveAttribute('aria-label', 'Banner');\n  });\n\n  test('should handle dynamic content updates with correct ARIA landmarks', async ({ page }) => {\n    // Initial verification\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeVisible();\n    await expect(mainContent).toHaveAttribute('aria-label', 'Main content area');\n\n    // Navigate to a different page\n    const navLink = page.getByRole('link', { name: /contact/i });\n    await navLink.click();\n    await expect(page).toHaveURL(/contact/);\n\n    // Verify navigation region still has correct role and label\n    const navRegion = page.getByRole('navigation');\n    await expect(navRegion).toBeVisible();\n    await expect(navRegion).toHaveAttribute('aria-label', 'Navigation');\n\n    // Verify main content region has updated content\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeVisible();\n    await expect(mainContent).toHaveText(/contact information/i);\n\n    // Verify footer region still has correct role and label\n    const footerRegion = page.getByRole('contentinfo');\n    await expect(footerRegion).toBeVisible();\n    await expect(footerRegion).toHaveAttribute('aria-label', 'Footer');\n\n    // Verify page has correct role and label\n    const pageRegion = page.getByRole('document');\n    await expect(pageRegion).toBeVisible();\n    await expect(pageRegion).toHaveAttribute('aria-label', 'Document');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8031,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4435,
+        "missing_keywords": [],
+        "assertion_count": 23,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 43.617,
+      "feedback_used": ""
+    }
+  ]
+}

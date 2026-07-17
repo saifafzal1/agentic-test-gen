@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_189",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7494,
+  "total_latency_s": 53.8,
+  "final_script": "describe('Search Filter Results Count Display', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should display correct number of results for each filter option', () => {\n    // Set up initial state with no filters applied\n    cy.get('[data-testid=\"search-input\"]').type('laptop');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Verify initial results count is displayed\n    cy.get('[data-testid=\"results-count\"]').should('be.visible');\n    cy.get('[data-testid=\"results-count\"]').should('contain', '0 results');\n\n    // Apply first filter (price range)\n    cy.get('[data-testid=\"price-filter-dropdown\"]').click();\n    cy.get('[data-testid=\"price-filter-option-100\"]').click();\n    cy.get('[data-testid=\"price-filter-option-200\"]').click();\n\n    // Verify results count updates\n    cy.get('[data-testid=\"results-count\"]').should('contain', '0 results');\n    cy.get('[data-testid=\"results-count\"]').should('contain', '100-200 results');\n\n    // Apply second filter (brand)\n    cy.get('[data-testid=\"brand-filter-dropdown\"]').click();\n    cy.get('[data-testid=\"brand-filter-option-apple\"]').click();\n\n    // Verify results count updates\n    cy.get('[data-testid=\"results-count\"]').should('contain', '100-200 results');\n    cy.get('[data-testid=\"results-count\"]').should('contain', 'Apple');\n\n    // Apply third filter (category)\n    cy.get('[data-testid=\"category-filter-dropdown\"]').click();\n    cy.get('[data-testid=\"category-filter-option-laptops\"]').click();\n\n    // Verify results count updates\n    cy.get('[data-testid=\"results-count\"]').should('contain', '100-200 results');\n    cy.get('[data-testid=\"results-count\"]').should('contain', 'Apple Laptops');\n\n    // Verify results count is accurate\n    cy.get('[data-testid=\"results-count\"]').should('contain', '10 results');\n  });\n\n  it('should handle edge case when no results are found for a filter combination', () => {\n    // Set up initial state with no filters applied\n    cy.get('[data-testid=\"search-input\"]').type('nonexistent product');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Verify initial results count is displayed\n    cy.get('[data-testid=\"results-count\"]').should('be.visible');\n    cy.get('[data-testid=\"results-count\"]').should('contain', '0 results');\n\n    // Apply filters\n    cy.get('[data-testid=\"price-filter-dropdown\"]').click();\n    cy.get('[data-testid=\"price-filter-option-100\"]').click();\n    cy.get('[data-testid=\"brand-filter-dropdown\"]').click();\n    cy.get('[data-testid=\"brand-filter-option-apple\"]').click();\n    cy.get('[data-testid=\"category-filter-dropdown\"]').click();\n    cy.get('[data-testid=\"category-filter-option-laptops\"]').click();\n\n    // Verify results count updates to reflect no results\n    cy.get('[data-testid=\"results-count\"]').should('contain', '0 results');\n\n    // Verify no results message is displayed\n    cy.get('[data-testid=\"no-results-message\"]').should('be.visible');\n    cy.get('[data-testid=\"no-results-message\"]').should('contain', 'No results found');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7494,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3646,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 53.8,
+      "feedback_used": ""
+    }
+  ]
+}

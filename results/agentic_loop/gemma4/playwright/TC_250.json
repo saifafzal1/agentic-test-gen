@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_250",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8348,
+  "total_latency_s": 182.496,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('PayPal Payment Method Selection', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should successfully select PayPal as payment method', async ({ page }) => {\n    // Verify payment options are visible\n    const paymentOptions = page.getByRole('group', { name: /payment options/i });\n    await expect(paymentOptions).toBeVisible();\n\n    // Verify PayPal option is visible and selectable\n    const payPalOption = page.getByRole('button', { name: /paypal/i });\n    await expect(payPalOption).toBeVisible();\n\n    // Click PayPal option\n    await payPalOption.click();\n\n    // Verify PayPal is selected\n    await expect(payPalOption).toHaveClass(/selected/);\n\n    // Verify PayPal payment details are displayed\n    const payPalDetails = page.getByText(/paypal/i);\n    await expect(payPalDetails).toBeVisible();\n\n    // Verify payment confirmation button is enabled\n    const confirmButton = page.getByRole('button', { name: /confirm payment/i });\n    await expect(confirmButton).toBeEnabled();\n\n    // Click confirm payment\n    await confirmButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/payment confirmed/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify user is redirected to order confirmation page\n    await expect(page).toHaveURL(/.*\\/order-confirmation/);\n  });\n\n  test('should handle PayPal option not being available', async ({ page }) => {\n    // Intercept the API call to simulate PayPal being unavailable\n    await page.route('**/api/payment/options', route => {\n      route.abort('failed');\n    });\n\n    // Verify payment options are visible\n    const paymentOptions = page.getByRole('group', { name: /payment options/i });\n    await expect(paymentOptions).toBeVisible();\n\n    // Attempt to click PayPal option\n    const payPalOption = page.getByRole('button', { name: /paypal/i });\n    await expect(payPalOption).toBeVisible();\n\n    // Click PayPal option\n    await payPalOption.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/paypal is currently unavailable/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify PayPal option is not selected\n    await expect(payPalOption).not.toHaveClass(/selected/);\n\n    // Verify user is prompted to select another option\n    const fallbackPrompt = page.getByText(/please select another payment method/i);\n    await expect(fallbackPrompt).toBeVisible();\n\n    // Verify other payment options are still available\n    const creditCardOption = page.getByRole('button', { name: /credit card/i });\n    await expect(creditCardOption).toBeVisible();\n\n    // Verify user can select credit card\n    await creditCardOption.click();\n    await expect(creditCardOption).toHaveClass(/selected/);\n\n    // Verify PayPal error persists\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5348,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.5159,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 71.902,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8348,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5493,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 110.594,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

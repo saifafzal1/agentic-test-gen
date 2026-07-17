@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_020",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7913,
+  "total_latency_s": 438.524,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Confirm Password Mismatch Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/signup');\n  });\n\n  test('should display confirmation password mismatch error in real-time when passwords do not match', async ({ page }) => {\n    // Setup: Fill in the first password field\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('Secure*Pass123');\n\n    // Setup: Fill in the confirm password field\n    const confirmPasswordInput = page.getByLabel('Confirm Password');\n    await confirmPasswordInput.fill('Secure*Pass123');\n\n    // Setup: Verify initial state of confirm password field\n    const confirmPasswordField = page.getByLabel('Confirm Password');\n    await expect(confirmPasswordField).toHaveValue('Secure*Pass123');\n\n    // Setup: Verify error message is not visible initially\n    const errorMessage = page.getByText('Passwords do not match');\n    await expect(errorMessage).not.toBeVisible();\n\n    // Setup: Fill in the confirm password field with a different value\n    await confirmPasswordInput.fill('WrongPass123');\n\n    // Setup: Verify error message appears\n    await expect(errorMessage).toBeVisible();\n\n    // Setup: Verify error message contains correct text\n    await expect(errorMessage).toContainText('Passwords do not match');\n\n    // Setup: Verify password field retains value\n    await expect(passwordInput).toHaveValue('Secure*Pass123');\n\n    // Setup: Verify confirm password field retains value\n    await expect(confirmPasswordInput).toHaveValue('WrongPass123');\n\n    // Setup: Verify error message is visible and styled\n    await expect(errorMessage).toHaveClass(/error-message/);\n  });\n\n  test('should clear error message when passwords match after initial mismatch', async ({ page }) => {\n    // Setup: Fill in the first password field\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('Secure*Pass123');\n\n    // Setup: Fill in the confirm password field with a mismatch\n    const confirmPasswordInput = page.getByLabel('Confirm Password');\n    await confirmPasswordInput.fill('WrongPass123');\n\n    // Setup: Verify error message appears\n    const errorMessage = page.getByText('Passwords do not match');\n    await expect(errorMessage).toBeVisible();\n\n    // Setup: Verify error message contains correct text\n    await expect(errorMessage).toContainText('Passwords do not match');\n\n    // Setup: Verify password field retains value\n    await expect(passwordInput).toHaveValue('Secure*Pass123');\n\n    // Setup: Verify confirm password field retains value\n    await expect(confirmPasswordInput).toHaveValue('WrongPass123');\n\n    // Setup: Fill in the confirm password field with the correct value\n    await confirmPasswordInput.fill('Secure*Pass123');\n\n    // Setup: Verify error message is cleared\n    await expect(errorMessage).not.toBeVisible();\n\n    // Setup: Verify confirm password field retains the correct value\n    await expect(confirmPasswordInput).toHaveValue('Secure*Pass123');\n\n    // Setup: Verify password field retains value\n    await expect(passwordInput).toHaveValue('Secure*Pass123');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7913,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4042,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 438.524,
+      "feedback_used": ""
+    }
+  ]
+}

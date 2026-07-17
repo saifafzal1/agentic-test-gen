@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_187",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8469,
+  "total_latency_s": 74.721,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Results Filtering by Category', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should filter search results by selecting category checkboxes', async ({ page }) => {\n    // Verify search input is visible\n    const searchInput = page.getByPlaceholder('Search products...');\n    await expect(searchInput).toBeVisible();\n\n    // Perform search\n    await searchInput.fill('laptop');\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await searchButton.click();\n\n    // Verify search results are displayed\n    const resultsContainer = page.getByTestId('search-results');\n    await expect(resultsContainer).toBeVisible();\n    const resultItems = page.getByTestId('result-item');\n    await expect(resultItems).toHaveCount(10);\n\n    // Verify category filter section is visible\n    const filterSection = page.getByTestId('category-filter');\n    await expect(filterSection).toBeVisible();\n\n    // Select 'Electronics' category checkbox\n    const electronicsCheckbox = page.getByLabel('Electronics');\n    await expect(electronicsCheckbox).toBeVisible();\n    await electronicsCheckbox.click();\n\n    // Verify 'Electronics' checkbox is checked\n    await expect(electronicsCheckbox).toBeChecked();\n\n    // Verify search results are filtered\n    await expect(resultItems).toHaveCount(5);\n    const filteredResult = page.getByTestId('result-item').first();\n    await expect(filteredResult).toContainText('laptop');\n\n    // Verify filter applied message\n    const filterAppliedMessage = page.getByText('Showing 5 results in Electronics');\n    await expect(filterAppliedMessage).toBeVisible();\n\n    // Deselect 'Electronics' category checkbox\n    await electronicsCheckbox.click();\n    await expect(electronicsCheckbox).not.toBeChecked();\n\n    // Verify all results are shown again\n    await expect(resultItems).toHaveCount(10);\n    await expect(filterAppliedMessage).not.toBeVisible();\n  });\n\n  test('should handle multiple category selections and clear filters', async ({ page }) => {\n    // Perform initial search\n    const searchInput = page.getByPlaceholder('Search products...');\n    await searchInput.fill('phone');\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await searchButton.click();\n\n    // Verify initial results\n    const resultItems = page.getByTestId('result-item');\n    await expect(resultItems).toHaveCount(10);\n\n    // Select 'Electronics' category\n    const electronicsCheckbox = page.getByLabel('Electronics');\n    await electronicsCheckbox.click();\n    await expect(electronicsCheckbox).toBeChecked();\n\n    // Select 'Accessories' category\n    const accessoriesCheckbox = page.getByLabel('Accessories');\n    await accessoriesCheckbox.click();\n    await expect(accessoriesCheckbox).toBeChecked();\n\n    // Verify results are filtered by both categories\n    await expect(resultItems).toHaveCount(7);\n    const filterAppliedMessage = page.getByText('Showing 7 results in Electronics and Accessories');\n    await expect(filterAppliedMessage).toBeVisible();\n\n    // Verify both categories are selected\n    await expect(electronicsCheckbox).toBeChecked();\n    await expect(accessoriesCheckbox).toBeChecked();\n\n    // Clear all filters button\n    const clearFiltersButton = page.getByRole('button', { name: /clear filters/i });\n    await clearFiltersButton.click();\n\n    // Verify all checkboxes are unchecked\n    await expect(electronicsCheckbox).not.toBeChecked();\n    await expect(accessoriesCheckbox).not.toBeChecked();\n\n    // Verify all results are displayed again\n    await expect(resultItems).toHaveCount(10);\n    await expect(filterAppliedMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8469,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4896,
+        "missing_keywords": [],
+        "assertion_count": 23,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 74.721,
+      "feedback_used": ""
+    }
+  ]
+}

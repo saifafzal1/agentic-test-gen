@@ -1,0 +1,13 @@
+{
+  "id": "TC_169",
+  "category": "file_upload",
+  "complexity": "complex",
+  "user_story": "As a user, I want to upload multiple files at once.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('File Upload Functionality', () => {\n    beforeEach(() => {\n        cy.visit('/upload'); // Replace with the actual URL of the upload page\n    });\n\n    it('should upload multiple files successfully', () => {\n        const filesToUpload = [\n            'file1.txt',\n            'file2.jpg',\n            'file3.pdf'\n        ];\n\n        const fileInput = cy.get('input[type=\"file\"]'); // Adjust selector as needed\n\n        fileInput.attachFile(filesToUpload);\n\n        cy.get('button[type=\"submit\"]').click(); // Adjust selector as needed\n\n        cy.get('.upload-success-message').should('be.visible'); // Adjust selector as needed\n        cy.get('.uploaded-files-list').should('contain', 'file1.txt');\n        cy.get('.uploaded-files-list').should('contain', 'file2.jpg');\n        cy.get('.uploaded-files-list').should('contain', 'file3.pdf');\n    });\n\n    it('should show an error when no files are selected', () => {\n        cy.get('button[type=\"submit\"]').click(); // Adjust selector as needed\n\n        cy.get('.error-message').should('be.visible'); // Adjust selector as needed\n        cy.get('.error-message').should('contain', 'Please select at least one file to upload.'); // Adjust message as needed\n    });\n});",
+  "prompt_tokens": 107,
+  "completion_tokens": 274,
+  "latency_s": 3.5,
+  "timestamp": "2026-06-19T16:35:57.683308"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_134",
+  "category": "modal_dialog",
+  "complexity": "simple",
+  "user_story": "As a user, I want an alert dialog to block interaction with the page behind it.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Alert Dialog Interaction', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-website-url.com');\n    await page.getByRole('button', { name: 'Open Alert Dialog' }).click();\n  });\n\n  test('should display the alert dialog', async ({ page }) => {\n    const alertDialog = page.getByRole('dialog');\n    await expect(alertDialog).toBeVisible();\n  });\n\n  test('should block interaction with the page behind the alert dialog', async ({ page }) => {\n    const alertDialog = page.getByRole('dialog');\n    await expect(alertDialog).toBeVisible();\n\n    const backgroundElement = page.getByText('Background Element');\n    await expect(backgroundElement).toBeDisabled(); // Assuming the background element is disabled when dialog is open\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 186,
+  "latency_s": 3.61,
+  "timestamp": "2026-06-19T16:52:45.568271"
+}

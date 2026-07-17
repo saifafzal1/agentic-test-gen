@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_215",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7024,
+  "total_latency_s": 769.845,
+  "final_script": "describe('Reading Order Matches Visual Order', () => {\n  beforeEach(() => {\n    cy.visit('/page');\n  });\n\n  it('should read content in the same order as it appears visually', () => {\n    // Verify the page loads with visible content\n    cy.get('[data-testid=\"page-content\"]').should('be.visible');\n\n    // Verify the first visible element is a heading\n    cy.get('[data-testid=\"page-heading\"]').should('contain', 'Welcome to Our Page');\n\n    // Verify the first visible paragraph follows the heading\n    cy.get('[data-testid=\"page-paragraph\"]').should('contain', 'This is the first paragraph of our page.');\n\n    // Verify the second visible element is a subheading\n    cy.get('[data-testid=\"page-subheading\"]').should('contain', 'Subheading');\n\n    // Verify the second visible paragraph follows the subheading\n    cy.get('[data-testid=\"page-paragraph\"]').should('contain', 'This is the second paragraph.');\n\n    // Verify the third visible element is a list\n    cy.get('[data-testid=\"page-list\"]').should('contain', 'List Item 1');\n\n    // Verify the first list item is visible\n    cy.get('[data-testid=\"list-item-1\"]').should('be.visible');\n\n    // Verify the fourth visible element is a button\n    cy.get('[data-testid=\"page-button\"]').should('be.visible');\n\n    // Verify the button is visible and has the correct text\n    cy.get('[data-testid=\"page-button\"]').should('contain', 'Click Me');\n\n    // Verify the fifth visible element is a footer\n    cy.get('[data-testid=\"page-footer\"]').should('be.visible');\n\n    // Verify the footer contains copyright information\n    cy.get('[data-testid=\"page-footer\"]').should('contain', '\u00a9 2023 Company');\n\n    // Verify the page has no hidden content\n    cy.get('[data-testid=\"page-content\"]').should('have.length.greaterThan', 0);\n  });\n\n  it('should handle content with dynamic visibility based on user interaction', () => {\n    // Verify the page loads with initial content\n    cy.get('[data-testid=\"page-content\"]').should('be.visible');\n\n    // Click the button to reveal hidden content\n    cy.get('[data-testid=\"page-button\"]').click();\n\n    // Verify the hidden content is now visible\n    cy.get('[data-testid=\"page-hidden-content\"]').should('be.visible');\n\n    // Verify the hidden content appears after the button\n    cy.get('[data-testid=\"page-hidden-content\"]').should('contain', 'This content was hidden before');\n\n    // Verify the reading order is still maintained\n    cy.get('[data-testid=\"page-heading\"]').should('contain', 'Welcome to Our Page');\n    cy.get('[data-testid=\"page-paragraph\"]').should('contain', 'This is the first paragraph of our page.');\n\n    // Verify the hidden content does not disrupt the visual order\n    cy.get('[data-testid=\"page-hidden-content\"]').should('be.visible');\n\n    // Verify the footer remains visible and unchanged\n    cy.get('[data-testid=\"page-footer\"]').should('be.visible');\n\n    // Verify the page does not have any broken or missing elements\n    cy.get('[data-testid=\"page-content\"]').should('have.length.greaterThan', 0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4263,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.1944,
+        "missing_keywords": [],
+        "assertion_count": 27,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 414.364,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7024,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.208,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 355.481,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

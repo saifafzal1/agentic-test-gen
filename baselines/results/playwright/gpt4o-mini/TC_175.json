@@ -1,0 +1,13 @@
+{
+  "id": "TC_175",
+  "category": "file_upload",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see the file name and size listed after selecting it.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/upload'); // Replace with the actual URL\n  });\n\n  test('should display the file name after selecting a file', async ({ page }) => {\n    const filePath = 'path/to/your/file.txt'; // Replace with the actual file path\n    await page.getByLabel('Upload File').setInputFiles(filePath);\n    \n    const fileName = await page.getByText('file.txt'); // Replace with the expected file name\n    expect(fileName).toBeVisible();\n  });\n\n  test('should display the file size after selecting a file', async ({ page }) => {\n    const filePath = 'path/to/your/file.txt'; // Replace with the actual file path\n    await page.getByLabel('Upload File').setInputFiles(filePath);\n    \n    const fileSize = await page.getByText('Size: 1 KB'); // Replace with the expected file size\n    expect(fileSize).toBeVisible();\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 235,
+  "latency_s": 3.03,
+  "timestamp": "2026-06-19T16:55:11.947639"
+}

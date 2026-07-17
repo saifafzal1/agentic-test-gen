@@ -1,0 +1,13 @@
+{
+  "id": "TC_157",
+  "category": "table_list",
+  "complexity": "complex",
+  "user_story": "As a user, I want to right-click a row to see a context menu.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Context Menu on Table Row', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/table'); // Replace with the actual URL\n  });\n\n  test('should display context menu on right-clicking a row', async ({ page }) => {\n    const row = page.getByRole('row', { name: 'Row Name' }); // Replace 'Row Name' with the actual row name\n    await row.dispatchEvent('contextmenu');\n    \n    const contextMenu = page.getByRole('menu');\n    await expect(contextMenu).toBeVisible();\n  });\n\n  test('should have correct options in context menu', async ({ page }) => {\n    const row = page.getByRole('row', { name: 'Row Name' }); // Replace 'Row Name' with the actual row name\n    await row.dispatchEvent('contextmenu');\n    \n    const contextMenu = page.getByRole('menu');\n    await expect(contextMenu.getByText('Edit')).toBeVisible();\n    await expect(contextMenu.getByText('Delete')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 242,
+  "latency_s": 3.16,
+  "timestamp": "2026-06-19T16:54:10.446301"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_018",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7478,
+  "total_latency_s": 233.388,
+  "final_script": "describe('Form Validation - Required Fields Highlighting', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n  });\n\n  it('should highlight required fields when submitting an empty form', () => {\n    // Intercept the form submission API\n    cy.intercept('POST', '/api/form-submit').as('submitForm');\n\n    // Fill in only the email field\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n\n    // Click the submit button\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify the form submission was intercepted\n    cy.wait('@submitForm').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify the email field is highlighted\n    cy.get('[data-testid=\"email-input\"]').should('have.class', 'highlighted');\n\n    // Verify the name field is also highlighted\n    cy.get('[data-testid=\"name-input\"]').should('have.class', 'highlighted');\n\n    // Verify the phone field is highlighted\n    cy.get('[data-testid=\"phone-input\"]').should('have.class', 'highlighted');\n\n    // Verify the submit button is disabled\n    cy.get('[data-testid=\"submit-button\"]').should('be.disabled');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please fill all required fields');\n  });\n\n  it('should clear highlighted fields when user corrects them', () => {\n    // Fill in only the email field\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n\n    // Click the submit button\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify the form submission was intercepted\n    cy.wait('@submitForm').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify the email field is highlighted\n    cy.get('[data-testid=\"email-input\"]').should('have.class', 'highlighted');\n\n    // Fill in the name field\n    cy.get('[data-testid=\"name-input\"]').type('John Doe');\n\n    // Verify the highlighted class is removed from email field\n    cy.get('[data-testid=\"email-input\"]').should('not.have.class', 'highlighted');\n\n    // Verify the phone field is still highlighted\n    cy.get('[data-testid=\"phone-input\"]').should('have.class', 'highlighted');\n\n    // Verify the submit button is now enabled\n    cy.get('[data-testid=\"submit-button\"]').should('not.be.disabled');\n\n    // Verify error message is cleared\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7478,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3595,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 233.388,
+      "feedback_used": ""
+    }
+  ]
+}

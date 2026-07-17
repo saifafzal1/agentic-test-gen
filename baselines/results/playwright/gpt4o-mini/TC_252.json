@@ -1,0 +1,13 @@
+{
+  "id": "TC_252",
+  "category": "payment_flow",
+  "complexity": "medium",
+  "user_story": "As a user, I want to receive an order confirmation after successful payment.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Payment Flow', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/checkout');\n  });\n\n  test('should display order confirmation after successful payment', async ({ page }) => {\n    await page.fill(getByLabel('Card Number'), '4111 1111 1111 1111');\n    await page.fill(getByLabel('Expiry Date'), '12/25');\n    await page.fill(getByLabel('CVC'), '123');\n    await page.click(getByRole('button', { name: 'Pay Now' }));\n\n    await expect(page.getByText('Payment Successful')).toBeVisible();\n    await expect(page.getByText('Thank you for your order!')).toBeVisible();\n  });\n\n  test('should not display order confirmation after failed payment', async ({ page }) => {\n    await page.fill(getByLabel('Card Number'), '4000 0000 0000 0002');\n    await page.fill(getByLabel('Expiry Date'), '12/25');\n    await page.fill(getByLabel('CVC'), '123');\n    await page.click(getByRole('button', { name: 'Pay Now' }));\n\n    await expect(page.getByText('Payment Failed')).toBeVisible();\n    await expect(page.getByText('Please check your payment details and try again.')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 300,
+  "latency_s": 4.54,
+  "timestamp": "2026-06-19T17:00:58.238238"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_217",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7974,
+  "total_latency_s": 30.882,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Loading States Communication to Assistive Technology', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/loading-states');\n  });\n\n  test('should announce loading state to screen reader when loading content', async ({ page }) => {\n    // Set up: intercept the API call and simulate loading\n    await page.route('**/api/content', (route) => {\n      route.abort('Loading...');\n    });\n\n    // Verify loading state is visible\n    const loadingIndicator = page.getByRole('status', { name: /loading/i });\n    await expect(loadingIndicator).toBeVisible();\n\n    // Verify loading message is announced by screen reader\n    await page.evaluate(() => {\n      navigator.screenReader.announce('Loading content...');\n    });\n\n    // Verify content is not visible yet\n    const content = page.getByRole('main');\n    await expect(content).not.toBeVisible();\n\n    // Verify loading state is announced when content is loaded\n    await page.evaluate(() => {\n      navigator.screenReader.announce('Content loaded');\n    });\n\n    // Verify content is now visible\n    await expect(content).toBeVisible();\n  });\n\n  test('should clear loading state when content is fully loaded', async ({ page }) => {\n    // Set up: intercept the API call and simulate loading\n    await page.route('**/api/content', (route) => {\n      route.continue();\n    });\n\n    // Verify loading state is visible\n    const loadingIndicator = page.getByRole('status', { name: /loading/i });\n    await expect(loadingIndicator).toBeVisible();\n\n    // Verify loading message is announced by screen reader\n    await page.evaluate(() => {\n      navigator.screenReader.announce('Loading content...');\n    });\n\n    // Verify content is not visible yet\n    const content = page.getByRole('main');\n    await expect(content).not.toBeVisible();\n\n    // Verify loading state is cleared when content is loaded\n    await page.evaluate(() => {\n      navigator.screenReader.announce('Content loaded');\n    });\n\n    // Verify loading state is no longer visible\n    await expect(loadingIndicator).not.toBeVisible();\n\n    // Verify content is now visible\n    await expect(content).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7974,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4245,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 30.882,
+      "feedback_used": ""
+    }
+  ]
+}

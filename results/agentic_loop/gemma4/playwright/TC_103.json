@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_103",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7942,
+  "total_latency_s": 193.771,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Session Expired Message on Token Timeout', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display session expired message when token times out', async ({ page }) => {\n    // Intercept the API call and simulate token expiration\n    await page.route('**/api/user/profile', (route) => {\n      route.abort('timedout');\n    });\n\n    // Wait for the token to expire and the API call to fail\n    await page.waitForTimeout(1000);\n\n    // Verify the session expired message is visible\n    const expiredMessage = page.getByText('Your session has expired');\n    await expect(expiredMessage).toBeVisible();\n\n    // Verify the user is redirected to the login page\n    const loginLink = page.getByRole('link', { name: /login/i });\n    await expect(loginLink).toBeVisible();\n    await expect(page).toHaveURL(/.*login/);\n\n    // Verify the logout button is visible and functional\n    const logoutButton = page.getByRole('button', { name: /logout/i });\n    await expect(logoutButton).toBeVisible();\n    await logoutButton.click();\n\n    // Verify user is logged out and redirected to login\n    await expect(page).toHaveURL(/.*login/);\n  });\n\n  test('should handle multiple failed token requests gracefully and show error state', async ({ page }) => {\n    // Intercept multiple API calls and simulate token expiration\n    await page.route('**/api/user/profile', (route) => {\n      route.abort('timedout');\n    });\n\n    // Simulate a second failed request\n    await page.route('**/api/user/settings', (route) => {\n      route.abort('timedout');\n    });\n\n    // Wait for both requests to fail\n    await page.waitForTimeout(2500);\n\n    // Verify the session expired message is displayed\n    const expiredMessage = page.getByText('Your session has expired');\n    await expect(expiredMessage).toBeVisible();\n\n    // Verify the user is not stuck in a loading state\n    const loadingSpinner = page.locator('[data-testid=\"loading-spinner\"]');\n    await expect(loadingSpinner).not.toBeVisible();\n\n    // Verify the user is redirected to the login page\n    await expect(page).toHaveURL(/.*login/);\n\n    // Verify the error message persists after redirect\n    const errorContainer = page.locator('[data-testid=\"error-container\"]');\n    await expect(errorContainer).toBeVisible();\n    await expect(errorContainer).toContainText('Session expired');\n\n    // Verify the user can navigate back to dashboard (should redirect again)\n    const dashboardLink = page.getByRole('link', { name: /dashboard/i });\n    await dashboardLink.click();\n\n    // Verify user is still on login page\n    await expect(page).toHaveURL(/.*login/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5285,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.495,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 76.49,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7942,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4139,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 117.281,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

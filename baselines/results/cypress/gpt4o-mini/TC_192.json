@@ -1,0 +1,13 @@
+{
+  "id": "TC_192",
+  "category": "search_filter",
+  "complexity": "medium",
+  "user_story": "As a user, I want search suggestions to highlight the matching part of the term.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Search Suggestions Highlighting', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Adjust the URL to your application's home page\n        cy.get('input[name=\"search\"]').as('searchInput'); // Adjust the selector to your search input\n    });\n\n    it('should highlight the matching part of the search term in suggestions', () => {\n        cy.get('@searchInput').type('Cypress');\n        cy.get('.suggestion-item') // Adjust the selector to your suggestion items\n            .should('be.visible')\n            .first()\n            .should('contain.html', '<strong>Cypress</strong>'); // Assuming matching part is wrapped in <strong>\n    });\n\n    it('should not highlight when there are no matches', () => {\n        cy.get('@searchInput').type('NonExistentTerm');\n        cy.get('.suggestion-item') // Adjust the selector to your suggestion items\n            .should('not.exist');\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 197,
+  "latency_s": 3.41,
+  "timestamp": "2026-06-19T16:37:18.771347"
+}

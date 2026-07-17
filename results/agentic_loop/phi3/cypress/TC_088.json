@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_088",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7392,
+  "total_latency_s": 444.432,
+  "final_script": "describe('User Mention in Comments', () => {\n  beforeEach(() => {\n    cy.visit('/comments');\n  });\n\n  it('should successfully mention another user in a comment', () => {\n    // Intercept the API call to create a comment\n    cy.intercept('POST', '/api/comments').as('createComment');\n\n    // Get the comment form\n    cy.get('[data-testid=\"comment-form\"]').should('be.visible');\n\n    // Fill in the comment form\n    cy.get('[data-testid=\"comment-input\"]').type('This is a great article!');\n\n    // Find the user to mention\n    cy.get('[data-testid=\"mention-user-input\"]').click();\n    cy.get('[data-testid=\"mention-user-dropdown\"]').click();\n    cy.get('[data-testid=\"mention-user-option\"]').click({ force: true });\n    cy.get('[data-testid=\"mention-user-name-input\"]').type('@john_doe');\n\n    // Submit the comment\n    cy.get('[data-testid=\"comment-submit-button\"]').click();\n\n    // Verify the comment was created\n    cy.wait('@createComment').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify the comment contains the mention\n    cy.get('[data-testid=\"comment-list\"]').should('contain', '@john_doe');\n\n    // Verify the mention appears in the comment\n    cy.get('[data-testid=\"comment-item\"]').first().should('contain', '@john_doe');\n  });\n\n  it('should handle mentioning a non-existent user gracefully', () => {\n    // Intercept the API call to create a comment\n    cy.intercept('POST', '/api/comments').as('createComment');\n\n    // Get the comment form\n    cy.get('[data-testid=\"comment-form\"]').should('be.visible');\n\n    // Fill in the comment form\n    cy.get('[data-testid=\"comment-input\"]').type('This is a great article!');\n\n    // Attempt to mention a non-existent user\n    cy.get('[data-testid=\"mention-user-input\"]').click();\n    cy.get('[data-testid=\"mention-user-dropdown\"]').click();\n    cy.get('[data-testid=\"mention-user-option\"]').click({ force: true });\n    cy.get('[data-testid=\"mention-user-name-input\"]').type('@nonexistent_user');\n\n    // Submit the comment\n    cy.get('[data-testid=\"comment-submit-button\"]').click();\n\n    // Verify the comment was created without the mention\n    cy.wait('@createComment').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify the comment does not contain the mention\n    cy.get('[data-testid=\"comment-list\"]').should('not.contain', '@nonexistent_user');\n\n    // Verify the user is notified about the failed mention\n    cy.get('[data-testid=\"mention-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"mention-error-message\"]').should('contain', 'User not found');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7392,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3306,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 444.432,
+      "feedback_used": ""
+    }
+  ]
+}

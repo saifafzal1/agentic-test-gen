@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_216",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8265,
+  "total_latency_s": 32.248,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Title Announcement', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/modal-page');\n  });\n\n  test('should announce modal title when modal is opened', async ({ page }) => {\n    // Open modal using getByRole\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n\n    // Verify modal title is announced\n    await expect(page).toHaveRole('alert');\n    await expect(page).toHaveText(/Modal Title/i);\n\n    // Verify modal content is visible\n    const modalContent = page.getByRole('region', { name: /modal content/i });\n    await expect(modalContent).toBeVisible();\n\n    // Verify close button is present\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n  });\n\n  test('should not announce modal title when modal is closed', async ({ page }) => {\n    // Open modal using getByRole\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n\n    // Verify modal title is announced\n    await expect(page).toHaveRole('alert');\n    await expect(page).toHaveText(/Modal Title/i);\n\n    // Close modal using getByRole\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n\n    // Verify modal is no longer visible\n    await expect(modal).not.toBeVisible();\n\n    // Verify modal title is no longer announced\n    await expect(page).not.toHaveRole('alert');\n\n    // Verify modal content is no longer visible\n    const modalContent = page.getByRole('region', { name: /modal content/i });\n    await expect(modalContent).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8265,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5217,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 32.248,
+      "feedback_used": ""
+    }
+  ]
+}

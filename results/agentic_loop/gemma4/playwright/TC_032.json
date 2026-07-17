@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_032",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8626,
+  "total_latency_s": 71.006,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Image Upload Preview', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload');\n  });\n\n  test('should display image preview when a file is uploaded', async ({ page }) => {\n    // Locate and interact with the file input using getByLabel\n    const fileInput = page.getByLabel('Upload Image');\n    await fileInput.setInputFiles('playwright/fixtures/sample-image.jpg');\n\n    // Wait for the preview container to appear\n    const previewContainer = page.getByRole('region', { name: /image preview/i });\n    await expect(previewContainer).toBeVisible();\n\n    // Verify the image preview element exists and has the correct source\n    const previewImage = page.getByRole('img', { name: /image preview/i });\n    await expect(previewImage).toBeVisible();\n    await expect(previewImage).toHaveAttribute('src', /sample-image\\.jpg/);\n\n    // Verify the preview container has a border or styling\n    const previewBox = page.locator('[data-testid=\"preview-box\"]');\n    await expect(previewBox).toHaveCSS('border', /1px solid/);\n\n    // Verify the submit button is enabled\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeEnabled();\n  });\n\n  test('should not display preview when file upload is cancelled or invalid', async ({ page }) => {\n    // Locate and interact with the file input using getByLabel\n    const fileInput = page.getByLabel('Upload Image');\n    await fileInput.setInputFiles('playwright/fixtures/sample-image.jpg');\n\n    // Verify preview appears initially\n    const previewContainer = page.getByRole('region', { name: /image preview/i });\n    await expect(previewContainer).toBeVisible();\n\n    // Cancel the file selection\n    await fileInput.setInputFiles('playwright/fixtures/sample-image.jpg', { force: true });\n    await fileInput.setInputFiles('playwright/fixtures/sample-image.jpg', { force: true });\n\n    // Wait for the preview to be removed\n    await page.waitForTimeout(500);\n\n    // Verify preview container is no longer visible\n    await expect(previewContainer).not.toBeVisible();\n\n    // Verify the preview image element is removed\n    const previewImage = page.getByRole('img', { name: /image preview/i });\n    await expect(previewImage).not.toBeVisible();\n\n    // Verify the submit button is disabled\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8626,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5421,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.006,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_224",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7459,
+  "total_latency_s": 72.355,
+  "final_script": "describe('Interactive Toast Notifications - Screen Reader Announcement', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should announce toast notification content to screen readers on success', () => {\n    // Intercept the API call for toast notification\n    cy.intercept('POST', '/api/toast').as('showToast');\n\n    // Trigger the toast notification\n    cy.get('[data-testid=\"show-toast-button\"]').click();\n\n    // Wait for the API call and verify the toast appears\n    cy.wait('@showToast');\n    cy.get('[data-testid=\"toast-notification\"]').should('be.visible');\n\n    // Verify the toast contains the correct success message\n    cy.get('[data-testid=\"toast-notification\"]').should('contain', 'Success');\n    cy.get('[data-testid=\"toast-notification\"]').should('contain', 'Item added to cart');\n\n    // Verify aria-live region is present and configured for screen reader announcement\n    cy.get('[data-testid=\"toast-notification\"]').should('have.attr', 'aria-live', 'polite');\n\n    // Verify role is set for screen reader context\n    cy.get('[data-testid=\"toast-notification\"]').should('have.attr', 'role', 'alert');\n\n    // Verify toast has a dismiss button\n    cy.get('[data-testid=\"toast-dismiss-button\"]').should('be.visible');\n\n    // Verify toast is dismissible\n    cy.get('[data-testid=\"toast-dismiss-button\"]').click();\n    cy.get('[data-testid=\"toast-notification\"]').should('not.exist');\n  });\n\n  it('should announce error toast notification and handle dismiss action', () => {\n    // Intercept the API call for error toast\n    cy.intercept('POST', '/api/toast').as('showErrorToast');\n\n    // Trigger the error toast\n    cy.get('[data-testid=\"show-error-toast-button\"]').click();\n\n    // Wait for the API call and verify the error toast appears\n    cy.wait('@showErrorToast');\n    cy.get('[data-testid=\"toast-notification\"]').should('be.visible');\n\n    // Verify the toast contains the correct error message\n    cy.get('[data-testid=\"toast-notification\"]').should('contain', 'Error');\n    cy.get('[data-testid=\"toast-notification\"]').should('contain', 'Failed to connect to server');\n\n    // Verify aria-live region is present for error announcement\n    cy.get('[data-testid=\"toast-notification\"]').should('have.attr', 'aria-live', 'assertive');\n\n    // Verify toast has a close button\n    cy.get('[data-testid=\"toast-dismiss-button\"]').should('be.visible');\n\n    // Verify toast can be dismissed by clicking the close button\n    cy.get('[data-testid=\"toast-dismiss-button\"]').click();\n    cy.get('[data-testid=\"toast-notification\"]').should('not.exist');\n\n    // Verify toast can also be dismissed by pressing Escape key\n    cy.get('[data-testid=\"toast-notification\"]').should('be.visible');\n    cy.get('body').type('{esc}');\n    cy.get('[data-testid=\"toast-notification\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7459,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3529,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.355,
+      "feedback_used": ""
+    }
+  ]
+}

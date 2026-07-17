@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_290",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7291,
+  "total_latency_s": 72.305,
+  "final_script": "describe('Profile Update Confirmation Message', () => {\n  beforeEach(() => {\n    cy.visit('/profile');\n  });\n\n  it('should display confirmation message after successful profile update', () => {\n    // Intercept the profile update API call\n    cy.intercept('PUT', '/api/profile').as('updateProfile');\n\n    // Fill in new profile details\n    cy.get('[data-testid=\"firstName-input\"]').type('John');\n    cy.get('[data-testid=\"lastName-input\"]').type('Doe');\n    cy.get('[data-testid=\"email-input\"]').type('john.doe@example.com');\n\n    // Click the update button\n    cy.get('[data-testid=\"update-profile-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@updateProfile');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"confirmation-message\"]')\n      .should('be.visible')\n      .should('contain', 'Profile updated successfully');\n\n    // Verify success styling\n    cy.get('[data-testid=\"confirmation-message\"]')\n      .should('have.class', 'success-message');\n\n    // Verify form is cleared or updated\n    cy.get('[data-testid=\"firstName-input\"]').should('have.value', 'John');\n    cy.get('[data-testid=\"lastName-input\"]').should('have.value', 'Doe');\n  });\n\n  it('should not display confirmation message when profile update fails', () => {\n    // Intercept the profile update API call and mock a failure response\n    cy.intercept('PUT', '/api/profile', {\n      statusCode: 400,\n      body: { error: 'Email already in use' }\n    }).as('updateProfileFailed');\n\n    // Fill in invalid profile details\n    cy.get('[data-testid=\"firstName-input\"]').type('Jane');\n    cy.get('[data-testid=\"lastName-input\"]').type('Smith');\n    cy.get('[data-testid=\"email-input\"]').type('jane@example.com');\n\n    // Click the update button\n    cy.get('[data-testid=\"update-profile-button\"]').click();\n\n    // Wait for the failed API call\n    cy.wait('@updateProfileFailed');\n\n    // Verify error message is displayed instead of success message\n    cy.get('[data-testid=\"error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Email already in use');\n\n    // Verify success message is NOT displayed\n    cy.get('[data-testid=\"confirmation-message\"]')\n      .should('not.exist');\n\n    // Verify form still contains input values\n    cy.get('[data-testid=\"firstName-input\"]').should('have.value', 'Jane');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7291,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2971,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.305,
+      "feedback_used": ""
+    }
+  ]
+}

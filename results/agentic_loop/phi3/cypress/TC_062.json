@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_062",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7568,
+  "total_latency_s": 820.645,
+  "final_script": "describe('Stale Data Invalidation on Form Submission', () => {\n  beforeEach(() => {\n    cy.visit('/form-page');\n  });\n\n  it('should invalidate stale data after successful form submission', () => {\n    // Intercept the API call to submit the form\n    cy.intercept('POST', '/api/form/submit').as('formSubmit');\n\n    // Fill in the form with stale data\n    cy.get('[data-testid=\"name-input\"]').type('John Doe');\n    cy.get('[data-testid=\"email-input\"]').type('john.doe@example.com');\n    cy.get('[data-testid=\"phone-input\"]').type('1234567890');\n\n    // Verify stale data is displayed\n    cy.get('[data-testid=\"name-input\"]').should('have.value', 'John Doe');\n    cy.get('[data-testid=\"email-input\"]').should('have.value', 'john.doe@example.com');\n    cy.get('[data-testid=\"phone-input\"]').should('have.value', '1234567890');\n\n    // Submit the form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for the API response\n    cy.wait('@formSubmit');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Form submitted successfully');\n\n    // Verify stale data is cleared\n    cy.get('[data-testid=\"name-input\"]').should('have.value', '');\n    cy.get('[data-testid=\"email-input\"]').should('have.value', '');\n    cy.get('[data-testid=\"phone-input\"]').should('have.value', '');\n\n    // Verify form is reset\n    cy.get('[data-testid=\"name-input\"]').should('be.disabled');\n    cy.get('[data-testid=\"email-input\"]').should('be.disabled');\n    cy.get('[data-testid=\"phone-input\"]').should('be.disabled');\n\n    // Verify form is ready for new data\n    cy.get('[data-testid=\"name-input\"]').should('not.have.value');\n    cy.get('[data-testid=\"email-input\"]').should('not.have.value');\n    cy.get('[data-testid=\"phone-input\"]').should('not.have.value');\n  });\n\n  it('should handle form submission with invalid data and display error messages', () => {\n    // Intercept the API call to submit the form\n    cy.intercept('POST', '/api/form/submit').as('formSubmit');\n\n    // Fill in the form with invalid data\n    cy.get('[data-testid=\"name-input\"]').type('');\n    cy.get('[data-testid=\"email-input\"]').type('invalid-email');\n    cy.get('[data-testid=\"phone-input\"]').type('');\n\n    // Verify error messages are displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Name is required');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Email is invalid');\n\n    // Verify form fields are still visible\n    cy.get('[data-testid=\"name-input\"]').should('be.visible');\n    cy.get('[data-testid=\"email-input\"]').should('be.visible');\n    cy.get('[data-testid=\"phone-input\"]').should('be.visible');\n\n    // Submit the form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for the API response\n    cy.wait('@formSubmit');\n\n    // Verify error messages are cleared\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n\n    // Verify success message does not appear\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n\n    // Verify form is still ready for new data\n    cy.get('[data-testid=\"name-input\"]').should('be.visible');\n    cy.get('[data-testid=\"email-input\"]').should('be.visible');\n    cy.get('[data-testid=\"phone-input\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4926,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.4152,
+        "missing_keywords": [],
+        "assertion_count": 24,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 474.951,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7568,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3893,
+        "missing_keywords": [],
+        "assertion_count": 25,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 345.694,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

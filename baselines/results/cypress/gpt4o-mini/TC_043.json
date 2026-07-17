@@ -1,0 +1,13 @@
+{
+  "id": "TC_043",
+  "category": "navigation",
+  "complexity": "complex",
+  "user_story": "As a user, I want a sidebar to collapse and expand on click.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Sidebar Navigation', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Adjust the URL to your application's base URL\n    });\n\n    it('should expand the sidebar when clicked', () => {\n        cy.get('.sidebar-toggle').click(); // Adjust the selector to your sidebar toggle button\n        cy.get('.sidebar').should('be.visible'); // Adjust the selector to your sidebar\n    });\n\n    it('should collapse the sidebar when clicked again', () => {\n        cy.get('.sidebar-toggle').click(); // Expand the sidebar first\n        cy.get('.sidebar').should('be.visible'); // Ensure it's visible\n        cy.get('.sidebar-toggle').click(); // Click to collapse\n        cy.get('.sidebar').should('not.be.visible'); // Ensure it's not visible\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 164,
+  "latency_s": 2.36,
+  "timestamp": "2026-06-19T16:27:52.059695"
+}

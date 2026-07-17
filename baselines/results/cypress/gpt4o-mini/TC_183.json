@@ -1,0 +1,13 @@
+{
+  "id": "TC_183",
+  "category": "file_upload",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see a virus scan status for uploaded files.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('File Upload Virus Scan Status', () => {\n    beforeEach(() => {\n        cy.visit('/upload'); // Adjust the URL to your application's upload page\n    });\n\n    it('should display virus scan status for a successfully uploaded file', () => {\n        const fileName = 'test-file.pdf'; // Replace with an actual file name\n        cy.fixture(fileName).then(fileContent => {\n            cy.get('input[type=\"file\"]').attachFile(fileName);\n            cy.get('button[type=\"submit\"]').click();\n            cy.wait(2000); // Wait for the upload and scan to complete\n            cy.get('.scan-status').should('contain', 'Scan completed: No threats detected');\n        });\n    });\n\n    it('should display an error message for a file with detected threats', () => {\n        const maliciousFileName = 'malicious-file.exe'; // Replace with an actual malicious file name\n        cy.fixture(maliciousFileName).then(fileContent => {\n            cy.get('input[type=\"file\"]').attachFile(maliciousFileName);\n            cy.get('button[type=\"submit\"]').click();\n            cy.wait(2000); // Wait for the upload and scan to complete\n            cy.get('.scan-status').should('contain', 'Scan completed: Threats detected');\n        });\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 268,
+  "latency_s": 3.01,
+  "timestamp": "2026-06-19T16:36:45.065357"
+}

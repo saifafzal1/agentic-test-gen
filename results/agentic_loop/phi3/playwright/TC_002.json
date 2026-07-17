@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_002",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8337,
+  "total_latency_s": 47.662,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Password Authentication Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should display error message when user enters incorrect password', async ({ page }) => {\n    // Setup: intercept the password API call with an incorrect response\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('failed');\n    });\n\n    // Intercept the API call with a successful response\n    await page.route('**/api/auth/login', (route) => {\n      route.continue();\n    });\n\n    // Verify error message is visible\n    const errorMessage = page.getByText('Invalid password');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error class is applied\n    const errorClass = page.getByTestId('error-message');\n    await expect(errorClass).toHaveClass(/error/);\n\n    // Verify error message is displayed\n    await expect(errorMessage).toContainText('Invalid password');\n\n    // Verify password input has error state\n    const passwordInput = page.getByLabel('Password');\n    await expect(passwordInput).toHaveClass(/error/);\n\n    // Verify password input is not empty\n    await expect(passwordInput).toHaveValue('');\n\n    // Verify login button is disabled\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await expect(loginButton).toBeDisabled();\n  });\n\n  test('should clear error message when user enters correct password', async ({ page }) => {\n    // Setup: intercept the password API call with an incorrect response\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('failed');\n    });\n\n    // Intercept the API call with a successful response\n    await page.route('**/api/auth/login', (route) => {\n      route.continue();\n    });\n\n    // Verify error message is visible initially\n    const errorMessage = page.getByText('Invalid password');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error class is applied\n    const errorClass = page.getByTestId('error-message');\n    await expect(errorClass).toHaveClass(/error/);\n\n    // Verify error message is displayed\n    await expect(errorMessage).toContainText('Invalid password');\n\n    // Verify password input has error state\n    const passwordInput = page.getByLabel('Password');\n    await expect(passwordInput).toHaveClass(/error/);\n\n    // Verify password input is not empty\n    await expect(passwordInput).toHaveValue('');\n\n    // Verify login button is disabled\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await expect(loginButton).toBeDisabled();\n\n    // Enter correct password\n    await passwordInput.fill('correctPassword123');\n\n    // Verify error message disappears\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify error class is removed\n    await expect(errorClass).not.toHaveClass(/error/);\n\n    // Verify login button is enabled\n    await expect(loginButton).not.toBeDisabled();\n\n    // Verify password input no longer has error state\n    await expect(passwordInput).not.toHaveClass(/error/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8337,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4456,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 47.662,
+      "feedback_used": ""
+    }
+  ]
+}

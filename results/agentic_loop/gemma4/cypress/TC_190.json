@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_190",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7925,
+  "total_latency_s": 72.716,
+  "final_script": "describe('Clear All Filters Button', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should clear all applied filters when clear all button is clicked', () => {\n    // Apply multiple filters\n    cy.get('[data-testid=\"filter-category-electronics\"]').click();\n    cy.get('[data-testid=\"filter-price-range-0-100\"]').click();\n    cy.get('[data-testid=\"filter-brand-samsung\"]').click();\n\n    // Verify filters are applied\n    cy.get('[data-testid=\"filter-category-electronics\"]').should('have.class', 'active');\n    cy.get('[data-testid=\"filter-price-range-0-100\"]').should('have.class', 'active');\n    cy.get('[data-testid=\"filter-brand-samsung\"]').should('have.class', 'active');\n\n    // Verify search results are displayed with filters\n    cy.get('[data-testid=\"search-results-count\"]').should('contain', 'results');\n\n    // Click clear all filters button\n    cy.get('[data-testid=\"clear-all-filters-button\"]').click();\n\n    // Verify all filters are cleared\n    cy.get('[data-testid=\"filter-category-electronics\"]').should('not.have.class', 'active');\n    cy.get('[data-testid=\"filter-price-range-0-100\"]').should('not.have.class', 'active');\n    cy.get('[data-testid=\"filter-brand-samsung\"]').should('not.have.class', 'active');\n\n    // Verify search results are reset\n    cy.get('[data-testid=\"search-results-count\"]').should('contain', 'all results');\n    cy.get('[data-testid=\"search-results-list\"]').should('be.visible');\n  });\n\n  it('should handle clicking clear all filters when no filters are applied', () => {\n    // Verify no filters are applied initially\n    cy.get('[data-testid=\"filter-category-electronics\"]').should('not.have.class', 'active');\n    cy.get('[data-testid=\"filter-price-range-0-100\"]').should('not.have.class', 'active');\n    cy.get('[data-testid=\"filter-brand-samsung\"]').should('not.have.class', 'active');\n\n    // Verify clear all button is disabled or hidden when no filters are applied\n    cy.get('[data-testid=\"clear-all-filters-button\"]').should('be.disabled');\n\n    // Attempt to click the disabled button\n    cy.get('[data-testid=\"clear-all-filters-button\"]').click({ force: true });\n\n    // Verify no state change occurs\n    cy.get('[data-testid=\"filter-category-electronics\"]').should('not.have.class', 'active');\n    cy.get('[data-testid=\"filter-price-range-0-100\"]').should('not.have.class', 'active');\n    cy.get('[data-testid=\"filter-brand-samsung\"]').should('not.have.class', 'active');\n\n    // Verify search results remain unchanged\n    cy.get('[data-testid=\"search-results-count\"]').should('contain', 'all results');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7925,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5083,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.716,
+      "feedback_used": ""
+    }
+  ]
+}

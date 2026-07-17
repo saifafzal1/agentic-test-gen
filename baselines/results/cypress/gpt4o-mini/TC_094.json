@@ -1,0 +1,13 @@
+{
+  "id": "TC_094",
+  "category": "error_states",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a permissions error if I try to edit another user's content.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Permissions Error Handling', () => {\n    beforeEach(() => {\n        cy.visit('/login');\n        cy.login('user1', 'password1'); // Assuming a custom command for login\n        cy.visit('/content/123'); // Visiting content owned by user1\n    });\n\n    it('should allow the owner to edit their own content', () => {\n        cy.get('button.edit').click();\n        cy.get('input[name=\"title\"]').clear().type('Updated Title');\n        cy.get('button.save').click();\n        cy.get('.notification').should('contain', 'Content updated successfully');\n    });\n\n    it('should show a permissions error when trying to edit another user\\'s content', () => {\n        cy.visit('/content/456'); // Visiting content owned by user2\n        cy.get('button.edit').click();\n        cy.get('.error-message').should('contain', 'You do not have permission to edit this content');\n    });\n});",
+  "prompt_tokens": 114,
+  "completion_tokens": 196,
+  "latency_s": 3.41,
+  "timestamp": "2026-06-19T16:31:25.363220"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_160",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7793,
+  "total_latency_s": 307.7,
+  "final_script": "describe('Numeric Column Summary Row', () => {\n  beforeEach(() => {\n    cy.visit('/table');\n  });\n\n  it('should display summary row with total for numeric column', () => {\n    // Intercept API call to load table data\n    cy.intercept('GET', '/api/table-data').as('loadTableData');\n    cy.wait('@loadTableData');\n\n    // Verify summary row is visible\n    cy.get('[data-testid=\"summary-row\"]').should('be.visible');\n\n    // Verify summary row contains correct total\n    cy.get('[data-testid=\"summary-row\"]').should('contain', 'Total');\n    cy.get('[data-testid=\"summary-row\"]').should('contain', '1234');\n\n    // Verify summary row has correct formatting\n    cy.get('[data-testid=\"summary-row\"]').should('have.css', 'text-align', 'right');\n    cy.get('[data-testid=\"summary-row\"]').should('have.css', 'font-weight', 'bold');\n\n    // Verify summary row is styled differently from other rows\n    cy.get('[data-testid=\"table-row\"]').should('not.have.css', 'background-color');\n    cy.get('[data-testid=\"summary-row\"]').should('have.css', 'background-color', 'lightgrey');\n  });\n\n  it('should hide summary row when numeric column is empty', () => {\n    // Intercept API call to load table data with empty numeric column\n    cy.intercept('GET', '/api/table-data').as('loadTableDataEmpty');\n    cy.wait('@loadTableDataEmpty');\n\n    // Verify summary row is initially visible\n    cy.get('[data-testid=\"summary-row\"]').should('be.visible');\n\n    // Verify summary row shows \"No data\" message\n    cy.get('[data-testid=\"summary-row\"]').should('contain', 'No data');\n\n    // Verify summary row is still styled differently\n    cy.get('[data-testid=\"summary-row\"]').should('have.css', 'background-color', 'lightgrey');\n\n    // Verify summary row is still visible when numeric column is empty\n    cy.get('[data-testid=\"summary-row\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7793,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4642,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 307.7,
+      "feedback_used": ""
+    }
+  ]
+}

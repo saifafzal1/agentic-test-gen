@@ -1,0 +1,13 @@
+{
+  "id": "TC_038",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want to navigate to the home page by clicking the logo.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Logo Navigation to Home Page', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should navigate to home page when logo is clicked', () => {\n    cy.get('[data-testid=\"logo\"]').should('be.visible').click();\n    cy.url().should('eq', Cypress.config().baseUrl + '/');\n    cy.get('h1').should('contain', 'Home');\n  });\n\n  it('should navigate to home page from any internal page when logo is clicked', () => {\n    cy.visit('/about');\n    cy.get('[data-testid=\"logo\"]').should('be.visible').click();\n    cy.url().should('eq', Cypress.config().baseUrl + '/');\n    cy.get('h1').should('contain', 'Home');\n  });\n\n  it('should handle logo click when logo is disabled or hidden gracefully', () => {\n    cy.get('[data-testid=\"logo\"]').then(($logo) => {\n      if ($logo.is(':visible')) {\n        cy.wrap($logo).click();\n        cy.url().should('include', '/');\n      } else {\n        cy.wrap($logo).should('not.be.visible');\n      }\n    });\n  });\n\n  it('should maintain logo accessibility with proper alt text', () => {\n    cy.get('[data-testid=\"logo\"]').should('have.attr', 'alt').and('not.be.empty');\n  });\n\n  it('should have clickable logo with proper cursor styling', () => {\n    cy.get('[data-testid=\"logo\"]').should('have.css', 'cursor', 'pointer');\n  });\n});",
+  "prompt_tokens": 120,
+  "completion_tokens": 407,
+  "latency_s": 4.13,
+  "timestamp": "2026-06-19T17:08:47.230580"
+}

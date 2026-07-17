@@ -1,0 +1,13 @@
+{
+  "id": "TC_276",
+  "category": "user_profile",
+  "complexity": "medium",
+  "user_story": "As a user, I want to update my display name and see it reflected across the app.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('User Profile - Update Display Name', () => {\n    beforeEach(() => {\n        cy.visit('/profile');\n        cy.login('testuser', 'password123'); // Assuming a login function exists\n    });\n\n    it('should update the display name successfully', () => {\n        const newDisplayName = 'New Display Name';\n        \n        cy.get('input[name=\"displayName\"]').clear().type(newDisplayName);\n        cy.get('button[type=\"submit\"]').click();\n        \n        cy.get('.notification').should('contain', 'Display name updated successfully');\n        cy.get('.user-display-name').should('contain', newDisplayName);\n    });\n\n    it('should show an error message when the display name is empty', () => {\n        cy.get('input[name=\"displayName\"]').clear();\n        cy.get('button[type=\"submit\"]').click();\n        \n        cy.get('.error-message').should('contain', 'Display name cannot be empty');\n    });\n});",
+  "prompt_tokens": 113,
+  "completion_tokens": 195,
+  "latency_s": 3.68,
+  "timestamp": "2026-06-19T16:42:28.066145"
+}

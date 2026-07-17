@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_067",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8083,
+  "total_latency_s": 72.949,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Polling Stops When Navigating Away', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should stop polling when user navigates to another page', async ({ page }) => {\n    // Intercept the polling API endpoint\n    await page.route('/api/polling-endpoint', (route) => {\n      route.continue();\n    });\n\n    // Verify initial polling is active\n    const pollingButton = page.getByRole('button', { name: /start polling/i });\n    await expect(pollingButton).toBeVisible();\n\n    // Start polling\n    await pollingButton.click();\n    await expect(pollingButton).toHaveText(/stop polling/);\n\n    // Verify polling indicator is visible\n    const pollingIndicator = page.getByText(/polling active/);\n    await expect(pollingIndicator).toBeVisible();\n\n    // Navigate to another page\n    const navLink = page.getByRole('link', { name: /settings/i });\n    await navLink.click();\n    await expect(page).toHaveURL(/.*settings/);\n\n    // Verify polling indicator is no longer visible\n    await expect(pollingIndicator).not.toBeVisible();\n\n    // Verify polling button text has reverted\n    await expect(pollingButton).toHaveText(/start polling/);\n\n    // Navigate back to dashboard\n    await page.goto('/dashboard');\n    await expect(page).toHaveURL(/.*dashboard/);\n\n    // Verify polling indicator is still not visible\n    await expect(pollingIndicator).not.toBeVisible();\n  });\n\n  test('should not resume polling when navigating back to the page', async ({ page }) => {\n    // Intercept the polling API endpoint\n    await page.route('/api/polling-endpoint', (route) => {\n      route.continue();\n    });\n\n    // Start polling\n    const pollingButton = page.getByRole('button', { name: /start polling/i });\n    await pollingButton.click();\n    await expect(pollingButton).toHaveText(/stop polling/);\n\n    // Verify polling indicator is visible\n    const pollingIndicator = page.getByText(/polling active/);\n    await expect(pollingIndicator).toBeVisible();\n\n    // Navigate away from the page\n    const navLink = page.getByRole('link', { name: /profile/i });\n    await navLink.click();\n    await expect(page).toHaveURL(/.*profile/);\n\n    // Verify polling indicator is gone\n    await expect(pollingIndicator).not.toBeVisible();\n\n    // Navigate back to dashboard\n    await page.goto('/dashboard');\n    await expect(page).toHaveURL(/.*dashboard/);\n\n    // Verify polling indicator is still not visible\n    await expect(pollingIndicator).not.toBeVisible();\n\n    // Verify polling button text is still \"start polling\"\n    await expect(pollingButton).toHaveText(/start polling/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8083,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.461,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.949,
+      "feedback_used": ""
+    }
+  ]
+}

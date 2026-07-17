@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_026",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7107,
+  "total_latency_s": 516.934,
+  "final_script": "describe('Email Inline Validation', () => {\n  beforeEach(() => {\n    cy.visit('/contact');\n  });\n\n  it('should display inline validation errors as user types in email field', () => {\n    // Intercept the API call to validate email\n    cy.intercept('POST', '/api/validate-email', {\n      statusCode: 200,\n      body: {\n        isValid: false,\n        errors: ['Email must be at least 6 characters long']\n      }\n    }).as('validateEmail');\n\n    // Get the email input field\n    cy.get('[data-testid=\"email-input\"]').should('be.visible');\n\n    // Type a valid email\n    cy.get('[data-testid=\"email-input\"]').type('test@example.com');\n    cy.get('[data-testid=\"email-input\"]').should('have.value', 'test@example.com');\n\n    // Verify validation error is not displayed\n    cy.get('[data-testid=\"email-error-message\"]').should('not.exist');\n\n    // Clear the email field\n    cy.get('[data-testid=\"email-input\"]').clear();\n\n    // Type an invalid email\n    cy.get('[data-testid=\"email-input\"]').type('t');\n\n    // Verify validation error is displayed\n    cy.get('[data-testid=\"email-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"email-error-message\"]').should('contain', 'Email must be at least 6 characters long');\n\n    // Verify error message disappears when valid email is entered\n    cy.get('[data-testid=\"email-input\"]').type('valid@example.com');\n    cy.get('[data-testid=\"email-error-message\"]').should('not.exist');\n\n    // Verify API call was made\n    cy.wait('@validateEmail');\n  });\n\n  it('should clear validation errors when email is corrected', () => {\n    // Intercept the API call to validate email\n    cy.intercept('POST', '/api/validate-email', {\n      statusCode: 200,\n      body: {\n        isValid: false,\n        errors: ['Email must be at least 6 characters long']\n      }\n    }).as('validateEmail');\n\n    // Get the email input field\n    cy.get('[data-testid=\"email-input\"]').should('be.visible');\n\n    // Type an invalid email\n    cy.get('[data-testid=\"email-input\"]').type('invalid');\n\n    // Verify validation error is displayed\n    cy.get('[data-testid=\"email-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"email-error-message\"]').should('contain', 'Email must be at least 6 characters long');\n\n    // Clear the email field\n    cy.get('[data-testid=\"email-input\"]').clear();\n\n    // Type a valid email\n    cy.get('[data-testid=\"email-input\"]').type('valid@example.com');\n\n    // Verify validation error is cleared\n    cy.get('[data-testid=\"email-error-message\"]').should('not.exist');\n\n    // Verify API call was made\n    cy.wait('@validateEmail');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7107,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2357,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 516.934,
+      "feedback_used": ""
+    }
+  ]
+}

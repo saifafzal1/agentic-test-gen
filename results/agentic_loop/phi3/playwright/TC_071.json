@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_071",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7743,
+  "total_latency_s": 128.14,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Conflict Error Message on Stale Record Save', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should display conflict error message when saving a stale record', async ({ page }) => {\n    // Get the record by role\n    const recordItem = page.getByRole('region', { name: /record/i });\n    await recordItem.click();\n\n    // Get the save button by role\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await expect(saveButton).toBeVisible();\n\n    // Click save button to trigger save operation\n    await saveButton.click();\n\n    // Wait for conflict error message to appear\n    const errorMessage = page.getByText(/record is stale/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message contains specific text\n    await expect(errorMessage).toContainText('Record is stale');\n\n    // Verify error message is visible and styled appropriately\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).toHaveClass(/error-message/i);\n\n    // Verify save button is disabled\n    await expect(saveButton).toBeDisabled();\n\n    // Verify error message has a close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify close button is clickable\n    await expect(closeButton).toBeEnabled();\n\n    // Click close button to dismiss error\n    await closeButton.click();\n\n    // Verify error message is no longer visible\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify record item is still visible\n    await expect(recordItem).toBeVisible();\n  });\n\n  test('should not display error message when saving a fresh record', async ({ page }) => {\n    // Get the record by role\n    const recordItem = page.getByRole('region', { name: /record/i });\n    await recordItem.click();\n\n    // Get the save button by role\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await expect(saveButton).toBeVisible();\n\n    // Click save button to trigger save operation\n    await saveButton.click();\n\n    // Wait for success message to appear\n    const successMessage = page.getByText(/record saved successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify success message is visible and styled appropriately\n    await expect(successMessage).toBeVisible();\n    await expect(successMessage).toHaveClass(/success-message/i);\n\n    // Verify save button is enabled\n    await expect(saveButton).toBeEnabled();\n\n    // Verify success message has a close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify close button is clickable\n    await expect(closeButton).toBeEnabled();\n\n    // Click close button to dismiss success message\n    await closeButton.click();\n\n    // Verify success message is no longer visible\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify record item is still visible\n    await expect(recordItem).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7743,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3478,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 128.14,
+      "feedback_used": ""
+    }
+  ]
+}

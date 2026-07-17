@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_275",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7396,
+  "total_latency_s": 782.307,
+  "final_script": "describe('Notification Count Reset', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should reset notification count to zero after reading all messages', () => {\n    // Intercept the API call to fetch notifications\n    cy.intercept('GET', '/api/notifications').as('fetchNotifications');\n    cy.wait('@fetchNotifications');\n\n    // Verify initial notification count is displayed\n    cy.get('[data-testid=\"notification-count\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-count\"]').should('contain', '5');\n\n    // Read the first notification\n    cy.get('[data-testid=\"notification-item-1\"]').should('be.visible');\n    cy.get('[data-testid=\"read-notification-btn\"]').click();\n\n    // Verify notification count decreases\n    cy.get('[data-testid=\"notification-count\"]').should('contain', '4');\n\n    // Read the second notification\n    cy.get('[data-testid=\"notification-item-2\"]').should('be.visible');\n    cy.get('[data-testid=\"read-notification-btn\"]').click();\n\n    // Verify notification count decreases again\n    cy.get('[data-testid=\"notification-count\"]').should('contain', '3');\n\n    // Read the third notification\n    cy.get('[data-testid=\"notification-item-3\"]').should('be.visible');\n    cy.get('[data-testid=\"read-notification-btn\"]').click();\n\n    // Verify notification count decreases once more\n    cy.get('[data-testid=\"notification-count\"]').should('contain', '2');\n\n    // Read the fourth notification\n    cy.get('[data-testid=\"notification-item-4\"]').should('be.visible');\n    cy.get('[data-testid=\"read-notification-btn\"]').click();\n\n    // Verify notification count decreases to zero\n    cy.get('[data-testid=\"notification-count\"]').should('contain', '0');\n\n    // Verify notification count is now zero\n    cy.get('[data-testid=\"notification-count\"]').should('contain', '0');\n\n    // Verify notification list is empty\n    cy.get('[data-testid=\"notification-item\"]').should('not.exist');\n  });\n\n  it('should not reset notification count when there are unread notifications', () => {\n    // Intercept the API call to fetch notifications\n    cy.intercept('GET', '/api/notifications').as('fetchNotifications');\n    cy.wait('@fetchNotifications');\n\n    // Verify initial notification count is displayed\n    cy.get('[data-testid=\"notification-count\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-count\"]').should('contain', '5');\n\n    // Read the first notification\n    cy.get('[data-testid=\"notification-item-1\"]').should('be.visible');\n    cy.get('[data-testid=\"read-notification-btn\"]').click();\n\n    // Verify notification count decreases\n    cy.get('[data-testid=\"notification-count\"]').should('contain', '4');\n\n    // Read the second notification\n    cy.get('[data-testid=\"notification-item-2\"]').should('be.visible');\n    cy.get('[data-testid=\"read-notification-btn\"]').click();\n\n    // Verify notification count decreases again\n    cy.get('[data-testid=\"notification-count\"]').should('contain', '3');\n\n    // Read the third notification\n    cy.get('[data-testid=\"notification-item-3\"]').should('be.visible');\n    cy.get('[data-testid=\"read-notification-btn\"]').click();\n\n    // Verify notification count decreases to 2\n    cy.get('[data-testid=\"notification-count\"]').should('contain', '2');\n\n    // Read the fourth notification\n    cy.get('[data-testid=\"notification-item-4\"]').should('be.visible');\n    cy.get('[data-testid=\"read-notification-btn\"]').click();\n\n    // Verify notification count decreases to 1\n    cy.get('[data-testid=\"notification-count\"]').should('contain', '1');\n\n    // Read the fifth notification\n    cy.get('[data-testid=\"notification-item-5\"]').should('be.visible');\n    cy.get('[data-testid=\"read-notification-btn\"]').click();\n\n    // Verify notification count decreases to 0\n    cy.get('[data-testid=\"notification-count\"]').should('contain', '0');\n\n    // Verify notification list is empty\n    cy.get('[data-testid=\"notification-item\"]').should('not.exist');\n\n    // Verify notification count does not reset to zero when there are unread notifications\n    cy.get('[data-testid=\"notification-count\"]').should('contain', '0');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4793,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3709,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 399.125,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7396,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3319,
+        "missing_keywords": [],
+        "assertion_count": 26,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 383.182,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_064",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8154,
+  "total_latency_s": 73.229,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Results Debouncing', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should debounce search API calls and update results as user types', async ({ page }) => {\n    // Setup API interception for search\n    await page.route('**/api/search*', (route) => {\n      route.continue();\n    });\n\n    // Get search input using getByLabel\n    const searchInput = page.getByLabel('Search');\n    await expect(searchInput).toBeVisible();\n\n    // Type first character\n    await searchInput.fill('a');\n    \n    // Wait for debounce period (300ms)\n    await page.waitForTimeout(350);\n\n    // Verify API was called with first character\n    const searchApiCall = page.route('**/api/search*', (route) => {\n      route.continue();\n    });\n    await expect(searchApiCall).toBeCalledWith('a');\n\n    // Verify results container is empty initially\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n    const resultItems = page.getByRole('listitem');\n    await expect(resultItems).toHaveCount(0);\n\n    // Type second character\n    await searchInput.fill('apple');\n    \n    // Wait for debounce period\n    await page.waitForTimeout(350);\n\n    // Verify API was called with full string\n    await expect(searchApiCall).toBeCalledWith('apple');\n\n    // Verify results are displayed\n    await expect(resultItems).toHaveCount(1);\n    const resultText = page.getByText('Apple');\n    await expect(resultText).toBeVisible();\n\n    // Clear input and verify API is not called\n    await searchInput.clear();\n    await page.waitForTimeout(350);\n    \n    // Verify API was not called with empty string\n    await expect(searchApiCall).not.toBeCalledWith('');\n  });\n\n  test('should handle rapid typing and only call API with final value', async ({ page }) => {\n    // Setup API interception\n    await page.route('**/api/search*', (route) => {\n      route.continue();\n    });\n\n    // Get search input using getByLabel\n    const searchInput = page.getByLabel('Search');\n    await expect(searchInput).toBeVisible();\n\n    // Rapidly type multiple characters\n    await searchInput.fill('banana');\n    \n    // Wait for debounce period\n    await page.waitForTimeout(350);\n\n    // Verify API was called only once with the final value\n    const searchApiCall = page.route('**/api/search*', (route) => {\n      route.continue();\n    });\n    await expect(searchApiCall).toBeCalledWith('banana');\n\n    // Verify results are displayed\n    const resultItems = page.getByRole('listitem');\n    await expect(resultItems).toHaveCount(1);\n    const resultText = page.getByText('Banana');\n    await expect(resultText).toBeVisible();\n\n    // Verify debounce timer is reset on subsequent input\n    await searchInput.clear();\n    await searchInput.fill('b');\n    await page.waitForTimeout(350);\n    \n    // Verify API was called again with the new value\n    await expect(searchApiCall).toBeCalledWith('b');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8154,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3846,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.229,
+      "feedback_used": ""
+    }
+  ]
+}

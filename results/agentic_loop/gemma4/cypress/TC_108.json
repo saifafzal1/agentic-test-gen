@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_108",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7741,
+  "total_latency_s": 72.293,
+  "final_script": "describe('Payment Card Decline Error Handling', () => {\n  beforeEach(() => {\n    cy.visit('/payment');\n  });\n\n  it('should display clear error message when payment card is declined', () => {\n    // Intercept the payment API call and simulate a decline response\n    cy.intercept('POST', '/api/payment/process', {\n      statusCode: 422,\n      body: {\n        error: 'Card declined',\n        errorCode: 'DECLINED_CARD',\n        message: 'Your payment card was declined. Please check your card details or use a different card.'\n      }\n    }).as('paymentDeclined');\n\n    // Fill in valid card details\n    cy.get('[data-testid=\"card-number-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"expiry-date-input\"]').type('12/25');\n    cy.get('[data-testid=\"cvv-input\"]').type('123');\n    cy.get('[data-testid=\"card-holder-name-input\"]').type('John Doe');\n\n    // Click the pay button\n    cy.get('[data-testid=\"pay-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@paymentDeclined');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Your payment card was declined');\n\n    // Verify error details are present\n    cy.get('[data-testid=\"error-code\"]')\n      .should('be.visible')\n      .should('contain', 'DECLINED_CARD');\n\n    // Verify error icon is displayed\n    cy.get('[data-testid=\"error-icon\"]')\n      .should('be.visible');\n\n    // Verify form is still visible for retry\n    cy.get('[data-testid=\"card-number-input\"]').should('be.visible');\n  });\n\n  it('should handle multiple decline attempts and provide retry option', () => {\n    // Intercept the first two payment attempts and simulate decline\n    cy.intercept('POST', '/api/payment/process', {\n      statusCode: 422,\n      body: {\n        error: 'Card declined',\n        errorCode: 'DECLINED_CARD',\n        message: 'Your payment card was declined. Please check your card details or use a different card.'\n      }\n    }).as('paymentDeclinedAttempt1');\n\n    cy.get('[data-testid=\"card-number-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"expiry-date-input\"]').type('12/25');\n    cy.get('[data-testid=\"cvv-input\"]').type('123');\n    cy.get('[data-testid=\"card-holder-name-input\"]').type('John Doe');\n\n    // First attempt\n    cy.get('[data-testid=\"pay-button\"]').click();\n    cy.wait('@paymentDeclinedAttempt1');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Your payment card was declined');\n\n    // Retry with the same card\n    cy.get('[data-testid=\"pay-button\"]').click();\n\n    // Intercept the second attempt\n    cy.intercept('POST', '/api/payment/process', {\n      statusCode: 422,\n      body: {\n        error: 'Card declined',\n        errorCode: 'DECLINED_CARD',\n        message: 'Your payment card was declined. Please check your card details or use a different card.'\n      }\n    }).as('paymentDeclinedAttempt2');\n\n    cy.wait('@paymentDeclinedAttempt2');\n\n    // Verify error message persists and retry button is available\n    cy.get('[data-testid=\"error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Your payment card was declined');\n\n    cy.get('[data-testid=\"retry-button\"]')\n      .should('be.visible')\n      .should('contain', 'Try Again');\n\n    // Verify form fields are still populated for quick retry\n    cy.get('[data-testid=\"card-number-input\"]').should('have.value', '4111111111111111');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7741,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.447,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.293,
+      "feedback_used": ""
+    }
+  ]
+}

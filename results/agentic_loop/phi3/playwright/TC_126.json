@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_126",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8205,
+  "total_latency_s": 36.903,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Animated Transitions Between Async Page Loads', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display loading indicator while waiting for async page load', async ({ page }) => {\n    // Verify initial state: no loading indicator\n    const loadingIndicator = page.getByRole('status');\n    await expect(loadingIndicator).not.toBeVisible();\n\n    // Click the button to load new page\n    const loadButton = page.getByRole('button', { name: /load new page/i });\n    await loadButton.click();\n\n    // Verify loading indicator appears\n    await expect(loadingIndicator).toBeVisible();\n\n    // Wait for the async load to complete\n    await page.waitForLoadState('networkidle');\n\n    // Verify loading indicator disappears\n    await expect(loadingIndicator).not.toBeVisible();\n\n    // Verify new page content is loaded\n    const pageTitle = page.getByRole('heading', { name: /dashboard/i });\n    await expect(pageTitle).toBeVisible();\n\n    // Verify page content is visible\n    const content = page.getByRole('main');\n    await expect(content).toBeVisible();\n  });\n\n  test('should handle failed async page load with error message and retry button', async ({ page }) => {\n    // Click the button to load new page\n    const loadButton = page.getByRole('button', { name: /load new page/i });\n    await loadButton.click();\n\n    // Verify loading indicator appears\n    const loadingIndicator = page.getByRole('status');\n    await expect(loadingIndicator).toBeVisible();\n\n    // Simulate failed load\n    await page.route('**/api/dashboard', route => {\n      route.abort('failed');\n    });\n\n    // Wait for error state\n    await page.waitForLoadState('networkidle');\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/error loading page/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify retry button is available\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify loading indicator is still visible\n    await expect(loadingIndicator).toBeVisible();\n\n    // Click retry button\n    await retryButton.click();\n\n    // Wait for the retry to complete\n    await page.waitForLoadState('networkidle');\n\n    // Verify error message is gone\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify loading indicator disappears\n    await expect(loadingIndicator).not.toBeVisible();\n\n    // Verify page content is now visible\n    const content = page.getByRole('main');\n    await expect(content).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8205,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5016,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 36.903,
+      "feedback_used": ""
+    }
+  ]
+}

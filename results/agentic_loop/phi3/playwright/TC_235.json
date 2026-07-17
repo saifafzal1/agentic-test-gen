@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_235",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.783,
+  "total_latency_s": 782.467,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Bottom Sheet Dropdown Replacement on Mobile', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should replace dropdowns with bottom sheet on mobile view', async ({ page }) => {\n    // Setup: intercept dropdown API calls\n    await page.route('**/api/dropdowns/options', (route) => {\n      route.abort('API call intercepted');\n    });\n\n    // Verify dropdown is visible on desktop\n    const dropdownMenu = page.getByRole('button', { name: /filter options/i });\n    await expect(dropdownMenu).toBeVisible();\n\n    // Verify dropdown contains options\n    const dropdownOptions = page.getByRole('option', { name: /option 1/i });\n    await expect(dropdownOptions).toBeVisible();\n\n    // Verify dropdown has a close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify dropdown is not visible on mobile\n    await page.setViewportSize({ width: 375, height: 812 });\n    await expect(dropdownMenu).not.toBeVisible();\n\n    // Verify bottom sheet appears\n    const bottomSheet = page.getByRole('dialog', { name: /filter options/i });\n    await expect(bottomSheet).toBeVisible();\n\n    // Verify bottom sheet has close button\n    const bottomSheetCloseButton = page.getByRole('button', { name: /close/i });\n    await expect(bottomSheetCloseButton).toBeVisible();\n\n    // Verify bottom sheet contains options\n    const bottomSheetOptions = page.getByRole('option', { name: /option 1/i });\n    await expect(bottomSheetOptions).toBeVisible();\n\n    // Verify bottom sheet is responsive\n    await expect(bottomSheet).toHaveAttribute('aria-label', /filter options/i);\n    await expect(bottomSheet).toHaveAttribute('aria-describedby', /filter options/i);\n\n    // Verify bottom sheet is accessible\n    await expect(bottomSheetCloseButton).toBeAccessible();\n\n    // Verify dropdown is hidden when bottom sheet is open\n    await expect(dropdownMenu).not.toBeVisible();\n\n    // Verify bottom sheet is closed when clicking close button\n    await bottomSheetCloseButton.click();\n    await expect(bottomSheet).not.toBeVisible();\n\n    // Verify dropdown is visible again on desktop\n    await page.setViewportSize({ width: 1024, height: 768 });\n    await expect(dropdownMenu).toBeVisible();\n\n    // Verify dropdown is not visible on mobile\n    await page.setViewportSize({ width: 375, height: 812 });\n    await expect(dropdownMenu).not.toBeVisible();\n  });\n\n  test('should handle bottom sheet close and reopen on mobile', async ({ page }) => {\n    // Setup: intercept dropdown API calls\n    await page.route('**/api/dropdowns/options', (route) => {\n      route.abort('API call intercepted');\n    });\n\n    // Verify dropdown is visible on desktop\n    const dropdownMenu = page.getByRole('button', { name: /filter options/i });\n    await expect(dropdownMenu).toBeVisible();\n\n    // Verify dropdown contains options\n    const dropdownOptions = page.getByRole('option', { name: /option 1/i });\n    await expect(dropdownOptions).toBeVisible();\n\n    // Verify dropdown has a close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify bottom sheet appears on mobile\n    await page.setViewportSize({ width: 375, height: 812 });\n    const bottomSheet = page.getByRole('dialog', { name: /filter options/i });\n    await expect(bottomSheet).toBeVisible();\n\n    // Verify bottom sheet has close button\n    const bottomSheetCloseButton = page.getByRole('button', { name: /close/i });\n    await expect(bottomSheetCloseButton).toBeVisible();\n\n    // Verify bottom sheet contains options\n    const bottomSheetOptions = page.getByRole('option', { name: /option 1/i });\n    await expect(bottomSheetOptions).toBeVisible();\n\n    // Verify bottom sheet is responsive\n    await expect(bottomSheet).toHaveAttribute('aria-label', /filter options/i);\n    await expect(bottomSheet).toHaveAttribute('aria-describedby', /filter options/i);\n\n    // Verify bottom sheet is accessible\n    await expect(bottomSheetCloseButton).toBeAccessible();\n\n    // Verify dropdown is hidden when bottom sheet is open\n    await expect(dropdownMenu).not.toBeVisible();\n\n    // Verify bottom sheet is closed when clicking close button\n    await bottomSheetCloseButton.click();\n    await expect(bottomSheet).not.toBeVisible();\n\n    // Verify dropdown is visible again on desktop\n    await page.setViewportSize({ width: 1024, height: 768 });\n    await expect(dropdownMenu).toBeVisible();\n\n    // Verify dropdown is not visible on mobile\n    await page.setViewportSize({ width: 375, height: 812 });\n    await expect(dropdownMenu).not.toBeVisible();\n\n    // Verify bottom sheet reappears when clicking close button again\n    await bottomSheetCloseButton.click();\n    await expect(bottomSheet).toBeVisible();\n\n    // Verify dropdown is hidden when bottom sheet is open\n    await expect(dropdownMenu).not.toBeVisible();\n\n    // Verify bottom sheet is closed when clicking close button again\n    await bottomSheetCloseButton.click();\n    await expect(bottomSheet).not.toBeVisible();\n\n    // Verify dropdown is visible again on desktop\n    await page.setViewportSize({ width: 1024, height: 768 });\n    await expect(dropdownMenu).toBeVisible();\n\n    // Verify dropdown is not visible on mobile\n    await page.setViewportSize({ width: 375, height: 812 });\n    await expect(dropdownMenu).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4843,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3676,
+        "missing_keywords": [],
+        "assertion_count": 27,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 302.109,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.783,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3767,
+        "missing_keywords": [],
+        "assertion_count": 32,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 480.358,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

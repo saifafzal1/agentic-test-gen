@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_021",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7709,
+  "total_latency_s": 46.889,
+  "final_script": "describe('Password Requirements Tooltip', () => {\n  beforeEach(() => {\n    cy.visit('/password-reset');\n  });\n\n  it('should display tooltip with password requirements when password is entered', () => {\n    // Intercept the API call to get password validation rules\n    cy.intercept('GET', '/api/password-validation-rules').as('getValidationRules');\n\n    // Get the password input field\n    cy.get('[data-testid=\"password-input\"]').should('be.visible');\n\n    // Type a password that meets the requirements\n    cy.get('[data-testid=\"password-input\"]').type('StrongPass123!');\n\n    // Wait for the validation rules API call\n    cy.wait('@getValidationRules');\n\n    // Verify the tooltip is visible\n    cy.get('[data-testid=\"password-tooltip\"]').should('be.visible');\n\n    // Verify the tooltip contains the correct message\n    cy.get('[data-testid=\"password-tooltip\"]').should('contain', 'Password must be at least 8 characters long');\n\n    // Verify the tooltip is styled correctly\n    cy.get('[data-testid=\"password-tooltip\"]').should('have.class', 'tooltip-active');\n\n    // Verify the password input still has focus\n    cy.get('[data-testid=\"password-input\"]').should('have.focus');\n  });\n\n  it('should hide tooltip when password is corrected to meet requirements', () => {\n    // Intercept the API call to get password validation rules\n    cy.intercept('GET', '/api/password-validation-rules').as('getValidationRules');\n\n    // Get the password input field\n    cy.get('[data-testid=\"password-input\"]').should('be.visible');\n\n    // Type a password that does not meet the requirements\n    cy.get('[data-testid=\"password-input\"]').type('Short');\n\n    // Wait for the validation rules API call\n    cy.wait('@getValidationRules');\n\n    // Verify the tooltip is visible with an error message\n    cy.get('[data-testid=\"password-tooltip\"]').should('be.visible');\n    cy.get('[data-testid=\"password-tooltip\"]').should('contain', 'Password must be at least 8 characters long');\n\n    // Verify the tooltip is styled correctly\n    cy.get('[data-testid=\"password-tooltip\"]').should('have.class', 'tooltip-active');\n\n    // Verify the password input still has focus\n    cy.get('[data-testid=\"password-input\"]').should('have.focus');\n\n    // Correct the password to meet the requirements\n    cy.get('[data-testid=\"password-input\"]').type('LongerPassword123!');\n\n    // Wait for the validation rules API call again\n    cy.wait('@getValidationRules');\n\n    // Verify the tooltip is hidden\n    cy.get('[data-testid=\"password-tooltip\"]').should('not.exist');\n\n    // Verify the password input no longer has focus\n    cy.get('[data-testid=\"password-input\"]').should('not.have.focus');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7709,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4365,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 46.889,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_151",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7523,
+  "total_latency_s": 305.12,
+  "final_script": "describe('Freeze First Column on Horizontal Scroll', () => {\n  beforeEach(() => {\n    cy.visit('/table-list');\n  });\n\n  it('should freeze the first column when scrolling horizontally', () => {\n    // Verify table is visible and has multiple columns\n    cy.get('[data-testid=\"table-container\"]').should('be.visible');\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 1);\n    cy.get('[data-testid=\"table-column\"]').should('have.length.greaterThan', 1);\n\n    // Scroll horizontally to trigger freeze\n    cy.get('[data-testid=\"table-container\"]').scrollLeft(1000);\n\n    // Verify first column is frozen (should not scroll)\n    cy.get('[data-testid=\"table-column-1\"]').should('have.css', 'position', 'sticky');\n    cy.get('[data-testid=\"table-column-1\"]').should('have.css', 'left', '0px');\n\n    // Verify other columns are scrollable\n    cy.get('[data-testid=\"table-column-2\"]').should('have.css', 'left', '100px');\n    cy.get('[data-testid=\"table-column-3\"]').should('have.css', 'left', '200px');\n\n    // Scroll back to the left to verify first column remains frozen\n    cy.get('[data-testid=\"table-container\"]').scrollLeft(-1000);\n    cy.get('[data-testid=\"table-column-1\"]').should('have.css', 'left', '0px');\n\n    // Verify table rows are still visible and scrollable\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 1);\n    cy.get('[data-testid=\"table-row\"]').first().should('be.visible');\n  });\n\n  it('should handle freeze when table is empty', () => {\n    // Verify table is empty\n    cy.get('[data-testid=\"table-container\"]').should('be.visible');\n    cy.get('[data-testid=\"table-row\"]').should('have.length', 0);\n\n    // Scroll horizontally to trigger freeze\n    cy.get('[data-testid=\"table-container\"]').scrollLeft(1000);\n\n    // Verify first column is still frozen\n    cy.get('[data-testid=\"table-column-1\"]').should('have.css', 'position', 'sticky');\n    cy.get('[data-testid=\"table-column-1\"]').should('have.css', 'left', '0px');\n\n    // Verify no rows are visible\n    cy.get('[data-testid=\"table-row\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7523,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3743,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 305.12,
+      "feedback_used": ""
+    }
+  ]
+}

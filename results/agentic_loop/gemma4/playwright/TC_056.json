@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_056",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8463,
+  "total_latency_s": 109.301,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Jump to Specific Page using Page Number Input', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/list');\n  });\n\n  test('should successfully jump to a specific page when page number is entered', async ({ page }) => {\n    // Verify initial page is displayed\n    const pageIndicator = page.getByRole('status', { name: /page 1 of 10/i });\n    await expect(pageIndicator).toBeVisible();\n\n    // Locate and fill page number input using getByLabel\n    const pageInput = page.getByLabel('Page Number');\n    await pageInput.fill('5');\n\n    // Locate and click jump button using getByRole\n    const jumpButton = page.getByRole('button', { name: /jump/i });\n    await jumpButton.click();\n\n    // Wait for page to load\n    await page.waitForResponse(response => \n      response.url().includes('/api/list') && response.status() === 200\n    );\n\n    // Verify page indicator updated to page 5\n    const updatedPageIndicator = page.getByRole('status', { name: /page 5 of 10/i });\n    await expect(updatedPageIndicator).toBeVisible();\n\n    // Verify list items are displayed\n    const listItems = page.getByRole('listitem');\n    await expect(listItems).toHaveCount(20);\n\n    // Verify current page button is active\n    const currentPageButton = page.getByRole('button', { name: '5' });\n    await expect(currentPageButton).toBeDisabled();\n  });\n\n  test('should handle invalid page number input gracefully', async ({ page }) => {\n    // Locate and fill page number input with invalid value\n    const pageInput = page.getByLabel('Page Number');\n    await pageInput.fill('abc');\n\n    // Locate and click jump button using getByRole\n    const jumpButton = page.getByRole('button', { name: /jump/i });\n    await jumpButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText('Please enter a valid page number');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify page indicator remains on page 1\n    const pageIndicator = page.getByRole('status', { name: /page 1 of 10/i });\n    await expect(pageIndicator).toBeVisible();\n\n    // Verify list items are still displayed\n    const listItems = page.getByRole('listitem');\n    await expect(listItems).toHaveCount(20);\n\n    // Clear input and verify error message disappears\n    await pageInput.clear();\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8463,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4876,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 109.301,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_111",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7489,
+  "total_latency_s": 319.013,
+  "final_script": "describe('Multiple Concurrent API Calls Resolution', () => {\n  beforeEach(() => {\n    cy.visit('/data-page');\n  });\n\n  it('should display data after multiple concurrent API calls resolve', () => {\n    // Intercept the first API call\n    cy.intercept('GET', '/api/data1').as('getData1');\n    // Intercept the second API call\n    cy.intercept('GET', '/api/data2').as('getData2');\n    // Intercept the third API call\n    cy.intercept('GET', '/api/data3').as('getData3');\n\n    // Wait for the first API call to resolve\n    cy.wait('@getData1');\n\n    // Wait for the second API call to resolve\n    cy.wait('@getData2');\n\n    // Wait for the third API call to resolve\n    cy.wait('@getData3');\n\n    // Verify all data is loaded\n    cy.get('[data-testid=\"data-item-1\"]').should('be.visible');\n    cy.get('[data-testid=\"data-item-2\"]').should('be.visible');\n    cy.get('[data-testid=\"data-item-3\"]').should('be.visible');\n\n    // Verify data is displayed\n    cy.get('[data-testid=\"data-item-1\"]').should('contain', 'Item 1');\n    cy.get('[data-testid=\"data-item-2\"]').should('contain', 'Item 2');\n    cy.get('[data-testid=\"data-item-3\"]').should('contain', 'Item 3');\n\n    // Verify loading state is gone\n    cy.get('[data-testid=\"loading-spinner\"]').should('not.exist');\n  });\n\n  it('should handle API call failures and display error state', () => {\n    // Intercept the first API call\n    cy.intercept('GET', '/api/data1', {\n      statusCode: 200,\n      body: { id: 1, name: 'Item 1' }\n    }).as('getData1');\n\n    // Intercept the second API call with error\n    cy.intercept('GET', '/api/data2', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' }\n    }).as('getData2');\n\n    // Intercept the third API call\n    cy.intercept('GET', '/api/data3', {\n      statusCode: 200,\n      body: { id: 3, name: 'Item 3' }\n    }).as('getData3');\n\n    // Wait for the first API call to resolve\n    cy.wait('@getData1');\n\n    // Wait for the second API call to fail\n    cy.wait('@getData2');\n\n    // Wait for the third API call to resolve\n    cy.wait('@getData3');\n\n    // Verify only successful data is displayed\n    cy.get('[data-testid=\"data-item-1\"]').should('be.visible');\n    cy.get('[data-testid=\"data-item-3\"]').should('be.visible');\n\n    // Verify error state is displayed for failed data\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Failed to load data');\n\n    // Verify loading spinner is gone\n    cy.get('[data-testid=\"loading-spinner\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7489,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3631,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 319.013,
+      "feedback_used": ""
+    }
+  ]
+}

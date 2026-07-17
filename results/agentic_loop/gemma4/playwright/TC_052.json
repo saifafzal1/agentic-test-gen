@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_052",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7997,
+  "total_latency_s": 71.463,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Sticky Header Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/navigation');\n  });\n\n  test('should display sticky header when scrolling down', async ({ page }) => {\n    // Verify header is visible initially\n    const header = page.getByRole('banner');\n    await expect(header).toBeVisible();\n    \n    // Verify logo is visible\n    const logo = page.getByRole('img', { name: /logo/i });\n    await expect(logo).toBeVisible();\n    \n    // Verify navigation links are visible\n    const navLinks = page.getByRole('navigation').getByText(/home|about|contact/i);\n    await expect(navLinks).toBeVisible();\n    \n    // Scroll down to trigger sticky behavior\n    await page.evaluate(() => window.scrollTo(0, 800));\n    \n    // Verify header remains visible and sticky\n    await expect(header).toBeVisible();\n    \n    // Verify header has sticky class\n    const headerElement = page.locator('[data-testid=\"sticky-header\"]');\n    await expect(headerElement).toHaveClass(/sticky-header/);\n    \n    // Verify header position is fixed\n    const headerBoundingBox = await headerElement.boundingBox();\n    expect(headerBoundingBox.y).toBeLessThan(100);\n    \n    // Verify logo is still visible in sticky header\n    await expect(logo).toBeVisible();\n    \n    // Verify navigation links are still visible in sticky header\n    await expect(navLinks).toBeVisible();\n  });\n\n  test('should not become sticky when scrolling up', async ({ page }) => {\n    // Scroll down to trigger sticky header\n    await page.evaluate(() => window.scrollTo(0, 800));\n    \n    // Verify header is sticky\n    const headerElement = page.locator('[data-testid=\"sticky-header\"]');\n    await expect(headerElement).toHaveClass(/sticky-header/);\n    \n    // Scroll back up\n    await page.evaluate(() => window.scrollTo(0, 0));\n    \n    // Verify header remains sticky\n    await expect(headerElement).toHaveClass(/sticky-header/);\n    \n    // Verify header position is fixed\n    const headerBoundingBox = await headerElement.boundingBox();\n    expect(headerBoundingBox.y).toBeLessThan(100);\n    \n    // Verify logo is still visible\n    const logo = page.getByRole('img', { name: /logo/i });\n    await expect(logo).toBeVisible();\n    \n    // Verify navigation links are still visible\n    const navLinks = page.getByRole('navigation').getByText(/home|about|contact/i);\n    await expect(navLinks).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7997,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4323,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.463,
+      "feedback_used": ""
+    }
+  ]
+}

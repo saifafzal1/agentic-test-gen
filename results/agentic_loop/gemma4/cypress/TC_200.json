@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_200",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7971,
+  "total_latency_s": 72.939,
+  "final_script": "describe('Filter Tag Removal', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should remove an individual filter tag by clicking the x icon', () => {\n    // Apply multiple filters\n    cy.get('[data-testid=\"filter-category-tag\"]').click();\n    cy.get('[data-testid=\"filter-price-tag\"]').click();\n    cy.get('[data-testid=\"filter-status-tag\"]').click();\n\n    // Verify all tags are visible\n    cy.get('[data-testid=\"filter-tag\"]').should('have.length', 3);\n    cy.get('[data-testid=\"filter-tag\"]').first().should('contain', 'Category');\n    cy.get('[data-testid=\"filter-tag\"]').eq(1).should('contain', 'Price');\n    cy.get('[data-testid=\"filter-tag\"]').eq(2).should('contain', 'Status');\n\n    // Click the remove icon on the first tag\n    cy.get('[data-testid=\"filter-tag\"]').first().find('[data-testid=\"remove-tag-icon\"]').click();\n\n    // Verify the first tag is removed\n    cy.get('[data-testid=\"filter-tag\"]').should('have.length', 2);\n    cy.get('[data-testid=\"filter-tag\"]').first().should('contain', 'Price');\n    cy.get('[data-testid=\"filter-tag\"]').eq(1).should('contain', 'Status');\n\n    // Verify the search results update\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"search-results\"]').should('contain', 'Showing results');\n  });\n\n  it('should handle removing the last filter tag and clear all filters', () => {\n    // Apply multiple filters\n    cy.get('[data-testid=\"filter-category-tag\"]').click();\n    cy.get('[data-testid=\"filter-price-tag\"]').click();\n    cy.get('[data-testid=\"filter-status-tag\"]').click();\n\n    // Remove the first tag\n    cy.get('[data-testid=\"filter-tag\"]').first().find('[data-testid=\"remove-tag-icon\"]').click();\n\n    // Remove the second tag\n    cy.get('[data-testid=\"filter-tag\"]').first().find('[data-testid=\"remove-tag-icon\"]').click();\n\n    // Verify only one tag remains\n    cy.get('[data-testid=\"filter-tag\"]').should('have.length', 1);\n    cy.get('[data-testid=\"filter-tag\"]').first().should('contain', 'Status');\n\n    // Remove the last tag\n    cy.get('[data-testid=\"filter-tag\"]').first().find('[data-testid=\"remove-tag-icon\"]').click();\n\n    // Verify all tags are removed\n    cy.get('[data-testid=\"filter-tag\"]').should('not.exist');\n\n    // Verify search results are reset to default\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"search-results\"]').should('contain', 'Showing all results');\n    cy.get('[data-testid=\"filter-reset-button\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7971,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5238,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.939,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_026",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8316,
+  "total_latency_s": 34.662,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Email Field Inline Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should display inline validation errors as user types in email field', async ({ page }) => {\n    // Locate email input using getByLabel\n    const emailInput = page.getByLabel('Email Address');\n    await expect(emailInput).toBeVisible();\n\n    // Type a valid email\n    await emailInput.fill('test@example.com');\n    await expect(emailInput).toHaveValue('test@example.com');\n\n    // Verify no validation error is displayed\n    const emailError = page.getByText('Email is required');\n    await expect(emailError).not.toBeVisible();\n\n    // Type an invalid email\n    await emailInput.fill('invalid-email');\n\n    // Verify validation error is displayed\n    await expect(emailError).toBeVisible();\n\n    // Verify error message is visible\n    const errorMessage = page.getByText('Please enter a valid email address');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error styling is applied\n    const errorClass = emailInput.getByRole('textbox').first().evaluate((el) => el.classList.contains('error'));\n    await expect(errorClass).toBe(true);\n\n    // Verify email input still has focus\n    await expect(emailInput).toHaveFocus();\n  });\n\n  test('should clear validation errors when email is corrected', async ({ page }) => {\n    // Locate email input using getByLabel\n    const emailInput = page.getByLabel('Email Address');\n    await expect(emailInput).toBeVisible();\n\n    // Type an invalid email\n    await emailInput.fill('invalid-email');\n    const emailError = page.getByText('Please enter a valid email address');\n    await expect(emailError).toBeVisible();\n\n    // Correct the email\n    await emailInput.fill('valid.email@example.com');\n\n    // Verify validation error is cleared\n    await expect(emailError).not.toBeVisible();\n\n    // Verify email input is no longer styled as error\n    const errorClass = emailInput.getByRole('textbox').first().evaluate((el) => el.classList.contains('error'));\n    await expect(errorClass).toBe(false);\n\n    // Verify email input has no error styling\n    const errorStyles = emailInput.getByRole('textbox').first().evaluate((el) => el.style.borderColor);\n    await expect(errorStyles).toBe('transparent');\n\n    // Verify email input still has focus\n    await expect(emailInput).toHaveFocus();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8316,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4387,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 34.662,
+      "feedback_used": ""
+    }
+  ]
+}

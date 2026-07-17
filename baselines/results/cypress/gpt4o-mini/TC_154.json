@@ -1,0 +1,13 @@
+{
+  "id": "TC_154",
+  "category": "table_list",
+  "complexity": "complex",
+  "user_story": "As a user, I want the table to show a loading state while data is fetching.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Table Loading State', () => {\n    beforeEach(() => {\n        cy.visit('/table-list'); // Adjust the URL as necessary\n    });\n\n    it('should display loading state while data is fetching', () => {\n        cy.intercept('GET', '/api/data', { delay: 2000 }).as('fetchData'); // Simulate data fetching\n        cy.get('.load-button').click(); // Trigger data fetch\n        cy.get('.loading-spinner').should('be.visible'); // Check if loading spinner is visible\n        cy.wait('@fetchData'); // Wait for the data to be fetched\n        cy.get('.loading-spinner').should('not.exist'); // Check if loading spinner is gone\n        cy.get('.data-table').should('be.visible'); // Verify that the data table is visible\n    });\n\n    it('should handle error state if data fetching fails', () => {\n        cy.intercept('GET', '/api/data', { statusCode: 500 }).as('fetchDataError'); // Simulate a fetch error\n        cy.get('.load-button').click(); // Trigger data fetch\n        cy.wait('@fetchDataError'); // Wait for the error response\n        cy.get('.error-message').should('be.visible').and('contain', 'Failed to load data'); // Check for error message\n        cy.get('.data-table').should('not.exist'); // Verify that the data table is not visible\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 296,
+  "latency_s": 3.44,
+  "timestamp": "2026-06-19T16:35:15.354169"
+}

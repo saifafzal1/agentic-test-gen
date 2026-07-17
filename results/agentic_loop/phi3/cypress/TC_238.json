@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_238",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7718,
+  "total_latency_s": 352.727,
+  "final_script": "describe('Mobile Search Bar Expansion on Focus', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should expand search bar on focus on mobile device', () => {\n    // Verify initial state - search bar is collapsed\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n    cy.get('[data-testid=\"search-input\"]').should('have.class', 'collapsed');\n\n    // Intercept the focus event\n    cy.intercept('POST', '/api/search').as('searchRequest');\n\n    // Simulate mobile device by setting viewport\n    cy.viewport('iphone-x');\n\n    // Focus the search input\n    cy.get('[data-testid=\"search-input\"]').click();\n\n    // Verify search bar expanded\n    cy.get('[data-testid=\"search-input\"]').should('have.class', 'expanded');\n\n    // Verify search input is visible and editable\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n    cy.get('[data-testid=\"search-input\"]').type('test search');\n\n    // Verify search button is visible\n    cy.get('[data-testid=\"search-button\"]').should('be.visible');\n\n    // Verify search button is enabled\n    cy.get('[data-testid=\"search-button\"]').should('not.be.disabled');\n\n    // Verify API call is triggered\n    cy.wait('@searchRequest');\n  });\n\n  it('should collapse search bar when focus is lost on mobile', () => {\n    // Verify search bar is expanded\n    cy.get('[data-testid=\"search-input\"]').should('have.class', 'expanded');\n\n    // Focus the search input\n    cy.get('[data-testid=\"search-input\"]').click();\n\n    // Verify search input is focused\n    cy.get('[data-testid=\"search-input\"]').should('have.focus');\n\n    // Verify search button is visible and enabled\n    cy.get('[data-testid=\"search-button\"]').should('be.visible');\n\n    // Blur the search input\n    cy.get('[data-testid=\"search-input\"]').blur();\n\n    // Verify search bar collapsed\n    cy.get('[data-testid=\"search-input\"]').should('have.class', 'collapsed');\n\n    // Verify search button is still visible\n    cy.get('[data-testid=\"search-button\"]').should('be.visible');\n\n    // Verify search button is disabled when input is not focused\n    cy.get('[data-testid=\"search-button\"]').should('be.disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7718,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4392,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 352.727,
+      "feedback_used": ""
+    }
+  ]
+}

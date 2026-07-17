@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_017",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8312,
+  "total_latency_s": 42.86,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Page Mobile Responsiveness', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should display login form correctly on mobile devices', async ({ page }) => {\n    // Set viewport to mobile width\n    await page.setViewportSize({ width: 375, height: 812 });\n\n    // Verify login form is visible\n    const loginForm = page.getByRole('form');\n    await expect(loginForm).toBeVisible();\n\n    // Verify email input field is visible and accessible\n    const emailInput = page.getByLabel('Email Address');\n    await expect(emailInput).toBeVisible();\n\n    // Verify password input field is visible and accessible\n    const passwordInput = page.getByLabel('Password');\n    await expect(passwordInput).toBeVisible();\n\n    // Verify login button is visible and accessible\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await expect(loginButton).toBeVisible();\n\n    // Verify error messages are visible and accessible\n    const errorMessage = page.getByText('Email address is required');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify success message is not visible\n    const successMessage = page.getByText('Login successful');\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify form is responsive and does not overflow\n    await expect(page).toHaveViewportSize({ width: 375, height: 812 });\n    await expect(page).toHaveViewportSize({ width: 375, height: 812 });\n  });\n\n  test('should handle login on mobile with valid credentials', async ({ page }) => {\n    // Set viewport to mobile width\n    await page.setViewportSize({ width: 375, height: 812 });\n\n    // Fill email input with valid value\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('user@example.com');\n\n    // Fill password input with valid value\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('password123');\n\n    // Click login button\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await loginButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Login successful');\n    await expect(successMessage).toBeVisible();\n\n    // Verify user is redirected to dashboard\n    const dashboard = page.getByRole('main');\n    await expect(dashboard).toBeVisible();\n\n    // Verify error messages are not visible\n    const errorMessage = page.getByText('Email address is required');\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify login button is disabled\n    await expect(loginButton).toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8312,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4375,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 42.86,
+      "feedback_used": ""
+    }
+  ]
+}

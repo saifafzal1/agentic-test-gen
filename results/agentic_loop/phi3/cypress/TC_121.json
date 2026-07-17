@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_121",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7785,
+  "total_latency_s": 44.611,
+  "final_script": "describe('Async PDF Generation Download', () => {\n  beforeEach(() => {\n    cy.visit('/pdf-generator');\n  });\n\n  it('should generate and download PDF when button is clicked', () => {\n    // Intercept the API call to generate PDF\n    cy.intercept('POST', '/api/generate-pdf', {\n      statusCode: 200,\n      body: {\n        url: 'https://example.com/generated-pdf.pdf',\n        size: 1024,\n        status: 'success'\n      }\n    }).as('generatePDF');\n\n    // Verify PDF generation button is visible\n    cy.get('[data-testid=\"generate-pdf-button\"]').should('be.visible');\n\n    // Click the button to trigger PDF generation\n    cy.get('[data-testid=\"generate-pdf-button\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@generatePDF');\n\n    // Verify download dialog appears\n    cy.get('[data-testid=\"download-dialog\"]').should('be.visible');\n\n    // Verify download button is present\n    cy.get('[data-testid=\"download-button\"]').should('be.visible');\n\n    // Click the download button\n    cy.get('[data-testid=\"download-button\"]').click();\n\n    // Verify PDF file is downloaded\n    cy.get('[data-testid=\"download-dialog\"]').should('not.exist');\n    cy.get('[data-testid=\"downloaded-file\"]').should('be.visible');\n    cy.get('[data-testid=\"downloaded-file\"]').should('contain', 'generated-pdf.pdf');\n\n    // Verify file size is correct\n    cy.get('[data-testid=\"downloaded-file\"]').then((file) => {\n      expect(file.size).to.equal(1024);\n    });\n\n    // Verify file is not corrupted\n    cy.get('[data-testid=\"downloaded-file\"]').then((file) => {\n      expect(file.type).to.equal('application/pdf');\n    });\n  });\n\n  it('should handle failed PDF generation and display error message', () => {\n    // Intercept the API call with a failure response\n    cy.intercept('POST', '/api/generate-pdf', {\n      statusCode: 500,\n      body: {\n        error: 'Internal server error',\n        status: 'failure'\n      }\n    }).as('generatePDFFailure');\n\n    // Verify PDF generation button is visible\n    cy.get('[data-testid=\"generate-pdf-button\"]').should('be.visible');\n\n    // Click the button to trigger PDF generation\n    cy.get('[data-testid=\"generate-pdf-button\"]').click();\n\n    // Wait for the failed API call\n    cy.wait('@generatePDFFailure');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Failed to generate PDF');\n\n    // Verify download button is not available\n    cy.get('[data-testid=\"download-button\"]').should('not.exist');\n\n    // Verify user is notified of the failure\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please try again later');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7785,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4615,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 44.611,
+      "feedback_used": ""
+    }
+  ]
+}

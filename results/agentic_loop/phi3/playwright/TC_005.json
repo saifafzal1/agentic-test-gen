@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_005",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8641,
+  "total_latency_s": 58.21,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Password Reset Confirmation Message', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/password-reset');\n  });\n\n  test('should display confirmation message after successful password reset', async ({ page }) => {\n    // Setup: intercept the API call to reset password\n    await page.route('**/api/password-reset/confirm', (route) => {\n      route.continue();\n    });\n\n    // Intercept the API call to verify the password reset\n    await page.route('**/api/password-reset/verify', (route) => {\n      route.continue();\n    });\n\n    // Verify the reset form is visible\n    const resetForm = page.getByRole('form', { name: /reset password/i });\n    await expect(resetForm).toBeVisible();\n\n    // Fill in the email field\n    const emailInput = page.getByLabel(/email/i);\n    await emailInput.fill('user@example.com');\n\n    // Fill in the new password field\n    const newPasswordInput = page.getByLabel(/new password/i);\n    await newPasswordInput.fill('NewSecurePassword123!');\n\n    // Fill in the confirm password field\n    const confirmPasswordInput = page.getByLabel(/confirm password/i);\n    await confirmPasswordInput.fill('NewSecurePassword123!');\n\n    // Click the reset button\n    const resetButton = page.getByRole('button', { name: /reset password/i });\n    await resetButton.click();\n\n    // Wait for the confirmation message to appear\n    const confirmationMessage = page.getByText(/password has been reset successfully/i);\n    await expect(confirmationMessage).toBeVisible();\n\n    // Verify the success message is displayed\n    await expect(confirmationMessage).toContainText('Password has been reset successfully');\n\n    // Verify the user is redirected to the homepage\n    await expect(page).toHaveURL(/^\\/.*$/);\n  });\n\n  test('should not display confirmation message if password reset fails', async ({ page }) => {\n    // Setup: intercept the API call to reset password with a failure response\n    await page.route('**/api/password-reset/confirm', (route) => {\n      route.abort('failed');\n    });\n\n    // Intercept the API call to verify the password reset\n    await page.route('**/api/password-reset/verify', (route) => {\n      route.abort('failed');\n    });\n\n    // Verify the reset form is visible\n    const resetForm = page.getByRole('form', { name: /reset password/i });\n    await expect(resetForm).toBeVisible();\n\n    // Fill in the email field\n    const emailInput = page.getByLabel(/email/i);\n    await emailInput.fill('user@example.com');\n\n    // Fill in the new password field\n    const newPasswordInput = page.getByLabel(/new password/i);\n    await newPasswordInput.fill('IncorrectPassword');\n\n    // Fill in the confirm password field\n    const confirmPasswordInput = page.getByLabel(/confirm password/i);\n    await confirmPasswordInput.fill('IncorrectPassword');\n\n    // Click the reset button\n    const resetButton = page.getByRole('button', { name: /reset password/i });\n    await resetButton.click();\n\n    // Wait for the error message to appear\n    const errorMessage = page.getByText(/password reset failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the error message is displayed\n    await expect(errorMessage).toContainText('Password reset failed');\n\n    // Verify the form is still visible\n    await expect(resetForm).toBeVisible();\n\n    // Verify the user is not redirected\n    await expect(page).toHaveURL(/^\\/.*$/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8641,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5469,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 58.21,
+      "feedback_used": ""
+    }
+  ]
+}

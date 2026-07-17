@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_019",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7766,
+  "total_latency_s": 40.592,
+  "final_script": "describe('Phone Number Field Validation', () => {\n  beforeEach(() => {\n    cy.visit('/contact');\n  });\n\n  it('should accept only numeric input in phone number field', () => {\n    // Intercept the API call to validate phone number\n    cy.intercept('POST', '/api/validate-phone').as('validatePhone');\n\n    // Get the phone number input field\n    cy.get('[data-testid=\"phone-input\"]').should('be.visible');\n\n    // Type a valid numeric phone number\n    cy.get('[data-testid=\"phone-input\"]').type('1234567890');\n\n    // Verify the input value is correct\n    cy.get('[data-testid=\"phone-input\"]').should('have.value', '1234567890');\n\n    // Click the submit button\n    cy.get('[data-testid=\"submit-btn\"]').click();\n\n    // Wait for the API validation response\n    cy.wait('@validatePhone').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Phone number validated successfully');\n  });\n\n  it('should reject non-numeric input in phone number field', () => {\n    // Intercept the API call to validate phone number\n    cy.intercept('POST', '/api/validate-phone').as('validatePhone');\n\n    // Get the phone number input field\n    cy.get('[data-testid=\"phone-input\"]').should('be.visible');\n\n    // Type a non-numeric value\n    cy.get('[data-testid=\"phone-input\"]').type('abc123');\n\n    // Verify the input value is still visible\n    cy.get('[data-testid=\"phone-input\"]').should('have.value', 'abc123');\n\n    // Click the submit button\n    cy.get('[data-testid=\"submit-btn\"]').click();\n\n    // Wait for the API validation response\n    cy.wait('@validatePhone').then((interception) => {\n      expect(interception.response.statusCode).to.equal(400);\n    });\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid phone number');\n\n    // Verify the input field is still visible for correction\n    cy.get('[data-testid=\"phone-input\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7766,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4553,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 40.592,
+      "feedback_used": ""
+    }
+  ]
+}

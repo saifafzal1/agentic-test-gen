@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_214",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.827,
+  "total_latency_s": 71.81,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Skip Navigation Links - First Focusable Element', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/page-with-skip-nav');\n  });\n\n  test('should focus on skip navigation link when page loads', async ({ page }) => {\n    // Verify skip navigation link is visible\n    const skipLink = page.getByRole('link', { name: /skip to main content/i });\n    await expect(skipLink).toBeVisible();\n\n    // Verify skip navigation link is the first focusable element\n    const firstFocusable = page.locator('[tabindex=\"0\"], [tabindex=\"-1\"], button, [href]');\n    await expect(firstFocusable).toHaveCount(1);\n\n    // Verify the skip link is the first focusable element\n    const firstFocusableElement = page.locator('[tabindex=\"0\"], [tabindex=\"-1\"], button, [href]');\n    await expect(firstFocusableElement).toBeVisible();\n    await expect(firstFocusableElement).toHaveCount(1);\n    await expect(firstFocusableElement).toContainText('skip to main content');\n\n    // Verify skip link has focus\n    await expect(skipLink).toBeFocused();\n  });\n\n  test('should move focus to main content when skip navigation link is clicked', async ({ page }) => {\n    // Verify skip navigation link is visible and has focus\n    const skipLink = page.getByRole('link', { name: /skip to main content/i });\n    await expect(skipLink).toBeVisible();\n    await expect(skipLink).toBeFocused();\n\n    // Click the skip navigation link\n    await skipLink.click();\n\n    // Verify focus moves to main content area\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeFocused();\n\n    // Verify main content is visible\n    await expect(mainContent).toBeVisible();\n\n    // Verify skip link loses focus\n    await expect(skipLink).not.toBeFocused();\n\n    // Verify main content is the first focusable element after click\n    const firstFocusable = page.locator('[tabindex=\"0\"], [tabindex=\"-1\"], button, [href]');\n    await expect(firstFocusable).toHaveCount(1);\n    await expect(firstFocusable).toContainText('main content');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.827,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5232,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.81,
+      "feedback_used": ""
+    }
+  ]
+}

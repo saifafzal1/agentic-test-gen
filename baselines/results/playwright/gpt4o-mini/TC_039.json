@@ -1,0 +1,13 @@
+{
+  "id": "TC_039",
+  "category": "navigation",
+  "complexity": "medium",
+  "user_story": "As a user, I want the active menu item to be highlighted in the navigation bar.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Navigation Menu Highlight', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should highlight the active menu item', async ({ page }) => {\n    const activeMenuItem = await page.getByRole('link', { name: 'Home' }); // Replace 'Home' with the actual active menu item name\n    await expect(activeMenuItem).toHaveCSS('background-color', 'rgb(255, 0, 0)'); // Replace with the actual highlight color\n  });\n\n  test('should not highlight inactive menu items', async ({ page }) => {\n    const inactiveMenuItem = await page.getByRole('link', { name: 'About' }); // Replace 'About' with an actual inactive menu item name\n    await expect(inactiveMenuItem).not.toHaveCSS('background-color', 'rgb(255, 0, 0)'); // Replace with the actual highlight color\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 226,
+  "latency_s": 4.29,
+  "timestamp": "2026-06-19T16:46:10.209370"
+}

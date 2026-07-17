@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_205",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7545,
+  "total_latency_s": 72.905,
+  "final_script": "describe('Keyboard Navigation - Tab Key', () => {\n  beforeEach(() => {\n    cy.visit('/accessibility-demo');\n  });\n\n  it('should navigate all interactive elements using Tab key in correct order', () => {\n    // Verify initial state\n    cy.get('[data-testid=\"tab-button\"]').should('be.visible');\n    cy.get('[data-testid=\"dropdown-menu\"]').should('be.visible');\n    cy.get('[data-testid=\"form-input\"]').should('be.visible');\n    cy.get('[data-testid=\"checkbox\"]').should('be.visible');\n    cy.get('[data-testid=\"link-to-page\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-trigger\"]').should('be.visible');\n\n    // Tab to first interactive element\n    cy.get('[data-testid=\"tab-button\"]').tab();\n    cy.get('[data-testid=\"tab-button\"]').should('have.focus');\n\n    // Tab to second interactive element (dropdown)\n    cy.get('[data-testid=\"dropdown-menu\"]').tab();\n    cy.get('[data-testid=\"dropdown-menu\"]').should('have.focus');\n\n    // Tab to third interactive element (form input)\n    cy.get('[data-testid=\"form-input\"]').tab();\n    cy.get('[data-testid=\"form-input\"]').should('have.focus');\n\n    // Tab to fourth interactive element (checkbox)\n    cy.get('[data-testid=\"checkbox\"]').tab();\n    cy.get('[data-testid=\"checkbox\"]').should('have.focus');\n\n    // Tab to fifth interactive element (link)\n    cy.get('[data-testid=\"link-to-page\"]').tab();\n    cy.get('[data-testid=\"link-to-page\"]').should('have.focus');\n\n    // Tab to sixth interactive element (modal trigger)\n    cy.get('[data-testid=\"modal-trigger\"]').tab();\n    cy.get('[data-testid=\"modal-trigger\"]').should('have.focus');\n\n    // Tab should wrap around to the first element\n    cy.get('[data-testid=\"tab-button\"]').tab();\n    cy.get('[data-testid=\"tab-button\"]').should('have.focus');\n  });\n\n  it('should handle focus management when modal opens and close', () => {\n    // Tab to modal trigger\n    cy.get('[data-testid=\"modal-trigger\"]').tab();\n    cy.get('[data-testid=\"modal-trigger\"]').should('have.focus');\n\n    // Open modal\n    cy.get('[data-testid=\"modal-trigger\"]').click();\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Focus should move inside the modal\n    cy.get('[data-testid=\"modal-input\"]').should('have.focus');\n\n    // Tab inside modal\n    cy.get('[data-testid=\"modal-input\"]').tab();\n    cy.get('[data-testid=\"modal-confirm-button\"]').should('have.focus');\n\n    // Tab should wrap inside modal\n    cy.get('[data-testid=\"modal-confirm-button\"]').tab();\n    cy.get('[data-testid=\"modal-input\"]').should('have.focus');\n\n    // Close modal using Escape key\n    cy.get('[data-testid=\"modal-dialog\"]').type('{esc}');\n    cy.get('[data-testid=\"modal-dialog\"]').should('not.exist');\n\n    // Focus should return to the element that triggered the modal\n    cy.get('[data-testid=\"modal-trigger\"]').should('have.focus');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7545,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3817,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.905,
+      "feedback_used": ""
+    }
+  ]
+}

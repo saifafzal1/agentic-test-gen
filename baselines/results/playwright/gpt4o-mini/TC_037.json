@@ -1,0 +1,13 @@
+{
+  "id": "TC_037",
+  "category": "form_validation",
+  "complexity": "complex",
+  "user_story": "As a user, I want to receive a confirmation email after form submission.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Submission Confirmation Email', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/form');\n  });\n\n  test('should submit the form and receive a confirmation email', async ({ page }) => {\n    await page.fill(getByLabel('Name'), 'John Doe');\n    await page.fill(getByLabel('Email'), 'john.doe@example.com');\n    await page.fill(getByLabel('Message'), 'This is a test message.');\n    await page.click(getByRole('button', { name: 'Submit' }));\n\n    await expect(page.getByText('Thank you for your submission!')).toBeVisible();\n  });\n\n  test('should receive a confirmation email', async ({ page }) => {\n    // Simulate waiting for the email to be sent and received\n    await page.waitForTimeout(5000); // Adjust timeout as necessary\n\n    const emailReceived = await checkEmail('john.doe@example.com', 'Confirmation Email');\n    expect(emailReceived).toBeTruthy();\n  });\n\n  async function checkEmail(email: string, subject: string): Promise<boolean> {\n    // Implement email checking logic here, possibly using an email testing service\n    return true; // Placeholder return value\n  }\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 270,
+  "latency_s": 4.16,
+  "timestamp": "2026-06-19T16:46:02.919145"
+}

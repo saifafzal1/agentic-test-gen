@@ -1,0 +1,13 @@
+{
+  "id": "TC_269",
+  "category": "notifications",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a notification panel slide in from the top.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Panel', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-application-url.com');\n  });\n\n  test('should display notification panel when triggered', async ({ page }) => {\n    await page.getByRole('button', { name: 'Show Notification' }).click();\n    const notificationPanel = page.getByRole('alert');\n    await expect(notificationPanel).toBeVisible();\n  });\n\n  test('should slide in from the top', async ({ page }) => {\n    await page.getByRole('button', { name: 'Show Notification' }).click();\n    const notificationPanel = page.getByRole('alert');\n    await expect(notificationPanel).toHaveCSS('transform', /translateY\\(0\\)/);\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 175,
+  "latency_s": 2.74,
+  "timestamp": "2026-06-19T17:02:34.282452"
+}

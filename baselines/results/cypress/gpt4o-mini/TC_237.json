@@ -1,0 +1,13 @@
+{
+  "id": "TC_237",
+  "category": "responsive",
+  "complexity": "medium",
+  "user_story": "As a user, I want to pinch-to-zoom on product images.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Pinch-to-Zoom on Product Images', () => {\n    beforeEach(() => {\n        cy.visit('/product-page'); // Replace with the actual product page URL\n    });\n\n    it('should zoom in on the product image when pinching out', () => {\n        cy.get('.product-image') // Replace with the actual selector for the product image\n            .trigger('touchstart', { touches: [{ clientX: 100, clientY: 100 }, { clientX: 200, clientY: 100 }] })\n            .trigger('touchmove', { touches: [{ clientX: 150, clientY: 100 }, { clientX: 250, clientY: 100 }] })\n            .trigger('touchend');\n\n        cy.get('.product-image').should('have.css', 'transform').and('include', 'scale(1.5)'); // Adjust scale value as needed\n    });\n\n    it('should not zoom in when pinch gesture is not performed', () => {\n        cy.get('.product-image') // Replace with the actual selector for the product image\n            .trigger('touchstart', { touches: [{ clientX: 100, clientY: 100 }] })\n            .trigger('touchend');\n\n        cy.get('.product-image').should('have.css', 'transform').and('not.include', 'scale'); \n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 284,
+  "latency_s": 3.81,
+  "timestamp": "2026-06-19T16:39:51.581799"
+}

@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_036",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7637,
+  "total_latency_s": 193.409,
+  "final_script": "describe('Multi-step Form Navigation - Back Button', () => {\n  beforeEach(() => {\n    cy.visit('/multi-step-form');\n  });\n\n  it('should navigate back to previous step without losing form data', () => {\n    // Step 1: Personal Information\n    cy.get('[data-testid=\"step-1-name-input\"]').type('John Doe');\n    cy.get('[data-testid=\"step-1-email-input\"]').type('john@example.com');\n    cy.get('[data-testid=\"step-1-phone-input\"]').type('555-123-44');\n    cy.get('[data-testid=\"step-1-next-button\"]').click();\n\n    // Step 2: Address Information\n    cy.get('[data-testid=\"step-2-address-input\"]').type('123 Main St');\n    cy.get('[data-testid=\"step-2-city-input\"]').type('Anytown');\n    cy.get('[data-testid=\"step-2-zip-input\"]').type('12345');\n    cy.get('[data-testid=\"step-2-next-button\"]').click();\n\n    // Step 3: Review and Submit\n    cy.get('[data-testid=\"step-3-review-button\"]').click();\n\n    // Navigate back to Step 2\n    cy.get('[data-testid=\"step-2-back-button\"]').click();\n\n    // Verify data is preserved in Step 2\n    cy.get('[data-testid=\"step-2-address-input\"]').should('have.value', '123 Main St');\n    cy.get('[data-testid=\"step-2-city-input\"]').should('have.value', 'Anytown');\n    cy.get('[data-testid=\"step-2-zip-input\"]').should('have.value', '12345');\n\n    // Navigate back to Step 1\n    cy.get('[data-testid=\"step-1-back-button\"]').click();\n\n    // Verify data is preserved in Step 1\n    cy.get('[data-testid=\"step-1-name-input\"]').should('have.value', 'John Doe');\n    cy.get('[data-testid=\"step-1-email-input\"]').should('have.value', 'john@example.com');\n    cy.get('[data-testid=\"step-1-phone-input\"]').should('have.value', '555-123-44');\n\n    // Navigate forward to Step 2 again\n    cy.get('[data-testid=\"step-1-next-button\"]').click();\n    cy.get('[data-testid=\"step-2-next-button\"]').click();\n\n    // Navigate forward to Step 3\n    cy.get('[data-testid=\"step-3-review-button\"]').click();\n\n    // Verify form is still valid and ready for submission\n    cy.get('[data-testid=\"step-3-submit-button\"]').should('be.visible');\n  });\n\n  it('should handle back navigation when form data is incomplete', () => {\n    // Step 1: Partial data entry\n    cy.get('[data-testid=\"step-1-name-input\"]').type('Jane');\n    cy.get('[data-testid=\"step-1-email-input\"]').type('jane@example.com');\n    // Do not fill phone number\n\n    // Attempt to proceed to Step 2 (should fail validation)\n    cy.get('[data-testid=\"step-1-next-button\"]').click();\n\n    // Verify validation error appears\n    cy.get('[data-testid=\"step-1-phone-input\"]').should('have.class', 'error');\n    cy.get('[data-testid=\"step-1-error-message\"]').should('contain', 'Phone number is required');\n\n    // Navigate back to Step 1 (should not change state)\n    cy.get('[data-testid=\"step-1-back-button\"]').click();\n\n    // Verify error message persists\n    cy.get('[data-testid=\"step-1-error-message\"]').should('be.visible');\n\n    // Verify partial data is still present\n    cy.get('[data-testid=\"step-1-name-input\"]').should('have.value', 'Jane');\n    cy.get('[data-testid=\"step-1-email-input\"]').should('have.value', 'jane@example.com');\n\n    // Fill in missing data and proceed\n    cy.get('[data-testid=\"step-1-phone-input\"]').type('555-999-00');\n    cy.get('[data-testid=\"step-1-next-button\"]').click();\n\n    // Verify validation error is cleared\n    cy.get('[data-testid=\"step-1-phone-input\"]').should('not.have.class', 'error');\n    cy.get('[data-testid=\"step-1-error-message\"]').should('not.exist');\n\n    // Navigate back to Step 1\n    cy.get('[data-testid=\"step-2-back-button\"]').click();\n\n    // Verify data is still preserved\n    cy.get('[data-testid=\"step-1-name-input\"]').should('have.value', 'Jane');\n    cy.get('[data-testid=\"step-1-email-input\"]').should('have.value', 'jane@example.com');\n    cy.get('[data-testid=\"step-1-phone-input\"]').should('have.value', '555-999-00');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4792,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3707,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 79.915,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7637,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4124,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 113.494,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

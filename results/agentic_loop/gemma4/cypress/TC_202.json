@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_202",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7246,
+  "total_latency_s": 73.04,
+  "final_script": "describe('Search Term Highlighting in Result Snippets', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should highlight search terms in result snippets when search is performed', () => {\n    cy.get('[data-testid=\"search-input\"]').type('cypress automation');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    cy.get('[data-testid=\"result-snippet\"]').should('be.visible');\n    cy.get('[data-testid=\"result-snippet\"]').should('contain', 'cypress automation');\n\n    // Verify highlighting using a specific class or attribute\n    cy.get('[data-testid=\"result-snippet\"]').should('have.class', 'highlighted-term');\n    cy.get('[data-testid=\"result-snippet\"]').should('contain', '<span class=\"highlighted-term\">cypress</span>');\n    cy.get('[data-testid=\"result-snippet\"]').should('contain', '<span class=\"highlighted-term\">automation</span>');\n\n    // Verify the highlighted term has a distinct style\n    cy.get('[data-testid=\"result-snippet\"]').should('have.css', 'color', 'rgb(0, 0, 0)');\n    cy.get('[data-testid=\"result-snippet\"]').should('have.css', 'background-color', 'rgb(255, 250, 240)');\n  });\n\n  it('should handle multiple search terms and edge cases like special characters', () => {\n    cy.get('[data-testid=\"search-input\"]').type('cypress automation $123');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    cy.get('[data-testid=\"result-snippet\"]').should('be.visible');\n    cy.get('[data-testid=\"result-snippet\"]').should('contain', 'cypress');\n    cy.get('[data-testid=\"result-snippet\"]').should('contain', 'automation');\n    cy.get('[data-testid=\"result-snippet\"]').should('contain', '$123');\n\n    // Verify all terms are highlighted\n    cy.get('[data-testid=\"result-snippet\"]').should('have.class', 'highlighted-term');\n    cy.get('[data-testid=\"result-snippet\"]').should('contain', '<span class=\"highlighted-term\">cypress</span>');\n    cy.get('[data-testid=\"result-snippet\"]').should('contain', '<span class=\"highlighted-term\">automation</span>');\n    cy.get('[data-testid=\"result-snippet\"]').should('contain', '<span class=\"highlighted-term\">$123</span>');\n\n    // Verify highlighting is applied correctly even with special characters\n    cy.get('[data-testid=\"result-snippet\"]').should('have.css', 'background-color', 'rgb(255, 250, 240)');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7246,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2821,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.04,
+      "feedback_used": ""
+    }
+  ]
+}

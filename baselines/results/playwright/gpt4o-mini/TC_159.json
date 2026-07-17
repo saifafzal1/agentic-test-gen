@@ -1,0 +1,13 @@
+{
+  "id": "TC_159",
+  "category": "table_list",
+  "complexity": "medium",
+  "user_story": "As a user, I want selected rows to be highlighted in a different colour.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Row Highlighting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/table'); // Replace with the actual URL\n  });\n\n  test('should highlight selected rows in a different colour', async ({ page }) => {\n    const firstRow = page.getByRole('row', { name: 'Row 1' });\n    const secondRow = page.getByRole('row', { name: 'Row 2' });\n\n    await firstRow.click();\n    await expect(firstRow).toHaveCSS('background-color', 'rgb(255, 255, 0)'); // Replace with the actual highlight color\n\n    await secondRow.click();\n    await expect(secondRow).toHaveCSS('background-color', 'rgb(255, 255, 0)'); // Replace with the actual highlight color\n  });\n\n  test('should not highlight unselected rows', async ({ page }) => {\n    const thirdRow = page.getByRole('row', { name: 'Row 3' });\n\n    await expect(thirdRow).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)'); // Replace with the actual default color\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 270,
+  "latency_s": 3.39,
+  "timestamp": "2026-06-19T16:54:18.360933"
+}

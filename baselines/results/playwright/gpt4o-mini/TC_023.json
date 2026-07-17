@@ -1,0 +1,13 @@
+{
+  "id": "TC_023",
+  "category": "form_validation",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error if I submit a registration form with an invalid email.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Registration Form Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/registration');\n  });\n\n  test('should show error for invalid email format', async ({ page }) => {\n    await page.fill(getByLabel('Email'), 'invalid-email');\n    await page.click(getByRole('button', { name: 'Submit' }));\n    \n    const errorMessage = await page.getByText('Please enter a valid email address.');\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should not show error for valid email format', async ({ page }) => {\n    await page.fill(getByLabel('Email'), 'test@example.com');\n    await page.click(getByRole('button', { name: 'Submit' }));\n    \n    const errorMessage = page.getByText('Please enter a valid email address.');\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 138,
+  "completion_tokens": 202,
+  "latency_s": 6.21,
+  "timestamp": "2026-06-19T16:44:58.960460"
+}

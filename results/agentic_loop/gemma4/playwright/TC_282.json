@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_282",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8257,
+  "total_latency_s": 72.61,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dark Mode Toggle from User Preferences', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/settings');\n  });\n\n  test('should successfully toggle dark mode from user preferences', async ({ page }) => {\n    // Verify dark mode is initially off (light mode)\n    const body = page.locator('body');\n    await expect(body).toHaveClass(/light-mode/);\n    const toggleButton = page.getByRole('button', { name: /toggle dark mode/i });\n    await expect(toggleButton).toBeVisible();\n\n    // Click toggle button to enable dark mode\n    await toggleButton.click();\n\n    // Verify dark mode is now active\n    await expect(body).toHaveClass(/dark-mode/);\n    const toggleButtonAfter = page.getByRole('button', { name: /toggle dark mode/i });\n    await expect(toggleButtonAfter).toBeVisible();\n\n    // Verify dark mode toggle button text has updated\n    await expect(toggleButtonAfter).toContainText('Switch to light mode');\n\n    // Verify dark mode class is present\n    await expect(body).toHaveClass(/dark-mode/);\n\n    // Click toggle button again to disable dark mode\n    await toggleButtonAfter.click();\n\n    // Verify dark mode is disabled\n    await expect(body).not.toHaveClass(/dark-mode/);\n    await expect(body).toHaveClass(/light-mode/);\n\n    // Verify toggle button text has reverted\n    await expect(toggleButtonAfter).toContainText('Toggle dark mode');\n  });\n\n  test('should handle dark mode toggle when preferences are disabled', async ({ page }) => {\n    // Navigate to preferences section\n    await page.getByRole('link', { name: /preferences/i }).click();\n    await page.waitForURL(/.*preferences/);\n\n    // Verify dark mode toggle is visible\n    const toggleButton = page.getByRole('button', { name: /toggle dark mode/i });\n    await expect(toggleButton).toBeVisible();\n\n    // Disable dark mode preference\n    const darkModeOption = page.getByLabel(/dark mode/i);\n    await expect(darkModeOption).toBeVisible();\n    await darkModeOption.click();\n\n    // Verify preference is disabled\n    await expect(darkModeOption).toContainText('Disabled');\n\n    // Verify dark mode toggle button is disabled and shows disabled state\n    await expect(toggleButton).toBeDisabled();\n    await expect(toggleButton).toContainText('Disabled');\n\n    // Verify dark mode class is not applied to body\n    const body = page.locator('body');\n    await expect(body).not.toHaveClass(/dark-mode/);\n\n    // Verify light mode class is applied\n    await expect(body).toHaveClass(/light-mode/);\n\n    // Attempt to click disabled toggle button\n    await expect(toggleButton).toBeDisabled();\n    await expect(toggleButton).not.toBeEnabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8257,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4188,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.61,
+      "feedback_used": ""
+    }
+  ]
+}

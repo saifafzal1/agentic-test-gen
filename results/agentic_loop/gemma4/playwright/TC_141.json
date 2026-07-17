@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_141",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.867,
+  "total_latency_s": 72.026,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Video Modal - Pause on Close', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/video-modal');\n  });\n\n  test('should pause video when modal is closed', async ({ page }) => {\n    // Open modal by clicking the open button\n    const openButton = page.getByRole('button', { name: /open video/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modal = page.locator('[data-testid=\"video-modal\"]');\n    await expect(modal).toBeVisible();\n\n    // Verify video is playing\n    const video = page.locator('[data-testid=\"video-player\"]');\n    await expect(video).toBeVisible();\n    const isPlaying = await video.evaluate((el) => !el.paused);\n    expect(isPlaying).toBe(true);\n\n    // Pause video using the pause button\n    const pauseButton = page.getByRole('button', { name: /pause/i });\n    await pauseButton.click();\n    const isPaused = await video.evaluate((el) => el.paused);\n    expect(isPaused).toBe(true);\n\n    // Close modal using the close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n\n    // Verify modal is closed\n    await expect(modal).not.toBeVisible();\n\n    // Verify video is paused after closing modal\n    const isStillPaused = await video.evaluate((el) => el.paused);\n    expect(isStillPaused).toBe(true);\n  });\n\n  test('should resume video when modal is reopened', async ({ page }) => {\n    // Open modal\n    const openButton = page.getByRole('button', { name: /open video/i });\n    await openButton.click();\n\n    // Verify video is playing\n    const video = page.locator('[data-testid=\"video-player\"]');\n    const isPlaying = await video.evaluate((el) => !el.paused);\n    expect(isPlaying).toBe(true);\n\n    // Close modal\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n\n    // Verify modal is closed\n    const modal = page.locator('[data-testid=\"video-modal\"]');\n    await expect(modal).not.toBeVisible();\n\n    // Reopen modal\n    await openButton.click();\n\n    // Verify modal is visible again\n    await expect(modal).toBeVisible();\n\n    // Verify video is still paused\n    const isPaused = await video.evaluate((el) => el.paused);\n    expect(isPaused).toBe(true);\n\n    // Resume video using the play button\n    const playButton = page.getByRole('button', { name: /play/i });\n    await playButton.click();\n\n    // Verify video is playing\n    const isNowPlaying = await video.evaluate((el) => !el.paused);\n    expect(isNowPlaying).toBe(true);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.867,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.6566,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.026,
+      "feedback_used": ""
+    }
+  ]
+}

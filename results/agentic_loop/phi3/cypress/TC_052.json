@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_052",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7585,
+  "total_latency_s": 28.498,
+  "final_script": "describe('Sticky Header Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should display sticky header when scrolling down', () => {\n    // Verify header is visible initially\n    cy.get('[data-testid=\"sticky-header\"]').should('be.visible');\n    cy.get('[data-testid=\"sticky-header\"]').should('have.css', 'position', 'sticky');\n\n    // Scroll down to test stickiness\n    cy.get('[data-testid=\"page-content\"]').scrollTo('bottom');\n\n    // Verify header is still visible after scrolling\n    cy.get('[data-testid=\"sticky-header\"]').should('be.visible');\n    cy.get('[data-testid=\"sticky-header\"]').should('have.css', 'position', 'sticky');\n\n    // Verify header content is still intact\n    cy.get('[data-testid=\"sticky-header\"]').should('contain', 'Logo');\n    cy.get('[data-testid=\"sticky-header\"]').should('contain', 'Menu');\n    cy.get('[data-testid=\"sticky-header\"]').should('contain', 'Contact');\n  });\n\n  it('should hide header when scrolling up past threshold', () => {\n    // Scroll down to test stickiness\n    cy.get('[data-testid=\"page-content\"]').scrollTo('bottom');\n\n    // Verify header is visible after scrolling\n    cy.get('[data-testid=\"sticky-header\"]').should('be.visible');\n\n    // Scroll up to test threshold\n    cy.get('[data-testid=\"page-content\"]').scrollTo('top');\n\n    // Verify header is no longer visible\n    cy.get('[data-testid=\"sticky-header\"]').should('not.exist');\n\n    // Verify header content is gone\n    cy.get('[data-testid=\"sticky-header\"]').should('not.be.visible');\n    cy.get('[data-testid=\"sticky-header\"]').should('not.contain', 'Logo');\n    cy.get('[data-testid=\"sticky-header\"]').should('not.contain', 'Menu');\n    cy.get('[data-testid=\"sticky-header\"]').should('not.contain', 'Contact');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7585,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.395,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 28.498,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_130",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8465,
+  "total_latency_s": 71.978,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Backdrop Close Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/modal-dialog');\n  });\n\n  test('should close modal when backdrop is clicked', async ({ page }) => {\n    // Open the modal\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modalContainer = page.locator('[data-testid=\"modal-container\"]');\n    await expect(modalContainer).toBeVisible();\n\n    // Verify modal title is displayed\n    const modalTitle = page.getByRole('heading', { name: /modal title/i });\n    await expect(modalTitle).toBeVisible();\n\n    // Verify modal content is visible\n    const modalContent = page.locator('[data-testid=\"modal-content\"]');\n    await expect(modalContent).toBeVisible();\n\n    // Click on the backdrop to close the modal\n    const backdrop = page.locator('[data-testid=\"modal-backdrop\"]');\n    await backdrop.click();\n\n    // Verify modal is no longer visible\n    await expect(modalContainer).not.toBeVisible();\n\n    // Verify modal content is no longer visible\n    await expect(modalContent).not.toBeVisible();\n\n    // Verify modal title is no longer visible\n    await expect(modalTitle).not.toBeVisible();\n  });\n\n  test('should not close modal when backdrop is clicked while modal is not open', async ({ page }) => {\n    // Verify modal is not visible initially\n    const modalContainer = page.locator('[data-testid=\"modal-container\"]');\n    await expect(modalContainer).not.toBeVisible();\n\n    // Verify modal title is not visible initially\n    const modalTitle = page.getByRole('heading', { name: /modal title/i });\n    await expect(modalTitle).not.toBeVisible();\n\n    // Click on the backdrop when modal is closed\n    const backdrop = page.locator('[data-testid=\"modal-backdrop\"]');\n    await backdrop.click();\n\n    // Verify modal is still not visible\n    await expect(modalContainer).not.toBeVisible();\n\n    // Verify modal title is still not visible\n    await expect(modalTitle).not.toBeVisible();\n\n    // Verify modal content is still not visible\n    const modalContent = page.locator('[data-testid=\"modal-content\"]');\n    await expect(modalContent).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8465,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5882,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.978,
+      "feedback_used": ""
+    }
+  ]
+}

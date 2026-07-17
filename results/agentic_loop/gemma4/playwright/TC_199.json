@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_199",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8294,
+  "total_latency_s": 72.606,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Active Filter Tags Above Search Results', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should display a tag for each active filter above search results', async ({ page }) => {\n    // Apply first filter\n    const categoryFilter = page.getByRole('button', { name: /category/i });\n    await categoryFilter.click();\n    const electronicsOption = page.getByRole('option', { name: /electronics/i });\n    await electronicsOption.click();\n\n    // Apply second filter\n    const priceFilter = page.getByRole('button', { name: /price/i });\n    await priceFilter.click();\n    const priceRangeOption = page.getByRole('option', { name: /under $500/i });\n    await priceRangeOption.click();\n\n    // Apply third filter\n    const brandFilter = page.getByRole('button', { name: /brand/i });\n    await brandFilter.click();\n    const appleOption = page.getByRole('option', { name: /apple/i });\n    await appleOption.click();\n\n    // Verify filter tags are displayed\n    const filterTags = page.getByRole('region', { name: /active filters/i });\n    await expect(filterTags).toBeVisible();\n\n    const electronicsTag = page.getByText('Electronics');\n    await expect(electronicsTag).toBeVisible();\n\n    const priceTag = page.getByText('Under $500');\n    await expect(priceTag).toBeVisible();\n\n    const appleTag = page.getByText('Apple');\n    await expect(appleTag).toBeVisible();\n\n    // Verify tags have remove buttons\n    const electronicsRemoveButton = page.getByRole('button', { name: /remove filter/i });\n    await expect(electronicsRemoveButton).toBeVisible();\n\n    const priceRemoveButton = page.getByRole('button', { name: /remove filter/i });\n    await expect(priceRemoveButton).toBeVisible();\n\n    const appleRemoveButton = page.getByRole('button', { name: /remove filter/i });\n    await expect(appleRemoveButton).toBeVisible();\n\n    // Verify search results are displayed below tags\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n  });\n\n  test('should not display filter tags when no filters are active', async ({ page }) => {\n    // Verify filter tags region is not visible initially\n    const filterTagsRegion = page.getByRole('region', { name: /active filters/i });\n    await expect(filterTagsRegion).not.toBeVisible();\n\n    // Verify no filter tags exist\n    const allFilterTags = page.getByRole('region', { name: /active filters/i }).locator('[data-testid=\"filter-tag\"]');\n    await expect(allFilterTags).toHaveCount(0);\n\n    // Verify search results are still displayed\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n\n    // Apply a filter and verify tag appears\n    const categoryFilter = page.getByRole('button', { name: /category/i });\n    await categoryFilter.click();\n    const electronicsOption = page.getByRole('option', { name: /electronics/i });\n    await electronicsOption.click();\n\n    // Verify tag appears\n    const electronicsTag = page.getByText('Electronics');\n    await expect(electronicsTag).toBeVisible();\n\n    // Verify tag has remove button\n    const electronicsRemoveButton = page.getByRole('button', { name: /remove filter/i });\n    await expect(electronicsRemoveButton).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8294,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5314,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.606,
+      "feedback_used": ""
+    }
+  ]
+}

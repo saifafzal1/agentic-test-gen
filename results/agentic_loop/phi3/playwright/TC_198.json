@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_198",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8285,
+  "total_latency_s": 593.46,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Filter - Exclude Term by Prefixing with \"-\"', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should exclude a term from search results by prefixing it with \"-\"', async ({ page }) => {\n    // Setup: Fill in search input with a term\n    const searchInput = page.getByLabel('Search');\n    await searchInput.fill('playwright');\n\n    // Setup: Click the search button to trigger search\n    const searchButton = page.getByRole('button', { name: 'Search' });\n    await searchButton.click();\n\n    // Verify search results are displayed\n    const searchResults = page.getByRole('region', { name: 'Search Results' });\n    await expect(searchResults).toBeVisible();\n\n    // Verify initial results contain the term\n    const resultItems = page.locator('[data-testid=\"search-result-item\"]');\n    await expect(resultItems).toHaveCount(3);\n\n    // Verify the term 'playwright' is present in the results\n    const playwrightResult = page.getByText('playwright');\n    await expect(playwrightResult).toBeVisible();\n\n    // Setup: Click the exclude button for the term\n    const excludeButton = page.getByRole('button', { name: 'Exclude' });\n    await excludeButton.click();\n\n    // Verify the exclude button is disabled after click\n    await expect(excludeButton).toBeDisabled();\n\n    // Verify the term 'playwright' is no longer in the results\n    await expect(playwrightResult).not.toBeVisible();\n\n    // Verify the search results count is reduced\n    await expect(resultItems).toHaveCount(2);\n\n    // Verify the search input still has the term\n    await expect(searchInput).toHaveValue('playwright');\n\n    // Verify the exclude button is now available for other terms\n    await expect(excludeButton).not.toBeDisabled();\n  });\n\n  test('should handle multiple excluded terms with \"-\" prefix', async ({ page }) => {\n    // Setup: Fill in search input with multiple terms\n    const searchInput = page.getByLabel('Search');\n    await searchInput.fill('playwright -test -script');\n\n    // Setup: Click the search button to trigger search\n    const searchButton = page.getByRole('button', { name: 'Search' });\n    await searchButton.click();\n\n    // Verify search results are displayed\n    const searchResults = page.getByRole('region', { name: 'Search Results' });\n    await expect(searchResults).toBeVisible();\n\n    // Verify initial results contain all terms\n    const resultItems = page.locator('[data-testid=\"search-result-item\"]');\n    await expect(resultItems).toHaveCount(5);\n\n    // Verify each term is present in the results\n    const playwrightResult = page.getByText('playwright');\n    const testResult = page.getByText('test');\n    const scriptResult = page.getByText('script');\n\n    await expect(playwrightResult).toBeVisible();\n    await expect(testResult).toBeVisible();\n    await expect(scriptResult).toBeVisible();\n\n    // Setup: Click the exclude button for 'test'\n    const testExcludeButton = page.getByRole('button', { name: 'Exclude -test' });\n    await testExcludeButton.click();\n\n    // Verify the exclude button is disabled after click\n    await expect(testExcludeButton).toBeDisabled();\n\n    // Verify the term 'test' is no longer in the results\n    await expect(testResult).not.toBeVisible();\n\n    // Verify the search results count is reduced\n    await expect(resultItems).toHaveCount(4);\n\n    // Verify the search input still has the term\n    await expect(searchInput).toHaveValue('playwright -test -script');\n\n    // Verify the exclude button is now available for other terms\n    await expect(testExcludeButton).not.toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8285,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4284,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 593.46,
+      "feedback_used": ""
+    }
+  ]
+}

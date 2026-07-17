@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_228",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.788,
+  "total_latency_s": 72.194,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Tablet Layout - Two Column Grid', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/tablet-view');\n  });\n\n  test('should switch to two-column grid layout on tablet viewport', async ({ page }) => {\n    // Set viewport to tablet size\n    await page.setViewportSize({ width: 768, height: 1022 });\n\n    // Verify two columns are visible\n    const column1 = page.getByRole('region', { name: /column 1/i });\n    const column2 = page.getByRole('region', { name: /column 2/i });\n    await expect(column1).toBeVisible();\n    await expect(column2).toBeVisible();\n\n    // Verify content is displayed in two columns\n    const contentItems = page.getByRole('article');\n    const itemCount = await contentItems.count();\n    expect(itemCount).toBeGreaterThan(0);\n\n    // Verify items are arranged in two columns\n    const firstItem = page.locator('[data-testid=\"content-item-1\"]');\n    const secondItem = page.locator('[data-testid=\"content-item-2\"]');\n    const thirdItem = page.locator('[data-testid=\"content-item-3\"]');\n    const fourthItem = page.locator('[data-testid=\"content-item-4\"]');\n\n    const firstItemBoundingBox = await firstItem.boundingBox();\n    const secondItemBoundingBox = await secondItem.boundingBox();\n    const thirdItemBoundingBox = await thirdItem.boundingBox();\n    const fourthItemBoundingBox = await fourthItem.boundingBox();\n\n    // Check if items are roughly in two columns\n    const isFirstInCol1 = firstItemBoundingBox.x < 300;\n    const isSecondInCol2 = secondItemBoundingBox.x > 350;\n    const isThirdInCol1 = thirdItemBoundingBox.x < 300;\n    const isFourthInCol2 = fourthItemBoundingBox.x > 350;\n\n    expect(isFirstInCol1).toBe(true);\n    expect(isSecondInCol2).toBe(true);\n    expect(isThirdInCol1).toBe(true);\n    expect(isFourthInCol2).toBe(true);\n  });\n\n  test('should handle layout switch gracefully when resizing from desktop to tablet', async ({ page }) => {\n    // Start in desktop view\n    await page.setViewportSize({ width: 1920, height: 1080 });\n    const desktopLayout = page.getByRole('region', { name: /desktop layout/i });\n    await expect(desktopLayout).toBeVisible();\n\n    // Resize to tablet view\n    await page.setViewportSize({ width: 768, height: 1020 });\n\n    // Verify two-column grid is now active\n    const column1 = page.getByRole('region', { name: /column 1/i });\n    const column2 = page.getByRole('region', { name: /column 2/i });\n    await expect(column1).toBeVisible();\n    await expect(column2).toBeVisible();\n\n    // Verify desktop layout is no longer visible\n    await expect(desktopLayout).not.toBeVisible();\n\n    // Verify content items are still accessible and visible\n    const contentItems = page.getByRole('article');\n    const itemCount = await contentItems.count();\n    expect(itemCount).toBeGreaterThan(0);\n\n    // Verify content is not overlapping\n    const firstItem = page.locator('[data-testid=\"content-item-1\"]');\n    const secondItem = page.locator('[data-testid=\"content-item-2\"]');\n    const firstItemBox = await firstItem.boundingBox();\n    const secondItemBox = await secondItem.boundingBox();\n\n    expect(firstItemBox.y).toBeLessThan(secondItemBox.y);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.788,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3933,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.194,
+      "feedback_used": ""
+    }
+  ]
+}

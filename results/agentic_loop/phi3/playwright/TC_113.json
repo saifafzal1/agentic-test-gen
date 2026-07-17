@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_113",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.811,
+  "total_latency_s": 33.634,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Background Job Notification Toast', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/job-notification');\n  });\n\n  test('should display toast notification when background job completes successfully', async ({ page }) => {\n    // Setup: Trigger background job\n    const jobButton = page.getByRole('button', { name: /start job/i });\n    await jobButton.click();\n\n    // Wait for job to complete\n    const jobStatus = page.getByText(/job completed/i);\n    await expect(jobStatus).toBeVisible();\n\n    // Verify toast notification appears\n    const toast = page.getByRole('status');\n    await expect(toast).toBeVisible();\n    await expect(toast).toContainText(/job completed/i);\n\n    // Verify success message\n    const successMessage = page.getByText(/job completed successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify toast is removed after close\n    await closeButton.click();\n    await expect(toast).not.toBeVisible();\n  });\n\n  test('should display error toast notification when background job fails', async ({ page }) => {\n    // Setup: Trigger background job\n    const jobButton = page.getByRole('button', { name: /start job/i });\n    await jobButton.click();\n\n    // Simulate job failure\n    await page.route('**/api/jobs/12345/status', route => {\n      route.abort('failed');\n    });\n\n    // Wait for error notification\n    const errorToast = page.getByRole('status');\n    await expect(errorToast).toBeVisible();\n\n    // Verify error message\n    const errorMessage = page.getByText(/job failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify retry button\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify toast is removed after close\n    await closeButton.click();\n    await expect(errorToast).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.811,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4701,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 33.634,
+      "feedback_used": ""
+    }
+  ]
+}

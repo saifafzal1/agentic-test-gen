@@ -1,0 +1,13 @@
+{
+  "id": "TC_258",
+  "category": "payment_flow",
+  "complexity": "medium",
+  "user_story": "As a user, I want to be redirected to an error page if payment times out.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Payment Flow', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/payment');\n  });\n\n  test('should display error page on payment timeout', async ({ page }) => {\n    // Simulate payment timeout\n    await page.fill(getByLabel('Card Number'), '4111 1111 1111 1111');\n    await page.fill(getByLabel('Expiration Date'), '12/25');\n    await page.fill(getByLabel('CVC'), '123');\n    await page.click(getByRole('button', { name: 'Pay Now' }));\n\n    // Wait for timeout and check redirection\n    await page.waitForTimeout(5000); // Simulate timeout duration\n    await expect(page).toHaveURL('/error');\n    await expect(page.getByText('Payment Timeout')).toBeVisible();\n  });\n\n  test('should not redirect if payment is successful', async ({ page }) => {\n    // Simulate successful payment\n    await page.fill(getByLabel('Card Number'), '4111 1111 1111 1111');\n    await page.fill(getByLabel('Expiration Date'), '12/25');\n    await page.fill(getByLabel('CVC'), '123');\n    await page.click(getByRole('button', { name: 'Pay Now' }));\n\n    // Check for successful payment confirmation\n    await expect(page).toHaveURL('/payment-success');\n    await expect(page.getByText('Payment Successful')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 324,
+  "latency_s": 4.34,
+  "timestamp": "2026-06-19T17:01:39.731628"
+}

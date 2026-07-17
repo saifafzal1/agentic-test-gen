@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_094",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7653,
+  "total_latency_s": 72.245,
+  "final_script": "describe('Permissions Error on Content Edit', () => {\n  beforeEach(() => {\n    cy.visit('/content/edit');\n  });\n\n  it('should display permissions error when editing another user\u2019s content', () => {\n    // Intercept the API call to edit content\n    cy.intercept('PUT', '/api/content/123').as('editContent');\n\n    // Navigate to edit another user's content\n    cy.get('[data-testid=\"content-selector\"]').click();\n    cy.get('[data-testid=\"content-title-input\"]').type('Unauthorized Content');\n    cy.get('[data-testid=\"content-body-textarea\"]').type('This is content belonging to another user.');\n\n    // Attempt to save the changes\n    cy.get('[data-testid=\"save-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@editContent');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]')\n      .should('be.visible')\n      .should('contain', 'You do not have permission to edit this content');\n\n    // Verify error styling\n    cy.get('[data-testid=\"error-message\"]')\n      .should('have.class', 'text-danger');\n\n    // Verify content was not saved\n    cy.get('[data-testid=\"content-title-input\"]')\n      .should('have.value', 'Unauthorized Content');\n    cy.get('[data-testid=\"content-body-textarea\"]')\n      .should('have.value', 'This is content belonging to another user.');\n\n    // Verify user is still on the edit page\n    cy.url().should('include', '/content/edit');\n  });\n\n  it('should prevent unauthorized content modification and show appropriate error', () => {\n    // Intercept the API call and mock a 433 error response\n    cy.intercept('PUT', '/api/content/456', {\n      statusCode: 433,\n      body: { error: 'Forbidden' }\n    }).as('forbiddenEdit');\n\n    // Navigate to edit another user's content\n    cy.get('[data-testid=\"content-selector\"]').click();\n    cy.get('[data-testid=\"content-title-input\"]').type('Secret Document');\n    cy.get('[data-testid=\"content-body-textarea\"]').type('This should not be saved.');\n\n    // Attempt to save the changes\n    cy.get('[data-testid=\"save-button\"]').click();\n\n    // Wait for the forbidden API call\n    cy.wait('@forbiddenEdit');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Permission denied');\n\n    // Verify error icon is visible\n    cy.get('[data-testid=\"error-icon\"]')\n      .should('be.visible');\n\n    // Verify content was not modified\n    cy.get('[data-testid=\"content-title-input\"]')\n      .should('have.value', 'Secret Document');\n    cy.get('[data-testid=\"content-body-textarea\"]')\n      .should('have.value', 'This should not be saved.');\n\n    // Verify user can still navigate away\n    cy.get('[data-testid=\"back-button\"]').click();\n    cy.get('[data-testid=\"content-list\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7653,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4176,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.245,
+      "feedback_used": ""
+    }
+  ]
+}

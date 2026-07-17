@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_134",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7462,
+  "total_latency_s": 312.972,
+  "final_script": "describe('Alert Dialog Interaction Blocking', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should block interaction with page when alert dialog is open', () => {\n    // Intercept the API call that triggers the alert dialog\n    cy.intercept('GET', '/api/alert').as('getAlert');\n    cy.get('[data-testid=\"trigger-alert-button\"]').click();\n\n    // Wait for the alert dialog to appear\n    cy.wait('@getAlert');\n\n    // Verify the alert dialog is visible\n    cy.get('[data-testid=\"alert-dialog\"]').should('be.visible');\n    cy.get('[data-testid=\"alert-title\"]').should('contain', 'Error');\n    cy.get('[data-testid=\"alert-message\"]').should('contain', 'Something went wrong');\n\n    // Attempt to interact with the page\n    cy.get('[data-testid=\"dashboard-table\"]').should('be.visible');\n    cy.get('[data-testid=\"dashboard-table\"]').click();\n\n    // Verify the click is blocked\n    cy.get('[data-testid=\"dashboard-table\"]').should('not.be.visible');\n    cy.get('[data-testid=\"dashboard-table\"]').should('not.have.class', 'active');\n\n    // Verify the alert dialog is still visible\n    cy.get('[data-testid=\"alert-dialog\"]').should('be.visible');\n  });\n\n  it('should close the alert dialog and restore page interaction when dismiss button is clicked', () => {\n    // Intercept the API call that triggers the alert dialog\n    cy.intercept('GET', '/api/alert').as('getAlert');\n    cy.get('[data-testid=\"trigger-alert-button\"]').click();\n\n    // Wait for the alert dialog to appear\n    cy.wait('@getAlert');\n\n    // Verify the alert dialog is visible\n    cy.get('[data-testid=\"alert-dialog\"]').should('be.visible');\n    cy.get('[data-testid=\"alert-title\"]').should('contain', 'Error');\n    cy.get('[data-testid=\"alert-message\"]').should('contain', 'Something went wrong');\n\n    // Click the dismiss button\n    cy.get('[data-testid=\"alert-dismiss-button\"]').click();\n\n    // Verify the alert dialog is no longer visible\n    cy.get('[data-testid=\"alert-dialog\"]').should('not.exist');\n\n    // Verify page interaction is restored\n    cy.get('[data-testid=\"dashboard-table\"]').should('be.visible');\n    cy.get('[data-testid=\"dashboard-table\"]').click();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7462,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3539,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 312.972,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_076",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8123,
+  "total_latency_s": 72.245,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Item Detail View - Single Item View', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/items');\n  });\n\n  test('should display item details when clicking on an item card', async ({ page }) => {\n    // Verify item list is visible\n    const itemCards = page.getByRole('region', { name: /item card/i });\n    await expect(itemCards).toBeVisible();\n\n    // Get the first item card and click it\n    const firstItemCard = page.locator('[data-testid=\"item-card-1\"]');\n    await expect(firstItemCard).toBeVisible();\n    await firstItemCard.click();\n\n    // Verify item detail page is loaded\n    await expect(page).toHaveURL(/.*\\/items\\/1/);\n\n    // Verify item title is displayed\n    const itemTitle = page.getByRole('heading', { name: /awesome gadget/i });\n    await expect(itemTitle).toBeVisible();\n\n    // Verify item description is displayed\n    const itemDescription = page.getByText(/a revolutionary gadget for everyday use/i);\n    await expect(itemDescription).toBeVisible();\n\n    // Verify item price is displayed\n    const itemPrice = page.getByText(/\\$99.99/);\n    await expect(itemPrice).toBeVisible();\n\n    // Verify item image is displayed\n    const itemImage = page.getByRole('img', { name: /awesome gadget/i });\n    await expect(itemImage).toBeVisible();\n\n    // Verify back button is available\n    const backButton = page.getByRole('button', { name: /back to items/i });\n    await expect(backButton).toBeVisible();\n  });\n\n  test('should handle item not found scenario when clicking on invalid item ID', async ({ page }) => {\n    // Navigate to item list\n    await page.goto('/items');\n\n    // Click on a non-existent item ID\n    const invalidItemLink = page.getByRole('link', { name: /item 999/i });\n    await expect(invalidItemLink).toBeVisible();\n    await invalidItemLink.click();\n\n    // Verify 444 not found page is displayed\n    await expect(page).toHaveURL(/.*\\/items\\/999/);\n    const notFoundMessage = page.getByText(/item not found/i);\n    await expect(notFoundMessage).toBeVisible();\n\n    // Verify error state is displayed\n    const errorContainer = page.locator('[data-testid=\"error-state\"]');\n    await expect(errorContainer).toBeVisible();\n\n    // Verify back button is available\n    const backButton = page.getByRole('button', { name: /back to items/i });\n    await expect(backButton).toBeVisible();\n\n    // Click back button to return to list\n    await backButton.click();\n    await expect(page).toHaveURL(/.*\\/items/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8123,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4745,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.245,
+      "feedback_used": ""
+    }
+  ]
+}

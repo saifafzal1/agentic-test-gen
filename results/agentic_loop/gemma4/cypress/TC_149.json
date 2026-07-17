@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_149",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8019,
+  "total_latency_s": 72.455,
+  "final_script": "describe('Table Row Selection with Header Checkbox', () => {\n  beforeEach(() => {\n    cy.visit('/table');\n  });\n\n  it('should select all rows using the header checkbox', () => {\n    // Verify table is visible\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n    \n    // Verify header checkbox exists and is unchecked\n    cy.get('[data-testid=\"header-checkbox\"]').should('be.visible').should('not. be checked');\n    \n    // Verify row checkboxes exist and are unchecked\n    cy.get('[data-testid=\"row-checkbox\"]').first().should('be.visible').should('not. be checked');\n    \n    // Click header checkbox to select all rows\n    cy.get('[data-testid=\"header-checkbox\"]').click();\n    \n    // Verify header checkbox is now checked\n    cy.get('[data-testid=\"header-checkbox\"]').should('be. checked');\n    \n    // Verify all row checkboxes are now checked\n    cy.get('[data-testid=\"row-checkbox\"]').each(($rowCheckbox) => {\n      cy.wrap($rowCheckbox).should('be. checked');\n    });\n    \n    // Verify selection count is updated\n    cy.get('[data-testid=\"selected-row-count\"]').should('contain', 'All');\n    \n    // Verify action button is enabled\n    cy.get('[data-testid=\"export-button\"]').should('not. be disabled');\n  });\n\n  it('should unselect all rows when header checkbox is unchecked', () => {\n    // Select all rows first\n    cy.get('[data-testid=\"header-checkbox\"]').click();\n    cy.get('[data-testid=\"row-checkbox\"]').first().should('be. checked');\n    \n    // Verify selection count is updated\n    cy.get('[data-testid=\"selected-row-count\"]').should('contain', 'All');\n    \n    // Uncheck header checkbox\n    cy.get('[data-testid=\"header-checkbox\"]').click();\n    \n    // Verify header checkbox is now unchecked\n    cy.get('[data-testid=\"header-checkbox\"]').should('not. be checked');\n    \n    // Verify all row checkboxes are now unchecked\n    cy.get('[data-testid=\"row-checkbox\"]').each(($rowCheckbox) => {\n      cy.wrap($rowCheckbox).should('not. be checked');\n    });\n    \n    // Verify selection count is reset\n    cy.get('[data-testid=\"selected-row-count\"]').should('contain', '0');\n    \n    // Verify action button is disabled\n    cy.get('[data-testid=\"export-button\"]').should('be. disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8019,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5398,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.455,
+      "feedback_used": ""
+    }
+  ]
+}

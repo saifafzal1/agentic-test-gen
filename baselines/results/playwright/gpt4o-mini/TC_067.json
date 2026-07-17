@@ -1,0 +1,13 @@
+{
+  "id": "TC_067",
+  "category": "api_response_handling",
+  "complexity": "complex",
+  "user_story": "As a user, I want polling to stop when I navigate away from the page.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Polling behavior on page navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should start polling when the page is loaded', async ({ page }) => {\n    // Assuming there's a button to start polling\n    await page.getByRole('button', { name: /start polling/i }).click();\n    \n    // Check if polling has started (e.g., a loading indicator appears)\n    const loadingIndicator = page.getByText(/loading/i);\n    await expect(loadingIndicator).toBeVisible();\n  });\n\n  test('should stop polling when navigating away from the page', async ({ page }) => {\n    await page.getByRole('button', { name: /start polling/i }).click();\n    const loadingIndicator = page.getByText(/loading/i);\n    await expect(loadingIndicator).toBeVisible();\n\n    // Navigate away from the page\n    await page.getByRole('link', { name: /go to another page/i }).click(); // Replace with actual link text\n\n    // Verify that polling has stopped (e.g., loading indicator disappears)\n    await expect(loadingIndicator).toBeHidden();\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 270,
+  "latency_s": 3.28,
+  "timestamp": "2026-06-19T16:48:02.366716"
+}

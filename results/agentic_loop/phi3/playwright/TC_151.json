@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_151",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8109,
+  "total_latency_s": 53.533,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Freeze First Column on Horizontal Scroll', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should freeze the first column when scrolling horizontally', async ({ page }) => {\n    // Verify the table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify the first column header is visible\n    const firstColumnHeader = page.getByRole('columnheader', { name: /Column 1/i });\n    await expect(firstColumnHeader).toBeVisible();\n\n    // Verify the first column data cells are visible\n    const firstColumnDataCell = page.getByRole('cell', { name: /Column 1/i });\n    await expect(firstColumnDataCell).toBeVisible();\n\n    // Verify the second column header is visible\n    const secondColumnHeader = page.getByRole('columnheader', { name: /Column 2/i });\n    await expect(secondColumnHeader).toBeVisible();\n\n    // Verify the second column data cells are visible\n    const secondColumnDataCell = page.getByRole('cell', { name: /Column 2/i });\n    await expect(secondColumnDataCell).toBeVisible();\n\n    // Scroll horizontally to the right\n    const scrollBar = page.getByRole('slider', { name: /scroll/i });\n    await scrollBar.click({ position: 'center' });\n    await page.waitForTimeout(50);\n\n    // Verify the first column is frozen and visible\n    await expect(firstColumnDataCell).toBeVisible();\n\n    // Verify the second column is visible and scrollable\n    await expect(secondColumnDataCell).toBeVisible();\n\n    // Scroll horizontally to the left\n    await scrollBar.click({ position: 'center' });\n    await page.waitForTimeout(50);\n\n    // Verify the first column is still frozen and visible\n    await expect(firstColumnDataCell).toBeVisible();\n\n    // Verify the second column is visible and scrollable\n    await expect(secondColumnDataCell).toBeVisible();\n  });\n\n  test('should freeze the first column when scrolling vertically', async ({ page }) => {\n    // Verify the table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify the first column header is visible\n    const firstColumnHeader = page.getByRole('columnheader', { name: /Column 1/i });\n    await expect(firstColumnHeader).toBeVisible();\n\n    // Verify the first column data cells are visible\n    const firstColumnDataCell = page.getByRole('cell', { name: /Column 1/i });\n    await expect(firstColumnDataCell).toBeVisible();\n\n    // Verify the second column header is visible\n    const secondColumnHeader = page.getByRole('columnheader', { name: /Column 2/i });\n    await expect(secondColumnHeader).toBeVisible();\n\n    // Verify the second column data cells are visible\n    const secondColumnDataCell = page.getByRole('cell', { name: /Column 2/i });\n    await expect(secondColumnDataCell).toBeVisible();\n\n    // Scroll vertically to the bottom\n    const scrollBar = page.getByRole('slider', { name: /scroll/i });\n    await scrollBar.click({ position: 'center' });\n    await page.waitForTimeout(50);\n\n    // Verify the first column is frozen and visible\n    await expect(firstColumnDataCell).toBeVisible();\n\n    // Verify the second column is visible and scrollable\n    await expect(secondColumnDataCell).toBeVisible();\n\n    // Scroll vertically to the top\n    await scrollBar.click({ position: 'center' });\n    await page.waitForTimeout(50);\n\n    // Verify the first column is still frozen and visible\n    await expect(firstColumnDataCell).toBeVisible();\n\n    // Verify the second column is visible and scrollable\n    await expect(secondColumnDataCell).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8109,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4696,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 53.533,
+      "feedback_used": ""
+    }
+  ]
+}

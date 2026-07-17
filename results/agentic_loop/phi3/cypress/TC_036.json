@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_036",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7697,
+  "total_latency_s": 415.905,
+  "final_script": "describe('Multi-Step Form Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/multi-step-form');\n  });\n\n  it('should navigate back to previous step without losing data', () => {\n    // Step 1: Fill in Step 1 fields\n    cy.get('[data-testid=\"step-1-name-input\"]').type('John Doe');\n    cy.get('[data-testid=\"step-1-email-input\"]').type('john.doe@example.com');\n    cy.get('[data-testid=\"step-1-submit-button\"]').click();\n\n    // Verify Step 2 is now visible\n    cy.get('[data-testid=\"step-2-title\"]').should('be.visible');\n\n    // Step 2: Fill in Step 2 fields\n    cy.get('[data-testid=\"step-2-address-input\"]').type('123 Main St');\n    cy.get('[data-testid=\"step-2-city-input\"]').type('Anytown');\n    cy.get('[data-testid=\"step-2-state-select\"]').select('CA');\n    cy.get('[data-testid=\"step-2-zip-code-input\"]').type('12345');\n\n    // Verify Step 3 is now visible\n    cy.get('[data-testid=\"step-3-title\"]').should('be.visible');\n\n    // Step 3: Fill in Step 3 fields\n    cy.get('[data-testid=\"step-3-phone-input\"]').type('555-1234');\n    cy.get('[data-testid=\"step-3-confirm-button\"]').click();\n\n    // Verify form submission button is visible\n    cy.get('[data-testid=\"submit-form-button\"]').should('be.visible');\n\n    // Navigate back to Step 2\n    cy.get('[data-testid=\"back-button\"]').click();\n\n    // Verify Step 2 is still visible\n    cy.get('[data-testid=\"step-2-title\"]').should('be.visible');\n\n    // Verify Step 2 data is still present\n    cy.get('[data-testid=\"step-2-address-input\"]').should('have.value', '123 Main St');\n    cy.get('[data-testid=\"step-2-city-input\"]').should('have.value', 'Anytown');\n\n    // Verify Step 1 data is still present\n    cy.get('[data-testid=\"step-1-name-input\"]').should('have.value', 'John Doe');\n    cy.get('[data-testid=\"step-1-email-input\"]').should('have.value', 'john.doe@example.com');\n\n    // Verify Step 3 data is still present\n    cy.get('[data-testid=\"step-3-phone-input\"]').should('have.value', '555-1234');\n\n    // Verify form submission button is still visible\n    cy.get('[data-testid=\"submit-form-button\"]').should('be.visible');\n  });\n\n  it('should handle navigation to previous step when form is not fully completed', () => {\n    // Step 1: Fill in Step 1 fields\n    cy.get('[data-testid=\"step-1-name-input\"]').type('Jane Smith');\n    cy.get('[data-testid=\"step-1-email-input\"]').type('jane.smith@example.com');\n\n    // Verify Step 2 is now visible\n    cy.get('[data-testid=\"step-2-title\"]').should('be.visible');\n\n    // Step 2: Attempt to navigate back before completing Step 2\n    cy.get('[data-testid=\"back-button\"]').click();\n\n    // Verify Step 1 is still visible\n    cy.get('[data-testid=\"step-1-title\"]').should('be.visible');\n\n    // Verify Step 2 data is still present\n    cy.get('[data-testid=\"step-2-address-input\"]').should('have.value', '');\n\n    // Verify Step 3 is still visible\n    cy.get('[data-testid=\"step-3-title\"]').should('be.visible');\n\n    // Verify form submission button is still visible\n    cy.get('[data-testid=\"submit-form-button\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4958,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.4261,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 137.487,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7697,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4322,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 278.418,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

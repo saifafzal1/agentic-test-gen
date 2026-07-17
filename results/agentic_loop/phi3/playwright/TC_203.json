@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_203",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8111,
+  "total_latency_s": 71.941,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Filter List by Multiple Statuses', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/list');\n  });\n\n  test('should filter list by multiple statuses simultaneously', async ({ page }) => {\n    // Verify initial list is displayed\n    const listItems = page.locator('[data-testid=\"list-item\"]');\n    await expect(listItems).toHaveCount(10);\n\n    // Verify all items are visible\n    const allItems = page.locator('[data-testid=\"list-item\"]');\n    await expect(allItems).toBeVisible();\n\n    // Click filter button\n    const filterButton = page.getByRole('button', { name: /filter by status/i });\n    await filterButton.click();\n\n    // Verify filter dropdown appears\n    const filterDropdown = page.locator('[data-testid=\"filter-dropdown\"]');\n    await expect(filterDropdown).toBeVisible();\n\n    // Select multiple statuses using checkboxes\n    const statuses = page.locator('[data-testid=\"status-filter-checkbox\"]');\n    await statuses.first().click();\n    await statuses.nth(1).click();\n    await statuses.nth(2).click();\n\n    // Verify filter is applied\n    const filteredItems = page.locator('[data-testid=\"list-item\"][data-filter=\"active,completed,archived\"]');\n    await expect(filteredItems).toHaveCount(3);\n\n    // Verify filtered items are visible\n    await expect(filteredItems).toBeVisible();\n\n    // Verify no items are hidden\n    const hiddenItems = page.locator('[data-testid=\"list-item\"][data-filter=\"pending\"]');\n    await expect(hiddenItems).not.toBeVisible();\n\n    // Verify filter button is disabled after selection\n    await expect(filterButton).toBeDisabled();\n  });\n\n  test('should handle clearing all filters and reset list', async ({ page }) => {\n    // Verify initial list is displayed\n    const listItems = page.locator('[data-testid=\"list-item\"]');\n    await expect(listItems).toHaveCount(10);\n\n    // Click filter button\n    const filterButton = page.getByRole('button', { name: /filter by status/i });\n    await filterButton.click();\n\n    // Verify filter dropdown appears\n    const filterDropdown = page.locator('[data-testid=\"filter-dropdown\"]');\n    await expect(filterDropdown).toBeVisible();\n\n    // Select multiple statuses using checkboxes\n    const statuses = page.locator('[data-testid=\"status-filter-checkbox\"]');\n    await statuses.first().click();\n    await statuses.nth(1).click();\n    await statuses.nth(2).click();\n\n    // Verify filter is applied\n    const filteredItems = page.locator('[data-testid=\"list-item\"][data-filter=\"active,completed,archived\"]');\n    await expect(filteredItems).toHaveCount(3);\n\n    // Verify list is filtered\n    await expect(filteredItems).toBeVisible();\n\n    // Verify clear button is visible\n    const clearButton = page.getByRole('button', { name: /clear filters/i });\n    await expect(clearButton).toBeVisible();\n\n    // Click clear button\n    await clearButton.click();\n\n    // Verify list is reset to all items\n    const allItems = page.locator('[data-testid=\"list-item\"]');\n    await expect(allItems).toHaveCount(10);\n\n    // Verify filter dropdown is closed\n    const filterDropdown = page.locator('[data-testid=\"filter-dropdown\"]');\n    await expect(filterDropdown).not.toBeVisible();\n\n    // Verify filter button is enabled\n    await expect(filterButton).not.toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8111,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4702,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.941,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_260",
+  "category": "notifications",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error toast notification when an action fails.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Error Toast Notification', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-application-url.com');\n  });\n\n  test('should display error toast notification on action failure', async ({ page }) => {\n    await page.getByRole('button', { name: 'Trigger Action' }).click();\n    const errorToast = page.getByText('Action failed. Please try again.');\n    await expect(errorToast).toBeVisible();\n  });\n\n  test('should not display error toast notification on successful action', async ({ page }) => {\n    await page.getByRole('button', { name: 'Trigger Successful Action' }).click();\n    const errorToast = page.getByText('Action failed. Please try again.');\n    await expect(errorToast).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 183,
+  "latency_s": 4.82,
+  "timestamp": "2026-06-19T17:01:50.354141"
+}

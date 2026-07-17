@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_196",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8353,
+  "total_latency_s": 48.707,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Filtered Search URL Sharing', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should successfully share a filtered search URL with another user', async ({ page }) => {\n    // Set up initial search filter\n    const searchInput = page.getByLabel('Search');\n    await searchInput.fill('Playwright');\n\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await searchButton.click();\n\n    // Verify search results are displayed\n    const resultList = page.getByRole('list');\n    await expect(resultList).toBeVisible();\n\n    // Verify search URL contains the filter term\n    const searchUrl = page.url();\n    expect(searchUrl).toContain('q=Playwright');\n\n    // Share the search URL using a share button\n    const shareButton = page.getByRole('button', { name: /share/i });\n    await shareButton.click();\n\n    // Verify share modal appears\n    const shareModal = page.getByRole('dialog');\n    await expect(shareModal).toBeVisible();\n\n    // Verify share button is visible\n    const shareButton = page.getByRole('button', { name: /share/i });\n    await expect(shareButton).toBeVisible();\n\n    // Click share button\n    await shareButton.click();\n\n    // Verify share confirmation message appears\n    const confirmationMessage = page.getByText(/shared successfully/i);\n    await expect(confirmationMessage).toBeVisible();\n\n    // Verify URL is copied to clipboard\n    const clipboard = page.getByRole('status');\n    await expect(clipboard).toContainText('URL copied to clipboard');\n\n    // Verify modal closes\n    await expect(shareModal).not.toBeVisible();\n\n    // Verify search results are still visible\n    await expect(resultList).toBeVisible();\n  });\n\n  test('should handle sharing a filtered search URL with invalid characters', async ({ page }) => {\n    // Set up initial search filter with invalid characters\n    const searchInput = page.getByLabel('Search');\n    await searchInput.fill('Playwright*');\n\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await searchButton.click();\n\n    // Verify search results are displayed\n    const resultList = page.getByRole('list');\n    await expect(resultList).toBeVisible();\n\n    // Share the search URL using a share button\n    const shareButton = page.getByRole('button', { name: /share/i });\n    await shareButton.click();\n\n    // Verify share modal appears\n    const shareModal = page.getByRole('dialog');\n    await expect(shareModal).toBeVisible();\n\n    // Verify share button is visible\n    const shareButton = page.getByRole('button', { name: /share/i });\n    await expect(shareButton).toBeVisible();\n\n    // Click share button\n    await shareButton.click();\n\n    // Verify share confirmation message appears\n    const confirmationMessage = page.getByText(/shared successfully/i);\n    await expect(confirmationMessage).toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/invalid characters/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify share modal closes\n    await expect(shareModal).not.toBeVisible();\n\n    // Verify search results are still visible\n    await expect(resultList).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8353,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.451,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 48.707,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_019",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8136,
+  "total_latency_s": 71.557,
+  "final_script": "describe('Phone Number Field Numeric Input Validation', () => {\n  beforeEach(() => {\n    cy.visit('/contact-form');\n  });\n\n  it('should accept only numeric input in phone number field', () => {\n    // Intercept the form submission API\n    cy.intercept('POST', '/api/submit-contact').as('submitContact');\n\n    // Locate the phone number input field\n    cy.get('[data-testid=\"phone-number-input\"]').should('be.visible');\n\n    // Type a valid numeric phone number\n    cy.get('[data-testid=\"phone-number-input\"]').type('1234567890');\n\n    // Verify the field contains only numbers\n    cy.get('[data-testid=\"phone-number-input\"]').should('have.value', '1234567890');\n\n    // Attempt to submit the form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@submitContact');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Form submitted successfully');\n  });\n\n  it('should reject non-numeric characters and display error message', () => {\n    // Intercept the form submission API\n    cy.intercept('POST', '/api/submit-contact').as('submitContact');\n\n    // Locate the phone number input field\n    cy.get('[data-testid=\"phone-number-input\"]').should('be.visible');\n\n    // Attempt to type non-numeric characters\n    cy.get('[data-testid=\"phone-number-input\"]').type('123-4-67');\n\n    // Verify the field only contains numeric characters (should strip non-numeric)\n    cy.get('[data-testid=\"phone-number-input\"]').should('have.value', '12346');\n\n    // Attempt to submit the form with invalid input\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@submitContact');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Phone number must contain only digits');\n\n    // Verify form was not submitted successfully\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n\n    // Verify the phone number field still has the invalid value\n    cy.get('[data-testid=\"phone-number-input\"]').should('have.value', '12346');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8136,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5787,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.557,
+      "feedback_used": ""
+    }
+  ]
+}

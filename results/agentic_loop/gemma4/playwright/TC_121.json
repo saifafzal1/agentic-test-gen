@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_121",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8179,
+  "total_latency_s": 72.056,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async PDF Generation Download', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/pdf-generator');\n  });\n\n  test('should generate and download PDF when async generation completes', async ({ page }) => {\n    // Intercept the PDF generation API call\n    await page.route('**/api/generate-pdf', (route) => {\n      route.abort('blockedbyclient');\n    });\n\n    // Set up the download listener\n    await page.on('download', async (download) => {\n      const path = await download.path();\n      expect(path).toContain('pdf-document');\n      await expect(download).toBeFinished();\n    });\n\n    // Set up the API response with delay\n    await page.route('**/api/generate-pdf', (route) => {\n      setTimeout(() => {\n        route.fulfill({\n          status: 200,\n          contentType: 'application/pdf',\n          body: Buffer.from([0x25, 0x04, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00]),\n        });\n      }, 2000);\n    });\n\n    // Click the generate button using getByRole\n    const generateButton = page.getByRole('button', { name: /generate pdf/i });\n    await expect(generateButton).toBeVisible();\n    await generateButton.click();\n\n    // Verify loading state appears\n    const loadingIndicator = page.getByText(/generating/i);\n    await expect(loadingIndicator).toBeVisible();\n\n    // Wait for the API response and download to complete\n    await page.waitForTimeout(2500);\n\n    // Verify loading state disappears\n    await expect(loadingIndicator).not.toBeVisible();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/pdf generated successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify download link is visible\n    const downloadLink = page.getByRole('link', { name: /download pdf/i });\n    await expect(downloadLink).toBeVisible();\n\n    // Click the download link using getByRole\n    await downloadLink.click();\n\n    // Verify download confirmation\n    const downloadConfirmation = page.getByText(/download started/i);\n    await expect(downloadConfirmation).toBeVisible();\n  });\n\n  test('should handle PDF generation failure and display error message', async ({ page }) => {\n    // Intercept the PDF generation API call and return an error\n    await page.route('**/api/generate-pdf', (route) => {\n      route.fulfill({\n        status: 500,\n        contentType: 'application/json',\n        body: JSON.stringify({ error: 'Server error during PDF generation' }),\n      });\n    });\n\n    // Click the generate button using getByRole\n    const generateButton = page.getByRole('button', { name: /generate pdf/i });\n    await expect(generateButton).toBeVisible();\n    await generateButton.click();\n\n    // Verify loading state appears\n    const loadingIndicator = page.getByText(/generating/i);\n    await expect(loadingIndicator).toBeVisible();\n\n    // Wait for the API response\n    await page.waitForTimeout(1000);\n\n    // Verify loading state disappears\n    await expect(loadingIndicator).not.toBeVisible();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/error generating pdf/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error details are displayed\n    const errorDetails = page.getByText(/server error/i);\n    await expect(errorDetails).toBeVisible();\n\n    // Verify download link does not appear\n    const downloadLink = page.getByRole('link', { name: /download pdf/i });\n    await expect(downloadLink).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8179,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.493,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.056,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_130",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8086,
+  "total_latency_s": 42.25,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Backdrop Close Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/modal-page');\n  });\n\n  test('should close modal when backdrop is clicked', async ({ page }) => {\n    // Verify modal is visible\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n\n    // Verify modal has correct title\n    const modalTitle = page.getByRole('heading', { name: /modal title/i });\n    await expect(modalTitle).toBeVisible();\n\n    // Verify modal content is visible\n    const modalContent = page.getByRole('main');\n    await expect(modalContent).toBeVisible();\n\n    // Verify backdrop is visible\n    const backdrop = page.locator('[data-testid=\"modal-backdrop\"]');\n    await expect(backdrop).toBeVisible();\n\n    // Verify close button is visible\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Click backdrop to close modal\n    await backdrop.click();\n\n    // Verify modal is no longer visible\n    await expect(modal).not.toBeVisible();\n\n    // Verify page content is visible (modal is closed)\n    const pageContent = page.getByRole('main');\n    await expect(pageContent).toBeVisible();\n\n    // Verify page title is visible (modal is closed)\n    const pageTitle = page.getByRole('heading', { name: /home/i });\n    await expect(pageTitle).toBeVisible();\n  });\n\n  test('should not close modal when clicking outside backdrop', async ({ page }) => {\n    // Verify modal is visible\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n\n    // Verify modal has correct title\n    const modalTitle = page.getByRole('heading', { name: /modal title/i });\n    await expect(modalTitle).toBeVisible();\n\n    // Verify modal content is visible\n    const modalContent = page.getByRole('main');\n    await expect(modalContent).toBeVisible();\n\n    // Verify backdrop is visible\n    const backdrop = page.locator('[data-testid=\"modal-backdrop\"]');\n    await expect(backdrop).toBeVisible();\n\n    // Verify close button is visible\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Click outside backdrop (e.g., on page content)\n    const pageContent = page.getByRole('main');\n    await pageContent.click();\n\n    // Verify modal is still visible (should not close)\n    await expect(modal).toBeVisible();\n\n    // Verify page content is still visible (modal is still open)\n    await expect(pageContent).toBeVisible();\n\n    // Verify page title is still visible (modal is still open)\n    const pageTitle = page.getByRole('heading', { name: /home/i });\n    await expect(pageTitle).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8086,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4622,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 42.25,
+      "feedback_used": ""
+    }
+  ]
+}

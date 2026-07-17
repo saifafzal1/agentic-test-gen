@@ -1,0 +1,13 @@
+{
+  "id": "TC_023",
+  "category": "form_validation",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error if I submit a registration form with an invalid email.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Registration Form Validation', () => {\n    beforeEach(() => {\n        cy.visit('/registration'); // Adjust the URL to your registration page\n    });\n\n    it('should display an error message for invalid email', () => {\n        cy.get('input[name=\"email\"]').type('invalid-email');\n        cy.get('form').submit();\n        cy.get('.error-message').should('be.visible').and('contain', 'Please enter a valid email address');\n    });\n\n    it('should not display an error message for valid email', () => {\n        cy.get('input[name=\"email\"]').type('test@example.com');\n        cy.get('form').submit();\n        cy.get('.error-message').should('not.exist');\n    });\n});",
+  "prompt_tokens": 115,
+  "completion_tokens": 149,
+  "latency_s": 3.17,
+  "timestamp": "2026-06-19T16:26:37.211254"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_044",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8044,
+  "total_latency_s": 71.591,
+  "final_script": "describe('Notification Click Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should navigate to relevant content when clicking a notification', () => {\n    // Intercept the API call for notification data\n    cy.intercept('GET', '/api/notifications').as('getNotifications');\n    cy.wait('@getNotifications');\n\n    // Verify notifications are displayed\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('contain', 'New message from John');\n\n    // Click the notification to navigate\n    cy.get('[data-testid=\"notification-item\"]').click();\n\n    // Verify navigation to the correct page\n    cy.url().should('include', '/messages');\n    cy.get('[data-testid=\"message-header\"]').should('be.visible');\n    cy.get('[data-testid=\"message-header\"]').should('contain', 'John Doe');\n  });\n\n  it('should handle clicking a notification with no associated content', () => {\n    // Intercept the API call for notifications\n    cy.intercept('GET', '/api/notifications').as('getNotifications');\n    cy.wait('@getNotifications');\n\n    // Verify notification with no content exists\n    cy.get('[data-testid=\"notification-item-empty\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item-empty\"]').should('contain', 'System update');\n\n    // Click the empty notification\n    cy.get('[data-testid=\"notification-item-empty\"]').click();\n\n    // Verify navigation to a generic or home page\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"dashboard-welcome\"]').should('be.visible');\n    cy.get('[data-testid=\"dashboard-welcome\"]').should('contain', 'Welcome back');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8044,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.548,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.591,
+      "feedback_used": ""
+    }
+  ]
+}

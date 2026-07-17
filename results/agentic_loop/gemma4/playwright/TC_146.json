@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_146",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.807,
+  "total_latency_s": 72.498,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Onboarding Tour Modal - Step Advancement', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/onboarding');\n  });\n\n  test('should advance through onboarding tour steps when next button is clicked', async ({ page }) => {\n    // Verify onboarding modal is visible\n    const modal = page.getByRole('dialog', { name: /onboarding tour/i });\n    await expect(modal).toBeVisible();\n\n    // Verify step 1 content is displayed\n    const step1Title = page.getByText('Welcome to our app');\n    await expect(step1Title).toBeVisible();\n\n    // Verify step 1 description is visible\n    const step1Description = page.getByText('This tour will guide you through key features.');\n    await expect(step1Description).toBeVisible();\n\n    // Click next button to advance to step 2\n    const nextButton = page.getByRole('button', { name: /next/i });\n    await nextButton.click();\n\n    // Verify step 2 content is displayed\n    const step2Title = page.getByText('Feature 1');\n    await expect(step2Title).toBeVisible();\n\n    // Verify step 2 description is visible\n    const step2Description = page.getByText('Explore our powerful analytics dashboard.');\n    await expect(step2Description).toBeVisible();\n\n    // Click next button to advance to step 3\n    await nextButton.click();\n\n    // Verify step 3 content is displayed\n    const step3Title = page.getByText('Feature 2');\n    await expect(step3Title).toBeVisible();\n\n    // Verify step 3 description is visible\n    const step3Description = page.getByText('Manage your projects with ease.');\n    await expect(step3Description).toBeVisible();\n\n    // Click next button to advance to final step\n    await nextButton.click();\n\n    // Verify final step content is displayed\n    const step4Title = page.getByText('Get Started');\n    await expect(step4Title).toBeVisible();\n\n    // Click finish button to close modal\n    const finishButton = page.getByRole('button', { name: /finish/i });\n    await finishButton.click();\n\n    // Verify modal is closed\n    await expect(modal).not.toBeVisible();\n  });\n\n  test('should handle edge case of clicking next button on last step', async ({ page }) => {\n    // Verify onboarding modal is visible\n    const modal = page.getByRole('dialog', { name: /onboarding tour/i });\n    await expect(modal).toBeVisible();\n\n    // Advance to step 3\n    const nextButton = page.getByRole('button', { name: /next/i });\n    await nextButton.click();\n    const step2Title = page.getByText('Feature 1');\n    await expect(step2Title).toBeVisible();\n\n    await nextButton.click();\n    const step3Title = page.getByText('Feature 2');\n    await expect(step3Title).toBeVisible();\n\n    // Verify progress indicator shows 3 of 4 steps\n    const progressIndicator = page.getByText('3 of 4');\n    await expect(progressIndicator).toBeVisible();\n\n    // Click next button on last step\n    await nextButton.click();\n\n    // Verify final step is displayed\n    const step4Title = page.getByText('Get Started');\n    await expect(step4Title).toBeVisible();\n\n    // Verify progress indicator shows 4 of 4 steps\n    const finalProgressIndicator = page.getByText('4 of 4');\n    await expect(finalProgressIndicator).toBeVisible();\n\n    // Verify finish button is visible and enabled\n    const finishButton = page.getByRole('button', { name: /finish/i });\n    await expect(finishButton).toBeVisible();\n    await expect(finishButton).toBeEnabled();\n\n    // Verify next button is disabled on last step\n    await expect(nextButton).toBeDisabled();\n\n    // Click finish button to close modal\n    await finishButton.click();\n\n    // Verify modal is closed\n    await expect(modal).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.807,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4567,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.498,
+      "feedback_used": ""
+    }
+  ]
+}

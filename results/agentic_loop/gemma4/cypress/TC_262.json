@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_262",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.757,
+  "total_latency_s": 72.129,
+  "final_script": "describe('Notification Auto-Dismissal', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should auto-dismiss notifications after 5 seconds', () => {\n    // Intercept the notification API call\n    cy.intercept('GET', '/api/notifications').as('getNotifications');\n    cy.wait('@getNotifications');\n\n    // Verify notifications are displayed\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-text\"]').should('contain', 'New message received');\n\n    // Verify notification has a dismiss timer\n    cy.get('[data-testid=\"notification-item\"]').should('have.class', 'notification-active');\n\n    // Wait for the auto-dismiss timer (5 seconds)\n    cy.wait(5100);\n\n    // Verify notification is dismissed\n    cy.get('[data-testid=\"notification-item\"]').should('not.exist');\n    cy.get('[data-testid=\"notification-list\"]').should('be.visible');\n  });\n\n  it('should not auto-dismiss notifications when user interacts with them', () => {\n    // Intercept the notification API call\n    cy.intercept('GET', '/api/notifications').as('getNotifications');\n    cy.wait('@getNotifications');\n\n    // Verify notification is displayed\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n\n    // User hovers over the notification\n    cy.get('[data-testid=\"notification-item\"]').trigger('mouseenter');\n\n    // Verify notification remains visible after hover\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n\n    // Wait for the auto-dismiss timer (5 seconds)\n    cy.wait(5100);\n\n    // Verify notification is still visible because user interacted with it\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n\n    // User clicks on the notification\n    cy.get('[data-testid=\"notification-item\"]').click();\n\n    // Verify notification is dismissed after click\n    cy.get('[data-testid=\"notification-item\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.757,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.39,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.129,
+      "feedback_used": ""
+    }
+  ]
+}

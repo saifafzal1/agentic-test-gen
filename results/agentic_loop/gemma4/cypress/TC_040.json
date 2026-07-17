@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_040",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7412,
+  "total_latency_s": 71.689,
+  "final_script": "describe('Footer Navigation Links', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should navigate to correct pages when clicking footer links', () => {\n    // Verify footer is visible\n    cy.get('[data-testid=\"footer\"]').should('be.visible');\n    \n    // Verify footer links exist\n    cy.get('[data-testid=\"footer-nav-link\"]').should('have.length.greaterThan', 0);\n    \n    // Click 'About Us' link\n    cy.get('[data-testid=\"footer-nav-link-about\"]').click();\n    \n    // Verify navigation to About Us page\n    cy.url().should('include', '/about');\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'About Us');\n    \n    // Verify About Us page content is loaded\n    cy.get('[data-testid=\"about-page-content\"]').should('be.visible');\n    \n    // Click 'Contact' link\n    cy.get('[data-testid=\"footer-nav-link-contact\"]').click();\n    \n    // Verify navigation to Contact page\n    cy.url().should('include', '/contact');\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Contact Us');\n    \n    // Verify Contact page content is loaded\n    cy.get('[data-testid=\"contact-form\"]').should('be.visible');\n    \n    // Click 'Privacy Policy' link\n    cy.get('[data-testid=\"footer-nav-link-privacy\"]').click();\n    \n    // Verify navigation to Privacy Policy page\n    cy.url().should('include', '/privacy');\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Privacy Policy');\n    \n    // Verify Privacy Policy content is loaded\n    cy.get('[data-testid=\"privacy-policy-text\"]').should('be.visible');\n  });\n\n  it('should handle broken or non-existent footer links gracefully', () => {\n    // Intercept API calls to simulate a broken link scenario\n    cy.intercept('GET', '/api/broken-link').as('brokenLink');\n    \n    // Click a link that might be broken or point to a non-existent page\n    cy.get('[data-testid=\"footer-nav-link-broken\"]').click();\n    \n    // Verify navigation attempt\n    cy.url().should('include', '/broken-link');\n    \n    // Verify error handling message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Page not found');\n    \n    // Verify user is not stuck in a loading state\n    cy.get('[data-testid=\"page-content\"]').should('be.visible');\n    \n    // Verify footer is still accessible\n    cy.get('[data-testid=\"footer\"]').should('be.visible');\n    \n    // Click a valid link to ensure navigation is still functional after error\n    cy.get('[data-testid=\"footer-nav-link-about\"]').click();\n    \n    // Verify navigation to About Us page\n    cy.url().should('include', '/about');\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'About Us');\n    \n    // Verify error message is no longer visible\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7412,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3372,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.689,
+      "feedback_used": ""
+    }
+  ]
+}

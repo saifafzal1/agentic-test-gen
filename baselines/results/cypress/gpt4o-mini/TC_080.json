@@ -1,0 +1,13 @@
+{
+  "id": "TC_080",
+  "category": "crud_operations",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see the created date and last modified date on a record.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Record Date Display', () => {\n    beforeEach(() => {\n        cy.visit('/records'); // Adjust the URL to your application's records page\n    });\n\n    it('should display the created date and last modified date for a record', () => {\n        cy.get('.record').first().within(() => {\n            cy.get('.created-date').should('be.visible').and('not.be.empty');\n            cy.get('.last-modified-date').should('be.visible').and('not.be.empty');\n        });\n    });\n\n    it('should handle the case when dates are not available', () => {\n        cy.get('.record').first().within(() => {\n            cy.get('.created-date').should('have.text', 'N/A');\n            cy.get('.last-modified-date').should('have.text', 'N/A');\n        });\n    });\n});",
+  "prompt_tokens": 113,
+  "completion_tokens": 173,
+  "latency_s": 2.87,
+  "timestamp": "2026-06-19T16:30:28.395575"
+}

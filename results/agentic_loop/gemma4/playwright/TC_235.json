@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_235",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8172,
+  "total_latency_s": 71.875,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Bottom Sheet Replacement for Dropdowns on Mobile', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should display bottom sheet when dropdown is clicked on mobile viewport', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 862 });\n    \n    // Verify dropdown button is visible\n    const dropdownButton = page.getByRole('button', { name: /select option/i });\n    await expect(dropdownButton).toBeVisible();\n    \n    // Click dropdown button\n    await dropdownButton.click();\n    \n    // Verify bottom sheet appears\n    const bottomSheet = page.getByRole('dialog', { name: /select option/i });\n    await expect(bottomSheet).toBeVisible();\n    \n    // Verify options are displayed in bottom sheet\n    const option1 = page.getByRole('option', { name: /option one/i });\n    const option2 = page.getByRole('option', { name: /option two/i });\n    await expect(option1).toBeVisible();\n    await expect(option2).toBeVisible();\n    \n    // Select option 1\n    await option1.click();\n    \n    // Verify bottom sheet closes\n    await expect(bottomSheet).not.toBeVisible();\n    \n    // Verify selected value is displayed in dropdown\n    await expect(dropdownButton).toContainText('Option One');\n  });\n\n  test('should handle bottom sheet closing via escape key and selecting option', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 860 });\n    \n    // Click dropdown button to open bottom sheet\n    const dropdownButton = page.getByRole('button', { name: /select option/i });\n    await dropdownButton.click();\n    \n    // Verify bottom sheet is visible\n    const bottomSheet = page.getByRole('dialog', { name: /select option/i });\n    await expect(bottomSheet).toBeVisible();\n    \n    // Close bottom sheet using escape key\n    await page.keyboard.press('Escape');\n    \n    // Verify bottom sheet is closed\n    await expect(bottomSheet).not.toBeVisible();\n    \n    // Reopen bottom sheet\n    await dropdownButton.click();\n    await expect(bottomSheet).toBeVisible();\n    \n    // Select option 2\n    const optionTwo = page.getByRole('option', { name: /option two/i });\n    await optionTwo.click();\n    \n    // Verify bottom sheet closes\n    await expect(bottomSheet).not.toBeVisible();\n    \n    // Verify selected value is displayed\n    await expect(dropdownButton).toContainText('Option Two');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8172,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4908,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.875,
+      "feedback_used": ""
+    }
+  ]
+}

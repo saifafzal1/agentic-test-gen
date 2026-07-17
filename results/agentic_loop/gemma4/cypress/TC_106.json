@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_106",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7351,
+  "total_latency_s": 80.993,
+  "final_script": "describe('Form Submission Error Scrolling', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n  });\n\n  it('should scroll to form submission errors when validation fails', () => {\n    // Intercept the form submission API\n    cy.intercept('POST', '/api/submit-form').as('formSubmit');\n\n    // Fill in form with invalid data\n    cy.get('[data-testid=\"name-input\"]').type('John');\n    cy.get('[data-testid=\"email-input\"]').type('invalid-email');\n    cy.get('[data-testid=\"password-input\"]').type('password123');\n\n    // Submit the form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@formSubmit');\n\n    // Verify error messages are displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please enter a valid email address');\n\n    // Verify the page has scrolled to the error message\n    cy.get('[data-testid=\"error-message\"]').then(($error) => {\n      const errorRect = $error[0].getBoundingClientRect();\n      const viewportHeight = cy.get('body').then(($body) => $body[0].clientHeight);\n      const errorTop = errorRect.top + cy.window().scrollLeft();\n\n      // Assert that the error message is within the viewport or near the top\n      expect(errorTop).to.be.lessThan(viewportHeight * 0.8);\n    });\n\n    // Verify the form is still visible\n    cy.get('[data-testid=\"form-container\"]').should('be.visible');\n  });\n\n  it('should not scroll when form is submitted successfully', () => {\n    // Intercept the form submission API\n    cy.intercept('POST', '/api/submit-form', {\n      statusCode: 200,\n      body: { success: true, message: 'Form submitted successfully' }\n    }).as('formSubmitSuccess');\n\n    // Fill in form with valid data\n    cy.get('[data-testid=\"name-input\"]').type('Jane Doe');\n    cy.get('[data-testid=\"email-input\"]').type('jane@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('password123');\n\n    // Submit the form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for the successful API call\n    cy.wait('@formSubmitSuccess');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Form submitted successfully');\n\n    // Verify no error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n\n    // Verify the page has not scrolled to an error state\n    cy.get('body').then(($body) => {\n      const scrollPosition = $body[0].scrollTop;\n      // Assert scroll position is within a reasonable range (not at the bottom of a long page)\n      expect(scrollPosition).to.be.lessThan(500);\n    });\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7351,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3171,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 80.993,
+      "feedback_used": ""
+    }
+  ]
+}

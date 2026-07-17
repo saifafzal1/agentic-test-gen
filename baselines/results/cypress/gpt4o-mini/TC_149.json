@@ -1,0 +1,13 @@
+{
+  "id": "TC_149",
+  "category": "table_list",
+  "complexity": "simple",
+  "user_story": "As a user, I want to select all rows with a header checkbox.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Table Row Selection', () => {\n    beforeEach(() => {\n        cy.visit('/your-table-page-url'); // Replace with the actual URL of the page\n    });\n\n    it('should select all rows when the header checkbox is checked', () => {\n        cy.get('input[type=\"checkbox\"][data-header-checkbox]').check(); // Adjust selector as needed\n        cy.get('input[type=\"checkbox\"][data-row-checkbox]').each(($checkbox) => {\n            cy.wrap($checkbox).should('be.checked');\n        });\n    });\n\n    it('should not select any rows when the header checkbox is unchecked', () => {\n        cy.get('input[type=\"checkbox\"][data-header-checkbox]').uncheck(); // Adjust selector as needed\n        cy.get('input[type=\"checkbox\"][data-row-checkbox]').each(($checkbox) => {\n            cy.wrap($checkbox).should('not.be.checked');\n        });\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 184,
+  "latency_s": 3.13,
+  "timestamp": "2026-06-19T16:35:00.092170"
+}

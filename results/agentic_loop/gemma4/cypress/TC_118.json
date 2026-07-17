@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_118",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7566,
+  "total_latency_s": 72.551,
+  "final_script": "describe('Sequential Async Checkout Flow', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should complete checkout with sequential async steps in correct order', () => {\n    // Step 1: Fill shipping form\n    cy.get('[data-testid=\"shipping-address-input\"]').type('123 Main St');\n    cy.get('[data-testid=\"city-input\"]').type('Anytown');\n    cy.get('[data-testid=\"zip-input\"]').type('12345');\n    cy.get('[data-testid=\"continue-button\"]').click();\n\n    // Step 2: Fill payment details\n    cy.get('[data-testid=\"card-number-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"expiry-month-input\"]').type('12');\n    cy.get('[data-testid=\"expiry-year-input\"]').type('25');\n    cy.get('[data-testid=\"cvv-input\"]').type('123');\n    cy.get('[data-testid=\"continue-button\"]').click();\n\n    // Step 3: Review and place order\n    cy.get('[data-testid=\"order-summary\"]').should('be.visible');\n    cy.get('[data-testid=\"place-order-button\"]').click();\n\n    // Step 4: Verify success message\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Order placed successfully');\n    cy.get('[data-testid=\"order-confirmation-number\"]').should('be.visible');\n    cy.get('[data-testid=\"order-confirmation-number\"]').should('have.length.greaterThan', 0);\n  });\n\n  it('should handle async step failure and prevent order placement', () => {\n    // Step 1: Fill shipping form\n    cy.get('[data-testid=\"shipping-address-input\"]').type('123 Main St');\n    cy.get('[data-testid=\"city-input\"]').type('Anytown');\n    cy.get('[data-testid=\"zip-input\"]').type('12345');\n    cy.get('[data-testid=\"continue-button\"]').click();\n\n    // Step 2: Fill payment details with invalid card\n    cy.get('[data-testid=\"card-number-input\"]').type('111');\n    cy.get('[data-testid=\"expiry-month-input\"]').type('12');\n    cy.get('[data-testid=\"expiry-year-input\"]').type('25');\n    cy.get('[data-testid=\"cvv-input\"]').type('123');\n    cy.get('[data-testid=\"continue-button\"]').click();\n\n    // Step 3: Verify error message and prevent proceeding\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid card number');\n    cy.get('[data-testid=\"place-order-button\"]').should('be.disabled');\n\n    // Step 4: Verify user is still on payment step\n    cy.get('[data-testid=\"payment-step-header\"]').should('be.visible');\n    cy.get('[data-testid=\"order-summary\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7566,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3886,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.551,
+      "feedback_used": ""
+    }
+  ]
+}

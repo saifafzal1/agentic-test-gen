@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_119",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8332,
+  "total_latency_s": 72.172,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Countdown Timer', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/countdown');\n  });\n\n  test('should update countdown timer every second', async ({ page }) => {\n    // Verify initial countdown value\n    const countdownDisplay = page.getByTestId('countdown-display');\n    await expect(countdownDisplay).toContainText('10');\n\n    // Verify timer interval is set\n    const timerInterval = page.getByTestId('timer-interval');\n    await expect(timerInterval).toBeVisible();\n\n    // Wait for 1 second\n    await page.waitForTimeout(1000);\n\n    // Verify countdown decremented\n    await expect(countdownDisplay).toContainText('9');\n\n    // Wait for another second\n    await page.waitForTimeout(1000);\n\n    // Verify countdown decremented again\n    await expect(countdownDisplay).toContainText('8');\n\n    // Wait for 10 seconds to reach zero\n    await page.waitForTimeout(10000);\n\n    // Verify countdown reaches zero\n    await expect(countdownDisplay).toContainText('0');\n\n    // Verify timer is stopped\n    const timerButton = page.getByRole('button', { name: /stop/i });\n    await expect(timerButton).toBeVisible();\n  });\n\n  test('should handle countdown reaching zero and display finished message', async ({ page }) => {\n    // Set initial countdown to 5\n    const countdownInput = page.getByLabel('Countdown Value');\n    await countdownInput.fill('5');\n\n    // Click start button\n    const startButton = page.getByRole('button', { name: /start/i });\n    await startButton.click();\n\n    // Verify countdown starts at 5\n    const countdownDisplay = page.getByTestId('countdown-display');\n    await expect(countdownDisplay).toContainText('5');\n\n    // Wait for 5 seconds\n    await page.waitForTimeout(5100);\n\n    // Verify countdown reaches zero\n    await expect(countdownDisplay).toContainText('0');\n\n    // Verify finished message is displayed\n    const finishedMessage = page.getByTestId('finished-message');\n    await expect(finishedMessage).toBeVisible();\n    await expect(finishedMessage).toContainText('Time is up');\n\n    // Verify timer is disabled\n    await expect(startButton).toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8332,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.444,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.172,
+      "feedback_used": ""
+    }
+  ]
+}

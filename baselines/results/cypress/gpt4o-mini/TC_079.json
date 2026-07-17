@@ -1,0 +1,13 @@
+{
+  "id": "TC_079",
+  "category": "crud_operations",
+  "complexity": "complex",
+  "user_story": "As a user, I want to restore an archived record.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Restore Archived Record', () => {\n    beforeEach(() => {\n        cy.visit('/records'); // Navigate to the records page\n        cy.login(); // Assuming there's a custom command for login\n    });\n\n    it('should successfully restore an archived record', () => {\n        cy.get('.archived-records').within(() => {\n            cy.get('.record-item').first().as('firstArchivedRecord');\n            cy.get('@firstArchivedRecord').find('.restore-button').click();\n        });\n\n        cy.get('.notification').should('contain', 'Record restored successfully');\n        cy.get('.active-records').should('contain', 'Restored Record Name'); // Replace with actual record name\n    });\n\n    it('should show an error when trying to restore a record that is not archived', () => {\n        cy.get('.active-records').within(() => {\n            cy.get('.record-item').first().as('firstActiveRecord');\n            cy.get('@firstActiveRecord').find('.restore-button').click();\n        });\n\n        cy.get('.notification').should('contain', 'Cannot restore a record that is not archived');\n    });\n});",
+  "prompt_tokens": 106,
+  "completion_tokens": 231,
+  "latency_s": 6.43,
+  "timestamp": "2026-06-19T16:30:25.218518"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_287",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7571,
+  "total_latency_s": 344.781,
+  "final_script": "describe('Active Sessions Management', () => {\n  beforeEach(() => {\n    cy.visit('/user-profile');\n  });\n\n  it('should display all active sessions and log out a specific one', () => {\n    // Verify initial active sessions are displayed\n    cy.get('[data-testid=\"active-sessions-list\"]').should('be.visible');\n    cy.get('[data-testid=\"session-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify session details are visible\n    cy.get('[data-testid=\"session-item\"]').first().should('be.visible');\n    cy.get('[data-testid=\"session-name\"]').first().should('contain', 'Session 1');\n    cy.get('[data-testid=\"session-status\"]').first().should('contain', 'Active');\n\n    // Verify logout button is present\n    cy.get('[data-testid=\"logout-button\"]').should('be.visible');\n\n    // Click logout button for a specific session\n    cy.get('[data-testid=\"session-item\"]').first().within(() => {\n      cy.get('[data-testid=\"logout-button\"]').click();\n    });\n\n    // Verify session is removed from the list\n    cy.get('[data-testid=\"active-sessions-list\"]').should('contain', 'Session 1');\n    cy.get('[data-testid=\"session-item\"]').first().should('not.exist');\n\n    // Verify remaining sessions are still displayed\n    cy.get('[data-testid=\"session-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify logout was successful\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Session 1 logged out successfully');\n  });\n\n  it('should handle edge case: logout button disabled for inactive sessions', () => {\n    // Verify initial active sessions are displayed\n    cy.get('[data-testid=\"active-sessions-list\"]').should('be.visible');\n\n    // Verify logout button is disabled for inactive sessions\n    cy.get('[data-testid=\"session-item\"]').first().within(() => {\n      cy.get('[data-testid=\"logout-button\"]').should('be.disabled');\n      cy.get('[data-testid=\"logout-button\"]').should('have.attr', 'aria-disabled', 'true');\n    });\n\n    // Verify logout button is enabled for active sessions\n    cy.get('[data-testid=\"session-item\"]').first().within(() => {\n      cy.get('[data-testid=\"logout-button\"]').should('not.be.disabled');\n    });\n\n    // Verify success message is not shown for inactive sessions\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7571,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3902,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 344.781,
+      "feedback_used": ""
+    }
+  ]
+}

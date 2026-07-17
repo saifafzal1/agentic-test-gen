@@ -1,0 +1,13 @@
+{
+  "id": "TC_245",
+  "category": "payment_flow",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error when I enter an invalid card number.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Payment Flow', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/payment');\n  });\n\n  test('should display an error for invalid card number', async ({ page }) => {\n    await page.fill('input[name=\"cardNumber\"]', '1234 5678 9012 3456'); // Example of an invalid card number\n    await page.click('button[type=\"submit\"]');\n    \n    const errorMessage = await page.getByText('Invalid card number');\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should not display an error for valid card number', async ({ page }) => {\n    await page.fill('input[name=\"cardNumber\"]', '4111 1111 1111 1111'); // Example of a valid card number\n    await page.click('button[type=\"submit\"]');\n    \n    const errorMessage = await page.getByText('Invalid card number');\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 223,
+  "latency_s": 12.29,
+  "timestamp": "2026-06-19T17:00:27.548323"
+}

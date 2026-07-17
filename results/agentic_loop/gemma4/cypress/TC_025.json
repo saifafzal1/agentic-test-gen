@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_025",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7322,
+  "total_latency_s": 180.718,
+  "final_script": "describe('Date Picker - Past Date Prevention for Future Bookings', () => {\n  beforeEach(() => {\n    cy.visit('/booking');\n  });\n\n  it('should prevent selecting past dates and only allow future dates', () => {\n    // Verify date picker is visible\n    cy.get('[data-testid=\"date-picker\"]').should('be.visible');\n    \n    // Attempt to select a past date (e.g., yesterday)\n    cy.get('[data-testid=\"date-picker\"]').click();\n    cy.get('[data-testid=\"date-picker\"]').should('be.visible');\n    \n    // Verify past dates are disabled\n    cy.get('[data-testid=\"date-picker\"]').find('[data-testid=\"date-cell\"]').first().should('have.attr', 'disabled');\n    \n    // Attempt to click a disabled past date cell\n    cy.get('[data-testid=\"date-picker\"]').find('[data-testid=\"date-cell\"]').first().click({ force: true });\n    \n    // Verify the date was not selected\n    cy.get('[data-testid=\"selected-date\"]').should('not. exist');\n    \n    // Select a future date\n    cy.get('[data-testid=\"date-picker\"]').click();\n    cy.get('[data-testid=\"date-picker\"]').find('[data-testid=\"date-cell\"]').eq(5).click();\n    \n    // Verify future date is selected\n    cy.get('[data-testid=\"selected-date\"]').should('contain', '2024-11-20');\n    \n    // Verify date picker closes after selection\n    cy.get('[data-testid=\"date-picker\"]').should('not. be.visible');\n    \n    // Verify booking form is enabled for submission\n    cy.get('[data-testid=\"submit-booking-btn\"]').should('not. be').disabled();\n  });\n\n  it('should display error message when user attempts to submit with past date', () => {\n    // Select a past date\n    cy.get('[data-testid=\"date-picker\"]').click();\n    cy.get('[data-testid=\"date-picker\"]').find('[data-testid=\"date-cell\"]').first().click();\n    \n    // Verify past date is selected\n    cy.get('[data-testid=\"selected-date\"]').should('contain', '2023-01-01');\n    \n    // Attempt to submit the form\n    cy.get('[data-testid=\"submit-booking-btn\"]').click();\n    \n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Cannot book past dates');\n    \n    // Verify form is not submitted\n    cy.url().should('include', '/booking');\n    \n    // Verify date field is still populated with the invalid date\n    cy.get('[data-testid=\"selected-date\"]').should('contain', '2023-01-01');\n    \n    // Clear the invalid date and select a valid future date\n    cy.get('[data-testid=\"selected-date\"]').clear();\n    cy.get('[data-testid=\"date-picker\"]').click();\n    cy.get('[data-testid=\"date-picker\"]').find('[data-testid=\"date-cell\"]').eq(10).click();\n    \n    // Verify error message is cleared\n    cy.get('[data-testid=\"error-message\"]').should('not. exist');\n    \n    // Verify form is now ready for submission\n    cy.get('[data-testid=\"submit-booking-btn\"]').should('not. be').disabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4721,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3471,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 71.167,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7322,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3074,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 109.551,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

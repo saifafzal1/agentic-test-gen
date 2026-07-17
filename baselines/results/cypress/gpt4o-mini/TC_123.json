@@ -1,0 +1,13 @@
+{
+  "id": "TC_123",
+  "category": "async_await",
+  "complexity": "medium",
+  "user_story": "As a user, I want async errors to surface a retry option.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Async Error Handling', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should display a retry option when an async error occurs', () => {\n        cy.intercept('GET', '/api/data', {\n            statusCode: 500,\n            body: { error: 'Internal Server Error' },\n        }).as('getData');\n\n        cy.get('button.fetch-data').click(); // Trigger the async operation\n        cy.wait('@getData');\n\n        cy.get('.error-message').should('be.visible');\n        cy.get('.retry-button').should('be.visible').and('contain', 'Retry');\n    });\n\n    it('should retry the async operation when the retry option is clicked', () => {\n        cy.intercept('GET', '/api/data', {\n            statusCode: 500,\n            body: { error: 'Internal Server Error' },\n        }).as('getData');\n\n        cy.get('button.fetch-data').click(); // Trigger the async operation\n        cy.wait('@getData');\n\n        cy.get('.retry-button').click(); // Click the retry option\n\n        cy.intercept('GET', '/api/data', {\n            statusCode: 200,\n            body: { data: 'Success' },\n        }).as('getDataSuccess');\n\n        cy.wait('@getDataSuccess');\n\n        cy.get('.success-message').should('be.visible').and('contain', 'Success');\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 304,
+  "latency_s": 5.43,
+  "timestamp": "2026-06-19T16:33:29.220982"
+}

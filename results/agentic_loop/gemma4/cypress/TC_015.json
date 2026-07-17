@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_015",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.81,
+  "total_latency_s": 75.474,
+  "final_script": "describe('Login with Email or Username Interchangeability', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should successfully log in using email address', () => {\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('SecurePassword123!');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n    cy.wait('@loginRequest');\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"welcome-message\"]').should('be.visible');\n    cy.get('[data-testid=\"welcome-message\"]').should('contain', 'Welcome');\n  });\n\n  it('should successfully log in using username', () => {\n    cy.get('[data-testid=\"username-input\"]').type('john.doe');\n    cy.get('[data-testid=\"password-input\"]').type('SecurePassword123!');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n    cy.wait('@loginRequest');\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"welcome-message\"]').should('be.visible');\n    cy.get('[data-testid=\"welcome-message\"]').should('contain', 'Welcome');\n  });\n\n  it('should display error when login fails with invalid credentials', () => {\n    cy.get('[data-testid=\"email-input\"]').type('invalid@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('WrongPassword123!');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.intercept('POST', '/api/auth/login', {\n      statusCode: 401,\n      body: { error: 'Invalid credentials' }\n    }).as('loginRequest');\n    cy.wait('@loginRequest');\n    cy.url().should('eq', '/login');\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid credentials');\n  });\n\n  it('should handle empty email/username field and prevent login', () => {\n    cy.get('[data-testid=\"password-input\"]').type('SecurePassword123!');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.intercept('POST', '/api/auth/login', {\n      statusCode: 400,\n      body: { error: 'Email or username is required' }\n    }).as('loginRequest');\n    cy.wait('@loginRequest');\n    cy.url().should('eq', '/login');\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Email or username is required');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.81,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5665,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 75.474,
+      "feedback_used": ""
+    }
+  ]
+}

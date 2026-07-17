@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_170",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.823,
+  "total_latency_s": 72.571,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload Progress Bar', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should display progress bar for each uploaded file', async ({ page }) => {\n    // Locate and click the file input using getByLabel\n    const fileInput = page.getByLabel('Select files');\n    await fileInput.setInputFiles('test-file.pdf');\n\n    // Verify file name appears\n    const fileNameDisplay = page.getByText('test-file.pdf');\n    await expect(fileNameDisplay).toBeVisible();\n\n    // Verify progress bar container is visible\n    const progressBarContainer = page.getByRole('region', { name: /file upload progress/i });\n    await expect(progressBarContainer).toBeVisible();\n\n    // Verify progress bar exists for the file\n    const progressBar = page.getByRole('progressbar');\n    await expect(progressBar).toBeVisible();\n\n    // Verify progress text is displayed\n    const progressText = page.getByText(/0%/);\n    await expect(progressText).toBeVisible();\n\n    // Verify progress bar has a value\n    const progressValue = page.getByText(/00%/);\n    await expect(progressValue).toBeVisible();\n\n    // Click upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await uploadButton.click();\n\n    // Wait for progress to update\n    await page.waitForTimeout(1000);\n\n    // Verify progress bar has updated\n    await expect(progressBar).toHaveAttribute('aria-valuenow', '50');\n    await expect(progressText).toContainText('50%');\n    await expect(progressValue).toContainText('50%');\n  });\n\n  test('should handle multiple files and display progress for each', async ({ page }) => {\n    // Locate and click the file input using getByLabel\n    const fileInput = page.getByLabel('Select files');\n    await fileInput.setInputFiles('doc1.pdf', 'image.png');\n\n    // Verify both file names appear\n    const fileName1 = page.getByText('doc1.pdf');\n    const fileName2 = page.getByText('image.png');\n    await expect(fileName1).toBeVisible();\n    await expect(fileName2).toBeVisible();\n\n    // Verify progress bar container is visible\n    const progressBarContainer = page.getByRole('region', { name: /file upload progress/i });\n    await expect(progressBarContainer).toBeVisible();\n\n    // Click upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await uploadButton.click();\n\n    // Wait for progress to update\n    await page.waitForTimeout(1500);\n\n    // Verify progress bar for doc1.pdf has updated\n    const progressBarDoc1 = page.getByRole('progressbar', { name: /doc1\\.pdf/i });\n    await expect(progressBarDoc1).toBeVisible();\n    await expect(progressBarDoc1).toHaveAttribute('aria-valuenow', '75');\n\n    // Verify progress text for doc1.pdf is displayed\n    const progressTextDoc1 = page.getByText(/75%/);\n    await expect(progressTextDoc1).toBeVisible();\n\n    // Verify progress bar for image.png has updated\n    const progressBarImage = page.getByRole('progressbar', { name: /image\\.png/i });\n    await expect(progressBarImage).toBeVisible();\n    await expect(progressBarImage).toHaveAttribute('aria-valuenow', '25');\n\n    // Verify progress text for image.png is displayed\n    const progressTextImage = page.getByText(/25%/);\n    await expect(progressTextImage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.823,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.41,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.571,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_086",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8288,
+  "total_latency_s": 76.867,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Marking a Record as Favourite', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should successfully mark a record as favourite and update UI', async ({ page }) => {\n    // Verify record list is visible\n    const recordList = page.getByRole('region', { name: /record list/i });\n    await expect(recordList).toBeVisible();\n\n    // Get the first record row\n    const firstRecordRow = page.locator('[data-testid=\"record-row-1\"]');\n    await expect(firstRecordRow).toBeVisible();\n\n    // Get the favourite button using getByRole\n    const favouriteButton = page.getByRole('button', { name: /favourite/i });\n    await expect(favouriteButton).toBeVisible();\n\n    // Click the favourite button\n    await favouriteButton.click();\n\n    // Verify favourite state is active\n    await expect(favouriteButton).toHaveAttribute('aria-pressed', 'true');\n    await expect(favouriteButton).toHaveClass(/is-favourite/);\n\n    // Verify favourite icon is displayed\n    const favouriteIcon = page.locator('[data-testid=\"favourite-icon\"]');\n    await expect(favouriteIcon).toBeVisible();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/record marked as favourite/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify record is now in favourite list\n    const favouriteList = page.getByRole('region', { name: /favourites/i });\n    await expect(favouriteList).toBeVisible();\n  });\n\n  test('should handle unfavouriting a record and revert UI state', async ({ page }) => {\n    // Get the first record row\n    const firstRecordRow = page.locator('[data-testid=\"record-row-1\"]');\n    await expect(firstRecordRow).toBeVisible();\n\n    // Get the favourite button using getByRole\n    const favouriteButton = page.getByRole('button', { name: /favourite/i });\n    await expect(favouriteButton).toBeVisible();\n\n    // Click to favourite the record\n    await favouriteButton.click();\n    await expect(favouriteButton).toHaveAttribute('aria-pressed', 'true');\n\n    // Get the favourite icon\n    const favouriteIcon = page.locator('[data-testid=\"favourite-icon\"]');\n    await expect(favouriteIcon).toBeVisible();\n\n    // Click the favourite button again to unfavourite\n    await favouriteButton.click();\n\n    // Verify favourite state is removed\n    await expect(favouriteButton).toHaveAttribute('aria-pressed', 'false');\n    await expect(favouriteButton).not.toHaveClass(/is-favourite/);\n\n    // Verify favourite icon is no longer displayed\n    await expect(favouriteIcon).not.toBeVisible();\n\n    // Verify success message for unfavourite\n    const unfavouriteMessage = page.getByText(/record removed from favourites/i);\n    await expect(unfavouriteMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8288,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5294,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 76.867,
+      "feedback_used": ""
+    }
+  ]
+}

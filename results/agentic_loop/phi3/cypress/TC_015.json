@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_015",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7419,
+  "total_latency_s": 392.493,
+  "final_script": "describe('Email/Username Login Interchangeability', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should successfully log in with email or username interchangeably', () => {\n    // Intercept the login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n\n    // Attempt to log in with email\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('password123');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Verify login request was made with email\n    cy.wait('@loginRequest').then((interception) => {\n      expect(interception.request.body.email).to.equal('user@example.com');\n    });\n\n    // Verify successful login redirect\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"welcome-message\"]').should('be.visible');\n    cy.get('[data-testid=\"welcome-message\"]').should('contain', 'Welcome, user@example.com');\n\n    // Clear email and attempt to log in with username\n    cy.get('[data-testid=\"email-input\"]').clear();\n    cy.get('[data-testid=\"username-input\"]').type('user123');\n    cy.get('[data-testid=\"password-input\"]').type('password123');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Verify login request was made with username\n    cy.wait('@loginRequest').then((interception) => {\n      expect(interception.request.body.username).to.equal('user123');\n    });\n\n    // Verify successful login redirect\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"welcome-message\"]').should('be.visible');\n    cy.get('[data-testid=\"welcome-message\"]').should('contain', 'Welcome, user123');\n  });\n\n  it('should display error when email or username is invalid', () => {\n    // Attempt to log in with invalid email\n    cy.get('[data-testid=\"email-input\"]').type('invalid-email');\n    cy.get('[data-testid=\"password-input\"]').type('password123');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid email address');\n\n    // Clear invalid email and attempt to log in with invalid username\n    cy.get('[data-testid=\"email-input\"]').clear();\n    cy.get('[data-testid=\"username-input\"]').type('invalid-username');\n    cy.get('[data-testid=\"password-input\"]').type('password123');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid username');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7419,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3396,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 392.493,
+      "feedback_used": ""
+    }
+  ]
+}

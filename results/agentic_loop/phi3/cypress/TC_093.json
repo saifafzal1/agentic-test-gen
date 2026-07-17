@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_093",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7343,
+  "total_latency_s": 309.942,
+  "final_script": "describe('Request Timeout Error Handling', () => {\n  beforeEach(() => {\n    cy.visit('/api/data');\n  });\n\n  it('should display timeout error when request takes longer than 10 seconds', () => {\n    cy.intercept('GET', '/api/data', {\n      statusCode: 200,\n      delay: 12000,\n      body: { data: 'Success' }\n    }).as('dataRequest');\n\n    cy.get('[data-testid=\"request-button\"]').click();\n    cy.wait('@dataRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(504);\n      expect(interception.response.statusCode).to.equal(504);\n      cy.get('[data-testid=\"error-message\"]').should('be.visible');\n      cy.get('[data-testid=\"error-message\"]').should('contain', 'Request timed out');\n      cy.get('[data-testid=\"error-message\"]').should('contain', 'Please try again');\n    });\n  });\n\n  it('should not display timeout error when request completes within 10 seconds', () => {\n    cy.intercept('GET', '/api/data', {\n      statusCode: 200,\n      delay: 5000,\n      body: { data: 'Success' }\n    }).as('fastDataRequest');\n\n    cy.get('[data-testid=\"request-button\"]').click();\n    cy.wait('@fastDataRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n      expect(interception.response.statusCode).to.equal(200);\n      cy.get('[data-testid=\"error-message\"]').should('not.exist');\n      cy.get('[data-testid=\"data-table\"]').should('be.visible');\n      cy.get('[data-testid=\"data-row\"]').should('contain', 'Success');\n    });\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7343,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3144,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 309.942,
+      "feedback_used": ""
+    }
+  ]
+}

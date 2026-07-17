@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_169",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8767,
+  "total_latency_s": 183.697,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Multiple File Upload', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should successfully upload multiple files at once', async ({ page }) => {\n    // Setup: intercept the upload API\n    await page.route('**/api/files/upload', (route) => {\n      route.continue();\n    });\n\n    // Locate and interact with the file input using getByLabel\n    const fileInput = page.getByLabel('Upload files');\n    await fileInput.setInputFiles('playwright/fixtures/file1.pdf', 'playwright/fixtures/file2.jpg', 'playwright/fixtures/file3.docx');\n\n    // Verify file names are displayed\n    const fileList = page.getByRole('list');\n    await expect(fileList).toBeVisible();\n\n    const fileItems = page.getByRole('listitem');\n    const count = await fileItems.count();\n    expect(count).toBe(3);\n\n    // Verify each file name is visible\n    const fileNames = page.getByText(/file1\\.pdf|file2\\.jpg|file3\\.docx/);\n    await expect(fileNames).toBeVisible();\n\n    // Click upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await uploadButton.click();\n\n    // Wait for upload confirmation\n    await page.waitForResponse(response => \n      response.url().includes('/api/files/upload') && response.status() === 200\n    );\n\n    // Verify success message appears\n    const successMessage = page.getByText(/files uploaded successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify success icon is displayed\n    const successIcon = page.getByRole('img', { name: /success/i });\n    await expect(successIcon).toBeVisible();\n  });\n\n  test('should handle file upload with validation errors', async ({ page }) => {\n    // Setup: intercept the upload API and return an error\n    await page.route('**/api/files/upload', (route) => {\n      route.abort('failed');\n    });\n\n    // Locate and interact with the file input using getByLabel\n    const fileInput = page.getByLabel('Upload files');\n    await fileInput.setInputFiles('playwright/fixtures/file1.pdf', 'playwright/fixtures/file2.jpg');\n\n    // Verify file names are displayed\n    const fileList = page.getByRole('list');\n    await expect(fileList).toBeVisible();\n\n    const fileItems = page.getByRole('listitem');\n    const count = await fileItems.count();\n    expect(count).toBe(2);\n\n    // Click upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await uploadButton.click();\n\n    // Wait for error response\n    await page.waitForResponse(response => \n      response.url().includes('/api/files/upload') && response.status() === 500\n    );\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/upload failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error icon is displayed\n    const errorIcon = page.getByRole('img', { name: /error/i });\n    await expect(errorIcon).toBeVisible();\n\n    // Verify file list is still visible but upload failed\n    await expect(fileList).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5206,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4686,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.552,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8767,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.589,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 111.145,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

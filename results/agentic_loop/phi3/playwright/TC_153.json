@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_153",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7938,
+  "total_latency_s": 344.435,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Column Visibility Toggle in Table List', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should toggle visibility of columns via settings menu', async ({ page }) => {\n    // Verify initial state: all columns visible\n    const columnHeaders = page.getByRole('columnheader');\n    await expect(columnHeaders).toHaveCount(5);\n\n    // Verify table data is visible\n    const tableData = page.getByRole('row');\n    await expect(tableData).toHaveCount(10);\n\n    // Navigate to settings menu\n    const settingsMenu = page.getByRole('button', { name: /settings/i });\n    await settingsMenu.click();\n\n    // Verify settings menu is visible\n    const settingsMenuOpen = page.getByRole('status', { name: /settings/i });\n    await expect(settingsMenuOpen).toBeVisible();\n\n    // Verify column visibility toggle button is present\n    const toggleButton = page.getByRole('button', { name: /toggle columns/i });\n    await expect(toggleButton).toBeVisible();\n\n    // Click toggle button to hide columns\n    await toggleButton.click();\n\n    // Verify columns are hidden\n    const visibleColumnHeaders = page.getByRole('columnheader');\n    await expect(visibleColumnHeaders).toHaveCount(0);\n\n    // Verify table data is still visible\n    await expect(tableData).toHaveCount(10);\n\n    // Verify settings menu is still open\n    await expect(settingsMenuOpen).toBeVisible();\n\n    // Click toggle button again to show columns\n    await toggleButton.click();\n\n    // Verify columns are visible again\n    await expect(visibleColumnHeaders).toHaveCount(5);\n\n    // Verify table data is still visible\n    await expect(tableData).toHaveCount(10);\n\n    // Verify settings menu is closed\n    const settingsMenuClosed = page.getByRole('status', { name: /closed/i });\n    await expect(settingsMenuClosed).toBeVisible();\n  });\n\n  test('should handle edge case: no columns available to toggle', async ({ page }) => {\n    // Navigate to table list with no columns\n    await page.goto('/table-list/empty');\n\n    // Verify no column headers are present\n    const columnHeaders = page.getByRole('columnheader');\n    await expect(columnHeaders).toHaveCount(0);\n\n    // Verify table data is still visible\n    const tableData = page.getByRole('row');\n    await expect(tableData).toHaveCount(0);\n\n    // Navigate to settings menu\n    const settingsMenu = page.getByRole('button', { name: /settings/i });\n    await settingsMenu.click();\n\n    // Verify settings menu is visible\n    const settingsMenuOpen = page.getByRole('status', { name: /settings/i });\n    await expect(settingsMenuOpen).toBeVisible();\n\n    // Verify column visibility toggle button is present\n    const toggleButton = page.getByRole('button', { name: /toggle columns/i });\n    await expect(toggleButton).toBeVisible();\n\n    // Click toggle button\n    await toggleButton.click();\n\n    // Verify no columns are visible\n    const visibleColumnHeaders = page.getByRole('columnheader');\n    await expect(visibleColumnHeaders).toHaveCount(0);\n\n    // Verify table data is still visible\n    await expect(tableData).toHaveCount(0);\n\n    // Verify settings menu is still open\n    await expect(settingsMenuOpen).toBeVisible();\n\n    // Verify no error message is displayed\n    const errorMessage = page.getByText(/no columns to toggle/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify settings menu is closed\n    const settingsMenuClosed = page.getByRole('status', { name: /closed/i });\n    await expect(settingsMenuClosed).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7938,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4125,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 344.435,
+      "feedback_used": ""
+    }
+  ]
+}

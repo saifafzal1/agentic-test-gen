@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_014",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8419,
+  "total_latency_s": 71.2,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Form Keyboard Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should navigate login form fields using arrow keys', async ({ page }) => {\n    // Verify login form is visible\n    const loginForm = page.getByRole('form', { name: /login/i });\n    await expect(loginForm).toBeVisible();\n\n    // Focus on email input using Tab\n    const emailInput = page.getByLabel(/email/i);\n    await emailInput.focus();\n    await expect(emailInput).toBeFocused();\n\n    // Verify email input has focus\n    await expect(emailInput).toHaveAttribute('data-testid', /email-input/);\n\n    // Navigate to password input using Tab\n    const passwordInput = page.getByLabel(/password/i);\n    await passwordInput.focus();\n    await expect(passwordInput).toBeFocused();\n\n    // Verify password input has focus\n    await expect(passwordInput).toHaveAttribute('data-testid', /password-input/);\n\n    // Navigate to submit button using Tab\n    const submitButton = page.getByRole('button', { name: /sign in/i });\n    await submitButton.focus();\n    await expect(submitButton).toBeFocused();\n\n    // Verify submit button has focus\n    await expect(submitButton).toHaveAttribute('data-testid', /submit-button/);\n\n    // Verify submit button is visible and enabled\n    await expect(submitButton).toBeVisible();\n    await expect(submitButton).toBeEnabled();\n  });\n\n  test('should handle arrow key navigation within login form', async ({ page }) => {\n    // Focus on email input using Tab\n    const emailInput = page.getByLabel(/email/i);\n    await emailInput.focus();\n\n    // Navigate to password input using Down arrow\n    await emailInput.press('ArrowDown');\n    await expect(passwordInput).toBeFocused();\n\n    // Navigate to submit button using Down arrow\n    await passwordInput.press('ArrowDown');\n    await expect(submitButton).toBeFocused();\n\n    // Navigate back to email input using Up arrow\n    await submitButton.press('ArrowUp');\n    await expect(emailInput).toBeFocused();\n\n    // Navigate to password input using Down arrow\n    await emailInput.press('ArrowDown');\n    await expect(passwordInput).toBeFocused();\n\n    // Verify form is still accessible and valid\n    await expect(loginForm).toBeVisible();\n    await expect(submitButton).toBeEnabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8419,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4729,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.2,
+      "feedback_used": ""
+    }
+  ]
+}

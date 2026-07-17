@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_106",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8402,
+  "total_latency_s": 128.327,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Submission Errors Scroll Into View', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form-page');\n  });\n\n  test('should scroll error messages into view when form validation fails', async ({ page }) => {\n    // Intercept the form submission API\n    await page.route('**/api/form-submit', (route) => {\n      route.abort('Validation failed');\n    });\n\n    // Fill in invalid form fields\n    const nameInput = page.getByLabel('Name');\n    await nameInput.fill('John Doe');\n\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('john.doe@example.com');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('weakpassword');\n\n    // Submit the form\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify error message is visible\n    const errorMessage = page.getByText('Name is required');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message is at the top of the viewport\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message is scrollable\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).toBeVisible();\n\n    // Verify form fields are still visible\n    await expect(nameInput).toBeVisible();\n    await expect(emailInput).toBeVisible();\n    await expect(passwordInput).toBeVisible();\n\n    // Verify error message is visible when scrolling\n    await page.evaluate(() => {\n      window.scrollBy(0, 1000);\n    });\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should not scroll error messages when form is valid', async ({ page }) => {\n    // Fill in valid form fields\n    const nameInput = page.getByLabel('Name');\n    await nameInput.fill('Jane Smith');\n\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('jane.smith@example.com');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('SecurePassword123');\n\n    // Submit the form\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify error message is not visible\n    const errorMessage = page.getByText('Name is required');\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify form fields are still visible\n    await expect(nameInput).toBeVisible();\n    await expect(emailInput).toBeVisible();\n    await expect(passwordInput).toBeVisible();\n\n    // Verify error message does not scroll into view\n    await page.evaluate(() => {\n      window.scrollBy(0, 1000);\n    });\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8402,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4672,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 128.327,
+      "feedback_used": ""
+    }
+  ]
+}

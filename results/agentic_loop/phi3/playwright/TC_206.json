@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_206",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 3,
+  "best_score": 0.8043,
+  "total_latency_s": 1154.932,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Focus Indicators on Interactive Elements', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/interactive-elements');\n  });\n\n  test('should display focus indicators on all interactive elements when tabbed through', async ({ page }) => {\n    // Verify initial state with no focus\n    const button = page.getByRole('button', { name: /submit/i });\n    const input = page.getByLabel(/email/i);\n    const checkbox = page.getByRole('checkbox', { name: /terms/i });\n    const select = page.getByRole('combobox', { name: /country/i });\n    const textarea = page.getByLabel(/feedback/i);\n\n    await expect(button).not.toBeFocused();\n    await expect(input).not.toBeFocused();\n    await expect(checkbox).not.toBeFocused();\n    await expect(select).not.toBeFocused();\n    await expect(textarea).not.toBeFocused();\n\n    // Tab through elements\n    await button.press('Tab');\n    await expect(button).toBeFocused();\n    await expect(button).toHaveClass(/focus-indicator/);\n\n    await input.press('Tab');\n    await expect(input).toBeFocused();\n    await expect(input).toHaveClass(/focus-indicator/);\n\n    await checkbox.press('Tab');\n    await expect(checkbox).toBeFocused();\n    await expect(checkbox).toHaveClass(/focus-indicator/);\n\n    await select.press('Tab');\n    await expect(select).toBeFocused();\n    await expect(select).toHaveClass(/focus-indicator/);\n\n    await textarea.press('Tab');\n    await expect(textarea).toBeFocused();\n    await expect(textarea).toHaveClass(/focus-indicator/);\n\n    // Verify focus indicator is visible on all elements\n    const focusStyles = page.getByRole('button').evaluate((el) => getComputedStyle(el).getPropertyValue('outline-color'));\n    const inputFocusStyles = page.getByLabel(/email/i).evaluate((el) => getComputedStyle(el).getPropertyValue('outline-color'));\n    const checkboxFocusStyles = page.getByRole('checkbox', { name: /terms/i }).evaluate((el) => getComputedStyle(el).getPropertyValue('outline-color'));\n    const selectFocusStyles = page.getByRole('combobox', { name: /country/i }).evaluate((el) => getComputedStyle(el).getPropertyValue('outline-color'));\n    const textareaFocusStyles = page.getByLabel(/feedback/i).evaluate((el) => getComputedStyle(el).getPropertyValue('outline-color'));\n\n    expect(focusStyles).toBeDefined();\n    expect(inputFocusStyles).toBeDefined();\n    expect(checkboxFocusStyles).toBeDefined();\n    expect(selectFocusStyles).toBeDefined();\n    expect(textareaFocusStyles).toBeDefined();\n\n    // Verify focus indicator is visible and styled correctly\n    expect(focusStyles).toBe('rgb(255, 0, 0)');\n    expect(inputFocusStyles).toBe('rgb(255, 0, 0)');\n    expect(checkboxFocusStyles).toBe('rgb(255, 0, 0)');\n    expect(selectFocusStyles).toBe('rgb(255, 0, 0)');\n    expect(textareaFocusStyles).toBe('rgb(255, 0, 0)');\n\n    // Verify focus indicator is removed when losing focus\n    await input.press('ArrowUp');\n    await expect(input).not.toHaveClass(/focus-indicator/);\n  });\n\n  test('should not display focus indicators on disabled elements', async ({ page }) => {\n    // Verify initial state with no focus indicators on disabled elements\n    const disabledButton = page.getByRole('button', { name: /submit/i });\n    const disabledInput = page.getByLabel(/email/i);\n    const disabledCheckbox = page.getByRole('checkbox', { name: /terms/i });\n    const disabledSelect = page.getByRole('combobox', { name: /country/i });\n    const disabledTextarea = page.getByLabel(/feedback/i);\n\n    await expect(disabledButton).not.toBeFocused();\n    await expect(disabledInput).not.toBeFocused();\n    await expect(disabledCheckbox).not.toBeFocused();\n    await expect(disabledSelect).not.toBeFocused();\n    await expect(disabledTextarea).not.toBeFocused();\n\n    // Verify focus indicators are not displayed on disabled elements\n    const disabledButtonFocusStyles = page.getByRole('button', { name: /submit/i }).evaluate((el) => getComputedStyle(el).getPropertyValue('outline-color'));\n    const disabledInputFocusStyles = page.getByLabel(/email/i).evaluate((el) => getComputedStyle(el).getPropertyValue('outline-color'));\n    const disabledCheckboxFocusStyles = page.getByRole('checkbox', { name: /terms/i }).evaluate((el) => getComputedStyle(el).getPropertyValue('outline-color'));\n    const disabledSelectFocusStyles = page.getByRole('combobox', { name: /country/i }).evaluate((el) => getComputedStyle(el).getPropertyValue('outline-color'));\n    const disabledTextareaFocusStyles = page.getByLabel(/feedback/i).evaluate((el) => getComputedStyle(el).getPropertyValue('outline-color'));\n\n    expect(disabledButtonFocusStyles).toBeUndefined();\n    expect(disabledInputFocusStyles).toBeUndefined();\n    expect(disabledCheckboxFocusStyles).toBeUndefined();\n    expect(disabledSelectFocusStyles).toBeUndefined();\n    expect(disabledTextareaFocusStyles).toBeUndefined();\n\n    // Verify focus indicator is not visible on disabled elements\n    await expect(disabledButton).not.toHaveClass(/focus-indicator/);\n    await expect(disabledInput).not.toHaveClass(/focus-indicator/);\n    await expect(disabledCheckbox).not.toHaveClass(/focus-indicator/);\n    await expect(disabledSelect).not.toHaveClass(/focus-indicator/);\n    await expect(disabledTextarea).not.toHaveClass(/focus-indicator/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5112,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4374,
+        "missing_keywords": [],
+        "assertion_count": 29,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 60.635,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4824,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3414,
+        "missing_keywords": [],
+        "assertion_count": 37,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 535.357,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.8043,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3478,
+        "missing_keywords": [],
+        "assertion_count": 41,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 558.94,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

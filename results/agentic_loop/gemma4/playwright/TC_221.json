@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_221",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8374,
+  "total_latency_s": 72.199,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Autocomplete Attributes', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form-page');\n  });\n\n  test('should set autocomplete attributes correctly for form fields', async ({ page }) => {\n    // Verify autocomplete attribute is set for name field\n    const nameInput = page.getByLabel('Full Name');\n    await expect(nameInput).toHaveAttribute('autocomplete', 'given-name');\n\n    // Verify autocomplete attribute is set for email field\n    const emailInput = page.getByLabel('Email Address');\n    await expect(emailInput).toHaveAttribute('autocomplete', 'email');\n\n    // Verify autocomplete attribute is set for phone field\n    const phoneInput = page.getByLabel('Phone Number');\n    await expect(phoneInput).toHaveAttribute('autocomplete', 'tel');\n\n    // Verify autocomplete attribute is set for address field\n    const addressInput = page.getByLabel('Street Address');\n    await expect(addressInput).toHaveAttribute('autocomplete', 'street-address');\n\n    // Verify autocomplete attribute is set for zip code field\n    const zipInput = page.getByLabel('Zip Code');\n    await expect(zipInput).toHaveAttribute('autocomplete', 'postal-code');\n\n    // Verify autocomplete attribute is set for country field\n    const countrySelect = page.getByLabel('Country');\n    await expect(countrySelect).toHaveAttribute('autocomplete', 'country');\n\n    // Verify autocomplete attribute is set for birthdate field\n    const birthdateInput = page.getByLabel('Date of Birth');\n    await expect(birthdateInput).toHaveAttribute('autocomplete', 'bd');\n\n    // Verify autocomplete attribute is set for password field\n    const passwordInput = page.getByLabel('Password');\n    await expect(passwordInput).toHaveAttribute('autocomplete', 'current-password');\n\n    // Verify autocomplete attribute is set for username field\n    const usernameInput = page.getByLabel('Username');\n    await expect(usernameInput).toHaveAttribute('autocomplete', 'username');\n  });\n\n  test('should handle missing autocomplete attributes gracefully', async ({ page }) => {\n    // Navigate to a page with missing autocomplete attributes\n    await page.goto('/form-page-no-autocomplete');\n\n    // Verify name field exists but lacks autocomplete attribute\n    const nameInput = page.getByLabel('Full Name');\n    await expect(nameInput).toBeVisible();\n    await expect(nameInput).not.toHaveAttribute('autocomplete');\n\n    // Verify email field exists but lacks autocomplete attribute\n    const emailInput = page.getByLabel('Email Address');\n    await expect(emailInput).toBeVisible();\n    await expect(emailInput).not.toHaveAttribute('autocomplete');\n\n    // Verify phone field exists but lacks autocomplete attribute\n    const phoneInput = page.getByLabel('Phone Number');\n    await expect(phoneInput).toBeVisible();\n    await expect(phoneInput).not.toHaveAttribute('autocomplete');\n\n    // Verify form submission still works without autocomplete\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8374,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4579,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.199,
+      "feedback_used": ""
+    }
+  ]
+}

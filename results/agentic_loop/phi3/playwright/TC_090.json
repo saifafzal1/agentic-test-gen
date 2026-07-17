@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_090",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7788,
+  "total_latency_s": 583.415,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Internet Connection Drop Message', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display friendly error message when internet connection drops', async ({ page }) => {\n    // Setup: Mock the network response to simulate a dropped connection\n    await page.route('**/api/data', async (route) => {\n      await new Promise(resolve => setTimeout(resolve, 100));\n      route.abort('Connection dropped');\n    });\n\n    // Intercept the initial data fetch request\n    const dataRequest = page.waitForResponse('**/api/data');\n    await dataRequest.abort();\n\n    // Verify error message is visible\n    const errorMessage = page.getByRole('alert');\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).toContainText('Unable to load data');\n\n    // Verify error message has a dismiss button\n    const dismissButton = page.getByRole('button', { name: /dismiss/i });\n    await expect(dismissButton).toBeVisible();\n\n    // Verify error message has a retry button\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify error message has a link to network settings\n    const networkSettingsLink = page.getByRole('link', { name: /network settings/i });\n    await expect(networkSettingsLink).toBeVisible();\n\n    // Verify error message has a timestamp\n    const timestamp = page.getByText(/at \\d{2}:\\d{2}:\\d{2}/);\n    await expect(timestamp).toBeVisible();\n\n    // Verify error message has a user-friendly icon\n    const icon = page.getByRole('img', { name: /no connection/i });\n    await expect(icon).toBeVisible();\n\n    // Verify error message is styled appropriately\n    const errorClass = page.getByTestId('error-message');\n    await expect(errorClass).toHaveClass(/is-visible/);\n\n    // Verify error message is not displayed when connection is restored\n    await page.route('**/api/data', async (route) => {\n      await route.continue();\n    });\n\n    // Verify error message disappears\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify dashboard content is restored\n    const dashboardContent = page.getByRole('main');\n    await expect(dashboardContent).toBeVisible();\n\n    // Verify data is now visible\n    const dataTable = page.getByRole('table');\n    await expect(dataTable).toBeVisible();\n\n    // Verify data is loaded\n    const dataRows = page.locator('[data-testid=\"data-row\"]');\n    await expect(dataRows).toHaveCount(3);\n  });\n\n  test('should not display error message when internet connection is restored', async ({ page }) => {\n    // Setup: Mock the network response to simulate a dropped connection\n    await page.route('**/api/data', async (route) => {\n      await new Promise(resolve => setTimeout(resolve, 100));\n      route.abort('Connection dropped');\n    });\n\n    // Intercept the initial data fetch request\n    const dataRequest = page.waitForResponse('**/api/data');\n    await dataRequest.abort();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByRole('alert');\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).toContainText('Unable to load data');\n\n    // Verify error message has a dismiss button\n    const dismissButton = page.getByRole('button', { name: /dismiss/i });\n    await expect(dismissButton).toBeVisible();\n\n    // Verify error message has a retry button\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify error message has a link to network settings\n    const networkSettingsLink = page.getByRole('link', { name: /network settings/i });\n    await expect(networkSettingsLink).toBeVisible();\n\n    // Verify error message has a timestamp\n    const timestamp = page.getByText(/at \\d{2}:\\d{2}:\\d{2}/);\n    await expect(timestamp).toBeVisible();\n\n    // Verify error message has a user-friendly icon\n    const icon = page.getByRole('img', { name: /no connection/i });\n    await expect(icon).toBeVisible();\n\n    // Verify error message is styled appropriately\n    const errorClass = page.getByTestId('error-message');\n    await expect(errorClass).toHaveClass(/is-visible/);\n\n    // Restore the connection\n    await page.route('**/api/data', async (route) => {\n      await route.continue();\n    });\n\n    // Verify error message disappears\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify dashboard content is restored\n    const dashboardContent = page.getByRole('main');\n    await expect(dashboardContent).toBeVisible();\n\n    // Verify data is now visible\n    const dataTable = page.getByRole('table');\n    await expect(dataTable).toBeVisible();\n\n    // Verify data is loaded\n    const dataRows = page.locator('[data-testid=\"data-row\"]');\n    await expect(dataRows).toHaveCount(3);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4711,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3236,
+        "missing_keywords": [],
+        "assertion_count": 29,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 54.367,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7788,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3627,
+        "missing_keywords": [],
+        "assertion_count": 24,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 529.048,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_272",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7983,
+  "total_latency_s": 72.585,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('In-App Notifications Real-Time Update', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display new notifications in real-time without page refresh', async ({ page }) => {\n    // Verify initial notification count\n    const notificationBadge = page.getByRole('status', { name: /notifications/i });\n    await expect(notificationBadge).toBeVisible();\n    const initialCount = await notificationBadge.textContent();\n    expect(initialCount).toContain('0');\n\n    // Intercept the WebSocket connection\n    await page.route('**/ws/notifications', (route) => {\n      route.continue();\n    });\n\n    // Verify WebSocket connection is established\n    const wsElement = page.locator('[data-testid=\"websocket-connection\"]');\n    await expect(wsElement).toBeVisible();\n\n    // Simulate a new notification via WebSocket\n    await page.route('**/ws/notifications', (route) => {\n      route.abort();\n    });\n    await page.route('**/ws/notifications', (route) => {\n      route.continue();\n    });\n\n    // Wait for the notification to appear\n    await page.waitForTimeout(500);\n\n    // Verify notification badge updates\n    await expect(notificationBadge).toContainText('1');\n\n    // Verify notification list item appears\n    const notificationItem = page.getByRole('listitem', { name: /new notification/i });\n    await expect(notificationItem).toBeVisible();\n\n    // Verify notification content is displayed\n    const notificationText = page.getByText('You have a new notification');\n    await expect(notificationText).toBeVisible();\n\n    // Verify notification has a timestamp\n    const timestamp = page.getByText(/just now/i);\n    await expect(timestamp).toBeVisible();\n  });\n\n  test('should handle multiple real-time notifications and clear badge on read', async ({ page }) => {\n    // Verify initial notification count\n    const notificationBadge = page.getByRole('status', { name: /notifications/i });\n    await expect(notificationBadge).toBeVisible();\n    const initialCount = await notificationBadge.textContent();\n    expect(initialCount).toContain('0');\n\n    // Intercept WebSocket and simulate multiple notifications\n    await page.route('**/ws/notifications', (route) => {\n      route.continue();\n    });\n\n    // Simulate first notification\n    await page.route('**/ws/notifications', (route) => {\n      route.abort();\n    });\n    await page.route('**/ws/notifications', (route) => {\n      route.continue();\n    });\n    await page.waitForTimeout(500);\n    await expect(notificationBadge).toContainText('1');\n\n    // Simulate second notification\n    await page.route('**/ws/notifications', (route) => {\n      route.abort();\n    });\n    await page.route('**/ws/notifications', (route) => {\n      route.continue();\n    });\n    await page.waitForTimeout(500);\n    await expect(notificationBadge).toContainText('2');\n\n    // Verify both notifications are visible\n    const notificationItems = page.getByRole('listitem', { name: /new notification/i });\n    await expect(notificationItems).toHaveCount(2);\n\n    // Click on the first notification to mark as read\n    const firstNotification = page.getByRole('listitem', { name: /new notification/i }).first();\n    await firstNotification.click();\n\n    // Verify notification badge count decreases\n    await expect(notificationBadge).toContainText('1');\n\n    // Verify notification is marked as read\n    const readNotification = page.getByText(/read/i);\n    await expect(readNotification).toBeVisible();\n\n    // Verify unread notification still exists\n    const unreadNotification = page.getByRole('listitem', { name: /new notification/i }).last();\n    await expect(unreadNotification).toBeVisible();\n    await expect(unreadNotification).not.toContainText('read');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7983,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4277,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.585,
+      "feedback_used": ""
+    }
+  ]
+}

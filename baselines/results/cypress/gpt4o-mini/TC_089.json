@@ -1,0 +1,13 @@
+{
+  "id": "TC_089",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error page if the server returns a 500 error.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Error Page Handling', () => {\n    beforeEach(() => {\n        cy.intercept('GET', '/api/data', {\n            statusCode: 500,\n            body: { error: 'Internal Server Error' },\n        }).as('getData');\n        cy.visit('/'); // Adjust the URL to your application's entry point\n    });\n\n    it('should display the error page on 500 server error', () => {\n        cy.wait('@getData');\n        cy.get('.error-page').should('be.visible');\n        cy.get('.error-page').contains('Internal Server Error');\n    });\n\n    it('should not display the error page on successful response', () => {\n        cy.intercept('GET', '/api/data', {\n            statusCode: 200,\n            body: { data: 'Success' },\n        }).as('getDataSuccess');\n        \n        cy.reload();\n        cy.wait('@getDataSuccess');\n        cy.get('.error-page').should('not.exist');\n        cy.get('.success-message').should('be.visible').contains('Success');\n    });\n});",
+  "prompt_tokens": 114,
+  "completion_tokens": 218,
+  "latency_s": 3.01,
+  "timestamp": "2026-06-19T16:31:03.845265"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_162",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7326,
+  "total_latency_s": 72.588,
+  "final_script": "describe('Virtual Scroll List - 10,000 Rows', () => {\n  beforeEach(() => {\n    cy.visit('/virtual-scroll');\n  });\n\n  it('should render and scroll through 10,000 rows without lag', () => {\n    // Verify initial state\n    cy.get('[data-testid=\"scroll-container\"]').should('be.visible');\n    cy.get('[data-testid=\"row-0\"]').should('be.visible');\n    cy.get('[data-testid=\"row-1\"]').should('be.visible');\n\n    // Scroll to the bottom\n    cy.get('[data-testid=\"scroll-container\"]').scrollTo('bottom');\n\n    // Verify the last row is visible\n    cy.get('[data-testid=\"row-10000-1\"]').should('be.visible');\n    cy.get('[data-testid=\"row-10000-1\"]').should('contain', 'Row 10000');\n\n    // Verify row content is loaded and not empty\n    cy.get('[data-testid=\"row-10000-1\"]').should('contain', 'Data');\n    cy.get('[data-testid=\"row-10000-1\"]').should('have.length.greaterThan', 0);\n\n    // Verify scroll performance by checking for smooth scrolling\n    cy.get('[data-testid=\"scroll-container\"]').then(($container) => {\n      const scrollHeight = $container[0].scrollHeight;\n      const clientHeight = $container[0].clientHeight;\n      expect(scrollHeight).to.be.greaterThan(clientHeight);\n    });\n\n    // Verify pagination/loading indicator is not stuck\n    cy.get('[data-testid=\"loading-indicator\"]').should('not.exist');\n  });\n\n  it('should handle rapid scrolling and maintain row visibility', () => {\n    // Scroll to a middle row\n    cy.get('[data-testid=\"scroll-container\"]').scrollTo('center');\n\n    // Verify a middle row is visible\n    cy.get('[data-testid=\"row-5000\"]').should('be.visible');\n    cy.get('[data-testid=\"row-5000\"]').should('contain', 'Row 5500');\n\n    // Rapidly scroll up and down\n    cy.get('[data-testid=\"scroll-container\"]').then(($container) => {\n      const initialScrollTop = $container[0].scrollTop;\n      cy.wrap($container).scrollTo('top');\n      cy.wrap($container).scrollTo('bottom');\n      cy.wrap($container).scrollTo('center');\n    });\n\n    // Verify row visibility is maintained after rapid scrolling\n    cy.get('[data-testid=\"row-1\"]').should('be.visible');\n    cy.get('[data-testid=\"row-10000-1\"]').should('be.visible');\n    cy.get('[data-testid=\"row-5000\"]').should('be.visible');\n\n    // Verify row content integrity after scrolling\n    cy.get('[data-testid=\"row-1\"]').should('contain', 'Row 1');\n    cy.get('[data-testid=\"row-10000-1\"]').should('contain', 'Row 10000');\n\n    // Verify no duplicate or missing rows are rendered\n    cy.get('[data-testid=\"row-1\"]').should('have.length', 1);\n    cy.get('[data-testid=\"row-5000\"]').should('have.length', 1);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7326,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3088,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.588,
+      "feedback_used": ""
+    }
+  ]
+}

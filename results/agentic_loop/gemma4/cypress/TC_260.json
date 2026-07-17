@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_260",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8148,
+  "total_latency_s": 71.638,
+  "final_script": "describe('Error Toast Notification', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should display error toast notification when an action fails', () => {\n    // Intercept the API call that should fail\n    cy.intercept('POST', '/api/items', {\n      statusCode: 500,\n      body: { error: 'Internal server error' }\n    }).as('createItemRequest');\n\n    // Click the button to trigger the failed action\n    cy.get('[data-testid=\"create-item-button\"]').click();\n\n    // Wait for the failed API call\n    cy.wait('@createItemRequest');\n\n    // Verify error toast appears\n    cy.get('[data-testid=\"error-toast\"]')\n      .should('be.visible')\n      .should('contain', 'Failed to create item');\n\n    // Verify error message content\n    cy.get('[data-testid=\"error-toast\"]')\n      .should('contain', 'Internal server error');\n\n    // Verify toast has close button and can be dismissed\n    cy.get('[data-testid=\"error-toast-close-button\"]').click();\n    cy.get('[data-testid=\"error-toast\"]')\n      .should('not.exist');\n  });\n\n  it('should not display error toast when action succeeds', () => {\n    // Intercept the API call that should succeed\n    cy.intercept('POST', '/api/items', {\n      statusCode: 201,\n      body: { id: 123, name: 'New Item' }\n    }).as('createItemRequest');\n\n    // Click the button to trigger the successful action\n    cy.get('[data-testid=\"create-item-button\"]').click();\n\n    // Wait for the successful API call\n    cy.wait('@createItemRequest');\n\n    // Verify success message appears instead of error toast\n    cy.get('[data-testid=\"success-toast\"]')\n      .should('be.visible')\n      .should('contain', 'Item created successfully');\n\n    // Verify error toast does not appear\n    cy.get('[data-testid=\"error-toast\"]').should('not.exist');\n\n    // Verify success toast can be dismissed\n    cy.get('[data-testid=\"success-toast-close-button\"]').click();\n    cy.get('[data-testid=\"success-toast\"]')\n      .should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8148,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5826,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.638,
+      "feedback_used": ""
+    }
+  ]
+}

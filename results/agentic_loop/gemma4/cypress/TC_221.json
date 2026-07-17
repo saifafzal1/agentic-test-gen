@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_221",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7627,
+  "total_latency_s": 72.493,
+  "final_script": "describe('Form Autocomplete Attributes', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n  });\n\n  it('should set autocomplete attributes correctly on form fields', () => {\n    // Verify autocomplete attribute is present on name field\n    cy.get('[data-testid=\"name-input\"]').should('have.attr', 'autocomplete');\n    cy.get('[data-testid=\"name-input\"]').should('have.attr', 'autocomplete', 'given-name');\n\n    // Verify autocomplete attribute is present on email field\n    cy.get('[data-testid=\"email-input\"]').should('have.attr', 'autocomplete');\n    cy.get('[data-testid=\"email-input\"]').should('have.attr', 'autocomplete', 'email');\n\n    // Verify autocomplete attribute is present on phone field\n    cy.get('[data-testid=\"phone-input\"]').should('have.attr', 'autocomplete');\n    cy.get('[data-testid=\"phone-input\"]').should('have.attr', 'autocomplete', 'tel');\n\n    // Verify autocomplete attribute is present on address line 1\n    cy.get('[data-testid=\"address-input\"]').should('have.attr', 'autocomplete');\n    cy.get('[data-testid=\"address-input\"]').should('have.attr', 'autocomplete', 'address-line1');\n\n    // Verify autocomplete attribute is present on zip code field\n    cy.get('[data-testid=\"zip-input\"]').should('have.attr', 'autocomplete');\n    cy.get('[data-testid=\"zip-input\"]').should('have.attr', 'autocomplete', 'postal-code');\n\n    // Verify autocomplete attribute is present on country dropdown\n    cy.get('[data-testid=\"country-select\"]').should('have.attr', 'autocomplete');\n    cy.get('[data-testid=\"country-select\"]').should('have.attr', 'autocomplete', 'country');\n\n    // Fill form and submit\n    cy.get('[data-testid=\"name-input\"]').type('John');\n    cy.get('[data-testid=\"email-input\"]').type('john@example.com');\n    cy.get('[data-testid=\"phone-input\"]').type('555-123-465');\n    cy.get('[data-testid=\"address-input\"]').type('123 Main St');\n    cy.get('[data-testid=\"zip-input\"]').type('12343');\n    cy.get('[data-testid=\"country-select\"]').select('United States');\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify form submission success message\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Form submitted successfully');\n  });\n\n  it('should handle missing autocomplete attributes gracefully', () => {\n    // Navigate to a form with missing autocomplete attributes\n    cy.visit('/form-no-autocomplete');\n\n    // Verify that form still functions without autocomplete\n    cy.get('[data-testid=\"name-input\"]').should('be.visible');\n    cy.get('[data-testid=\"email-input\"]').should('be.visible');\n    cy.get('[data-testid=\"phone-input\"]').should('be.visible');\n\n    // Fill form without autocomplete\n    cy.get('[data-testid=\"name-input\"]').type('Jane');\n    cy.get('[data-testid=\"email-input\"]').type('jane@example.com');\n    cy.get('[data-testid=\"phone-input\"]').type('555-567-700');\n\n    // Submit form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify form submission still works\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Form submitted successfully');\n\n    // Verify error message is not displayed\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7627,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4089,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.493,
+      "feedback_used": ""
+    }
+  ]
+}

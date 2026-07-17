@@ -1,0 +1,13 @@
+{
+  "id": "TC_227",
+  "category": "responsive",
+  "complexity": "simple",
+  "user_story": "As a mobile user, I want touch targets to be large enough to tap easily.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Touch Targets Accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('Verify touch targets are large enough', async ({ page }) => {\n    const touchTarget = page.getByRole('button', { name: /submit/i });\n    const boundingBox = await touchTarget.boundingBox();\n    expect(boundingBox).not.toBeNull();\n    expect(boundingBox!.width).toBeGreaterThanOrEqual(48);\n    expect(boundingBox!.height).toBeGreaterThanOrEqual(48);\n  });\n\n  test('Check touch target spacing', async ({ page }) => {\n    const firstTarget = page.getByRole('button', { name: /submit/i });\n    const secondTarget = page.getByRole('button', { name: /cancel/i });\n    \n    const firstBox = await firstTarget.boundingBox();\n    const secondBox = await secondTarget.boundingBox();\n    \n    expect(firstBox).not.toBeNull();\n    expect(secondBox).not.toBeNull();\n    \n    const distance = Math.abs(firstBox!.x - secondBox!.x);\n    expect(distance).toBeGreaterThanOrEqual(16); // Minimum spacing\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 277,
+  "latency_s": 4.73,
+  "timestamp": "2026-06-19T16:58:57.937088"
+}

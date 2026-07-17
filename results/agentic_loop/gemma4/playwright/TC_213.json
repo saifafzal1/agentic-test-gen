@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_213",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8343,
+  "total_latency_s": 71.918,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dropdown Menu - Escape Key Closure', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dropdown');\n  });\n\n  test('should close dropdown when Escape key is pressed', async ({ page }) => {\n    // Open dropdown by clicking the button\n    const dropdownButton = page.getByRole('button', { name: /open dropdown/i });\n    await dropdownButton.click();\n\n    // Verify dropdown is visible\n    const dropdownMenu = page.getByRole('menuitem', { name: /options/i });\n    await expect(dropdownMenu).toBeVisible();\n\n    // Press Escape key\n    await page.keyboard.press('Escape');\n\n    // Verify dropdown is closed\n    await expect(dropdownMenu).not.toBeVisible();\n    \n    // Verify button text is reset\n    await expect(dropdownButton).toHaveText('Open dropdown');\n  });\n\n  test('should handle Escape key press when dropdown is not open', async ({ page }) => {\n    // Verify dropdown is initially closed\n    const dropdownButton = page.getByRole('button', { name: /open dropdown/i });\n    await expect(dropdownButton).toHaveText('Open dropdown');\n    \n    // Press Escape key when dropdown is closed\n    await page.keyboard.press('Escape');\n    \n    // Verify dropdown remains closed\n    const dropdownMenu = page.getByRole('menuitem', { name: /options/i });\n    await expect(dropdownMenu).not.toBeVisible();\n    \n    // Verify button text is unchanged\n    await expect(dropdownButton).toHaveText('Open dropdown');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8343,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5478,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.918,
+      "feedback_used": ""
+    }
+  ]
+}

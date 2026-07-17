@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_081",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7983,
+  "total_latency_s": 76.26,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Inline Table Row Editing', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table');\n  });\n\n  test('should allow inline editing of a table row without opening a modal', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify table rows are visible\n    const rows = page.getByRole('row');\n    await expect(rows).toHaveCount(3);\n\n    // Get the first editable cell using getByRole('cell')\n    const firstCell = page.getByRole('cell', { name: /John Doe/i });\n    await expect(firstCell).toBeVisible();\n\n    // Click the cell to enter edit mode\n    await firstCell.click();\n\n    // Verify input field appears\n    const inputField = page.getByRole('textbox');\n    await expect(inputField).toBeVisible();\n\n    // Type new value\n    await inputField.fill('Jane Doe');\n\n    // Verify input field has new value\n    await expect(inputField).toHaveValue('Jane Doe');\n\n    // Press Enter to save\n    await inputField.press('Enter');\n\n    // Verify input field disappears and cell content is updated\n    await expect(inputField).not.toBeVisible();\n    await expect(firstCell).toContainText('Jane Doe');\n\n    // Verify save confirmation message appears\n    const successMessage = page.getByText('Updated successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify table row is still visible\n    await expect(rows).toHaveCount(3);\n  });\n\n  test('should handle cancellation of inline edit and revert to original value', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Get the second editable cell using getByRole('cell')\n    const secondCell = page.getByRole('cell', { name: /Jane Smith/i });\n    await expect(secondCell).toBeVisible();\n\n    // Click the cell to enter edit mode\n    await secondCell.click();\n\n    // Verify input field appears\n    const inputField = page.getByRole('textbox');\n    await expect(inputField).toBeVisible();\n\n    // Type new value\n    await inputField.fill('Jane Smith Jr');\n\n    // Verify input field has new value\n    await expect(inputField).toHaveValue('Jane Smith Jr');\n\n    // Press Escape to cancel\n    await inputField.press('Escape');\n\n    // Verify input field disappears\n    await expect(inputField).not.toBeVisible();\n\n    // Verify cell content reverts to original value\n    await expect(secondCell).toContainText('Jane Smith');\n\n    // Verify no success message appears\n    const successMessage = page.getByText('Updated successfully');\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify table row is still visible\n    await expect(rows).toHaveCount(3);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7983,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4276,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 76.26,
+      "feedback_used": ""
+    }
+  ]
+}

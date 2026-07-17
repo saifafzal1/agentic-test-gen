@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_192",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.73,
+  "total_latency_s": 72.536,
+  "final_script": "describe('Search Suggestions Highlighting', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should highlight matching part of search term in suggestions', () => {\n    cy.get('[data-testid=\"search-input\"]').type('apple');\n    cy.get('[data-testid=\"suggestion-item\"]').should('be.visible');\n    cy.get('[data-testid=\"suggestion-item\"]').should('contain', 'apple');\n    cy.get('[data-testid=\"suggestion-item\"]').should('have.class', 'highlighted');\n    cy.get('[data-testid=\"suggestion-item\"]').should('contain', 'apple');\n    cy.get('[data-testid=\"suggestion-item\"]').should('have.attr', 'data-testid', 'suggestion-item');\n    cy.get('[data-testid=\"suggestion-item\"]').should('contain', 'apple');\n  });\n\n  it('should not highlight when no matching suggestions are found', () => {\n    cy.get('[data-testid=\"search-input\"]').type('xyz123');\n    cy.get('[data-testid=\"suggestion-item\"]').should('not.exist');\n    cy.get('[data-testid=\"no-suggestions-message\"]').should('be.visible');\n    cy.get('[data-testid=\"no-suggestions-message\"]').should('contain', 'No suggestions found');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.73,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.536,
+      "feedback_used": ""
+    }
+  ]
+}

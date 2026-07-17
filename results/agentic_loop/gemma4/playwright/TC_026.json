@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_026",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8574,
+  "total_latency_s": 71.067,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Email Field Inline Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/contact-form');\n  });\n\n  test('should display inline validation error when email format is invalid', async ({ page }) => {\n    // Locate and fill email field using getByLabel\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('invalid-email');\n\n    // Wait for validation to trigger\n    await page.waitForTimeout(500);\n\n    // Verify error message appears using getByRole\n    const errorMessage = page.getByRole('alert');\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).toContainText('Please enter a valid email address');\n\n    // Verify error styling is applied\n    await expect(emailInput).toHaveClass(/error-border/);\n\n    // Verify submit button is disabled\n    const submitButton = page.getByRole('button', { name: 'Submit' });\n    await expect(submitButton).toBeDisabled();\n  });\n\n  test('should clear inline validation error when email format becomes valid', async ({ page }) => {\n    // Locate and fill email field with invalid format\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('invalid-email');\n\n    // Wait for initial validation error\n    await page.waitForTimeout(500);\n\n    // Verify error message is visible\n    const errorMessage = page.getByRole('alert');\n    await expect(errorMessage).toBeVisible();\n\n    // Correct the email format\n    await emailInput.fill('user@example.com');\n\n    // Wait for validation to clear\n    await page.waitForTimeout(500);\n\n    // Verify error message is no longer visible\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify error styling is removed\n    await expect(emailInput).not.toHaveClass(/error-border/);\n\n    // Verify submit button is enabled\n    const submitButton = page.getByRole('button', { name: 'Submit' });\n    await expect(submitButton).not.toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8574,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5247,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.067,
+      "feedback_used": ""
+    }
+  ]
+}

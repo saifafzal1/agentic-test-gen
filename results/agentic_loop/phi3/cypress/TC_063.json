@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_063",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7297,
+  "total_latency_s": 31.503,
+  "final_script": "describe('No Results Found Message', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should display \"No results found\" message when API returns empty list', () => {\n    // Intercept the API call to return an empty list\n    cy.intercept('GET', '/api/search?q=nonexistent').as('emptySearch');\n\n    // Trigger the search API call\n    cy.get('[data-testid=\"search-input\"]').type('nonexistent');\n    cy.wait('@emptySearch');\n\n    // Verify the \"No results found\" message is displayed\n    cy.get('[data-testid=\"no-results-message\"]')\n      .should('be.visible')\n      .should('contain', 'No results found');\n\n    // Verify the search input still exists and is not empty\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n    cy.get('[data-testid=\"search-input\"]').should('have.value', 'nonexistent');\n\n    // Verify the search button is still enabled\n    cy.get('[data-testid=\"search-button\"]').should('be.enabled');\n  });\n\n  it('should handle empty list gracefully without crashing', () => {\n    // Intercept the API call to return an empty list\n    cy.intercept('GET', '/api/search?q=empty').as('emptySearch');\n\n    // Trigger the search API call\n    cy.get('[data-testid=\"search-input\"]').type('empty');\n    cy.wait('@emptySearch');\n\n    // Verify the page does not crash and remains responsive\n    cy.get('[data-testid=\"page-title\"]').should('be.visible');\n    cy.get('[data-testid=\"no-results-message\"]').should('be.visible');\n\n    // Verify other page elements are still accessible\n    cy.get('[data-testid=\"nav-menu\"]').should('be.visible');\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n\n    // Verify the search button is still present and functional\n    cy.get('[data-testid=\"search-button\"]').should('be.visible');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Verify the page reloads or navigates to a different state\n    cy.url().should('include', '/search');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7297,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2989,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 31.503,
+      "feedback_used": ""
+    }
+  ]
+}

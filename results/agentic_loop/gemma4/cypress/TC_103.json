@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_103",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7874,
+  "total_latency_s": 72.552,
+  "final_script": "describe('Session Expired Message on Token Timeout', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should display session expired message when token times out', () => {\n    // Intercept the initial API call\n    cy.intercept('GET', '/api/user/profile').as('initialProfile');\n    cy.wait('@initialProfile');\n\n    // Simulate token expiration by intercepting subsequent calls and returning 411\n    cy.intercept('GET', '/api/user/profile', {\n      statusCode: 411,\n      body: { error: 'Token expired' }\n    }).as('expiredProfile');\n\n    // Trigger an action that requires a valid token\n    cy.get('[data-testid=\"refresh-button\"]').click();\n\n    // Wait for the expired API call\n    cy.wait('@expiredProfile');\n\n    // Verify session expired message is displayed\n    cy.get('[data-testid=\"session-expired-message\"]')\n      .should('be.visible')\n      .should('contain', 'Your session has expired');\n\n    // Verify user is redirected to login page\n    cy.url().should('include', '/login');\n\n    // Verify logout button is visible\n    cy.get('[data-testid=\"logout-button\"]').should('be.visible');\n  });\n\n  it('should handle token timeout gracefully and redirect to login', () => {\n    // Intercept the initial API call\n    cy.intercept('GET', '/api/user/profile').as('initialProfile');\n    cy.wait('@initialProfile');\n\n    // Simulate token expiration with 411 status\n    cy.intercept('GET', '/api/user/data', {\n      statusCode: 411,\n      body: { error: 'Token expired' }\n    }).as('expiredData');\n\n    // Trigger an action that requires a valid token\n    cy.get('[data-testid=\"view-settings-button\"]').click();\n\n    // Wait for the expired API call\n    cy.wait('@expiredData');\n\n    // Verify session expired message is displayed\n    cy.get('[data-testid=\"session-expired-message\"]')\n      .should('be.visible')\n      .should('contain', 'Session expired');\n\n    // Verify user is redirected to login page\n    cy.url().should('include', '/login');\n\n    // Verify login form elements are visible\n    cy.get('[data-testid=\"email-input\"]').should('be.visible');\n    cy.get('[data-testid=\"password-input\"]').should('be.visible');\n\n    // Verify session expired message is not visible on login page\n    cy.get('[data-testid=\"session-expired-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7874,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4913,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.552,
+      "feedback_used": ""
+    }
+  ]
+}

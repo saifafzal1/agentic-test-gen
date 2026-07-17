@@ -1,0 +1,13 @@
+{
+  "id": "TC_141",
+  "category": "modal_dialog",
+  "complexity": "medium",
+  "user_story": "As a user, I want a modal with a video to pause the video when closed.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Video Modal', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n        cy.get('.open-modal-button').click(); // Replace with the actual selector to open the modal\n    });\n\n    it('should pause the video when the modal is closed', () => {\n        cy.get('.modal-close-button').click(); // Replace with the actual selector for closing the modal\n        cy.get('video').then(($video) => {\n            const isPaused = $video[0].paused;\n            expect(isPaused).to.be.true; // Verify that the video is paused\n        });\n    });\n\n    it('should keep the video playing when the modal is not closed', () => {\n        cy.get('video').then(($video) => {\n            const isPlayingBeforeClose = !$video[0].paused;\n            expect(isPlayingBeforeClose).to.be.true; // Verify that the video is playing before closing\n        });\n        cy.get('.modal-close-button').click(); // Close the modal\n        cy.get('video').then(($video) => {\n            const isPausedAfterClose = $video[0].paused;\n            expect(isPausedAfterClose).to.be.true; // Verify that the video is paused after closing\n        });\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 268,
+  "latency_s": 4.9,
+  "timestamp": "2026-06-19T16:34:33.207140"
+}

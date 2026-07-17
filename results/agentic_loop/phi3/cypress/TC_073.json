@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_073",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7594,
+  "total_latency_s": 240.968,
+  "final_script": "describe('Task Creation Form', () => {\n  beforeEach(() => {\n    cy.visit('/tasks');\n  });\n\n  it('should successfully create a new task by filling out the form and clicking Save', () => {\n    // Intercept the API call to create a task\n    cy.intercept('POST', '/api/tasks').as('createTask');\n\n    // Fill out the form\n    cy.get('[data-testid=\"task-title-input\"]').type('Complete project report');\n    cy.get('[data-testid=\"task-description-input\"]').type('Prepare and submit the final report to management');\n    cy.get('[data-testid=\"task-due-date-input\"]').type('2023-05-10');\n    cy.get('[data-testid=\"task-priority-select\"]').select('High');\n\n    // Click the Save button\n    cy.get('[data-testid=\"save-task-button\"]').click();\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Task created successfully');\n\n    // Verify task appears in list\n    cy.get('[data-testid=\"task-list\"]').should('contain', 'Complete project report');\n\n    // Verify API call was made\n    cy.wait('@createTask').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n  });\n\n  it('should display validation error when saving an empty task', () => {\n    // Intercept the API call\n    cy.intercept('POST', '/api/tasks').as('createTask');\n\n    // Fill out only the title field\n    cy.get('[data-testid=\"task-title-input\"]').type('');\n\n    // Click the Save button\n    cy.get('[data-testid=\"save-task-button\"]').click();\n\n    // Verify validation error message appears\n    cy.get('[data-testid=\"validation-error-message\"]').should('be.visible').should('contain', 'Task title is required');\n\n    // Verify form is still visible\n    cy.get('[data-testid=\"task-form\"]').should('be.visible');\n\n    // Verify API call was not made\n    cy.wait('@createTask').then((interception) => {\n      expect(interception.request.body).to.not.exist;\n    });\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7594,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.398,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 240.968,
+      "feedback_used": ""
+    }
+  ]
+}

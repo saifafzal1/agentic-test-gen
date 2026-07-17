@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_154",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8511,
+  "total_latency_s": 72.542,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Loading State', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should display loading state while data is fetching', async ({ page }) => {\n    // Intercept the API call to simulate loading\n    await page.route('**/api/table/data', (route) => {\n      setTimeout(() => {\n        route.abort('failed');\n      }, 3000);\n    });\n\n    // Verify table container is visible\n    const tableContainer = page.getByRole('region', { name: /table/i });\n    await expect(tableContainer).toBeVisible();\n\n    // Verify loading spinner is visible\n    const loadingSpinner = page.getByRole('status', { name: /loading/i });\n    await expect(loadingSpinner).toBeVisible();\n\n    // Verify loading message is displayed\n    const loadingMessage = page.getByText(/loading data/i);\n    await expect(loadingMessage).toBeVisible();\n\n    // Verify table rows are not yet visible\n    const tableRows = page.getByRole('row');\n    await expect(tableRows).toHaveCount(0);\n\n    // Wait for loading to complete\n    await page.waitForTimeout(3500);\n\n    // Verify loading spinner is no longer visible\n    await expect(loadingSpinner).not.toBeVisible();\n\n    // Verify loading message is no longer visible\n    await expect(loadingMessage).not.toBeVisible();\n\n    // Verify table rows are now visible\n    await expect(tableRows).toHaveCount(5);\n\n    // Verify table data is displayed\n    const tableData = page.getByText(/sample data/i);\n    await expect(tableData).toBeVisible();\n  });\n\n  test('should handle loading state with error and display error message', async ({ page }) => {\n    // Intercept the API call to simulate error\n    await page.route('**/api/table/data', (route) => {\n      setTimeout(() => {\n        route.abort('failed');\n      }, 1000);\n    });\n\n    // Verify table container is visible\n    const tableContainer = page.getByRole('region', { name: /table/i });\n    await expect(tableContainer).toBeVisible();\n\n    // Verify loading spinner is visible\n    const loadingSpinner = page.getByRole('status', { name: /loading/i });\n    await expect(loadingSpinner).toBeVisible();\n\n    // Wait for loading to complete\n    await page.waitForTimeout(1100);\n\n    // Verify loading spinner is no longer visible\n    await expect(loadingSpinner).not.toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/failed to load data/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify table rows are not visible\n    const tableRows = page.getByRole('row');\n    await expect(tableRows).toHaveCount(0);\n\n    // Verify retry button is visible\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Click retry button\n    await retryButton.click();\n\n    // Verify loading spinner reappears\n    await expect(loadingSpinner).toBeVisible();\n\n    // Wait for retry to complete\n    await page.waitForTimeout(1100);\n\n    // Verify error message is gone\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify table rows are now visible\n    await expect(tableRows).toHaveCount(5);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8511,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.6036,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.542,
+      "feedback_used": ""
+    }
+  ]
+}

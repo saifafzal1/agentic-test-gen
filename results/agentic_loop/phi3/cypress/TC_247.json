@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_247",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7145,
+  "total_latency_s": 40.002,
+  "final_script": "describe('Promo Code Application and Discounted Total Display', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should apply promo code and display discounted total on successful validation', () => {\n    // Intercept the API call to get the original total\n    cy.intercept('GET', '/api/cart/total').as('getTotal');\n    cy.wait('@getTotal');\n    cy.get('[data-testid=\"original-total\"]').should('be.visible').should('contain', '$100.00');\n\n    // Enter a valid promo code\n    cy.get('[data-testid=\"promo-code-input\"]').type('SAVE10');\n    cy.get('[data-testid=\"apply-promo-button\"]').click();\n\n    // Intercept the API call to apply the promo code\n    cy.intercept('POST', '/api/cart/apply-promo').as('applyPromo');\n    cy.wait('@applyPromo');\n\n    // Verify the discounted total is displayed\n    cy.get('[data-testid=\"discounted-total\"]').should('be.visible').should('contain', '$90.00');\n\n    // Verify the discount amount is shown\n    cy.get('[data-testid=\"discount-amount\"]').should('be.visible').should('contain', '$10.00');\n\n    // Verify the promo code was applied successfully\n    cy.get('[data-testid=\"promo-code-status\"]').should('contain', 'Applied');\n\n    // Verify the original total is still visible for reference\n    cy.get('[data-testid=\"original-total\"]').should('be.visible');\n  });\n\n  it('should show error when invalid promo code is entered', () => {\n    // Intercept the API call to get the original total\n    cy.intercept('GET', '/api/cart/total').as('getTotal');\n    cy.wait('@getTotal');\n    cy.get('[data-testid=\"original-total\"]').should('be.visible').should('contain', '$100.00');\n\n    // Enter an invalid promo code\n    cy.get('[data-testid=\"promo-code-input\"]').type('INVALIDCODE');\n    cy.get('[data-testid=\"apply-promo-button\"]').click();\n\n    // Intercept the API call to apply the promo code\n    cy.intercept('POST', '/api/cart/apply-promo').as('applyPromo');\n    cy.wait('@applyPromo');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Invalid promo code');\n\n    // Verify the original total is still visible\n    cy.get('[data-testid=\"original-total\"]').should('be.visible');\n\n    // Verify the discounted total is not displayed\n    cy.get('[data-testid=\"discounted-total\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7145,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2482,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 40.002,
+      "feedback_used": ""
+    }
+  ]
+}

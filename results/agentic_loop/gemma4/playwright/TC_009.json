@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_009",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.856,
+  "total_latency_s": 71.234,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Account Lockout After Failed Login Attempts', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should lock an account after 5 failed login attempts', async ({ page }) => {\n    // Attempt 1\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('user@example.com');\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('wrongpassword1');\n    const loginButton = page.getByRole('button', { name: /sign in/i });\n    await loginButton.click();\n\n    const errorMessage = page.getByText('Invalid credentials');\n    await expect(errorMessage).toBeVisible();\n\n    // Attempt 2\n    await passwordInput.fill('wrongpassword2');\n    await loginButton.click();\n    await expect(errorMessage).toBeVisible();\n\n    // Attempt 3\n    await passwordInput.fill('wrongpassword3');\n    await loginButton.click();\n    await expect(errorMessage).toBeVisible();\n\n    // Attempt 4\n    await passwordInput.fill('wrongpassword4');\n    await loginButton.click();\n    await expect(errorMessage).toBeVisible();\n\n    // Attempt 5 - Should trigger lockout\n    await passwordInput.fill('wrongpassword5');\n    await loginButton.click();\n\n    const lockoutMessage = page.getByText('Account locked. Please contact support');\n    await expect(lockoutMessage).toBeVisible();\n\n    const resetLink = page.getByRole('link', { name: /reset password/i });\n    await expect(resetLink).toBeVisible();\n\n    const contactSupportButton = page.getByRole('button', { name: /contact support/i });\n    await expect(contactSupportButton).toBeVisible();\n  });\n\n  test('should allow account access after successful password reset', async ({ page }) => {\n    // Attempt 1 - Failed\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('user@example.com');\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('wrongpassword1');\n    const loginButton = page.getByRole('button', { name: /sign in/i });\n    await loginButton.click();\n\n    const errorMessage = page.getByText('Invalid credentials');\n    await expect(errorMessage).toBeVisible();\n\n    // Attempt 2 - Failed\n    await passwordInput.fill('wrongpassword2');\n    await loginButton.click();\n    await expect(errorMessage).toBeVisible();\n\n    // Attempt 3 - Failed\n    await passwordInput.fill('wrongpassword3');\n    await loginButton.click();\n    await expect(errorMessage).toBeVisible();\n\n    // Attempt 4 - Failed\n    await passwordInput.fill('wrongpassword4');\n    await loginButton.click();\n    await expect(errorMessage).toBeVisible();\n\n    // Attempt 5 - Should trigger lockout\n    await passwordInput.fill('wrongpassword5');\n    await loginButton.click();\n\n    const lockoutMessage = page.getByText('Account locked. Please contact support');\n    await expect(lockoutMessage).toBeVisible();\n\n    // Reset password\n    const resetLink = page.getByRole('link', { name: /reset password/i });\n    await resetLink.click();\n\n    const resetEmailInput = page.getByLabel('Reset email');\n    await resetEmailInput.fill('user@example.com');\n    const resetTokenButton = page.getByRole('button', { name: /send reset link/i });\n    await resetTokenButton.click();\n\n    const resetSuccessMessage = page.getByText('Password reset link sent');\n    await expect(resetSuccessMessage).toBeVisible();\n\n    // Verify account is unlocked\n    const loginButtonAfterReset = page.getByRole('button', { name: /sign in/i });\n    await expect(loginButtonAfterReset).toBeVisible();\n\n    // Attempt login with correct password\n    await passwordInput.fill('correctpassword123');\n    await loginButtonAfterReset.click();\n\n    const dashboardTitle = page.getByRole('heading', { name: /dashboard/i });\n    await expect(dashboardTitle).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.856,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5201,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.234,
+      "feedback_used": ""
+    }
+  ]
+}

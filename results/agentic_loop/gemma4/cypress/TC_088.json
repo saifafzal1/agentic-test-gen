@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_088",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7731,
+  "total_latency_s": 72.582,
+  "final_script": "describe('User Mention in Comment', () => {\n  beforeEach(() => {\n    cy.visit('/comments');\n  });\n\n  it('should successfully mention another user in a comment', () => {\n    // Setup: Navigate to comment section\n    cy.get('[data-testid=\"comment-input\"]').should('be.visible');\n\n    // Type comment with mention\n    cy.get('[data-testid=\"comment-input\"]').type('Hey @john_doe, can you review this?');\n\n    // Verify mention is formatted correctly\n    cy.get('[data-testid=\"mention-tag\"]').should('contain', '@john_doe');\n    cy.get('[data-testid=\"mention-tag\"]').should('have.class', 'mention-formatted');\n\n    // Verify mention has a tooltip or preview\n    cy.get('[data-testid=\"mention-tag\"]').should('be.visible');\n    cy.get('[data-testid=\"mention-tag\"]').should('contain', 'john_doe');\n\n    // Submit comment\n    cy.get('[data-testid=\"submit-comment-button\"]').click();\n\n    // Verify comment is posted\n    cy.get('[data-testid=\"comment-list\"]').should('contain', 'Hey @john_doe, can you review this?');\n\n    // Verify mention is visible in comment\n    cy.get('[data-testid=\"comment-item\"]').should('contain', '@john_doe');\n\n    // Verify mention is clickable and links to user profile\n    cy.get('[data-testid=\"mention-tag\"]').should('be.visible');\n    cy.get('[data-testid=\"mention-tag\"]').should('have.attr', 'href');\n    cy.get('[data-testid=\"mention-tag\"]').should('have.attr', '/users/john_doe');\n  });\n\n  it('should handle invalid or non-existent user mentions', () => {\n    // Setup: Navigate to comment section\n    cy.get('[data-testid=\"comment-input\"]').should('be.visible');\n\n    // Type comment with invalid mention\n    cy.get('[data-testid=\"comment-input\"]').type('Hey @invaliduser123, please check this out');\n\n    // Verify mention is not formatted as a valid user\n    cy.get('[data-testid=\"mention-tag\"]').should('not.exist');\n\n    // Verify no mention preview appears\n    cy.get('[data-testid=\"mention-preview\"]').should('not.exist');\n\n    // Submit comment\n    cy.get('[data-testid=\"submit-comment-button\"]').click();\n\n    // Verify comment is posted without mention\n    cy.get('[data-testid=\"comment-list\"]').should('contain', 'Hey invaliduser123, please check this out');\n\n    // Verify mention is not clickable\n    cy.get('[data-testid=\"comment-item\"]').should('not.contain', '[data-testid=\"mention-tag\"]');\n\n    // Verify error message for invalid mention is displayed\n    cy.get('[data-testid=\"mention-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"mention-error-message\"]').should('contain', 'User not found');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7731,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4438,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.582,
+      "feedback_used": ""
+    }
+  ]
+}

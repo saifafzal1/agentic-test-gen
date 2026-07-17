@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_183",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7059,
+  "total_latency_s": 81.236,
+  "final_script": "describe('Virus Scan Status for Uploaded Files', () => {\n  beforeEach(() => {\n    cy.visit('/file-upload');\n  });\n\n  it('should display virus scan status after successful file upload', () => {\n    // Intercept the file upload API endpoint\n    cy.intercept('POST', '/api/files/upload').as('fileUpload');\n\n    // Upload a valid file\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/test-file.pdf');\n\n    // Click upload button\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for the upload API call\n    cy.wait('@fileUpload');\n\n    // Verify success message and file name display\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'File uploaded successfully');\n    cy.get('[data-testid=\"file-name-display\"]').should('be.visible').should('contain', 'test-file.pdf');\n\n    // Verify virus scan status is displayed\n    cy.get('[data-testid=\"scan-status\"]').should('be.visible').should('contain', 'Virus scan in progress');\n\n    // Wait for scan completion\n    cy.intercept('GET', '/api/files/scan-status').as('scanStatus');\n    cy.get('[data-testid=\"refresh-scan-button\"]').click();\n    cy.wait('@scanStatus');\n\n    // Verify scan completed and status is clean\n    cy.get('[data-testid=\"scan-status\"]').should('be.visible').should('contain', 'Virus scan complete');\n    cy.get('[data-testid=\"scan-result\"]').should('be.visible').should('contain', 'No viruses found');\n    cy.get('[data-testid=\"scan-result\"]').should('have.class', 'clean');\n  });\n\n  it('should handle virus detection and display appropriate warning', () => {\n    // Intercept the file upload API endpoint\n    cy.intercept('POST', '/api/files/upload').as('fileUpload');\n\n    // Upload a file with a virus\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/infected-file.exe');\n\n    // Click upload button\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for upload and scan\n    cy.wait('@fileUpload');\n\n    // Verify scan status is displayed\n    cy.get('[data-testid=\"scan-status\"]').should('be.visible').should('contain', 'Virus scan in progress');\n\n    // Wait for scan completion with virus detected\n    cy.intercept('GET', '/api/files/scan-status').as('scanStatus');\n    cy.get('[data-testid=\"refresh-scan-button\"]').click();\n    cy.wait('@scanStatus');\n\n    // Verify virus detected warning is displayed\n    cy.get('[data-testid=\"scan-status\"]').should('be.visible').should('contain', 'Virus scan complete');\n    cy.get('[data-testid=\"scan-result\"]').should('be.visible').should('contain', 'Virus detected');\n    cy.get('[data-testid=\"scan-result\"]').should('have.class', 'infected');\n\n    // Verify user is prompted to take action\n    cy.get('[data-testid=\"action-button\"]').should('be.visible').should('contain', 'Quarantine file');\n\n    // Verify file is not available for download\n    cy.get('[data-testid=\"download-button\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7059,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2197,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 81.236,
+      "feedback_used": ""
+    }
+  ]
+}

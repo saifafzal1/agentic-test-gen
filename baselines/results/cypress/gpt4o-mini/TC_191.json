@@ -1,0 +1,13 @@
+{
+  "id": "TC_191",
+  "category": "search_filter",
+  "complexity": "simple",
+  "user_story": "As a user, I want recently searched terms to appear as suggestions.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Search Suggestions', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should display recently searched terms as suggestions', () => {\n        cy.get('input[name=\"search\"]').type('Cypress');\n        cy.get('input[name=\"search\"]').blur(); // Trigger the suggestions to appear\n        cy.get('.suggestions-list').should('be.visible');\n        cy.get('.suggestions-list').contains('Cypress').should('exist');\n    });\n\n    it('should not display suggestions when there are no recent searches', () => {\n        cy.get('input[name=\"search\"]').type('NonExistentTerm');\n        cy.get('input[name=\"search\"]').blur(); // Trigger the suggestions to appear\n        cy.get('.suggestions-list').should('not.exist');\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 176,
+  "latency_s": 2.87,
+  "timestamp": "2026-06-19T16:37:15.051385"
+}

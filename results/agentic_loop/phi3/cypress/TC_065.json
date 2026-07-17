@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_065",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7479,
+  "total_latency_s": 32.439,
+  "final_script": "describe('401 Error Handling - Redirect to Login', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should redirect to login page when API returns 401 Unauthorized', () => {\n    // Setup: intercept the API call to simulate 401 response\n    cy.intercept('GET', '/api/data', {\n      statusCode: 401,\n      body: { error: 'Unauthorized' }\n    }).as('unauthorizedData');\n\n    // Attempt to access protected resource\n    cy.get('[data-testid=\"protected-data-button\"]').click();\n\n    // Verify redirection to login page\n    cy.url().should('include', '/login');\n    cy.get('[data-testid=\"login-form\"]').should('be.visible');\n    cy.get('[data-testid=\"login-email\"]').should('contain', 'Email');\n    cy.get('[data-testid=\"login-password\"]').should('contain', 'Password');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'You are not authorized to access this page');\n\n    // Verify login button is available\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n  });\n\n  it('should handle 401 error with custom error page', () => {\n    // Setup: intercept the API call to simulate 401 response\n    cy.intercept('GET', '/api/user/profile', {\n      statusCode: 401,\n      body: { error: 'Unauthorized' }\n    }).as('unauthorizedProfile');\n\n    // Attempt to access user profile\n    cy.get('[data-testid=\"user-profile-link\"]').click();\n\n    // Verify redirection to custom error page\n    cy.url().should('include', '/error');\n    cy.get('[data-testid=\"error-page-title\"]').should('contain', 'Access Denied');\n    cy.get('[data-testid=\"error-page-description\"]').should('contain', 'You are not authorized to view this page');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n\n    // Verify login link is available\n    cy.get('[data-testid=\"login-link\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7479,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3597,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 32.439,
+      "feedback_used": ""
+    }
+  ]
+}

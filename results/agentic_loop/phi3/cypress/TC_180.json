@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_180",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8031,
+  "total_latency_s": 276.619,
+  "final_script": "describe('File Upload Button Disabled During Upload', () => {\n  beforeEach(() => {\n    cy.visit('/file-upload');\n  });\n\n  it('should disable upload button while file is uploading', () => {\n    // Intercept the file upload API call\n    cy.intercept('POST', '/api/upload', {\n      statusCode: 200,\n      body: { success: true, message: 'File uploaded successfully' }\n    }).as('uploadFile');\n\n    // Verify upload button is visible and enabled initially\n    cy.get('[data-testid=\"upload-button\"]').should('be.visible');\n    cy.get('[data-testid=\"upload-button\"]').should('not.be.disabled');\n\n    // Click the upload button to start the upload\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Verify upload button is now disabled\n    cy.get('[data-testid=\"upload-button\"]').should('be.disabled');\n\n    // Verify upload progress indicator is visible\n    cy.get('[data-testid=\"upload-progress-indicator\"]').should('be.visible');\n\n    // Wait for the upload API call to complete\n    cy.wait('@uploadFile');\n\n    // Verify upload button is re-enabled after completion\n    cy.get('[data-testid=\"upload-button\"]').should('not.be.disabled');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'File uploaded successfully');\n  });\n\n  it('should re-enable upload button after canceling upload', () => {\n    // Intercept the file upload API call\n    cy.intercept('POST', '/api/upload', {\n      statusCode: 200,\n      body: { success: false, message: 'Upload cancelled' }\n    }).as('cancelUpload');\n\n    // Verify upload button is visible and enabled initially\n    cy.get('[data-testid=\"upload-button\"]').should('be.visible');\n    cy.get('[data-testid=\"upload-button\"]').should('not.be.disabled');\n\n    // Click the upload button to start the upload\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Verify upload button is now disabled\n    cy.get('[data-testid=\"upload-button\"]').should('be.disabled');\n\n    // Verify upload progress indicator is visible\n    cy.get('[data-testid=\"upload-progress-indicator\"]').should('be.visible');\n\n    // Click cancel button to cancel the upload\n    cy.get('[data-testid=\"cancel-upload-button\"]').click();\n\n    // Verify upload button is re-enabled after cancellation\n    cy.get('[data-testid=\"upload-button\"]').should('not.be.disabled');\n\n    // Verify cancel success message appears\n    cy.get('[data-testid=\"cancel-success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"cancel-success-message\"]').should('contain', 'Upload cancelled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8031,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5438,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 276.619,
+      "feedback_used": ""
+    }
+  ]
+}

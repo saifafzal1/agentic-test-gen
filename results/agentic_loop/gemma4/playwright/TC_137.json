@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_137",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8544,
+  "total_latency_s": 72.051,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Scroll Prevention', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/modal-page');\n  });\n\n  test('should prevent page scroll when modal is open', async ({ page }) => {\n    // Open the modal\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modal = page.locator('[data-testid=\"modal-dialog\"]');\n    await expect(modal).toBeVisible();\n\n    // Get the initial scroll position of the page content\n    const pageContent = page.locator('[data-testid=\"page-content\"]');\n    const initialScrollY = await pageContent.evaluate((el) => el.scrollTop);\n\n    // Scroll the page content to test scroll prevention\n    await pageContent.evaluate((el) => {\n      el.scrollTop = 1000;\n    });\n\n    // Verify scroll position did not change\n    const finalScrollY = await pageContent.evaluate((el) => el.scrollTop);\n    expect(finalScrollY).toBe(initialScrollY);\n\n    // Verify modal is still visible\n    await expect(modal).toBeVisible();\n  });\n\n  test('should allow page scroll when modal is closed', async ({ page }) => {\n    // Open the modal\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modal = page.locator('[data-testid=\"modal-dialog\"]');\n    await expect(modal).toBeVisible();\n\n    // Get the initial scroll position of the page content\n    const pageContent = page.locator('[data-testid=\"page-content\"]');\n    const initialScrollY = await pageContent.evaluate((el) => el.scrollTop);\n\n    // Close the modal\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n\n    // Verify modal is no longer visible\n    await expect(modal).not.toBeVisible();\n\n    // Scroll the page content to verify scroll is now enabled\n    await pageContent.evaluate((el) => {\n      el.scrollTop = 1000;\n    });\n\n    // Verify scroll position has changed\n    const finalScrollY = await pageContent.evaluate((el) => el.scrollTop);\n    expect(finalScrollY).toBeGreaterThan(initialScrollY);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8544,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.6148,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.051,
+      "feedback_used": ""
+    }
+  ]
+}

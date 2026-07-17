@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_066",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.747,
+  "total_latency_s": 48.181,
+  "final_script": "describe('403 Error Handling - Access Denied Page', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should display access denied page when API returns 403 status', () => {\n    // Intercept the API call with a 403 response\n    cy.intercept('GET', '/api/user/data', {\n      statusCode: 403,\n      body: { error: 'Forbidden', message: 'You do not have permission to view this resource.' }\n    }).as('getUserData403');\n\n    // Attempt to access restricted data\n    cy.get('[data-testid=\"user-data-button\"]').click();\n\n    // Wait for the 403 response\n    cy.wait('@getUserData403');\n\n    // Verify access denied page is displayed\n    cy.get('[data-testid=\"access-denied-page\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Forbidden');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'You do not have permission to view this resource.');\n\n    // Verify navigation to error page is not possible\n    cy.get('[data-testid=\"user-data-button\"]').should('be.disabled');\n    cy.get('[data-testid=\"logout-button\"]').should('be.disabled');\n\n    // Verify user is not logged out\n    cy.get('[data-testid=\"user-name\"]').should('be.visible');\n    cy.get('[data-testid=\"user-name\"]').should('contain', 'John Doe');\n\n    // Verify error page has correct styling\n    cy.get('[data-testid=\"error-container\"]').should('have.class', 'error-page');\n  });\n\n  it('should handle 403 error with custom error page and retry button', () => {\n    // Intercept the API call with a 403 response\n    cy.intercept('GET', '/api/user/data', {\n      statusCode: 403,\n      body: { error: 'Forbidden', message: 'Access denied due to insufficient permissions.' }\n    }).as('getUserData403');\n\n    // Attempt to access restricted data\n    cy.get('[data-testid=\"user-data-button\"]').click();\n\n    // Wait for the 403 response\n    cy.wait('@getUserData403');\n\n    // Verify access denied page is displayed\n    cy.get('[data-testid=\"access-denied-page\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Forbidden');\n\n    // Verify retry button is present and functional\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n    cy.get('[data-testid=\"retry-button\"]').click();\n\n    // Verify retry button triggers API call\n    cy.intercept('GET', '/api/user/data', {\n      statusCode: 200,\n      body: { data: 'User data loaded successfully' }\n    }).as('getUserDataRetry');\n\n    cy.wait('@getUserDataRetry');\n\n    // Verify user is redirected to dashboard\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"user-name\"]').should('be.visible');\n    cy.get('[data-testid=\"user-name\"]').should('contain', 'John Doe');\n\n    // Verify error page is no longer visible\n    cy.get('[data-testid=\"access-denied-page\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.747,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3567,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 48.181,
+      "feedback_used": ""
+    }
+  ]
+}

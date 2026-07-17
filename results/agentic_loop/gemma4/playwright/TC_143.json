@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_143",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8638,
+  "total_latency_s": 72.258,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Image Gallery Lightbox', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/gallery');\n  });\n\n  test('should open lightbox when clicking an image in gallery', async ({ page }) => {\n    // Verify gallery container is visible\n    const gallery = page.getByRole('region', { name: /gallery/i });\n    await expect(gallery).toBeVisible();\n\n    // Get the first image and click it\n    const firstImage = page.getByRole('img', { name: /image 1/i });\n    await expect(firstImage).toBeVisible();\n    await firstImage.click();\n\n    // Verify lightbox overlay appears\n    const lightboxOverlay = page.getByRole('dialog', { name: /lightbox/i });\n    await expect(lightboxOverlay).toBeVisible();\n\n    // Verify image is displayed in lightbox\n    const lightboxImage = page.getByRole('img', { name: /image 1/i });\n    await expect(lightboxImage).toBeVisible();\n\n    // Verify close button is visible\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify lightbox has correct dimensions\n    const lightboxRect = await lightboxOverlay.boundingBox();\n    expect(lightboxRect.width).toBeGreaterThan(0);\n    expect(lightboxRect.height).toBeGreaterThan(0);\n  });\n\n  test('should close lightbox when clicking close button or pressing escape', async ({ page }) => {\n    // Get the first image and open lightbox\n    const firstImage = page.getByRole('img', { name: /image 1/i });\n    await firstImage.click();\n\n    // Verify lightbox is open\n    const lightboxOverlay = page.getByRole('dialog', { name: /lightbox/i });\n    await expect(lightboxOverlay).toBeVisible();\n\n    // Close lightbox using the close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n\n    // Verify lightbox is closed\n    await expect(lightboxOverlay).not.toBeVisible();\n\n    // Open lightbox again\n    await firstImage.click();\n    await expect(lightboxOverlay).toBeVisible();\n\n    // Close lightbox using escape key\n    await page.keyboard.press('Escape');\n    await expect(lightboxOverlay).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8638,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.6461,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.258,
+      "feedback_used": ""
+    }
+  ]
+}

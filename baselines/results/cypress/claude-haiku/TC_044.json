@@ -1,0 +1,13 @@
+{
+  "id": "TC_044",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want clicking a notification to navigate to the relevant content.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Notification Navigation', () => {\n  beforeEach(() => {\n    cy.visit('http://localhost:3000');\n    cy.viewport(1280, 720);\n  });\n\n  it('should navigate to relevant content when clicking a notification', () => {\n    cy.get('[data-testid=\"notification-bell\"]').click();\n    cy.get('[data-testid=\"notification-list\"]').should('be.visible');\n    \n    cy.get('[data-testid=\"notification-item\"]').first().click();\n    \n    cy.url().should('include', '/content');\n    cy.get('[data-testid=\"content-page\"]').should('be.visible');\n    cy.get('h1').should('contain', 'Content');\n  });\n\n  it('should navigate to correct content for different notification types', () => {\n    cy.get('[data-testid=\"notification-bell\"]').click();\n    cy.get('[data-testid=\"notification-list\"]').should('be.visible');\n    \n    cy.get('[data-testid=\"notification-item\"]').contains('Message').click();\n    cy.url().should('include', '/messages');\n    cy.get('[data-testid=\"messages-page\"]').should('be.visible');\n  });\n\n  it('should handle notification click when notification list is empty', () => {\n    cy.get('[data-testid=\"notification-bell\"]').click();\n    cy.get('[data-testid=\"empty-notification-message\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item\"]').should('not.exist');\n  });\n\n  it('should close notification panel after navigation', () => {\n    cy.get('[data-testid=\"notification-bell\"]').click();\n    cy.get('[data-testid=\"notification-list\"]').should('be.visible');\n    \n    cy.get('[data-testid=\"notification-item\"]').first().click();\n    \n    cy.get('[data-testid=\"notification-list\"]').should('not.be.visible');\n    cy.url().should('include', '/content');\n  });\n\n  it('should maintain notification state when navigating back', () => {\n    cy.get('[data-testid=\"notification-bell\"]').click();\n    cy.get('[data-testid=\"notification-item\"]').first().click();\n    cy.url().should('include', '/content');\n    \n    cy.go('back');\n    cy.url().should('not.include', '/content');\n    \n    cy.get('[data-testid=\"notification-bell\"]').click();\n    cy.get('[data-testid=\"notification-list\"]').should('be.visible');\n  });\n});",
+  "prompt_tokens": 119,
+  "completion_tokens": 644,
+  "latency_s": 4.31,
+  "timestamp": "2026-06-19T17:09:24.956233"
+}

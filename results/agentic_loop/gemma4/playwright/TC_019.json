@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_019",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8553,
+  "total_latency_s": 71.072,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Phone Number Field Numeric Input Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/contact-form');\n  });\n\n  test('should accept only numeric input in phone number field', async ({ page }) => {\n    // Locate phone number input using getByLabel\n    const phoneInput = page.getByLabel('Phone Number');\n    await expect(phoneInput).toBeVisible();\n\n    // Verify input field is empty initially\n    await expect(phoneInput).toHaveValue('');\n\n    // Enter valid numeric input\n    await phoneInput.fill('123496701');\n\n    // Verify input contains only numbers\n    await expect(phoneInput).toHaveValue('123496701');\n\n    // Attempt to enter non-numeric characters\n    await phoneInput.fill('1234-6790');\n\n    // Verify input value is sanitized to only numbers\n    await expect(phoneInput).toHaveValue('12346790');\n\n    // Attempt to enter letters\n    await phoneInput.fill('12345abc');\n\n    // Verify input value is sanitized to only numbers\n    await expect(phoneInput).toHaveValue('12345');\n\n    // Verify error message does not appear for valid numeric input\n    const errorMessage = page.getByText('Phone number must contain only digits');\n    await expect(errorMessage).not.toBeVisible();\n\n    // Submit the form\n    const submitButton = page.getByRole('button', { name: 'Submit' });\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should display error message when phone number field is empty and required', async ({ page }) => {\n    // Locate phone number input using getByLabel\n    const phoneInput = page.getByLabel('Phone Number');\n    await expect(phoneInput).toBeVisible();\n\n    // Verify input field is empty\n    await expect(phoneInput).toHaveValue('');\n\n    // Attempt to submit the form without entering a phone number\n    const submitButton = page.getByRole('button', { name: 'Submit' });\n    await submitButton.click();\n\n    // Verify error message appears for empty field\n    const errorMessage = page.getByText('Phone number is required');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify phone input has validation styling (e.g., red border)\n    await expect(phoneInput).toHaveAttribute('aria-invalid', 'true');\n\n    // Verify form was not submitted\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).not.toBeVisible();\n\n    // Enter valid numeric input\n    await phoneInput.fill('123456790');\n\n    // Verify error message disappears\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify phone input no longer has validation styling\n    await expect(phoneInput).not.toHaveAttribute('aria-invalid', 'true');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8553,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5176,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.072,
+      "feedback_used": ""
+    }
+  ]
+}

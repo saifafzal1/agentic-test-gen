@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_160",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8037,
+  "total_latency_s": 40.086,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Numeric Column Summary Row', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should display summary row at the bottom of numeric column when data is present', async ({ page }) => {\n    // Setup: Load table with numeric data\n    await page.route('**/api/table-data', route => {\n      route.continue();\n    });\n\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify summary row is not visible initially\n    const summaryRow = page.getByRole('row', { name: /summary/i });\n    await expect(summaryRow).not.toBeVisible();\n\n    // Verify table headers are present\n    const headers = page.getByRole('rowheader', { name: /column 1|column 2|column 3/i });\n    await expect(headers).toBeVisible();\n\n    // Verify numeric data rows are present\n    const dataRows = page.getByRole('row', { name: /row 1|row 2|row 3/i });\n    await expect(dataRows).toHaveCount(3);\n\n    // Verify summary row is visible after data is loaded\n    await page.waitForResponse(response => response.url().includes('/api/table-data') && response.status() === 200);\n    await expect(summaryRow).toBeVisible();\n\n    // Verify summary row contains correct data\n    const summaryCell = page.getByRole('cell', { name: /total/i });\n    await expect(summaryCell).toContainText('Total');\n\n    const summaryValue = page.getByRole('cell', { name: /1000/i });\n    await expect(summaryValue).toContainText('1000');\n\n    // Verify summary row is styled appropriately\n    await expect(summaryRow).toHaveClass(/summary-row/);\n  });\n\n  test('should not display summary row when no data is present', async ({ page }) => {\n    // Setup: Disable data source\n    await page.route('**/api/table-data', route => {\n      route.abort();\n    });\n\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify summary row is not visible when no data\n    const summaryRow = page.getByRole('row', { name: /summary/i });\n    await expect(summaryRow).not.toBeVisible();\n\n    // Verify table headers are present\n    const headers = page.getByRole('rowheader', { name: /column 1|column 2|column 3/i });\n    await expect(headers).toBeVisible();\n\n    // Verify summary row is still not visible\n    await expect(summaryRow).not.toBeVisible();\n\n    // Verify summary row is not styled\n    await expect(summaryRow).not.toHaveClass(/summary-row/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8037,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4455,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 40.086,
+      "feedback_used": ""
+    }
+  ]
+}

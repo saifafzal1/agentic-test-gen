@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_220",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8082,
+  "total_latency_s": 72.184,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Motion Preference - Reduced Motion', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should respect prefers-reduced-motion setting and disable animations', async ({ page }) => {\n    // Set reduced motion preference using page.evaluate\n    await page.evaluate(() => {\n      document.documentElement.style.transition = 'none';\n      document.documentElement.style.animation = 'none';\n    });\n\n    // Verify reduced motion class is applied\n    const body = page.locator('body');\n    await expect(body).toHaveClass(/reduced-motion/);\n\n    // Click a button that normally triggers an animation\n    const button = page.getByRole('button', { name: /animate/i });\n    await button.click();\n\n    // Verify animation class is not present\n    const animationClass = page.locator('[class*=\"animate-fade\"]');\n    await expect(animationClass).not.toBeVisible();\n\n    // Verify transition property is not set\n    const transitionStyle = await page.evaluate(() => {\n      return getComputedStyle(document.documentElement).transition;\n    });\n    expect(transitionStyle).toBe('none');\n\n    // Verify content appears instantly without transition\n    const content = page.locator('[data-testid=\"animated-content\"]');\n    await expect(content).toBeVisible();\n  });\n\n  test('should respect prefers-reduced-motion setting and disable animations when animation is disabled', async ({ page }) => {\n    // Set reduced motion preference using page.evaluate\n    await page.evaluate(() => {\n      document.documentElement.style.transition = 'none';\n      document.documentElement.style.animation = 'none';\n    });\n\n    // Verify reduced motion class is applied\n    const body = page.locator('body');\n    await expect(body).toHaveClass(/reduced-motion/);\n\n    // Click a button that normally triggers an animation\n    const button = page.getByRole('button', { name: /animate/i });\n    await button.click();\n\n    // Verify animation class is not present\n    const animationClass = page.locator('[class*=\"animate-fade\"]');\n    await expect(animationClass).not.toBeVisible();\n\n    // Verify transition property is not set\n    const transitionStyle = await page.evaluate(() => {\n      return getComputedStyle(document.documentElement).transition;\n    });\n    expect(transitionStyle).toBe('none');\n\n    // Verify content appears instantly without transition\n    const content = page.locator('[data-testid=\"animated-content\"]');\n    await expect(content).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8082,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4606,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.184,
+      "feedback_used": ""
+    }
+  ]
+}

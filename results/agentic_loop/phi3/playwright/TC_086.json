@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_086",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7807,
+  "total_latency_s": 556.152,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mark Record as Favourite', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should mark a record as favourite and display a star icon', async ({ page }) => {\n    // Verify the records list is visible\n    const recordsList = page.getByRole('region', { name: /records/i });\n    await expect(recordsList).toBeVisible();\n\n    // Locate and click the first record using getByRole\n    const recordItem = page.getByRole('listitem', { name: /record 1/i });\n    await expect(recordItem).toBeVisible();\n    await recordItem.click();\n\n    // Verify the record details modal is open\n    const recordDetailsModal = page.locator('[data-testid=\"record-details-modal\"]');\n    await expect(recordDetailsModal).toBeVisible();\n\n    // Verify the star icon is visible and not disabled\n    const starIcon = page.getByRole('button', { name: /star/i });\n    await expect(starIcon).toBeVisible();\n    await expect(starIcon).not.toBeDisabled();\n\n    // Click the star icon to mark as favourite\n    await starIcon.click();\n\n    // Verify the star icon is now active\n    await expect(starIcon).toHaveAttribute('aria-pressed', 'true');\n\n    // Verify the record is now marked as favourite\n    const favouriteCount = page.getByText(/favourites/i);\n    await expect(favouriteCount).toContainText('1');\n\n    // Verify the star icon is displayed\n    await expect(starIcon).toBeVisible();\n\n    // Verify the record details modal is still open\n    await expect(recordDetailsModal).toBeVisible();\n\n    // Verify the record details are visible\n    const recordName = page.getByText(/record 1/i);\n    await expect(recordName).toBeVisible();\n\n    // Verify the record details are updated with favourite status\n    const favouriteStatus = page.getByText(/favourite/i);\n    await expect(favouriteStatus).toBeVisible();\n\n    // Verify the save button is enabled\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await expect(saveButton).not.toBeDisabled();\n\n    // Close the modal\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n\n    // Verify the records list is still visible\n    await expect(recordsList).toBeVisible();\n  });\n\n  test('should not mark a record as favourite if already marked', async ({ page }) => {\n    // Verify the records list is visible\n    const recordsList = page.getByRole('region', { name: /records/i });\n    await expect(recordsList).toBeVisible();\n\n    // Locate and click the first record using getByRole\n    const recordItem = page.getByRole('listitem', { name: /record 1/i });\n    await expect(recordItem).toBeVisible();\n    await recordItem.click();\n\n    // Verify the record details modal is open\n    const recordDetailsModal = page.locator('[data-testid=\"record-details-modal\"]');\n    await expect(recordDetailsModal).toBeVisible();\n\n    // Verify the star icon is visible and not disabled\n    const starIcon = page.getByRole('button', { name: /star/i });\n    await expect(starIcon).toBeVisible();\n    await expect(starIcon).not.toBeDisabled();\n\n    // Click the star icon to mark as favourite\n    await starIcon.click();\n\n    // Verify the star icon is now active\n    await expect(starIcon).toHaveAttribute('aria-pressed', 'true');\n\n    // Verify the record is now marked as favourite\n    const favouriteCount = page.getByText(/favourites/i);\n    await expect(favouriteCount).toContainText('1');\n\n    // Verify the record details are updated with favourite status\n    const favouriteStatus = page.getByText(/favourite/i);\n    await expect(favouriteStatus).toBeVisible();\n\n    // Verify the save button is enabled\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await expect(saveButton).not.toBeDisabled();\n\n    // Click the save button\n    await saveButton.click();\n\n    // Verify the record details modal closes\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n\n    // Verify the records list is still visible\n    await expect(recordsList).toBeVisible();\n\n    // Verify the star icon is still visible and active\n    await expect(starIcon).toBeVisible();\n    await expect(starIcon).toHaveAttribute('aria-pressed', 'true');\n\n    // Verify the record is still marked as favourite\n    await expect(favouriteCount).toContainText('1');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4856,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3721,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 54.745,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7807,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.369,
+        "missing_keywords": [],
+        "assertion_count": 26,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 501.407,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

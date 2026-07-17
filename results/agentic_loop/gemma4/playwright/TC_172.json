@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_172",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.865,
+  "total_latency_s": 72.523,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload Queue - Remove File Before Submission', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should successfully remove a file from the upload queue before submission', async ({ page }) => {\n    // Setup: Upload multiple files\n    const fileInput = page.getByLabel('Upload files');\n    await fileInput.setInputFiles('playwright/fixtures/test-file-1.pdf');\n    await fileInput.setInputFiles('playwright/fixtures/test-file-2.pdf');\n    await fileInput.setInputFiles('playwright/fixtures/test-file-3.pdf');\n\n    // Verify all files are in the queue\n    const queueItems = page.getByRole('listitem', { name: /file/i });\n    await expect(queueItems).toHaveCount(3);\n\n    // Verify file names are displayed\n    const fileNames = page.getByText(/test-file-1\\.pdf|test-file-2\\.pdf|test-file-3\\.pdf/);\n    await expect(fileNames).toBeVisible();\n\n    // Action: Remove the middle file (test-file-2.pdf)\n    const removeButton = page.getByRole('button', { name: /remove/i });\n    await removeButton.click();\n\n    // Verify the file is removed from the queue\n    const updatedQueueItems = page.getByRole('listitem', { name: /file/i });\n    await expect(updatedQueueItems).toHaveCount(2);\n\n    // Verify the removed file name is no longer visible\n    const removedFileName = page.getByText('test-file-2.pdf');\n    await expect(removedFileName).not.toBeVisible();\n\n    // Verify remaining files are still visible\n    const remainingFileNames = page.getByText(/test-file-1\\.pdf|test-file-3\\.pdf/);\n    await expect(remainingFileNames).toBeVisible();\n\n    // Action: Submit the remaining files\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify success message\n    const successMessage = page.getByText(/files submitted successfully/i);\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should handle removing the last file and prevent submission', async ({ page }) => {\n    // Setup: Upload a single file\n    const fileInput = page.getByLabel('Upload files');\n    await fileInput.setInputFiles('playwright/fixtures/test-file-single.pdf');\n\n    // Verify file is in queue\n    const queueItems = page.getByRole('listitem', { name: /file/i });\n    await expect(queueItems).toHaveCount(1);\n\n    // Action: Remove the only file\n    const removeButton = page.getByRole('button', { name: /remove/i });\n    await removeButton.click();\n\n    // Verify queue is empty\n    const emptyQueue = page.getByRole('listitem', { name: /file/i });\n    await expect(emptyQueue).toHaveCount(0);\n\n    // Verify empty state message is displayed\n    const emptyState = page.getByText(/no files in queue/i);\n    await expect(emptyState).toBeVisible();\n\n    // Action: Attempt to submit with empty queue\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/please upload files to submit/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify submission was not successful\n    const successMessage = page.getByText(/files submitted successfully/i);\n    await expect(successMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.865,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5499,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.523,
+      "feedback_used": ""
+    }
+  ]
+}

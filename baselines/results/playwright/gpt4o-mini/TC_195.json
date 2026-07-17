@@ -1,0 +1,13 @@
+{
+  "id": "TC_195",
+  "category": "search_filter",
+  "complexity": "medium",
+  "user_story": "As a user, I want to save a search query for later.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Query Saving', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should save a search query', async ({ page }) => {\n    await page.getByRole('textbox', { name: 'Search' }).fill('Test Query');\n    await page.getByRole('button', { name: 'Search' }).click();\n    await page.getByRole('button', { name: 'Save Query' }).click();\n    \n    const successMessage = await page.getByText('Query saved successfully');\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should display saved search query in saved queries list', async ({ page }) => {\n    await page.getByRole('button', { name: 'Saved Queries' }).click();\n    \n    const savedQuery = await page.getByText('Test Query');\n    await expect(savedQuery).toBeVisible();\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 218,
+  "latency_s": 3.34,
+  "timestamp": "2026-06-19T16:56:43.269984"
+}

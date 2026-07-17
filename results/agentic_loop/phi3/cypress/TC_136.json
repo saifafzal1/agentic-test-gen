@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_136",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7568,
+  "total_latency_s": 50.139,
+  "final_script": "describe('Modal Content Scroll Independent Overflow', () => {\n  beforeEach(() => {\n    cy.visit('/modal-dialog');\n  });\n\n  it('should scroll modal content independently when it overflows horizontally', () => {\n    // Open modal\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Verify modal is visible\n    cy.get('[data-testid=\"modal-title\"]').should('contain', 'Scrollable Modal');\n\n    // Trigger horizontal overflow\n    cy.get('[data-testid=\"modal-content\"]').then((modal) => {\n      modal.find('[data-testid=\"scrollable-content\"]').then((content) => {\n        content.find('[data-testid=\"item-1\"]').then((item) => {\n          item.click();\n        });\n      });\n    });\n\n    // Verify scrollbar appears\n    cy.get('[data-testid=\"modal-scrollbar\"]').should('be.visible');\n\n    // Verify content is scrollable\n    cy.get('[data-testid=\"modal-content\"]').should('have.css', 'overflow-y', 'auto');\n    cy.get('[data-testid=\"modal-content\"]').should('have.css', 'overflow-x', 'auto');\n\n    // Verify content is not scrollable vertically\n    cy.get('[data-testid=\"modal-content\"]').should('not.have.css', 'overflow-y');\n\n    // Verify scroll position is correct\n    cy.get('[data-testid=\"modal-content\"]').then((modal) => {\n      cy.wrap(modal).then((modal) => {\n        cy.wrap(modal.scrollTop()).should('equal', 0);\n        cy.wrap(modal.scrollLeft()).should('equal', 0);\n      });\n    });\n\n    // Close modal\n    cy.get('[data-testid=\"close-modal-btn\"]').click();\n    cy.get('[data-testid=\"modal-dialog\"]').should('not.exist');\n  });\n\n  it('should scroll modal content independently when it overflows vertically', () => {\n    // Open modal\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Trigger vertical overflow\n    cy.get('[data-testid=\"modal-content\"]').then((modal) => {\n      modal.find('[data-testid=\"scrollable-content\"]').then((content) => {\n        content.find('[data-testid=\"item-1\"]').then((item) => {\n          item.click();\n        });\n      });\n    });\n\n    // Verify scrollbar appears\n    cy.get('[data-testid=\"modal-scrollbar\"]').should('be.visible');\n\n    // Verify content is scrollable vertically\n    cy.get('[data-testid=\"modal-content\"]').should('have.css', 'overflow-y', 'auto');\n\n    // Verify content is not scrollable horizontally\n    cy.get('[data-testid=\"modal-content\"]').should('not.have.css', 'overflow-x');\n\n    // Verify scroll position is correct\n    cy.get('[data-testid=\"modal-content\"]').then((modal) => {\n      cy.wrap(modal.scrollTop()).should('equal', 0);\n      cy.wrap(modal.scrollLeft()).should('equal', 0);\n    });\n\n    // Close modal\n    cy.get('[data-testid=\"close-modal-btn\"]').click();\n    cy.get('[data-testid=\"modal-dialog\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7568,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3895,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 50.139,
+      "feedback_used": ""
+    }
+  ]
+}

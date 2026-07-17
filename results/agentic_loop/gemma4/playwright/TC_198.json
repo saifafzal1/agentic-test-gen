@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_198",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8106,
+  "total_latency_s": 72.075,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Term Exclusion by Prefixing with \"-\"', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should exclude a search term when prefixed with \"-\" and display relevant results', async ({ page }) => {\n    // Verify search input is visible\n    const searchInput = page.getByPlaceholder('Search...');\n    await expect(searchInput).toBeVisible();\n\n    // Perform search with exclusion\n    await searchInput.fill('laptop -brand');\n\n    // Wait for search results to load\n    await page.waitForResponse(response => \n      response.url().includes('/api/search') && response.status() === 200\n    );\n\n    // Verify search results container is visible\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n\n    // Verify results are displayed\n    const resultItems = page.getByRole('listitem');\n    await expect(resultItems).toHaveCount(1);\n\n    // Verify the result contains the search term but not the excluded brand\n    const resultText = await resultItems.first().textContent();\n    expect(resultText).toContain('laptop');\n    expect(resultText).not.toContain('brand');\n\n    // Verify no exclusion message is shown\n    const exclusionMessage = page.getByText(/no results found/i);\n    await expect(exclusionMessage).not.toBeVisible();\n  });\n\n  test('should handle multiple excluded terms and display no results when all terms are excluded', async ({ page }) => {\n    // Perform search with multiple exclusions\n    const searchInput = page.getByPlaceholder('Search...');\n    await searchInput.fill('laptop -brand -model');\n\n    // Wait for search results to load\n    await page.waitForResponse(response => \n      response.url().includes('/api/search') && response.status() === 200\n    );\n\n    // Verify search results container is visible\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n\n    // Verify no results are displayed\n    const resultItems = page.getByRole('listitem');\n    await expect(resultItems).toHaveCount(0);\n\n    // Verify no results message is displayed\n    const noResultsMessage = page.getByText(/no results found/i);\n    await expect(noResultsMessage).toBeVisible();\n\n    // Verify the search input still contains the full query\n    await expect(searchInput).toHaveValue('laptop -brand -model');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8106,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4686,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.075,
+      "feedback_used": ""
+    }
+  ]
+}

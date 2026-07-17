@@ -1,0 +1,13 @@
+{
+  "id": "TC_063",
+  "category": "api_response_handling",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see a 'No results found' message when an API returns an empty list.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('API Response Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/your-page-url'); // Replace with your actual page URL\n  });\n\n  test('should display \"No results found\" message when API returns an empty list', async ({ page }) => {\n    // Mock the API response to return an empty list\n    await page.route('**/your-api-endpoint', (route) => {\n      route.fulfill({\n        status: 200,\n        contentType: 'application/json',\n        body: JSON.stringify([]),\n      });\n    });\n\n    // Trigger the API call\n    await page.click(getByRole('button', { name: /fetch data/i })); // Replace with your actual button role and name\n\n    // Assert that the \"No results found\" message is displayed\n    const noResultsMessage = await page.getByText('No results found');\n    await expect(noResultsMessage).toBeVisible();\n  });\n\n  test('should not display \"No results found\" message when API returns data', async ({ page }) => {\n    // Mock the API response to return a non-empty list\n    await page.route('**/your-api-endpoint', (route) => {\n      route.fulfill({\n        status: 200,\n        contentType: 'application/json',\n        body: JSON.stringify([{ id: 1, name: 'Item 1' }]),\n      });\n    });\n\n    // Trigger the API call\n    await page.click(getByRole('button', { name: /fetch data/i })); // Replace with your actual button role and name\n\n    // Assert that the \"No results found\" message is not displayed\n    const noResultsMessage = await page.getByText('No results found');\n    await expect(noResultsMessage).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 142,
+  "completion_tokens": 391,
+  "latency_s": 5.61,
+  "timestamp": "2026-06-19T16:47:43.525359"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_048",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7473,
+  "total_latency_s": 71.305,
+  "final_script": "describe('Breadcrumbs Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/products');\n  });\n\n  it('should display breadcrumbs showing current location in site hierarchy', () => {\n    // Verify breadcrumbs container is visible\n    cy.get('[data-testid=\"breadcrumbs-container\"]').should('be.visible');\n\n    // Verify breadcrumb links exist\n    cy.get('[data-testid=\"breadcrumb-link\"]').should('have.length.greaterThan', 1);\n\n    // Verify breadcrumb structure and text\n    cy.get('[data-testid=\"breadcrumb-link\"]').first().should('contain', 'Home');\n    cy.get('[data-testid=\"breadcrumb-link\"]').eq(1).should('contain', 'Products');\n    cy.get('[data-testid=\"breadcrumb-link\"]').eq(2).should('contain', 'Electronics');\n    cy.get('[data-testid=\"breadcrumb-link\"]').eq(3).should('contain', 'Smartphones');\n\n    // Verify current page indicator is present and not a link\n    cy.get('[data-testid=\"breadcrumb-current-page\"]').should('be.visible');\n    cy.get('[data-testid=\"breadcrumb-current-page\"]').should('contain', 'Smartphones');\n    cy.get('[data-testid=\"breadcrumb-current-page\"]').should('not.have.attr', 'href');\n\n    // Verify breadcrumb separator is present\n    cy.get('[data-testid=\"breadcrumb-separator\"]').should('be.visible');\n  });\n\n  it('should handle deep navigation and display all hierarchy levels', () => {\n    // Navigate to a deeply nested page\n    cy.get('[data-testid=\"breadcrumb-link\"]').eq(2).click();\n    cy.get('[data-testid=\"breadcrumb-link\"]').eq(3).click();\n    cy.get('[data-testid=\"breadcrumb-link\"]').eq(4).click();\n\n    // Verify breadcrumbs updated to reflect new location\n    cy.get('[data-testid=\"breadcrumb-link\"]').first().should('contain', 'Home');\n    cy.get('[data-testid=\"breadcrumb-link\"]').eq(1).should('contain', 'Products');\n    cy.get('[data-testid=\"breadcrumb-link\"]').eq(2).should('contain', 'Electronics');\n    cy.get('[data-testid=\"breadcrumb-link\"]').eq(3).should('contain', 'Smartphones');\n    cy.get('[data-testid=\"breadcrumb-link\"]').eq(4).should('contain', 'Accessories');\n\n    // Verify current page indicator is updated\n    cy.get('[data-testid=\"breadcrumb-current-page\"]').should('contain', 'Accessories');\n\n    // Verify breadcrumbs are still clickable except for the current page\n    cy.get('[data-testid=\"breadcrumb-link\"]').first().should('be.attr', 'href');\n    cy.get('[data-testid=\"breadcrumb-link\"]').eq(1).should('be.attr', 'href');\n    cy.get('[data-testid=\"breadcrumb-link\"]').eq(2).should('be.attr', 'href');\n    cy.get('[data-testid=\"breadcrumb-link\"]').eq(3).should('be.attr', 'href');\n    cy.get('[data-testid=\"breadcrumb-current-page\"]').should('not.have.attr', 'href');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7473,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3576,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.305,
+      "feedback_used": ""
+    }
+  ]
+}

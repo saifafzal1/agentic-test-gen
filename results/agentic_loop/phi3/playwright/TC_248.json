@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_248",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.826,
+  "total_latency_s": 525.727,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Promo Code Expiration Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should display error message when user enters expired promo code', async ({ page }) => {\n    // Setup: intercept the API call to validate promo code\n    await page.route('**/api/promo-codes/validate', (route) => {\n      route.abort('failed');\n    });\n\n    // Setup: intercept the API call to get promo details\n    await page.route('**/api/promo-codes/details', (route) => {\n      route.abort('failed');\n    });\n\n    // Setup: intercept the API call to apply discount\n    await page.route('**/api/checkout/apply-discount', (route) => {\n      route.abort('failed');\n    });\n\n    // Setup: intercept the API call to complete checkout\n    await page.route('**/api/checkout/complete', (route) => {\n      route.abort('failed');\n    });\n\n    // Get the promo code input using getByLabel\n    const promoCodeInput = page.getByLabel('Promo Code');\n    await expect(promoCodeInput).toBeVisible();\n\n    // Enter an expired promo code\n    await promoCodeInput.fill('EXPIRED123');\n\n    // Get the error message using getByText\n    const errorMessage = page.getByText('Promo code has expired');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message is displayed\n    await expect(errorMessage).toContainText('Promo code has expired');\n\n    // Verify checkout button is disabled\n    const checkoutButton = page.getByRole('button', { name: /checkout/i });\n    await expect(checkoutButton).toBeDisabled();\n\n    // Verify error message is visible and styled appropriately\n    await expect(errorMessage).toHaveClass(/error-message/);\n\n    // Verify promo code input is still visible\n    await expect(promoCodeInput).toBeVisible();\n  });\n\n  test('should clear error message when user enters a valid promo code', async ({ page }) => {\n    // Setup: intercept the API call to validate promo code\n    await page.route('**/api/promo-codes/validate', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the API call to get promo details\n    await page.route('**/api/promo-codes/details', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the API call to apply discount\n    await page.route('**/api/checkout/apply-discount', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the API call to complete checkout\n    await page.route('**/api/checkout/complete', (route) => {\n      route.continue();\n    });\n\n    // Get the promo code input using getByLabel\n    const promoCodeInput = page.getByLabel('Promo Code');\n    await expect(promoCodeInput).toBeVisible();\n\n    // Enter a valid promo code\n    await promoCodeInput.fill('VALID2023');\n\n    // Get the success message using getByText\n    const successMessage = page.getByText('Promo applied successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify success message is displayed\n    await expect(successMessage).toContainText('Promo applied successfully');\n\n    // Verify error message is no longer visible\n    const errorMessage = page.getByText('Promo code has expired');\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify checkout button is now enabled\n    const checkoutButton = page.getByRole('button', { name: /checkout/i });\n    await expect(checkoutButton).toBeEnabled();\n\n    // Verify error message is cleared\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4845,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3685,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 54.361,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.826,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4199,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 471.366,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

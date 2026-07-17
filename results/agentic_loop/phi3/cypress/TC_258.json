@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_258",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7779,
+  "total_latency_s": 310.609,
+  "final_script": "describe('Payment Timeout Redirect to Error Page', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should redirect to error page when payment times out', () => {\n    // Intercept the payment API call\n    cy.intercept('POST', '/api/payment/process', {\n      statusCode: 408,\n      body: { error: 'Payment timed out' }\n    }).as('paymentTimeout');\n\n    // Attempt to submit payment form\n    cy.get('[data-testid=\"payment-form\"]').should('be.visible');\n    cy.get('[data-testid=\"card-number\"]').type('4111111111111111');\n    cy.get('[data-testid=\"expiry-date\"]').type('12/25');\n    cy.get('[data-testid=\"cvv\"]').type('123');\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for payment timeout response\n    cy.wait('@paymentTimeout');\n\n    // Verify redirection to error page\n    cy.url().should('include', '/error');\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Payment timed out');\n\n    // Verify error page content\n    cy.get('[data-testid=\"error-code\"]').should('contain', '408');\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n    cy.get('[data-testid=\"retry-button\"]').click();\n\n    // Verify retry button is still visible\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n  });\n\n  it('should handle successful payment without timeout', () => {\n    // Intercept successful payment API call\n    cy.intercept('POST', '/api/payment/process', {\n      statusCode: 200,\n      body: { success: true, transactionId: '123456789' }\n    }).as('paymentSuccess');\n\n    // Attempt to submit payment form\n    cy.get('[data-testid=\"payment-form\"]').should('be.visible');\n    cy.get('[data-testid=\"card-number\"]').type('4111111111111111');\n    cy.get('[data-testid=\"expiry-date\"]').type('12/25');\n    cy.get('[data-testid=\"cvv\"]').type('123');\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for successful payment response\n    cy.wait('@paymentSuccess');\n\n    // Verify redirection to success page\n    cy.url().should('include', '/success');\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Payment successful');\n\n    // Verify success page content\n    cy.get('[data-testid=\"transaction-id\"]').should('contain', '123456789');\n    cy.get('[data-testid=\"continue-to-checkout\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7779,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4597,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 310.609,
+      "feedback_used": ""
+    }
+  ]
+}

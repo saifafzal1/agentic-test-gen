@@ -1,0 +1,13 @@
+{
+  "id": "TC_131",
+  "category": "modal_dialog",
+  "complexity": "simple",
+  "user_story": "As a user, I want focus to be trapped inside an open modal.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Modal Focus Trap', () => {\n    beforeEach(() => {\n        cy.visit('/your-modal-page'); // Replace with the actual page URL\n        cy.get('#open-modal-button').click(); // Replace with the actual button selector to open the modal\n    });\n\n    it('should keep focus inside the modal when tabbing', () => {\n        cy.get('#modal').should('be.visible'); // Replace with the actual modal selector\n        cy.get('#modal input:first').focus(); // Replace with the actual first focusable element in the modal\n\n        cy.focused().should('have.attr', 'id', 'modal-input-1'); // Replace with the actual ID of the first input\n        cy.tab(); // Simulate tabbing\n        cy.focused().should('have.attr', 'id', 'modal-input-2'); // Replace with the actual ID of the second input\n        cy.tab(); // Simulate tabbing\n        cy.focused().should('have.attr', 'id', 'modal-close-button'); // Replace with the actual ID of the close button\n        cy.tab(); // Simulate tabbing\n        cy.focused().should('have.attr', 'id', 'modal-input-1'); // Should loop back to the first input\n    });\n\n    it('should not allow focus to leave the modal', () => {\n        cy.get('#modal').should('be.visible'); // Replace with the actual modal selector\n        cy.get('body').tab(); // Simulate tabbing from the body\n        cy.focused().should('have.attr', 'id', 'modal-input-1'); // Should remain on the first input\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 343,
+  "latency_s": 4.25,
+  "timestamp": "2026-06-19T16:34:01.842807"
+}

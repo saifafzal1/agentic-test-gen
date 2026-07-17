@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_021",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.84,
+  "total_latency_s": 428.357,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Password Requirements Tooltip', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/password-reset');\n  });\n\n  test('should display tooltip with password requirements when password field is focused', async ({ page }) => {\n    // Locate password input using getByLabel\n    const passwordInput = page.getByLabel('New Password');\n    await expect(passwordInput).toBeVisible();\n\n    // Set up intercept for password validation API\n    await page.route('**/api/password-validation', (route) => {\n      route.abort('API call aborted');\n    });\n\n    // Focus on password input to trigger tooltip\n    await passwordInput.focus();\n\n    // Verify tooltip is visible\n    const tooltip = page.getByRole('tooltip');\n    await expect(tooltip).toBeVisible();\n\n    // Verify tooltip contains required text\n    await expect(tooltip).toContainText('Password must be at least 8 characters long');\n\n    // Verify password input has required pattern attribute\n    await expect(passwordInput).toHaveAttribute('pattern', '(?=.*[A-Z])(?=.*[a-z])(?=.*\\\\d).{8,}');\n\n    // Verify password input has required minlength attribute\n    await expect(passwordInput).toHaveAttribute('minlength', '8');\n\n    // Verify password input has required maxlength attribute\n    await expect(passwordInput).toHaveAttribute('maxlength', '256');\n\n    // Verify password input has required placeholder\n    await expect(passwordInput).toHavePlaceholder('Enter new password');\n\n    // Verify password input has required required attribute\n    await expect(passwordInput).toHaveAttribute('required', 'required');\n\n    // Verify password input has required autocomplete attribute\n    await expect(passwordInput).toHaveAttribute('autocomplete', 'new-password');\n\n    // Verify tooltip disappears when password input loses focus\n    await passwordInput.blur();\n    await expect(tooltip).not.toBeVisible();\n  });\n\n  test('should not display tooltip when password field is not focused', async ({ page }) => {\n    // Locate password input using getByLabel\n    const passwordInput = page.getByLabel('New Password');\n    await expect(passwordInput).toBeVisible();\n\n    // Verify tooltip is not visible initially\n    const tooltip = page.getByRole('tooltip');\n    await expect(tooltip).not.toBeVisible();\n\n    // Verify password input has required pattern attribute\n    await expect(passwordInput).toHaveAttribute('pattern', '(?=.*[A-Z])(?=.*[a-z])(?=.*\\\\d).{8,}');\n\n    // Verify password input has required minlength attribute\n    await expect(passwordInput).toHaveAttribute('minlength', '8');\n\n    // Verify password input has required maxlength attribute\n    await expect(passwordInput).toHaveAttribute('maxlength', '256');\n\n    // Verify password input has required placeholder\n    await expect(passwordInput).toHavePlaceholder('Enter new password');\n\n    // Verify password input has required required attribute\n    await expect(passwordInput).toHaveAttribute('required', 'required');\n\n    // Verify password input has required autocomplete attribute\n    await expect(passwordInput).toHaveAttribute('autocomplete', 'new-password');\n\n    // Verify tooltip does not appear when password input is not focused\n    await expect(tooltip).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.84,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4665,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 428.357,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_090",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.4659,
+  "total_latency_s": 1162.553,
+  "final_script": "describe('Internet Connection Drop Message', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should display friendly error message when internet connection drops', () => {\n    // Setup: simulate initial page load with internet connection\n    cy.intercept('GET', '/api/data').as('initialData');\n    cy.wait('@initialData');\n\n    // Verify page loads successfully\n    cy.get('[data-testid=\"dashboard-content\"]').should('be.visible');\n\n    // Simulate internet connection drop\n    cy.intercept('GET', '/api/data', {\n      statusCode: 503,\n      body: { error: 'Service Unavailable' }\n    }).as('connectionError');\n    cy.wait('@connectionError');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Unable to load data');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n\n    // Verify retry button has correct text\n    cy.get('[data-testid=\"retry-button\"]').should('contain', 'Retry');\n\n    // Verify error message has a friendly tone\n    cy.get('[data-testid=\"error-message\"]').should('have.css', 'color', 'rgb(102, 178, 255)');\n\n    // Verify error message has a timeout countdown\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please try again in 30 seconds');\n\n    // Verify connection status icon is visible\n    cy.get('[data-testid=\"connection-status-icon\"]').should('be.visible');\n\n    // Verify connection status icon shows 'no connection'\n    cy.get('[data-testid=\"connection-status-icon\"]').should('have.class', 'no-connection');\n\n    // Verify error message disappears after 30 seconds\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n\n    // Verify page is still functional after error\n    cy.get('[data-testid=\"dashboard-content\"]').should('be.visible');\n  });\n\n  it('should handle multiple connection errors gracefully', () => {\n    // Setup: simulate initial page load\n    cy.intercept('GET', '/api/data').as('initialData');\n    cy.wait('@initialData');\n\n    // Verify page loads successfully\n    cy.get('[data-testid=\"dashboard-content\"]').should('be.visible');\n\n    // Simulate first connection error\n    cy.intercept('GET', '/api/data', {\n      statusCode: 503,\n      body: { error: 'Service Unavailable' }\n    }).as('firstConnectionError');\n    cy.wait('@firstConnectionError');\n\n    // Verify first error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n\n    // Verify retry button has correct text\n    cy.get('[data-testid=\"retry-button\"]').should('contain', 'Retry');\n\n    // Simulate second connection error\n    cy.intercept('GET', '/api/data', {\n      statusCode: 503,\n      body: { error: 'Service Unavailable' }\n    }).as('secondConnectionError');\n    cy.wait('@secondConnectionError');\n\n    // Verify error message persists and does not disappear\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n\n    // Verify error message still has a timeout countdown\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please try again in 30 seconds');\n\n    // Verify retry button is still available\n    cy.get('[data-testid=\"retry-button\"]",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4659,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3263,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 56.132,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4552,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.2905,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 493.321,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.4552,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.2905,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 613.1,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

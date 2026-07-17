@@ -1,0 +1,13 @@
+{
+  "id": "TC_125",
+  "category": "async_await",
+  "complexity": "simple",
+  "user_story": "As a user, I want async state to be preserved during browser navigation.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Async State Preservation during Browser Navigation', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Adjust the URL to your application's entry point\n    });\n\n    it('should preserve async state when navigating away and back', () => {\n        // Simulate an async operation\n        cy.intercept('GET', '/api/data', { fixture: 'data.json' }).as('getData');\n        cy.get('button.load-data').click(); // Assume there's a button to load data\n        cy.wait('@getData');\n\n        // Verify the async state is set\n        cy.get('.data-display').should('contain', 'Expected Data');\n\n        // Navigate away\n        cy.get('a.navigate-away').click(); // Assume there's a link to navigate away\n        cy.url().should('include', '/another-page');\n\n        // Navigate back\n        cy.get('a.navigate-back').click(); // Assume there's a link to navigate back\n        cy.url().should('include', '/');\n\n        // Verify the async state is still preserved\n        cy.get('.data-display').should('contain', 'Expected Data');\n    });\n\n    it('should not preserve async state if the user refreshes the page', () => {\n        // Simulate an async operation\n        cy.intercept('GET', '/api/data', { fixture: 'data.json' }).as('getData');\n        cy.get('button.load-data').click();\n        cy.wait('@getData');\n\n        // Verify the async state is set\n        cy.get('.data-display').should('contain', 'Expected Data');\n\n        // Refresh the page\n        cy.reload();\n\n        // Verify the async state is reset\n        cy.get('.data-display').should('not.contain', 'Expected Data');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 361,
+  "latency_s": 5.06,
+  "timestamp": "2026-06-19T16:33:38.284154"
+}

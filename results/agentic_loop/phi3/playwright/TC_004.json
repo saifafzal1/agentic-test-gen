@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_004",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8162,
+  "total_latency_s": 764.698,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Protected Page Authentication', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should redirect to login when accessing a protected page without authentication', async ({ page }) => {\n    // Verify the protected page loads\n    const protectedPageContent = page.getByRole('heading', { name: /Dashboard/i });\n    await expect(protectedPageContent).toBeVisible();\n\n    // Verify login button is visible\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await expect(loginButton).toBeVisible();\n\n    // Verify login form is present\n    const loginForm = page.getByRole('form', { name: /login/i });\n    await expect(loginForm).toBeVisible();\n\n    // Verify login form has required fields\n    const emailInput = page.getByLabel(/email/i);\n    await expect(emailInput).toBeVisible();\n    const passwordInput = page.getByLabel(/password/i);\n    await expect(passwordInput).toBeVisible();\n\n    // Verify login button is enabled\n    await expect(loginButton).toBeEnabled();\n\n    // Attempt to submit the form without filling in required fields\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await loginButton.click();\n\n    // Verify user is redirected to login page\n    const loginPageTitle = page.getByRole('heading', { name: /login/i });\n    await expect(loginPageTitle).toBeVisible();\n\n    // Verify login page has error message\n    const errorMessage = page.getByText(/please fill all fields/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify login button is now disabled\n    await expect(loginButton).not.toBeEnabled();\n  });\n\n  test('should allow access to protected page after successful login', async ({ page }) => {\n    // Verify protected page loads\n    const protectedPageContent = page.getByRole('heading', { name: /Dashboard/i });\n    await expect(protectedPageContent).toBeVisible();\n\n    // Verify login button is visible\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await expect(loginButton).toBeVisible();\n\n    // Verify login form is present\n    const loginForm = page.getByRole('form', { name: /login/i });\n    await expect(loginForm).toBeVisible();\n\n    // Verify login form has required fields\n    const emailInput = page.getByLabel(/email/i);\n    await expect(emailInput).toBeVisible();\n    const passwordInput = page.getByLabel(/password/i);\n    await expect(passwordInput).toBeVisible();\n\n    // Verify login button is enabled\n    await expect(loginButton).toBeEnabled();\n\n    // Fill in login form with valid credentials\n    const emailInput = page.getByLabel(/email/i);\n    await emailInput.fill('user@example.com');\n\n    const passwordInput = page.getByLabel(/password/i);\n    await passwordInput.fill('password123');\n\n    // Submit login form\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await loginButton.click();\n\n    // Verify user is redirected to protected page\n    const protectedPageContent = page.getByRole('heading', { name: /Dashboard/i });\n    await expect(protectedPageContent).toBeVisible();\n\n    // Verify user is logged in\n    const welcomeMessage = page.getByText(/welcome, user/i);\n    await expect(welcomeMessage).toBeVisible();\n\n    // Verify user can interact with protected page\n    const dashboardLink = page.getByRole('link', { name: /dashboard/i });\n    await expect(dashboardLink).toBeVisible();\n\n    // Verify dashboard content is displayed\n    const dashboardContent = page.getByText(/dashboard content/i);\n    await expect(dashboardContent).toBeVisible();\n\n    // Verify user is not redirected back to login\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await expect(loginButton).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4893,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3842,
+        "missing_keywords": [],
+        "assertion_count": 25,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 373.47,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8162,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3874,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 391.228,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

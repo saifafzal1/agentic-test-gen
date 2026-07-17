@@ -1,0 +1,13 @@
+{
+  "id": "TC_140",
+  "category": "modal_dialog",
+  "complexity": "simple",
+  "user_story": "As a user, I want a popover to toggle on button click.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Popover Toggle on Button Click', () => {\n  beforeEach(() => {\n    cy.visit('http://localhost:3000');\n  });\n\n  it('should open popover when button is clicked', () => {\n    cy.get('[data-testid=\"popover-trigger-btn\"]').click();\n    cy.get('[data-testid=\"popover-content\"]').should('be.visible');\n    cy.get('[data-testid=\"popover-content\"]').should('contain.text', 'Popover content');\n  });\n\n  it('should close popover when button is clicked again', () => {\n    cy.get('[data-testid=\"popover-trigger-btn\"]').click();\n    cy.get('[data-testid=\"popover-content\"]').should('be.visible');\n    cy.get('[data-testid=\"popover-trigger-btn\"]').click();\n    cy.get('[data-testid=\"popover-content\"]').should('not.be.visible');\n  });\n\n  it('should close popover when clicking outside of it', () => {\n    cy.get('[data-testid=\"popover-trigger-btn\"]').click();\n    cy.get('[data-testid=\"popover-content\"]').should('be.visible');\n    cy.get('body').click(0, 0);\n    cy.get('[data-testid=\"popover-content\"]').should('not.be.visible');\n  });\n\n  it('should toggle popover multiple times without issues', () => {\n    const button = cy.get('[data-testid=\"popover-trigger-btn\"]');\n    const popover = cy.get('[data-testid=\"popover-content\"]');\n\n    button.click();\n    popover.should('be.visible');\n\n    button.click();\n    popover.should('not.be.visible');\n\n    button.click();\n    popover.should('be.visible');\n\n    button.click();\n    popover.should('not.be.visible');\n  });\n\n  it('should maintain popover state when hovering over content', () => {\n    cy.get('[data-testid=\"popover-trigger-btn\"]').click();\n    cy.get('[data-testid=\"popover-content\"]').should('be.visible');\n    cy.get('[data-testid=\"popover-content\"]').trigger('mouseenter');\n    cy.get('[data-testid=\"popover-content\"]').should('be.visible');\n  });\n});",
+  "prompt_tokens": 120,
+  "completion_tokens": 593,
+  "latency_s": 3.45,
+  "timestamp": "2026-06-19T17:20:17.492712"
+}

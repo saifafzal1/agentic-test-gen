@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_276",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8062,
+  "total_latency_s": 333.498,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Update Display Name - User Profile', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/user-profile');\n  });\n\n  test('should successfully update display name and reflect it across the app', async ({ page }) => {\n    // Verify initial display name is visible\n    const displayNameInput = page.getByLabel('Display Name');\n    await expect(displayNameInput).toBeVisible();\n    const displayNameValue = await displayNameInput.getByRole('textbox').textContent();\n    expect(displayNameValue).toBe('John Doe');\n\n    // Verify current user name is displayed\n    const userNameDisplay = page.getByText('John Doe');\n    await expect(userNameDisplay).toBeVisible();\n\n    // Update display name using getByLabel\n    const newDisplayNameInput = page.getByLabel('Display Name');\n    await newDisplayNameInput.fill('Jane Smith');\n\n    // Verify new display name is visible\n    const newDisplayNameValue = await newDisplayNameInput.getByRole('textbox').textContent();\n    expect(newDisplayNameValue).toBe('Jane Smith');\n\n    // Verify user name is updated\n    const updatedUserNameDisplay = page.getByText('Jane Smith');\n    await expect(updatedUserNameDisplay).toBeVisible();\n\n    // Verify email is still visible and unchanged\n    const emailDisplay = page.getByText('jane.smith@example.com');\n    await expect(emailDisplay).toBeVisible();\n\n    // Verify profile picture is still visible\n    const profilePicture = page.getByRole('img', { name: /profile picture/i });\n    await expect(profilePicture).toBeVisible();\n\n    // Verify navigation menu is still visible\n    const navigationMenu = page.getByRole('navigation');\n    await expect(navigationMenu).toBeVisible();\n\n    // Verify settings button is still visible\n    const settingsButton = page.getByRole('button', { name: /settings/i });\n    await expect(settingsButton).toBeVisible();\n\n    // Verify user is still logged in\n    const userStatus = page.getByText('Logged in');\n    await expect(userStatus).toBeVisible();\n  });\n\n  test('should handle empty display name input and display error message', async ({ page }) => {\n    // Verify initial display name is visible\n    const displayNameInput = page.getByLabel('Display Name');\n    await expect(displayNameInput).toBeVisible();\n\n    // Verify error message is not visible initially\n    const errorMessage = page.getByText(/display name is required/i);\n    await expect(errorMessage).not.toBeVisible();\n\n    // Attempt to update with empty input\n    const emptyDisplayNameInput = page.getByLabel('Display Name');\n    await emptyDisplayNameInput.fill('');\n\n    // Verify error message is now visible\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message contains correct text\n    await expect(errorMessage).toContainText(/display name is required/i);\n\n    // Verify update button is still visible\n    const updateButton = page.getByRole('button', { name: /update/i });\n    await expect(updateButton).toBeVisible();\n\n    // Verify navigation menu is still visible\n    const navigationMenu = page.getByRole('navigation');\n    await expect(navigationMenu).toBeVisible();\n\n    // Verify user is still logged in\n    const userStatus = page.getByText('Logged in');\n    await expect(userStatus).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8062,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3538,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 333.498,
+      "feedback_used": ""
+    }
+  ]
+}

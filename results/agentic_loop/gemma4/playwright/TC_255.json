@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_255",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8296,
+  "total_latency_s": 81.29,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Change Billing Address During Checkout', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should successfully change billing address during checkout', async ({ page }) => {\n    // Verify billing address is displayed\n    const billingAddress = page.getByText('123 Main St');\n    await expect(billingAddress).toBeVisible();\n\n    // Click on billing address to open modal\n    const billingAddressLink = page.getByRole('link', { name: /billing address/i });\n    await billingAddressLink.click();\n\n    // Verify billing address modal is open\n    const modal = page.locator('[data-testid=\"billing-address-modal\"]');\n    await expect(modal).toBeVisible();\n\n    // Verify address input fields are visible\n    const streetInput = page.getByLabel('Street Address');\n    await expect(streetInput).toBeVisible();\n\n    // Enter new street address\n    await streetInput.fill('406 Oak Ave');\n\n    // Enter new city\n    const cityInput = page.getByLabel('City');\n    await cityInput.fill('Springfield');\n\n    // Enter new zip code\n    const zipInput = page.getByLabel('Zip Code');\n    await zipInput.fill('62701');\n\n    // Click save button\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await saveButton.click();\n\n    // Verify modal closes\n    await expect(modal).not.toBeVisible();\n\n    // Verify new billing address is displayed\n    const updatedBillingAddress = page.getByText('406 Oak Ave');\n    await expect(updatedBillingAddress).toBeVisible();\n\n    // Verify checkout proceeds\n    const continueButton = page.getByRole('button', { name: /continue/i });\n    await continueButton.click();\n\n    // Verify user is on payment step\n    const paymentStep = page.getByText('Payment');\n    await expect(paymentStep).toBeVisible();\n  });\n\n  test('should handle invalid billing address input and prevent saving', async ({ page }) => {\n    // Verify billing address is displayed\n    const billingAddress = page.getByText('123 Main St');\n    await expect(billingAddress).toBeVisible();\n\n    // Click on billing address to open modal\n    const billingAddressLink = page.getByRole('link', { name: /billing address/i });\n    await billingAddressLink.click();\n\n    // Verify billing address modal is open\n    const modal = page.locator('[data-testid=\"billing-address-modal\"]');\n    await expect(modal).toBeVisible();\n\n    // Enter invalid street address (empty)\n    const streetInput = page.getByLabel('Street Address');\n    await streetInput.fill('');\n\n    // Enter valid city\n    const cityInput = page.getByLabel('City');\n    await cityInput.fill('Springfield');\n\n    // Enter invalid zip code (too short)\n    const zipInput = page.getByLabel('Zip Code');\n    await zipInput.fill('12');\n\n    // Click save button\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await saveButton.click();\n\n    // Verify validation error message appears\n    const errorMessage = page.getByText('Please enter a valid zip code');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify modal remains open\n    await expect(modal).toBeVisible();\n\n    // Verify billing address has not changed\n    const originalBillingAddress = page.getByText('123 Main St');\n    await expect(originalBillingAddress).toBeVisible();\n\n    // Verify user is still on checkout page\n    const checkoutHeader = page.getByText('Checkout');\n    await expect(checkoutHeader).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8296,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4321,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 81.29,
+      "feedback_used": ""
+    }
+  ]
+}

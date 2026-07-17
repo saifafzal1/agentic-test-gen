@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_257",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8333,
+  "total_latency_s": 75.394,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Total Price Update on Quantity Change', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/cart');\n  });\n\n  test('should update total price when quantity is increased', async ({ page }) => {\n    // Verify initial total price\n    const totalPriceDisplay = page.getByTestId('total-price');\n    await expect(totalPriceDisplay).toContainText('$10.00');\n\n    // Locate and interact with quantity input using getByLabel\n    const quantityInput = page.getByLabel('Quantity');\n    await expect(quantityInput).toHaveValue('1');\n\n    // Increase quantity by clicking the increment button using getByRole\n    const incrementButton = page.getByRole('button', { name: 'Increase quantity' });\n    await incrementButton.click();\n\n    // Verify quantity updated\n    await expect(quantityInput).toHaveValue('2');\n\n    // Verify total price updated\n    await expect(totalPriceDisplay).toContainText('$20.00');\n\n    // Increase quantity again\n    await incrementButton.click();\n\n    // Verify quantity updated\n    await expect(quantityInput).toHaveValue('3');\n\n    // Verify total price updated\n    await expect(totalPriceDisplay).toContainText('$30.00');\n  });\n\n  test('should update total price when quantity is decreased', async ({ page }) => {\n    // Verify initial total price\n    const totalPriceDisplay = page.getByTestId('total-price');\n    await expect(totalPriceDisplay).toContainText('$10.00');\n\n    // Locate and interact with quantity input using getByLabel\n    const quantityInput = page.getByLabel('Quantity');\n    await expect(quantityInput).toHaveValue('1');\n\n    // Decrease quantity by clicking the decrement button using getByRole\n    const decrementButton = page.getByRole('button', { name: 'Decrease quantity' });\n    await decrementButton.click();\n\n    // Verify quantity is at minimum (1)\n    await expect(quantityInput).toHaveValue('1');\n\n    // Verify total price remains unchanged\n    await expect(totalPriceDisplay).toContainText('$10.00');\n\n    // Increase quantity to 5\n    await page.getByRole('button', { name: 'Increase quantity' }).click();\n    await page.getByRole('button', { name: 'Increase quantity' }).click();\n    await page.getByRole('button', { name: 'Increase quantity' }).click();\n    await page.getByRole('button', { name: 'Increase quantity' }).click();\n    await page.getByRole('button', { name: 'Increase quantity' }).click();\n\n    // Verify quantity is 5\n    await expect(quantityInput).toHaveValue('5');\n\n    // Verify total price updated\n    await expect(totalPriceDisplay).toContainText('$50.00');\n\n    // Decrease quantity back to 1\n    await page.getByRole('button', { name: 'Decrease quantity' }).click();\n    await page.getByRole('button', { name: 'Decrease quantity' }).click();\n    await page.getByRole('button', { name: 'Decrease quantity' }).click();\n    await page.getByRole('button', { name: 'Decrease quantity' }).click();\n    await page.getByRole('button', { name: 'Decrease quantity' }).click();\n\n    // Verify quantity is 1\n    await expect(quantityInput).toHaveValue('1');\n\n    // Verify total price is back to initial value\n    await expect(totalPriceDisplay).toContainText('$10.00');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8333,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4444,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 75.394,
+      "feedback_used": ""
+    }
+  ]
+}

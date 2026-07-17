@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_080",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8049,
+  "total_latency_s": 192.843,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Record Created and Modified Dates', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should display created and modified dates on a record', async ({ page }) => {\n    // Intercept the API call to get the record data\n    await page.route('**/api/records/123', (route) => {\n      route.continue();\n    });\n\n    // Click on the record to open details\n    const recordItem = page.getByRole('button', { name: /record 123/i });\n    await recordItem.click();\n\n    // Wait for the record details to load\n    await page.waitForLoadState('networkidle');\n\n    // Verify the record title is visible\n    const recordTitle = page.getByRole('heading', { name: /record 123/i });\n    await expect(recordTitle).toBeVisible();\n\n    // Verify the created date is displayed\n    const createdDateLabel = page.getByText(/created on/i);\n    await expect(createdDateLabel).toBeVisible();\n\n    const createdDateValue = page.getByText(/\\d{2}\\/\\d{2}\\/\\d{4,4d}/);\n    await expect(createdDateValue).toBeVisible();\n\n    // Verify the last modified date is displayed\n    const modifiedDateLabel = page.getByText(/last modified on/i);\n    await expect(modifiedDateLabel).toBeVisible();\n\n    const modifiedDateValue = page.getByText(/\\d{2}\\/\\d{2}\\/\\d{4d}/);\n    await expect(modifiedDateValue).toBeVisible();\n\n    // Verify both dates are present and not empty\n    await expect(createdDateValue).not.toHaveText('');\n    await expect(modifiedDateValue).not.toHaveText('');\n  });\n\n  test('should handle missing modified date gracefully', async ({ page }) => {\n    // Intercept the API call and return a record without a modified date\n    await page.route('**/api/records/456', (route) => {\n      route.abort('failed');\n    });\n\n    // Mock the successful response with only created date\n    await page.route('**/api/records/456', (route) => {\n      route.continue();\n    });\n\n    // Click on the record to open details\n    const recordItem = page.getByRole('button', { name: /record 456/i });\n    await recordItem.click();\n\n    // Wait for the record details to load\n    await page.waitForLoadState('networkidle');\n\n    // Verify the record title is visible\n    const recordTitle = page.getByRole('heading', { name: /record 456/i });\n    await expect(recordTitle).toBeVisible();\n\n    // Verify the created date is displayed\n    const createdDateLabel = page.getByText(/created on/i);\n    await expect(createdDateLabel).toBeVisible();\n\n    const createdDateValue = page.getByText(/\\d{2}\\/\\d{2}\\/\\d{4d}/);\n    await expect(createdDateValue).toBeVisible();\n\n    // Verify the modified date label is not present\n    const modifiedDateLabel = page.getByText(/last modified on/i);\n    await expect(modifiedDateLabel).not.toBeVisible();\n\n    // Verify a fallback message is displayed when modified date is missing\n    const fallbackMessage = page.getByText(/no modification date available/i);\n    await expect(fallbackMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5305,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.5016,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 75.879,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8049,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4496,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 116.964,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

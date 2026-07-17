@@ -1,0 +1,13 @@
+{
+  "id": "TC_066",
+  "category": "api_response_handling",
+  "complexity": "medium",
+  "user_story": "As a user, I want the app to handle 403 errors by showing an access denied page.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Access Denied Page Handling', () => {\n    beforeEach(() => {\n        cy.intercept('GET', '/api/protected-resource', {\n            statusCode: 403,\n            body: { message: 'Access Denied' }\n        }).as('getProtectedResource');\n        \n        cy.visit('/protected-page');\n    });\n\n    it('should display the access denied page on 403 error', () => {\n        cy.wait('@getProtectedResource');\n        cy.get('.access-denied-message').should('be.visible');\n        cy.get('.access-denied-message').contains('Access Denied');\n    });\n\n    it('should not show the access denied page if the user has access', () => {\n        cy.intercept('GET', '/api/protected-resource', {\n            statusCode: 200,\n            body: { data: 'Protected Data' }\n        }).as('getProtectedResourceWithAccess');\n\n        cy.visit('/protected-page');\n        cy.wait('@getProtectedResourceWithAccess');\n        cy.get('.protected-content').should('be.visible');\n        cy.get('.protected-content').contains('Protected Data');\n    });\n});",
+  "prompt_tokens": 116,
+  "completion_tokens": 229,
+  "latency_s": 3.19,
+  "timestamp": "2026-06-19T16:29:26.189440"
+}

@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_237",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 3,
+  "best_score": 0.7783,
+  "total_latency_s": 1049.571,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Pinch-to-Zoom on Product Images', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/products');\n  });\n\n  test('should enable pinch-to-zoom on product images', async ({ page }) => {\n    // Verify initial state: no zoom\n    const image = page.getByRole('img', { name: /product image/i });\n    await expect(image).toBeVisible();\n    const zoomInButton = page.getByRole('button', { name: /zoom in/i });\n    await expect(zoomInButton).toBeVisible();\n\n    // Verify zoom in button is disabled by default\n    await expect(zoomInButton).toBeDisabled();\n\n    // Intercept API call to get product image\n    await page.route('**/api/products/123/image', (route) => {\n      route.continue();\n    });\n\n    // Pinch-to-zoom using touch events\n    await page.evaluate(() => {\n      const touchStart = new TouchEvent('touchstart', {\n        target: document.querySelector('[data-testid=\"product-image\"]'),\n        touches: [new Touch({ clientX: 100, clientY: 100 })],\n        identifier: 1,\n        screenX: 100,\n        screenY: 100,\n      });\n      const touchMove = new TouchEvent('touchmove', {\n        target: document.querySelector('[data-testid=\"product-image\"]'),\n        touches: [new Touch({ clientX: 200, clientY: 200 })],\n        identifier: 1,\n        screenX: 200,\n        screenY: 200,\n      });\n      const touchEnd = new TouchEvent('touchend', {\n        target: document.querySelector('[data-testid=\"product-image\"]'),\n        touches: [new Touch({ clientX: 300, clientY: 300 })],\n        identifier: 1,\n        screenX: 300,\n        screenY: 300,\n      });\n\n      document.dispatchEvent(touchStart);\n      document.dispatchEvent(touchMove);\n      document.dispatchEvent(touchEnd);\n    });\n\n    // Verify zoom in button is now enabled\n    await expect(zoomInButton).not.toBeDisabled();\n\n    // Verify zoom level is updated\n    const zoomLevel = page.getByRole('heading', { name: /zoom level/i });\n    await expect(zoomLevel).toBeVisible();\n    await expect(zoomLevel).toContainText('100%');\n\n    // Verify zoom in button is visible and clickable\n    await expect(zoomInButton).toBeVisible();\n\n    // Click zoom in button\n    await zoomInButton.click();\n\n    // Verify zoom level is increased\n    await expect(zoomLevel).toContainText('200%');\n\n    // Verify zoom out button is now enabled\n    const zoomOutButton = page.getByRole('button', { name: /zoom out/i });\n    await expect(zoomOutButton).toBeVisible();\n\n    // Click zoom out button\n    await zoomOutButton.click();\n\n    // Verify zoom level is decreased\n    await expect(zoomLevel).toContainText('100%');\n\n    // Verify zoom in button is now disabled\n    await expect(zoomInButton).toBeDisabled();\n  });\n\n  test('should handle pinch-to-zoom with multiple touch points', async ({ page }) => {\n    // Verify initial state: no zoom\n    const image = page.getByRole('img', { name: /product image/i });\n    await expect(image).toBeVisible();\n    const zoomInButton = page.getByRole('button', { name: /zoom in/i });\n    await expect(zoomInButton).toBeVisible();\n    await expect(zoomInButton).toBeDisabled();\n\n    // Pinch-to-zoom using multiple touch points\n    await page.evaluate(() => {\n      const touch1 = new TouchEvent('touchstart', {\n        target: document.querySelector('[data-testid=\"product-image\"]'),\n        touches: [new Touch({ clientX: 100, clientY: 100 })],\n        identifier: 1,\n        screenX: 100,\n        screenY: 100,\n      });\n      const touch2 = new TouchEvent('touchmove', {\n        target: document.querySelector('[data-testid=\"product-image\"]'),\n        touches: [new Touch({ clientX: 200, clientY: 200 })],\n        identifier: 2,\n        screenX: 200,\n        screenY: 200,\n      });\n      const touch3 = new TouchEvent('touchend', {\n        target: document.querySelector('[data-testid=\"product-image\"]'),\n        touches: [new Touch({ clientX: 300, clientY: 300 })],\n        identifier: 3,\n        screenX: 300,\n        screenY: 300,\n      });\n\n      document.dispatchEvent(touch1);\n      document.dispatchEvent(touch2);\n      document.dispatchEvent(touch3);\n    });\n\n    // Verify zoom in button is now enabled\n    await expect(zoomInButton).not.toBeDisabled();\n\n    // Verify zoom level is updated\n    const zoomLevel = page.getByRole('heading', { name: /zoom level/i });\n    await expect(zoomLevel).toBeVisible();\n    await expect(zoomLevel).toContainText('150%');\n\n    // Verify zoom in button is visible and clickable\n    await expect(zoomInButton).toBeVisible();\n\n    // Click zoom in button\n    await zoomInButton.click();\n\n    // Verify zoom level is increased\n    await expect(zoomLevel).toContainText('200%');\n\n    // Verify zoom out button is now enabled\n    const zoomOutButton = page.getByRole('button', { name: /zoom out/i });\n    await expect(zoomOutButton).toBeVisible();\n\n    // Click zoom out button\n    await zoomOutButton.click();\n\n    // Verify zoom level is decreased\n    await expect(zoomLevel).toContainText('150%');\n\n    // Verify zoom in button is now disabled\n    await expect(zoomInButton).toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4787,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3492,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 61.085,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4814,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.358,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 490.231,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.7783,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3611,
+        "missing_keywords": [],
+        "assertion_count": 22,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 498.255,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

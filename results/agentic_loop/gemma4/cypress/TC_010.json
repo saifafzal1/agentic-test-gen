@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_010",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7707,
+  "total_latency_s": 72.604,
+  "final_script": "describe('Google OAuth Login', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should successfully log in with Google OAuth and redirect to dashboard', () => {\n    // Intercept the Google OAuth redirect endpoint\n    cy.intercept('GET', '/api/auth/google/callback').as('googleCallback');\n\n    // Click the Google login button\n    cy.get('[data-testid=\"google-login-button\"]').click();\n\n    // Wait for the OAuth callback\n    cy.wait('@googleCallback');\n\n    // Verify successful login and redirect\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"welcome-message\"]').should('be.visible');\n    cy.get('[data-testid=\"welcome-message\"]').should('contain', 'Welcome');\n    cy.get('[data-testid=\"user-profile-icon\"]').should('be.visible');\n  });\n\n  it('should handle Google OAuth failure and display error message', () => {\n    // Intercept the Google OAuth redirect endpoint and simulate an error response\n    cy.intercept('GET', '/api/auth/google/callback', {\n      statusCode: 401,\n      body: { error: 'Invalid credentials' }\n    }).as('googleCallbackError');\n\n    // Click the Google login button\n    cy.get('[data-testid=\"google-login-button\"]').click();\n\n    // Wait for the failed OAuth callback\n    cy.wait('@googleCallbackError');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Login failed');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please try again');\n\n    // Verify user is still on the login page\n    cy.url().should('include', '/login');\n    cy.get('[data-testid=\"google-login-button\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7707,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4356,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.604,
+      "feedback_used": ""
+    }
+  ]
+}

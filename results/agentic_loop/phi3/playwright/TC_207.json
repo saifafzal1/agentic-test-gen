@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_207",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8054,
+  "total_latency_s": 555.904,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Colour Contrast WCAG 2.1 AA Compliance', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should pass colour contrast checks for all elements', async ({ page }) => {\n    // Locate and verify the main content container using getByRole\n    const mainContainer = page.getByRole('main');\n    await expect(mainContainer).toBeVisible();\n\n    // Locate and verify navigation links using getByRole\n    const navLinks = page.getByRole('navigation').locator('[data-testid=\"nav-link\"]');\n    await expect(navLinks).toHaveCount(3);\n\n    // Locate and verify form elements using getByLabel\n    const formInput = page.getByLabel('Email Address');\n    await expect(formInput).toBeVisible();\n\n    const formButton = page.getByRole('button', { name: /submit/i });\n    await expect(formButton).toBeVisible();\n\n    // Locate and verify error messages using getByRole\n    const errorMessage = page.getByRole('alert');\n    await expect(errorMessage).toBeVisible();\n\n    // Locate and verify success message using getByRole\n    const successMessage = page.getByRole('alert');\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify colour contrast using getByRole\n    const contrastCheck = page.getByRole('heading', { name: /contrast check/i });\n    await expect(contrastCheck).toBeVisible();\n\n    // Verify contrast ratio using getByRole\n    const contrastResult = page.getByRole('region', { name: /contrast ratio/i });\n    await expect(contrastResult).toBeVisible();\n\n    // Verify contrast ratio meets WCAG 2.1 AA standards\n    const ratioValue = await contrastResult.evaluate((el) => {\n      const contrastRatio = calculateContrastRatio(el);\n      return contrastRatio >= 4.5 ? 'pass' : 'fail';\n    });\n    await expect(ratioValue).toBe('pass');\n\n    // Verify all elements have appropriate colour contrast\n    const allElements = page.locator('[data-testid=\"content-element\"]');\n    await expect(allElements).toHaveCount(10);\n    const allPass = await allElements.evaluate((elements) => {\n      return elements.every((el) => {\n        const contrastRatio = calculateContrastRatio(el);\n        return contrastRatio >= 4.5;\n      });\n    });\n    await expect(allPass).toBe(true);\n  });\n\n  test('should fail colour contrast for specific elements', async ({ page }) => {\n    // Locate and verify a button using getByRole\n    const button = page.getByRole('button', { name: /submit/i });\n    await expect(button).toBeVisible();\n\n    // Manually set a low contrast colour for the button background\n    await button.evaluate((el) => {\n      el.style.backgroundColor = '#000000';\n    });\n\n    // Verify contrast ratio fails\n    const contrastResult = page.getByRole('region', { name: /contrast ratio/i });\n    await expect(contrastResult).toBeVisible();\n    const ratioValue = await contrastResult.evaluate((el) => {\n      const contrastRatio = calculateContrastRatio(el);\n      return contrastRatio >= 4.5 ? 'pass' : 'fail';\n    });\n    await expect(ratioValue).toBe('fail');\n\n    // Verify error message is displayed\n    const errorMessage = page.getByRole('alert');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify contrast ratio is displayed\n    const contrastResultText = page.getByText(/contrast ratio: 1.00/i);\n    await expect(contrastResultText).toBeVisible();\n\n    // Verify button is still visible\n    await expect(button).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4702,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3208,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 60.074,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8054,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3514,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 495.83,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

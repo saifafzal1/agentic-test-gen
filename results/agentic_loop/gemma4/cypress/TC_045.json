@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_045",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7552,
+  "total_latency_s": 71.778,
+  "final_script": "describe('Internal Links Open in Same Tab', () => {\n  beforeEach(() => {\n    cy.visit('/pages/home');\n  });\n\n  it('should open internal links in the same tab', () => {\n    // Verify the page loads successfully\n    cy.get('[data-testid=\"home-page\"]').should('be.visible');\n\n    // Click on an internal link\n    cy.get('[data-testid=\"internal-link-about\"]').click();\n\n    // Verify navigation to the correct page\n    cy.url().should('include', '/pages/about');\n\n    // Verify the page content is visible\n    cy.get('[data-testid=\"about-page-title\"]').should('be.visible');\n    cy.get('[data-testid=\"about-page-title\"]').should('contain', 'About Us');\n\n    // Verify the same tab is used (no new window/tab opened)\n    cy.window().then((win) => {\n      expect(win.opener).to.equal(null);\n    });\n  });\n\n  it('should handle internal links with no target attribute and open in same tab', () => {\n    // Verify the page loads successfully\n    cy.get('[data-testid=\"home-page\"]').should('be.visible');\n\n    // Click on an internal link without a target attribute\n    cy.get('[data-testid=\"internal-link-contact\"]').click();\n\n    // Verify navigation to the correct page\n    cy.url().should('include', '/pages/contact');\n\n    // Verify the page content is visible\n    cy.get('[data-testid=\"contact-page-title\"]').should('be.visible');\n    cy.get('[data-testid=\"contact-page-title\"]').should('contain', 'Contact');\n\n    // Verify the same tab is used\n    cy.window().then((win) => {\n      expect(win.opener).to.equal(null);\n    });\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7552,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3841,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.778,
+      "feedback_used": ""
+    }
+  ]
+}

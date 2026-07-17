@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_080",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.86,
+  "total_latency_s": 463.177,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Record Creation - Display Created and Last Modified Dates', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should display created and last modified dates for a record', async ({ page }) => {\n    // Create a new record\n    const createButton = page.getByRole('button', { name: /create record/i });\n    await createButton.click();\n    \n    const nameInput = page.getByLabel(/record name/i);\n    await nameInput.fill('Test Record');\n    \n    const descriptionInput = page.getByLabel(/record description/i);\n    await descriptionInput.fill('This is a test record');\n    \n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n    \n    // Verify success message\n    const successMessage = page.getByText(/record created successfully/i);\n    await expect(successMessage).toBeVisible();\n    \n    // Verify record is listed\n    const recordList = page.getByRole('list', { name: /records/i });\n    await expect(recordList).toBeVisible();\n    \n    // Verify created date is displayed\n    const createdDate = page.getByText(/created on/i);\n    await expect(createdDate).toBeVisible();\n    \n    // Verify last modified date is displayed\n    const lastModifiedDate = page.getByText(/last modified on/i);\n    await expect(lastModifiedDate).toBeVisible();\n    \n    // Verify record details are visible\n    const recordItem = page.getByText('Test Record');\n    await expect(recordItem).toBeVisible();\n    \n    // Verify record details are clickable\n    await expect(recordItem).toHaveAttribute('data-testid', /record-item/);\n  });\n\n  test('should display created and last modified dates when record is updated', async ({ page }) => {\n    // Navigate to record page\n    const recordPage = page.getByRole('main', { name: /records/i });\n    await recordPage.click();\n    \n    // Verify record is listed\n    const recordList = page.getByRole('list', { name: /records/i });\n    await expect(recordList).toBeVisible();\n    \n    // Verify record details are visible\n    const recordItem = page.getByText('Test Record');\n    await expect(recordItem).toBeVisible();\n    \n    // Verify created date is displayed\n    const createdDate = page.getByText(/created on/i);\n    await expect(createdDate).toBeVisible();\n    \n    // Verify last modified date is displayed\n    const lastModifiedDate = page.getByText(/last modified on/i);\n    await expect(lastModifiedDate).toBeVisible();\n    \n    // Update record\n    const updateButton = page.getByRole('button', { name: /update/i });\n    await updateButton.click();\n    \n    const updatedNameInput = page.getByLabel(/record name/i);\n    await updatedNameInput.fill('Updated Test Record');\n    \n    const updatedDescriptionInput = page.getByLabel(/record description/i);\n    await updatedDescriptionInput.fill('Updated description');\n    \n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n    \n    // Verify success message\n    const successMessage = page.getByText(/record updated successfully/i);\n    await expect(successMessage).toBeVisible();\n    \n    // Verify record details are updated\n    await expect(recordItem).toContainText('Updated Test Record');\n    \n    // Verify created date remains unchanged\n    await expect(createdDate).toContainText('created on');\n    \n    // Verify last modified date is updated\n    await expect(lastModifiedDate).toContainText('last modified on');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.86,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5333,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 463.177,
+      "feedback_used": ""
+    }
+  ]
+}

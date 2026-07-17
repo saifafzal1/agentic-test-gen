@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_154",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8626,
+  "total_latency_s": 72.041,
+  "final_script": "describe('Table Loading State', () => {\n  beforeEach(() => {\n    cy.visit('/table');\n  });\n\n  it('should display loading state while data is fetching', () => {\n    // Intercept the API call to simulate loading\n    cy.intercept('GET', '/api/table/data', (req) => {\n      req.reply((res) => {\n        res.delay(2000);\n        res.send({\n          statusCode: 200,\n          body: {\n            data: [\n              { id: 1, name: 'Item 1', status: 'active' },\n              { id: 2, name: 'Item 2', status: 'inactive' },\n            ],\n          },\n        });\n      });\n    }).as('fetchTableData');\n\n    // Verify loading indicator is visible\n    cy.get('[data-testid=\"loading-spinner\"]').should('be.visible');\n    cy.get('[data-testid=\"loading-text\"]').should('contain', 'Loading data...');\n\n    // Verify table rows are not yet visible\n    cy.get('[data-testid=\"table-row\"]').should('not.exist');\n\n    // Wait for the API call to complete\n    cy.wait('@fetchTableData');\n\n    // Verify loading indicator is hidden\n    cy.get('[data-testid=\"loading-spinner\"]').should('not.exist');\n    cy.get('[data-testid=\"loading-text\"]').should('not.exist');\n\n    // Verify table rows are now visible\n    cy.get('[data-testid=\"table-row\"]').should('be.visible');\n    cy.get('[data-testid=\"table-row\"]').should('have.length', 2);\n\n    // Verify data is displayed correctly\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', 'Item 1');\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', 'active');\n  });\n\n  it('should handle API error and display error message', () => {\n    // Intercept the API call to simulate an error\n    cy.intercept('GET', '/api/table/data', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' },\n    }).as('fetchTableDataError');\n\n    // Verify loading indicator is visible initially\n    cy.get('[data-testid=\"loading-spinner\"]').should('be.visible');\n\n    // Wait for the failed API call\n    cy.wait('@fetchTableDataError');\n\n    // Verify loading indicator is hidden\n    cy.get('[data-testid=\"loading-spinner\"]').should('not.exist');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Failed to load data');\n\n    // Verify table is not displayed\n    cy.get('[data-testid=\"table-row\"]').should('not.exist');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n    cy.get('[data-testid=\"retry-button\"]').should('contain', 'Retry');\n\n    // Verify error state persists\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8626,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.7419,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.041,
+      "feedback_used": ""
+    }
+  ]
+}

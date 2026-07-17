@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_141",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8376,
+  "total_latency_s": 73.278,
+  "final_script": "describe('Modal with Video - Pause on Close', () => {\n  beforeEach(() => {\n    cy.visit('/modal-video');\n  });\n\n  it('should pause video when modal is closed', () => {\n    // Open the modal\n    cy.get('[data-testid=\"open-modal-button\"]').click();\n    cy.get('[data-testid=\"video-modal\"]').should('be.visible');\n\n    // Verify video is playing\n    cy.get('[data-testid=\"video-player\"]').should('be.visible');\n    cy.get('[data-testid=\"video-player\"]').then(($video) => {\n      expect($video[0].paused).to.be.false;\n    });\n\n    // Close the modal\n    cy.get('[data-testid=\"close-modal-button\"]').click();\n    cy.get('[data-testid=\"video-modal\"]').should('not.exist');\n\n    // Verify video is paused after closing\n    cy.get('[data-testid=\"video-player\"]').should('be.visible');\n    cy.get('[data-testid=\"video-player\"]').then(($video) => {\n      expect($video[0].paused).to.be.true;\n    });\n  });\n\n  it('should not pause video when modal is interacted with', () => {\n    // Open the modal\n    cy.get('[data-testid=\"open-modal-button\"]').click();\n    cy.get('[data-testid=\"video-modal\"]').should('be.visible');\n\n    // Verify video is playing\n    cy.get('[data-testid=\"video-player\"]').should('be.visible');\n    cy.get('[data-testid=\"video-player\"]').then(($video) => {\n      expect($video[0].paused).to.be.false;\n    });\n\n    // Interact with video controls (e. pause)\n    cy.get('[data-testid=\"pause-button\"]').click();\n    cy.get('[data-testid=\"video-player\"]').then(($video) => {\n      expect($video[0].paused).to.be.true;\n    });\n\n    // Close the modal\n    cy.get('[data-testid=\"close-modal-button\"]').click();\n    cy.get('[data-testid=\"video-modal\"]').should('not.exist');\n\n    // Verify video remains paused after closing\n    cy.get('[data-testid=\"video-player\"]').should('be.visible');\n    cy.get('[data-testid=\"video-player\"]').then(($video) => {\n      expect($video[0].paused).to.be.true;\n    });\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8376,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.6588,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.278,
+      "feedback_used": ""
+    }
+  ]
+}

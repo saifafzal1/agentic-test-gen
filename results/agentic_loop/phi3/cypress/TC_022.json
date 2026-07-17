@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_022",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7363,
+  "total_latency_s": 414.688,
+  "final_script": "describe('Currency Field Formatting', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n  });\n\n  it('should format currency input with commas and two decimal places on blur', () => {\n    // Intercept the API call to validate currency format\n    cy.intercept('POST', '/api/validate-currency').as('validateCurrency');\n\n    // Get the currency input field\n    cy.get('[data-testid=\"currency-input\"]').type('1234567.89');\n\n    // Focus on the input field\n    cy.get('[data-testid=\"currency-input\"]').focus();\n\n    // Blur the input field\n    cy.get('[data-testid=\"currency-input\"]').blur();\n\n    // Wait for the API validation\n    cy.wait('@validateCurrency');\n\n    // Verify the formatted value is displayed\n    cy.get('[data-testid=\"formatted-currency-value\"]').should('be.visible');\n    cy.get('[data-testid=\"formatted-currency-value\"]').should('contain', '1,234,567.89');\n\n    // Verify the original value is still in the input\n    cy.get('[data-testid=\"currency-input\"]').should('have.value', '1234567.89');\n  });\n\n  it('should not format currency input when it is not a valid number', () => {\n    // Intercept the API call to validate currency format\n    cy.intercept('POST', '/api/validate-currency').as('validateCurrency');\n\n    // Get the currency input field\n    cy.get('[data-testid=\"currency-input\"]').type('abc123');\n\n    // Focus on the input field\n    cy.get('[data-testid=\"currency-input\"]').focus();\n\n    // Blur the input field\n    cy.get('[data-testid=\"currency-input\"]').blur();\n\n    // Wait for the API validation\n    cy.wait('@validateCurrency');\n\n    // Verify the formatted value is not displayed\n    cy.get('[data-testid=\"formatted-currency-value\"]').should('not.exist');\n\n    // Verify the original value is still in the input\n    cy.get('[data-testid=\"currency-input\"]').should('have.value', 'abc123');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7363,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3211,
+        "missing_keywords": [],
+        "assertion_count": 5,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 414.688,
+      "feedback_used": ""
+    }
+  ]
+}

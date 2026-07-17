@@ -1,0 +1,13 @@
+{
+  "id": "TC_256",
+  "category": "payment_flow",
+  "complexity": "complex",
+  "user_story": "As a user, I want the checkout form to validate card expiry in MM/YY format.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Checkout Form Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should accept valid card expiry date in MM/YY format', async ({ page }) => {\n    await page.fill(getByLabel('Card Expiry'), '12/25');\n    await page.click(getByRole('button', { name: 'Submit' }));\n    await expect(page.getByText('Payment processed successfully')).toBeVisible();\n  });\n\n  test('should show error for invalid card expiry date', async ({ page }) => {\n    await page.fill(getByLabel('Card Expiry'), '13/25');\n    await page.click(getByRole('button', { name: 'Submit' }));\n    await expect(page.getByText('Invalid expiry date')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 185,
+  "latency_s": 2.85,
+  "timestamp": "2026-06-19T17:01:30.994878"
+}

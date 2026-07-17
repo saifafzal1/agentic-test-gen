@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_041",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7683,
+  "total_latency_s": 283.024,
+  "final_script": "describe('404 Page Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should display 404 page when navigating to invalid URL', () => {\n    // Intercept the request to the root path\n    cy.intercept('GET', '/').as('rootRequest');\n    cy.wait('@rootRequest');\n\n    // Navigate to an invalid URL\n    cy.visit('/invalid-page');\n\n    // Verify 404 page is displayed\n    cy.get('[data-testid=\"error-page\"]').should('be.visible');\n    cy.get('[data-testid=\"error-title\"]').should('contain', '404');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Page not found');\n\n    // Verify navigation back to home is possible\n    cy.get('[data-testid=\"back-to-home-button\"]').click();\n    cy.url().should('include', '/');\n  });\n\n  it('should handle edge case: navigating to non-existent subdirectory', () => {\n    // Intercept the request to the root path\n    cy.intercept('GET', '/').as('rootRequest');\n    cy.wait('@rootRequest');\n\n    // Navigate to a non-existent subdirectory\n    cy.visit('/nonexistent-subdir/invalid-page');\n\n    // Verify 404 page is displayed\n    cy.get('[data-testid=\"error-page\"]').should('be.visible');\n    cy.get('[data-testid=\"error-title\"]').should('contain', '404');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Page not found');\n\n    // Verify navigation back to home is possible\n    cy.get('[data-testid=\"back-to-home-button\"]').click();\n    cy.url().should('include', '/');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7683,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4278,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 283.024,
+      "feedback_used": ""
+    }
+  ]
+}

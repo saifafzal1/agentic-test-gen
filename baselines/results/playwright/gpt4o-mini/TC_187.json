@@ -1,0 +1,13 @@
+{
+  "id": "TC_187",
+  "category": "search_filter",
+  "complexity": "complex",
+  "user_story": "As a user, I want to filter search results by category using checkboxes.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Filter by Category', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should display search results for selected category', async ({ page }) => {\n    await page.getByRole('checkbox', { name: 'Electronics' }).check();\n    await page.getByRole('button', { name: 'Search' }).click();\n    \n    const results = await page.getByRole('heading', { name: /results/i });\n    await expect(results).toBeVisible();\n    \n    const firstResult = await page.getByText('Smartphone Model XYZ');\n    await expect(firstResult).toBeVisible();\n  });\n\n  test('should not display results for unselected category', async ({ page }) => {\n    await page.getByRole('checkbox', { name: 'Clothing' }).check();\n    await page.getByRole('button', { name: 'Search' }).click();\n    \n    const noResultsMessage = await page.getByText('No results found');\n    await expect(noResultsMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 250,
+  "latency_s": 3.33,
+  "timestamp": "2026-06-19T16:56:11.583748"
+}

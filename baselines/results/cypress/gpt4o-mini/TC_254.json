@@ -1,0 +1,13 @@
+{
+  "id": "TC_254",
+  "category": "payment_flow",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an itemised receipt after checkout.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Itemised Receipt after Checkout', () => {\n    beforeEach(() => {\n        cy.visit('/checkout');\n        cy.get('#checkout-button').click();\n    });\n\n    it('should display an itemised receipt after successful checkout', () => {\n        cy.get('#payment-method').select('Credit Card');\n        cy.get('#card-number').type('4111111111111111');\n        cy.get('#expiry-date').type('12/25');\n        cy.get('#cvv').type('123');\n        cy.get('#submit-payment').click();\n        \n        cy.url().should('include', '/receipt');\n        cy.get('.receipt-header').should('contain', 'Thank you for your purchase!');\n        cy.get('.itemised-list').should('exist');\n        cy.get('.itemised-list').children().should('have.length.greaterThan', 0);\n    });\n\n    it('should show an error message for invalid payment details', () => {\n        cy.get('#payment-method').select('Credit Card');\n        cy.get('#card-number').type('1234567812345678');\n        cy.get('#expiry-date').type('01/20');\n        cy.get('#cvv').type('123');\n        cy.get('#submit-payment').click();\n        \n        cy.get('.error-message').should('be.visible').and('contain', 'Invalid payment details');\n        cy.url().should('not.include', '/receipt');\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 290,
+  "latency_s": 3.71,
+  "timestamp": "2026-06-19T16:40:56.326199"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_106",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8253,
+  "total_latency_s": 79.844,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Submission Error Auto-Scroll', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should automatically scroll to form submission errors when validation fails', async ({ page }) => {\n    // Intercept the form submission API\n    await page.route('**/api/submit-form', (route) => {\n      route.abort('blockedbyclient');\n    });\n\n    // Fill form with invalid data\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('John Doe');\n\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('invalid-email');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('short');\n\n    // Click submit button\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Wait for error message to appear\n    await page.waitForTimeout(500);\n\n    // Verify error messages are visible\n    const emailError = page.getByText('Please enter a valid email address');\n    await expect(emailError).toBeVisible();\n\n    const passwordError = page.getByText('Password must be at least 8 characters');\n    await expect(passwordError).toBeVisible();\n\n    // Verify the page has scrolled to the error messages\n    const emailErrorBox = page.locator('[data-testid=\"email-error-box\"]');\n    await expect(emailErrorBox).toBeVisible();\n\n    const scrollPosition = await page.evaluate(() => window.scrollY);\n    expect(scrollPosition).toBeGreaterThan(0);\n\n    // Verify the error container is in the viewport\n    const errorContainer = page.locator('[data-testid=\"form-error-container\"]');\n    const isErrorContainerInViewport = await errorContainer.evaluate((el) =>\n      el.getBoundingClientRect().top >= 0 &&\n      el.getBoundingClientRect().bottom <= (window.innerHeight || document.documentElement.clientHeight)\n    );\n    expect(isErrorContainerInViewport).toBe(true);\n  });\n\n  test('should not scroll when form submission is successful', async ({ page }) => {\n    // Intercept the form submission API and return success\n    await page.route('**/api/submit-form', (route) => {\n      route.fulfill({\n        status: 200,\n        contentType: 'application/json',\n        body: JSON.stringify({ success: true, message: 'Form submitted successfully' }),\n      });\n    });\n\n    // Fill form with valid data\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('Jane Smith');\n\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('jane@example.com');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('ValidPassword123');\n\n    // Click submit button\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Wait for success response\n    await page.waitForTimeout(500);\n\n    // Verify success message is displayed\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify no error messages are visible\n    const emailError = page.getByText('Please enter a valid email address');\n    await expect(emailError).not.toBeVisible();\n\n    const passwordError = page.getByText('Password must be at least 8 characters');\n    await expect(passwordError).not.toBeVisible();\n\n    // Verify the page has not scrolled to error messages\n    const scrollPosition = await page.evaluate(() => window.scrollY);\n    expect(scrollPosition).toBeLessThan(10);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8253,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4175,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.844,
+      "feedback_used": ""
+    }
+  ]
+}

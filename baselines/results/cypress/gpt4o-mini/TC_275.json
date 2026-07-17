@@ -1,0 +1,13 @@
+{
+  "id": "TC_275",
+  "category": "notifications",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a notification count reset to zero after reading all messages.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Notification Count Reset', () => {\n    beforeEach(() => {\n        cy.visit('/notifications');\n        cy.login(); // Assuming there's a custom command for login\n    });\n\n    it('should display notification count reset to zero after reading all messages', () => {\n        cy.get('.notification-count').should('have.text', '3'); // Assuming there are 3 notifications initially\n        cy.get('.notification-item').each(($el) => {\n            cy.wrap($el).click(); // Simulate reading each notification\n        });\n        cy.get('.notification-count').should('have.text', '0'); // Verify count is reset to zero\n    });\n\n    it('should not show negative notification count after reading all messages', () => {\n        cy.get('.notification-count').should('have.text', '3'); // Assuming there are 3 notifications initially\n        cy.get('.notification-item').each(($el) => {\n            cy.wrap($el).click(); // Simulate reading each notification\n        });\n        cy.get('.notification-count').should('have.text', '0'); // Verify count is reset to zero\n        cy.get('.notification-item').first().click(); // Click again to simulate reading already read notification\n        cy.get('.notification-count').should('have.text', '0'); // Ensure count remains zero\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 272,
+  "latency_s": 3.74,
+  "timestamp": "2026-06-19T16:42:24.081548"
+}

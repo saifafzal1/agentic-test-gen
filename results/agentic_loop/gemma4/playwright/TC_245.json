@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_245",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8517,
+  "total_latency_s": 72.003,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Invalid Card Number Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/payment');\n  });\n\n  test('should display error message when entering invalid card number', async ({ page }) => {\n    // Locate and fill card number input using getByLabel\n    const cardNumberInput = page.getByLabel('Card Number');\n    await cardNumberInput.fill('123');\n\n    // Locate and click submit button using getByRole\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/invalid card number/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message has correct styling\n    const errorBox = page.locator('[data-testid=\"error-box\"]');\n    await expect(errorBox).toBeVisible();\n    await expect(errorBox).toHaveClass(/error-message/);\n\n    // Verify form is not submitted\n    const paymentForm = page.locator('[data-testid=\"payment-form\"]');\n    await expect(paymentForm).toBeVisible();\n  });\n\n  test('should clear error message when entering valid card number', async ({ page }) => {\n    // Locate and fill invalid card number\n    const cardNumberInput = page.getByLabel('Card Number');\n    await cardNumberInput.fill('123');\n\n    // Locate and click submit button\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/invalid card number/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Locate and clear the invalid card number\n    await cardNumberInput.clear();\n    await cardNumberInput.fill('4121 1276 1210 1211');\n\n    // Locate and click submit button again\n    await submitButton.click();\n\n    // Verify error message is no longer visible\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify success message is displayed\n    const successMessage = page.getByText(/payment successful/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify form is submitted\n    const paymentForm = page.locator('[data-testid=\"payment-form\"]');\n    await expect(paymentForm).toHaveAttribute('data-submitted', 'true');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8517,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5057,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.003,
+      "feedback_used": ""
+    }
+  ]
+}

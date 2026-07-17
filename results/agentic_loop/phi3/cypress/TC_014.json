@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_014",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7738,
+  "total_latency_s": 33.643,
+  "final_script": "describe('Login Form Keyboard Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should navigate through login form using keyboard arrows and submit successfully', () => {\n    // Focus on email input field\n    cy.get('[data-testid=\"email-input\"]').click();\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n\n    // Tab to password field\n    cy.get('[data-testid=\"password-input\"]').click();\n    cy.get('[data-testid=\"password-input\"]').type('password123');\n\n    // Tab to submit button\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Verify login was successful\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"welcome-message\"]').should('be.visible');\n    cy.get('[data-testid=\"welcome-message\"]').should('contain', 'Welcome back');\n  });\n\n  it('should handle focus and tab order correctly when form is empty', () => {\n    // Focus on email input field\n    cy.get('[data-testid=\"email-input\"]').click();\n    cy.get('[data-testid=\"email-input\"]').type('');\n\n    // Tab to password field\n    cy.get('[data-testid=\"password-input\"]').click();\n    cy.get('[data-testid=\"password-input\"]').type('');\n\n    // Tab to submit button\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please fill in both fields');\n\n    // Tab back to email field\n    cy.get('[data-testid=\"password-input\"]').click();\n    cy.get('[data-testid=\"password-input\"]').type('password');\n\n    // Tab to submit button again\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Verify login was successful\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"welcome-message\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7738,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4459,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 33.643,
+      "feedback_used": ""
+    }
+  ]
+}

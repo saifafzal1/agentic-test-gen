@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_227",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7801,
+  "total_latency_s": 186.707,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Touch Target Size Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/touch-target-validation');\n  });\n\n  test('should display large enough touch targets for mobile users', async ({ page }) => {\n    // Verify the page loads\n    await expect(page).toBeVisible();\n\n    // Verify the main content container is visible\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeVisible();\n\n    // Verify the first touch target button is visible and has a minimum size\n    const button1 = page.getByRole('button', { name: /submit form/i });\n    await expect(button1).toBeVisible();\n    const buttonBox = await button1.boundingBox();\n    expect(buttonBox.width).toBeGreaterThan(44);\n    expect(buttonBox.height).toBeGreaterThan(44);\n\n    // Verify the second touch target link is visible and has a minimum size\n    const link2 = page.getByRole('link', { name: /view details/i });\n    await expect(link2).toBeVisible();\n    const linkBox = await link2.boundingBox();\n    expect(linkBox.width).toBeGreaterThan(48);\n    expect(linkBox.height).toBeGreaterThan(48);\n\n    // Verify the third touch target icon button is visible and has a minimum size\n    const iconButton3 = page.getByRole('button', { name: /settings/i });\n    await expect(iconButton3).toBeVisible();\n    const iconBox = await iconButton3.boundingBox();\n    expect(iconBox.width).toBeGreaterThan(40);\n    expect(iconBox.height).toBeGreaterThan(40);\n\n    // Verify the fourth touch target is visible and has a minimum size\n    const button4 = page.getByRole('button', { name: /cancel operation/i });\n    await expect(button4).toBeVisible();\n    const button4Box = await button4.boundingBox();\n    expect(buttonBox.width).toBeGreaterThan(40);\n    expect(buttonBox.height).toBeGreaterThan(40);\n  });\n\n  test('should handle small touch targets with appropriate warning message', async ({ page }) => {\n    // Navigate to the small touch target scenario\n    await page.goto('/touch-target-validation/small-targets');\n\n    // Verify the warning message is displayed\n    const warningMessage = page.getByText(/touch targets are too small/i);\n    await expect(warningMessage).toBeVisible();\n\n    // Verify the warning message has a specific style\n    const warningBox = await warningMessage.boundingBox();\n    expect(warningBox.width).toBeGreaterThan(200);\n    expect(warningBox.height).toBeGreaterThan(30);\n\n    // Verify the small touch target button exists\n    const smallButton = page.getByRole('button', { name: /small target/i });\n    await expect(smallButton).toBeVisible();\n    const smallBox = await smallButton.boundingBox();\n    expect(smallBox.width).toBeLessThan(30);\n    expect(smallBox.height).toBeLessThan(30);\n\n    // Verify the small touch target link exists\n    const smallLink = page.getByRole('link', { name: /small link/i });\n    await expect(smallLink).toBeVisible();\n    const smallLinkBox = await smallLink.boundingBox();\n    expect(smallLinkBox.width).toBeLessThan(30);\n    expect(smallLinkBox.height).toBeLessThan(30);\n\n    // Verify the user can dismiss the warning\n    const dismissButton = page.getByRole('button', { name: /dismiss warning/i });\n    await expect(dismissButton).toBeVisible();\n    await dismissButton.click();\n\n    // Verify the warning message is no longer visible\n    await expect(warningMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4881,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3802,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.171,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7801,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3671,
+        "missing_keywords": [],
+        "assertion_count": 25,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 114.536,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

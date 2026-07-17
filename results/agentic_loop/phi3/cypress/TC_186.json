@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_186",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7545,
+  "total_latency_s": 37.35,
+  "final_script": "describe('Product Search by Keyword - Instant Results', () => {\n  beforeEach(() => {\n    cy.visit('/products');\n  });\n\n  it('should display instant search results when user enters a keyword', () => {\n    // Intercept the search API call\n    cy.intercept('GET', '/api/products/search*').as('searchResults');\n\n    // Get the search input element\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n    cy.get('[data-testid=\"search-input\"]').type('laptop');\n\n    // Verify the search input has focus\n    cy.get('[data-testid=\"search-input\"]').should('have.focus');\n\n    // Wait for the API call to complete\n    cy.wait('@searchResults');\n\n    // Verify search results are displayed\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"search-results\"]').should('contain', 'laptop');\n\n    // Verify results are listed\n    cy.get('[data-testid=\"search-result-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify the first result is displayed\n    cy.get('[data-testid=\"search-result-item\"]').first().should('be.visible');\n\n    // Verify the search results are sorted alphabetically\n    cy.get('[data-testid=\"search-result-item\"]').first().should('contain', 'Apple MacBook Pro');\n    cy.get('[data-testid=\"search-result-item\"]').last().should('contain', 'Lenovo ThinkPad');\n  });\n\n  it('should handle empty search input and display no results message', () => {\n    // Intercept the search API call\n    cy.intercept('GET', '/api/products/search*').as('searchResults');\n\n    // Get the search input element\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n\n    // Clear the search input\n    cy.get('[data-testid=\"search-input\"]').clear();\n\n    // Verify the search input is empty\n    cy.get('[data-testid=\"search-input\"]').should('have.value', '');\n\n    // Wait for the API call to complete\n    cy.wait('@searchResults');\n\n    // Verify no results are displayed\n    cy.get('[data-testid=\"search-results\"]').should('not.exist');\n\n    // Verify no results message is displayed\n    cy.get('[data-testid=\"no-results-message\"]').should('be.visible');\n    cy.get('[data-testid=\"no-results-message\"]').should('contain', 'No products found');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7545,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3817,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 37.35,
+      "feedback_used": ""
+    }
+  ]
+}

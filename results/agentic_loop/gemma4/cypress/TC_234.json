@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_234",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7458,
+  "total_latency_s": 72.414,
+  "final_script": "describe('Sticky Footer Navigation on Mobile', () => {\n  beforeEach(() => {\n    cy.visit('/mobile-page');\n  });\n\n  it('should display sticky footer navigation when content is short', () => {\n    // Verify page loads in mobile viewport\n    cy.viewport('iphone-x');\n    cy.get('[data-testid=\"mobile-page-container\"]').should('be.visible');\n\n    // Verify footer is visible and sticky\n    cy.get('[data-testid=\"footer-nav\"]').should('be.visible');\n    cy.get('[data-testid=\"footer-nav\"]').should('have.css', 'position', 'fixed');\n\n    // Verify footer is at the bottom of the viewport\n    cy.get('[data-testid=\"footer-nav\"]').should('have.css', 'bottom', '0px');\n\n    // Verify footer contains navigation links\n    cy.get('[data-testid=\"footer-nav\"]').should('contain', 'Home');\n    cy.get('[data-testid=\"footer-nav\"]').should('contain', 'Search');\n    cy.get('[data-testid=\"footer-nav\"]').should('contain', 'Profile');\n\n    // Verify footer is not pushed down by content\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n    cy.get('[data-testid=\"main-content\"]').should('have.css', 'padding-bottom', '0px');\n  });\n\n  it('should handle long content and keep footer sticky at bottom', () => {\n    // Intercept API call for long content\n    cy.intercept('GET', '/api/long-content').as('loadLongContent');\n    cy.get('[data-testid=\"load-more-button\"]').click();\n    cy.wait('@loadLongContent');\n\n    // Verify footer is still visible and sticky\n    cy.get('[data-testid=\"footer-nav\"]').should('be.visible');\n    cy.get('[data-testid=\"footer-nav\"]').should('have.css', 'position', 'fixed');\n    cy.get('[data-testid=\"footer-nav\"]').should('have.css', 'bottom', '0px');\n\n    // Verify main content is scrollable and footer remains fixed\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n    cy.get('[data-testid=\"main-content\"]').should('have.css', 'overflow', 'auto');\n\n    // Scroll down to verify footer stays in place\n    cy.get('[data-testid=\"main-content\"]').scrollTo('bottom');\n    cy.get('[data-testid=\"footer-nav\"]').should('be.visible');\n    cy.get('[data-testid=\"footer-nav\"]').should('have.css', 'bottom', '0px');\n\n    // Verify footer is not obscured by content\n    cy.get('[data-testid=\"footer-nav\"]').should('not.be.hidden');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7458,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3526,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.414,
+      "feedback_used": ""
+    }
+  ]
+}

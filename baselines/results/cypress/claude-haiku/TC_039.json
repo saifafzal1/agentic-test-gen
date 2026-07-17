@@ -1,0 +1,13 @@
+{
+  "id": "TC_039",
+  "category": "navigation",
+  "complexity": "medium",
+  "user_story": "As a user, I want the active menu item to be highlighted in the navigation bar.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Navigation Menu Active Item Highlighting', () => {\n  beforeEach(() => {\n    cy.visit('/');\n    cy.get('nav').should('be.visible');\n  });\n\n  it('should highlight the active menu item when navigating to a page', () => {\n    cy.get('nav a[href=\"/about\"]').click();\n    cy.get('nav a[href=\"/about\"]').should('have.class', 'active');\n    cy.get('nav a[href=\"/\"]').should('not.have.class', 'active');\n  });\n\n  it('should maintain active state on page reload', () => {\n    cy.get('nav a[href=\"/services\"]').click();\n    cy.get('nav a[href=\"/services\"]').should('have.class', 'active');\n    cy.reload();\n    cy.get('nav a[href=\"/services\"]').should('have.class', 'active');\n  });\n\n  it('should update active item when navigating between multiple pages', () => {\n    cy.get('nav a[href=\"/about\"]').click();\n    cy.get('nav a[href=\"/about\"]').should('have.class', 'active');\n    \n    cy.get('nav a[href=\"/contact\"]').click();\n    cy.get('nav a[href=\"/contact\"]').should('have.class', 'active');\n    cy.get('nav a[href=\"/about\"]').should('not.have.class', 'active');\n  });\n\n  it('should highlight home menu item on initial page load', () => {\n    cy.get('nav a[href=\"/\"]').should('have.class', 'active');\n  });\n\n  it('should apply active styling with correct visual indicators', () => {\n    cy.get('nav a[href=\"/about\"]').click();\n    cy.get('nav a[href=\"/about\"]').should('have.class', 'active');\n    cy.get('nav a[href=\"/about\"]').should('have.css', 'color').and('not.equal', 'rgb(0, 0, 0)');\n  });\n\n  it('should handle nested menu items correctly', () => {\n    cy.get('nav a[href=\"/products\"]').click();\n    cy.get('nav a[href=\"/products\"]').should('have.class', 'active');\n    cy.get('nav a[href=\"/products/electronics\"]').click();\n    cy.get('nav a[href=\"/products/electronics\"]').should('have.class', 'active');\n    cy.get('nav a[href=\"/products\"]').should('have.class', 'active');\n  });\n\n  it('should only have one active menu item at a time', () => {\n    cy.get('nav a').each(($link) => {\n      cy.wrap($link).click();\n    });\n    \n    cy.get('nav a.active').should('have.length', 1);\n  });\n});",
+  "prompt_tokens": 121,
+  "completion_tokens": 696,
+  "latency_s": 4.13,
+  "timestamp": "2026-06-19T17:08:51.662695"
+}

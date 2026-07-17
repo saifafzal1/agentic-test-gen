@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_200",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.802,
+  "total_latency_s": 71.902,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Filter Tag Removal', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should remove an individual filter tag when x icon is clicked', async ({ page }) => {\n    // Apply a filter to generate a tag\n    const filterInput = page.getByPlaceholder('Filter by category');\n    await filterInput.fill('Electronics');\n    const applyButton = page.getByRole('button', { name: 'Apply' });\n    await applyButton.click();\n\n    // Verify filter tag is visible\n    const filterTag = page.getByText('Electronics');\n    await expect(filterTag).toBeVisible();\n\n    // Click the remove icon (x)\n    const removeIcon = page.getByRole('button', { name: /remove|close/i });\n    await removeIcon.click();\n\n    // Verify filter tag is removed\n    await expect(filterTag).not.toBeVisible();\n\n    // Verify search results are updated\n    const resultsContainer = page.getByTestId('search-results');\n    await expect(resultsContainer).toBeVisible();\n  });\n\n  test('should handle removing the last filter tag and clear search results', async ({ page }) => {\n    // Apply multiple filters\n    const filterInput1 = page.getByPlaceholder('Filter by category');\n    await filterInput1.fill('Electronics');\n    const applyButton = page.getByRole('button', { name: 'Apply' });\n    await applyButton.click();\n\n    const filterInput2 = page.getByPlaceholder('Filter by price');\n    await filterInput2.fill('100-500');\n    await applyButton.click();\n\n    // Verify both filter tags are visible\n    const tag1 = page.getByText('Electronics');\n    const tag2 = page.getByText('100-550');\n    await expect(tag1).toBeVisible();\n    await expect(tag2).toBeVisible();\n\n    // Remove the first filter tag\n    const removeIcon1 = page.getByRole('button', { name: /remove|close/i });\n    await removeIcon1.click();\n\n    // Verify first tag is removed\n    await expect(tag1).not.toBeVisible();\n    await expect(tag2).toBeVisible();\n\n    // Remove the second (last) filter tag\n    const removeIcon2 = page.getByRole('button', { name: /remove|close/i });\n    await removeIcon2.click();\n\n    // Verify both tags are removed\n    await expect(tag1).not.toBeVisible();\n    await expect(tag2).not.toBeVisible();\n\n    // Verify search results are cleared or reset\n    const resultsContainer = page.getByTestId('search-results');\n    await expect(resultsContainer).toBeVisible();\n    const resultItems = page.getByTestId('result-item');\n    const count = await resultItems.count();\n    expect(count).toBeGreaterThan(0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.802,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4401,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.902,
+      "feedback_used": ""
+    }
+  ]
+}

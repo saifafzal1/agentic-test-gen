@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_258",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8049,
+  "total_latency_s": 71.978,
+  "final_script": "describe('Payment Timeout Redirection to Error Page', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should redirect to error page when payment times out', () => {\n    // Intercept the payment API call\n    cy.intercept('POST', '/api/payment/process', {\n      statusCode: 504,\n      body: { error: 'Gateway timeout' }\n    }).as('paymentTimeout');\n\n    // Fill in payment details\n    cy.get('[data-testid=\"card-number-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"expiry-date-input\"]').type('12/25');\n    cy.get('[data-testid=\"cvc-input\"]').type('123');\n\n    // Click pay button\n    cy.get('[data-testid=\"pay-button\"]').click();\n\n    // Wait for the payment API call\n    cy.wait('@paymentTimeout');\n\n    // Verify redirection to error page\n    cy.url().should('include', '/error');\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Payment timed out');\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n  });\n\n  it('should display error message and prevent navigation when payment times out', () => {\n    // Intercept the payment API call with timeout\n    cy.intercept('POST', '/api/payment/process', {\n      statusCode: 504,\n      body: { error: 'Gateway timeout' }\n    }).as('paymentTimeout');\n\n    // Fill in payment details\n    cy.get('[data-testid=\"card-number-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"expiry-date-input\"]').type('12/22');\n    cy.get('[data-testid=\"cvc-input\"]').type('123');\n\n    // Click pay button\n    cy.get('[data-testid=\"pay-button\"]').click();\n\n    // Wait for the payment API call\n    cy.wait('@paymentTimeout');\n\n    // Verify error message is displayed on checkout page\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Payment timed out');\n\n    // Verify user is still on checkout page\n    cy.url().should('include', '/checkout');\n    cy.get('[data-testid=\"order-summary\"]').should('be.visible');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8049,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5497,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.978,
+      "feedback_used": ""
+    }
+  ]
+}

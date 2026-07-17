@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_037",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7689,
+  "total_latency_s": 42.983,
+  "final_script": "describe('Form Submission with Confirmation Email', () => {\n  beforeEach(() => {\n    cy.visit('/contact-form');\n  });\n\n  it('should successfully submit form and send confirmation email', () => {\n    // Intercept the API call to submit the form\n    cy.intercept('POST', '/api/contact-form').as('formSubmit');\n\n    // Fill in the form fields\n    cy.get('[data-testid=\"name-input\"]').type('John Doe');\n    cy.get('[data-testid=\"email-input\"]').type('john.doe@example.com');\n    cy.get('[data-testid=\"message-textarea\"]').type('Hello, I am interested in your product.');\n\n    // Verify all fields are filled\n    cy.get('[data-testid=\"name-input\"]').should('have.value', 'John Doe');\n    cy.get('[data-testid=\"email-input\"]').should('have.value', 'john.doe@example.com');\n    cy.get('[data-testid=\"message-textarea\"]').should('have.value', 'Hello, I am interested in your product.');\n\n    // Submit the form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@formSubmit');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Thank you for your message');\n\n    // Verify confirmation email was sent\n    cy.get('[data-testid=\"email-confirmation-toast\"]').should('be.visible');\n    cy.get('[data-testid=\"email-confirmation-toast\"]').should('contain', 'Your email has been sent');\n\n    // Verify email was sent to the correct address\n    cy.get('[data-testid=\"email-confirmation-toast\"]').should('contain', 'john.doe@example.com');\n  });\n\n  it('should handle form submission failure and display error message', () => {\n    // Intercept the API call to submit the form\n    cy.intercept('POST', '/api/contact-form', {\n      statusCode: 500,\n      body: { error: 'Internal server error' }\n    }).as('formSubmitError');\n\n    // Fill in the form fields\n    cy.get('[data-testid=\"name-input\"]').type('Jane Smith');\n    cy.get('[data-testid=\"email-input\"]').type('jane.smith@example.com');\n    cy.get('[data-testid=\"message-textarea\"]').type('Please help, my order is delayed.');\n\n    // Submit the form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@formSubmitError');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Failed to send your message');\n\n    // Verify success message does not appear\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n\n    // Verify email was not sent\n    cy.get('[data-testid=\"email-confirmation-toast\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7689,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4296,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 42.983,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_245",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7693,
+  "total_latency_s": 72.557,
+  "final_script": "describe('Invalid Card Number Error Handling', () => {\n  beforeEach(() => {\n    cy.visit('/payment');\n  });\n\n  it('should display error message when entering invalid card number', () => {\n    // Intercept the payment API call\n    cy.intercept('POST', '/api/payment').as('processPayment');\n\n    // Fill in valid form fields\n    cy.get('[data-testid=\"card-holder-name\"]').type('John Doe');\n    cy.get('[data-testid=\"card-number\"]').type('123456789012345');\n    cy.get('[data-testid=\"expiry-date\"]').type('12/25');\n    cy.get('[data-testid=\"cvv\"]').type('123');\n    cy.get('[data-testid=\"card-type\"]').click();\n    cy.get('[data-testid=\"card-type-visa\"]').click();\n\n    // Attempt to submit the form\n    cy.get('[data-testid=\"submit-payment-btn\"]').click();\n\n    // Wait for the API call\n    cy.wait('@processPayment');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Invalid card number');\n\n    // Verify form is not submitted\n    cy.get('[data-testid=\"payment-success-message\"]')\n      .should('not.exist');\n\n    // Verify card number field still has value\n    cy.get('[data-testid=\"card-number\"]').should('have.value', '123456789012345');\n  });\n\n  it('should not display error when entering valid card number', () => {\n    // Intercept the payment API call\n    cy.intercept('POST', '/api/payment', {\n      statusCode: 200,\n      body: { success: true, transactionId: 'txn_12345' }\n    }).as('processPayment');\n\n    // Fill in valid form fields\n    cy.get('[data-testid=\"card-holder-name\"]').type('Jane Smith');\n    cy.get('[data-testid=\"card-number\"]').type('4928 1617 0000 1234');\n    cy.get('[data-testid=\"expiry-date\"]').type('12/26');\n    cy.get('[data-testid=\"cvv\"]').type('412');\n    cy.get('[data-testid=\"card-type\"]').click();\n    cy.get('[data-testid=\"card-type-mastercard\"]').click();\n\n    // Submit the form\n    cy.get('[data-testid=\"submit-payment-btn\"]').click();\n\n    // Wait for the API call\n    cy.wait('@processPayment');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"payment-success-message\"]')\n      .should('be.visible')\n      .should('contain', 'Payment successful');\n\n    // Verify error message does not exist\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n\n    // Verify form is cleared or reset\n    cy.get('[data-testid=\"card-number\"]').should('have.value', '');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7693,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4309,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.557,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_263",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7978,
+  "total_latency_s": 379.559,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Bell Badge Count', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should display correct badge count on notification bell icon', async ({ page }) => {\n    // Verify notification bell icon is visible\n    const bellIcon = page.getByRole('button', { name: /notification bell/i });\n    await expect(bellIcon).toBeVisible();\n\n    // Verify badge count is displayed\n    const badgeCount = page.getByText(/3 notifications/i);\n    await expect(badgeCount).toBeVisible();\n\n    // Verify badge count is accurate\n    const actualCount = page.getByText(/3 notifications/i);\n    const expectedCount = page.getByText(/3 notifications/i);\n    await expect(actualCount).toBeVisible();\n    await expect(expectedCount).toBeVisible();\n\n    // Verify badge color is correct\n    const badgeColor = page.getByRole('status', { name: /notifications/i });\n    await expect(badgeColor).toHaveAttribute('data-badge-color', 'red');\n\n    // Verify notification bell icon has correct aria-label\n    await expect(bellIcon).toHaveAttribute('aria-label', 'Notification bell');\n\n    // Verify notification bell icon has correct aria-pressed state\n    await expect(bellIcon).toHaveAttribute('aria-pressed', 'false');\n  });\n\n  test('should update badge count when notifications are received', async ({ page }) => {\n    // Verify initial badge count is 0\n    const initialBadgeCount = page.getByText(/0 notifications/i);\n    await expect(initialBadgeCount).toBeVisible();\n\n    // Mock API call to receive notifications\n    await page.route('**/api/notifications', (route) => {\n      route.continue();\n    });\n\n    // Verify notification bell icon is still visible\n    const bellIcon = page.getByRole('button', { name: /notification bell/i });\n    await expect(bellIcon).toBeVisible();\n\n    // Verify badge count updates to 1\n    const updatedBadgeCount = page.getByText(/1 notification/i);\n    await expect(updatedBadgeCount).toBeVisible();\n\n    // Verify badge color is still correct\n    const badgeColor = page.getByRole('status', { name: /notifications/i });\n    await expect(badgeColor).toHaveAttribute('data-badge-color', 'red');\n\n    // Verify notification bell icon has correct aria-pressed state\n    await expect(bellIcon).toHaveAttribute('aria-pressed', 'true');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7978,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4259,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 379.559,
+      "feedback_used": ""
+    }
+  ]
+}

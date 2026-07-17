@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_231",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7378,
+  "total_latency_s": 72.212,
+  "final_script": "describe('Horizontal Scrolling Disabled on Main Layout', () => {\n  beforeEach(() => {\n    cy.visit('/main-layout');\n  });\n\n  it('should disable horizontal scrolling on main layout when viewport is mobile size', () => {\n    // Set viewport to mobile size\n    cy.viewport('iphone-x');\n    \n    // Verify main content is visible and scrollable vertically\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n    cy.get('[data-testid=\"main-content\"]').should('have.height', 'auto');\n    \n    // Attempt to scroll horizontally by clicking on an element and dragging\n    cy.get('[data-testid=\"main-content\"]').then(($content) => {\n      const scrollLeft = $content[0].scrollLeft;\n      const scrollWidth = $content[0].scrollWidth;\n      \n      // Verify scrollLeft is 0 (no horizontal offset)\n      expect(scrollLeft).to.equal(0);\n      \n      // Verify scrollWidth is equal to clientWidth (no overflow)\n      expect(scrollWidth).to.equal($content[0].clientWidth);\n    });\n    \n    // Verify no horizontal scrollbar is visible\n    cy.get('[data-testid=\"horizontal-scrollbar\"]').should('not.exist');\n    \n    // Verify vertical scrolling is still functional\n    cy.get('[data-testid=\"main-content\"]').scrollTo('bottom');\n    cy.get('[data-testid=\"footer\"]').should('be.visible');\n  });\n\n  it('should allow horizontal scrolling when viewport is desktop size', () => {\n    // Set viewport to desktop size\n    cy.viewport('desktop');\n    \n    // Verify horizontal scrollbar is visible on desktop\n    cy.get('[data-testid=\"horizontal-scrollbar\"]').should('be.visible');\n    \n    // Verify main content has horizontal overflow\n    cy.get('[data-testid=\"main-content\"]').then(($content) => {\n      const scrollLeft = $content[0].scrollLeft;\n      const scrollWidth = $content[0].scrollWidth;\n      \n      // Verify scrollWidth is greater than clientWidth\n      expect(scrollWidth).to.be.greaterThan($content[0].clientWidth);\n      \n      // Verify scrollLeft is 0 initially\n      expect(scrollLeft).to.equal(0);\n    });\n    \n    // Verify horizontal scrolling is possible\n    cy.get('[data-testid=\"main-content\"]').scrollTo('right', 500);\n    cy.get('[data-testid=\"main-content\"]').should('have.scrollLeft', 500);\n    \n    // Verify vertical scrolling is still functional\n    cy.get('[data-testid=\"main-content\"]').scrollTo('bottom');\n    cy.get('[data-testid=\"footer\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7378,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.326,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.212,
+      "feedback_used": ""
+    }
+  ]
+}

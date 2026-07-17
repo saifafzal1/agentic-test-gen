@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_042",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8091,
+  "total_latency_s": 362.811,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Tab Navigation with URL Hash Update', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/tabs');\n  });\n\n  test('should update URL hash when switching tabs and display correct content', async ({ page }) => {\n    // Verify initial state\n    const tabList = page.getByRole('tablist');\n    await expect(tabList).toBeVisible();\n    const tab1 = page.getByRole('tab', { name: /tab 1/i });\n    await expect(tab1).toBeVisible();\n    const tab2 = page.getByRole('tab', { name: /tab 2/i });\n    await expect(tab2).toBeVisible();\n\n    // Click on tab 1\n    await tab1.click();\n    await expect(page).toHaveURL(/tabs\\/#tab1/);\n    const tab1Content = page.getByRole('region', { name: /tab 1 content/i });\n    await expect(tab1Content).toBeVisible();\n\n    // Click on tab 2\n    await tab2.click();\n    await expect(page).toHaveURL(/tabs\\/#tab2/);\n    const tab2Content = page.getByRole('region', { name: /tab 2 content/i });\n    await expect(tab2Content).toBeVisible();\n\n    // Verify content is displayed for tab 2\n    const tab2Title = page.getByRole('heading', { name: /tab 2/i });\n    await expect(tab2Title).toBeVisible();\n\n    // Verify URL hash is correct\n    const hash = page.evaluate(() => window.location.hash);\n    expect(hash).toBe('/tabs/#tab2');\n  });\n\n  test('should handle back navigation and update URL hash accordingly', async ({ page }) => {\n    // Navigate to tab 2\n    const tab2 = page.getByRole('tab', { name: /tab 2/i });\n    await tab2.click();\n    await expect(page).toHaveURL(/tabs\\/#tab2/);\n\n    // Verify content is displayed for tab 2\n    const tab2Content = page.getByRole('region', { name: /tab 2 content/i });\n    await expect(tab2Content).toBeVisible();\n\n    // Navigate back to tab 1 using browser back button\n    await page.goBack();\n\n    // Verify URL hash is updated to tab 1\n    await expect(page).toHaveURL(/tabs\\/#tab1/);\n\n    // Verify content is displayed for tab 1\n    const tab1Content = page.getByRole('region', { name: /tab 1 content/i });\n    await expect(tab1Content).toBeVisible();\n\n    // Verify tab 1 is active\n    const tab1 = page.getByRole('tab', { name: /tab 1/i });\n    await expect(tab1).toBeVisible();\n\n    // Verify tab 2 is not visible\n    const tab2 = page.getByRole('tab', { name: /tab 2/i });\n    await expect(tab2).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8091,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4637,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 362.811,
+      "feedback_used": ""
+    }
+  ]
+}

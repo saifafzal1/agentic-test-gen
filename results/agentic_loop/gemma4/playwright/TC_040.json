@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_040",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.82,
+  "total_latency_s": 72.129,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Footer Navigation Links', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should navigate to correct pages when clicking footer links', async ({ page }) => {\n    // Verify footer is visible\n    const footer = page.getByRole('contentinfo', { name: /footer/i });\n    await expect(footer).toBeVisible();\n\n    // Verify footer links container exists\n    const footerLinks = page.getByRole('navigation', { name: /footer links/i });\n    await expect(footerLinks).toBeVisible();\n\n    // Click 'About Us' link\n    const aboutLink = page.getByRole('link', { name: /about us/i });\n    await expect(aboutLink).toBeVisible();\n    await aboutLink.click();\n\n    // Verify About Us page loaded\n    await expect(page).toHaveURL(/.*\\/about/);\n    const aboutTitle = page.getByRole('heading', { name: /about us/i });\n    await expect(aboutTitle).toBeVisible();\n\n    // Click 'Contact' link\n    const contactLink = page.getByRole('link', { name: /contact us/i });\n    await expect(contactLink).toBeVisible();\n    await contactLink.click();\n\n    // Verify Contact page loaded\n    await expect(page).toHaveURL(/.*\\/contact/);\n    const contactTitle = page.getByRole('heading', { name: /contact us/i });\n    await expect(contactTitle).toBeVisible();\n\n    // Click 'Privacy Policy' link\n    const privacyLink = page.getByRole('link', { name: /privacy policy/i });\n    await expect(privacyLink).toBeVisible();\n    await privacyLink.click();\n\n    // Verify Privacy Policy page loaded\n    await expect(page).toHaveURL(/.*\\/privacy-policy/);\n    const privacyTitle = page.getByRole('heading', { name: /privacy policy/i });\n    await expect(privacyTitle).toBeVisible();\n  });\n\n  test('should handle broken footer links gracefully and display error message', async ({ page }) => {\n    // Intercept a known broken link\n    await page.route('**/broken-link', route => {\n      route.abort('failed');\n    });\n\n    // Click the broken link\n    const brokenLink = page.getByRole('link', { name: /broken link/i });\n    await expect(brokenLink).toBeVisible();\n    await brokenLink.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/page not found/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify user is still on the home page (or error page)\n    await expect(page).toHaveURL(/.*\\/error/);\n\n    // Verify footer is still accessible\n    const footer = page.getByRole('contentinfo', { name: /footer/i });\n    await expect(footer).toBeVisible();\n\n    // Click a working link to ensure navigation is not blocked\n    const homeLink = page.getByRole('link', { name: /home/i });\n    await expect(homeLink).toBeVisible();\n    await homeLink.click();\n\n    // Verify home page loads\n    await expect(page).toHaveURL(/.*\\/$/);\n    const homeTitle = page.getByRole('heading', { name: /home/i });\n    await expect(homeTitle).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.82,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.129,
+      "feedback_used": ""
+    }
+  ]
+}

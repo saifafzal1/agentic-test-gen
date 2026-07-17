@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_113",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7683,
+  "total_latency_s": 260.127,
+  "final_script": "describe('Background Job Notification Toast', () => {\n  beforeEach(() => {\n    cy.visit('/jobs');\n  });\n\n  it('should display success toast notification when background job completes successfully', () => {\n    // Intercept the API call for the background job\n    cy.intercept('POST', '/api/background-jobs/start').as('startJob');\n    cy.intercept('GET', '/api/background-jobs/status').as('getJobStatus');\n\n    // Start the background job\n    cy.get('[data-testid=\"start-job-btn\"]').click();\n    cy.wait('@startJob');\n\n    // Wait for the job to complete\n    cy.wait('@getJobStatus').then((interception) => {\n      if (interception.response.statusCode === 200) {\n        cy.get('[data-testid=\"toast-container\"]').should('be.visible');\n        cy.get('[data-testid=\"toast-success\"]').should('contain', 'Job completed successfully');\n        cy.get('[data-testid=\"toast-success\"]').should('have.class', 'toast-success');\n        cy.get('[data-testid=\"toast-success\"]').should('be.visible');\n        cy.get('[data-testid=\"toast-success\"]').should('contain', 'Your job has finished');\n      } else {\n        cy.get('[data-testid=\"toast-container\"]').should('not.exist');\n        cy.get('[data-testid=\"error-toast\"]').should('be.visible');\n        cy.get('[data-testid=\"error-toast\"]').should('contain', 'Job failed');\n      }\n    });\n  });\n\n  it('should display error toast notification when background job fails', () => {\n    // Intercept the API call for the background job\n    cy.intercept('POST', '/api/background-jobs/start').as('startJob');\n    cy.intercept('GET', '/api/background-jobs/status').as('getJobStatus');\n\n    // Start the background job\n    cy.get('[data-testid=\"start-job-btn\"]').click();\n    cy.wait('@startJob');\n\n    // Simulate job failure\n    cy.intercept('GET', '/api/background-jobs/status', {\n      statusCode: 500,\n      body: { error: 'Internal server error' }\n    }).as('failedJob');\n\n    // Wait for the failed job status\n    cy.wait('@failedJob');\n\n    // Verify error toast is displayed\n    cy.get('[data-testid=\"toast-container\"]').should('be.visible');\n    cy.get('[data-testid=\"toast-error\"]').should('be.visible');\n    cy.get('[data-testid=\"toast-error\"]').should('contain', 'Job failed');\n    cy.get('[data-testid=\"toast-error\"]').should('have.class', 'toast-error');\n\n    // Verify success toast is not displayed\n    cy.get('[data-testid=\"toast-success\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7683,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4278,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 260.127,
+      "feedback_used": ""
+    }
+  ]
+}

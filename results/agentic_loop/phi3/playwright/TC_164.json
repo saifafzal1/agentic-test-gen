@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_164",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7923,
+  "total_latency_s": 49.237,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Column Sort Direction Indication', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should display correct sort direction arrow icon for each column', async ({ page }) => {\n    // Verify initial state with no sort applied\n    const sortArrow = page.getByRole('button', { name: /sort/i });\n    await expect(sortArrow).toBeVisible();\n\n    // Verify arrow icons are not visible initially\n    const descArrow = page.getByRole('img', { name: /desc/i });\n    await expect(descArrow).not.toBeVisible();\n\n    const ascArrow = page.getByRole('img', { name: /asc/i });\n    await expect(ascArrow).not.toBeVisible();\n\n    // Click the first column to sort by it\n    const firstColumn = page.getByRole('columnheader', { name: /first name/i });\n    await firstColumn.click();\n\n    // Verify descending arrow appears for the first column\n    await expect(descArrow).toBeVisible();\n\n    // Verify ascending arrow disappears for the first column\n    await expect(ascArrow).not.toBeVisible();\n\n    // Verify ascending arrow appears for the second column\n    const secondColumn = page.getByRole('columnheader', { name: /last name/i });\n    await secondColumn.click();\n\n    await expect(ascArrow).toBeVisible();\n    await expect(descArrow).not.toBeVisible();\n\n    // Verify descending arrow appears for the second column\n    await expect(descArrow).toBeVisible();\n\n    // Verify ascending arrow disappears for the second column\n    await expect(ascArrow).not.toBeVisible();\n\n    // Verify arrow icons are not visible for other columns\n    const thirdColumn = page.getByRole('columnheader', { name: /email/i });\n    await thirdColumn.click();\n\n    await expect(ascArrow).not.toBeVisible();\n    await expect(descArrow).not.toBeVisible();\n  });\n\n  test('should update sort direction when clicking the same column again', async ({ page }) => {\n    // Click the first column to sort by it\n    const firstColumn = page.getByRole('columnheader', { name: /first name/i });\n    await firstColumn.click();\n\n    // Verify descending arrow appears for the first column\n    const descArrow = page.getByRole('img', { name: /desc/i });\n    await expect(descArrow).toBeVisible();\n\n    // Click the first column again to toggle sort direction\n    await firstColumn.click();\n\n    // Verify ascending arrow appears for the first column\n    await expect(ascArrow).toBeVisible();\n\n    // Verify descending arrow disappears for the first column\n    await expect(descArrow).not.toBeVisible();\n\n    // Verify ascending arrow disappears for the second column\n    const secondColumn = page.getByRole('columnheader', { name: /last name/i });\n    await secondColumn.click();\n\n    await expect(ascArrow).not.toBeVisible();\n\n    // Verify descending arrow appears for the second column\n    await expect(descArrow).toBeVisible();\n\n    // Verify ascending arrow disappears for the second column\n    await expect(ascArrow).not.toBeVisible();\n\n    // Verify arrow icons are not visible for other columns\n    const thirdColumn = page.getByRole('columnheader', { name: /email/i });\n    await thirdColumn.click();\n\n    await expect(ascArrow).not.toBeVisible();\n    await expect(descArrow).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7923,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4078,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 49.237,
+      "feedback_used": ""
+    }
+  ]
+}

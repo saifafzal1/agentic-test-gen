@@ -1,0 +1,13 @@
+{
+  "id": "TC_119",
+  "category": "async_await",
+  "complexity": "simple",
+  "user_story": "As a user, I want a countdown timer to update every second using an interval.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Countdown Timer', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('http://localhost:3000'); // Replace with your application's URL\n  });\n\n  test('should display the initial countdown value', async ({ page }) => {\n    const countdownValue = await page.getByRole('timer').innerText();\n    expect(countdownValue).toBe('60'); // Assuming the countdown starts at 60 seconds\n  });\n\n  test('should update the countdown value every second', async ({ page }) => {\n    const countdownElement = page.getByRole('timer');\n    const initialValue = await countdownElement.innerText();\n\n    await page.waitForTimeout(1000); // Wait for 1 second\n    const updatedValue = await countdownElement.innerText();\n\n    expect(updatedValue).not.toBe(initialValue); // Ensure the value has changed\n    expect(parseInt(updatedValue)).toBe(parseInt(initialValue) - 1); // Check if it decremented by 1\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 224,
+  "latency_s": 2.75,
+  "timestamp": "2026-06-19T16:51:46.560834"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_255",
+  "category": "payment_flow",
+  "complexity": "medium",
+  "user_story": "As a user, I want to change my billing address during checkout.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Billing Address Change during Checkout', () => {\n    beforeEach(() => {\n        cy.visit('/checkout');\n        cy.get('#login').type('user@example.com');\n        cy.get('#password').type('password123');\n        cy.get('#login-button').click();\n    });\n\n    it('should successfully change the billing address during checkout', () => {\n        cy.get('#billing-address-toggle').click();\n        cy.get('#billing-address-street').clear().type('123 New Street');\n        cy.get('#billing-address-city').clear().type('New City');\n        cy.get('#billing-address-state').select('New State');\n        cy.get('#billing-address-zip').clear().type('12345');\n        cy.get('#save-billing-address').click();\n        \n        cy.get('.success-message').should('contain', 'Billing address updated successfully');\n        cy.get('#billing-address-display').should('contain', '123 New Street');\n    });\n\n    it('should show an error when the billing address is incomplete', () => {\n        cy.get('#billing-address-toggle').click();\n        cy.get('#billing-address-street').clear();\n        cy.get('#billing-address-city').clear();\n        cy.get('#billing-address-state').select('Select State');\n        cy.get('#billing-address-zip').clear();\n        cy.get('#save-billing-address').click();\n        \n        cy.get('.error-message').should('contain', 'Please fill out all required fields');\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 297,
+  "latency_s": 4.33,
+  "timestamp": "2026-06-19T16:41:00.961502"
+}

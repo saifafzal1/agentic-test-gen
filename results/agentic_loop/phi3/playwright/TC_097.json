@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_097",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8273,
+  "total_latency_s": 425.014,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Email Registration - Unique Email Requirement', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/register');\n  });\n\n  test('should display error when registering with an already-used email', async ({ page }) => {\n    // Setup: Fill in valid form data\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('user@example.com');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('SecurePassword123');\n\n    const confirmPasswordInput = page.getByLabel('Confirm Password');\n    await confirmPasswordInput.fill('SecurePassword123');\n\n    const submitButton = page.getByRole('button', { name: /register/i });\n    await submitButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText('Email already in use');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify form is still visible\n    const form = page.locator('[data-testid=\"registration-form\"]');\n    await expect(form).toBeVisible();\n\n    // Verify error message is displayed\n    const errorList = page.locator('[data-testid=\"error-list\"]');\n    await expect(errorList).toBeVisible();\n\n    // Verify error message contains specific text\n    await expect(errorMessage).toContainText('Email already in use');\n\n    // Verify error message has a clear action button\n    const clearButton = page.getByRole('button', { name: /clear/i });\n    await expect(clearButton).toBeVisible();\n\n    // Verify error message has a dismiss button\n    const dismissButton = page.getByRole('button', { name: /dismiss/i });\n    await expect(dismissButton).toBeVisible();\n\n    // Verify error message has a close icon\n    const closeIcon = page.getByRole('button', { name: /close/i });\n    await expect(closeIcon).toBeVisible();\n\n    // Verify error message has a styling class\n    const errorClass = page.getByTestId('error-message');\n    await expect(errorClass).toHaveClass(/error/i);\n  });\n\n  test('should not display error when registering with a new email', async ({ page }) => {\n    // Setup: Fill in valid form data with a new email\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('newuser@example.com');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('SecurePassword123');\n\n    const confirmPasswordInput = page.getByLabel('Confirm Password');\n    await confirmPasswordInput.fill('SecurePassword123');\n\n    const submitButton = page.getByRole('button', { name: /register/i });\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Registration successful');\n    await expect(successMessage).toBeVisible();\n\n    // Verify form is still visible\n    const form = page.locator('[data-testid=\"registration-form\"]');\n    await expect(form).toBeVisible();\n\n    // Verify success message is displayed\n    const successList = page.locator('[data-testid=\"success-list\"]');\n    await expect(successList).toBeVisible();\n\n    // Verify success message contains specific text\n    await expect(successMessage).toContainText('Registration successful');\n\n    // Verify error message is not visible\n    const errorMessage = page.getByText('Email already in use');\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify error message has no styling class\n    const errorClass = page.getByTestId('error-message');\n    await expect(errorClass).not.toHaveClass(/error/i);\n\n    // Verify error message is not present\n    const errorList = page.locator('[data-testid=\"error-list\"]');\n    await expect(errorList).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8273,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4242,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 425.014,
+      "feedback_used": ""
+    }
+  ]
+}

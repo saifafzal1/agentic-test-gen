@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_120",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8216,
+  "total_latency_s": 72.1,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('WebSocket Real-time UI Updates', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should establish WebSocket connection and update UI in real-time', async ({ page }) => {\n    // Verify initial state\n    const statusIndicator = page.getByRole('status');\n    await expect(statusIndicator).toContainText('Connected');\n\n    const messageDisplay = page.getByTestId('message-display');\n    await expect(messageDisplay).toContainText('Welcome');\n\n    // Open WebSocket connection\n    const connectButton = page.getByRole('button', { name: /connect/i });\n    await connectButton.click();\n\n    // Wait for connection confirmation\n    await page.waitForResponse(response => \n      response.url().includes('/ws') && response.status() === 100\n    );\n\n    // Verify connection status\n    await expect(statusIndicator).toContainText('Connected');\n\n    // Listen for real-time message updates\n    const messagePromise = page.waitForResponse(response => \n      response.url().includes('/ws') && response.status() === 100\n    );\n\n    // Send a message via WebSocket\n    const messageInput = page.getByPlaceholder('Type a message...');\n    await messageInput.fill('Hello from user');\n\n    const sendButton = page.getByRole('button', { name: /send/i });\n    await sendButton.click();\n\n    // Wait for the message to be received and displayed\n    const receivedMessage = page.getByTestId('received-message');\n    await expect(receivedMessage).toContainText('Hello from user');\n\n    // Verify timestamp is updated\n    const timestamp = page.getByTestId('message-timestamp');\n    await expect(timestamp).toBeVisible();\n\n    // Verify message count increases\n    const messageCount = page.getByTestId('message-count');\n    await expect(messageCount).toContainText('1');\n  });\n\n  test('should handle WebSocket disconnection and display error state', async ({ page }) => {\n    // Verify initial state\n    const statusIndicator = page.getByRole('status');\n    await expect(statusIndicator).toContainText('Connected');\n\n    // Open WebSocket connection\n    const connectButton = page.getByRole('button', { name: /connect/i });\n    await connectButton.click();\n\n    // Wait for connection confirmation\n    await page.waitForResponse(response => \n      response.url().includes('/ws') && response.status() === 100\n    );\n\n    // Simulate WebSocket disconnection\n    await page.route('**/ws', route => {\n      route.abort('failed');\n    });\n\n    // Wait for disconnection event\n    await page.waitForTimeout(500);\n\n    // Verify connection status updates to disconnected\n    await expect(statusIndicator).toContainText('Disconnected');\n\n    // Verify error message is displayed\n    const errorMessage = page.getByTestId('error-message');\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).toContainText('Connection lost');\n\n    // Verify retry button is visible\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify message count is reset or shows no messages\n    const messageCount = page.getByTestId('message-count');\n    await expect(messageCount).toContainText('0');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8216,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5055,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.1,
+      "feedback_used": ""
+    }
+  ]
+}

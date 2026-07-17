@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_122",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8514,
+  "total_latency_s": 72.076,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async Operation Cancellation with Abort Button', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/async-operation');\n  });\n\n  test('should cancel an ongoing async operation when Abort button is clicked', async ({ page }) => {\n    // Start the async operation\n    const startButton = page.getByRole('button', { name: /start/i });\n    await startButton.click();\n\n    // Verify operation is running\n    const statusText = page.getByText(/running/i);\n    await expect(statusText).toBeVisible();\n\n    // Wait briefly to ensure operation has started\n    await page.waitForTimeout(500);\n\n    // Click the Abort button\n    const abortButton = page.getByRole('button', { name: /abort/i });\n    await abortButton.click();\n\n    // Verify operation is cancelled\n    await expect(statusText).not.toBeVisible();\n    const cancelledMessage = page.getByText(/operation cancelled/i);\n    await expect(cancelledMessage).toBeVisible();\n\n    // Verify error state is displayed\n    const errorDisplay = page.getByText(/operation cancelled/i);\n    await expect(errorDisplay).toBeVisible();\n  });\n\n  test('should handle successful completion when Abort button is not clicked', async ({ page }) => {\n    // Start the async operation\n    const startButton = page.getByRole('button', { name: /start/i });\n    await startButton.click();\n\n    // Wait for operation to complete\n    const statusText = page.getByText(/completed successfully/i);\n    await expect(statusText).toBeVisible();\n\n    // Verify success message is displayed\n    const successMessage = page.getByText(/operation completed successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify status is no longer running\n    const runningStatus = page.getByText(/running/i);\n    await expect(runningStatus).not.toBeVisible();\n\n    // Verify result data is displayed\n    const resultData = page.getByText(/result data/i);\n    await expect(resultData).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8514,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.6045,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.076,
+      "feedback_used": ""
+    }
+  ]
+}

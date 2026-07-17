@@ -1,0 +1,13 @@
+{
+  "id": "TC_105",
+  "category": "error_states",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see a warning before navigating away from an unsaved form.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Unsaved Form Navigation Warning', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('http://example.com/form'); // Replace with the actual URL of the form\n  });\n\n  test('should show a warning when trying to navigate away with unsaved changes', async ({ page }) => {\n    await page.fill(getByLabel('Name'), 'John Doe'); // Assuming there's a label for the name field\n    await page.fill(getByLabel('Email'), 'john.doe@example.com'); // Assuming there's a label for the email field\n\n    const [dialog] = await Promise.all([\n      page.waitForEvent('dialog'),\n      page.click(getByText('Go to another page')) // Replace with the actual button or link to navigate away\n    ]);\n\n    expect(dialog.message()).toContain('You have unsaved changes.'); // Adjust the message as per the actual warning\n    await dialog.dismiss();\n  });\n\n  test('should allow navigation if changes are saved', async ({ page }) => {\n    await page.fill(getByLabel('Name'), 'John Doe');\n    await page.fill(getByLabel('Email'), 'john.doe@example.com');\n    await page.click(getByText('Save')); // Assuming there's a save button\n\n    await page.click(getByText('Go to another page')); // Replace with the actual button or link to navigate away\n    expect(page.url()).toBe('http://example.com/another-page'); // Replace with the actual URL of the target page\n  });\n});",
+  "prompt_tokens": 136,
+  "completion_tokens": 327,
+  "latency_s": 4.59,
+  "timestamp": "2026-06-19T16:50:45.694852"
+}

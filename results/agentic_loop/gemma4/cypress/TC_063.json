@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_063",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 71.478,
+  "final_script": "describe('No Results Found Message - API Empty List Handling', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should display \"No results found\" message when API returns empty list', () => {\n    cy.intercept('GET', '/api/search?q=nonexistent').as('searchEmpty');\n    cy.get('[data-testid=\"search-input\"]').type('nonexistent');\n    cy.get('[data-testid=\"search-button\"]').click();\n    cy.wait('@searchEmpty');\n\n    cy.get('[data-testid=\"no-results-message\"]')\n      .should('be.visible')\n      .should('contain', 'No results found');\n\n    cy.get('[data-testid=\"results-list\"]')\n      .should('not.exist');\n\n    cy.get('[data-testid=\"results-count\"]')\n      .should('contain', '0');\n  });\n\n  it('should handle empty list with pagination and display correct message', () => {\n    cy.intercept('GET', '/api/search?q=empty&page=1').as('searchEmptyPage1');\n    cy.intercept('GET', '/api/search?q=empty&page=2').as('searchEmptyPage2');\n    cy.get('[data-testid=\"search-input\"]').type('empty');\n    cy.get('[data-testid=\"search-button\"]').click();\n    cy.wait('@searchEmptyPage1');\n\n    cy.get('[data-testid=\"no-results-message\"]')\n      .should('be.visible')\n      .should('contain', 'No results found');\n\n    cy.get('[data-testid=\"results-list\"]')\n      .should('not.exist');\n\n    cy.get('[data-testid=\"pagination-controls\"]')\n      .should('not.exist');\n\n    cy.get('[data-testid=\"results-count\"]')\n      .should('contain', '0');\n\n    cy.get('[data-testid=\"pagination-button\"]').click();\n    cy.wait('@searchEmptyPage2');\n\n    cy.get('[data-testid=\"no-results-message\"]')\n      .should('be.visible')\n      .should('contain', 'No results found');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.478,
+      "feedback_used": ""
+    }
+  ]
+}

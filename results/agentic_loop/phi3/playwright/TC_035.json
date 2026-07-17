@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_035",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 3,
+  "best_score": 0.8101,
+  "total_latency_s": 1329.613,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Multi-Step Form Progress Indicator', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/multi-step-form');\n  });\n\n  test('should display progress indicator and update as user completes steps', async ({ page }) => {\n    // Verify initial state: progress indicator is empty\n    const progressIndicator = page.getByTestId('progress-indicator');\n    await expect(progressIndicator).toBeVisible();\n    await expect(progressIndicator).toHaveValue('0%');\n\n    // Navigate to first step\n    const firstStepButton = page.getByRole('button', { name: /step 1/i });\n    await firstStepButton.click();\n\n    // Verify first step is visible\n    const firstStepForm = page.getByTestId('step-form-1');\n    await expect(firstStepForm).toBeVisible();\n\n    // Verify progress indicator shows 25%\n    await expect(progressIndicator).toHaveValue('25%');\n\n    // Fill out first step form\n    const firstStepInput = page.getByLabel(/first name/i);\n    await firstStepInput.fill('John');\n\n    const firstStepSubmitButton = page.getByRole('button', { name: /submit/i });\n    await firstStepSubmitButton.click();\n\n    // Verify form is submitted and progress indicator updates\n    const successMessage = page.getByText(/successfully submitted step 1/i);\n    await expect(successMessage).toBeVisible();\n\n    await expect(progressIndicator).toHaveValue('50%');\n\n    // Navigate to second step\n    const secondStepButton = page.getByRole('button', { name: /step 2/i });\n    await secondStepButton.click();\n\n    // Verify second step is visible\n    const secondStepForm = page.getByTestId('step-form-2');\n    await expect(secondStepForm).toBeVisible();\n\n    // Verify progress indicator shows 75%\n    await expect(progressIndicator).toHaveValue('75%');\n\n    // Fill out second step form\n    const secondStepInput = page.getByLabel(/email/i);\n    await secondStepInput.fill('john@example.com');\n\n    const secondStepSubmitButton = page.getByRole('button', { name: /submit/i });\n    await secondStepSubmitButton.click();\n\n    // Verify form is submitted and progress indicator updates\n    await expect(progressIndicator).toHaveValue('100%');\n\n    // Verify success message for second step\n    await expect(successMessage).toBeVisible();\n\n    // Navigate to third step\n    const thirdStepButton = page.getByRole('button', { name: /step 3/i });\n    await thirdStepButton.click();\n\n    // Verify third step is visible\n    const thirdStepForm = page.getByTestId('step-form-3');\n    await expect(thirdStepForm).toBeVisible();\n\n    // Verify progress indicator shows 100%\n    await expect(progressIndicator).toHaveValue('100%');\n\n    // Verify success message for third step\n    const thirdStepSuccessMessage = page.getByText(/successfully submitted step 3/i);\n    await expect(thirdStepSuccessMessage).toBeVisible();\n\n    // Verify form is submitted and progress indicator is complete\n    await expect(progressIndicator).toHaveValue('100%');\n  });\n\n  test('should handle form submission errors and display appropriate messages', async ({ page }) => {\n    // Navigate to first step\n    const firstStepButton = page.getByRole('button', { name: /step 1/i });\n    await firstStepButton.click();\n\n    // Verify first step form is visible\n    const firstStepForm = page.getByTestId('step-form-1');\n    await expect(firstStepForm).toBeVisible();\n\n    // Fill out first step form with invalid data\n    const firstStepInput = page.getByLabel(/first name/i);\n    await firstStepInput.fill('Invalid Name');\n\n    const firstStepSubmitButton = page.getByRole('button', { name: /submit/i });\n    await firstStepSubmitButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/please enter a valid name/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify progress indicator does not update\n    const progressIndicator = page.getByTestId('progress-indicator');\n    await expect(progressIndicator).toHaveValue('25%');\n\n    // Navigate to second step\n    const secondStepButton = page.getByRole('button', { name: /step 2/i });\n    await secondStepButton.click();\n\n    // Verify second step form is visible\n    const secondStepForm = page.getByTestId('step-form-2');\n    await expect(secondStepForm).toBeVisible();\n\n    // Fill out second step form with valid data\n    const secondStepInput = page.getByLabel(/email/i);\n    await secondStepInput.fill('john@example.com');\n\n    const secondStepSubmitButton = page.getByRole('button', { name: /submit/i });\n    await secondStepSubmitButton.click();\n\n    // Verify form is submitted and progress indicator updates\n    await expect(progressIndicator).toHaveValue('50%');\n\n    // Verify success message for second step\n    const successMessage = page.getByText(/successfully submitted step 2/i);\n    await expect(successMessage).toBeVisible();\n\n    // Navigate to third step\n    const thirdStepButton = page.getByRole('button', { name: /step 3/i });\n    await thirdStepButton.click();\n\n    // Verify third step form is visible\n    const thirdStepForm = page.getByTestId('step-form-3');\n    await expect(thirdStepForm).toBeVisible();\n\n    // Fill out third step form with invalid data\n    const thirdStepInput = page.getByLabel(/password/i);\n    await thirdStepInput.fill('Short');\n\n    const thirdStepSubmitButton = page.getByRole('button', { name: /submit/i });\n    await thirdStepSubmitButton.click();\n\n    // Verify error message is displayed\n    const thirdStepErrorMessage = page.getByText(/password must be at least 8 characters/i);\n    await expect(thirdStepErrorMessage).toBeVisible();\n\n    // Verify progress indicator does not update\n    await expect(progressIndicator).toHaveValue('75%');\n\n    // Verify form is not submitted\n    await expect(page).toHaveURL(/step-2/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 379.282,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4934,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3778,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 472.351,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.8101,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.367,
+        "missing_keywords": [],
+        "assertion_count": 24,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 477.98,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

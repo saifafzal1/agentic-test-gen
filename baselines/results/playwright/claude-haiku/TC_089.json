@@ -1,0 +1,13 @@
+{
+  "id": "TC_089",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error page if the server returns a 500 error.",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "```typescript\nimport { test, expect } from '@playwright/test';\n\ntest.describe('500 Error Page', () => {\n  test.beforeEach(async ({ page }) => {\n    // Set up route to intercept and return 500 error\n    await page.route('**/*', (route) => {\n      route.abort('failed');\n    });\n  });\n\n  test('should display error page when server returns 500 error', async ({ page }) => {\n    // Navigate to a page that will trigger the 500 error\n    await page.goto('http://localhost:3000', { waitUntil: 'networkidle', timeout: 5000 }).catch(() => {\n      // Expected to fail due to network abort\n    });\n\n    // Verify error message is displayed\n    const errorHeading = page.getByRole('heading', { name: /error/i });\n    await expect(errorHeading).toBeVisible();\n  });\n\n  test('should show error details on 500 error page', async ({ page }) => {\n    // Mock a 500 response\n    await page.route('**/*', (route) => {\n      route.abort('failed');\n    });\n\n    await page.goto('http://localhost:3000', { waitUntil: 'networkidle', timeout: 5000 }).catch(() => {\n      // Expected to fail\n    });\n\n    // Check for error status code or error message\n    const errorMessage = page.getByText(/server error|500|something went wrong/i);\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should have a way to navigate back from 500 error page', async ({ page }) => {\n    await page.route('**/*', (route) => {\n      route.abort('failed');\n    });\n\n    await page.goto('http://localhost:3000', { waitUntil: 'networkidle', timeout: 5000 }).catch(() => {\n      // Expected to fail\n    });\n\n    // Look for a back button or home link\n    const backButton = page.getByRole('link', { name: /home|back|return/i }).first();\n    await expect(backButton).toBeVisible();\n  });\n});\n```",
+  "prompt_tokens": 149,
+  "completion_tokens": 530,
+  "latency_s": 3.86,
+  "timestamp": "2026-06-19T17:48:08.286239"
+}

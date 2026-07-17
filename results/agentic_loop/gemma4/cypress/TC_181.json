@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_181",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8369,
+  "total_latency_s": 72.339,
+  "final_script": "describe('File Upload Success Checkmark', () => {\n  beforeEach(() => {\n    cy.visit('/file-upload');\n  });\n\n  it('should display success checkmark when file upload completes successfully', () => {\n    // Intercept the file upload API endpoint\n    cy.intercept('POST', '/api/files/upload').as('fileUpload');\n\n    // Get the file input element\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/sample.pdf', { force: true });\n\n    // Verify file name is displayed\n    cy.get('[data-testid=\"file-name-display\"]').should('contain', 'sample.pdf');\n\n    // Click the upload button\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for the upload API call\n    cy.wait('@fileUpload').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify success checkmark appears\n    cy.get('[data-testid=\"success-checkmark\"]').should('be.visible');\n    cy.get('[data-testid=\"success-checkmark\"]').should('have.class', 'success-icon');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'File uploaded successfully');\n\n    // Verify upload progress indicator is hidden\n    cy.get('[data-testid=\"upload-progress-bar\"]').should('not.exist');\n\n    // Verify file is listed in uploaded files section\n    cy.get('[data-testid=\"uploaded-file-list\"]').should('contain', 'sample.pdf');\n  });\n\n  it('should not display success checkmark when file upload fails', () => {\n    // Intercept the file upload API endpoint and mock a failure response\n    cy.intercept('POST', '/api/files/upload', {\n      statusCode: 500,\n      body: { error: 'Server error during upload' }\n    }).as('fileUploadFailure');\n\n    // Get the file input element\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/large_file.zip', { force: true });\n\n    // Click the upload button\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for the failed upload API call\n    cy.wait('@fileUploadFailure');\n\n    // Verify success checkmark does NOT appear\n    cy.get('[data-testid=\"success-checkmark\"]').should('not.exist');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Upload failed');\n\n    // Verify error details are shown\n    cy.get('[data-testid=\"error-details\"]').should('be.visible');\n    cy.get('[data-testid=\"error-details\"]').should('contain', 'Server error');\n\n    // Verify upload progress indicator is still visible or shows error state\n    cy.get('[data-testid=\"upload-progress-bar\"]').should('be.visible');\n    cy.get('[data-testid=\"upload-progress-bar\"]').should('have.class', 'error-state');\n\n    // Verify file is not listed in uploaded files section\n    cy.get('[data-testid=\"uploaded-file-list\"]').should('not.contain', 'large_file.zip');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8369,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.6562,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.339,
+      "feedback_used": ""
+    }
+  ]
+}

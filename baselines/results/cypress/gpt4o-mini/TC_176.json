@@ -1,0 +1,13 @@
+{
+  "id": "TC_176",
+  "category": "file_upload",
+  "complexity": "simple",
+  "user_story": "As a user, I want to retry a failed upload without re-selecting the file.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('File Upload Retry Functionality', () => {\n    beforeEach(() => {\n        cy.visit('/upload'); // Replace with the actual URL of the upload page\n    });\n\n    it('should successfully retry a failed upload without re-selecting the file', () => {\n        const filePath = 'path/to/your/file.txt'; // Replace with the actual file path\n\n        // Simulate a failed upload\n        cy.get('input[type=\"file\"]').attachFile(filePath);\n        cy.get('button.upload').click();\n        cy.intercept('POST', '/upload', { statusCode: 500 }).as('uploadRequest'); // Simulate server error\n        cy.wait('@uploadRequest');\n\n        // Retry the upload\n        cy.get('button.retry').click();\n        cy.intercept('POST', '/upload', { statusCode: 200 }).as('retryUploadRequest'); // Simulate successful retry\n        cy.wait('@retryUploadRequest');\n\n        // Verify success message\n        cy.get('.upload-status').should('contain', 'Upload successful');\n    });\n\n    it('should show an error message if retry fails', () => {\n        const filePath = 'path/to/your/file.txt'; // Replace with the actual file path\n\n        // Simulate a failed upload\n        cy.get('input[type=\"file\"]').attachFile(filePath);\n        cy.get('button.upload').click();\n        cy.intercept('POST', '/upload', { statusCode: 500 }).as('uploadRequest'); // Simulate server error\n        cy.wait('@uploadRequest');\n\n        // Retry the upload\n        cy.get('button.retry').click();\n        cy.intercept('POST', '/upload', { statusCode: 500 }).as('retryUploadRequest'); // Simulate retry failure\n        cy.wait('@retryUploadRequest');\n\n        // Verify error message\n        cy.get('.upload-status').should('contain', 'Upload failed, please try again');\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 399,
+  "latency_s": 5.74,
+  "timestamp": "2026-06-19T16:36:23.819458"
+}

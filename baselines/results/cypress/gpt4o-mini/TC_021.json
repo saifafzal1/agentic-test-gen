@@ -1,0 +1,13 @@
+{
+  "id": "TC_021",
+  "category": "form_validation",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see a tooltip explaining password requirements.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Password Requirements Tooltip', () => {\n    beforeEach(() => {\n        cy.visit('/login'); // Adjust the URL to your application's login page\n    });\n\n    it('should display the tooltip with password requirements on focus', () => {\n        cy.get('input[name=\"password\"]').focus();\n        cy.get('.tooltip').should('be.visible')\n            .and('contain', 'Password must be at least 8 characters long, include an uppercase letter, a number, and a special character.');\n    });\n\n    it('should not display the tooltip when the password input is not focused', () => {\n        cy.get('input[name=\"username\"]').focus(); // Focus on another input\n        cy.get('.tooltip').should('not.exist');\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 153,
+  "latency_s": 2.66,
+  "timestamp": "2026-06-19T16:26:30.878500"
+}

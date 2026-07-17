@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_151",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8232,
+  "total_latency_s": 72.442,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Column Freezing on Horizontal Scroll', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-list');\n  });\n\n  test('should freeze the first column when scrolling horizontally', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify first column header is visible\n    const firstColumnHeader = page.getByText('ID');\n    await expect(firstColumnHeader).toBeVisible();\n\n    // Verify first column data cell is visible\n    const firstDataCell = page.getByText('1');\n    await expect(firstDataCell).toBeVisible();\n\n    // Scroll horizontally to trigger column freeze\n    const scrollContainer = page.locator('[data-testid=\"table-scroll-container\"]');\n    await scrollContainer.evaluate((el) => {\n      el.scrollBy({ left: 1000 });\n    });\n\n    // Verify first column remains visible and frozen\n    await expect(firstColumnHeader).toBeVisible();\n    await expect(firstDataCell).toBeVisible();\n\n    // Verify other columns are visible and scrollable\n    const secondColumnHeader = page.getByText('Name');\n    await expect(secondColumnHeader).toBeVisible();\n\n    const thirdColumnHeader = page.getByText('Email');\n    await expect(thirdColumnHeader).toBeVisible();\n\n    // Verify first column data is still visible after scrolling\n    const frozenData = page.getByText('1');\n    await expect(frozenData).toBeVisible();\n  });\n\n  test('should not freeze first column when scrolling vertically', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify first column header is visible\n    const firstColumnHeader = page.getByText('ID');\n    await expect(firstColumnHeader).toBeVisible();\n\n    // Verify first column data cell is visible\n    const firstDataCell = page.getByText('1');\n    await expect(firstDataCell).toBeVisible();\n\n    // Scroll vertically to trigger row scrolling\n    const scrollContainer = page.locator('[data-testid=\"table-scroll-container\"]');\n    await scrollContainer.evaluate((el) => {\n      el.scrollBy({ top: 1000 });\n    });\n\n    // Verify first column is not frozen (i. Scroll should be possible)\n    const firstRowData = page.getByText('1');\n    await expect(firstRowData).toBeVisible();\n\n    // Verify first column header is still visible\n    await expect(firstColumnHeader).toBeVisible();\n\n    // Verify other columns are visible\n    const secondColumnHeader = page.getByText('Name');\n    await expect(secondColumnHeader).toBeVisible();\n\n    // Verify first column data is still visible after vertical scroll\n    await expect(firstDataCell).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8232,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5108,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.442,
+      "feedback_used": ""
+    }
+  ]
+}

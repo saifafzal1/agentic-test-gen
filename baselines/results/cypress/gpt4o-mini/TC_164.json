@@ -1,0 +1,13 @@
+{
+  "id": "TC_164",
+  "category": "table_list",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see column sort direction indicated by an arrow icon.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Table Column Sort Direction Indicator', () => {\n    beforeEach(() => {\n        cy.visit('/table'); // Adjust the URL to your application's table page\n    });\n\n    it('should display an ascending sort arrow when the column is sorted in ascending order', () => {\n        cy.get('th.sortable').first().click(); // Click to sort the first column\n        cy.get('th.sortable').first().find('.sort-arrow').should('have.class', 'ascending'); // Check for ascending arrow\n    });\n\n    it('should display a descending sort arrow when the column is sorted in descending order', () => {\n        cy.get('th.sortable').first().click(); // Click to sort the first column\n        cy.get('th.sortable').first().click(); // Click again to sort in descending order\n        cy.get('th.sortable').first().find('.sort-arrow').should('have.class', 'descending'); // Check for descending arrow\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 201,
+  "latency_s": 3.27,
+  "timestamp": "2026-06-19T16:35:46.852584"
+}

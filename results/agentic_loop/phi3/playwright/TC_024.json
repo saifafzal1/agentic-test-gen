@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_024",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.822,
+  "total_latency_s": 910.628,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Character Count on Textarea with Limit', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should display character count and prevent submission when exceeding 500 characters', async ({ page }) => {\n    // Locate the textarea using getByLabel\n    const textarea = page.getByLabel('Description');\n    await expect(textarea).toBeVisible();\n\n    // Set up a listener for input events\n    const inputListener = page.waitForEvent('input', { state: 'active' });\n\n    // Type 501 characters to trigger the limit\n    await textarea.fill('This is a very long description that exceeds the 500 character limit.');\n\n    // Verify character count is displayed\n    const characterCount = page.getByText('Characters: 501');\n    await expect(characterCount).toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('Maximum 500 characters allowed');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the textarea is still editable\n    await expect(textarea).toBeEditable();\n\n    // Verify the submit button is disabled\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeDisabled();\n\n    // Verify the error message is visible\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the character count is updated when deleting characters\n    await textarea.fill('This is a long description');\n    await expect(characterCount).toContainText('Characters: 12');\n\n    // Verify the submit button is now enabled\n    await expect(submitButton).not.toBeDisabled();\n\n    // Verify the form is still visible\n    const form = page.getByRole('form');\n    await expect(form).toBeVisible();\n  });\n\n  test('should allow submission when character count is within limit', async ({ page }) => {\n    // Locate the textarea using getByLabel\n    const textarea = page.getByLabel('Description');\n    await expect(textarea).toBeVisible();\n\n    // Type 499 characters to stay within the limit\n    await textarea.fill('This is a long description that is within the 500 character limit.');\n\n    // Verify character count is displayed\n    const characterCount = page.getByText('Characters: 499');\n    await expect(characterCount).toBeVisible();\n\n    // Verify the error message is not displayed\n    const errorMessage = page.getByText('Maximum 500 characters allowed');\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify the submit button is enabled\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeEnabled();\n\n    // Verify the form is still visible\n    const form = page.getByRole('form');\n    await expect(form).toBeVisible();\n\n    // Verify the form is submitted successfully\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify the form is cleared for another submission\n    await expect(textarea).toHaveValue('');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.461,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.2901,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 429.959,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.822,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4067,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 480.669,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

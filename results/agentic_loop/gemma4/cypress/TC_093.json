@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_093",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8249,
+  "total_latency_s": 72.387,
+  "final_script": "describe('Request Timeout Error Handling', () => {\n  beforeEach(() => {\n    cy.visit('/api/data');\n  });\n\n  it('should display timeout error when request exceeds 10 seconds', () => {\n    // Intercept the API call and delay the response\n    cy.intercept('GET', '/api/data', (req) => {\n      req.reply((res) => {\n        res.delay(11000);\n        res.send({\n          statusCode: 200,\n          body: { data: 'delayed response' }\n        });\n      });\n    }).as('delayedRequest');\n\n    // Trigger the API call\n    cy.get('[data-testid=\"fetch-button\"]').click();\n\n    // Wait for the timeout error to be displayed\n    cy.get('[data-testid=\"timeout-error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Request timed out');\n\n    // Verify the error state is visible\n    cy.get('[data-testid=\"error-state-icon\"]')\n      .should('be.visible')\n      .have.class('error');\n\n    // Verify the original data is not displayed\n    cy.get('[data-testid=\"data-display\"]')\n      .should('not.exist');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-button\"]')\n      .should('be.visible');\n  });\n\n  it('should handle timeout gracefully and allow retry', () => {\n    // Intercept the API call and delay the response\n    cy.intercept('GET', '/api/data', (req) => {\n      req.reply((res) => {\n        res.delay(12000);\n        res.send({\n          statusCode: 200,\n          body: { data: 'delayed response' }\n        });\n      });\n    }).as('delayedRequest');\n\n    // Trigger the API call\n    cy.get('[data-testid=\"fetch-button\"]').click();\n\n    // Verify timeout error appears\n    cy.get('[data-testid=\"timeout-error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Request timed out');\n\n    // Click retry button\n    cy.get('[data-testid=\"retry-button\"]').click();\n\n    // Intercept the retry request and respond immediately\n    cy.intercept('GET', '/api/data', {\n      statusCode: 200,\n      body: { data: 'successful response' }\n    }).as('retryRequest');\n\n    // Wait for the successful retry\n    cy.wait('@retryRequest');\n\n    // Verify timeout error is cleared\n    cy.get('[data-testid=\"timeout-error-message\"]')\n      .should('not.exist');\n\n    // Verify data is now displayed\n    cy.get('[data-testid=\"data-display\"]')\n      .should('be.visible')\n      .should('contain', 'successful response');\n\n    // Verify error state is cleared\n    cy.get('[data-testid=\"error-state-icon\"]')\n      .should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8249,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.6165,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.387,
+      "feedback_used": ""
+    }
+  ]
+}

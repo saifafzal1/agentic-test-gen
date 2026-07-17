@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_175",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8396,
+  "total_latency_s": 354.765,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload - File Name and Size Display', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should display file name and size when a file is selected', async ({ page }) => {\n    // Intercept the file upload API call\n    await page.route('**/api/upload', (route) => {\n      route.continue();\n    });\n\n    // Locate and click the file input using getByRole\n    const fileInput = page.getByRole('button', { name: /choose file/i });\n    await fileInput.click();\n\n    // Locate and select a file using getByLabel\n    const fileInputLabel = page.getByLabel(/choose file/i);\n    await fileInputLabel.click();\n\n    // Locate and click the file using getByRole\n    const fileInput = page.getByRole('button', { name: /choose file/i });\n    await fileInput.click();\n\n    // Wait for file name and size to appear\n    const fileNameDisplay = page.getByText(/filename/i);\n    const fileSizeDisplay = page.getByText(/size/i);\n\n    await expect(fileNameDisplay).toBeVisible();\n    await expect(fileSizeDisplay).toBeVisible();\n\n    // Verify file name and size are displayed\n    const fileName = await fileNameDisplay.textContent();\n    const fileSize = await fileSizeDisplay.textContent();\n    expect(fileName).toBe('example.pdf');\n    expect(fileSize).toBe('1.2 MB');\n\n    // Verify file name and size are visible in the UI\n    const fileNameElement = page.getByText(fileName);\n    const fileSizeElement = page.getByText(fileSize);\n    await expect(fileNameElement).toBeVisible();\n    await expect(fileSizeElement).toBeVisible();\n\n    // Verify file name and size are displayed in the upload progress bar\n    const progressBar = page.locator('[data-testid=\"upload-progress-bar\"]');\n    await expect(progressBar).toBeVisible();\n  });\n\n  test('should handle empty file selection and display error message', async ({ page }) => {\n    // Intercept the file upload API call\n    await page.route('**/api/upload', (route) => {\n      route.abort();\n    });\n\n    // Locate and click the file input using getByRole\n    const fileInput = page.getByRole('button', { name: /choose file/i });\n    await fileInput.click();\n\n    // Locate and select an empty file using getByLabel\n    const fileInputLabel = page.getByLabel(/choose file/i);\n    await fileInputLabel.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/file is empty/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify file name and size are not displayed\n    const fileNameDisplay = page.getByText(/filename/i);\n    const fileSizeDisplay = page.getByText(/size/i);\n    await expect(fileNameDisplay).not.toBeVisible();\n    await expect(fileSizeDisplay).not.toBeVisible();\n\n    // Verify error message is visible in the UI\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8396,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4652,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 354.765,
+      "feedback_used": ""
+    }
+  ]
+}

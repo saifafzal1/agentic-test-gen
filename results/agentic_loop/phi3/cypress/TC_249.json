@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_249",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7754,
+  "total_latency_s": 51.824,
+  "final_script": "describe('Save Card Details for Future Purchases', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should successfully save card details and display success message', () => {\n    // Intercept the API call to save card details\n    cy.intercept('POST', '/api/payment/save-card').as('saveCard');\n\n    // Fill in card details\n    cy.get('[data-testid=\"card-number-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"card-expiry-input\"]').type('1225');\n    cy.get('[data-testid=\"card-cvc-input\"]').type('123');\n\n    // Verify input fields are filled\n    cy.get('[data-testid=\"card-number-input\"]').should('have.value', '4111111111111111');\n    cy.get('[data-testid=\"card-expiry-input\"]').should('have.value', '1225');\n    cy.get('[data-testid=\"card-cvc-input\"]').should('have.value', '123');\n\n    // Click save button\n    cy.get('[data-testid=\"save-card-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@saveCard');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Card details saved successfully');\n\n    // Verify card details are stored\n    cy.get('[data-testid=\"card-details-storage\"]').should('be.visible');\n    cy.get('[data-testid=\"card-details-storage\"]').should('contain', '4111111111111111');\n\n    // Verify card details are not visible on the form\n    cy.get('[data-testid=\"card-number-input\"]').should('not.have.value');\n  });\n\n  it('should handle invalid card details and display error message', () => {\n    // Intercept the API call to save card details\n    cy.intercept('POST', '/api/payment/save-card').as('saveCard');\n\n    // Fill in invalid card details\n    cy.get('[data-testid=\"card-number-input\"]').type('1234');\n    cy.get('[data-testid=\"card-expiry-input\"]').type('00');\n    cy.get('[data-testid=\"card-cvc-input\"]').type('123');\n\n    // Verify input fields are filled\n    cy.get('[data-testid=\"card-number-input\"]').should('have.value', '1234');\n    cy.get('[data-testid=\"card-expiry-input\"]').should('have.value', '00');\n    cy.get('[data-testid=\"card-cvc-input\"]').should('have.value', '123');\n\n    // Click save button\n    cy.get('[data-testid=\"save-card-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@saveCard');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid card details');\n\n    // Verify card details are not stored\n    cy.get('[data-testid=\"card-details-storage\"]').should('not.exist');\n\n    // Verify form is still visible\n    cy.get('[data-testid=\"card-number-input\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7754,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4514,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 51.824,
+      "feedback_used": ""
+    }
+  ]
+}

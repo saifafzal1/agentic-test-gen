@@ -1,0 +1,13 @@
+{
+  "id": "TC_226",
+  "category": "responsive",
+  "complexity": "complex",
+  "user_story": "As a mobile user, I want the navigation to collapse into a hamburger menu.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Mobile Navigation Hamburger Menu', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n        cy.viewport('iphone-6'); // Set viewport to mobile size\n    });\n\n    it('should display the hamburger menu when the screen is resized to mobile', () => {\n        cy.get('.navbar').should('be.visible'); // Ensure the navbar is visible\n        cy.get('.hamburger-menu').should('be.visible'); // Check if hamburger menu is visible\n    });\n\n    it('should collapse the navigation into a hamburger menu when clicked', () => {\n        cy.get('.hamburger-menu').click(); // Click the hamburger menu\n        cy.get('.navbar').should('not.be.visible'); // Ensure the navbar is collapsed\n        cy.get('.hamburger-menu').should('have.class', 'active'); // Check if hamburger menu is active\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 187,
+  "latency_s": 2.52,
+  "timestamp": "2026-06-19T16:39:13.512071"
+}

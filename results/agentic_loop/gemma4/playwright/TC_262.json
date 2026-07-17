@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_262",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7956,
+  "total_latency_s": 72.794,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Auto-Dismissal', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should auto-dismiss notifications after 5 seconds', async ({ page }) => {\n    // Verify notification container is visible\n    const notificationContainer = page.getByRole('region', { name: /notifications/i });\n    await expect(notificationContainer).toBeVisible();\n\n    // Verify notification list is visible\n    const notificationList = page.getByRole('list', { name: /notifications/i });\n    await expect(notificationList).toBeVisible();\n\n    // Verify notification item exists\n    const notificationItem = page.getByRole('listitem', { name: /new message/i });\n    await expect(notificationItem).toBeVisible();\n\n    // Verify notification has a dismiss button\n    const dismissButton = page.getByRole('button', { name: /dismiss/i });\n    await expect(dismissButton).toBeVisible();\n\n    // Verify notification is visible with initial styling\n    const notificationContent = page.getByText(/new message/i);\n    await expect(notificationContent).toBeVisible();\n\n    // Wait for auto-dismissal timeout\n    await page.waitForTimeout(5100);\n\n    // Verify notification has been dismissed\n    await expect(notificationItem).not.toBeVisible();\n\n    // Verify notification container is still visible\n    await expect(notificationContainer).toBeVisible();\n\n    // Verify notification list is empty\n    const emptyState = page.getByText(/no notifications/i);\n    await expect(emptyState).toBeVisible();\n  });\n\n  test('should not auto-dismiss notification if user interacts with it', async ({ page }) => {\n    // Verify notification container is visible\n    const notificationContainer = page.getByRole('region', { name: /notifications/i });\n    await expect(notificationContainer).toBeVisible();\n\n    // Verify notification item exists\n    const notificationItem = page.getByRole('listitem', { name: /new message/i });\n    await expect(notificationItem).toBeVisible();\n\n    // Verify notification is visible with initial styling\n    const notificationContent = page.getByText(/new message/i);\n    await expect(notificationContent).toBeVisible();\n\n    // Interact with notification by clicking on it\n    await notificationItem.click();\n\n    // Verify notification remains visible after interaction\n    await expect(notificationItem).toBeVisible();\n\n    // Verify notification content is still visible\n    await expect(notificationContent).toBeVisible();\n\n    // Wait for auto-dismissal timeout\n    await page.waitForTimeout(5100);\n\n    // Verify notification still exists after timeout\n    await expect(notificationItem).toBeVisible();\n\n    // Verify notification has a 'keep' button\n    const keepButton = page.getByRole('button', { name: /keep/i });\n    await expect(keepButton).toBeVisible();\n\n    // Click keep button to confirm it stays\n    await keepButton.click();\n    await expect(notificationItem).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7956,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4187,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.794,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_179",
+  "category": "file_upload",
+  "complexity": "simple",
+  "user_story": "As a user, I want an uploaded PDF to display in an inline viewer.",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "```typescript\nimport { test, expect } from '@playwright/test';\n\ntest.describe('PDF Inline Viewer', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should display PDF upload input field', async ({ page }) => {\n    const fileInput = page.getByLabel(/upload pdf/i);\n    await expect(fileInput).toBeVisible();\n  });\n\n  test('should display uploaded PDF in inline viewer', async ({ page }) => {\n    const fileInput = page.getByLabel(/upload pdf/i);\n    \n    await fileInput.setInputFiles({\n      name: 'sample.pdf',\n      mimeType: 'application/pdf',\n      buffer: Buffer.from('%PDF-1.4\\n%test pdf content'),\n    });\n\n    const pdfViewer = page.getByRole('region', { name: /pdf viewer/i });\n    await expect(pdfViewer).toBeVisible();\n  });\n\n  test('should display PDF content after successful upload', async ({ page }) => {\n    const fileInput = page.getByLabel(/upload pdf/i);\n    \n    await fileInput.setInputFiles({\n      name: 'document.pdf',\n      mimeType: 'application/pdf',\n      buffer: Buffer.from('%PDF-1.4\\n%test pdf document'),\n    });\n\n    const pdfFrame = page.frameLocator('iframe[title*=\"PDF\"]').first();\n    await expect(pdfFrame).toBeVisible();\n  });\n\n  test('should show error message for invalid file type', async ({ page }) => {\n    const fileInput = page.getByLabel(/upload pdf/i);\n    \n    await fileInput.setInputFiles({\n      name: 'document.txt',\n      mimeType: 'text/plain',\n      buffer: Buffer.from('This is not a PDF'),\n    });\n\n    const errorMessage = page.getByText(/invalid file type|only pdf files/i);\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should clear viewer when new PDF is uploaded', async ({ page }) => {\n    const fileInput = page.getByLabel(/upload pdf/i);\n    \n    await fileInput.setInputFiles({\n      name: 'first.pdf',\n      mimeType: 'application/pdf',\n      buffer: Buffer.from('%PDF-1.4\\n%first document'),\n    });\n\n    const pdfViewer = page.getByRole('region', { name: /pdf viewer/i });\n    await expect(pdfViewer).toBeVisible();\n\n    await fileInput.setInputFiles({\n      name: 'second.pdf',\n      mimeType: 'application/pdf',\n      buffer: Buffer.from('%PDF-1.4\\n%second document'),\n    });\n\n    await expect(pdfViewer).toBeVisible();\n  });\n});\n```",
+  "prompt_tokens": 144,
+  "completion_tokens": 702,
+  "latency_s": 4.11,
+  "timestamp": "2026-06-19T17:59:42.626845"
+}

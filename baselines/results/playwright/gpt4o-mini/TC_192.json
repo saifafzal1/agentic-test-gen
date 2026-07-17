@@ -1,0 +1,13 @@
+{
+  "id": "TC_192",
+  "category": "search_filter",
+  "complexity": "medium",
+  "user_story": "As a user, I want search suggestions to highlight the matching part of the term.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Suggestions Highlighting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should highlight matching part of the search term in suggestions', async ({ page }) => {\n    await page.getByRole('textbox', { name: 'Search' }).fill('apple');\n    await page.waitForTimeout(500); // Wait for suggestions to load\n\n    const suggestions = await page.getByRole('listbox').locator('li').allTextContents();\n    suggestions.forEach(suggestion => {\n      expect(suggestion).toContain('apple');\n      expect(suggestion).toMatch(/<mark>apple<\\/mark>/); // Assuming highlights are wrapped in <mark> tags\n    });\n  });\n\n  test('should not highlight non-matching part of the search term in suggestions', async ({ page }) => {\n    await page.getByRole('textbox', { name: 'Search' }).fill('banana');\n    await page.waitForTimeout(500); // Wait for suggestions to load\n\n    const suggestions = await page.getByRole('listbox').locator('li').allTextContents();\n    suggestions.forEach(suggestion => {\n      expect(suggestion).not.toMatch(/<mark>[^b].*<\\/mark>/); // Ensure non-matching parts are not highlighted\n    });\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 301,
+  "latency_s": 4.57,
+  "timestamp": "2026-06-19T16:56:32.135228"
+}

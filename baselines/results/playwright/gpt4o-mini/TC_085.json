@@ -1,0 +1,13 @@
+{
+  "id": "TC_085",
+  "category": "crud_operations",
+  "complexity": "complex",
+  "user_story": "As a user, I want to import records from a CSV file.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('CSV Import Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/import');\n  });\n\n  test('should display the import form', async ({ page }) => {\n    const importForm = page.getByRole('form', { name: /import records/i });\n    await expect(importForm).toBeVisible();\n  });\n\n  test('should successfully import records from a CSV file', async ({ page }) => {\n    const filePath = 'path/to/your/test.csv';\n    await page.getByLabel('Choose CSV file').setInputFiles(filePath);\n    await page.getByRole('button', { name: /import/i }).click();\n    \n    const successMessage = page.getByText(/records imported successfully/i);\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 184,
+  "latency_s": 2.5,
+  "timestamp": "2026-06-19T16:49:18.459734"
+}

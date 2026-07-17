@@ -1,0 +1,37 @@
+{
+  "id": "TC_284",
+  "model": "claude-haiku",
+  "framework": "cypress",
+  "category": "user_profile",
+  "complexity": "simple",
+  "rouge_l": {
+    "precision": 0.4059,
+    "recall": 0.6212,
+    "f1": 0.491
+  },
+  "token_f1": {
+    "precision": 0.4444,
+    "recall": 0.6667,
+    "f1": 0.5333
+  },
+  "quality": {
+    "keyword_hits": {
+      "describe(": true,
+      "it(": true,
+      "cy.visit(": true,
+      "cy.get(": true,
+      "cy.click(": false,
+      "cy.type(": false,
+      "cy.should(": false,
+      "beforeEach(": true,
+      "cy.intercept(": false
+    },
+    "keyword_score": 0.5556,
+    "line_count": 48,
+    "char_count": 2114,
+    "no_fences": true
+  },
+  "latency_s": 4.52,
+  "prompt_tokens": 122,
+  "completion_tokens": 663
+}

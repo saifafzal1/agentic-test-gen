@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_045",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.801,
+  "total_latency_s": 71.352,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Internal Links Open in Same Tab', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/page-with-internal-links');\n  });\n\n  test('should open internal links in the same tab', async ({ page }) => {\n    // Verify the page is loaded\n    await expect(page).toHaveURL(/page-with-internal-links/);\n\n    // Get the internal link button by role\n    const internalLinkButton = page.getByRole('button', { name: /go to about page/ });\n    await expect(internalLinkButton).toBeVisible();\n\n    // Get the internal link by role\n    const internalLink = page.getByRole('link', { name: /about us/ });\n    await expect(internalLink).toBeVisible();\n\n    // Get the internal link by role\n    const contactLink = page.getByRole('link', { name: /contact us/ });\n    await expect(contactLink).toBeVisible();\n\n    // Click the internal link\n    await internalLink.click();\n\n    // Verify the URL changed to the about page\n    await expect(page).toHaveURL(/page\\/about/);\n\n    // Verify the page content has loaded\n    const aboutHeading = page.getByRole('heading', { name: /about us/ });\n    await expect(aboutHeading).toBeVisible();\n\n    // Verify the back button is available\n    const backButton = page.getByRole('button', { name: /back to home/ });\n    await expect(backButton).toBeVisible();\n\n    // Click the back button\n    await backButton.click();\n\n    // Verify the URL is back to the original page\n    await expect(page).toHaveURL(/page\\/with-internal-links/);\n  });\n\n  test('should not open internal links in a new tab', async ({ page }) => {\n    // Verify the page is loaded\n    await expect(page).toHaveURL(/page\\/with-internal-links/);\n\n    // Get the internal link by role\n    const internalLink = page.getByRole('link', { name: /contact us/ });\n    await expect(internalLink).toBeVisible();\n\n    // Get the external link by role\n    const externalLink = page.getByRole('link', { name: /external site/ });\n    await expect(externalLink).toBeVisible();\n\n    // Click the internal link\n    await internalLink.click();\n\n    // Verify the URL changed to the contact page\n    await expect(page).toHaveURL(/page\\/contact/);\n\n    // Verify the contact page heading is visible\n    const contactHeading = page.getByRole('heading', { name: /contact us/ });\n    await expect(contactHeading).toBeVisible();\n\n    // Verify the page title reflects the contact page\n    await expect(page).toHaveTitle(/contact us/);\n\n    // Verify the external link still exists and is accessible\n    await expect(externalLink).toBeVisible();\n\n    // Click the external link\n    await externalLink.click();\n\n    // Verify the external link opens in a new tab\n    const newTab = page.context().pages().find((p) => p.url().includes('external-site.com'));\n    await expect(newTab).toBeDefined();\n\n    // Verify the original page is still open\n    await expect(page).toHaveURL(/page\\/contact/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.801,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4365,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.352,
+      "feedback_used": ""
+    }
+  ]
+}

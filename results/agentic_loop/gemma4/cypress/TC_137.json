@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_137",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.785,
+  "total_latency_s": 186.174,
+  "final_script": "describe('Modal Scroll Lock', () => {\n  beforeEach(() => {\n    cy.visit('/modal-page');\n  });\n\n  it('should prevent page scrolling when modal is open', () => {\n    // Verify page is visible and scrollable before modal opens\n    cy.get('[data-testid=\"page-content\"]').should('be.visible');\n    cy.get('[data-testid=\"page-content\"]').then(($content) => {\n      const height = $content.height();\n      const scrollHeight = $content[0].scrollHeight;\n      expect(height).to.be.greaterThan(0);\n      expect(scrollHeight).to.be.greaterThan(height);\n    });\n\n    // Open the modal\n    cy.get('[data-testid=\"open-modal-button\"]').click();\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Verify page content is still visible behind modal\n    cy.get('[data-testid=\"page-content\"]').should('be.visible');\n\n    // Attempt to scroll the page while modal is open\n    cy.get('body').then(($body) => {\n      const initialScrollTop = $body.scrollTop();\n      cy.scrollTo('bottom');\n      const finalScrollTop = $body.scrollTop();\n      expect(finalScrollTop).to.equal(initialScrollTop);\n    });\n\n    // Verify modal is still open and scroll lock is active\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-content\"]').should('be.visible');\n\n    // Close the modal\n    cy.get('[data-testid=\"close-modal-button\"]').click();\n    cy.get('[data-testid=\"modal-dialog\"]').should('not.exist');\n  });\n\n  it('should allow page scrolling when modal is closed', () => {\n    // Open the modal\n    cy.get('[data-testid=\"open-modal-button\"]').click();\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Verify page is scroll-locked\n    cy.get('body').then(($body) => {\n      const initialScrollTop = $body.scrollTop();\n      cy.scrollTo('bottom');\n      const finalScrollTop = $body.scrollTop();\n      expect(finalScrollTop).to.equal(initialScrollTop);\n    });\n\n    // Close the modal\n    cy.get('[data-testid=\"close-modal-button\"]').click();\n    cy.get('[data-testid=\"modal-dialog\"]').should('not.exist');\n\n    // Verify page is now scrollable\n    cy.get('[data-testid=\"page-content\"]').then(($content) => {\n      const initialScrollTop = $content[0].scrollTop;\n      cy.scrollTo('bottom');\n      const finalScrollTop = $content[0].scrollTop;\n      expect(finalScrollTop).to.be.greaterThan(initialScrollTop);\n    });\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4786,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3687,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 73.253,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.785,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4834,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 112.921,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

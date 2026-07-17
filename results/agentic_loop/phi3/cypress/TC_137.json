@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_137",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7785,
+  "total_latency_s": 423.842,
+  "final_script": "describe('Modal Scroll Prevention', () => {\n  beforeEach(() => {\n    cy.visit('/modal-page');\n  });\n\n  it('should prevent page scrolling when modal is open', () => {\n    // Open modal\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Verify modal is visible\n    cy.get('[data-testid=\"modal-title\"]').should('contain', 'Modal Title');\n\n    // Scroll to bottom of page\n    cy.get('[data-testid=\"page-content\"]').scrollTo('bottom');\n\n    // Verify page scroll position is at bottom\n    cy.get('[data-testid=\"page-content\"]').should('have.scrollHeight', cy.get('[data-testid=\"page-content\"]').scrollTop() + cy.get('[data-testid=\"page-content\"]').scrollHeight);\n\n    // Verify modal is still visible and not scrollable\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-content\"]').should('be.visible');\n    cy.get('[data-testid=\"page-content\"]').should('not.have.scrollHeight');\n\n    // Close modal\n    cy.get('[data-testid=\"close-modal-btn\"]').click();\n\n    // Verify modal is closed\n    cy.get('[data-testid=\"modal-dialog\"]').should('not.exist');\n  });\n\n  it('should allow scrolling when modal is closed', () => {\n    // Open modal\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n\n    // Scroll to top of page\n    cy.get('[data-testid=\"page-content\"]').scrollTo('top');\n\n    // Verify page scroll position is at top\n    cy.get('[data-testid=\"page-content\"]').should('have.scrollHeight', cy.get('[data-testid=\"page-content\"]').scrollTop() + cy.get('[data-testid=\"page-content\"]').scrollHeight);\n\n    // Close modal\n    cy.get('[data-testid=\"close-modal-btn\"]').click();\n\n    // Verify page scroll is restored\n    cy.get('[data-testid=\"page-content\"]').should('have.scrollHeight');\n    cy.get('[data-testid=\"page-content\"]').should('have.scrollTop', 0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7785,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4615,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 423.842,
+      "feedback_used": ""
+    }
+  ]
+}

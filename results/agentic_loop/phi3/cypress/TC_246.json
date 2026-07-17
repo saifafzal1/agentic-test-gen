@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_246",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7699,
+  "total_latency_s": 944.812,
+  "final_script": "describe('Card Decline Error Handling', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should display error message when card is declined', () => {\n    // Intercept the API call to simulate card decline\n    cy.intercept('POST', '/api/payment/process', {\n      statusCode: 400,\n      body: {\n        error: 'Card declined',\n        message: 'The card you entered was declined. Please try a different card or contact your bank.'\n      }\n    }).as('cardDecline');\n\n    // Fill in the card details\n    cy.get('[data-testid=\"card-number-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"card-expiry-input\"]').type('12/25');\n    cy.get('[data-testid=\"card-cvc-input\"]').type('123');\n\n    // Submit the payment form\n    cy.get('[data-testid=\"submit-payment-button\"]').click();\n\n    // Wait for the card decline API response\n    cy.wait('@cardDecline');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Card declined');\n\n    // Verify success message is not displayed\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n\n    // Verify form is still visible and user can retry\n    cy.get('[data-testid=\"payment-form\"]').should('be.visible');\n  });\n\n  it('should handle card decline with retry option', () => {\n    // Intercept the API call to simulate card decline\n    cy.intercept('POST', '/api/payment/process', {\n      statusCode: 400,\n      body: {\n        error: 'Card declined',\n        message: 'The card you entered was declined. Please try a different card or contact your bank.'\n      }\n    }).as('cardDecline');\n\n    // Fill in the card details\n    cy.get('[data-testid=\"card-number-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"card-expiry-input\"]').type('12/25');\n    cy.get('[data-testid=\"card-cvc-input\"]').type('123');\n\n    // Submit the payment form\n    cy.get('[data-testid=\"submit-payment-button\"]').click();\n\n    // Wait for the card decline API response\n    cy.wait('@cardDecline');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Card declined');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n\n    // Click retry button\n    cy.get('[data-testid=\"retry-button\"]').click();\n\n    // Verify form is still visible\n    cy.get('[data-testid=\"payment-form\"]').should('be.visible');\n\n    // Verify error message is cleared\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n\n    // Verify success message is not displayed\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4883,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.4009,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 450.984,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7699,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4331,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 493.828,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

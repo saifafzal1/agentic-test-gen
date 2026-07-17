@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_193",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8001,
+  "total_latency_s": 72.941,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search - No Results Message', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should display \"No results found\" message when search returns no items', async ({ page }) => {\n    // Intercept the search API call\n    await page.route('**/api/search*', (route) => {\n      route.abort('blockedbyclient');\n    });\n\n    // Perform search with no matching items\n    const searchInput = page.getByPlaceholder('Search items...');\n    await searchInput.fill('nonexistentitem123');\n\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await searchButton.click();\n\n    // Wait for the API response\n    await page.waitForResponse(response => \n      response.url().includes('/api/search') && response.status() === 200\n    );\n\n    // Verify the \"No results found\" message is visible\n    const noResultsMessage = page.getByText('No results found');\n    await expect(noResultsMessage).toBeVisible();\n\n    // Verify the results list is empty\n    const resultsContainer = page.locator('[data-testid=\"results-container\"]');\n    await expect(resultsContainer).toBeVisible();\n    await expect(resultsContainer).not.toContainText(/item/i);\n\n    // Verify the search input still contains the query\n    await expect(searchInput).toHaveValue('nonexistentitem123');\n\n    // Verify the search button is still enabled\n    await expect(searchButton).toBeEnabled();\n  });\n\n  test('should hide \"No results found\" message when search returns items', async ({ page }) => {\n    // Intercept the search API call and return mock data\n    await page.route('**/api/search*', (route) => {\n      route.continue({\n        status: 200,\n        contentType: 'application/json',\n        body: JSON.stringify({\n          items: [\n            { id: 1, name: 'Item A', price: 10 },\n            { id: 2, name: 'Item B', price: 20 },\n          ],\n          total: 2,\n        }),\n      });\n    });\n\n    // Perform search with matching items\n    const searchInput = page.getByPlaceholder('Search items...');\n    await searchInput.fill('item');\n\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await searchButton.click();\n\n    // Wait for the API response\n    await page.waitForResponse(response => \n      response.url().includes('/api/search') && response.status() === 200\n    );\n\n    // Verify the \"No results found\" message is NOT visible\n    const noResultsMessage = page.getByText('No results found');\n    await expect(noResultsMessage).not.toBeVisible();\n\n    // Verify results are displayed\n    const resultsContainer = page.locator('[data-testid=\"results-container\"]');\n    await expect(resultsContainer).toBeVisible();\n\n    // Verify results list contains items\n    const resultItems = page.locator('[data-testid=\"result-item\"]');\n    await expect(resultItems).toHaveCount(2);\n\n    // Verify item names are visible\n    const itemAName = page.getByText('Item A');\n    const itemBName = page.getByText('Item B');\n    await expect(itemAName).toBeVisible();\n    await expect(itemBName).toBeVisible();\n\n    // Verify pagination controls are visible\n    const pagination = page.locator('[data-testid=\"pagination\"]');\n    await expect(pagination).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8001,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4337,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.941,
+      "feedback_used": ""
+    }
+  ]
+}

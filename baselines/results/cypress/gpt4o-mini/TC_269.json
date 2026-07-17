@@ -1,0 +1,13 @@
+{
+  "id": "TC_269",
+  "category": "notifications",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a notification panel slide in from the top.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Notification Panel', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should display the notification panel sliding in from the top', () => {\n        cy.get('.notification-trigger').click(); // Assuming there's a trigger to show the notification\n        cy.get('.notification-panel').should('be.visible').and('have.class', 'slide-in');\n    });\n\n    it('should not display the notification panel when not triggered', () => {\n        cy.get('.notification-panel').should('not.be.visible');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 122,
+  "latency_s": 2.88,
+  "timestamp": "2026-06-19T16:42:02.147680"
+}

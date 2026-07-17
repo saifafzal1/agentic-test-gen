@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_104",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7867,
+  "total_latency_s": 46.075,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Error Message Accessibility for Screen Readers', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/error-page');\n  });\n\n  test('should display accessible error message when API call fails', async ({ page }) => {\n    // Setup: intercept API call to simulate failure\n    await page.route('**/api/data', (route) => {\n      route.abort('failed');\n    });\n\n    // Intercept and verify error message is visible\n    const errorMessage = page.getByRole('alert');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message contains appropriate text\n    await expect(errorMessage).toContainText('Failed to load data');\n\n    // Verify error message has a descriptive heading\n    const errorHeading = page.getByRole('heading', { name: /data not found/i });\n    await expect(errorHeading).toBeVisible();\n\n    // Verify error message has a descriptive paragraph\n    const errorDescription = page.getByText(/unable to retrieve data/i);\n    await expect(errorDescription).toBeVisible();\n\n    // Verify error message has a call-to-action button\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify button is accessible to screen readers\n    await expect(retryButton).toHaveAttribute('aria-label', 'Retry');\n\n    // Verify error message has a dismiss button\n    const dismissButton = page.getByRole('button', { name: /dismiss/i });\n    await expect(dismissButton).toBeVisible();\n\n    // Verify dismiss button is accessible to screen readers\n    await expect(dismissButton).toHaveAttribute('aria-label', 'Dismiss error message');\n  });\n\n  test('should display accessible error message when validation fails', async ({ page }) => {\n    // Setup: intercept API call to simulate validation failure\n    await page.route('**/api/validate-data', (route) => {\n      route.abort('failed');\n    });\n\n    // Intercept and verify error message is visible\n    const errorMessage = page.getByRole('alert');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message contains appropriate text\n    await expect(errorMessage).toContainText('Validation failed');\n\n    // Verify error message has a descriptive heading\n    const errorHeading = page.getByRole('heading', { name: /validation error/i });\n    await expect(errorHeading).toBeVisible();\n\n    // Verify error message has a descriptive paragraph\n    const errorDescription = page.getByText(/missing required fields/i);\n    await expect(errorDescription).toBeVisible();\n\n    // Verify error message has a call-to-action button\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify button is accessible to screen readers\n    await expect(retryButton).toHaveAttribute('aria-label', 'Retry');\n\n    // Verify error message has a dismiss button\n    const dismissButton = page.getByRole('button', { name: /dismiss/i });\n    await expect(dismissButton).toBeVisible();\n\n    // Verify dismiss button is accessible to screen readers\n    await expect(dismissButton).toHaveAttribute('aria-label', 'Dismiss validation error');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7867,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.389,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 46.075,
+      "feedback_used": ""
+    }
+  ]
+}

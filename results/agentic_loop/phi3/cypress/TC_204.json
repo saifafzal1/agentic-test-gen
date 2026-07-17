@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_204",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7049,
+  "total_latency_s": 408.439,
+  "final_script": "describe('Image Alt Text Accessibility', () => {\n  beforeEach(() => {\n    cy.visit('/images');\n  });\n\n  it('should display descriptive alt text for all images', () => {\n    cy.get('[data-testid=\"image-container\"]').should('be.visible');\n    cy.get('[data-testid=\"image-1\"]').should('be.visible');\n    cy.get('[data-testid=\"image-1\"]').should('have.attr', 'alt', 'A beautiful sunset over the mountains');\n    cy.get('[data-testid=\"image-2\"]').should('be.visible');\n    cy.get('[data-testid=\"image-2\"]').should('have.attr', 'alt', 'A group of people laughing at a comedy show');\n    cy.get('[data-testid=\"image-3\"]').should('be.visible');\n    cy.get('[data-testid=\"image-3\"]').should('have.attr', 'alt', 'A close-up of a cat with whiskers');\n    cy.get('[data-testid=\"image-4\"]').should('be.visible');\n    cy.get('[data-testid=\"image-4\"]').should('have.attr', 'alt', 'A detailed illustration of a human heart');\n  });\n\n  it('should not display empty or generic alt text for images', () => {\n    cy.get('[data-testid=\"image-5\"]').should('be.visible');\n    cy.get('[data-testid=\"image-5\"]').should('have.attr', 'alt', '');\n    cy.get('[data-testid=\"image-6\"]').should('be.visible');\n    cy.get('[data-testid=\"image-6\"]').should('have.attr', 'alt', '');\n    cy.get('[data-testid=\"image-7\"]').should('be.visible');\n    cy.get('[data-testid=\"image-7\"]').should('have.attr', 'alt', '');\n    cy.get('[data-testid=\"image-8\"]').should('be.visible');\n    cy.get('[data-testid=\"image-8\"]').should('have.attr', 'alt', '');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7049,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2162,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 408.439,
+      "feedback_used": ""
+    }
+  ]
+}

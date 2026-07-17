@@ -1,0 +1,13 @@
+{
+  "id": "TC_097",
+  "category": "error_states",
+  "complexity": "complex",
+  "user_story": "As a user, I want a clear error if I try to register with an already-used email.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Registration', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/register');\n  });\n\n  test('should show error message for already-used email', async ({ page }) => {\n    await page.fill(getByLabel('Email'), 'existinguser@example.com');\n    await page.fill(getByLabel('Password'), 'SecurePassword123');\n    await page.fill(getByLabel('Confirm Password'), 'SecurePassword123');\n    await page.click(getByRole('button', { name: 'Register' }));\n    \n    const errorMessage = await page.getByText('Email already in use. Please use a different email.');\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should not show error message for unique email', async ({ page }) => {\n    await page.fill(getByLabel('Email'), 'newuser@example.com');\n    await page.fill(getByLabel('Password'), 'SecurePassword123');\n    await page.fill(getByLabel('Confirm Password'), 'SecurePassword123');\n    await page.click(getByRole('button', { name: 'Register' }));\n    \n    const successMessage = await page.getByText('Registration successful!');\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 137,
+  "completion_tokens": 267,
+  "latency_s": 3.92,
+  "timestamp": "2026-06-19T16:50:10.094095"
+}

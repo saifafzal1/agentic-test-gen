@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_001",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8128,
+  "total_latency_s": 80.746,
+  "final_script": "describe('User Login with Valid Credentials', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should successfully log in with valid credentials and redirect to dashboard', () => {\n    // Verify login page is visible\n    cy.get('[data-testid=\"login-form\"]').should('be.visible');\n    cy.get('[data-testid=\"email-input\"]').should('be.visible');\n    cy.get('[data-testid=\"password-input\"]').should('be.visible');\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n\n    // Fill in valid credentials\n    cy.get('[data-testid=\"email-input\"]').type('user@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('ValidPassword123');\n\n    // Click login button\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Intercept login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n    cy.wait('@loginRequest');\n\n    // Verify successful login\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"dashboard-header\"]').should('be.visible');\n    cy.get('[data-testid=\"welcome-message\"]').should('contain', 'Welcome');\n    cy.get('[data-testid=\"user-profile-icon\"]').should('be.visible');\n    cy.get('[data-testid=\"logout-button\"]').should('be.visible');\n  });\n\n  it('should display error message when login fails with invalid credentials', () => {\n    // Fill in invalid credentials\n    cy.get('[data-testid=\"email-input\"]').type('invalid-user@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('WrongPassword123');\n\n    // Intercept login API call and mock failure response\n    cy.intercept('POST', '/api/auth/login', {\n      statusCode: 401,\n      body: { error: 'Invalid credentials' }\n    }).as('loginRequest');\n\n    // Click login button\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@loginRequest');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid credentials');\n\n    // Verify user is still on login page\n    cy.url().should('include', '/login');\n    cy.get('[data-testid=\"login-form\"]').should('be.visible');\n    cy.get('[data-testid=\"email-input\"]').should('have.value', 'invalid-user@example.com');\n    cy.get('[data-testid=\"password-input\"]').should('have.value', 'WrongPassword123');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8128,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5761,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 80.746,
+      "feedback_used": ""
+    }
+  ]
+}

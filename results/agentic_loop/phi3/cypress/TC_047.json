@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_047",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7822,
+  "total_latency_s": 235.277,
+  "final_script": "describe('Skip-to-Content Link Accessibility', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should navigate to content when skip-to-content link is clicked', () => {\n    // Verify skip-to-content link is visible\n    cy.get('[data-testid=\"skip-to-content-link\"]').should('be.visible');\n    cy.get('[data-testid=\"skip-to-content-link\"]').should('contain', 'Skip to content');\n\n    // Click the skip-to-content link\n    cy.get('[data-testid=\"skip-to-content-link\"]').click();\n\n    // Verify navigation to content section\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n    cy.get('[data-testid=\"main-content\"]').should('contain', 'Welcome to our website');\n\n    // Verify skip-to-content link is hidden after navigation\n    cy.get('[data-testid=\"skip-to-content-link\"]').should('not.exist');\n  });\n\n  it('should not navigate when skip-to-content link is disabled', () => {\n    // Verify skip-to-content link is visible\n    cy.get('[data-testid=\"skip-to-content-link\"]').should('be.visible');\n\n    // Verify link is disabled\n    cy.get('[data-testid=\"skip-to-content-link\"]').should('have.attr', 'aria-disabled', 'true');\n\n    // Click the disabled skip-to-content link\n    cy.get('[data-testid=\"skip-to-content-link\"]').click();\n\n    // Verify navigation does not occur\n    cy.get('[data-testid=\"main-content\"]').should('not.exist');\n\n    // Verify skip-to-content link remains visible and disabled\n    cy.get('[data-testid=\"skip-to-content-link\"]').should('have.attr', 'aria-disabled', 'true');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7822,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4739,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 235.277,
+      "feedback_used": ""
+    }
+  ]
+}

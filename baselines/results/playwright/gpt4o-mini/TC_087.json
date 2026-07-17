@@ -1,0 +1,13 @@
+{
+  "id": "TC_087",
+  "category": "crud_operations",
+  "complexity": "medium",
+  "user_story": "As a user, I want to comment on a record.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Comment on a record', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should display the comment input field', async ({ page }) => {\n    const commentInput = page.getByLabel('Comment');\n    await expect(commentInput).toBeVisible();\n  });\n\n  test('should allow a user to submit a comment', async ({ page }) => {\n    const commentInput = page.getByLabel('Comment');\n    const submitButton = page.getByRole('button', { name: 'Submit' });\n\n    await commentInput.fill('This is a test comment.');\n    await submitButton.click();\n\n    const successMessage = page.getByText('Comment submitted successfully!');\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 129,
+  "completion_tokens": 176,
+  "latency_s": 2.5,
+  "timestamp": "2026-06-19T16:49:24.657623"
+}

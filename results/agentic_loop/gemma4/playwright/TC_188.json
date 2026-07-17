@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_188",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8225,
+  "total_latency_s": 72.27,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Results Sorting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should sort search results by relevance, price, or date', async ({ page }) => {\n    // Search for a product\n    const searchInput = page.getByPlaceholder('Search products...');\n    await searchInput.fill('laptop');\n\n    // Wait for search results to load\n    await page.waitForResponse(response => response.url().includes('/api/search'));\n\n    // Verify search results are displayed\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n\n    // Verify at least one result exists\n    const resultItems = page.getByRole('listitem', { name: /laptop/i });\n    await expect(resultItems).toHaveCount(1);\n\n    // Sort by relevance (default)\n    const relevanceSortButton = page.getByRole('button', { name: /relevance/i });\n    await expect(relevanceSortButton).toBeVisible();\n    await relevanceSortButton.click();\n\n    // Verify results are sorted by relevance\n    const firstResult = page.getByRole('listitem', { name: /laptop/i }).first();\n    await expect(firstResult).toBeVisible();\n\n    // Sort by price\n    const priceSortButton = page.getByRole('button', { name: /price/i });\n    await expect(priceSortButton).toBeVisible();\n    await priceSortButton.click();\n\n    // Verify results are sorted by price\n    const priceSortedResults = page.getByRole('listitem', { name: /laptop/i });\n    const firstPriceResult = priceSortedResults.first();\n    const secondPriceResult = priceSortedResults.nth(1);\n    const firstPricePrice = await firstPriceResult.getByText(/\\$\\d+/).first().textContent();\n    const secondPrice = await secondPriceResult.getByText(/\\$\\d+/).first().textContent();\n    expect(parseFloat(firstPrice)).toBeLessThan(parseFloat(secondPrice));\n\n    // Sort by date\n    const dateSortButton = page.getByRole('button', { name: /date/i });\n    await expect(dateSortButton).toBeVisible();\n    await dateSortButton.click();\n\n    // Verify results are sorted by date\n    const dateSortedResults = page.getByRole('listitem', { name: /laptop/i });\n    const firstDateResult = dateSortedResults.first();\n    const secondDateResult = dateSortedResults.nth(1);\n    const firstDateText = await firstDateResult.getByText(/\\d{2,}/).first().textContent();\n    const secondDateText = await secondDateResult.getByText(/\\d{2,}/).first().textContent();\n    expect(firstDateText).not.toBe(secondDateText);\n  });\n\n  test('should handle sorting when no results are found', async ({ page }) => {\n    // Search for a non-existent product\n    const searchInput = page.getByPlaceholder('Search products...');\n    await searchInput.fill('xyz123nonexistentproduct');\n\n    // Wait for search results to load\n    await page.waitForResponse(response => response.url().includes('/api/search'));\n\n    // Verify no results message is displayed\n    const noResultsMessage = page.getByText(/no results found/i);\n    await expect(noResultsMessage).toBeVisible();\n\n    // Verify sort buttons are disabled or not visible\n    const relevanceSortButton = page.getByRole('button', { name: /relevance/i });\n    await expect(relevanceSortButton).not.toBeVisible();\n\n    const priceSortButton = page.getByRole('button', { name: /price/i });\n    await expect(priceSortButton).not.toBeVisible();\n\n    const dateSortButton = page.getByRole('button', { name: /date/i });\n    await expect(dateSortButton).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8225,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5082,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.27,
+      "feedback_used": ""
+    }
+  ]
+}

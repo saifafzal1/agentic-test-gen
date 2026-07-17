@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_231",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7801,
+  "total_latency_s": 52.661,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Main Layout Horizontal Scroll Disabled on Mobile', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/main-layout');\n  });\n\n  test('should disable horizontal scrolling on mobile devices', async ({ page }) => {\n    // Set viewport to mobile width\n    await page.setViewportSize({ width: 375, height: 812 });\n\n    // Verify horizontal scrollbar is visible\n    const scrollbar = page.locator('[data-testid=\"horizontal-scrollbar\"]');\n    await expect(scrollbar).toBeVisible();\n\n    // Verify scrollbar is enabled\n    const scrollbarState = page.getByRole('status', { name: /scrollable/i });\n    await expect(scrollbarState).toBeVisible();\n\n    // Verify horizontal scroll is enabled\n    const scrollX = page.getByRole('heading', { name: /scroll/i });\n    await expect(scrollX).toBeVisible();\n\n    // Verify content is scrollable horizontally\n    const content = page.locator('[data-testid=\"main-content\"]');\n    await expect(content).toBeVisible();\n    await expect(content).toHaveScrollWidth(expect.gt(0));\n\n    // Scroll to the right edge\n    await content.evaluate((el) => {\n      el.scrollLeft = el.scrollWidth;\n    });\n\n    // Verify scrollbar is still visible\n    await expect(scrollbar).toBeVisible();\n\n    // Verify content does not scroll further\n    await expect(content).toHaveScrollWidth(expect.equal(content.evaluate((el) => el.scrollWidth)));\n\n    // Verify horizontal scrollbar is disabled\n    const scrollbarDisabled = page.getByRole('status', { name: /disabled/i });\n    await expect(scrollbarDisabled).toBeVisible();\n\n    // Verify horizontal scroll is disabled\n    const scrollXDisabled = page.getByRole('heading', { name: /disabled/i });\n    await expect(scrollXDisabled).toBeVisible();\n\n    // Verify content is not scrollable horizontally\n    await expect(content).toHaveScrollWidth(expect.equal(content.evaluate((el) => el.scrollWidth)));\n  });\n\n  test('should enable horizontal scrolling on desktop devices', async ({ page }) => {\n    // Set viewport to desktop width\n    await page.setViewportSize({ width: 1280, height: 812 });\n\n    // Verify horizontal scrollbar is not visible\n    const scrollbar = page.locator('[data-testid=\"horizontal-scrollbar\"]');\n    await expect(scrollbar).not.toBeVisible();\n\n    // Verify scrollbar is disabled\n    const scrollbarState = page.getByRole('status', { name: /disabled/i });\n    await expect(scrollbarState).toBeVisible();\n\n    // Verify horizontal scroll is disabled\n    const scrollX = page.getByRole('heading', { name: /disabled/i });\n    await expect(scrollX).toBeVisible();\n\n    // Verify content is not scrollable horizontally\n    const content = page.locator('[data-testid=\"main-content\"]');\n    await expect(content).toHaveScrollWidth(expect.equal(content.evaluate((el) => el.scrollWidth)));\n\n    // Scroll to the right edge\n    await content.evaluate((el) => {\n      el.scrollLeft = el.scrollWidth;\n    });\n\n    // Verify scrollbar is visible\n    await expect(scrollbar).toBeVisible();\n\n    // Verify scrollbar is enabled\n    await expect(scrollbarState).toBeVisible();\n\n    // Verify horizontal scroll is enabled\n    const scrollXEnabled = page.getByRole('heading', { name: /enabled/i });\n    await expect(scrollXEnabled).toBeVisible();\n\n    // Verify content is scrollable horizontally\n    await expect(content).toHaveScrollWidth(expect.gt(content.evaluate((el) => el.scrollWidth)));\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7801,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3672,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 52.661,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_250",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7822,
+  "total_latency_s": 72.529,
+  "final_script": "describe('PayPal Payment Method Selection', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should successfully select PayPal as payment method', () => {\n    // Verify checkout page loads\n    cy.get('[data-testid=\"checkout-page\"]').should('be.visible');\n    cy.get('[data-testid=\"payment-method-options\"]').should('be.visible');\n\n    // Verify PayPal option is visible\n    cy.get('[data-testid=\"paypal-option\"]').should('be.visible');\n    cy.get('[data-testid=\"paypal-option\"]').should('contain', 'PayPal');\n\n    // Select PayPal option\n    cy.get('[data-testid=\"paypal-option\"]').click();\n\n    // Verify PayPal is selected\n    cy.get('[data-testid=\"paypal-option\"]').should('have.class', 'selected');\n    cy.get('[data-testid=\"payment-method-label\"]').should('contain', 'PayPal');\n\n    // Verify PayPal specific fields appear (e.g., redirect button)\n    cy.get('[data-testid=\"paypal-redirect-button\"]').should('be.visible');\n    cy.get('[data-testid=\"paypal-redirect-button\"]').should('contain', 'Pay with PayPal');\n\n    // Click to proceed to PayPal\n    cy.get('[data-testid=\"paypal-redirect-button\"]').click();\n\n    // Verify redirect to PayPal is initiated\n    cy.url().should('include', 'paypal.com');\n    cy.get('[data-testid=\"paypal-login-form\"]').should('be.visible');\n  });\n\n  it('should handle PayPal option being disabled or unavailable', () => {\n    // Intercept API call to simulate PayPal being unavailable\n    cy.intercept('POST', '/api/payment/paypal/validate', {\n      statusCode: 503,\n      body: { error: 'Service unavailable' }\n    }).as('paypalValidation');\n\n    // Navigate to checkout\n    cy.visit('/checkout');\n\n    // Verify PayPal option is visible initially\n    cy.get('[data-testid=\"paypal-option\"]').should('be.visible');\n\n    // Attempt to select PayPal\n    cy.get('[data-testid=\"paypal-option\"]').click();\n\n    // Wait for validation\n    cy.wait('@paypalValidation');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"paypal-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"paypal-error-message\"]').should('contain', 'Service unavailable');\n\n    // Verify PayPal option is not selected\n    cy.get('[data-testid=\"paypal-option\"]').should('not.have.class', 'selected');\n\n    // Verify user can still select other payment methods\n    cy.get('[data-testid=\"credit-card-option\"]').should('be.visible');\n    cy.get('[data-testid=\"credit-card-option\"]').click();\n    cy.get('[data-testid=\"credit-card-option\"]').should('have.class', 'selected');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7822,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.474,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.529,
+      "feedback_used": ""
+    }
+  ]
+}

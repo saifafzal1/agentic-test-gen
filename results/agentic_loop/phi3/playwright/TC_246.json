@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_246",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8165,
+  "total_latency_s": 531.534,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Card Decline Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should display error message when card is declined', async ({ page }) => {\n    // Setup: intercept the API call to simulate card decline\n    await page.route('**/api/payment/process', (route) => {\n      route.abort('failed');\n    });\n\n    // Intercept the API call to simulate successful payment\n    await page.route('**/api/payment/process', (route) => {\n      route.continue();\n    });\n\n    // Verify initial payment form is visible\n    const paymentForm = page.getByRole('form', { name: /payment/i });\n    await expect(paymentForm).toBeVisible();\n\n    // Fill in card details\n    const cardNumberInput = page.getByLabel(/card number/i);\n    await cardNumberInput.fill('4111111111111111');\n\n    const expiryDateInput = page.getByLabel(/expiry date/i);\n    await expiryDateInput.fill('12/25');\n\n    const cvvInput = page.getByLabel(/cvv/i);\n    await cvvInput.fill('123');\n\n    // Click the submit button\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/card declined/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error state is applied to the form\n    const errorState = page.getByTestId('payment-error');\n    await expect(errorState).toBeVisible();\n\n    // Verify success message does not appear\n    const successMessage = page.getByText(/successfully processed/i);\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify payment form is still visible\n    await expect(paymentForm).toBeVisible();\n  });\n\n  test('should handle card decline with retry option', async ({ page }) => {\n    // Setup: intercept the API call to simulate card decline\n    await page.route('**/api/payment/process', (route) => {\n      route.abort('failed');\n    });\n\n    // Intercept the API call to simulate successful payment\n    await page.route('**/api/payment/process', (route) => {\n      route.continue();\n    });\n\n    // Verify initial payment form is visible\n    const paymentForm = page.getByRole('form', { name: /payment/i });\n    await expect(paymentForm).toBeVisible();\n\n    // Fill in card details\n    const cardNumberInput = page.getByLabel(/card number/i);\n    await cardNumberInput.fill('4111111111111111');\n\n    const expiryDateInput = page.getByLabel(/expiry date/i);\n    await expiryDateInput.fill('12/25');\n\n    const cvvInput = page.getByLabel(/cvv/i);\n    await cvvInput.fill('123');\n\n    // Click the submit button\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/card declined/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify retry button is visible\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Verify retry button is clickable\n    await expect(retryButton).toBeEnabled();\n\n    // Verify retry button is not disabled\n    const retryButtonDisabled = page.getByRole('button', { name: /retry/i, disabled: true });\n    await expect(retryButtonDisabled).not.toBeVisible();\n\n    // Verify error state is applied to the form\n    const errorState = page.getByTestId('payment-error');\n    await expect(errorState).toBeVisible();\n\n    // Verify success message does not appear\n    const successMessage = page.getByText(/successfully processed/i);\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify payment form is still visible\n    await expect(paymentForm).toBeVisible();\n\n    // Verify retry button is still visible\n    await expect(retryButton).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4922,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3741,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 55.536,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8165,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3885,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 475.998,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

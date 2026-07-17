@@ -1,0 +1,13 @@
+{
+  "id": "TC_113",
+  "category": "async_await",
+  "complexity": "simple",
+  "user_story": "As a user, I want a background job to notify me via a toast when it completes.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Background Job Notification', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Adjust the URL to your application's homepage\n    });\n\n    it('should display a toast notification when the background job completes successfully', () => {\n        // Trigger the background job\n        cy.get('#start-job-button').click(); // Adjust the selector to your start job button\n\n        // Wait for the job to complete (this may vary based on your implementation)\n        cy.wait(5000); // Adjust the wait time as necessary\n\n        // Assert that the toast notification is visible\n        cy.get('.toast-notification') // Adjust the selector to your toast notification\n            .should('be.visible')\n            .and('contain', 'Job completed successfully!'); // Adjust the message as necessary\n    });\n\n    it('should not display a toast notification if the job fails', () => {\n        // Trigger the background job that is expected to fail\n        cy.get('#start-failing-job-button').click(); // Adjust the selector to your start failing job button\n\n        // Wait for the job to complete\n        cy.wait(5000); // Adjust the wait time as necessary\n\n        // Assert that the toast notification is not visible\n        cy.get('.toast-notification') // Adjust the selector to your toast notification\n            .should('not.exist');\n    });\n});",
+  "prompt_tokens": 114,
+  "completion_tokens": 277,
+  "latency_s": 4.74,
+  "timestamp": "2026-06-19T16:32:46.458043"
+}

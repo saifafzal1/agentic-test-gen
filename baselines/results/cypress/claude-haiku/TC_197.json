@@ -1,0 +1,13 @@
+{
+  "id": "TC_197",
+  "category": "search_filter",
+  "complexity": "simple",
+  "user_story": "As a user, I want the search input to be focused when I press '/' on the keyboard.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Search Input Focus on Slash Key', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should focus search input when \"/\" key is pressed', () => {\n    cy.get('input[type=\"search\"], input[placeholder*=\"search\" i], [data-testid=\"search-input\"]').as('searchInput');\n    \n    cy.get('@searchInput').should('exist');\n    cy.get('@searchInput').should('not.have.focus');\n    \n    cy.get('body').type('/');\n    \n    cy.get('@searchInput').should('have.focus');\n  });\n\n  it('should not focus search input when \"/\" is typed in an input field', () => {\n    cy.get('input[type=\"search\"], input[placeholder*=\"search\" i], [data-testid=\"search-input\"]').as('searchInput');\n    cy.get('input[type=\"text\"]').first().as('otherInput');\n    \n    cy.get('@otherInput').focus();\n    cy.get('@otherInput').type('/');\n    \n    cy.get('@searchInput').should('not.have.focus');\n    cy.get('@otherInput').should('have.focus');\n  });\n\n  it('should focus search input when \"/\" is pressed after clicking elsewhere', () => {\n    cy.get('input[type=\"search\"], input[placeholder*=\"search\" i], [data-testid=\"search-input\"]').as('searchInput');\n    \n    cy.get('body').click();\n    cy.get('@searchInput').should('not.have.focus');\n    \n    cy.get('body').type('/');\n    \n    cy.get('@searchInput').should('have.focus');\n  });\n\n  it('should clear existing text and focus when \"/\" is pressed on focused search input', () => {\n    cy.get('input[type=\"search\"], input[placeholder*=\"search\" i], [data-testid=\"search-input\"]').as('searchInput');\n    \n    cy.get('@searchInput').focus().type('test');\n    cy.get('@searchInput').should('have.value', 'test');\n    \n    cy.get('body').type('/');\n    \n    cy.get('@searchInput').should('have.focus');\n  });\n});",
+  "prompt_tokens": 126,
+  "completion_tokens": 545,
+  "latency_s": 3.61,
+  "timestamp": "2026-06-19T17:26:00.110596"
+}

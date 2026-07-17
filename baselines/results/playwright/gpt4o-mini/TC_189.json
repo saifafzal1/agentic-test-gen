@@ -1,0 +1,13 @@
+{
+  "id": "TC_189",
+  "category": "search_filter",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see the number of results for each filter option.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Filter Results', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should display the correct number of results for the first filter option', async ({ page }) => {\n    await page.getByRole('button', { name: 'Filter Option 1' }).click();\n    const resultsCount = await page.getByText(/results found/i).innerText();\n    expect(resultsCount).toBe('10 results found'); // Replace with the expected count\n  });\n\n  test('should display the correct number of results for the second filter option', async ({ page }) => {\n    await page.getByRole('button', { name: 'Filter Option 2' }).click();\n    const resultsCount = await page.getByText(/results found/i).innerText();\n    expect(resultsCount).toBe('5 results found'); // Replace with the expected count\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 216,
+  "latency_s": 2.83,
+  "timestamp": "2026-06-19T16:56:19.470109"
+}

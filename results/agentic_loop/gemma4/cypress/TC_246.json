@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_246",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7678,
+  "total_latency_s": 72.356,
+  "final_script": "describe('Card Decline Error Handling', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should display error message when card is declined', () => {\n    // Intercept the payment API call\n    cy.intercept('POST', '/api/payment/process').as('processPayment');\n\n    // Fill in form with valid card details\n    cy.get('[data-testid=\"card-number-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"expiry-date-input\"]').type('12/25');\n    cy.get('[data-testid=\"cvv-input\"]').type('123');\n    cy.get('[data-testid=\"card-holder-name-input\"]').type('John Doe');\n\n    // Click pay button\n    cy.get('[data-testid=\"pay-button\"]').click();\n\n    // Wait for API response\n    cy.wait('@processPayment').then((interception) => {\n      expect(interception.response.statusCode).to.equal(422);\n    });\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Card declined by your bank');\n\n    // Verify error styling\n    cy.get('[data-testid=\"error-message\"]')\n      .should('have.class', 'error-text');\n\n    // Verify payment form is still visible for retry\n    cy.get('[data-testid=\"card-number-input\"]').should('be.visible');\n  });\n\n  it('should handle multiple failed payment attempts and prevent form submission', () => {\n    // Intercept payment API call and mock multiple failures\n    cy.intercept('POST', '/api/payment/process', {\n      statusCode: 422,\n      body: { error: 'Card declined' }\n    }).as('processPayment1');\n\n    cy.intercept('POST', '/api/payment/process', {\n      statusCode: 422,\n      body: { error: 'Card declined' }\n    }).as('processPayment2');\n\n    // Fill in form with valid card details\n    cy.get('[data-testid=\"card-number-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"expiry-date-input\"]').type('12/25');\n    cy.get('[data-testid=\"cvv-input\"]').type('123');\n    cy.get('[data-testid=\"card-holder-name-input\"]').type('John Doe');\n\n    // First attempt\n    cy.get('[data-testid=\"pay-button\"]').click();\n    cy.wait('@processPayment1');\n\n    // Verify first error message\n    cy.get('[data-testid=\"error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Card declined by your bank');\n\n    // Second attempt\n    cy.get('[data-testid=\"pay-button\"]').click();\n    cy.wait('@processPayment2');\n\n    // Verify second error message\n    cy.get('[data-testid=\"error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Card declined by your bank');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n\n    // Verify form is not disabled after multiple failures\n    cy.get('[data-testid=\"card-number-input\"]').should('not.be.disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7678,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.426,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.356,
+      "feedback_used": ""
+    }
+  ]
+}

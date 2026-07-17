@@ -1,0 +1,13 @@
+{
+  "id": "TC_129",
+  "category": "modal_dialog",
+  "complexity": "medium",
+  "user_story": "As a user, I want to close a modal by pressing the Escape key.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Modal Dialog', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL where the modal can be triggered\n        cy.get('.open-modal-button').click(); // Replace with the actual selector to open the modal\n    });\n\n    it('should close the modal when the Escape key is pressed', () => {\n        cy.get('.modal').should('be.visible'); // Ensure the modal is visible\n        cy.get('body').type('{esc}'); // Simulate pressing the Escape key\n        cy.get('.modal').should('not.exist'); // Verify the modal is closed\n    });\n\n    it('should not close the modal when clicking outside of it', () => {\n        cy.get('.modal').should('be.visible'); // Ensure the modal is visible\n        cy.get('.modal-background').click(); // Replace with the actual selector for the area outside the modal\n        cy.get('.modal').should('be.visible'); // Verify the modal is still open\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 208,
+  "latency_s": 2.9,
+  "timestamp": "2026-06-19T16:33:53.846175"
+}

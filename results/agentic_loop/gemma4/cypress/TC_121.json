@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_121",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.798,
+  "total_latency_s": 71.951,
+  "final_script": "describe('Async PDF Generation Download', () => {\n  beforeEach(() => {\n    cy.visit('/pdf-generator');\n  });\n\n  it('should generate and download PDF when async process completes', () => {\n    // Intercept the PDF generation API call\n    cy.intercept('POST', '/api/generate-pdf').as('generatePdf');\n\n    // Click the generate PDF button\n    cy.get('[data-testid=\"generate-pdf-btn\"]').click();\n\n    // Verify loading state appears\n    cy.get('[data-testid=\"loading-spinner\"]').should('be.visible');\n    cy.get('[data-testid=\"loading-text\"]').should('contain', 'Generating PDF');\n\n    // Wait for the API call to complete\n    cy.wait('@generatePdf');\n\n    // Verify loading state is removed\n    cy.get('[data-testid=\"loading-spinner\"]').should('not.exist');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'PDF generated successfully');\n\n    // Verify download link appears\n    cy.get('[data-testid=\"download-pdf-btn\"]').should('be.visible');\n\n    // Click the download button to trigger download\n    cy.get('[data-testid=\"download-pdf-btn\"]').click();\n\n    // Verify download confirmation or file name appears\n    cy.get('[data-testid=\"download-confirmation\"]').should('be.visible');\n    cy.get('[data-testid=\"download-confirmation\"]').should('contain', 'PDF download started');\n\n    // Verify download link is disabled after click\n    cy.get('[data-testid=\"download-pdf-btn\"]').should('be.disabled');\n  });\n\n  it('should handle PDF generation failure and display error message', () => {\n    // Intercept the PDF generation API call and mock a failure response\n    cy.intercept('POST', '/api/generate-pdf', {\n      statusCode: 500,\n      body: { error: 'Internal server error during PDF generation' }\n    }).as('generatePdfFailure');\n\n    // Click the generate PDF button\n    cy.get('[data-testid=\"generate-pdf-btn\"]').click();\n\n    // Verify loading state appears\n    cy.get('[data-testid=\"loading-spinner\"]').should('be.visible');\n\n    // Wait for the failed API call\n    cy.wait('@generatePdfFailure');\n\n    // Verify loading state is removed\n    cy.get('[data-testid=\"loading-spinner\"]').should('not.exist');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Failed to generate PDF');\n\n    // Verify error details are displayed\n    cy.get('[data-testid=\"error-details\"]').should('be.visible');\n    cy.get('[data-testid=\"error-details\"]').should('contain', 'Internal server error');\n\n    // Verify download button does not appear\n    cy.get('[data-testid=\"download-pdf-btn\"]').should('not.exist');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-btn\"]').should('be.visible');\n    cy.get('[data-testid=\"retry-btn\"]').should('not.be.disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.798,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5268,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.951,
+      "feedback_used": ""
+    }
+  ]
+}

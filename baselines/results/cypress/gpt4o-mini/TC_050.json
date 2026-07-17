@@ -1,0 +1,13 @@
+{
+  "id": "TC_050",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want deep links to load the correct page directly.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Deep Link Navigation', () => {\n    beforeEach(() => {\n        cy.visit('/');\n    });\n\n    it('should load the correct page when accessing a deep link directly', () => {\n        cy.visit('/products/12345');\n        cy.url().should('include', '/products/12345');\n        cy.get('h1').should('contain', 'Product 12345');\n    });\n\n    it('should show a 404 page for an invalid deep link', () => {\n        cy.visit('/products/invalid-id');\n        cy.url().should('include', '/products/invalid-id');\n        cy.get('h1').should('contain', '404 Not Found');\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 141,
+  "latency_s": 2.2,
+  "timestamp": "2026-06-19T16:28:16.931221"
+}

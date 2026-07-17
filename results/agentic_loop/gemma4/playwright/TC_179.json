@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_179",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8565,
+  "total_latency_s": 72.57,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('PDF Inline Viewer', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should display uploaded PDF in inline viewer', async ({ page }) => {\n    // Locate and interact with file input using getByLabel\n    const fileInput = page.getByLabel('Upload PDF');\n    await fileInput.setInputFiles('playwright/fixtures/sample.pdf');\n\n    // Verify file name appears\n    const fileNameDisplay = page.getByText('sample.pdf');\n    await expect(fileNameDisplay).toBeVisible();\n\n    // Locate and click upload button using getByRole\n    const uploadButton = page.getByRole('button', { name: 'Upload' });\n    await uploadButton.click();\n\n    // Wait for file to process\n    await page.waitForResponse(response => \n      response.url().includes('/api/files/upload') && response.status() === 200\n    );\n\n    // Verify inline viewer appears\n    const viewerContainer = page.getByRole('region', { name: 'PDF Viewer' });\n    await expect(viewerContainer).toBeVisible();\n\n    // Verify PDF content is displayed\n    const pdfContent = page.getByText('This is a sample PDF document');\n    await expect(pdfContent).toBeVisible();\n\n    // Verify document title is displayed\n    const docTitle = page.getByText('Sample Document');\n    await expect(docTitle).toBeVisible();\n  });\n\n  test('should handle invalid file types and display error message', async ({ page }) => {\n    // Locate and interact with file input using getByLabel\n    const fileInput = page.getByLabel('Upload PDF');\n    await fileInput.setInputFiles('playwright/fixtures/sample.jpg');\n\n    // Verify error message appears for invalid file type\n    const errorMessage = page.getByText('Invalid file type. Only PDF is allowed.');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify inline viewer does not appear\n    const viewerContainer = page.getByRole('region', { name: 'PDF Viewer' });\n    await expect(viewerContainer).not.toBeVisible();\n\n    // Verify upload button is disabled\n    const uploadButton = page.getByRole('button', { name: 'Upload' });\n    await expect(uploadButton).toBeDisabled();\n\n    // Verify file name does not appear\n    const fileNameDisplay = page.getByText('sample.jpg');\n    await expect(fileNameDisplay).not.toBeVisible();\n\n    // Verify error message disappears when file is removed\n    await fileInput.clear();\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8565,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5216,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.57,
+      "feedback_used": ""
+    }
+  ]
+}

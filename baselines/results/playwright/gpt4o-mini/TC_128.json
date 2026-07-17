@@ -1,0 +1,13 @@
+{
+  "id": "TC_128",
+  "category": "modal_dialog",
+  "complexity": "simple",
+  "user_story": "As a user, I want a confirmation modal to appear before deleting a record.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Confirmation Modal for Deleting a Record', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should display confirmation modal when delete button is clicked', async ({ page }) => {\n    await page.getByRole('button', { name: /delete/i }).click();\n    const modal = page.getByRole('dialog', { name: /confirm deletion/i });\n    await expect(modal).toBeVisible();\n  });\n\n  test('should not delete the record if confirmation is not given', async ({ page }) => {\n    await page.getByRole('button', { name: /delete/i }).click();\n    await page.getByRole('button', { name: /cancel/i }).click();\n    const record = page.getByText(/record name/i); // Replace with actual record name\n    await expect(record).toBeVisible();\n  });\n\n  test('should delete the record if confirmation is given', async ({ page }) => {\n    await page.getByRole('button', { name: /delete/i }).click();\n    await page.getByRole('button', { name: /confirm/i }).click();\n    const record = page.getByText(/record name/i); // Replace with actual record name\n    await expect(record).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 297,
+  "latency_s": 4.05,
+  "timestamp": "2026-06-19T16:52:23.875666"
+}

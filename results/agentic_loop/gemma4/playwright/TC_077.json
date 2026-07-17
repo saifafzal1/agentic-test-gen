@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_077",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8157,
+  "total_latency_s": 72.17,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Bulk Delete Selected Items', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/items');\n  });\n\n  test('should successfully bulk delete multiple selected items', async ({ page }) => {\n    // Select multiple items using getByRole\n    const itemCheckboxes = page.getByRole('checkbox');\n    await itemCheckboxes.first().click();\n    await itemCheckboxes.nth(1).click();\n    await itemCheckboxes.nth(2).click();\n\n    // Verify items are selected\n    await expect(itemCheckboxes.first()).toBeChecked();\n    await expect(itemCheckboxes.nth(2)).toBeChecked();\n\n    // Click the bulk delete button using getByRole\n    const deleteButton = page.getByRole('button', { name: /bulk delete/i });\n    await deleteButton.click();\n\n    // Verify confirmation modal appears\n    const confirmModal = page.getByRole('dialog', { name: /confirm deletion/i });\n    await expect(confirmModal).toBeVisible();\n\n    // Click confirm button in modal\n    const confirmButton = page.getByRole('button', { name: /confirm/i });\n    await confirmButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/items deleted successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify deleted items are removed from the list\n    const itemRows = page.getByRole('row', { name: /item/i });\n    const remainingItems = await itemRows.filter({ has: page.getByText('Item 1') }).count();\n    expect(remainingItems).toBe(0);\n  });\n\n  test('should handle empty selection and prevent bulk delete', async ({ page }) => {\n    // Verify no items are selected initially\n    const itemCheckboxes = page.getByRole('checkbox');\n    await expect(itemCheckboxes.first()).not.toBeChecked();\n\n    // Attempt to click bulk delete button without selecting any items\n    const deleteButton = page.getByRole('button', { name: /bulk delete/i });\n    await deleteButton.click();\n\n    // Verify no confirmation modal appears\n    const confirmModal = page.getByRole('dialog', { name: /confirm deletion/i });\n    await expect(confirmModal).not.toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/please select at least one item/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify item list remains unchanged\n    const itemRows = page.getByRole('row', { name: /item/i });\n    const itemCount = await itemRows.count();\n    expect(itemCount).toBeGreaterThan(0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8157,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4857,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.17,
+      "feedback_used": ""
+    }
+  ]
+}

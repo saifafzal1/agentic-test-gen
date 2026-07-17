@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_074",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7418,
+  "total_latency_s": 44.096,
+  "final_script": "describe('Edit Task Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/tasks');\n  });\n\n  it('should successfully edit an existing task by clicking Edit button', () => {\n    // Verify initial task list is displayed\n    cy.get('[data-testid=\"task-list\"]').should('be.visible');\n    cy.get('[data-testid=\"task-item\"]').should('have.length.greaterThan', 0);\n\n    // Find a task to edit\n    cy.get('[data-testid=\"task-item\"]').first().click();\n\n    // Verify edit modal is displayed\n    cy.get('[data-testid=\"edit-modal\"]').should('be.visible');\n\n    // Verify form fields are populated with task data\n    cy.get('[data-testid=\"task-name-input\"]').should('have.value', 'Initial Task Name');\n    cy.get('[data-testid=\"task-description-input\"]').should('have.value', 'Initial Task Description');\n\n    // Verify Save button is visible\n    cy.get('[data-testid=\"save-button\"]').should('be.visible');\n\n    // Fill in new task details\n    cy.get('[data-testid=\"task-name-input\"]').type('Updated Task Name');\n    cy.get('[data-testid=\"task-description-input\"]').type('Updated Task Description');\n\n    // Click Save button\n    cy.get('[data-testid=\"save-button\"]').click();\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Task updated successfully');\n\n    // Verify task list is updated\n    cy.get('[data-testid=\"task-item\"]').first().should('contain', 'Updated Task Name');\n\n    // Verify edit button is still visible for other tasks\n    cy.get('[data-testid=\"task-item\"]').last().should('have.attr', 'data-testid');\n  });\n\n  it('should handle empty task name input and display validation error', () => {\n    // Find a task to edit\n    cy.get('[data-testid=\"task-item\"]').first().click();\n\n    // Verify edit modal is displayed\n    cy.get('[data-testid=\"edit-modal\"]').should('be.visible');\n\n    // Fill in task description but leave task name empty\n    cy.get('[data-testid=\"task-description-input\"]').type('Updated Task Description');\n\n    // Click Save button\n    cy.get('[data-testid=\"save-button\"]').click();\n\n    // Verify validation error message appears\n    cy.get('[data-testid=\"validation-error\"]').should('be.visible');\n    cy.get('[data-testid=\"validation-error\"]').should('contain', 'Task name cannot be empty');\n\n    // Verify success message does not appear\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n\n    // Verify task list is not updated\n    cy.get('[data-testid=\"task-item\"]').first().should('contain', 'Initial Task Name');\n\n    // Verify edit button is still visible\n    cy.get('[data-testid=\"task-item\"]').last().should('have.attr', 'data-testid');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7418,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3393,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 44.096,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_252",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8481,
+  "total_latency_s": 182.42,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Order Confirmation After Successful Payment', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkout');\n  });\n\n  test('should display order confirmation after successful payment', async ({ page }) => {\n    // Verify checkout page is visible\n    const checkoutPage = page.getByRole('main');\n    await expect(checkoutPage).toBeVisible();\n\n    // Fill in shipping details\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('John Doe');\n\n    const addressInput = page.getByLabel('Shipping Address');\n    await addressInput.fill('123 Main St');\n\n    // Fill in payment details\n    const cardNumberInput = page.getByLabel('Card Number');\n    await cardNumberInput.fill('4111 1111 1111 1234');\n\n    const expiryInput = page.getByLabel('Expiry Date');\n    await expiryInput.fill('12/25');\n\n    const cvvInput = page.getByLabel('CVV');\n    await cvvInput.fill('123');\n\n    // Click pay button\n    const payButton = page.getByRole('button', { name: /pay/i });\n    await payButton.click();\n\n    // Wait for payment processing\n    await page.waitForResponse(response => \n      response.url().includes('/api/payment/process') && response.status() === 200\n    );\n\n    // Verify order confirmation page is displayed\n    const confirmationPage = page.getByRole('main');\n    await expect(confirmationPage).toBeVisible();\n\n    // Verify success message\n    const successMessage = page.getByText(/order confirmed/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify order number is displayed\n    const orderNumber = page.getByText(/\\d{8,}/);\n    await expect(orderNumber).toBeVisible();\n\n    // Verify confirmation details\n    const orderDetails = page.getByText(/order details/i);\n    await expect(orderDetails).toBeVisible();\n\n    // Verify total amount is displayed\n    const totalAmount = page.getByText(/\\$\\d+\\.\\d{2}/);\n    await expect(totalAmount).toBeVisible();\n  });\n\n  test('should handle payment failure and display error message', async ({ page }) => {\n    // Fill in shipping details\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('Jane Smith');\n\n    const addressInput = page.getByLabel('Shipping Address');\n    await addressInput.fill('404 Test Ln');\n\n    // Fill in invalid payment details\n    const cardNumberInput = page.getByLabel('Card Number');\n    await cardNumberInput.fill('1111 1111 1111 111');\n\n    const expiryInput = page.getByLabel('Expiry Date');\n    await expiryInput.fill('01/20');\n\n    const cvvInput = page.getByLabel('CVV');\n    await cvvInput.fill('123');\n\n    // Click pay button\n    const payButton = page.getByRole('button', { name: /pay/i });\n    await payButton.click();\n\n    // Wait for payment processing response\n    await page.waitForResponse(response => \n      response.url().includes('/api/payment/process') && response.status() === 402\n    );\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/payment failed/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error details\n    const errorDetails = page.getByText(/invalid card details/i);\n    await expect(errorDetails).toBeVisible();\n\n    // Verify user is still on checkout page\n    const checkoutPage = page.getByRole('main');\n    await expect(checkoutPage).toBeVisible();\n\n    // Verify pay button is still enabled\n    const payButtonState = await payButton.evaluate(el => el.disabled);\n    expect(payButtonState).toBe(false);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5128,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4427,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.647,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8481,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4938,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 109.773,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_219",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7462,
+  "total_latency_s": 72.557,
+  "final_script": "describe('Video Captions Accessibility', () => {\n  beforeEach(() => {\n    cy.visit('/video-player');\n  });\n\n  it('should display captions when video is playing', () => {\n    // Verify video element exists\n    cy.get('[data-testid=\"video-player\"]').should('be.visible');\n    \n    // Verify captions container exists\n    cy.get('[data-testid=\"captions-container\"]').should('be.visible');\n    \n    // Play the video\n    cy.get('[data-testid=\"play-button\"]').click();\n    \n    // Wait for video to start playing\n    cy.get('[data-testid=\"video-player\"]').should('have.attr', 'src');\n    \n    // Verify captions are visible and contain text\n    cy.get('[data-testid=\"captions-container\"]').should('be.visible');\n    cy.get('[data-testid=\"caption-text\"]').should('contain', 'This is a sample video');\n    \n    // Verify captions are styled correctly (e.g, background color)\n    cy.get('[data-testid=\"captions-container\"]').should('have.css', 'background-color');\n    \n    // Verify captions are not empty\n    cy.get('[data-testid=\"caption-text\"]').should('not.have.css', 'display: none');\n  });\n\n  it('should hide captions when video is paused or captions are disabled', () => {\n    // Play the video to show captions\n    cy.get('[data-testid=\"play-button\"]').click();\n    cy.get('[data-testid=\"captions-container\"]').should('be.visible');\n    \n    // Pause the video\n    cy.get('[data-testid=\"pause-button\"]').click();\n    \n    // Verify captions are still visible when paused\n    cy.get('[data-testid=\"captions-container\"]').should('be.visible');\n    cy.get('[data-testid=\"caption-text\"]').should('contain', 'This is a sample video');\n    \n    // Disable captions via settings\n    cy.get('[data-testid=\"settings-button\"]').click();\n    cy.get('[data-testid=\"caption-toggle\"]').click();\n    \n    // Verify captions are hidden when disabled\n    cy.get('[data-testid=\"captions-container\"]').should('not.exist');\n    \n    // Re-enable captions\n    cy.get('[data-testid=\"settings-button\"]').click();\n    cy.get('[data-testid=\"caption-toggle\"]').click();\n    \n    // Verify captions reappear\n    cy.get('[data-testid=\"captions-container\"]').should('be.visible');\n    cy.get('[data-testid=\"caption-text\"]').should('contain', 'This is a sample video');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7462,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.354,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.557,
+      "feedback_used": ""
+    }
+  ]
+}

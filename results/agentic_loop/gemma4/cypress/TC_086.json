@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_086",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.792,
+  "total_latency_s": 72.613,
+  "final_script": "describe('Mark Record as Favourite', () => {\n  beforeEach(() => {\n    cy.visit('/records');\n  });\n\n  it('should successfully mark a record as favourite', () => {\n    // Intercept the API call to mark as favourite\n    cy.intercept('POST', '/api/records/*/mark-as-favourite').as('markAsFavourite');\n\n    // Find and click the favourite button on a record\n    cy.get('[data-testid=\"record-item-1\"]').within(() => {\n      cy.get('[data-testid=\"favourite-button\"]').click();\n    });\n\n    // Wait for the API call\n    cy.wait('@markAsFavourite');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-toast\"]').should('be.visible').should('contain', 'Record marked as favourite');\n\n    // Verify favourite button state changes\n    cy.get('[data-testid=\"record-item-1\"]').within(() => {\n      cy.get('[data-testid=\"favourite-button\"]').should('have.class', 'is-active');\n      cy.get('[data-testid=\"favourite-icon\"]').should('have.attr', 'aria-label', 'Remove from favourites');\n    });\n\n    // Verify favourite count updates\n    cy.get('[data-testid=\"favourite-count\"]').should('contain', '1');\n  });\n\n  it('should handle API errors when marking a record as favourite', () => {\n    // Intercept the API call and mock an error response\n    cy.intercept('POST', '/api/records/*/mark-as-favourite', {\n      statusCode: 500,\n      body: { error: 'Internal server error' }\n    }).as('markAsFavouriteError');\n\n    // Find and click the favourite button on a record\n    cy.get('[data-testid=\"record-item-2\"]').within(() => {\n      cy.get('[data-testid=\"favourite-button\"]').click();\n    });\n\n    // Wait for the failed API call\n    cy.wait('@markAsFavouriteError');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-toast\"]').should('be.visible').should('contain', 'Failed to mark as favourite');\n\n    // Verify favourite button state does not change\n    cy.get('[data-testid=\"record-item-2\"]').within(() => {\n      cy.get('[data-testid=\"favourite-button\"]').should('not.have.class', 'is-active');\n      cy.get('[data-testid=\"favourite-icon\"]').should('have.attr', 'aria-label', 'Add to favourites');\n    });\n\n    // Verify favourite count remains unchanged\n    cy.get('[data-testid=\"favourite-count\"]').should('contain', '0');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.792,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5067,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.613,
+      "feedback_used": ""
+    }
+  ]
+}

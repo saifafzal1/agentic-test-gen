@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_082",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7805,
+  "total_latency_s": 76.844,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('List Item Reordering by Drag and Drop', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/list-items');\n  });\n\n  test('should successfully reorder list items using drag and drop', async ({ page }) => {\n    // Verify initial list order\n    const listItems = page.getByRole('listitem');\n    const initialOrder = await listItems.map((item) => item.textContent());\n    expect(initialOrder).toEqual(['Item 1', 'Item 2', 'Item 3']);\n\n    // Get the first item and drag it to the end\n    const firstItem = page.getByText('Item 1');\n    await firstItem.dragTo(page.getByText('Item 3'));\n\n    // Verify the new order\n    const reorderedItems = page.getByRole('listitem');\n    const finalOrder = await reorderedItems.map((item) => item.textContent());\n    expect(finalOrder).toEqual(['Item 2', 'Item 3', 'Item 1']);\n\n    // Verify the reorder button is visible and enabled\n    const reorderButton = page.getByRole('button', { name: /reorder/i });\n    await expect(reorderButton).toBeVisible();\n    await expect(reorderButton).toBeEnabled();\n\n    // Click reorder button to persist changes\n    await reorderButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('List reordered successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify the order is persisted after page refresh\n    await page.reload();\n    const persistedItems = page.getByRole('listitem');\n    const persistedOrder = await persistedItems.map((item) => item.textContent());\n    expect(persistedOrder).toEqual(['Item 2', 'Item 3', 'Item 1']);\n  });\n\n  test('should handle drag and drop with empty list and error states', async ({ page }) => {\n    // Navigate to empty list state\n    await page.goto('/list-items?empty');\n\n    // Verify empty state message\n    const emptyState = page.getByText('No items in the list');\n    await expect(emptyState).toBeVisible();\n\n    // Attempt to drag an item (should not be possible)\n    const dragHandle = page.getByRole('button', { name: /drag handle/i });\n    await expect(dragHandle).not.toBeVisible();\n\n    // Verify reorder button is disabled when list is empty\n    const reorderButton = page.getByRole('button', { name: /reorder/i });\n    await expect(reorderButton).toBeDisabled();\n\n    // Add items to the list\n    const addItemButton = page.getByRole('button', { name: /add item/i });\n    await addItemButton.click();\n    const newItemInput = page.getByPlaceholder('Enter item name');\n    await newItemInput.fill('New Item');\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify new item is added\n    const listItems = page.getByRole('listitem');\n    const itemText = await listItems.first().textContent();\n    expect(itemText).toContain('New Item');\n\n    // Drag and drop the new item\n    const newItem = page.getByText('New Item');\n    const targetItem = page.getByText('Item 1');\n    await newItem.dragTo(targetItem);\n\n    // Verify the new order\n    const reorderedItems = page.getByRole('listitem');\n    const finalOrder = await reorderedItems.map((item) => item.textContent());\n    expect(finalOrder).toEqual(['New Item', 'Item 1']);\n\n    // Verify error handling when dropping outside a valid target\n    const dropZone = page.locator('[data-testid=\"drop-zone\"]');\n    await dropZone.dragTo(page.getByText('Item 1'));\n\n    // Verify the item remains in its original position\n    const finalOrderAfterInvalidDrop = await reorderedItems.map((item) => item.textContent());\n    expect(finalOrderAfterInvalidDrop).toEqual(['New Item', 'Item 1']);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7805,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3683,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 76.844,
+      "feedback_used": ""
+    }
+  ]
+}

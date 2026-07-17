@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_267",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.75,
+  "total_latency_s": 72.008,
+  "final_script": "describe('Browser Push Notifications for Urgent Alerts', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should display browser push notification when urgent alert is received', () => {\n    // Intercept the API call that triggers the push notification\n    cy.intercept('POST', '/api/alerts/urgent').as('urgentAlert');\n\n    // Click the button to trigger an urgent alert\n    cy.get('[data-testid=\"trigger-urgent-alert-btn\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@urgentAlert');\n\n    // Verify the notification appears in the UI\n    cy.get('[data-testid=\"notification-banner\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-banner\"]').should('contain', 'Urgent Alert');\n\n    // Verify the notification has the correct styling for urgency\n    cy.get('[data-testid=\"notification-banner\"]').should('have.class', 'notification-urgent');\n\n    // Verify the notification has a close button\n    cy.get('[data-testid=\"notification-close-btn\"]').should('be.visible');\n\n    // Verify the notification content is correct\n    cy.get('[data-testid=\"notification-message\"]').should('contain', 'System maintenance scheduled');\n  });\n\n  it('should handle browser permission denial for push notifications', () => {\n    // Mock the browser permission API to simulate denial\n    cy.window().then((win) => {\n      cy.stub(win.Notification, 'requestPermission').resolves('denied');\n    });\n\n    // Attempt to trigger an urgent alert\n    cy.get('[data-testid=\"trigger-urgent-alert-btn\"]').click();\n\n    // Verify the notification banner does not appear\n    cy.get('[data-testid=\"notification-banner\"]').should('not.exist');\n\n    // Verify a fallback message is displayed instead\n    cy.get('[data-testid=\"permission-denied-message\"]').should('be.visible');\n    cy.get('[data-testid=\"permission-denied-message\"]').should('contain', 'Push notifications are disabled');\n\n    // Verify the user is prompted to enable notifications\n    cy.get('[data-testid=\"enable-notifications-btn\"]').should('be.visible');\n    cy.get('[data-testid=\"enable-notifications-btn\"]').should('contain', 'Enable Notifications');\n\n    // Verify the user can still interact with the dashboard\n    cy.get('[data-testid=\"dashboard-content\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.75,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3668,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.008,
+      "feedback_used": ""
+    }
+  ]
+}

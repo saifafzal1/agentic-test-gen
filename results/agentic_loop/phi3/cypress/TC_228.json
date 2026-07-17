@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_228",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.726,
+  "total_latency_s": 351.122,
+  "final_script": "describe('Tablet Layout - Two-Column Grid', () => {\n  beforeEach(() => {\n    cy.visit('/tablet-layout');\n  });\n\n  it('should switch to two-column grid layout on tablet viewport', () => {\n    // Verify initial desktop layout\n    cy.get('[data-testid=\"desktop-layout\"]').should('be.visible');\n    cy.get('[data-testid=\"desktop-grid-item\"]').should('have.class', 'grid-item');\n    cy.get('[data-testid=\"desktop-grid-item\"]').should('have.css', 'width', '50%');\n\n    // Trigger tablet viewport\n    cy.intercept('GET', '/api/layouts/tablet').as('tabletLayout');\n    cy.get('[data-testid=\"toggle-layout-button\"]').click();\n    cy.wait('@tabletLayout');\n\n    // Verify two-column grid layout\n    cy.get('[data-testid=\"tablet-layout\"]').should('be.visible');\n    cy.get('[data-testid=\"tablet-grid-item\"]').should('have.class', 'grid-item');\n    cy.get('[data-testid=\"tablet-grid-item\"]').should('have.css', 'width', '50%');\n    cy.get('[data-testid=\"tablet-grid-item\"]').should('have.css', 'margin-right', '5px');\n\n    // Verify responsive breakpoints\n    cy.get('[data-testid=\"tablet-grid-item\"]').should('have.css', 'min-width', '320px');\n    cy.get('[data-testid=\"tablet-grid-item\"]').should('have.css', 'max-width', '640px');\n  });\n\n  it('should handle edge case: tablet viewport with very narrow screen', () => {\n    // Trigger tablet viewport with narrow screen\n    cy.intercept('GET', '/api/layouts/tablet').as('tabletLayout');\n    cy.get('[data-testid=\"toggle-layout-button\"]').click();\n    cy.wait('@tabletLayout');\n\n    // Verify layout adapts to very narrow screen\n    cy.get('[data-testid=\"tablet-layout\"]').should('be.visible');\n    cy.get('[data-testid=\"tablet-grid-item\"]').should('have.class', 'grid-item');\n    cy.get('[data-testid=\"tablet-grid-item\"]').should('have.css', 'width', '100%');\n\n    // Verify no margin on last item\n    cy.get('[data-testid=\"tablet-grid-item\"]:last-child').should('have.css', 'margin-right', '0px');\n\n    // Verify responsive breakpoints still apply\n    cy.get('[data-testid=\"tablet-grid-item\"]').should('have.css', 'min-width', '320px');\n    cy.get('[data-testid=\"tablet-grid-item\"]').should('have.css', 'max-width', '640px');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.726,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2866,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 351.122,
+      "feedback_used": ""
+    }
+  ]
+}

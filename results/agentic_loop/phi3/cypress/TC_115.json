@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_115",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7614,
+  "total_latency_s": 682.251,
+  "final_script": "describe('Debounced Search Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should trigger search only after user stops typing for 300ms', () => {\n    // Setup: intercept the search API call\n    cy.intercept('GET', '/api/search*').as('searchRequest');\n\n    // Get the search input element\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n\n    // Type a query quickly\n    cy.get('[data-testid=\"search-input\"]').type('quick search');\n\n    // Verify API call is made immediately\n    cy.wait('@searchRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Type a second query to trigger another API call\n    cy.get('[data-testid=\"search-input\"]').type('quick search');\n\n    // Verify API call is made again\n    cy.wait('@searchRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Type a third query and wait for 300ms\n    cy.get('[data-testid=\"search-input\"]').type('quick search');\n    cy.wait(300);\n\n    // Verify API call is not made during the 300ms delay\n    cy.wait('@searchRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify search results are displayed\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"search-results\"]').should('contain', 'quick search');\n  });\n\n  it('should handle backspace and clear input without triggering search', () => {\n    // Setup: intercept the search API call\n    cy.intercept('GET', '/api/search*').as('searchRequest');\n\n    // Get the search input element\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n\n    // Type a query\n    cy.get('[data-testid=\"search-input\"]').type('test search');\n\n    // Verify API call is made\n    cy.wait('@searchRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Clear the input\n    cy.get('[data-testid=\"search-input\"]').clear();\n\n    // Verify API call is not made after clearing\n    cy.wait('@searchRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Type a new query\n    cy.get('[data-testid=\"search-input\"]').type('test search');\n\n    // Verify API call is made\n    cy.wait('@searchRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify search results are displayed\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"search-results\"]').should('contain', 'test search');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4749,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3562,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 392.587,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7614,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4046,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 289.664,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

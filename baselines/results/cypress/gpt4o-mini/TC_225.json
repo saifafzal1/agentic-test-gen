@@ -1,0 +1,13 @@
+{
+  "id": "TC_225",
+  "category": "accessibility",
+  "complexity": "medium",
+  "user_story": "As a user, I want the date picker to be fully operable via keyboard alone.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Date Picker Keyboard Accessibility', () => {\n    beforeEach(() => {\n        cy.visit('/date-picker'); // Adjust the URL to your application's date picker page\n    });\n\n    it('should open the date picker when the input is focused and Enter is pressed', () => {\n        cy.get('input[type=\"text\"]').focus().type('{enter}');\n        cy.get('.datepicker').should('be.visible');\n    });\n\n    it('should navigate through dates using arrow keys', () => {\n        cy.get('input[type=\"text\"]').focus().type('{enter}');\n        cy.get('.datepicker').should('be.visible');\n\n        cy.get('.datepicker').find('.day').first().should('have.class', 'selected');\n\n        cy.get('input[type=\"text\"]').type('{rightarrow}');\n        cy.get('.datepicker').find('.day').eq(1).should('have.class', 'selected');\n\n        cy.get('input[type=\"text\"]').type('{leftarrow}');\n        cy.get('.datepicker').find('.day').first().should('have.class', 'selected');\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 217,
+  "latency_s": 2.73,
+  "timestamp": "2026-06-19T16:39:10.683116"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_051",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8453,
+  "total_latency_s": 71.464,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mobile Hamburger Menu Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/mobile-menu');\n  });\n\n  test('should open and close the hamburger menu correctly on mobile viewport', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 862 });\n    \n    // Verify menu button is visible\n    const menuButton = page.getByRole('button', { name: /menu/i });\n    await expect(menuButton).toBeVisible();\n    \n    // Click to open menu\n    await menuButton.click();\n    \n    // Verify menu is open and visible\n    const navMenu = page.getByRole('navigation');\n    await expect(navMenu).toBeVisible();\n    \n    // Verify menu items are visible\n    const homeLink = page.getByRole('link', { name: /home/i });\n    await expect(homeLink).toBeVisible();\n    \n    const aboutLink = page.getByRole('link', { name: /about/i });\n    await expect(aboutLink).toBeVisible();\n    \n    // Verify close button is visible\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n    \n    // Click close button\n    await closeButton.click();\n    \n    // Verify menu is closed\n    await expect(navMenu).not.toBeVisible();\n  });\n\n  test('should handle menu interaction and close when clicking outside', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 860 });\n    \n    // Open menu\n    const menuButton = page.getByRole('button', { name: /menu/i });\n    await menuButton.click();\n    \n    const navMenu = page.getByRole('navigation');\n    await expect(navMenu).toBeVisible();\n    \n    // Click outside the menu to close it\n    const body = page.locator('body');\n    await body.click();\n    \n    // Verify menu is closed\n    await expect(navMenu).not.toBeVisible();\n    \n    // Open menu again\n    await menuButton.click();\n    await expect(navMenu).toBeVisible();\n    \n    // Verify menu items are still accessible\n    const contactLink = page.getByRole('link', { name: /contact/i });\n    await expect(contactLink).toBeVisible();\n    \n    // Click on a menu item to navigate\n    await contactLink.click();\n    \n    // Verify navigation occurred\n    await expect(page).toHaveURL(/contact/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8453,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5844,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.464,
+      "feedback_used": ""
+    }
+  ]
+}

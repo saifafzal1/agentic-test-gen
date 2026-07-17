@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_285",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 3,
+  "best_score": 0.7896,
+  "total_latency_s": 1412.807,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Public Profile Page - Shared Information Display', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/profile');\n  });\n\n  test('should display public profile page with shared information when logged in', async ({ page }) => {\n    // Setup: Mock user authentication\n    await page.route('**/api/auth/login', (route) => {\n      route.continue();\n    });\n\n    // Setup: Mock user data\n    await page.route('**/api/user/me', (route) => {\n      route.continue();\n    });\n\n    // Mock response for user data\n    await page.route('**/api/user/me', (route) => {\n      route.continue();\n    }, {\n      status: 200,\n      body: JSON.stringify({\n        id: 1,\n        username: 'johndoe',\n        email: 'john@example.com',\n        firstName: 'John',\n        lastName: 'Doe',\n        profilePicture: 'https://example.com/avatars/john.jpg',\n        bio: 'Software Developer',\n        location: 'New York, NY',\n        website: 'https://johndoe.com',\n        socialMedia: {\n          twitter: '@johndoe',\n          linkedin: 'linkedin.com/in/johndoe',\n          github: 'johndoe/repo'\n        }\n      })\n    });\n\n    // Setup: Mock user role\n    await page.route('**/api/user/me/role', (route) => {\n      route.continue();\n    }, {\n      status: 200,\n      body: JSON.stringify({\n        role: 'user'\n      })\n    });\n\n    // Verify page loads\n    const profilePageTitle = page.getByRole('heading', { name: /public profile/i });\n    await expect(profilePageTitle).toBeVisible();\n\n    // Verify user name is displayed\n    const userName = page.getByText(/John Doe/i);\n    await expect(userName).toBeVisible();\n\n    // Verify email is displayed\n    const userEmail = page.getByText(/john@example.com/i);\n    await expect(userEmail).toBeVisible();\n\n    // Verify profile picture is displayed\n    const profilePicture = page.getByRole('img', { name: /John Doe/i });\n    await expect(profilePicture).toBeVisible();\n\n    // Verify bio is displayed\n    const userBio = page.getByText(/Software Developer/i);\n    await expect(userBio).toBeVisible();\n\n    // Verify location is displayed\n    const userLocation = page.getByText(/New York, NY/i);\n    await expect(userLocation).toBeVisible();\n\n    // Verify website is displayed\n    const userWebsite = page.getByText(/https://johndoe.com/i);\n    await expect(userWebsite).toBeVisible();\n\n    // Verify social media links are displayed\n    const twitterLink = page.getByRole('link', { href: /twitter\\.com\\/\\@johndoe/i });\n    await expect(twitterLink).toBeVisible();\n\n    const linkedinLink = page.getByRole('link', { href: /linkedin\\.com\\/in\\/johndoe/i });\n    await expect(linkedinLink).toBeVisible();\n\n    const githubLink = page.getByRole('link', { href: /johndoe\\.github\\.com/i });\n    await expect(githubLink).toBeVisible();\n\n    // Verify user role is displayed\n    const userRole = page.getByText(/user/i);\n    await expect(userRole).toBeVisible();\n\n    // Verify user has a public profile\n    const publicProfileBadge = page.getByRole('img', { name: /public profile/i });\n    await expect(publicProfileBadge).toBeVisible();\n\n    // Verify user has a private profile option\n    const privateProfileButton = page.getByRole('button', { name: /private profile/i });\n    await expect(privateProfileButton).toBeVisible();\n\n    // Verify user has a logout option\n    const logoutButton = page.getByRole('button', { name: /logout/i });\n    await expect(logoutButton).toBeVisible();\n  });\n\n  test('should display error when user is not logged in and cannot access shared information', async ({ page }) => {\n    // Setup: Mock user not authenticated\n    await page.route('**/api/auth/login', (route) => {\n      route.abort();\n    });\n\n    // Setup: Mock user data\n    await page.route('**/api/user/me', (route) => {\n      route.abort();\n    });\n\n    // Setup: Mock error response\n    await page.route('**/api/user/me', (route) => {\n      route.abort();\n    }, {\n      status: 401,\n      body: JSON.stringify({\n        error: 'Unauthorized'\n      })\n    });\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/unauthorized/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify login button is visible\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await expect(loginButton).toBeVisible();\n\n    // Verify user is not logged in\n    const userName = page.getByText(/John Doe/i);\n    await expect(userName).not.toBeVisible();\n\n    // Verify no shared information is displayed\n    const userBio = page.getByText(/Software Developer/i);\n    await expect(userBio).not.toBeVisible();\n\n    // Verify no social media links are displayed\n    const twitterLink = page.getByRole('link', { href: /twitter\\.com\\/\\@johndoe/i });\n    await expect(twitterLink).not.toBeVisible();\n\n    const linkedinLink = page.getByRole('link', { href: /linkedin\\.com\\/in\\/johndoe/i });\n    await expect(linkedinLink).not.toBeVisible();\n\n    const githubLink = page.getByRole('link', { href: /johndoe\\.github\\.com/i });\n    await expect(githubLink).not.toBeVisible();\n\n    // Verify user has a logout option\n    const logoutButton = page.getByRole('button', { name: /logout/i });\n    await expect(logoutButton).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5015,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.4049,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 367.6,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4957,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4056,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 545.455,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.7896,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3985,
+        "missing_keywords": [],
+        "assertion_count": 22,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 499.752,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

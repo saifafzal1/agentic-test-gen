@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_230",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7217,
+  "total_latency_s": 72.377,
+  "final_script": "describe('Font Size Readability on Small Screens', () => {\n  beforeEach(() => {\n    cy.visit('/page');\n  });\n\n  it('should display readable font size on small screen without zooming', () => {\n    cy.viewport('iphone-x');\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n    cy.get('[data-testid=\"heading-1\"]').should('contain', 'Page Title');\n    cy.get('[data-testid=\"paragraph-text\"]').should('contain', 'This is a paragraph of text');\n    cy.get('[data-testid=\"paragraph-text\"]').should('have.css', 'font-size').and('include', '16px');\n    cy.get('[data-testid=\"heading-1\"]').should('have.css', 'font-size').and('include', '24px');\n    cy.get('[data-testid=\"body-text\"]').should('have.css', 'font-size').and('include', '16px');\n    cy.get('[data-testid=\"body-text\"]').should('be.visible');\n    cy.get('[data-testid=\"body-text\"]').should('not.be.hidden');\n  });\n\n  it('should maintain readable font size when screen is resized to small mobile view', () => {\n    cy.viewport('ipad-2');\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n    cy.get('[data-testid=\"paragraph-text\"]').should('contain', 'This is a paragraph of text');\n    cy.get('[data-testid=\"paragraph-text\"]').should('have.css', 'font-size').and('include', '16px');\n    cy.viewport('iphone-12');\n    cy.get('[data-testid=\"paragraph-text\"]').should('have.css', 'font-size').and('include', '16px');\n    cy.get('[data-testid=\"heading-1\"]').should('have.css', 'font-size').and('include', '24px');\n    cy.get('[data-testid=\"heading-1\"]').should('be.visible');\n    cy.get('[data-testid=\"body-text\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7217,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2724,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.377,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_270",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7043,
+  "total_latency_s": 59.082,
+  "final_script": "describe('Unread vs Read Notification Visibility', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should visually distinguish unread notifications from read ones', () => {\n    // Intercept the API call to fetch notifications\n    cy.intercept('GET', '/api/notifications').as('fetchNotifications');\n    cy.wait('@fetchNotifications');\n\n    // Verify unread notification is visible and styled differently\n    cy.get('[data-testid=\"notification-item-unread\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item-unread\"]').should('have.class', 'notification-unread');\n    cy.get('[data-testid=\"notification-item-unread\"]').should('have.css', 'background-color', '#ffcccc');\n\n    // Verify read notification is visible but styled differently\n    cy.get('[data-testid=\"notification-item-read\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-item-read\"]').should('have.class', 'notification-read');\n    cy.get('[data-testid=\"notification-item-read\"]').should('have.css', 'background-color', '#ffffff');\n\n    // Verify unread notification has a distinct badge\n    cy.get('[data-testid=\"notification-item-unread\"]').should('have.attr', 'data-badge', '1');\n\n    // Verify read notification does not have a badge\n    cy.get('[data-testid=\"notification-item-read\"]').should('not.have.attr', 'data-badge');\n\n    // Verify notification count is displayed\n    cy.get('[data-testid=\"notification-count-unread\"]').should('be.visible');\n    cy.get('[data-testid=\"notification-count-unread\"]').should('contain', '1');\n\n    // Verify notification list has pagination for more items\n    cy.get('[data-testid=\"notification-pagination\"]').should('be.visible');\n  });\n\n  it('should handle edge case when all notifications are read', () => {\n    // Mock API to return no unread notifications\n    cy.intercept('GET', '/api/notifications', {\n      statusCode: 200,\n      body: {\n        notifications: [],\n        total: 0\n      }\n    }).as('fetchNoUnreadNotifications');\n    cy.wait('@fetchNoUnreadNotifications');\n\n    // Verify no unread notifications are displayed\n    cy.get('[data-testid=\"notification-item-unread\"]').should('not.exist');\n\n    // Verify read notifications are still visible\n    cy.get('[data-testid=\"notification-item-read\"]').should('be.visible');\n\n    // Verify notification count is zero\n    cy.get('[data-testid=\"notification-count-unread\"]').should('contain', '0');\n\n    // Verify no badge is shown\n    cy.get('[data-testid=\"notification-item-read\"]').should('not.have.attr', 'data-badge');\n\n    // Verify pagination is still available\n    cy.get('[data-testid=\"notification-pagination\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7043,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2143,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 59.082,
+      "feedback_used": ""
+    }
+  ]
+}

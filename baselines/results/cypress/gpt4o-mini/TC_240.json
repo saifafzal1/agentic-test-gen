@@ -1,0 +1,13 @@
+{
+  "id": "TC_240",
+  "category": "responsive",
+  "complexity": "medium",
+  "user_story": "As a user, I want the checkout form to stack vertically on mobile screens.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Checkout Form Responsiveness', () => {\n    beforeEach(() => {\n        cy.visit('/checkout');\n        cy.viewport('iphone-6'); // Set viewport to mobile screen size\n    });\n\n    it('should display the checkout form stacked vertically on mobile screens', () => {\n        cy.get('.checkout-form').should('be.visible');\n        cy.get('.checkout-form .form-field').should('have.length.greaterThan', 1);\n        cy.get('.checkout-form .form-field').each(($field) => {\n            cy.wrap($field).should('have.css', 'display', 'block');\n        });\n    });\n\n    it('should not have any fields side by side on mobile screens', () => {\n        cy.get('.checkout-form .form-field').each(($field, index, $list) => {\n            if (index < $list.length - 1) {\n                const nextField = $list[index + 1];\n                const fieldPosition = $field[0].getBoundingClientRect();\n                const nextFieldPosition = nextField.getBoundingClientRect();\n                expect(nextFieldPosition.top).to.be.greaterThan(fieldPosition.bottom);\n            }\n        });\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 242,
+  "latency_s": 2.87,
+  "timestamp": "2026-06-19T16:40:01.428408"
+}

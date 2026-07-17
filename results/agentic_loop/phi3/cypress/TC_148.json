@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_148",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7625,
+  "total_latency_s": 44.132,
+  "final_script": "describe('Table Row Filtering by Search Input', () => {\n  beforeEach(() => {\n    cy.visit('/table-list');\n  });\n\n  it('should filter table rows by typing in search input and display matching results', () => {\n    // Verify initial table state\n    cy.get('[data-testid=\"table-container\"]').should('be.visible');\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 0);\n\n    // Intercept API call to get initial table data\n    cy.intercept('GET', '/api/table-data').as('getTableData');\n    cy.wait('@getTableData');\n\n    // Verify initial table content\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 0);\n\n    // Type in search input\n    cy.get('[data-testid=\"search-input\"]').type('test');\n\n    // Verify search input is focused\n    cy.get('[data-testid=\"search-input\"]').should('have.focus');\n\n    // Verify table rows are still visible\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 0);\n\n    // Verify search input has value\n    cy.get('[data-testid=\"search-input\"]').should('have.value', 'test');\n\n    // Wait for API call to filter data\n    cy.intercept('GET', '/api/table-data?search=test').as('filterTableData');\n    cy.wait('@filterTableData');\n\n    // Verify filtered table rows are displayed\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"table-row\"]').should('contain', 'test');\n\n    // Verify table headers are still visible\n    cy.get('[data-testid=\"table-header\"]').should('be.visible');\n\n    // Verify search input is still visible\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n\n    // Verify pagination controls are still visible\n    cy.get('[data-testid=\"pagination-controls\"]').should('be.visible');\n  });\n\n  it('should handle empty search input and display all table rows', () => {\n    // Intercept initial API call\n    cy.intercept('GET', '/api/table-data').as('getTableData');\n    cy.wait('@getTableData');\n\n    // Verify initial table content\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 0);\n\n    // Clear search input\n    cy.get('[data-testid=\"search-input\"]').clear();\n\n    // Verify search input is cleared\n    cy.get('[data-testid=\"search-input\"]').should('have.value', '');\n\n    // Verify all table rows are displayed again\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 0);\n\n    // Verify table headers are still visible\n    cy.get('[data-testid=\"table-header\"]').should('be.visible');\n\n    // Verify pagination controls are still visible\n    cy.get('[data-testid=\"pagination-controls\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7625,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4083,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 44.132,
+      "feedback_used": ""
+    }
+  ]
+}

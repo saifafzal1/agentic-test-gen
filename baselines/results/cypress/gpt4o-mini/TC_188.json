@@ -1,0 +1,13 @@
+{
+  "id": "TC_188",
+  "category": "search_filter",
+  "complexity": "simple",
+  "user_story": "As a user, I want to sort search results by relevance, price, or date.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Search Results Sorting', () => {\n    beforeEach(() => {\n        cy.visit('/search'); // Adjust the URL as necessary\n    });\n\n    it('should sort search results by relevance', () => {\n        cy.get('select#sort-options').select('Relevance');\n        cy.get('.search-result').first().should('contain', 'Expected Result for Relevance');\n    });\n\n    it('should sort search results by price', () => {\n        cy.get('select#sort-options').select('Price');\n        cy.get('.search-result').first().should('contain', 'Expected Result for Price');\n    });\n\n    it('should handle no results found when sorting', () => {\n        cy.get('select#sort-options').select('Date');\n        cy.get('.search-result').should('have.length', 0);\n        cy.get('.no-results-message').should('be.visible').and('contain', 'No results found');\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 193,
+  "latency_s": 3.28,
+  "timestamp": "2026-06-19T16:37:04.355477"
+}

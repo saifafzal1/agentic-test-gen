@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_214",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7682,
+  "total_latency_s": 76.362,
+  "final_script": "describe('Skip Navigation Links - First Focusable Element', () => {\n  beforeEach(() => {\n    cy.visit('/page');\n  });\n\n  it('should focus on skip navigation link when page loads', () => {\n    // Verify skip link exists and is visible\n    cy.get('[data-testid=\"skip-nav-link\"]').should('be.visible');\n    cy.get('[data-testid=\"skip-nav-link\"]').should('contain', 'Skip to main content');\n\n    // Verify skip link is the first focusable element\n    cy.get('[data-testid=\"skip-nav-link\"]').focus();\n    cy.get('[data-testid=\"skip-nav-link\"]').should('have.focus');\n\n    // Verify no other elements are focusable before skip link\n    cy.get('[data-testid=\"main-nav-item\"]').should('not.have.focus');\n    cy.get('[data-testid=\"search-input\"]').should('not.have.focus');\n\n    // Verify skip link has correct tabindex\n    cy.get('[data-testid=\"skip-nav-link\"]').should('have.attr', 'tabindex', '0');\n  });\n\n  it('should not focus on skip navigation link when it is hidden or disabled', () => {\n    // Intercept page load to simulate skip link being hidden\n    cy.intercept('GET', '/page').as('pageLoad');\n    cy.wait('@pageLoad');\n\n    // Verify skip link is not visible\n    cy.get('[data-testid=\"skip-nav-link\"]').should('not.exist');\n\n    // Verify main navigation is the first focusable element\n    cy.get('[data-testid=\"main-nav-item\"]').focus();\n    cy.get('[data-testid=\"main-nav-item\"]').should('have.focus');\n\n    // Verify skip link does not have tabindex\n    cy.get('[data-testid=\"skip-nav-link\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7682,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4272,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 76.362,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_029",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.766,
+  "total_latency_s": 1080.022,
+  "final_script": "describe('Form Data Persistence on Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/form-page');\n  });\n\n  it('should persist form data when navigating away and returning', () => {\n    // Fill out form fields\n    cy.get('[data-testid=\"name-input\"]').type('John Doe');\n    cy.get('[data-testid=\"email-input\"]').type('john.doe@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('SecurePassword123');\n\n    // Submit form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify form submission success\n    cy.intercept('POST', '/api/form-submit').as('formSubmit');\n    cy.wait('@formSubmit');\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Form submitted successfully');\n\n    // Navigate away from the form page\n    cy.visit('/dashboard');\n\n    // Verify form data is still present on the form page\n    cy.get('[data-testid=\"name-input\"]').should('have.value', 'John Doe');\n    cy.get('[data-testid=\"email-input\"]').should('have.value', 'john.doe@example.com');\n    cy.get('[data-testid=\"password-input\"]').should('have.value', 'SecurePassword123');\n\n    // Return to the form page\n    cy.visit('/form-page');\n\n    // Verify form data is still present\n    cy.get('[data-testid=\"name-input\"]').should('have.value', 'John Doe');\n    cy.get('[data-testid=\"email-input\"]').should('have.value', 'john.doe@example.com');\n    cy.get('[data-testid=\"password-input\"]').should('have.value', 'SecurePassword123');\n\n    // Verify form is still visible and editable\n    cy.get('[data-testid=\"form-container\"]').should('be.visible');\n    cy.get('[data-testid=\"name-input\"]').should('be.editable');\n  });\n\n  it('should not persist form data when navigating away and returning with invalid data', () => {\n    // Fill out form fields with valid data\n    cy.get('[data-testid=\"name-input\"]').type('Jane Smith');\n    cy.get('[data-testid=\"email-input\"]').type('jane.smith@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('ValidPassword123');\n\n    // Submit form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify form submission success\n    cy.intercept('POST', '/api/form-submit').as('formSubmit');\n    cy.wait('@formSubmit');\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Form submitted successfully');\n\n    // Navigate away from the form page\n    cy.visit('/dashboard');\n\n    // Return to the form page with invalid data\n    cy.visit('/form-page');\n\n    // Verify form data is cleared\n    cy.get('[data-testid=\"name-input\"]').should('have.value', '');\n    cy.get('[data-testid=\"email-input\"]').should('have.value', '');\n    cy.get('[data-testid=\"password-input\"]').should('have.value', '');\n\n    // Verify form is still visible but empty\n    cy.get('[data-testid=\"form-container\"]').should('be.visible');\n    cy.get('[data-testid=\"name-input\"]').should('be.editable');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4796,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.372,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 521.609,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.766,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4201,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 558.413,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

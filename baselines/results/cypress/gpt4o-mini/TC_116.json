@@ -1,0 +1,13 @@
+{
+  "id": "TC_116",
+  "category": "async_await",
+  "complexity": "simple",
+  "user_story": "As a user, I want an async validation check that verifies username availability.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Username Availability Validation', () => {\n    beforeEach(() => {\n        cy.visit('/signup'); // Adjust the URL to your application's signup page\n    });\n\n    it('should indicate username is available when a unique username is entered', () => {\n        cy.get('input[name=\"username\"]').type('uniqueUsername123');\n        cy.intercept('GET', '/api/username-check?username=uniqueUsername123', {\n            statusCode: 200,\n            body: { available: true }\n        }).as('checkUsername');\n        cy.get('input[name=\"username\"]').blur();\n        cy.wait('@checkUsername');\n        cy.get('.username-availability').should('contain', 'Username is available');\n    });\n\n    it('should indicate username is taken when a duplicate username is entered', () => {\n        cy.get('input[name=\"username\"]').type('takenUsername456');\n        cy.intercept('GET', '/api/username-check?username=takenUsername456', {\n            statusCode: 200,\n            body: { available: false }\n        }).as('checkUsername');\n        cy.get('input[name=\"username\"]').blur();\n        cy.wait('@checkUsername');\n        cy.get('.username-availability').should('contain', 'Username is already taken');\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 259,
+  "latency_s": 3.48,
+  "timestamp": "2026-06-19T16:32:57.985113"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_063",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.86,
+  "total_latency_s": 73.498,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('No Results Found Message - API Response Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should display \"No results found\" message when API returns empty list', async ({ page }) => {\n    // Intercept the search API call\n    await page.route('**/api/search', (route) => {\n      route.abort();\n      route.continue();\n    });\n\n    // Mock the API response with an empty list\n    await page.route('**/api/search', (route) => {\n      route.fulfill({\n        status: 200,\n        contentType: 'application/json',\n        body: JSON.stringify({ results: [] }),\n      });\n    });\n\n    // Enter search term and click search button\n    const searchInput = page.getByPlaceholder('Enter search term');\n    await searchInput.fill('nonexistent');\n\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await searchButton.click();\n\n    // Wait for the results container to appear\n    const resultsContainer = page.locator('[data-testid=\"results-container\"]');\n    await expect(resultsContainer).toBeVisible();\n\n    // Verify \"No results found\" message is displayed\n    const noResultsMessage = page.getByText('No results found');\n    await expect(noResultsMessage).toBeVisible();\n\n    // Verify results list is empty\n    const resultsList = page.locator('[data-testid=\"results-list\"]');\n    await expect(resultsList).toHaveCount(0);\n  });\n\n  test('should handle API error and display appropriate message', async ({ page }) => {\n    // Intercept the search API call and mock an error\n    await page.route('**/api/search', (route) => {\n      route.fulfill({\n        status: 500,\n        contentType: 'application/json',\n        body: JSON.stringify({ error: 'Internal Server Error' }),\n      });\n    });\n\n    // Enter search term and click search button\n    const searchInput = page.getByPlaceholder('Enter search term');\n    await searchInput.fill('test');\n\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await searchButton.click();\n\n    // Wait for error message to appear\n    const errorMessage = page.getByText(/error/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify \"No results found\" message is NOT displayed\n    const noResultsMessage = page.getByText('No results found');\n    await expect(noResultsMessage).not.toBeVisible();\n\n    // Verify results container is visible but empty\n    const resultsContainer = page.locator('[data-testid=\"results-container\"]');\n    await expect(resultsContainer).toBeVisible();\n    const resultsList = page.locator('[data-testid=\"results-list\"]');\n    await expect(resultsList).toHaveCount(0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.86,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.6335,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.498,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_192",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.764,
+  "total_latency_s": 341.774,
+  "final_script": "describe('Search Suggestions Highlighting Matching Parts', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should highlight matching part of search term in suggestions', () => {\n    // Intercept the search API call\n    cy.intercept('GET', '/api/search*', (req) => {\n      expect(req.url).to.include('/api/search');\n      expect(req.body.query).to.equal('cypress');\n    }).as('searchRequest');\n\n    // Type a search term\n    cy.get('[data-testid=\"search-input\"]').type('cypress');\n\n    // Wait for API response\n    cy.wait('@searchRequest');\n\n    // Verify suggestions are displayed\n    cy.get('[data-testid=\"suggestions-list\"]').should('be.visible');\n    cy.get('[data-testid=\"suggestion-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify the first suggestion highlights the matching part\n    cy.get('[data-testid=\"suggestion-item\"]').first().should('contain', 'cypress');\n    cy.get('[data-testid=\"suggestion-item\"]').first().should('have.css', 'background-color', 'rgba(0, 123, 255, 0.1)');\n\n    // Verify the suggestion text is not fully highlighted\n    cy.get('[data-testid=\"suggestion-item\"]').first().should('not.have.css', 'background-color', 'rgba(0, 123, 255, 0.5)');\n\n    // Verify other suggestions are not highlighted\n    cy.get('[data-testid=\"suggestion-item\"]').eq(1).should('not.have.css', 'background-color');\n\n    // Verify the search input still contains the full term\n    cy.get('[data-testid=\"search-input\"]').should('contain', 'cypress');\n  });\n\n  it('should handle empty search term and display no suggestions', () => {\n    // Clear the search input\n    cy.get('[data-testid=\"search-input\"]').clear();\n\n    // Type an empty term\n    cy.get('[data-testid=\"search-input\"]').type('');\n\n    // Wait for API response\n    cy.intercept('GET', '/api/search*', (req) => {\n      expect(req.url).to.include('/api/search');\n      expect(req.body.query).to.equal('');\n    }).as('emptySearchRequest');\n    cy.wait('@emptySearchRequest');\n\n    // Verify suggestions are not displayed\n    cy.get('[data-testid=\"suggestions-list\"]').should('not.exist');\n\n    // Verify search input is still visible\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n\n    // Verify no error message is displayed\n    cy.get('[data-testid=\"no-results-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.764,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4134,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 341.774,
+      "feedback_used": ""
+    }
+  ]
+}

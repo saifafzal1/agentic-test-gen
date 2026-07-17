@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_042",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7625,
+  "total_latency_s": 231.422,
+  "final_script": "describe('Tab Navigation URL Hash Update', () => {\n  beforeEach(() => {\n    cy.visit('/tabs');\n  });\n\n  it('should update URL hash when tab is selected', () => {\n    // Verify initial URL hash\n    cy.url().should('include', '#tab1');\n\n    // Click on tab 2\n    cy.get('[data-testid=\"tab-2\"]').click();\n\n    // Verify URL hash has changed to #tab2\n    cy.url().should('include', '#tab2');\n\n    // Verify tab content is displayed for tab 2\n    cy.get('[data-testid=\"tab-content-2\"]').should('be.visible');\n\n    // Verify tab 1 is not visible\n    cy.get('[data-testid=\"tab-content-1\"]').should('not.be.visible');\n\n    // Verify tab 2 content is visible\n    cy.get('[data-testid=\"tab-content-2\"]').should('be.visible');\n  });\n\n  it('should handle URL hash with special characters', () => {\n    // Navigate to a tab with special characters in hash\n    cy.visit('/tabs#tab3%40');\n\n    // Verify URL hash contains special characters\n    cy.url().should('include', '#tab3%40');\n\n    // Click on tab 4\n    cy.get('[data-testid=\"tab-4\"]').click();\n\n    // Verify URL hash has been updated correctly\n    cy.url().should('include', '#tab4');\n\n    // Verify tab content is displayed for tab 4\n    cy.get('[data-testid=\"tab-content-4\"]').should('be.visible');\n\n    // Verify previous tab content is not visible\n    cy.get('[data-testid=\"tab-content-3%40\"]').should('not.be.visible');\n\n    // Verify tab 4 content is visible\n    cy.get('[data-testid=\"tab-content-4\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4571,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.2969,
+        "missing_keywords": [],
+        "assertion_count": 24,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 53.854,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7625,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4085,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 177.568,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

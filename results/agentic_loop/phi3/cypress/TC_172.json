@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_172",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7707,
+  "total_latency_s": 298.672,
+  "final_script": "describe('File Upload Queue - Remove File Before Submit', () => {\n  beforeEach(() => {\n    cy.visit('/file-upload');\n  });\n\n  it('should successfully remove a file from the upload queue and proceed with submission', () => {\n    // Intercept the file upload API\n    cy.intercept('POST', '/api/uploads/queue').as('uploadQueue');\n\n    // Verify upload queue is visible\n    cy.get('[data-testid=\"upload-queue-list\"]').should('be.visible');\n    cy.get('[data-testid=\"upload-queue-item\"]').should('have.length.greaterThan', 0);\n\n    // Select a file to upload\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/sample.pdf', { force: true });\n\n    // Verify file is in queue\n    cy.get('[data-testid=\"upload-queue-item\"]').should('contain', 'sample.pdf');\n\n    // Remove the file from the queue\n    cy.get('[data-testid=\"remove-file-btn\"]').click();\n\n    // Verify file is removed\n    cy.get('[data-testid=\"upload-queue-item\"]').should('not.exist');\n\n    // Verify remaining files are still in queue\n    cy.get('[data-testid=\"upload-queue-item\"]').should('have.length.greaterThan', 0);\n\n    // Submit remaining files\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify success message\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Files submitted successfully');\n\n    // Verify upload queue is empty\n    cy.get('[data-testid=\"upload-queue-list\"]').should('be.empty');\n\n    // Verify API call was made\n    cy.wait('@uploadQueue').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n  });\n\n  it('should handle removing a non-existent file from the queue gracefully', () => {\n    // Intercept the file upload API\n    cy.intercept('POST', '/api/uploads/queue').as('uploadQueue');\n\n    // Verify upload queue is visible\n    cy.get('[data-testid=\"upload-queue-list\"]').should('be.visible');\n\n    // Attempt to remove a non-existent file\n    cy.get('[data-testid=\"remove-file-btn\"]').click();\n\n    // Verify no error is shown\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n\n    // Verify file still exists in queue\n    cy.get('[data-testid=\"upload-queue-item\"]').should('be.visible');\n\n    // Verify API call was made\n    cy.wait('@uploadQueue').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7707,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4356,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 298.672,
+      "feedback_used": ""
+    }
+  ]
+}

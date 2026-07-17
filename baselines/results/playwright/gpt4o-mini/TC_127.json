@@ -1,0 +1,13 @@
+{
+  "id": "TC_127",
+  "category": "async_await",
+  "complexity": "complex",
+  "user_story": "As a user, I want async form submission to disable the submit button until resolved.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Async Form Submission', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form-page'); // Replace with the actual form page URL\n  });\n\n  test('should disable submit button during async submission', async ({ page }) => {\n    await page.fill(getByLabel('Name'), 'John Doe');\n    await page.fill(getByLabel('Email'), 'john.doe@example.com');\n    \n    const submitButton = page.getByRole('button', { name: 'Submit' });\n    await expect(submitButton).toBeEnabled();\n\n    await submitButton.click();\n    \n    await expect(submitButton).toBeDisabled();\n    \n    // Simulate waiting for async operation to complete\n    await page.waitForTimeout(2000); // Adjust timeout as necessary\n\n    await expect(submitButton).toBeEnabled();\n  });\n\n  test('should show success message after successful submission', async ({ page }) => {\n    await page.fill(getByLabel('Name'), 'Jane Doe');\n    await page.fill(getByLabel('Email'), 'jane.doe@example.com');\n    \n    const submitButton = page.getByRole('button', { name: 'Submit' });\n    await submitButton.click();\n    \n    await expect(submitButton).toBeDisabled();\n    \n    // Simulate waiting for async operation to complete\n    await page.waitForTimeout(2000); // Adjust timeout as necessary\n\n    await expect(page.getByText('Submission successful!')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 323,
+  "latency_s": 4.24,
+  "timestamp": "2026-06-19T16:52:19.520095"
+}

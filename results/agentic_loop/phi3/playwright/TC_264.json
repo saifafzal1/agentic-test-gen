@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_264",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7948,
+  "total_latency_s": 324.628,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mark All Notifications as Read', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should mark all notifications as read with one click', async ({ page }) => {\n    // Verify initial notification count\n    const notificationCount = page.getByRole('heading', { name: /notifications/i }).count();\n    await expect(notificationCount).toBeGreaterThan(0);\n\n    // Verify notifications are visible\n    const notifications = page.getByRole('region', { name: /notifications/i });\n    await expect(notifications).toBeVisible();\n\n    // Verify read button is disabled initially\n    const readButton = page.getByRole('button', { name: /mark all as read/i });\n    await expect(readButton).toBeDisabled();\n\n    // Click read button\n    await readButton.click();\n\n    // Verify all notifications are marked as read\n    const readStatus = page.getByText(/all read/i);\n    await expect(readStatus).toBeVisible();\n\n    // Verify read button is now enabled\n    await expect(readButton).not.toBeDisabled();\n\n    // Verify notification count is updated\n    const updatedCount = page.getByRole('heading', { name: /notifications/i }).count();\n    await expect(updatedCount).toBe(0);\n\n    // Verify success message is displayed\n    const successMessage = page.getByText(/all notifications have been marked as read/i);\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should handle edge case when no notifications are present', async ({ page }) => {\n    // Verify no notifications are present\n    const notificationCount = page.getByRole('heading', { name: /notifications/i }).count();\n    await expect(notificationCount).toBe(0);\n\n    // Verify read button is disabled when no notifications are available\n    const readButton = page.getByRole('button', { name: /mark all as read/i });\n    await expect(readButton).toBeDisabled();\n\n    // Verify success message is not displayed\n    const successMessage = page.getByText(/all notifications have been marked as read/i);\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify no error message is displayed\n    const errorMessage = page.getByText(/no notifications to mark/i);\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify read button is still enabled\n    await expect(readButton).not.toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7948,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4159,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 324.628,
+      "feedback_used": ""
+    }
+  ]
+}

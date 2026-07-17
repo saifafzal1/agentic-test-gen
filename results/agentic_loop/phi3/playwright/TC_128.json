@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_128",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8029,
+  "total_latency_s": 828.526,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Confirmation Modal Before Deletion', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should display confirmation modal with delete button when user attempts to delete a record', async ({ page }) => {\n    // Locate and click the delete button using getByRole\n    const deleteButton = page.getByRole('button', { name: /delete/i });\n    await deleteButton.click();\n\n    // Verify confirmation modal is visible\n    const confirmationModal = page.getByRole('dialog', { name: /confirm/i });\n    await expect(confirmationModal).toBeVisible();\n\n    // Verify modal has delete button using getByRole\n    const confirmDeleteButton = page.getByRole('button', { name: /confirm/i });\n    await expect(confirmDeleteButton).toBeVisible();\n\n    // Verify delete button is enabled\n    await expect(confirmDeleteButton).toBeEnabled();\n\n    // Verify delete button has correct text\n    await expect(confirmDeleteButton).toContainText('Delete Record');\n\n    // Verify close button is present\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify close button is enabled\n    await expect(closeButton).toBeEnabled();\n\n    // Verify modal has success message\n    const successMessage = page.getByText(/record deleted successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify success message is visible\n    await expect(successMessage).toBeVisible();\n\n    // Verify record is removed from list\n    const recordList = page.getByRole('list');\n    await expect(recordList).toContainText('Record Name');\n\n    // Verify confirmation modal is closed\n    await confirmationModal.evaluate((modal) => {\n      modal.remove();\n    });\n\n    // Verify record is no longer in list\n    await expect(recordList).not.toContainText('Record Name');\n  });\n\n  test('should prevent deletion when confirmation modal is closed without confirming', async ({ page }) => {\n    // Locate and click the delete button using getByRole\n    const deleteButton = page.getByRole('button', { name: /delete/i });\n    await deleteButton.click();\n\n    // Verify confirmation modal is visible\n    const confirmationModal = page.getByRole('dialog', { name: /confirm/i });\n    await expect(confirmationModal).toBeVisible();\n\n    // Verify delete button is visible\n    const confirmDeleteButton = page.getByRole('button', { name: /confirm/i });\n    await expect(confirmDeleteButton).toBeVisible();\n\n    // Verify close button is present\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify close button is enabled\n    await expect(closeButton).toBeEnabled();\n\n    // Click close button to dismiss modal\n    await closeButton.click();\n\n    // Verify confirmation modal is no longer visible\n    await expect(confirmationModal).not.toBeVisible();\n\n    // Verify record is still in list\n    const recordList = page.getByRole('list');\n    await expect(recordList).toContainText('Record Name');\n\n    // Verify delete button is still enabled\n    await expect(confirmDeleteButton).toBeEnabled();\n\n    // Verify delete button still has correct text\n    await expect(confirmDeleteButton).toContainText('Delete Record');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5082,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4475,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 392.575,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8029,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4428,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 435.951,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

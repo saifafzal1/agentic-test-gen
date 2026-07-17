@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_188",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8176,
+  "total_latency_s": 72.491,
+  "final_script": "describe('Search Results Sorting', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should sort search results by relevance, price, and date', () => {\n    // Perform a search\n    cy.get('[data-testid=\"search-input\"]').type('laptop');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Verify search results are displayed\n    cy.get('[data-testid=\"search-results-container\"]').should('be.visible');\n    cy.get('[data-testid=\"search-result-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify default sort is by relevance\n    cy.get('[data-testid=\"sort-dropdown\"]').should('contain', 'Relevance');\n\n    // Sort by price\n    cy.get('[data-testid=\"sort-dropdown\"]').click();\n    cy.get('[data-testid=\"sort-option-price\"]').click();\n\n    // Verify results are sorted by price\n    cy.get('[data-testid=\"sort-dropdown\"]').should('contain', 'Price');\n    cy.get('[data-testid=\"search-result-item\"]').first().should('contain', '$1000');\n\n    // Sort by date\n    cy.get('[data-testid=\"sort-dropdown\"]').click();\n    cy.get('[data-testid=\"sort-option-date\"]').click();\n\n    // Verify results are sorted by date\n    cy.get('[data-testid=\"sort-dropdown\"]').should('contain', 'Date');\n    cy.get('[data-testid=\"search-result-item\"]').first().should('contain', '2024-10-20');\n\n    // Sort by relevance again\n    cy.get('[data-testid=\"sort-dropdown\"]').click();\n    cy.get('[data-testid=\"sort-option-relevance\"]').click();\n\n    // Verify results are sorted by relevance\n    cy.get('[data-testid=\"sort-dropdown\"]').should('contain', 'Relevance');\n    cy.get('[data-testid=\"search-result-item\"]').first().should('contain', 'Laptop Pro');\n  });\n\n  it('should handle sorting when no results are found', () => {\n    // Perform a search with no results\n    cy.get('[data-testid=\"search-input\"]').type('nonexistentproduct123');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Verify no results message is displayed\n    cy.get('[data-testid=\"no-results-message\"]').should('be.visible');\n    cy.get('[data-testid=\"no-results-message\"]').should('contain', 'No results found');\n\n    // Verify sort dropdown is still visible but inactive\n    cy.get('[data-testid=\"sort-dropdown\"]').should('be.visible');\n    cy.get('[data-testid=\"sort-dropdown\"]').should('contain', 'Relevance');\n\n    // Attempt to sort when no results exist\n    cy.get('[data-testid=\"sort-dropdown\"]').click();\n    cy.get('[data-testid=\"sort-option-price\"]').click();\n\n    // Verify no change in state and no error\n    cy.get('[data-testid=\"no-results-message\"]').should('be.visible');\n    cy.get('[data-testid=\"no-results-message\"]').should('contain', 'No results found');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8176,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5918,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.491,
+      "feedback_used": ""
+    }
+  ]
+}

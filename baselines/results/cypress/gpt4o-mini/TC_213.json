@@ -1,0 +1,13 @@
+{
+  "id": "TC_213",
+  "category": "accessibility",
+  "complexity": "medium",
+  "user_story": "As a keyboard user, I want to close dropdowns by pressing Escape.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Dropdown Accessibility Tests', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n        cy.get('.dropdown-toggle').click(); // Open the dropdown\n    });\n\n    it('should close the dropdown when Escape key is pressed', () => {\n        cy.get('.dropdown-menu').should('be.visible'); // Ensure dropdown is visible\n        cy.get('body').type('{esc}'); // Simulate Escape key press\n        cy.get('.dropdown-menu').should('not.exist'); // Verify dropdown is closed\n    });\n\n    it('should not close the dropdown when other keys are pressed', () => {\n        cy.get('.dropdown-menu').should('be.visible'); // Ensure dropdown is visible\n        cy.get('body').type('a'); // Simulate pressing a non-Escape key\n        cy.get('.dropdown-menu').should('be.visible'); // Verify dropdown is still open\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 195,
+  "latency_s": 2.91,
+  "timestamp": "2026-06-19T16:38:32.236258"
+}

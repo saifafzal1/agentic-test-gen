@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_260",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7999,
+  "total_latency_s": 350.15,
+  "final_script": "describe('Error Toast Notification', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should display error toast notification when action fails', () => {\n    // Intercept the API call to simulate failure\n    cy.intercept('POST', '/api/save-data', {\n      statusCode: 500,\n      body: { error: 'Internal server error' }\n    }).as('saveDataFailed');\n\n    // Attempt to save data\n    cy.get('[data-testid=\"save-button\"]').click();\n\n    // Wait for the failed API call\n    cy.wait('@saveDataFailed');\n\n    // Verify error toast is visible\n    cy.get('[data-testid=\"error-toast\"]')\n      .should('be.visible')\n      .should('contain', 'Error')\n      .should('contain', 'Internal server error');\n\n    // Verify toast has a close button\n    cy.get('[data-testid=\"error-toast-close-btn\"]')\n      .should('be.visible')\n      .click();\n\n    // Verify toast is removed from the DOM\n    cy.get('[data-testid=\"error-toast\"]').should('not.exist');\n  });\n\n  it('should not display error toast when action succeeds', () => {\n    // Intercept the API call to simulate success\n    cy.intercept('POST', '/api/save-data', {\n      statusCode: 200,\n      body: { success: true, message: 'Data saved successfully' }\n    }).as('saveDataSuccess');\n\n    // Attempt to save data\n    cy.get('[data-testid=\"save-button\"]').click();\n\n    // Wait for the successful API call\n    cy.wait('@saveDataSuccess');\n\n    // Verify error toast is not visible\n    cy.get('[data-testid=\"error-toast\"]')\n      .should('not.exist');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]')\n      .should('be.visible')\n      .should('contain', 'Data saved successfully');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7999,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5329,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 350.15,
+      "feedback_used": ""
+    }
+  ]
+}

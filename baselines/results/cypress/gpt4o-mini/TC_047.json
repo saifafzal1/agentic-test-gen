@@ -1,0 +1,13 @@
+{
+  "id": "TC_047",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want a skip-to-content link for accessibility.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Skip to Content Link Accessibility', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should navigate to the main content when the skip-to-content link is clicked', () => {\n        cy.get('a.skip-to-content') // Replace with the actual selector for the skip-to-content link\n            .should('be.visible')\n            .click();\n        \n        cy.url().should('include', '#main-content'); // Replace with the actual ID or selector of the main content\n        cy.get('#main-content').should('be.visible'); // Ensure the main content is visible\n    });\n\n    it('should not navigate if the skip-to-content link is not present', () => {\n        cy.get('a.skip-to-content').should('exist'); // Check if the link exists\n        cy.get('a.skip-to-content').click();\n        \n        cy.url().should('include', '#main-content'); // Ensure the URL includes the main content anchor\n        cy.get('#main-content').should('be.visible'); // Ensure the main content is visible\n    });\n});",
+  "prompt_tokens": 107,
+  "completion_tokens": 232,
+  "latency_s": 5.51,
+  "timestamp": "2026-06-19T16:28:07.069135"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_282",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7441,
+  "total_latency_s": 76.595,
+  "final_script": "describe('Dark Mode Toggle from User Preferences', () => {\n  beforeEach(() => {\n    cy.visit('/settings');\n  });\n\n  it('should successfully toggle dark mode from user preferences', () => {\n    // Verify dark mode is initially off (light mode)\n    cy.get('[data-testid=\"theme-toggle\"]').should('contain', 'Light');\n    cy.get('[data-testid=\"theme-toggle\"]').should('have.class', 'btn-primary');\n    cy.get('[data-testid=\"app-container\"]').should('have.css', 'background-color', 'rgb(244, 255, 259)');\n\n    // Click the toggle button to switch to dark mode\n    cy.get('[data-testid=\"theme-toggle\"]').click();\n\n    // Verify dark mode is now active\n    cy.get('[data-testid=\"theme-toggle\"]').should('contain', 'Dark');\n    cy.get('[data-testid=\"theme-toggle\"]').should('have.class', 'btn-secondary');\n    cy.get('[data-testid=\"app-container\"]').should('have.css', 'background-color', 'rgb(30, 30, 35)');\n\n    // Verify theme preference is saved in local storage\n    cy.window().then((win) => {\n      expect(win.localStorage.getItem('theme')).to.equal('dark');\n    });\n\n    // Verify theme preference is reflected in UI elements\n    cy.get('[data-testid=\"text-color\"]').should('have.css', 'color', 'rgb(240, 250, 240)');\n  });\n\n  it('should handle toggling dark mode and persist preference across page reload', () => {\n    // Toggle to dark mode\n    cy.get('[data-testid=\"theme-toggle\"]').click();\n    cy.get('[data-testid=\"theme-toggle\"]').should('contain', 'Dark');\n\n    // Verify dark mode is active\n    cy.get('[data-testid=\"app-container\"]').should('have.css', 'background-color', 'rgb(30, 30, 25)');\n\n    // Reload the page\n    cy.reload();\n\n    // Verify dark mode persists after reload\n    cy.get('[data-testid=\"theme-toggle\"]').should('contain', 'Dark');\n    cy.get('[data-testid=\"app-container\"]').should('have.css', 'background-color', 'rgb(30, 30, 25)');\n\n    // Verify theme preference is still in local storage\n    cy.window().then((win) => {\n      expect(win.localStorage.getItem('theme')).to.equal('dark');\n    });\n\n    // Verify dark mode is still applied to text\n    cy.get('[data-testid=\"text-color\"]').should('have.css', 'color', 'rgb(240, 250, 250)');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7441,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3472,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 76.595,
+      "feedback_used": ""
+    }
+  ]
+}

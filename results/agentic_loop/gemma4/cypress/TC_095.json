@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_095",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8149,
+  "total_latency_s": 72.608,
+  "final_script": "describe('File Upload - Unsupported File Type Error', () => {\n  beforeEach(() => {\n    cy.visit('/upload');\n  });\n\n  it('should display error message when uploading unsupported file type', () => {\n    // Setup: intercept the file upload API call\n    cy.intercept('POST', '/api/upload').as('uploadRequest');\n\n    // Get the file input element\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/document.pdf', { force: true });\n\n    // Verify file name is displayed\n    cy.get('[data-testid=\"file-name\"]').should('contain', 'document.pdf');\n\n    // Click upload button\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@uploadRequest');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Unsupported file type');\n\n    // Verify error icon is visible\n    cy.get('[data-testid=\"error-icon\"]').should('be.visible');\n\n    // Verify upload button is still enabled for retry\n    cy.get('[data-testid=\"upload-button\"]').should('not.be.disabled');\n  });\n\n  it('should clear error message when user selects a supported file type', () => {\n    // Setup: intercept the file upload API call\n    cy.intercept('POST', '/api/upload').as('uploadRequest');\n\n    // Upload unsupported file first\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/document.pdf', { force: true });\n    cy.get('[data-testid=\"upload-button\"]').click();\n    cy.wait('@uploadRequest');\n\n    // Verify error message is visible\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n\n    // Clear the file input\n    cy.get('[data-testid=\"file-input\"]').clear();\n\n    // Upload supported file\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/image.png', { force: true });\n\n    // Verify error message is cleared\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n\n    // Verify file name is updated\n    cy.get('[data-testid=\"file-name\"]').should('contain', 'image.png');\n\n    // Verify upload button is enabled\n    cy.get('[data-testid=\"upload-button\"]').should('not.be.disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8149,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5831,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.608,
+      "feedback_used": ""
+    }
+  ]
+}

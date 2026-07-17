@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_146",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.79,
+  "total_latency_s": 650.724,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Onboarding Tour Modal Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/onboarding');\n  });\n\n  test('should navigate through onboarding steps successfully', async ({ page }) => {\n    // Open the onboarding tour modal\n    const openButton = page.getByRole('button', { name: /open tour/i });\n    await openButton.click();\n    const tourModal = page.locator('[data-testid=\"onboarding-tour-modal\"]');\n    await expect(tourModal).toBeVisible();\n\n    // Verify initial step is displayed\n    const stepOne = page.getByRole('heading', { name: /step 1/i });\n    await expect(stepOne).toBeVisible();\n\n    // Verify step content is visible\n    const stepOneContent = page.getByText(/welcome to our app/i);\n    await expect(stepOneContent).toBeVisible();\n\n    // Click the \"Next\" button to advance to step 2\n    const nextButton = page.getByRole('button', { name: /next/i });\n    await nextButton.click();\n\n    // Verify step 2 is now visible\n    const stepTwo = page.getByRole('heading', { name: /step 2/i });\n    await expect(stepTwo).toBeVisible();\n\n    // Verify step 2 content is visible\n    const stepTwoContent = page.getByText(/how to use features/i);\n    await expect(stepTwoContent).toBeVisible();\n\n    // Click the \"Next\" button to advance to step 3\n    await nextButton.click();\n\n    // Verify step 3 is now visible\n    const stepThree = page.getByRole('heading', { name: /step 3/i });\n    await expect(stepThree).toBeVisible();\n\n    // Verify step 3 content is visible\n    const stepThreeContent = page.getByText(/sign up/i);\n    await expect(stepThreeContent).toBeVisible();\n\n    // Click the \"Finish\" button to close the modal\n    const finishButton = page.getByRole('button', { name: /finish/i });\n    await finishButton.click();\n\n    // Verify modal is closed\n    await expect(tourModal).not.toBeVisible();\n\n    // Verify welcome message is displayed\n    const welcomeMessage = page.getByText(/thank you for completing the tour/i);\n    await expect(welcomeMessage).toBeVisible();\n  });\n\n  test('should handle navigation failure and retry', async ({ page }) => {\n    // Open the onboarding tour modal\n    const openButton = page.getByRole('button', { name: /open tour/i });\n    await openButton.click();\n    const tourModal = page.locator('[data-testid=\"onboarding-tour-modal\"]');\n    await expect(tourModal).toBeVisible();\n\n    // Verify initial step is displayed\n    const stepOne = page.getByRole('heading', { name: /step 1/i });\n    await expect(stepOne).toBeVisible();\n\n    // Verify step content is visible\n    const stepOneContent = page.getByText(/welcome to our app/i);\n    await expect(stepOneContent).toBeVisible();\n\n    // Click the \"Next\" button to advance to step 2\n    const nextButton = page.getByRole('button', { name: /next/i });\n    await nextButton.click();\n\n    // Verify step 2 is now visible\n    const stepTwo = page.getByRole('heading', { name: /step 2/i });\n    await expect(stepTwo).toBeVisible();\n\n    // Verify step 2 content is visible\n    const stepTwoContent = page.getByText(/how to use features/i);\n    await expect(stepTwoContent).toBeVisible();\n\n    // Click the \"Next\" button to advance to step 3\n    await nextButton.click();\n\n    // Verify step 3 is now visible\n    const stepThree = page.getByRole('heading', { name: /step 3/i });\n    await expect(stepThree).toBeVisible();\n\n    // Verify step 3 content is visible\n    const stepThreeContent = page.getByText(/sign up/i);\n    await expect(stepThreeContent).toBeVisible();\n\n    // Click the \"Finish\" button to close the modal\n    const finishButton = page.getByRole('button', { name: /finish/i });\n    await finishButton.click();\n\n    // Verify modal is closed\n    await expect(tourModal).not.toBeVisible();\n\n    // Verify welcome message is displayed\n    const welcomeMessage = page.getByText(/thank you for completing the tour/i);\n    await expect(welcomeMessage).toBeVisible();\n\n    // Introduce a navigation failure by clicking the \"Next\" button again\n    await nextButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/navigation error/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify retry button is visible\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n\n    // Click the retry button\n    await retryButton.click();\n\n    // Verify step 3 content is still visible\n    await expect(stepThreeContent).toBeVisible();\n\n    // Verify welcome message is still displayed\n    await expect(welcomeMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5042,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4339,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 329.1,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4,
+        "missing_keywords": [],
+        "assertion_count": 22,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 321.624,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_004",
+  "category": "authentication",
+  "complexity": "complex",
+  "user_story": "As a user, I want to be redirected to login if I access a protected page unauthenticated.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Protected Page Access', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/protected-page');\n  });\n\n  test('should redirect to login when accessing protected page unauthenticated', async ({ page }) => {\n    await expect(page).toHaveURL('/login');\n  });\n\n  test('should display login form on the login page', async ({ page }) => {\n    await expect(page.getByRole('heading', { name: /login/i })).toBeVisible();\n    await expect(page.getByLabel('Email')).toBeVisible();\n    await expect(page.getByLabel('Password')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 137,
+  "completion_tokens": 146,
+  "latency_s": 2.43,
+  "timestamp": "2026-06-19T16:43:35.195745"
+}

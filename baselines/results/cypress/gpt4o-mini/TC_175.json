@@ -1,0 +1,13 @@
+{
+  "id": "TC_175",
+  "category": "file_upload",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see the file name and size listed after selecting it.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('File Upload Functionality', () => {\n    beforeEach(() => {\n        cy.visit('/upload'); // Replace with the actual URL of the upload page\n    });\n\n    it('should display the file name and size after selecting a valid file', () => {\n        const fileName = 'example.txt';\n        const fileSize = '1 KB'; // Adjust based on the actual file size\n\n        cy.fixture(fileName).then(fileContent => {\n            cy.get('input[type=\"file\"]').attachFile(fileName);\n            cy.get('.file-info').should('be.visible');\n            cy.get('.file-name').should('contain.text', fileName);\n            cy.get('.file-size').should('contain.text', fileSize);\n        });\n    });\n\n    it('should not display file info when no file is selected', () => {\n        cy.get('.file-info').should('not.exist');\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 184,
+  "latency_s": 2.74,
+  "timestamp": "2026-06-19T16:36:17.768175"
+}

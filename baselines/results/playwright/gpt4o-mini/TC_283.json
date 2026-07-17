@@ -1,0 +1,13 @@
+{
+  "id": "TC_283",
+  "category": "user_profile",
+  "complexity": "complex",
+  "user_story": "As a user, I want to set my timezone in profile settings.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Profile - Timezone Settings', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/profile/settings');\n    await page.getByRole('button', { name: 'Login' }).click();\n    await page.getByLabel('Email').fill('user@example.com');\n    await page.getByLabel('Password').fill('password123');\n    await page.getByRole('button', { name: 'Submit' }).click();\n  });\n\n  test('should display current timezone', async ({ page }) => {\n    const timezoneDisplay = await page.getByText('Current Timezone:');\n    await expect(timezoneDisplay).toBeVisible();\n    const currentTimezone = await timezoneDisplay.nextSibling();\n    await expect(currentTimezone).toHaveText('UTC');\n  });\n\n  test('should allow user to change timezone', async ({ page }) => {\n    await page.getByLabel('Timezone').selectOption('America/New_York');\n    await page.getByRole('button', { name: 'Save Changes' }).click();\n    \n    const successMessage = await page.getByText('Timezone updated successfully');\n    await expect(successMessage).toBeVisible();\n    \n    const updatedTimezone = await page.getByText('Current Timezone:').nextSibling();\n    await expect(updatedTimezone).toHaveText('America/New_York');\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 292,
+  "latency_s": 6.91,
+  "timestamp": "2026-06-19T17:03:52.276575"
+}

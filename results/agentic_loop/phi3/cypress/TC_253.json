@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_253",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7132,
+  "total_latency_s": 564.687,
+  "final_script": "describe('Payment Processing Loading State', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should display loading state while payment is processing', () => {\n    // Intercept the payment API call\n    cy.intercept('POST', '/api/payments/process', {\n      statusCode: 200,\n      body: {\n        success: true,\n        transactionId: '123456789',\n        amount: 100.00,\n        currency: 'USD',\n        status: 'completed'\n      }\n    }).as('paymentProcess');\n\n    // Verify initial payment form is visible\n    cy.get('[data-testid=\"payment-form\"]').should('be.visible');\n\n    // Fill in payment details\n    cy.get('[data-testid=\"card-number\"]').type('4111111111111111');\n    cy.get('[data-testid=\"expiry-date\"]').type('12/25');\n    cy.get('[data-testid=\"cvv\"]').type('123');\n\n    // Verify loading spinner is visible\n    cy.get('[data-testid=\"loading-spinner\"]').should('be.visible');\n\n    // Click the submit button\n    cy.get('[data-testid=\"submit-payment-btn\"]').click();\n\n    // Wait for payment API call to complete\n    cy.wait('@paymentProcess');\n\n    // Verify loading spinner is hidden\n    cy.get('[data-testid=\"loading-spinner\"]').should('not.exist');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"payment-success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"payment-success-message\"]').should('contain', 'Payment processed successfully');\n\n    // Verify payment details are cleared\n    cy.get('[data-testid=\"card-number\"]').should('have.value', '');\n    cy.get('[data-testid=\"expiry-date\"]').should('have.value', '');\n    cy.get('[data-testid=\"cvv\"]').should('have.value', '');\n\n    // Verify order confirmation page is displayed\n    cy.url().should('include', '/order-confirmation');\n  });\n\n  it('should display error state when payment fails', () => {\n    // Intercept the payment API call with error response\n    cy.intercept('POST', '/api/payments/process', {\n      statusCode: 500,\n      body: {\n        success: false,\n        error: 'Internal server error',\n        transactionId: null\n      }\n    }).as('paymentError');\n\n    // Fill in payment details\n    cy.get('[data-testid=\"card-number\"]').type('4111111111111111');\n    cy.get('[data-testid=\"expiry-date\"]').type('12/25');\n    cy.get('[data-testid=\"cvv\"]').type('123');\n\n    // Verify loading spinner is visible\n    cy.get('[data-testid=\"loading-spinner\"]').should('be.visible');\n\n    // Click the submit button\n    cy.get('[data-testid=\"submit-payment-btn\"]').click();\n\n    // Wait for payment API call to complete\n    cy.wait('@paymentError');\n\n    // Verify loading spinner is still visible\n    cy.get('[data-testid=\"loading-spinner\"]').should('be.visible');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"payment-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"payment-error-message\"]').should('contain', 'Payment failed');\n\n    // Verify payment details are still visible\n    cy.get('[data-testid=\"card-number\"]').should('have.value', '4111111111111111');\n\n    // Verify retry button is available\n    cy.get('[data-testid=\"retry-payment-btn\"]').should('be.visible');\n\n    // Verify order confirmation page is not displayed\n    cy.url().should('not.include', '/order-confirmation');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4432,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.2508,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 54.96,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7132,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2439,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 509.727,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

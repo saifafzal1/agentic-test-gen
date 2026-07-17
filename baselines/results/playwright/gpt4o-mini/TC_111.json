@@ -1,0 +1,13 @@
+{
+  "id": "TC_111",
+  "category": "async_await",
+  "complexity": "medium",
+  "user_story": "As a user, I want multiple concurrent API calls to resolve before displaying data.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Concurrent API Calls', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com');\n  });\n\n  test('should display data after multiple concurrent API calls', async ({ page }) => {\n    const apiCall1 = page.waitForResponse(response => response.url().includes('/api/data1') && response.status() === 200);\n    const apiCall2 = page.waitForResponse(response => response.url().includes('/api/data2') && response.status() === 200);\n    \n    await Promise.all([\n      apiCall1,\n      apiCall2,\n      page.click(getByRole('button', { name: 'Fetch Data' }))\n    ]);\n\n    const data1 = await page.locator(getByText('Data from API 1')).innerText();\n    const data2 = await page.locator(getByText('Data from API 2')).innerText();\n\n    expect(data1).toBe('Expected Data 1');\n    expect(data2).toBe('Expected Data 2');\n  });\n\n  test('should handle API errors gracefully', async ({ page }) => {\n    await page.route('**/api/data1', route => route.abort('failed'));\n    await page.route('**/api/data2', route => route.abort('failed'));\n\n    await page.click(getByRole('button', { name: 'Fetch Data' }));\n\n    const errorMessage = await page.locator(getByText('Failed to fetch data')).innerText();\n    expect(errorMessage).toBe('Failed to fetch data');\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 333,
+  "latency_s": 5.27,
+  "timestamp": "2026-06-19T16:51:11.568305"
+}

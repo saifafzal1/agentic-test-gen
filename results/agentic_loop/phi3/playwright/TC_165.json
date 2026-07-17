@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_165",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8198,
+  "total_latency_s": 515.63,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Print Filtered Table View', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table-view');\n  });\n\n  test('should print a filtered table view with pagination', async ({ page }) => {\n    // Set up API interception for table data\n    await page.route('**/api/table-data', (route) => {\n      route.continue();\n    });\n\n    // Set up API interception for pagination\n    await page.route('**/api/table-data/page', (route) => {\n      route.continue();\n    });\n\n    // Set up API interception for filter\n    await page.route('**/api/table-data/filter', (route) => {\n      route.continue();\n    });\n\n    // Verify initial table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify table headers are present\n    const headers = page.getByRole('rowheader');\n    await expect(headers).toBeVisible();\n\n    // Verify table body contains data\n    const rows = page.getByRole('row');\n    await expect(rows).toHaveCount(10);\n\n    // Apply filter using getByLabel\n    const filterInput = page.getByLabel('Filter by Name');\n    await filterInput.fill('John Doe');\n\n    // Verify filter is applied\n    const filteredRows = page.getByRole('row');\n    await expect(filteredRows).toHaveCount(5);\n\n    // Verify pagination controls are visible\n    const pageLinks = page.getByRole('link', { name: /page/i });\n    await expect(pageLinks).toBeVisible();\n\n    // Navigate to second page\n    const secondPageLink = pageLinks.first();\n    await secondPageLink.click();\n\n    // Verify table data is paginated\n    const secondPageRows = page.getByRole('row');\n    await expect(secondPageRows).toHaveCount(10);\n\n    // Verify table headers are still present\n    await expect(headers).toBeVisible();\n\n    // Print the filtered table view\n    const printButton = page.getByRole('button', { name: /print/i });\n    await printButton.click();\n\n    // Verify print dialog appears\n    const printDialog = page.getByRole('dialog', { name: /print/i });\n    await expect(printDialog).toBeVisible();\n\n    // Verify print button is present\n    const printButton = page.getByRole('button', { name: /print/i });\n    await expect(printButton).toBeVisible();\n\n    // Verify print button is enabled\n    await expect(printButton).toBeEnabled();\n\n    // Close print dialog\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await closeButton.click();\n\n    // Verify table is still visible after print\n    await expect(table).toBeVisible();\n  });\n\n  test('should handle empty table view when no data is available', async ({ page }) => {\n    // Set up API interception for table data\n    await page.route('**/api/table-data', (route) => {\n      route.continue();\n    });\n\n    // Set up API interception for filter\n    await page.route('**/api/table-data/filter', (route) => {\n      route.continue();\n    });\n\n    // Set up API interception for pagination\n    await page.route('**/api/table-data/page', (route) => {\n      route.continue();\n    });\n\n    // Verify initial table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify table headers are present\n    const headers = page.getByRole('rowheader');\n    await expect(headers).toBeVisible();\n\n    // Verify table body is empty\n    const rows = page.getByRole('row');\n    await expect(rows).toHaveCount(0);\n\n    // Apply filter using getByLabel\n    const filterInput = page.getByLabel('Filter by Name');\n    await filterInput.fill('');\n\n    // Verify table body remains empty\n    await expect(rows).toHaveCount(0);\n\n    // Verify no pagination controls are visible\n    const pageLinks = page.getByRole('link', { name: /page/i });\n    await expect(pageLinks).not.toBeVisible();\n\n    // Verify print button is disabled\n    const printButton = page.getByRole('button', { name: /print/i });\n    await expect(printButton).not.toBeEnabled();\n\n    // Verify print dialog does not appear\n    const printDialog = page.getByRole('dialog', { name: /print/i });\n    await expect(printDialog).not.toBeVisible();\n\n    // Verify table is still visible after empty filter\n    await expect(table).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4946,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.382,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 54.333,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8198,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3995,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 461.297,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_187",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.4954,
+  "total_latency_s": 1214.86,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Results Filtering by Category', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should filter search results by selected categories using checkboxes', async ({ page }) => {\n    // Verify initial search results are displayed\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n\n    // Verify all categories are displayed initially\n    const categoryCheckboxes = page.getByRole('checkbox', { name: /category/i });\n    const categoryCount = await categoryCheckboxes.count();\n    expect(categoryCount).toBeGreaterThan(0);\n\n    // Verify search results are visible\n    const resultItems = page.getByRole('listitem');\n    await expect(resultItems).toHaveCount(10);\n\n    // Select multiple categories using checkboxes\n    const sportsCheckbox = page.getByRole('checkbox', { name: /sports/i });\n    await sportsCheckbox.click();\n\n    const technologyCheckbox = page.getByRole('checkbox', { name: /technology/i });\n    await technologyCheckbox.click();\n\n    const fashionCheckbox = page.getByRole('checkbox', { name: /fashion/i });\n    await fashionCheckbox.click();\n\n    // Verify categories are now selected\n    await expect(sportsCheckbox).toBeChecked();\n    await expect(technologyCheckbox).toBeChecked();\n    await expect(fashionCheckbox).toBeChecked();\n\n    // Verify search results are filtered\n    const filteredResults = page.getByRole('listitem');\n    await expect(filteredResults).toHaveCount(3);\n\n    // Verify only items from selected categories are displayed\n    const sportsResult = page.getByText(/sports/i);\n    await expect(sportsResult).toBeVisible();\n\n    const technologyResult = page.getByText(/technology/i);\n    await expect(technologyResult).toBeVisible();\n\n    const fashionResult = page.getByText(/fashion/i);\n    await expect(fashionResult).toBeVisible();\n\n    // Verify other categories are not displayed\n    const foodResult = page.getByText(/food/i);\n    await expect(foodResult).not.toBeVisible();\n\n    const travelResult = page.getByText(/travel/i);\n    await expect(travelResult).not.toBeVisible();\n\n    // Verify search results are sorted alphabetically\n    const firstResult = page.getByText(/apple/i);\n    await expect(firstResult).toBeVisible();\n\n    const secondResult = page.getByText(/banana/i);\n    await expect(secondResult).toBeVisible();\n\n    const thirdResult = page.getByText(/orange/i);\n    await expect(thirdResult).toBeVisible();\n\n    // Verify category filter is applied\n    const categoryFilter = page.getByRole('heading', { name: /filter by category/i });\n    await expect(categoryFilter).toBeVisible();\n\n    // Verify filter button is enabled\n    const filterButton = page.getByRole('button', { name: /apply filter/i });\n    await expect(filterButton).toBeEnabled();\n  });\n\n  test('should clear all filters and display all search results', async ({ page }) => {\n    // Verify initial search results are displayed\n    const resultsContainer = page.getByRole('region', { name: /search results/i });\n    await expect(resultsContainer).toBeVisible();\n\n    // Verify all categories are displayed initially\n    const categoryCheckboxes = page.getByRole('checkbox', { name: /category/i });\n    const categoryCount = await categoryCheckboxes.count();\n    expect(categoryCount).toBeGreaterThan(0);\n\n    // Verify search results are visible\n    const resultItems = page.getByRole('listitem');\n    await expect(resultItems).toHaveCount(10);\n\n    // Select all categories using checkboxes\n    const allCategories = page.getByRole('checkbox', { name: /category/i });\n    await allCategories.check();\n\n    //",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4954,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4046,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 58.662,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4925,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3949,
+        "missing_keywords": [],
+        "assertion_count": 32,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 552.293,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.4803,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3542,
+        "missing_keywords": [],
+        "assertion_count": 48,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 603.905,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

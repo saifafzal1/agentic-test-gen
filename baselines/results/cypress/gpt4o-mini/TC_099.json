@@ -1,0 +1,13 @@
+{
+  "id": "TC_099",
+  "category": "error_states",
+  "complexity": "medium",
+  "user_story": "As a user, I want to see an out-of-stock message when adding an unavailable item to cart.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Out of Stock Message', () => {\n    beforeEach(() => {\n        cy.visit('/products'); // Visit the products page\n    });\n\n    it('should display an out-of-stock message when adding an unavailable item to cart', () => {\n        cy.get('.product-item').contains('Unavailable Item').click(); // Click on the unavailable item\n        cy.get('.add-to-cart-button').click(); // Attempt to add to cart\n        cy.get('.notification').should('be.visible'); // Check if notification is visible\n        cy.get('.notification').should('contain', 'This item is currently out of stock'); // Verify the message\n    });\n\n    it('should not allow adding out-of-stock item to cart', () => {\n        cy.get('.product-item').contains('Unavailable Item').click(); // Click on the unavailable item\n        cy.get('.add-to-cart-button').should('be.disabled'); // Ensure the button is disabled\n    });\n});",
+  "prompt_tokens": 115,
+  "completion_tokens": 196,
+  "latency_s": 2.94,
+  "timestamp": "2026-06-19T16:31:42.135083"
+}

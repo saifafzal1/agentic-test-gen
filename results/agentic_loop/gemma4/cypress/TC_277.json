@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_277",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7992,
+  "total_latency_s": 71.974,
+  "final_script": "describe('Profile Picture Upload and Preview', () => {\n  beforeEach(() => {\n    cy.visit('/profile');\n  });\n\n  it('should successfully upload a profile picture and display preview', () => {\n    // Intercept the upload API endpoint\n    cy.intercept('POST', '/api/profile/picture/upload').as('uploadPicture');\n\n    // Click the upload button\n    cy.get('[data-testid=\"upload-profile-picture-btn\"]').click();\n\n    // Verify file input is visible\n    cy.get('[data-testid=\"file-input\"]').should('be.visible');\n\n    // Upload a valid image file\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/profile-picture.jpg', {\n      force: true\n    });\n\n    // Verify file name appears in input\n    cy.get('[data-testid=\"file-name-display\"]').should('contain', 'profile-picture.jpg');\n\n    // Click the upload button again to trigger upload\n    cy.get('[data-testid=\"upload-profile-picture-btn\"]').click();\n\n    // Wait for the upload API call\n    cy.wait('@uploadPicture');\n\n    // Verify success message\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Profile picture uploaded successfully');\n\n    // Verify preview image is displayed\n    cy.get('[data-testid=\"profile-picture-preview\"]').should('be.visible');\n    cy.get('[data-testid=\"profile-picture-preview img\"]').should('have.attr', 'src');\n\n    // Verify preview image has correct dimensions\n    cy.get('[data-testid=\"profile-picture-preview img\"]').should('have.css', 'width', '100px');\n    cy.get('[data-testid=\"profile-picture-preview img\"]').should('have.css', 'height', '100px');\n\n    // Verify preview image has correct aspect ratio (e.g., 1/1)\n    cy.get('[data-testid=\"profile-picture-preview img\"]').should('have.css', 'aspect-ratio', '1 / 1');\n  });\n\n  it('should handle invalid file types and display error message', () => {\n    // Intercept the upload API endpoint\n    cy.intercept('POST', '/api/profile/picture/upload', {\n      statusCode: 400,\n      body: { error: 'Invalid file type. Only JPG and PNG are allowed.' }\n    }).as('uploadPictureError');\n\n    // Click the upload button\n    cy.get('[data-testid=\"upload-profile-picture-btn\"]').click();\n\n    // Attempt to upload an invalid file (e.g., PDF)\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/document.pdf', {\n      force: true\n    });\n\n    // Click the upload button\n    cy.get('[data-testid=\"upload-profile-picture-btn\"]').click();\n\n    // Wait for the error API call\n    cy.wait('@uploadPictureError');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid file type');\n\n    // Verify preview is NOT displayed\n    cy.get('[data-testid=\"profile-picture-preview\"]').should('not.exist');\n\n    // Verify file input is still visible and ready for retry\n    cy.get('[data-testid=\"file-input\"]').should('be.visible');\n\n    // Verify success message does not appear\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7992,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5308,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.974,
+      "feedback_used": ""
+    }
+  ]
+}

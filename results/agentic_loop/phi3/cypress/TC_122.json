@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_122",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.767,
+  "total_latency_s": 440.921,
+  "final_script": "describe('Async Operation Cancellation with Abort Button', () => {\n  beforeEach(() => {\n    cy.visit('/async-operation');\n  });\n\n  it('should cancel an ongoing async operation when Abort button is clicked', () => {\n    // Intercept the API call\n    cy.intercept('GET', '/api/async-operation/start').as('startOperation');\n    cy.intercept('GET', '/api/async-operation/cancel').as('cancelOperation');\n\n    // Click the start button to initiate the async operation\n    cy.get('[data-testid=\"start-async-btn\"]').click();\n    cy.wait('@startOperation');\n\n    // Verify the operation is in progress\n    cy.get('[data-testid=\"operation-status\"]').should('contain', 'In Progress');\n\n    // Click the Abort button\n    cy.get('[data-testid=\"abort-btn\"]').click();\n\n    // Verify the cancel button was clicked\n    cy.get('[data-testid=\"abort-btn\"]').should('be.visible');\n\n    // Verify the operation was cancelled\n    cy.wait('@cancelOperation');\n    cy.get('[data-testid=\"operation-status\"]').should('contain', 'Cancelled');\n\n    // Verify the cancel button is no longer visible\n    cy.get('[data-testid=\"abort-btn\"]').should('not.exist');\n  });\n\n  it('should not cancel an already completed async operation', () => {\n    // Intercept the API call\n    cy.intercept('GET', '/api/async-operation/start').as('startOperation');\n    cy.intercept('GET', '/api/async-operation/cancel').as('cancelOperation');\n\n    // Click the start button to initiate the async operation\n    cy.get('[data-testid=\"start-async-btn\"]').click();\n    cy.wait('@startOperation');\n\n    // Verify the operation is in progress\n    cy.get('[data-testid=\"operation-status\"]').should('contain', 'In Progress');\n\n    // Wait for the operation to complete\n    cy.wait('@startOperation').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify the operation is completed\n    cy.get('[data-testid=\"operation-status\"]').should('contain', 'Completed');\n\n    // Click the Abort button\n    cy.get('[data-testid=\"abort-btn\"]').click();\n\n    // Verify the operation was not cancelled (already completed)\n    cy.get('[data-testid=\"operation-status\"]').should('contain', 'Completed');\n\n    // Verify the cancel button is still visible\n    cy.get('[data-testid=\"abort-btn\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.767,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4232,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 440.921,
+      "feedback_used": ""
+    }
+  ]
+}

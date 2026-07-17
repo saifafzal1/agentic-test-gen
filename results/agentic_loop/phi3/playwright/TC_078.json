@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_078",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8026,
+  "total_latency_s": 469.968,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Duplicate Record Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should successfully duplicate an existing record with one click', async ({ page }) => {\n    // Verify initial record count\n    const recordCount = page.getByRole('heading', { name: /records/i }).count();\n    expect(recordCount).toBeGreaterThan(0);\n\n    // Verify first record is visible\n    const firstRecord = page.getByText('Record 1');\n    await expect(firstRecord).toBeVisible();\n\n    // Verify duplicate button is visible\n    const duplicateButton = page.getByRole('button', { name: /duplicate/i });\n    await expect(duplicateButton).toBeVisible();\n\n    // Click duplicate button\n    await duplicateButton.click();\n\n    // Verify duplicate record appears\n    const duplicateRecord = page.getByText('Record 1 - Copy');\n    await expect(duplicateRecord).toBeVisible();\n\n    // Verify duplicate record has unique ID\n    const originalId = page.getByRole('heading', { name: /record 1/i }).first().textContent().match(/\\d+/);\n    const duplicateId = page.getByRole('heading', { name: /record 1 - copy/i }).first().textContent().match(/\\d+/);\n    expect(originalId).not.toBe(duplicateId);\n\n    // Verify duplicate record is listed\n    const duplicateRecordList = page.locator('[data-testid=\"record-list\"]');\n    await expect(duplicateRecordList).toContainText('Record 1 - Copy');\n\n    // Verify duplicate record has same data as original\n    const originalRecordData = page.getByRole('heading', { name: /record 1/i }).first().textContent().match(/\\d+/);\n    const duplicateRecordData = page.getByRole('heading', { name: /record 1 - copy/i }).first().textContent().match(/\\d+/);\n    expect(originalRecordData).toBe(duplicateRecordData);\n\n    // Verify duplicate record has same edit/delete options\n    const editButton = page.getByRole('button', { name: /edit/i });\n    await expect(editButton).toBeVisible();\n    const deleteButton = page.getByRole('button', { name: /delete/i });\n    await expect(deleteButton).toBeVisible();\n  });\n\n  test('should handle duplicate of non-existent record gracefully', async ({ page }) => {\n    // Verify no records are displayed initially\n    const recordCount = page.getByRole('heading', { name: /records/i }).count();\n    expect(recordCount).toBe(0);\n\n    // Click duplicate button on empty state\n    const duplicateButton = page.getByRole('button', { name: /duplicate/i });\n    await expect(duplicateButton).toBeVisible();\n    await duplicateButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/no records to duplicate/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify duplicate button is still visible\n    await expect(duplicateButton).toBeVisible();\n\n    // Verify no duplicate record is created\n    const duplicateRecord = page.getByText('Record 1 - Copy');\n    await expect(duplicateRecord).not.toBeVisible();\n\n    // Verify original error message is still present\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8026,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.442,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 469.968,
+      "feedback_used": ""
+    }
+  ]
+}

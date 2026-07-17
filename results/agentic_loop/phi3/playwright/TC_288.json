@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_288",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.4989,
+  "total_latency_s": 1065.994,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Export Personal Data as JSON File', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/user-profile');\n  });\n\n  test('should successfully export personal data as a JSON file', async ({ page }) => {\n    // Verify export button is visible and enabled\n    const exportButton = page.getByRole('button', { name: /export/i });\n    await expect(exportButton).toBeVisible();\n\n    // Verify export button is enabled\n    await expect(exportButton).toBeEnabled();\n\n    // Click export button\n    await exportButton.click();\n\n    // Verify export dialog appears\n    const exportDialog = page.locator('[data-testid=\"export-dialog\"]');\n    await expect(exportDialog).toBeVisible();\n\n    // Verify export button is disabled in dialog\n    const exportButtonInDialog = page.getByRole('button', { name: /export/i });\n    await expect(exportButtonInDialog).not.toBeEnabled();\n\n    // Verify export button is disabled\n    const exportButtonOutsideDialog = page.getByRole('button', { name: /export/i });\n    await expect(exportButtonOutsideDialog).not.toBeEnabled();\n\n    // Verify export button is disabled due to dialog\n    await expect(exportButtonInDialog).toBeDisabled();\n\n    // Verify export button is disabled when dialog is open\n    await expect(exportButtonOutsideDialog).toBeDisabled();\n\n    // Verify export button is enabled when dialog is closed\n    await exportDialog.click();\n    await expect(exportButtonOutsideDialog).toBeEnabled();\n\n    // Verify export file is downloaded\n    const downloadButton = page.getByRole('button', { name: /download/i });\n    await expect(downloadButton).toBeVisible();\n\n    // Verify file name is correct\n    const fileName = page.getByText(/personal-data.json/i);\n    await expect(fileName).toBeVisible();\n\n    // Verify file download dialog appears\n    const downloadDialog = page.locator('[data-testid=\"download-dialog\"]');\n    await expect(downloadDialog).toBeVisible();\n\n    // Verify download button is visible\n    const downloadButtonInDialog = page.getByRole('button', { name: /download/i });\n    await expect(downloadButtonInDialog).toBeVisible();\n\n    // Verify download button is enabled\n    await expect(downloadButtonInDialog).toBeEnabled();\n\n    // Verify file is downloaded successfully\n    await expect(downloadButtonInDialog).toBeEnabled();\n\n    // Verify file exists in downloads folder\n    const downloadsFolder = page.locator('[data-testid=\"downloads-folder\"]');\n    await expect(downloadsFolder).toBeVisible();\n\n    const filePath = page.locator('[data-testid=\"downloaded-file-path\"]');\n    await expect(filePath).toContainText('personal-data.json');\n\n    // Verify file is readable\n    const fileContent = await page.evaluate(() => {\n      const file = new File(downloadsFolder.evaluate(), 'personal-data.json');\n      return file.text();\n    });\n    expect(fileContent).toBeDefined();\n\n    // Verify file content is valid JSON\n    const json = JSON.parse(fileContent);\n    expect(json).toBeDefined();\n  });\n\n  test('should handle export failure and display error message', async ({ page }) => {\n    // Mock API response for export failure\n    await page.route('**/api/export-data', (route) => {\n      route.abort('Failed to export data');\n    });\n\n    // Verify export button is visible and enabled\n    const exportButton = page.getByRole('button', { name: /export/i });\n    await expect(exportButton).toBeVisible();\n    await expect(exportButton).toBeEnabled();\n\n    // Click export button\n    await exportButton.click();\n\n    // Verify export dialog appears\n    const exportDialog = page.locator('[data-testid=\"export-dialog\"]');\n    await expect(exportDialog).toBeVisible();\n\n    // Verify export button is disabled in dialog\n    const export",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4989,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4164,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 55.436,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4582,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.2805,
+        "missing_keywords": [],
+        "assertion_count": 41,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 489.755,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.444,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.2333,
+        "missing_keywords": [],
+        "assertion_count": 56,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 520.803,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

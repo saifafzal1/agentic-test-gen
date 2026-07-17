@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_268",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7696,
+  "total_latency_s": 71.751,
+  "final_script": "describe('Notification Filtering by Type', () => {\n  beforeEach(() => {\n    cy.visit('/notifications');\n  });\n\n  it('should filter notifications by type when a filter button is clicked', () => {\n    // Intercept API call to fetch notifications\n    cy.intercept('GET', '/api/notifications').as('getNotifications');\n    cy.get('[data-testid=\"load-notifications-btn\"]').click();\n    cy.wait('@getNotifications');\n\n    // Verify all notifications are loaded\n    cy.get('[data-testid=\"notification-item\"]').should('have.length.greaterThan', 0);\n\n    // Click on 'info' filter button\n    cy.get('[data-testid=\"filter-info-btn\"]').click();\n\n    // Verify only info notifications are displayed\n    cy.get('[data-testid=\"notification-item\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"notification-item\"]').each(($item) => {\n      cy.wrap($item).should('contain', 'info');\n    });\n\n    // Click on 'warning' filter button\n    cy.get('[data-testid=\"filter-warning-btn\"]').click();\n\n    // Verify only warning notifications are displayed\n    cy.get('[data-testid=\"notification-item\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"notification-item\"]').each(($item) => {\n      cy.wrap($item).should('contain', 'warning');\n    });\n\n    // Click on 'error' filter button\n    cy.get('[data-testid=\"filter-error-btn\"]').click();\n\n    // Verify only error notifications are displayed\n    cy.get('[data-testid=\"notification-item\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"notification-item\"]').each(($item) => {\n      cy.wrap($item).should('contain', 'error');\n    });\n  });\n\n  it('should handle filter with no matching notifications and clear filter', () => {\n    // Intercept API call to fetch notifications\n    cy.intercept('GET', '/api/notifications').as('getNotifications');\n    cy.get('[data-testid=\"load-notifications-btn\"]').click();\n    cy.wait('@getNotifications');\n\n    // Click on 'info' filter button\n    cy.get('[data-testid=\"filter-info-btn\"]').click();\n\n    // Verify info notifications are displayed\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n\n    // Click on 'warning' filter button\n    cy.get('[data-testid=\"filter-warning-btn\"]').click();\n\n    // Verify warning notifications are displayed\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n\n    // Click on 'error' filter button\n    cy.get('[data-testid=\"filter-error-btn\"]').click();\n\n    // Verify error notifications are displayed\n    cy.get('[data-testid=\"notification-item\"]').should('be.visible');\n\n    // Click on 'info' filter button again to show all\n    cy.get('[data-testid=\"filter-info-btn\"]').click();\n\n    // Verify all notifications are visible again\n    cy.get('[data-testid=\"notification-item\"]').should('have.length.greaterThan', 0);\n\n    // Click on 'clear-filters' button\n    cy.get('[data-testid=\"clear-filters-btn\"]').click();\n\n    // Verify all filters are cleared and all notifications are shown\n    cy.get('[data-testid=\"notification-item\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"filter-info-btn\"]').should('not.have.class', 'active');\n    cy.get('[data-testid=\"filter-warning-btn\"]').should('not.have.class', 'active');\n    cy.get('[data-testid=\"filter-error-btn\"]').should('not.have.class', 'active');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7696,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4319,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.751,
+      "feedback_used": ""
+    }
+  ]
+}

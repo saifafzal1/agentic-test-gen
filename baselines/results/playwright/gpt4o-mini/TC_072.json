@@ -1,0 +1,13 @@
+{
+  "id": "TC_072",
+  "category": "api_response_handling",
+  "complexity": "medium",
+  "user_story": "As a user, I want file download to trigger when clicking an export button.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Download Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should trigger file download when export button is clicked', async ({ page }) => {\n    const [download] = await Promise.all([\n      page.waitForEvent('download'),\n      page.getByRole('button', { name: /export/i }).click(),\n    ]);\n    const downloadPath = await download.path();\n    expect(downloadPath).toBeTruthy();\n  });\n\n  test('should show success message after clicking export button', async ({ page }) => {\n    await page.getByRole('button', { name: /export/i }).click();\n    const successMessage = await page.getByText(/download initiated/i);\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 192,
+  "latency_s": 3.62,
+  "timestamp": "2026-06-19T16:48:22.777872"
+}

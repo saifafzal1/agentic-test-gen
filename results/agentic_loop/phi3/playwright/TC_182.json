@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_182",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.4921,
+  "total_latency_s": 1479.225,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Image Paste from Clipboard into Upload Area', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload');\n  });\n\n  test('should successfully paste an image from the clipboard into the upload area', async ({ page }) => {\n    // Verify upload button is visible\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await expect(uploadButton).toBeVisible();\n\n    // Verify upload area is visible\n    const uploadArea = page.getByRole('region', { name: /upload area/i });\n    await expect(uploadArea).toBeVisible();\n\n    // Verify paste button is visible\n    const pasteButton = page.getByRole('button', { name: /paste/i });\n    await expect(pasteButton).toBeVisible();\n\n    // Verify upload area has placeholder text\n    const placeholderText = page.getByText(/paste image/i);\n    await expect(placeholderText).toBeVisible();\n\n    // Verify upload area has no file input\n    const fileInput = page.getByRole('input', { name: /file/i });\n    await expect(fileInput).not.toBeVisible();\n\n    // Verify upload button is enabled\n    await expect(uploadButton).toBeEnabled();\n\n    // Verify paste button is enabled\n    await expect(pasteButton).toBeEnabled();\n\n    // Verify upload area has no error message\n    const errorMessage = page.getByText(/error/i);\n    await expect(errorMessage).not.toBeVisible();\n\n    // Paste image using keyboard shortcut (Ctrl+V)\n    await page.keyboard.press('Ctrl+V');\n\n    // Verify file input appears\n    await expect(fileInput).toBeVisible();\n\n    // Verify file input has the correct file type\n    const fileInputValue = await fileInput.evaluate((el) => el.value);\n    expect(fileInputValue).toContain('image/png');\n\n    // Verify upload button is now disabled\n    await expect(uploadButton).not.toBeEnabled();\n\n    // Verify paste button is now disabled\n    await expect(pasteButton).not.toBeEnabled();\n\n    // Verify upload area shows success message\n    const successMessage = page.getByText(/upload successful/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify file input has the correct file name\n    const fileName = await fileInput.evaluate((el) => el.files[0].name);\n    expect(fileName).toBe('test-image.png');\n  });\n\n  test('should handle pasting an invalid image file and display error message', async ({ page }) => {\n    // Verify upload button is visible\n    const uploadButton = page.getByRole('button', { name: /upload/i });\n    await expect(uploadButton).toBeVisible();\n\n    // Verify upload area is visible\n    const uploadArea = page.getByRole('region', { name: /upload area/i });\n    await expect(uploadArea).toBeVisible();\n\n    // Verify paste button is visible\n    const pasteButton = page.getByRole('button', { name: /paste/i });\n    await expect(pasteButton).toBeVisible();\n\n    // Verify upload area has placeholder text\n    const placeholderText = page.getByText(/paste image/i);\n    await expect(placeholderText).toBeVisible();\n\n    // Verify upload area has no file input\n    const fileInput = page.getByRole('input', { name: /file/i });\n    await expect(fileInput).not.toBeVisible();\n\n    // Verify upload button is enabled\n    await expect(uploadButton).toBeEnabled();\n\n    // Verify paste button is enabled\n    await expect(pasteButton).toBeEnabled();\n\n    // Verify upload area has no error message\n    const errorMessage = page.getByText(/error/i);\n    await expect(errorMessage).not.toBeVisible();\n\n    // Paste invalid image file using keyboard shortcut (Ctrl+V)\n    await page.keyboard.press('Ctrl+V');\n\n    // Verify file input appears\n    await expect(fileInput).toBeVisible();\n\n    // Verify",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4921,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3935,
+        "missing_keywords": [],
+        "assertion_count": 23,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 354.945,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4448,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.2359,
+        "missing_keywords": [],
+        "assertion_count": 43,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 526.151,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.4333,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.1977,
+        "missing_keywords": [],
+        "assertion_count": 59,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 598.129,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_005",
+  "category": "authentication",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a confirmation message after successfully resetting my password.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Password Reset Confirmation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/reset-password');\n  });\n\n  test('should display confirmation message after password reset', async ({ page }) => {\n    await page.fill(getByLabel('Email'), 'user@example.com');\n    await page.click(getByRole('button', { name: 'Reset Password' }));\n    \n    const confirmationMessage = await page.getByText('A confirmation link has been sent to your email.');\n    await expect(confirmationMessage).toBeVisible();\n  });\n\n  test('should not display confirmation message for invalid email', async ({ page }) => {\n    await page.fill(getByLabel('Email'), 'invalid-email');\n    await page.click(getByRole('button', { name: 'Reset Password' }));\n    \n    const errorMessage = await page.getByText('Please enter a valid email address.');\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 209,
+  "latency_s": 2.9,
+  "timestamp": "2026-06-19T16:43:38.398035"
+}

@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_147",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7701,
+  "total_latency_s": 186.628,
+  "final_script": "describe('Table Sorting by Column Headers', () => {\n  beforeEach(() => {\n    cy.visit('/table');\n  });\n\n  it('should sort table in ascending order when clicking column header', () => {\n    // Verify table is visible\n    cy.get('[data-testid=\"table-container\"]').should('be.visible');\n    \n    // Verify initial state (unsorted or default order)\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', 'John Doe');\n    \n    // Click on 'Name' column header to sort ascending\n    cy.get('[data-testid=\"column-header-name\"]').click();\n    \n    // Verify table is sorted by Name in ascending order\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', 'Alice Smith');\n    cy.get('[data-testid=\"table-row\"]').eq(1).should('contain', 'Bob Johnson');\n    \n    // Verify sort indicator is present\n    cy.get('[data-testid=\"column-header-name\"]').should('have.class', 'sorted-asc');\n    \n    // Click on 'Name' column header again to sort descending\n    cy.get('[data-testid=\"column-header-name\"]').click();\n    \n    // Verify table is now sorted in descending order\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', 'Zoe Williams');\n    cy.get('[data-testid=\"table-row\"]').eq(1).should('contain', 'Charlie Brown');\n    \n    // Verify sort indicator is updated\n    cy.get('[data-testid=\"column-header-name\"]').should('have.class', 'sorted-desc');\n  });\n\n  it('should handle sorting with empty or null values gracefully', () => {\n    // Click on 'Age' column header to sort\n    cy.get('[data-testid=\"column-header-age\"]').click();\n    \n    // Verify table is sorted by Age\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', '25');\n    \n    // Click on 'Email' column header to sort\n    cy.get('[data-testid=\"column-header-email\"]').click();\n    \n    // Verify table is sorted by Email\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', 'a@example.com');\n    \n    // Click on 'Email' column header again to sort descending\n    cy.get('[data-testid=\"column-header-email\"]').click();\n    \n    // Verify table is sorted by Email in descending order\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', 'z@example.com');\n    \n    // Verify sort indicator is present\n    cy.get('[data-testid=\"column-header-email\"]').should('have.class', 'sorted-desc');\n    \n    // Verify table rows still exist after sorting\n    cy.get('[data-testid=\"table-row\"]').should('have.length.greaterThan', 0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4709,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3431,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.269,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7701,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4336,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 114.359,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

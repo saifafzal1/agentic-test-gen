@@ -1,0 +1,13 @@
+{
+  "id": "TC_007",
+  "category": "authentication",
+  "complexity": "complex",
+  "user_story": "As a user, I want to stay logged in with a 'Remember Me' checkbox.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Authentication', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should log in with \"Remember Me\" checked', async ({ page }) => {\n    await page.getByLabel('Email').fill('user@example.com');\n    await page.getByLabel('Password').fill('password123');\n    await page.getByRole('checkbox', { name: 'Remember Me' }).check();\n    await page.getByRole('button', { name: 'Login' }).click();\n\n    await expect(page).toHaveURL('/dashboard');\n    await expect(page.getByText('Welcome back!')).toBeVisible();\n  });\n\n  test('should remain logged in after refreshing the page', async ({ page }) => {\n    await page.getByLabel('Email').fill('user@example.com');\n    await page.getByLabel('Password').fill('password123');\n    await page.getByRole('checkbox', { name: 'Remember Me' }).check();\n    await page.getByRole('button', { name: 'Login' }).click();\n\n    await expect(page).toHaveURL('/dashboard');\n\n    await page.reload();\n    await expect(page).toHaveURL('/dashboard');\n    await expect(page.getByText('Welcome back!')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 284,
+  "latency_s": 3.84,
+  "timestamp": "2026-06-19T16:43:46.681620"
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_225",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7531,
+  "total_latency_s": 51.315,
+  "final_script": "describe('Date Picker Keyboard Operability', () => {\n  beforeEach(() => {\n    cy.visit('/date-picker');\n  });\n\n  it('should navigate through date picker using arrow keys and select a date', () => {\n    // Open date picker\n    cy.get('[data-testid=\"date-picker-input\"]').click();\n\n    // Verify date picker is visible\n    cy.get('[data-testid=\"date-picker-container\"]').should('be.visible');\n\n    // Navigate to previous month using left arrow\n    cy.get('[data-testid=\"prev-month-button\"]').click();\n    cy.get('[data-testid=\"date-picker-container\"]').should('be.visible');\n    cy.get('[data-testid=\"date-picker-input\"]').should('contain', '12');\n\n    // Navigate to next month using right arrow\n    cy.get('[data-testid=\"next-month-button\"]').click();\n    cy.get('[data-testid=\"date-picker-container\"]').should('be.visible');\n    cy.get('[data-testid=\"date-picker-input\"]').should('contain', '01');\n\n    // Navigate to current day using down arrow\n    cy.get('[data-testid=\"down-arrow-button\"]').click();\n    cy.get('[data-testid=\"date-picker-input\"]').should('contain', '01');\n\n    // Navigate to next day using down arrow\n    cy.get('[data-testid=\"down-arrow-button\"]').click();\n    cy.get('[data-testid=\"date-picker-input\"]').should('contain', '02');\n\n    // Select a specific date using tab and enter\n    cy.get('[data-testid=\"date-picker-input\"]').should('be.visible');\n    cy.get('[data-testid=\"date-picker-input\"]').type('15');\n    cy.get('[data-testid=\"date-picker-input\"]').type('{enter}');\n\n    // Verify date is selected\n    cy.get('[data-testid=\"selected-date-label\"]').should('contain', '15');\n\n    // Verify date picker closes\n    cy.get('[data-testid=\"date-picker-container\"]').should('not.exist');\n  });\n\n  it('should handle edge case when navigating to last day of month', () => {\n    // Open date picker\n    cy.get('[data-testid=\"date-picker-input\"]').click();\n    cy.get('[data-testid=\"date-picker-container\"]').should('be.visible');\n\n    // Navigate to last day of previous month\n    cy.get('[data-testid=\"prev-month-button\"]').click();\n    cy.get('[data-testid=\"date-picker-input\"]').should('contain', '31');\n\n    // Navigate to last day of current month\n    cy.get('[data-testid=\"prev-month-button\"]').click();\n    cy.get('[data-testid=\"date-picker-input\"]').should('contain', '31');\n\n    // Navigate to last day of next month\n    cy.get('[data-testid=\"prev-month-button\"]').click();\n    cy.get('[data-testid=\"date-picker-input\"]').should('contain', '31');\n\n    // Verify date picker does not allow navigation beyond last day\n    cy.get('[data-testid=\"prev-month-button\"]').click();\n    cy.get('[data-testid=\"date-picker-input\"]').should('contain', '31');\n\n    // Verify date picker remains open\n    cy.get('[data-testid=\"date-picker-container\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7531,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3771,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 51.315,
+      "feedback_used": ""
+    }
+  ]
+}

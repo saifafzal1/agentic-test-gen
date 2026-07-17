@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_038",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8226,
+  "total_latency_s": 71.573,
+  "final_script": "describe('Logo Navigation to Home Page', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should navigate to home page when logo is clicked', () => {\n    // Verify we are on the dashboard page\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Dashboard');\n    \n    // Verify logo exists\n    cy.get('[data-testid=\"logo\"]').should('be.visible');\n    \n    // Click the logo\n    cy.get('[data-testid=\"logo\"]').click();\n    \n    // Verify navigation to home page\n    cy.url().should('include', '/');\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Home');\n    cy.get('[data-testid=\"home-hero\"]').should('be.visible');\n  });\n\n  it('should handle logo click when on home page and navigate to home page', () => {\n    // Navigate to home page first\n    cy.visit('/');\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Home');\n    \n    // Click the logo on home page\n    cy.get('[data-testid=\"logo\"]').click();\n    \n    // Verify we are still on home page\n    cy.url().should('include', '/');\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'Home');\n    cy.get('[data-testid=\"home-hero\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8226,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.6087,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.573,
+      "feedback_used": ""
+    }
+  ]
+}

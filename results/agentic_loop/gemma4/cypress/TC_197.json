@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_197",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8243,
+  "total_latency_s": 72.84,
+  "final_script": "describe('Search Input Focus on Slash Key Press', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should focus search input when user presses / key', () => {\n    // Verify search input is not focused initially\n    cy.get('[data-testid=\"search-input\"]').should('not.have.focus');\n\n    // Press / key\n    cy.get('body').type('/');\n\n    // Verify search input is now focused\n    cy.get('[data-testid=\"search-input\"]').should('have.focus');\n\n    // Verify search input has focus styling\n    cy.get('[data-testid=\"search-input\"]').should('have.class', 'focused-state');\n\n    // Verify search input is visible\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n  });\n\n  it('should not focus search input when other keys are pressed', () => {\n    // Verify search input is not focused initially\n    cy.get('[data-testid=\"search-input\"]').should('not.have.focus');\n\n    // Press Enter key\n    cy.get('body').type('{Enter}');\n\n    // Verify search input is not focused\n    cy.get('[data-testid=\"search-input\"]').should('not.have.focus');\n\n    // Press Tab key\n    cy.get('body').type('{Tab}');\n\n    // Verify search input is not focused\n    cy.get('[data-testid=\"search-input\"]').should('not.have.focus');\n\n    // Press Shift + Enter\n    cy.get('body').type('{Shift}{Enter}');\n\n    // Verify search input is not focused\n    cy.get('[data-testid=\"search-input\"]').should('not.have.focus');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8243,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.6142,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.84,
+      "feedback_used": ""
+    }
+  ]
+}

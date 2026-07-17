@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_162",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7758,
+  "total_latency_s": 878.15,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Virtual Scroll List Performance with 10,000 Rows', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/virtual-scroll-list');\n  });\n\n  test('should handle 10,000 rows without lag', async ({ page }) => {\n    // Setup: intercept the API call to get the list data\n    await page.route('**/api/list-data', (route) => {\n      route.continue();\n    });\n\n    // Get the list container\n    const listContainer = page.getByRole('region', { name: /virtual scroll list/i });\n    await expect(listContainer).toBeVisible();\n\n    // Get the scrollbar\n    const scrollbar = page.getByRole('slider', { name: /scroll/i });\n    await expect(scrollbar).toBeVisible();\n\n    // Get the first item\n    const firstItem = page.getByRole('heading', { name: /item 1/i });\n    await expect(firstItem).toBeVisible();\n\n    // Get the last item\n    const lastItem = page.getByRole('heading', { name: /item 10000/i });\n    await expect(lastItem).toBeVisible();\n\n    // Verify the list has 10,000 items\n    const itemCount = page.getByRole('heading', { name: /item \\d+/i }).count();\n    expect(itemCount).toBe(10000);\n\n    // Verify the scrollbar is visible and has a value\n    await expect(scrollbar).toBeVisible();\n    const scrollValue = await scrollbar.evaluate((el) => el.value);\n    expect(scrollValue).toBeGreaterThan(0);\n\n    // Verify the list is not empty\n    const listItems = page.getByRole('listitem');\n    await expect(listItems).toHaveCount(10000);\n\n    // Verify the list is not empty\n    const listItemCount = page.getByRole('listitem').count();\n    expect(listItemCount).toBe(10000);\n\n    // Verify the first item is visible\n    await expect(firstItem).toBeVisible();\n\n    // Verify the last item is visible\n    await expect(lastItem).toBeVisible();\n\n    // Verify the list is responsive and does not cause layout shift\n    await expect(page).toHaveNoCrashed();\n  });\n\n  test('should handle dynamic updates to the list without lag', async ({ page }) => {\n    // Setup: intercept the API call to get the list data\n    await page.route('**/api/list-data', (route) => {\n      route.continue();\n    });\n\n    // Get the list container\n    const listContainer = page.getByRole('region', { name: /virtual scroll list/i });\n    await expect(listContainer).toBeVisible();\n\n    // Get the scrollbar\n    const scrollbar = page.getByRole('slider', { name: /scroll/i });\n    await expect(scrollbar).toBeVisible();\n\n    // Get the first item\n    const firstItem = page.getByRole('heading', { name: /item 1/i });\n    await expect(firstItem).toBeVisible();\n\n    // Get the last item\n    const lastItem = page.getByRole('heading', { name: /item 10000/i });\n    await expect(lastItem).toBeVisible();\n\n    // Verify the list has 10,000 items\n    const itemCount = page.getByRole('heading', { name: /item \\d+/i }).count();\n    expect(itemCount).toBe(10000);\n\n    // Verify the scrollbar is visible and has a value\n    await expect(scrollbar).toBeVisible();\n    const scrollValue = await scrollbar.evaluate((el) => el.value);\n    expect(scrollValue).toBeGreaterThan(0);\n\n    // Verify the list is responsive and does not cause layout shift\n    await expect(page).toHaveNoCrashed();\n\n    // Trigger a dynamic update to the list\n    await page.route('**/api/list-data', (route) => {\n      route.continue();\n    });\n\n    // Verify the list updates without lag\n    const updatedItemCount = page.getByRole('heading', { name: /item \\d+/i }).count();\n    expect(updatedItemCount).toBe(10000);\n\n    // Verify the scrollbar value remains consistent\n    const updatedScrollValue = await scrollbar.evaluate((el) => el.value);\n    expect(updatedScrollValue).toBeGreaterThan(0);\n\n    // Verify the list is still responsive and does not cause layout shift\n    await expect(page).toHaveNoCrashed();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4945,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4016,
+        "missing_keywords": [],
+        "assertion_count": 22,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 367.309,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7758,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3525,
+        "missing_keywords": [],
+        "assertion_count": 23,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 510.841,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

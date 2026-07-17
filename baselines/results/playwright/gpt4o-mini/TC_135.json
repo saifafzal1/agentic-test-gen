@@ -1,0 +1,13 @@
+{
+  "id": "TC_135",
+  "category": "modal_dialog",
+  "complexity": "medium",
+  "user_story": "As a user, I want a drawer/slide-in panel to open from the right.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Drawer/Slide-in Panel', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('http://your-application-url.com');\n  });\n\n  test('should open the drawer when the button is clicked', async ({ page }) => {\n    await page.getByRole('button', { name: /open drawer/i }).click();\n    const drawer = page.getByRole('dialog', { name: /drawer panel/i });\n    await expect(drawer).toBeVisible();\n  });\n\n  test('should close the drawer when the close button is clicked', async ({ page }) => {\n    await page.getByRole('button', { name: /open drawer/i }).click();\n    const drawer = page.getByRole('dialog', { name: /drawer panel/i });\n    await expect(drawer).toBeVisible();\n\n    await drawer.getByRole('button', { name: /close/i }).click();\n    await expect(drawer).toBeHidden();\n  });\n});",
+  "prompt_tokens": 135,
+  "completion_tokens": 217,
+  "latency_s": 3.34,
+  "timestamp": "2026-06-19T16:52:49.220063"
+}

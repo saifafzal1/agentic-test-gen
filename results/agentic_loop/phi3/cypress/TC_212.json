@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_212",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7205,
+  "total_latency_s": 362.57,
+  "final_script": "describe('Icon Button Accessibility', () => {\n  beforeEach(() => {\n    cy.visit('/icon-buttons');\n  });\n\n  it('should display accessible names for all icon buttons', () => {\n    cy.get('[data-testid=\"icon-button-home\"]').should('be.visible');\n    cy.get('[data-testid=\"icon-button-home\"]').should('have.attr', 'aria-label', 'Go to Home');\n\n    cy.get('[data-testid=\"icon-button-settings\"]').should('be.visible');\n    cy.get('[data-testid=\"icon-button-settings\"]').should('have.attr', 'aria-label', 'Open Settings');\n\n    cy.get('[data-testid=\"icon-button-help\"]').should('be.visible');\n    cy.get('[data-testid=\"icon-button-help\"]').should('have.attr', 'aria-label', 'Get Help');\n\n    cy.get('[data-testid=\"icon-button-logout\"]').should('be.visible');\n    cy.get('[data-testid=\"icon-button-logout\"]').should('have.attr', 'aria-label', 'Logout');\n  });\n\n  it('should handle icon button with no visible text', () => {\n    cy.get('[data-testid=\"icon-button-search\"]').should('be.visible');\n    cy.get('[data-testid=\"icon-button-search\"]').should('have.attr', 'aria-label', 'Search');\n\n    cy.get('[data-testid=\"icon-button-settings\"]').should('be.visible');\n    cy.get('[data-testid=\"icon-button-settings\"]').should('have.attr', 'aria-label', 'Open Settings');\n\n    cy.get('[data-testid=\"icon-button-help\"]').should('be.visible');\n    cy.get('[data-testid=\"icon-button-help\"]').should('have.attr', 'aria-label', 'Get Help');\n\n    cy.get('[data-testid=\"icon-button-logout\"]').should('be.visible');\n    cy.get('[data-testid=\"icon-button-logout\"]').should('have.attr', 'aria-label', 'Logout');\n\n    // Verify that the button with no visible text has an appropriate aria-label\n    cy.get('[data-testid=\"icon-button-search\"]').should('have.attr', 'aria-label', 'Search');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7205,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2683,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 362.57,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_147",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8023,
+  "total_latency_s": 72.566,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Sorting by Column Headers', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/table');\n  });\n\n  test('should sort table by clicking column headers', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify initial sort order (should be default or unsorted)\n    const rows = page.getByRole('row');\n    const firstRow = rows.first();\n    const lastRow = rows.last();\n    const firstLastName = await firstRow.getByText().first().textContent();\n    const lastLastName = await lastRow.getByText().first().textContent();\n    expect(firstLastName).not.toBe(lastLastName);\n\n    // Click 'Last Name' column header to sort\n    const lastNameHeader = page.getByRole('columnheader', { name: /last name/i });\n    await lastNameHeader.click();\n\n    // Verify table is sorted by Last Name (A-Z)\n    const sortedRows = page.getByRole('row');\n    const sortedFirstRow = sortedRows.first();\n    const sortedLastRow = sortedRows.last();\n    const sortedFirstLastName = await sortedFirstRow.getByText().first().textContent();\n    const sortedLastLastName = await sortedLastRow.getByText().first().textContent();\n    expect(sortedFirstLastName).toBeLessThanOrEqual(sortedLastLastName);\n\n    // Click 'Last Name' column header again to reverse sort (Z-A)\n    await lastNameHeader.click();\n\n    // Verify table is reverse sorted by Last Name (Z-A)\n    const reverseSortedRows = page.getByRole('row');\n    const reverseSortedFirstRow = reverseSortedRows.first();\n    const reverseSortedLastRow = reverseSortedRows.last();\n    const reverseSortedFirstLastName = await reverseSortedFirstRow.getByText().first().textContent();\n    const reverseSortedLastLastName = await reverseSortedLastRow.getByText().first().textContent();\n    expect(reverseSortedFirstLastName).toBeGreaterThanOrEqual(reverseSortedLastLastName);\n\n    // Click 'First Name' column header to sort\n    const firstNameHeader = page.getByRole('columnheader', { name: /first name/i });\n    await firstNameHeader.click();\n\n    // Verify table is sorted by First Name (A-Z)\n    const finalSortedRows = page.getByRole('row');\n    const finalFirstRow = finalSortedRows.first();\n    const finalLastRow = finalSortedRows.last();\n    const finalFirstLastName = await finalFirstRow.getByText().first().textContent();\n    const finalLastLastName = await finalLastRow.getByText().first().textContent();\n    expect(finalFirstLastName).toBeLessThanOrEqual(finalLastLastName);\n  });\n\n  test('should handle sorting with empty table', async ({ page }) => {\n    // Navigate to empty table view\n    await page.goto('/table?empty=true');\n\n    // Verify table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify empty state message is displayed\n    const emptyMessage = page.getByText('No records found');\n    await expect(emptyMessage).toBeVisible();\n\n    // Verify no column headers are present\n    const columnHeaders = page.getByRole('columnheader');\n    await expect(columnHeaders).not.toBeVisible();\n\n    // Verify no rows are present\n    const rows = page.getByRole('row');\n    const rowCount = await rows.count();\n    expect(rowCount).toBe(0);\n\n    // Attempt to click a column header (should not crash)\n    const lastNameHeader = page.getByRole('columnheader', { name: /last name/i });\n    if (await lastNameHeader.isVisibleEnabled()) {\n      await lastNameHeader.click();\n    }\n\n    // Verify empty state message persists\n    await expect(emptyMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8023,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4409,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.566,
+      "feedback_used": ""
+    }
+  ]
+}

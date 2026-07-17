@@ -1,0 +1,13 @@
+{
+  "id": "TC_200",
+  "category": "search_filter",
+  "complexity": "simple",
+  "user_story": "As a user, I want to remove individual filter tags by clicking an x icon.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Remove individual filter tags', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n    cy.get('[data-testid=\"search-input\"]').type('test query');\n    cy.get('[data-testid=\"filter-button\"]').click();\n    cy.get('[data-testid=\"filter-option-category\"]').click();\n    cy.get('[data-testid=\"filter-option-price\"]').click();\n    cy.get('[data-testid=\"apply-filters-button\"]').click();\n  });\n\n  it('should remove a single filter tag when clicking the x icon', () => {\n    cy.get('[data-testid=\"filter-tag\"]').should('have.length', 2);\n    cy.get('[data-testid=\"filter-tag-remove-icon\"]').first().click();\n    cy.get('[data-testid=\"filter-tag\"]').should('have.length', 1);\n    cy.get('[data-testid=\"filter-tag\"]').should('contain', 'Price');\n  });\n\n  it('should remove all filter tags one by one', () => {\n    cy.get('[data-testid=\"filter-tag\"]').should('have.length', 2);\n    cy.get('[data-testid=\"filter-tag-remove-icon\"]').first().click();\n    cy.get('[data-testid=\"filter-tag\"]').should('have.length', 1);\n    cy.get('[data-testid=\"filter-tag-remove-icon\"]').click();\n    cy.get('[data-testid=\"filter-tag\"]').should('have.length', 0);\n    cy.get('[data-testid=\"no-filters-message\"]').should('be.visible');\n  });\n\n  it('should update search results after removing a filter tag', () => {\n    cy.get('[data-testid=\"search-result\"]').should('have.length.greaterThan', 0);\n    const initialResultCount = cy.get('[data-testid=\"search-result\"]').its('length');\n    cy.get('[data-testid=\"filter-tag-remove-icon\"]').first().click();\n    cy.get('[data-testid=\"search-result\"]').should('have.length.greaterThan', 0);\n  });\n\n  it('should handle removing filter tag when only one filter is applied', () => {\n    cy.get('[data-testid=\"filter-tag-remove-icon\"]').first().click();\n    cy.get('[data-testid=\"filter-tag\"]').should('have.length', 1);\n    cy.get('[data-testid=\"filter-tag-remove-icon\"]').click();\n    cy.get('[data-testid=\"filter-tag\"]').should('not.exist');\n    cy.get('[data-testid=\"search-input\"]').should('have.value', 'test query');\n  });\n});",
+  "prompt_tokens": 122,
+  "completion_tokens": 688,
+  "latency_s": 3.97,
+  "timestamp": "2026-06-19T17:26:19.170274"
+}

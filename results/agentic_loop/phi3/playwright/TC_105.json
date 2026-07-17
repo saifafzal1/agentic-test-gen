@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_105",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8467,
+  "total_latency_s": 411.339,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Unsaved Form Warning', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should display warning when user attempts to navigate away from unsaved form', async ({ page }) => {\n    // Fill form fields using getByLabel\n    const nameInput = page.getByLabel('Name');\n    await nameInput.fill('John Doe');\n\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('john@example.com');\n\n    // Submit form using getByRole\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Attempt to navigate away using getByRole\n    const backButton = page.getByRole('button', { name: /back/i });\n    await backButton.click();\n\n    // Verify warning message appears\n    const warningMessage = page.getByText('You have unsaved changes');\n    await expect(warningMessage).toBeVisible();\n\n    // Verify navigation is blocked\n    const navigationLink = page.getByRole('link', { name: /cancel/i });\n    await expect(navigationLink).toBeDisabled();\n\n    // Verify form fields are still filled\n    await expect(nameInput).toHaveValue('John Doe');\n    await expect(emailInput).toHaveValue('john@example.com');\n\n    // Verify warning message is still visible\n    await expect(warningMessage).toBeVisible();\n  });\n\n  test('should clear warning when form is saved', async ({ page }) => {\n    // Fill form fields using getByLabel\n    const nameInput = page.getByLabel('Name');\n    await nameInput.fill('Jane Smith');\n\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('jane@example.com');\n\n    // Submit form using getByRole\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify warning message is gone\n    const warningMessage = page.getByText('You have unsaved changes');\n    await expect(warningMessage).not.toBeVisible();\n\n    // Verify navigation is enabled\n    const navigationLink = page.getByRole('link', { name: /cancel/i });\n    await expect(navigationLink).not.toBeDisabled();\n\n    // Verify form fields are still filled\n    await expect(nameInput).toHaveValue('Jane Smith');\n    await expect(emailInput).toHaveValue('jane@example.com');\n\n    // Verify warning message is not visible\n    await expect(warningMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8467,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.489,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 411.339,
+      "feedback_used": ""
+    }
+  ]
+}

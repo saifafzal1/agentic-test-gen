@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_023",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7589,
+  "total_latency_s": 419.061,
+  "final_script": "describe('Registration Form Email Validation', () => {\n  beforeEach(() => {\n    cy.visit('/register');\n  });\n\n  it('should display error message when submitting form with invalid email', () => {\n    // Intercept the registration API call\n    cy.intercept('POST', '/api/register').as('registerRequest');\n\n    // Fill in the form with invalid email\n    cy.get('[data-testid=\"email-input\"]').type('not-an-email');\n    cy.get('[data-testid=\"password-input\"]').type('SecurePassword123');\n    cy.get('[data-testid=\"confirm-password-input\"]').type('SecurePassword123');\n    cy.get('[data-testid=\"name-input\"]').type('John Doe');\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"email-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"email-error-message\"]').should('contain', 'Please enter a valid email address');\n\n    // Verify form is not submitted\n    cy.get('[data-testid=\"register-form\"]').should('have.class', 'is-submitting');\n    cy.get('[data-testid=\"register-form\"]').should('not.have.class', 'is-valid');\n\n    // Verify error state persists after form reset\n    cy.get('[data-testid=\"reset-button\"]').click();\n    cy.get('[data-testid=\"email-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"email-error-message\"]').should('contain', 'Please enter a valid email address');\n  });\n\n  it('should clear error message when form is validated with correct email', () => {\n    // Intercept the registration API call\n    cy.intercept('POST', '/api/register').as('registerRequest');\n\n    // Fill in the form with valid email\n    cy.get('[data-testid=\"email-input\"]').type('john.doe@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('SecurePassword123');\n    cy.get('[data-testid=\"confirm-password-input\"]').type('SecurePassword123');\n    cy.get('[data-testid=\"name-input\"]').type('Jane Doe');\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify error message is cleared\n    cy.get('[data-testid=\"email-error-message\"]').should('not.exist');\n\n    // Verify form is submitted successfully\n    cy.get('[data-testid=\"register-form\"]').should('not.have.class', 'is-submitting');\n    cy.get('[data-testid=\"register-form\"]').should('have.class', 'is-valid');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Registration successful');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7589,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3964,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 419.061,
+      "feedback_used": ""
+    }
+  ]
+}

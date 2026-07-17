@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_068",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7797,
+  "total_latency_s": 376.201,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Live Data Last Updated Timestamp', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/live-data');\n  });\n\n  test('should display the last updated timestamp for live data', async ({ page }) => {\n    // Verify the live data table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify the last updated timestamp is displayed\n    const timestamp = page.getByText('Last Updated: 2023-04-01 12:34:56');\n    await expect(timestamp).toBeVisible();\n\n    // Verify the timestamp is formatted correctly\n    const timestampText = page.getByText('Last Updated: 2023-04-01 12:34:56');\n    await expect(timestampText).toContainText('2023-04-01');\n    await expect(timestampText).toContainText('12:34');\n\n    // Verify the timestamp is clickable and navigates to a detailed view\n    await expect(timestamp).toBeClickable();\n    const detailView = page.getByRole('region', { name: /live data details/i });\n    await expect(detailView).toBeVisible();\n\n    // Verify the detail view contains more information\n    const detailTitle = page.getByText('Live Data Details');\n    await expect(detailTitle).toBeVisible();\n\n    // Verify the detail view has a refresh button\n    const refreshButton = page.getByRole('button', { name: /refresh/i });\n    await expect(refreshButton).toBeVisible();\n\n    // Verify the refresh button is clickable\n    await expect(refreshButton).toBeClickable();\n  });\n\n  test('should handle empty live data with no timestamp', async ({ page }) => {\n    // Verify the live data table is visible\n    const table = page.getByRole('table');\n    await expect(table).toBeVisible();\n\n    // Verify the last updated timestamp is not displayed\n    const timestamp = page.getByText('Last Updated: 2023-04-01 12:34:56');\n    await expect(timestamp).not.toBeVisible();\n\n    // Verify the table has a loading state\n    const loadingState = page.getByText('Loading...');\n    await expect(loadingState).toBeVisible();\n\n    // Verify the table has no data rows\n    const dataRows = page.getByRole('row');\n    await expect(dataRows).not.toBeVisible();\n\n    // Verify the table has a no data message\n    const noDataMessage = page.getByText('No live data available');\n    await expect(noDataMessage).toBeVisible();\n\n    // Verify the refresh button is visible and clickable\n    const refreshButton = page.getByRole('button', { name: /refresh/i });\n    await expect(refreshButton).toBeVisible();\n    await expect(refreshButton).toBeClickable();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7797,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3657,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 376.201,
+      "feedback_used": ""
+    }
+  ]
+}

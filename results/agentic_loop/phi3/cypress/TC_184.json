@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_184",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7553,
+  "total_latency_s": 310.887,
+  "final_script": "describe('File Upload - Set Title and Description', () => {\n  beforeEach(() => {\n    cy.visit('/file-upload');\n  });\n\n  it('should successfully upload a file with title and description', () => {\n    // Intercept the file upload API\n    cy.intercept('POST', '/api/files/upload').as('uploadFile');\n\n    // Select file input\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/sample-document.pdf', { force: true });\n\n    // Fill title and description fields\n    cy.get('[data-testid=\"file-title-input\"]').type('Annual Report');\n    cy.get('[data-testid=\"file-description-input\"]').type('Yearly financial summary');\n\n    // Submit the form\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for the upload API call\n    cy.wait('@uploadFile');\n\n    // Verify success message\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'File uploaded successfully');\n\n    // Verify file details are displayed\n    cy.get('[data-testid=\"file-details\"]').should('be.visible');\n    cy.get('[data-testid=\"file-title\"]').should('contain', 'Annual Report');\n    cy.get('[data-testid=\"file-description\"]').should('contain', 'Yearly financial summary');\n\n    // Verify file is listed in the uploads section\n    cy.get('[data-testid=\"uploaded-files-list\"]').should('contain', 'Annual Report');\n  });\n\n  it('should handle empty title and description fields', () => {\n    // Intercept the file upload API\n    cy.intercept('POST', '/api/files/upload').as('uploadFile');\n\n    // Select file input\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/sample-document.pdf', { force: true });\n\n    // Attempt to submit without filling title or description\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@uploadFile');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Title and description are required');\n\n    // Verify file is not listed in the uploads section\n    cy.get('[data-testid=\"uploaded-files-list\"]').should('not.contain', 'Annual Report');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7553,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3842,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 310.887,
+      "feedback_used": ""
+    }
+  ]
+}

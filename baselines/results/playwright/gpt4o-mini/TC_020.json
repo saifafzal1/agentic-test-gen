@@ -1,0 +1,13 @@
+{
+  "id": "TC_020",
+  "category": "form_validation",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a confirmation password mismatch error in real-time.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Password Confirmation Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/signup'); // Replace with the actual signup page URL\n  });\n\n  test('should show error message when passwords do not match', async ({ page }) => {\n    await page.fill(getByLabel('Password'), 'password123');\n    await page.fill(getByLabel('Confirm Password'), 'password321');\n    await page.waitForTimeout(500); // Simulate real-time validation delay\n    const errorMessage = await page.getByText('Passwords do not match');\n    await expect(errorMessage).toBeVisible();\n  });\n\n  test('should not show error message when passwords match', async ({ page }) => {\n    await page.fill(getByLabel('Password'), 'password123');\n    await page.fill(getByLabel('Confirm Password'), 'password123');\n    await page.waitForTimeout(500); // Simulate real-time validation delay\n    const errorMessage = page.getByText('Passwords do not match');\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 236,
+  "latency_s": 3.64,
+  "timestamp": "2026-06-19T16:44:45.078650"
+}

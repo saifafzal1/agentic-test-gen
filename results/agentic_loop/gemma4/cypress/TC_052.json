@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_052",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7653,
+  "total_latency_s": 71.229,
+  "final_script": "describe('Sticky Header Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/home');\n  });\n\n  it('should display sticky header and keep it visible when scrolling down', () => {\n    // Verify header is visible initially\n    cy.get('[data-testid=\"header\"]').should('be.visible');\n    cy.get('[data-testid=\"header\"]').should('have.css', 'position', 'fixed');\n    cy.get('[data-testid=\"header\"]').should('have.css', 'top', '0px');\n\n    // Verify header contains navigation links\n    cy.get('[data-testid=\"nav-link-home\"]').should('be.visible');\n    cy.get('[data-testid=\"nav-link-about\"]').should('be.visible');\n    cy.get('[data-testid=\"nav-link-contact\"]').should('be.visible');\n\n    // Scroll down to trigger sticky behavior\n    cy.scrollTo('bottom');\n\n    // Verify header remains visible and fixed at the top\n    cy.get('[data-testid=\"header\"]').should('be.visible');\n    cy.get('[data-testid=\"header\"]').should('have.css', 'position', 'fixed');\n    cy.get('[data-testid=\"header\"]').should('have.css', 'top', '0px');\n\n    // Verify header does not disappear when scrolling\n    cy.get('[data-testid=\"header\"]').should('be.visible');\n    cy.get('[data-testid=\"header\"]').should('not.have.css', 'display', 'none');\n\n    // Verify navigation links are still accessible\n    cy.get('[data-testid=\"nav-link-home\"]').should('be.visible');\n    cy.get('[data-testid=\"nav-link-about\"]').should('be.visible');\n  });\n\n  it('should handle scrolling up and maintain sticky header visibility', () => {\n    // Scroll down to trigger sticky header\n    cy.scrollTo('bottom');\n    cy.get('[data-testid=\"header\"]').should('be.visible');\n    cy.get('[data-testid=\"header\"]').should('have.css', 'position', 'fixed');\n\n    // Scroll back up\n    cy.scrollTo('top');\n\n    // Verify header remains sticky and visible\n    cy.get('[data-testid=\"header\"]').should('be.visible');\n    cy.get('[data-testid=\"header\"]').should('have.css', 'position', 'fixed');\n    cy.get('[data-testid=\"header\"]').should('have.css', 'top', '0px');\n\n    // Verify header does not jump or flicker\n    cy.get('[data-testid=\"header\"]').should('not.have.css', 'opacity', '0');\n\n    // Verify navigation links are still functional\n    cy.get('[data-testid=\"nav-link-home\"]').click();\n    cy.url().should('include', '/home');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7653,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4178,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.229,
+      "feedback_used": ""
+    }
+  ]
+}

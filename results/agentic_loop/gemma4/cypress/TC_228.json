@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_228",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7452,
+  "total_latency_s": 71.965,
+  "final_script": "describe('Tablet Layout - Two Column Grid', () => {\n  beforeEach(() => {\n    cy.visit('/tablet-view');\n  });\n\n  it('should display two-column grid layout on tablet screen', () => {\n    // Intercept API calls to verify data loading\n    cy.intercept('GET', '/api/products').as('getProducts');\n    cy.wait('@getProducts');\n\n    // Verify the viewport is set to tablet size\n    cy.viewport('ipad');\n\n    // Verify the two-column grid is visible\n    cy.get('[data-testid=\"product-grid\"]').should('be.visible');\n    cy.get('[data-testid=\"product-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify the grid has two columns\n    cy.get('[data-testid=\"product-grid\"]').should('have.css', 'grid-template-columns', '2');\n\n    // Verify each item is displayed in a column\n    cy.get('[data-testid=\"product-item\"]').each(($item) => {\n      cy.wrap($item).should('be.visible');\n    });\n\n    // Verify the layout is responsive and not stacked\n    cy.get('[data-testid=\"product-item\"]').first().should('not.have.css', 'width', '100%');\n    cy.get('[data-testid=\"product-item\"]').first().should('have.css', 'width', 'calc(50% - 16px)');\n  });\n\n  it('should handle edge case with empty product list on tablet', () => {\n    // Intercept API call with empty response\n    cy.intercept('GET', '/api/products', {\n      statusCode: 200,\n      body: { products: [] }\n    }).as('getEmptyProducts');\n    cy.wait('@getEmptyProducts');\n\n    // Verify the viewport is set to tablet size\n    cy.viewport('ipad');\n\n    // Verify the grid container is visible\n    cy.get('[data-testid=\"product-grid\"]').should('be.visible');\n\n    // Verify no product items are displayed\n    cy.get('[data-testid=\"product-item\"]').should('not.exist');\n\n    // Verify an empty state message is shown\n    cy.get('[data-testid=\"empty-state-message\"]').should('be.visible');\n    cy.get('[data-testid=\"empty-state-message\"]').should('contain', 'No products found');\n\n    // Verify the grid container has appropriate styling even when empty\n    cy.get('[data-testid=\"product-grid\"]').should('have.css', 'grid-template-columns', '2');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7452,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3508,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.965,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_023",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8816,
+  "total_latency_s": 71.101,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Registration Form Email Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/register');\n  });\n\n  test('should display error message when submitting registration form with invalid email', async ({ page }) => {\n    // Fill in valid name and password\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('John Doe');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('ValidPassword123');\n\n    // Fill in invalid email\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('invalid-email-format');\n\n    // Click submit button\n    const submitButton = page.getByRole('button', { name: /register/i });\n    await submitButton.click();\n\n    // Wait for error message to appear\n    await page.waitForTimeout(500);\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('Please enter a valid email address');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify form is not submitted\n    const successMessage = page.getByText('Registration successful');\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify email input still contains invalid value\n    await expect(emailInput).toHaveValue('invalid-email-format');\n  });\n\n  test('should allow form submission with valid email and display success message', async ({ page }) => {\n    // Fill in valid name, email, and password\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('Jane Smith');\n\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('jane.smith@example.com');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('ValidPassword123');\n\n    // Click submit button\n    const submitButton = page.getByRole('button', { name: /register/i });\n    await submitButton.click();\n\n    // Wait for success message\n    await page.waitForTimeout(500);\n\n    // Verify success message is displayed\n    const successMessage = page.getByText('Registration successful');\n    await expect(successMessage).toBeVisible();\n\n    // Verify error message is not displayed\n    const errorMessage = page.getByText('Please enter a valid email address');\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify user is redirected to dashboard\n    await expect(page).toHaveURL(/.*\\/dashboard/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8816,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.6053,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.101,
+      "feedback_used": ""
+    }
+  ]
+}

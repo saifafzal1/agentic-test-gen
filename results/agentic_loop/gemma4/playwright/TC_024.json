@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_024",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8407,
+  "total_latency_s": 71.062,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Character Count on Textarea', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should display character count and limit input to 500 characters', async ({ page }) => {\n    // Verify textarea is visible and has initial count\n    const textarea = page.getByLabel('Message');\n    await expect(textarea).toBeVisible();\n    const countDisplay = page.getByText('0/500');\n    await expect(countDisplay).toBeVisible();\n\n    // Type less than 500 characters\n    await textarea.fill('This is a test message.');\n    await expect(countDisplay).toContainText('25/500');\n\n    // Type exactly 500 characters\n    const fullMessage = 'A'.repeat(500);\n    await textarea.fill(fullMessage);\n    await expect(countDisplay).toContainText('500/500');\n\n    // Verify character count is not exceeded\n    const inputLength = await textarea.inputValue();\n    expect(inputLength.length).toBe(500);\n\n    // Attempt to type one more character\n    await textarea.fill(fullMessage + 'A');\n    await expect(countDisplay).toContainText('500/500');\n    const exceededLength = await textarea.inputValue();\n    expect(exceededLength.length).toBe(500);\n\n    // Verify submit button is enabled\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeEnabled();\n  });\n\n  test('should handle empty textarea and display correct count', async ({ page }) => {\n    // Verify textarea is visible and count is 0\n    const textarea = page.getByLabel('Message');\n    const countDisplay = page.getByText('0/500');\n    await expect(textarea).toBeVisible();\n    await expect(countDisplay).toBeVisible();\n\n    // Clear textarea\n    await textarea.clear();\n    await expect(countDisplay).toContainText('0/500');\n\n    // Verify submit button is disabled when textarea is empty\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeDisabled();\n\n    // Type a short message\n    await textarea.fill('Hello world');\n    await expect(countDisplay).toContainText('11/500');\n\n    // Verify submit button is enabled\n    await expect(submitButton).toBeEnabled();\n\n    // Verify character count updates as user deletes text\n    await textarea.clear();\n    await expect(countDisplay).toContainText('0/500');\n    await expect(submitButton).toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8407,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.469,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.062,
+      "feedback_used": ""
+    }
+  ]
+}

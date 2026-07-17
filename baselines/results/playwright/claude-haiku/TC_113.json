@@ -1,0 +1,13 @@
+{
+  "id": "TC_113",
+  "category": "async_await",
+  "complexity": "simple",
+  "user_story": "As a user, I want a background job to notify me via a toast when it completes.",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "```typescript\nimport { test, expect } from '@playwright/test';\n\ntest.describe('Background Job Toast Notification', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('http://localhost:3000');\n  });\n\n  test('should display toast notification when background job completes', async ({ page }) => {\n    // Click button to start background job\n    const startJobButton = page.getByRole('button', { name: /start job/i });\n    await startJobButton.click();\n\n    // Wait for toast notification to appear\n    const toast = page.getByRole('status');\n    await expect(toast).toBeVisible({ timeout: 10000 });\n\n    // Verify toast contains success message\n    await expect(toast).toContainText(/job completed/i);\n  });\n\n  test('should display toast with correct completion message', async ({ page }) => {\n    // Start the background job\n    const startJobButton = page.getByRole('button', { name: /start job/i });\n    await startJobButton.click();\n\n    // Wait for and verify the toast notification content\n    const toast = page.getByText(/successfully completed/i);\n    await expect(toast).toBeVisible({ timeout: 10000 });\n\n    // Verify toast is dismissible\n    const closeButton = page.getByRole('button', { name: /close/i }).first();\n    await closeButton.click();\n    await expect(toast).not.toBeVisible();\n  });\n\n  test('should handle multiple background jobs with separate notifications', async ({ page }) => {\n    // Start first job\n    const startJobButton = page.getByRole('button', { name: /start job/i });\n    await startJobButton.click();\n\n    // Wait for first toast\n    const firstToast = page.getByRole('status').first();\n    await expect(firstToast).toBeVisible({ timeout: 10000 });\n\n    // Start second job\n    await startJobButton.click();\n\n    // Wait for second toast\n    const toasts = page.getByRole('status');\n    await expect(toasts).toHaveCount(2, { timeout: 10000 });\n  });\n});\n```",
+  "prompt_tokens": 148,
+  "completion_tokens": 523,
+  "latency_s": 3.8,
+  "timestamp": "2026-06-19T17:51:22.024375"
+}

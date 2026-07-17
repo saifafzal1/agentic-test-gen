@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_078",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.4872,
+  "total_latency_s": 977.195,
+  "final_script": "describe('Duplicate Record Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/records');\n  });\n\n  it('should successfully duplicate an existing record with one click', () => {\n    // Verify initial state: no records displayed\n    cy.get('[data-testid=\"no-records-message\"]').should('be.visible');\n\n    // Intercept API call to fetch records\n    cy.intercept('GET', '/api/records').as('getRecords');\n    cy.wait('@getRecords');\n\n    // Verify one record is displayed\n    cy.get('[data-testid=\"record-list\"]').should('be.visible');\n    cy.get('[data-testid=\"record-item\"]').should('have.length.greaterThan', 0);\n\n    // Click on the first record to duplicate\n    cy.get('[data-testid=\"record-item\"]').first().click();\n\n    // Verify duplicate button appears\n    cy.get('[data-testid=\"duplicate-button\"]').should('be.visible');\n\n    // Click duplicate button\n    cy.get('[data-testid=\"duplicate-button\"]').click();\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Record successfully duplicated');\n\n    // Verify duplicate record is now visible\n    cy.get('[data-testid=\"record-item\"]').should('have.length', 2);\n\n    // Verify duplicate record has unique ID\n    cy.get('[data-testid=\"record-item\"]').eq(1).should('have.attr', 'data-record-id');\n    cy.get('[data-testid=\"record-item\"]').eq(1).should('have.attr', 'data-record-id').and('not.equal', cy.get('[data-testid=\"record-item\"]').first().attr('data-record-id'));\n\n    // Verify duplicate record has same data as original\n    cy.get('[data-testid=\"record-item\"]').eq(1).should('have.text', 'Original Record');\n  });\n\n  it('should handle duplicate of a record with existing duplicate', () => {\n    // Intercept API call to fetch records\n    cy.intercept('GET', '/api/records').as('getRecords');\n    cy.wait('@getRecords');\n\n    // Verify one record is displayed\n    cy.get('[data-testid=\"record-item\"]').should('have.length.greaterThan', 0);\n\n    // Click on the first record to duplicate\n    cy.get('[data-testid=\"record-item\"]').first().click();\n\n    // Verify duplicate button appears\n    cy.get('[data-testid=\"duplicate-button\"]').should('be.visible');\n\n    // Click duplicate button\n    cy.get('[data-testid=\"duplicate-button\"]').click();\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Record successfully duplicated');\n\n    // Verify duplicate record is now visible\n    cy.get('[data-testid=\"record-item\"]').should('have.length', 2);\n\n    // Verify duplicate record has unique ID\n    cy.get('[data-testid=\"record-item\"]').eq(1).should('have.attr', 'data-record-id');\n    cy.get('[data-testid=\"record-item\"]').eq(1).should('have.attr', 'data-record-id').and('not.equal', cy.get('[data-testid=\"record-item\"]').first().attr('data-record-id'));\n\n    // Verify duplicate record has same data as original\n    cy.get('[data-testid=\"record-item\"]').eq(1).should('have.text', 'Original Record');\n\n    // Verify duplicate record has different ID\n    cy.get('[data-testid=\"record-item\"]').eq(2).should('have.attr', 'data",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4872,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3973,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 358.135,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4791,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3702,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 305.926,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.4791,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3702,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 313.134,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

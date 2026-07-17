@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_021",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8514,
+  "total_latency_s": 71.01,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Password Requirements Tooltip', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/signup');\n  });\n\n  test('should display tooltip when hovering over password requirements', async ({ page }) => {\n    // Verify password input field is visible\n    const passwordInput = page.getByLabel('Password');\n    await expect(passwordInput).toBeVisible();\n\n    // Hover over password requirements link to trigger tooltip\n    const requirementsLink = page.getByRole('link', { name: /password requirements/i });\n    await requirementsLink.hover();\n\n    // Verify tooltip appears\n    const tooltip = page.getByText(/password must contain at least 8 characters/i);\n    await expect(tooltip).toBeVisible();\n\n    // Verify tooltip content is correct\n    await expect(tooltip).toContainText('uppercase');\n    await expect(tooltip).toContainText('lowercase');\n    await expect(tooltip).toContainText('number');\n    await expect(tooltip).toContainText('special character');\n\n    // Verify tooltip disappears when hovering away\n    await requirementsLink.hover({ force: true });\n    await page.waitForTimeout(50);\n    await requirementsLink.hover({ force: true });\n    await expect(tooltip).not.toBeVisible();\n  });\n\n  test('should not display tooltip when password requirements link is not visible', async ({ page }) => {\n    // Navigate to a page without password requirements\n    await page.goto('/about');\n\n    // Verify password requirements link does not exist\n    const requirementsLink = page.getByRole('link', { name: /password requirements/i });\n    await expect(requirementsLink).not.toBeVisible();\n\n    // Verify tooltip does not appear\n    const tooltip = page.getByText(/password must contain at least 8 characters/i);\n    await expect(tooltip).not.toBeVisible();\n\n    // Verify password input field is not present\n    const passwordInput = page.getByLabel('Password');\n    await expect(passwordInput).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8514,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5048,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.01,
+      "feedback_used": ""
+    }
+  ]
+}

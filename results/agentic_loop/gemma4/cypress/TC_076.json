@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_076",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8021,
+  "total_latency_s": 118.343,
+  "final_script": "describe('Item Details View', () => {\n  beforeEach(() => {\n    cy.visit('/items');\n  });\n\n  it('should display item details when clicking on an item card', () => {\n    // Intercept the API call to fetch item details\n    cy.intercept('GET', '/api/items/*').as('getItemDetails');\n\n    // Verify item list is visible\n    cy.get('[data-testid=\"item-list\"]').should('be.visible');\n    cy.get('[data-testid=\"item-card-1\"]').should('be.visible');\n\n    // Click on the first item card to view details\n    cy.get('[data-testid=\"item-card-1\"]').click();\n\n    // Wait for the API call to complete\n    cy.wait('@getItemDetails');\n\n    // Verify item details page is displayed\n    cy.get('[data-testid=\"item-details-page\"]').should('be.visible');\n    cy.get('[data-testid=\"item-title\"]').should('contain', 'Product Name');\n    cy.get('[data-testid=\"item-description\"]').should('be.visible');\n    cy.get('[data-testid=\"item-price\"]').should('contain', '$19.99');\n    cy.get('[data-testid=\"item-stock\"]').should('contain', 'In Stock');\n\n    // Verify back button is available\n    cy.get('[data-testid=\"back-button\"]').should('be.visible');\n  });\n\n  it('should handle item not found scenario when clicking on an item', () => {\n    // Intercept the API call and return a 444 not found response\n    cy.intercept('GET', '/api/items/999').as('getItemDetailsNotFound');\n\n    // Navigate to items page\n    cy.visit('/items');\n\n    // Click on a non-existent item card\n    cy.get('[data-testid=\"item-card-999\"]').click();\n\n    // Wait for the API call\n    cy.wait('@getItemDetailsNotFound');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Item not found');\n\n    // Verify item details page is not displayed\n    cy.get('[data-testid=\"item-details-page\"]').should('not.exist');\n\n    // Verify back button is still available\n    cy.get('[data-testid=\"back-button\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8021,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5402,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 118.343,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_040",
+  "category": "navigation",
+  "complexity": "complex",
+  "user_story": "As a user, I want footer links to navigate to the correct pages.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Footer Links Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com');\n  });\n\n  test('should navigate to the About Us page when About Us link is clicked', async ({ page }) => {\n    await page.getByText('About Us').click();\n    await expect(page).toHaveURL('https://example.com/about');\n    await expect(page.getByRole('heading', { name: /about us/i })).toBeVisible();\n  });\n\n  test('should navigate to the Contact page when Contact link is clicked', async ({ page }) => {\n    await page.getByText('Contact').click();\n    await expect(page).toHaveURL('https://example.com/contact');\n    await expect(page.getByRole('heading', { name: /contact/i })).toBeVisible();\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 189,
+  "latency_s": 3.0,
+  "timestamp": "2026-06-19T16:46:13.510384"
+}

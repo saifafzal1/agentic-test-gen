@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_259",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8036,
+  "total_latency_s": 924.615,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Success Toast Notification on Record Save', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should display success toast notification with success message and close button when record is saved successfully', async ({ page }) => {\n    // Intercept the save API call\n    await page.route('**/api/records/save', (route) => {\n      route.continue();\n    });\n\n    // Locate and click the save button using getByRole\n    const saveButton = page.getByRole('button', { name: /save record/i });\n    await saveButton.click();\n\n    // Wait for the toast to appear using getByRole\n    const successToast = page.getByRole('alert', { name: /record saved successfully/i });\n    await expect(successToast).toBeVisible();\n\n    // Verify success message is present using getByText\n    const successMessage = page.getByText(/record saved successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify close button is present using getByRole\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify toast is visible using getByRole\n    await expect(successToast).toBeVisible();\n\n    // Verify toast is dismissible using getByRole\n    await expect(closeButton).toBeEnabled();\n\n    // Verify success toast has a positive class\n    const successClass = page.getByTestId('success-toast');\n    await expect(successClass).toHaveClass(/success/i);\n\n    // Verify toast has a dismiss button using getByRole\n    const dismissButton = page.getByRole('button', { name: /dismiss/i });\n    await expect(dismissButton).toBeVisible();\n\n    // Verify toast is not persistent\n    await expect(successToast).not.toBeVisible();\n  });\n\n  test('should not display success toast notification when record save fails', async ({ page }) => {\n    // Intercept the save API call with a failure response\n    await page.route('**/api/records/save', (route) => {\n      route.abort('Failed to save record');\n    });\n\n    // Locate and click the save button using getByRole\n    const saveButton = page.getByRole('button', { name: /save record/i });\n    await saveButton.click();\n\n    // Wait for error toast to appear using getByRole\n    const errorToast = page.getByRole('alert', { name: /failed to save record/i });\n    await expect(errorToast).toBeVisible();\n\n    // Verify error message is present using getByText\n    const errorMessage = page.getByText(/failed to save record/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error toast is dismissible using getByRole\n    const dismissButton = page.getByRole('button', { name: /dismiss/i });\n    await expect(dismissButton).toBeVisible();\n\n    // Verify error toast has a negative class\n    const errorClass = page.getByTestId('error-toast');\n    await expect(errorClass).toHaveClass(/error/i);\n\n    // Verify error toast is not persistent\n    await expect(errorToast).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4749,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3364,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 450.739,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8036,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4454,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 473.876,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

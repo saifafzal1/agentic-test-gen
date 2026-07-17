@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_171",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7627,
+  "total_latency_s": 72.436,
+  "final_script": "describe('Cancel In-Progress Upload', () => {\n  beforeEach(() => {\n    cy.visit('/upload');\n  });\n\n  it('should successfully cancel an in-progress file upload', () => {\n    // Setup: intercept the upload API call\n    cy.intercept('POST', '/api/upload').as('uploadRequest');\n\n    // Select a file to upload\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/sample.pdf', { force: true });\n\n    // Verify upload progress indicator appears\n    cy.get('[data-testid=\"upload-progress-bar\"]').should('be.visible');\n    cy.get('[data-testid=\"upload-status\"]').should('contain', 'Uploading');\n\n    // Click cancel button\n    cy.get('[data-testid=\"cancel-upload-button\"]').click();\n\n    // Verify cancellation confirmation modal appears\n    cy.get('[data-testid=\"cancel-confirmation-modal\"]').should('be.visible');\n    cy.get('[data-testid=\"cancel-confirmation-message\"]').should('contain', 'Are you sure you want to cancel?');\n\n    // Confirm cancellation\n    cy.get('[data-testid=\"confirm-cancel-button\"]').click();\n\n    // Verify upload is cancelled and progress bar is removed\n    cy.get('[data-testid=\"upload-progress-bar\"]').should('not.exist');\n    cy.get('[data-testid=\"upload-status\"]').should('contain', 'Cancelled');\n\n    // Verify success message is displayed\n    cy.get('[data-testid=\"upload-success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"upload-success-message\"]').should('contain', 'Upload cancelled successfully');\n\n    // Verify file is no longer in the queue\n    cy.get('[data-testid=\"upload-file-item\"]').should('not.exist');\n  });\n\n  it('should prevent cancellation when upload is not in progress', () => {\n    // Setup: intercept the upload API call\n    cy.intercept('POST', '/api/upload').as('uploadRequest');\n\n    // Select a file\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/sample.pdf', { force: true });\n\n    // Wait for upload to complete (or fail)\n    cy.wait('@uploadRequest');\n\n    // Verify upload is complete\n    cy.get('[data-testid=\"upload-status\"]').should('contain', 'Completed');\n\n    // Attempt to click cancel button\n    cy.get('[data-testid=\"cancel-upload-button\"]').should('not.exist');\n\n    // Verify no cancellation modal appears\n    cy.get('[data-testid=\"cancel-confirmation-modal\"]').should('not.exist');\n\n    // Verify upload status remains 'Completed'\n    cy.get('[data-testid=\"upload-status\"]').should('contain', 'Completed');\n\n    // Verify file is still visible in the upload list\n    cy.get('[data-testid=\"upload-file-item\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7627,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4091,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.436,
+      "feedback_used": ""
+    }
+  ]
+}

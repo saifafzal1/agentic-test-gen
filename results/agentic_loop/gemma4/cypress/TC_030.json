@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_030",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7997,
+  "total_latency_s": 71.069,
+  "final_script": "describe('Search Field Dropdown - Matching Options', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should display dropdown with matching options when typing in search field', () => {\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n    cy.get('[data-testid=\"search-input\"]').type('apple');\n    cy.get('[data-testid=\"dropdown-list\"]').should('be.visible');\n    cy.get('[data-testid=\"dropdown-item-apple\"]').should('contain', 'Apple');\n    cy.get('[data-testid=\"dropdown-item-apple\"]').should('be.visible');\n    cy.get('[data-testid=\"dropdown-item-banana\"]').should('contain', 'Banana');\n    cy.get('[data-testid=\"dropdown-item-banana\"]').should('be.visible');\n    cy.get('[data-testid=\"dropdown-item-orange\"]').should('contain', 'Orange');\n    cy.get('[data-testid=\"dropdown-item-orange\"]').should('be.visible');\n    cy.get('[data-testid=\"dropdown-item-apple\"]').click();\n    cy.get('[data-testid=\"search-input\"]').should('have.value', 'apple');\n    cy.get('[data-testid=\"dropdown-list\"]').should('not.exist');\n    cy.get('[data-testid=\"search-results\"]').should('contain', 'Apple');\n  });\n\n  it('should not display dropdown when search field is empty or no matches are found', () => {\n    cy.get('[data-testid=\"search-input\"]').should('be.visible');\n    cy.get('[data-testid=\"search-input\"]').clear();\n    cy.get('[data-testid=\"dropdown-list\"]').should('not.exist');\n    cy.get('[data-testid=\"search-input\"]').type('xyz123');\n    cy.get('[data-testid=\"dropdown-list\"]').should('be.visible');\n    cy.get('[data-testid=\"dropdown-item-xyz123\"]').should('not.exist');\n    cy.get('[data-testid=\"no-results-message\"]').should('be.visible');\n    cy.get('[data-testid=\"no-results-message\"]').should('contain', 'No results found');\n    cy.get('[data-testid=\"dropdown-list\"]').should('be.visible');\n    cy.get('[data-testid=\"dropdown-item-apple\"]').should('not.exist');\n    cy.get('[data-testid=\"dropdown-item-banana\"]').should('not.exist');\n    cy.get('[data-testid=\"dropdown-item-orange\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7997,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5325,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.069,
+      "feedback_used": ""
+    }
+  ]
+}

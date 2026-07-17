@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_201",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7437,
+  "total_latency_s": 72.753,
+  "final_script": "describe('Search Spelling Tolerance', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should return results when search query has minor spelling mistakes', () => {\n    // Intercept the search API call\n    cy.intercept('GET', '/api/search*').as('searchRequest');\n\n    // Perform search with a misspelled query\n    cy.get('[data-testid=\"search-input\"]').type('apple');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for the API response\n    cy.wait('@searchRequest');\n\n    // Verify results are displayed\n    cy.get('[data-testid=\"search-results-container\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify results contain the correct item despite misspelling\n    cy.get('[data-testid=\"result-item\"]').first().should('contain', 'Apple');\n    cy.get('[data-testid=\"result-item\"]').first().should('contain', 'fruit');\n  });\n\n  it('should handle multiple misspelled words and still return relevant results', () => {\n    // Intercept the search API call\n    cy.intercept('GET', '/api/search*').as('searchRequest');\n\n    // Perform search with multiple misspelled words\n    cy.get('[data-testid=\"search-input\"]').type('computrer');\n    cy.get('[data-testid=\"search-input\"]').type(' and');\n    cy.get('[data-testid=\"search-input\"]').type('programe');\n    cy.get('[data-testid=\"search-button\"]').click();\n\n    // Wait for the API response\n    cy.wait('@searchRequest');\n\n    // Verify results are displayed\n    cy.get('[data-testid=\"search-results-container\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify results contain both corrected terms\n    cy.get('[data-testid=\"result-item\"]').first().should('contain', 'computer');\n    cy.get('[data-testid=\"result-item\"]').first().should('contain', 'program');\n    cy.get('[data-testid=\"result-item\"]').first().should('contain', 'software');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7437,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3455,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.753,
+      "feedback_used": ""
+    }
+  ]
+}

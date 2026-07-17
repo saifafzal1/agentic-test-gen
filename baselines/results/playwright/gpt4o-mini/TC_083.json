@@ -1,0 +1,13 @@
+{
+  "id": "TC_083",
+  "category": "crud_operations",
+  "complexity": "simple",
+  "user_story": "As a user, I want to assign a category to a record via a dropdown.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('CRUD Operations - Assign Category', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should display category dropdown', async ({ page }) => {\n    const dropdown = page.getByRole('combobox', { name: /category/i });\n    await expect(dropdown).toBeVisible();\n  });\n\n  test('should assign a category to a record', async ({ page }) => {\n    const dropdown = page.getByRole('combobox', { name: /category/i });\n    await dropdown.selectOption('category-1');\n    \n    const assignButton = page.getByRole('button', { name: /assign/i });\n    await assignButton.click();\n    \n    const successMessage = page.getByText(/category assigned successfully/i);\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 189,
+  "latency_s": 2.59,
+  "timestamp": "2026-06-19T16:49:12.534380"
+}

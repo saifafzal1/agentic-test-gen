@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_105",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7636,
+  "total_latency_s": 377.222,
+  "final_script": "describe('Unsaved Form Navigation Warning', () => {\n  beforeEach(() => {\n    cy.visit('/form-page');\n  });\n\n  it('should display warning when user attempts to navigate away from unsaved form', () => {\n    // Intercept the navigation route\n    cy.intercept('GET', '/form-page').as('getFormPage');\n    cy.get('[data-testid=\"form-container\"]').should('be.visible');\n\n    // Fill form with data\n    cy.get('[data-testid=\"input-name\"]').type('John Doe');\n    cy.get('[data-testid=\"input-email\"]').type('john@example.com');\n    cy.get('[data-testid=\"input-message\"]').type('Hello, this is a test message');\n\n    // Verify form is not submitted yet\n    cy.get('[data-testid=\"form-status\"]').should('contain', 'Form is unsaved');\n\n    // Attempt to navigate away\n    cy.get('[data-testid=\"navigation-button\"]').click();\n\n    // Verify warning is displayed\n    cy.get('[data-testid=\"unsaved-warning\"]').should('be.visible');\n    cy.get('[data-testid=\"unsaved-warning\"]').should('contain', 'You have unsaved changes');\n\n    // Verify navigation route was intercepted\n    cy.wait('@getFormPage').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify form is still visible\n    cy.get('[data-testid=\"form-container\"]').should('be.visible');\n  });\n\n  it('should clear warning when form is successfully submitted', () => {\n    // Fill form with data\n    cy.get('[data-testid=\"input-name\"]').type('Jane Smith');\n    cy.get('[data-testid=\"input-email\"]').type('jane@example.com');\n    cy.get('[data-testid=\"input-message\"]').type('Please review my changes');\n\n    // Verify form is not submitted yet\n    cy.get('[data-testid=\"form-status\"]').should('contain', 'Form is unsaved');\n\n    // Submit form\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify warning is cleared\n    cy.get('[data-testid=\"unsaved-warning\"]').should('not.exist');\n\n    // Verify form is submitted\n    cy.get('[data-testid=\"form-status\"]').should('contain', 'Form submitted successfully');\n\n    // Verify navigation route was not intercepted\n    cy.intercept('GET', '/form-page').as('getFormPage');\n    cy.wait('@getFormPage').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify form is still visible\n    cy.get('[data-testid=\"form-container\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7636,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4119,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 377.222,
+      "feedback_used": ""
+    }
+  ]
+}

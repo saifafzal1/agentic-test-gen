@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_144",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.759,
+  "total_latency_s": 43.141,
+  "final_script": "describe('Modal with Tabbed Content - Active Tab Persistence', () => {\n  beforeEach(() => {\n    cy.visit('/modal-tabs');\n  });\n\n  it('should display modal with tabbed content and remember the active tab', () => {\n    // Open modal\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n    cy.get('[data-testid=\"modal-container\"]').should('be.visible');\n\n    // Verify initial tab is displayed\n    cy.get('[data-testid=\"tab-1\"]').should('be.visible');\n    cy.get('[data-testid=\"tab-1\"]').should('contain', 'Tab 1 Content');\n\n    // Verify tab 2 is not visible\n    cy.get('[data-testid=\"tab-2\"]').should('not.be.visible');\n\n    // Click on tab 2\n    cy.get('[data-testid=\"tab-2\"]').click();\n\n    // Verify tab 2 is now active\n    cy.get('[data-testid=\"tab-2\"]').should('be.visible');\n    cy.get('[data-testid=\"tab-2\"]').should('contain', 'Tab 2 Content');\n\n    // Verify tab 1 is hidden\n    cy.get('[data-testid=\"tab-1\"]').should('not.be.visible');\n\n    // Close modal\n    cy.get('[data-testid=\"close-modal-btn\"]').click();\n\n    // Verify modal is closed\n    cy.get('[data-testid=\"modal-container\"]').should('not.exist');\n  });\n\n  it('should maintain active tab state after reopening modal with different tab selection', () => {\n    // Open modal\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n    cy.get('[data-testid=\"modal-container\"]').should('be.visible');\n\n    // Click on tab 3\n    cy.get('[data-testid=\"tab-3\"]').click();\n    cy.get('[data-testid=\"tab-3\"]').should('be.visible');\n    cy.get('[data-testid=\"tab-3\"]').should('contain', 'Tab 3 Content');\n\n    // Close modal\n    cy.get('[data-testid=\"close-modal-btn\"]').click();\n\n    // Reopen modal\n    cy.get('[data-testid=\"open-modal-btn\"]').click();\n    cy.get('[data-testid=\"modal-container\"]').should('be.visible');\n\n    // Verify tab 3 is still active\n    cy.get('[data-testid=\"tab-3\"]').should('be.visible');\n    cy.get('[data-testid=\"tab-3\"]').should('contain', 'Tab 3 Content');\n\n    // Verify other tabs are hidden\n    cy.get('[data-testid=\"tab-1\"]').should('not.be.visible');\n    cy.get('[data-testid=\"tab-2\"]').should('not.be.visible');\n\n    // Close modal\n    cy.get('[data-testid=\"close-modal-btn\"]').click();\n\n    // Verify modal is closed\n    cy.get('[data-testid=\"modal-container\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.759,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3966,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 43.141,
+      "feedback_used": ""
+    }
+  ]
+}

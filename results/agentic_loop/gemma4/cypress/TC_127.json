@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_127",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8328,
+  "total_latency_s": 73.398,
+  "final_script": "describe('Async Form Submission - Disable Submit Button', () => {\n  beforeEach(() => {\n    cy.visit('/form');\n  });\n\n  it('should disable submit button during successful async form submission', () => {\n    // Intercept the form submission API call\n    cy.intercept('POST', '/api/submit-form').as('formSubmit');\n\n    // Fill in form fields\n    cy.get('[data-testid=\"name-input\"]').type('John Doe');\n    cy.get('[data-testid=\"email-input\"]').type('john@example.com');\n    cy.get('[data-testid=\"message-textarea\"]').type('This is a test message');\n\n    // Verify submit button is enabled before click\n    cy.get('[data-testid=\"submit-button\"]').should('not.be.disabled');\n    cy.get('[data-testid=\"submit-button\"]').should('be.visible');\n\n    // Click submit button\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify submit button is disabled immediately after click\n    cy.get('[data-testid=\"submit-button\"]').should('be.disabled');\n    cy.get('[data-testid=\"submit-button\"]').should('contain', 'Submitting...');\n\n    // Wait for API response\n    cy.wait('@formSubmit').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Form submitted successfully');\n\n    // Verify submit button is re-enabled after success\n    cy.get('[data-testid=\"submit-button\"]').should('not.be.disabled');\n    cy.get('[data-testid=\"submit-button\"]').should('contain', 'Submit');\n  });\n\n  it('should re-enable submit button after failed async form submission', () => {\n    // Intercept the form submission API call and mock a failure\n    cy.intercept('POST', '/api/submit-form', {\n      statusCode: 500,\n      body: { error: 'Server error' }\n    }).as('formSubmitFailure');\n\n    // Fill in form fields\n    cy.get('[data-testid=\"name-input\"]').type('Jane Doe');\n    cy.get('[data-testid=\"email-input\"]').type('jane@example.com');\n    cy.get('[data-testid=\"message-textarea\"]').type('This form failed');\n\n    // Verify submit button is enabled before click\n    cy.get('[data-testid=\"submit-button\"]').should('not.be.disabled');\n\n    // Click submit button\n    cy.get('[data-testid=\"submit-button\"]').click();\n\n    // Verify submit button is disabled during submission\n    cy.get('[data-testid=\"submit-button\"]').should('be.disabled');\n    cy.get('[data-testid=\"submit-button\"]').should('contain', 'Submitting...');\n\n    // Wait for failed API response\n    cy.wait('@formSubmitFailure');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Server error');\n\n    // Verify submit button is re-enabled after failure\n    cy.get('[data-testid=\"submit-button\"]').should('not.be.disabled');\n    cy.get('[data-testid=\"submit-button\"]').should('contain', 'Submit');\n\n    // Verify form data is still present\n    cy.get('[data-testid=\"name-input\"]').should('have.value', 'Jane Doe');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8328,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.6427,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.398,
+      "feedback_used": ""
+    }
+  ]
+}

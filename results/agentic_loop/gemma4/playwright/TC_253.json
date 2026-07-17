@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_253",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8384,
+  "total_latency_s": 72.042,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Payment Processing Loading State', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/payment');\n  });\n\n  test('should display loading state while payment is processing', async ({ page }) => {\n    // Verify payment form is visible\n    const paymentForm = page.getByRole('form', { name: /payment/i });\n    await expect(paymentForm).toBeVisible();\n\n    // Fill in card number using getByLabel\n    const cardNumberInput = page.getByLabel(/card number/i);\n    await cardNumberInput.fill('411111111111111');\n\n    // Fill in expiry date using getByLabel\n    const expiryInput = page.getByLabel(/expiry date/i);\n    await expiryInput.fill('12/25');\n\n    // Fill in CVV using getByLabel\n    const cvvInput = page.getByLabel(/cvv/i);\n    await cvvInput.fill('123');\n\n    // Click process payment button using getByRole\n    const processButton = page.getByRole('button', { name: /process payment/i });\n    await processButton.click();\n\n    // Verify loading spinner appears\n    const loadingSpinner = page.getByRole('status', { name: /processing/i });\n    await expect(loadingSpinner).toBeVisible();\n\n    // Verify loading text is displayed\n    const loadingText = page.getByText(/processing payment/i);\n    await expect(loadingText).toBeVisible();\n\n    // Verify payment button is disabled during processing\n    await expect(processButton).toBeDisabled();\n\n    // Wait for payment to complete\n    await page.waitForTimeout(2000);\n\n    // Verify loading state is removed\n    await expect(loadingSpinner).not.toBeVisible();\n    await expect(loadingText).not.toBeVisible();\n\n    // Verify success message is displayed\n    const successMessage = page.getByText(/payment successful/i);\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should handle payment processing timeout and display error state', async ({ page }) => {\n    // Fill in card number using getByLabel\n    const cardNumberInput = page.getByLabel(/card number/i);\n    await cardNumberInput.fill('411111111111111');\n\n    // Fill in expiry date using getByLabel\n    const expiryInput = page.getByLabel(/expiry date/i);\n    await expiryInput.fill('12/25');\n\n    // Fill in CVV using getByLabel\n    const cvvInput = page.getByLabel(/cvv/i);\n    await cvvInput.fill('123');\n\n    // Click process payment button using getByRole\n    const processButton = page.getByRole('button', { name: /process payment/i });\n    await processButton.click();\n\n    // Verify loading spinner appears\n    const loadingSpinner = page.getByRole('status', { name: /processing/i });\n    await expect(loadingSpinner).toBeVisible();\n\n    // Wait for timeout\n    await page.waitForTimeout(5000);\n\n    // Verify loading state is removed\n    await expect(loadingSpinner).not.toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/payment timed out/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error details are shown\n    const errorDetails = page.getByText(/please try again/i);\n    await expect(errorDetails).toBeVisible();\n\n    // Verify payment button is re-enabled\n    await expect(processButton).not.toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8384,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4612,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.042,
+      "feedback_used": ""
+    }
+  ]
+}

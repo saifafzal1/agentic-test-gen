@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_090",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.852,
+  "total_latency_s": 77.065,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Internet Connection Drop Friendly Message', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display friendly message when internet connection drops', async ({ page }) => {\n    // Verify initial page loads successfully\n    const welcomeMessage = page.getByRole('heading', { name: /welcome/i });\n    await expect(welcomeMessage).toBeVisible();\n\n    // Simulate internet connection drop\n    await page.route('**/api/data', route => {\n      route.abort('failed');\n    });\n\n    // Trigger data fetch\n    const refreshButton = page.getByRole('button', { name: /refresh/i });\n    await refreshButton.click();\n\n    // Wait for error state to render\n    await page.waitForTimeout(500);\n\n    // Verify friendly error message is displayed\n    const errorMessage = page.getByText(/internet connection lost/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify connection status indicator shows error\n    const statusIndicator = page.getByLabel(/connection status/i);\n    await expect(statusIndicator).toContainText('offline');\n\n    // Verify user can retry connection\n    const retryButton = page.getByRole('button', { name: /retry/i });\n    await expect(retryButton).toBeVisible();\n    await expect(retryButton).not.toBeDisabled();\n  });\n\n  test('should hide friendly message when internet connection is restored', async ({ page }) => {\n    // Verify initial page loads successfully\n    const welcomeMessage = page.getByRole('heading', { name: /welcome/i });\n    await expect(welcomeMessage).toBeVisible();\n\n    // Simulate internet connection drop\n    await page.route('**/api/data', route => {\n      route.abort('failed');\n    });\n\n    // Trigger data fetch to simulate connection loss\n    const refreshButton = page.getByRole('button', { name: /refresh/i });\n    await refreshButton.click();\n\n    // Wait for error state to render\n    await page.waitForTimeout(500);\n\n    // Verify friendly error message is displayed\n    const errorMessage = page.getByText(/internet connection lost/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Restore internet connection\n    await page.route('**/api/data', route => {\n      route.continue();\n    });\n\n    // Trigger data fetch again\n    await refreshButton.click();\n\n    // Wait for data to load\n    await page.waitForTimeout(500);\n\n    // Verify friendly error message is no longer visible\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify data is displayed\n    const dataTable = page.getByRole('region', { name: /data table/i });\n    await expect(dataTable).toBeVisible();\n\n    // Verify connection status indicator shows online\n    const statusIndicator = page.getByLabel(/connection status/i);\n    await expect(statusIndicator).toContainText('online');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.852,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5066,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 77.065,
+      "feedback_used": ""
+    }
+  ]
+}

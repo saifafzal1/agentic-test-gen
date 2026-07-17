@@ -1,0 +1,13 @@
+{
+  "id": "TC_040",
+  "category": "navigation",
+  "complexity": "complex",
+  "user_story": "As a user, I want footer links to navigate to the correct pages.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Footer Links Navigation', () => {\n    beforeEach(() => {\n        cy.visit('https://example.com'); // Replace with the actual URL of the application\n    });\n\n    it('should navigate to the About Us page when the About Us link is clicked', () => {\n        cy.get('footer').contains('About Us').click();\n        cy.url().should('include', '/about-us');\n        cy.get('h1').should('contain', 'About Us');\n    });\n\n    it('should display an error message when the Contact Us link is clicked and the page is down', () => {\n        cy.intercept('GET', '/contact-us', { statusCode: 500 }).as('getContactUs');\n        cy.get('footer').contains('Contact Us').click();\n        cy.wait('@getContactUs');\n        cy.get('.error-message').should('be.visible').and('contain', 'Sorry, we are experiencing technical difficulties.');\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 196,
+  "latency_s": 3.08,
+  "timestamp": "2026-06-19T16:27:42.803249"
+}

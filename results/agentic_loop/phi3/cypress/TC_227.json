@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_227",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7121,
+  "total_latency_s": 350.713,
+  "final_script": "describe('Mobile Touch Target Size Test', () => {\n  beforeEach(() => {\n    cy.visit('/mobile-app');\n  });\n\n  it('should have large enough touch targets for easy tapping on mobile', () => {\n    // Verify button has minimum touch target size\n    cy.get('[data-testid=\"submit-button\"]').should('be.visible');\n    cy.get('[data-testid=\"submit-button\"]').should('have.css', 'min-width', '48px');\n    cy.get('[data-testid=\"submit-button\"]').should('have.css', 'min-height', '48px');\n\n    // Verify form input has minimum touch target size\n    cy.get('[data-testid=\"email-input\"]').should('be.visible');\n    cy.get('[data-testid=\"email-input\"]').should('have.css', 'min-width', '48px');\n    cy.get('[data-testid=\"email-input\"]').should('have.css', 'min-height', '48px');\n\n    // Verify navigation links have minimum touch target size\n    cy.get('[data-testid=\"nav-link-home\"]').should('be.visible');\n    cy.get('[data-testid=\"nav-link-home\"]').should('have.css', 'min-width', '48px');\n    cy.get('[data-testid=\"nav-link-home\"]').should('have.css', 'min-height', '48px');\n\n    // Verify list items have minimum touch target size\n    cy.get('[data-testid=\"list-item-1\"]').should('be.visible');\n    cy.get('[data-testid=\"list-item-1\"]').should('have.css', 'min-width', '48px');\n    cy.get('[data-testid=\"list-item-1\"]').should('have.css', 'min-height', '48px');\n\n    // Verify error message has minimum touch target size\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('have.css', 'min-width', '48px');\n    cy.get('[data-testid=\"error-message\"]').should('have.css', 'min-height', '48px');\n  });\n\n  it('should handle edge case where touch targets are too small on mobile', () => {\n    // Intercept API call to simulate small touch target\n    cy.intercept('GET', '/api/data').as('getData');\n\n    cy.get('[data-testid=\"small-touch-target\"]').should('be.visible');\n\n    // Verify touch target is too small\n    cy.get('[data-testid=\"small-touch-target\"]').should('have.css', 'min-width', '20px');\n    cy.get('[data-testid=\"small-touch-target\"]').should('have.css', 'min-height', '20px');\n\n    // Attempt to interact with small touch target\n    cy.get('[data-testid=\"small-touch-target\"]').click();\n\n    // Verify error is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Touch target too small');\n\n    // Verify API call was made\n    cy.wait('@getData').then((interception) => {\n      expect(interception.response.statusCode).to.equal(500);\n    });\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7121,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2404,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 350.713,
+      "feedback_used": ""
+    }
+  ]
+}

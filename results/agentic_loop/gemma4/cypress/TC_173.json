@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_173",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7981,
+  "total_latency_s": 72.461,
+  "final_script": "describe('File Upload - Invalid File Type Error Handling', () => {\n  beforeEach(() => {\n    cy.visit('/file-upload');\n  });\n\n  it('should display error message when uploading an unsupported file type', () => {\n    // Attempt to upload a non-allowed file type (e.g., .exe)\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/unsupported.exe', {\n      force: true\n    });\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Unsupported file type');\n\n    // Verify upload button is disabled or action is blocked\n    cy.get('[data-testid=\"upload-button\"]').should('be.disabled');\n\n    // Verify file input value is still present\n    cy.get('[data-testid=\"file-input\"]').should('have.value', 'cypress/fixtures/unsupported.exe');\n  });\n\n  it('should allow upload when a supported file type is selected and clear error message', () => {\n    // Upload a supported file type (e.g., .pdf)\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/document.pdf', {\n      force: true\n    });\n\n    // Verify error message is not visible\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n\n    // Verify upload button is enabled\n    cy.get('[data-testid=\"upload-button\"]').should('not.be.disabled');\n\n    // Click upload button to proceed\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]')\n      .should('be.visible')\n      .should('contain', 'File uploaded successfully');\n\n    // Verify error message is cleared\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7981,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.527,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.461,
+      "feedback_used": ""
+    }
+  ]
+}

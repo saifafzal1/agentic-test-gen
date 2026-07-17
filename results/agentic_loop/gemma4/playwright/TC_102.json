@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_102",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.84,
+  "total_latency_s": 77.684,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Past Date Field Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should display error when submitting form with future date in past-date field', async ({ page }) => {\n    // Set up intercept for form submission\n    await page.route('**/api/submit-form', route => {\n      route.abort('blockedbyclient');\n    });\n\n    // Fill in past date field with a future date\n    const pastDateField = page.getByLabel('Past Date');\n    await pastDateField.fill('2099-01-01');\n\n    // Fill in other required fields\n    const nameField = page.getByLabel('Full Name');\n    await nameField.fill('John Doe');\n\n    const emailField = page.getByLabel('Email');\n    await emailField.fill('john@example.com');\n\n    // Click submit button\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Wait for validation error message to appear\n    const errorMessage = page.getByText('Date cannot be in the future');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message is associated with the correct field\n    await expect(pastDateField).toHaveAttribute('aria-invalid', 'true');\n\n    // Verify form was not submitted\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).not.toBeVisible();\n  });\n\n  test('should allow submission when past date field contains a valid past date', async ({ page }) => {\n    // Set up intercept for successful form submission\n    await page.route('**/api/submit-form', route => {\n      route.continue();\n    });\n\n    // Fill in past date field with a valid past date\n    const pastDateField = page.getByLabel('Past Date');\n    await pastDateField.fill('2020-01-01');\n\n    // Fill in other required fields\n    const nameField = page.getByLabel('Full Name');\n    await nameField.fill('Jane Smith');\n\n    const emailField = page.getByLabel('Email');\n    await emailField.fill('jane@example.com');\n\n    // Click submit button\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Wait for success message\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify form was submitted successfully\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).not.toBeDisabled();\n\n    // Verify error message does not exist\n    const errorMessage = page.getByText('Date cannot be in the future');\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.84,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4668,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 77.684,
+      "feedback_used": ""
+    }
+  ]
+}

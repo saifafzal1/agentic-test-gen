@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_273",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8428,
+  "total_latency_s": 74.756,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Preferences Management', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/settings');\n  });\n\n  test('should successfully manage notification preferences', async ({ page }) => {\n    // Verify settings page is visible\n    const settingsHeader = page.getByRole('heading', { name: /settings/i });\n    await expect(settingsHeader).toBeVisible();\n\n    // Navigate to notification settings\n    const notificationLink = page.getByRole('link', { name: /notifications/i });\n    await expect(notificationLink).toBeVisible();\n    await notificationLink.click();\n\n    // Verify notification settings section is displayed\n    const notificationSection = page.getByRole('region', { name: /notification preferences/i });\n    await expect(notificationSection).toBeVisible();\n\n    // Toggle email notifications on\n    const emailToggle = page.getByLabel(/email notifications/i);\n    await expect(emailToggle).toBeVisible();\n    await emailToggle.click();\n    await expect(emailToggle).toHaveAttribute('aria-checked', 'true');\n\n    // Toggle SMS notifications off\n    const smsToggle = page.getByLabel(/sms notifications/i);\n    await expect(smsToggle).toBeVisible();\n    await smsToggle.click();\n    await expect(smsToggle).toHaveAttribute('aria-checked', 'false');\n\n    // Toggle push notifications on\n    const pushToggle = page.getByLabel(/push notifications/i);\n    await expect(pushToggle).toBeVisible();\n    await pushToggle.click();\n    await expect(pushToggle).toHaveAttribute('aria-checked', 'true');\n\n    // Click save button\n    const saveButton = page.getByRole('button', { name: /save preferences/i });\n    await expect(saveButton).toBeVisible();\n    await saveButton.click();\n\n    // Verify success message\n    const successMessage = page.getByText(/preferences saved successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify toggles reflect saved state\n    await expect(emailToggle).toHaveAttribute('aria-checked', 'true');\n    await expect(smsToggle).toHaveAttribute('aria-checked', 'false');\n    await expect(pushToggle).toHaveAttribute('aria-checked', 'true');\n  });\n\n  test('should handle invalid email format when saving notification preferences', async ({ page }) => {\n    // Navigate to notification settings\n    const notificationLink = page.getByRole('link', { name: /notifications/i });\n    await expect(notificationLink).toBeVisible();\n    await notificationLink.click();\n\n    // Verify notification settings section is displayed\n    const notificationSection = page.getByRole('region', { name: /notification preferences/i });\n    await expect(notificationSection).toBeVisible();\n\n    // Toggle email notifications on\n    const emailToggle = page.getByLabel(/email notifications/i);\n    await expect(emailToggle).toBeVisible();\n    await emailToggle.click();\n    await expect(emailToggle).toHaveAttribute('aria-checked', 'true');\n\n    // Enter invalid email format\n    const emailInput = page.getByLabel(/email address/i);\n    await expect(emailInput).toBeVisible();\n    await emailInput.fill('invalid-email');\n\n    // Attempt to save with invalid email\n    const saveButton = page.getByRole('button', { name: /save preferences/i });\n    await saveButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/invalid email format/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify email input still contains invalid value\n    await expect(emailInput).toHaveValue('invalid-email');\n\n    // Verify success message does not appear\n    const successMessage = page.getByText(/preferences saved successfully/i);\n    await expect(successMessage).not.toBeVisible();\n\n    // Correct the email format\n    await emailInput.clear();\n    await emailInput.fill('user@example.com');\n\n    // Verify error message is cleared\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify save button is enabled\n    await expect(saveButton).toBeEnabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8428,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4759,
+        "missing_keywords": [],
+        "assertion_count": 24,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 74.756,
+      "feedback_used": ""
+    }
+  ]
+}

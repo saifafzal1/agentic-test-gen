@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_098",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7282,
+  "total_latency_s": 41.128,
+  "final_script": "describe('Error Boundary - UI Crash Handling', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should display fallback screen when an error occurs in a component', () => {\n    // Intercept the API call that might cause a crash\n    cy.intercept('GET', '/api/data').as('apiData');\n\n    // Trigger the API call\n    cy.wait('@apiData');\n\n    // Simulate a crash in the component by forcing an error\n    cy.get('[data-testid=\"crash-component\"]').then((crashComponent) => {\n      crashComponent.then((element) => {\n        element.click();\n        cy.stub(window, 'console', {\n          error: (message) => {\n            cy.log('Error: ' + message);\n          }\n        }).as('consoleStub');\n\n        // Force a crash by accessing a non-existent property\n        cy.get('@crash-component').then((crashElement) => {\n          crashElement.then((element) => {\n            element.prop('nonExistentProperty');\n          });\n        });\n      });\n    });\n\n    // Verify fallback screen is displayed\n    cy.get('[data-testid=\"fallback-screen\"]').should('be.visible');\n    cy.get('[data-testid=\"fallback-screen\"]').should('contain', 'Oops, something went wrong');\n    cy.get('[data-testid=\"fallback-screen\"]').should('have.class', 'error-boundary-fallback');\n  });\n\n  it('should not display fallback screen when error is caught by error boundary', () => {\n    // Intercept the API call\n    cy.intercept('GET', '/api/data').as('apiData');\n\n    // Trigger the API call\n    cy.wait('@apiData');\n\n    // Simulate a crash in a component\n    cy.get('[data-testid=\"crash-component\"]').then((crashComponent) => {\n      crashComponent.then((element) => {\n        element.click();\n        cy.stub(window, 'console', {\n          error: (message) => {\n            cy.log('Error: ' + message);\n          }\n        }).as('consoleStub');\n\n        // Force a crash\n        cy.get('@crash-component').then((crashElement) => {\n          crashElement.then((element) => {\n            element.prop('nonExistentProperty');\n          });\n        });\n      });\n    });\n\n    // Verify error boundary catches the crash and does not show fallback\n    cy.get('[data-testid=\"crash-component\"]').should('be.visible');\n    cy.get('[data-testid=\"error-boundary-fallback\"]').should('not.exist');\n    cy.get('[data-testid=\"error-boundary-fallback\"]').should('not.be.visible');\n    cy.get('[data-testid=\"error-boundary-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-boundary-message\"]').should('contain', 'An unexpected error occurred');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7282,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2939,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 41.128,
+      "feedback_used": ""
+    }
+  ]
+}

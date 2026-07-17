@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_043",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8192,
+  "total_latency_s": 71.486,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Sidebar Collapse/Expand Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should collapse and expand sidebar on button click', async ({ page }) => {\n    // Verify sidebar is initially expanded\n    const sidebar = page.getByRole('navigation', { name: /sidebar/i });\n    await expect(sidebar).toBeVisible();\n    const menuItems = page.getByRole('link', { name: /menu item/i });\n    await expect(menuItems).toHaveCount(5);\n\n    // Get the collapse button using getByRole\n    const collapseButton = page.getByRole('button', { name: /collapse sidebar/i });\n    await expect(collapseButton).toBeVisible();\n\n    // Click to collapse sidebar\n    await collapseButton.click();\n\n    // Verify sidebar is collapsed\n    await expect(sidebar).toBeVisible();\n    const collapsedWidth = 50;\n    const currentWidth = await sidebar.evaluate((el) => el.offsetWidth);\n    expect(currentWidth).toBeCloseTo(collapsedWidth);\n\n    // Verify menu items are hidden or truncated\n    const visibleMenuItems = page.getByRole('link', { name: /menu item/i });\n    await expect(visibleMenuItems).toHaveCount(0);\n\n    // Click to expand sidebar\n    await collapseButton.click();\n\n    // Verify sidebar is expanded again\n    const expandedWidth = await sidebar.evaluate((el) => el.offsetWidth);\n    expect(expandedWidth).toBeGreaterThan(collapsedWidth);\n\n    // Verify menu items are visible\n    await expect(visibleMenuItems).toHaveCount(5);\n  });\n\n  test('should handle multiple clicks and maintain state', async ({ page }) => {\n    // Verify sidebar is initially expanded\n    const sidebar = page.getByRole('navigation', { name: /sidebar/i });\n    await expect(sidebar).toBeVisible();\n    const menuItems = page.getByRole('link', { name: /menu item/i });\n    await expect(menuItems).toHaveCount(5);\n\n    // Click to collapse sidebar\n    const collapseButton = page.getByRole('button', { name: /collapse sidebar/i });\n    await collapseButton.click();\n\n    // Verify sidebar is collapsed\n    const collapsedWidth = await sidebar.evaluate((el) => el.offsetWidth);\n    expect(collapsedWidth).toBeCloseTo(50);\n\n    // Click again to expand sidebar\n    await collapseButton.click();\n\n    // Verify sidebar is expanded\n    const expandedWidth = await sidebar.evaluate((el) => el.offsetWidth);\n    expect(expandedWidth).toBeGreaterThan(collapsedWidth);\n\n    // Click a third time to collapse again\n    await collapseButton.click();\n\n    // Verify sidebar is collapsed\n    const finalCollapsedWidth = await sidebar.evaluate((el) => el.offsetWidth);\n    expect(finalCollapsedWidth).toBeCloseTo(50);\n\n    // Verify menu items are hidden\n    const visibleMenuItems = page.getByRole('link', { name: /menu item/i });\n    await expect(visibleMenuItems).toHaveCount(0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8192,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4974,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.486,
+      "feedback_used": ""
+    }
+  ]
+}

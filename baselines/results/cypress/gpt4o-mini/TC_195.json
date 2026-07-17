@@ -1,0 +1,13 @@
+{
+  "id": "TC_195",
+  "category": "search_filter",
+  "complexity": "medium",
+  "user_story": "As a user, I want to save a search query for later.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Save Search Query Feature', () => {\n    beforeEach(() => {\n        cy.visit('/search'); // Navigate to the search page\n    });\n\n    it('should save a search query successfully', () => {\n        cy.get('input[name=\"search\"]').type('Cypress testing'); // Enter search query\n        cy.get('button[type=\"submit\"]').click(); // Submit the search\n        cy.get('.save-query-button').click(); // Click to save the query\n        cy.get('.notification').should('contain', 'Search query saved successfully'); // Verify success message\n    });\n\n    it('should show an error when trying to save an empty query', () => {\n        cy.get('button[type=\"submit\"]').click(); // Submit without entering a query\n        cy.get('.save-query-button').click(); // Attempt to save the empty query\n        cy.get('.error-message').should('contain', 'Cannot save an empty query'); // Verify error message\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 200,
+  "latency_s": 2.83,
+  "timestamp": "2026-06-19T16:37:27.812406"
+}

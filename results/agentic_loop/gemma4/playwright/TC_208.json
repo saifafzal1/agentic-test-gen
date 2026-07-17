@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_208",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8294,
+  "total_latency_s": 74.898,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Field Labels Accessibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form-page');\n  });\n\n  test('should display form fields with associated labels for screen reader users', async ({ page }) => {\n    // Verify form container is visible\n    const formContainer = page.getByRole('form');\n    await expect(formContainer).toBeVisible();\n\n    // Verify email input has an associated label\n    const emailLabel = page.getByLabel('Email Address');\n    await expect(emailLabel).toBeVisible();\n    const emailInput = page.getByLabel('Email Address');\n    await expect(emailInput).toBeVisible();\n\n    // Verify password input has an associated label\n    const passwordLabel = page.getByLabel('Password');\n    await expect(passwordLabel).toBeVisible();\n    const passwordInput = page.getByLabel('Password');\n    await expect(passwordInput).toBeVisible();\n\n    // Verify username input has an associated label\n    const usernameLabel = page.getByLabel('Username');\n    await expect(usernameLabel).toBeVisible();\n    const usernameInput = page.getByLabel('Username');\n    await expect(usernameInput).toBeVisible();\n\n    // Verify submit button is accessible\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeVisible();\n\n    // Fill out form and submit\n    await emailInput.fill('test@example.com');\n    await passwordInput.fill('SecurePassword123');\n    await usernameInput.fill('user123');\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should handle missing labels gracefully and provide fallback accessibility', async ({ page }) => {\n    // Navigate to a page with a form missing labels\n    await page.goto('/form-page-no-labels');\n\n    // Verify form container is visible\n    const formContainer = page.getByRole('form');\n    await expect(formContainer).toBeVisible();\n\n    // Verify email input exists but has no visible label\n    const emailInput = page.getByPlaceholder('Enter email');\n    await expect(emailInput).toBeVisible();\n\n    // Verify email input has aria-label fallback\n    const emailAriaLabel = page.getByRole('textbox', { name: /enter email/i });\n    await expect(emailAriaLabel).toBeVisible();\n\n    // Verify password input exists but has no visible label\n    const passwordInput = page.getByPlaceholder('Enter password');\n    await expect(passwordInput).toBeVisible();\n\n    // Verify password input has aria-label fallback\n    const passwordAriaLabel = page.getByRole('textbox', { name: /enter password/i });\n    await expect(passwordAriaLabel).toBeVisible();\n\n    // Verify submit button is accessible\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeVisible();\n\n    // Fill out form using placeholder text\n    await emailInput.fill('test@example.com');\n    await passwordInput.fill('SecurePassword123');\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8294,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4314,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 74.898,
+      "feedback_used": ""
+    }
+  ]
+}

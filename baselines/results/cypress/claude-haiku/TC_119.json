@@ -1,0 +1,13 @@
+{
+  "id": "TC_119",
+  "category": "async_await",
+  "complexity": "simple",
+  "user_story": "As a user, I want a countdown timer to update every second using an interval.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Countdown Timer - Interval Updates', () => {\n  beforeEach(() => {\n    cy.visit('http://localhost:3000');\n  });\n\n  it('should update countdown timer every second', () => {\n    cy.get('[data-testid=\"timer-display\"]').should('contain', '10');\n    \n    cy.wait(1000);\n    cy.get('[data-testid=\"timer-display\"]').should('contain', '9');\n    \n    cy.wait(1000);\n    cy.get('[data-testid=\"timer-display\"]').should('contain', '8');\n    \n    cy.wait(1000);\n    cy.get('[data-testid=\"timer-display\"]').should('contain', '7');\n  });\n\n  it('should countdown to zero and stop', () => {\n    cy.get('[data-testid=\"timer-display\"]').should('contain', '10');\n    \n    cy.wait(10000);\n    cy.get('[data-testid=\"timer-display\"]').should('contain', '0');\n    \n    cy.wait(1000);\n    cy.get('[data-testid=\"timer-display\"]').should('contain', '0');\n  });\n\n  it('should handle timer pause and resume', () => {\n    cy.get('[data-testid=\"timer-display\"]').should('contain', '10');\n    \n    cy.get('[data-testid=\"pause-button\"]').click();\n    cy.wait(1000);\n    cy.get('[data-testid=\"timer-display\"]').should('contain', '10');\n    \n    cy.get('[data-testid=\"resume-button\"]').click();\n    cy.wait(1000);\n    cy.get('[data-testid=\"timer-display\"]').should('contain', '9');\n  });\n\n  it('should reset timer to initial value', () => {\n    cy.wait(3000);\n    cy.get('[data-testid=\"timer-display\"]').should('contain', '7');\n    \n    cy.get('[data-testid=\"reset-button\"]').click();\n    cy.get('[data-testid=\"timer-display\"]').should('contain', '10');\n  });\n\n  it('should handle rapid interval updates without memory leaks', () => {\n    cy.get('[data-testid=\"timer-display\"]').should('exist');\n    \n    for (let i = 0; i < 5; i++) {\n      cy.wait(1000);\n      cy.get('[data-testid=\"timer-display\"]').should('be.visible');\n    }\n    \n    cy.get('[data-testid=\"timer-display\"]').should('contain', '5');\n  });\n});",
+  "prompt_tokens": 122,
+  "completion_tokens": 647,
+  "latency_s": 5.12,
+  "timestamp": "2026-06-19T17:17:59.696797"
+}

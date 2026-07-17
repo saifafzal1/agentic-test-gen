@@ -1,0 +1,13 @@
+{
+  "id": "TC_044",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a user, I want clicking a notification to navigate to the relevant content.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should navigate to relevant content when notification is clicked', async ({ page }) => {\n    await page.getByRole('button', { name: /notification/i }).click();\n    await expect(page).toHaveURL(/.*relevant-content/); // Adjust the URL pattern as needed\n  });\n\n  test('should display relevant content after navigation', async ({ page }) => {\n    await page.getByRole('button', { name: /notification/i }).click();\n    await expect(page.getByText(/relevant content title/i)).toBeVisible(); // Adjust the text as needed\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 174,
+  "latency_s": 3.73,
+  "timestamp": "2026-06-19T16:46:27.567698"
+}

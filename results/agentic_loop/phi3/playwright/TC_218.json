@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_218",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 3,
+  "best_score": 0.7992,
+  "total_latency_s": 685.158,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Click Target Size Accessibility for Users with Motor Impairment', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/accessibility-test-page');\n  });\n\n  test('should have click targets with minimum size of 44x44px for users with motor impairment', async ({ page }) => {\n    // Verify the page has a role of main\n    const mainRole = page.getByRole('main');\n    await expect(mainRole).toBeVisible();\n\n    // Verify button has a minimum size of 44x44px\n    const button = page.getByRole('button', { name: /submit form/i });\n    await expect(button).toBeVisible();\n    const buttonSize = await button.boundingBox();\n    expect(buttonSize.width).toBeGreaterThanOrEqual(44);\n    expect(buttonSize.height).toBeGreaterThanOrEqual(44);\n\n    // Verify link has a minimum size of 44x44px\n    const link = page.getByRole('link', { name: /download file/i });\n    await expect(link).toBeVisible();\n    const linkSize = await link.boundingBox();\n    expect(linkSize.width).toBeGreaterThanOrEqual(44);\n    expect(linkSize.height).toBeGreaterThanOrEqual(44);\n\n    // Verify input has a minimum size of 44x44px\n    const input = page.getByLabel(/email address/i);\n    await expect(input).toBeVisible();\n    const inputSize = await input.boundingBox();\n    expect(inputSize.width).toBeGreaterThanOrEqual(44);\n    expect(inputSize.height).toBeGreaterThanOrEqual(44);\n\n    // Verify checkbox has a minimum size of 44x44px\n    const checkbox = page.getByLabel(/agree to terms/i);\n    await expect(checkbox).toBeVisible();\n    const checkboxSize = await checkbox.boundingBox();\n    expect(checkboxSize.width).toBeGreaterThanOrEqual(44);\n    expect(checkboxSize.height).toBeGreaterThanOrEqual(44);\n\n    // Verify dropdown has a minimum size of 44x44px\n    const dropdown = page.getByRole('combobox', { name: /select plan/i });\n    await expect(dropdown).toBeVisible();\n    const dropdownSize = await dropdown.boundingBox();\n    expect(dropdownSize.width).toBeGreaterThanOrEqual(44);\n    expect(dropdownSize.height).toBeGreaterThanOrEqual(44);\n\n    // Verify error message has a minimum size of 44x44px\n    const errorMessage = page.getByText(/error/i);\n    await expect(errorMessage).toBeVisible();\n    const errorMessageSize = await errorMessage.boundingBox();\n    expect(errorMessageSize.width).toBeGreaterThanOrEqual(44);\n    expect(errorMessageSize.height).toBeGreaterThanOrEqual(44);\n  });\n\n  test('should handle click targets with sizes smaller than 44x44px gracefully', async ({ page }) => {\n    // Verify page has a role of main\n    const mainRole = page.getByRole('main');\n    await expect(mainRole).toBeVisible();\n\n    // Verify button with size smaller than 44x44px\n    const smallButton = page.getByRole('button', { name: /submit form/i });\n    await expect(smallButton).toBeVisible();\n    const smallButtonSize = await smallButton.boundingBox();\n    expect(smallButtonSize.width).toBeLessThan(44);\n    expect(smallButtonSize.height).toBeLessThan(44);\n\n    // Verify link with size smaller than 44x44px\n    const smallLink = page.getByRole('link', { name: /download file/i });\n    await expect(smallLink).toBeVisible();\n    const smallLinkSize = await smallLink.boundingBox();\n    expect(smallLinkSize.width).toBeLessThan(44);\n    expect(smallLinkSize.height).toBeLessThan(44);\n\n    // Verify input with size smaller than 44x44px\n    const smallInput = page.getByLabel(/email address/i);\n    await expect(smallInput).toBeVisible();\n    const smallInputSize = await smallInput.boundingBox();\n    expect(smallInputSize.width).toBeLessThan(44);\n    expect(smallInputSize.height).toBeLessThan(44);\n\n    // Verify checkbox with size smaller than 44x44px\n    const smallCheckbox = page.getByLabel(/agree to terms/i);\n    await expect(smallCheckbox).toBeVisible();\n    const smallCheckboxSize = await smallCheckbox.boundingBox();\n    expect(smallCheckboxSize.width).toBeLessThan(44);\n    expect(smallCheckboxSize.height).toBeLessThan(44);\n\n    // Verify dropdown with size smaller than 44x44px\n    const smallDropdown = page.getByRole('combobox', { name: /select plan/i });\n    await expect(smallDropdown).toBeVisible();\n    const smallDropdownSize = await smallDropdown.boundingBox();\n    expect(smallDropdownSize.width).toBeLessThan(44);\n    expect(smallDropdownSize.height).toBeLessThan(44);\n\n    // Verify error message with size smaller than 44x44px\n    const smallErrorMessage = page.getByText(/error/i);\n    await expect(smallErrorMessage).toBeVisible();\n    const smallErrorMessageSize = await smallErrorMessage.boundingBox();\n    expect(smallErrorMessageSize.width).toBeLessThan(44);\n    expect(smallErrorMessageSize.height).toBeLessThan(44);\n\n    // Verify error message is still visible and accessible\n    const errorMessageText = await smallErrorMessage.textContent();\n    expect(errorMessageText).toContain('error');\n\n    // Verify error message is still accessible via screen readers\n    const errorMessageSpeak = await page.evaluate(() => {\n      const errorMessage = document.querySelector('[aria-live=\"polite\"]');\n      if (errorMessage) {\n        return errorMessage.textContent;\n      }\n      return '';\n    });\n    expect(errorMessageSpeak).toContain('error');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4683,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.2942,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 113.546,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4788,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3292,
+        "missing_keywords": [],
+        "assertion_count": 39,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 300.17,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.7992,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3305,
+        "missing_keywords": [],
+        "assertion_count": 40,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 271.442,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

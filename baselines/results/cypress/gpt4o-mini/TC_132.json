@@ -1,0 +1,13 @@
+{
+  "id": "TC_132",
+  "category": "modal_dialog",
+  "complexity": "medium",
+  "user_story": "As a user, I want a modal to open with an animation.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Modal Dialog Animation', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n        cy.get('button.open-modal').click(); // Replace with the actual selector to open the modal\n    });\n\n    it('should open the modal with animation', () => {\n        cy.get('.modal') // Replace with the actual selector for the modal\n            .should('be.visible')\n            .and('have.class', 'fade-in'); // Assuming 'fade-in' is the class for animation\n    });\n\n    it('should close the modal when the close button is clicked', () => {\n        cy.get('.modal .close-button').click(); // Replace with the actual selector for the close button\n        cy.get('.modal').should('not.be.visible');\n    });\n});",
+  "prompt_tokens": 108,
+  "completion_tokens": 168,
+  "latency_s": 2.41,
+  "timestamp": "2026-06-19T16:34:04.561554"
+}

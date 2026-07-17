@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_024",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7097,
+  "total_latency_s": 431.78,
+  "final_script": "describe('Character Count on Textarea with 500-character Limit', () => {\n  beforeEach(() => {\n    cy.visit('/textarea-validation');\n  });\n\n  it('should display character count and update as user types', () => {\n    // Verify initial state: empty textarea with 0 characters displayed\n    cy.get('[data-testid=\"textarea-input\"]').should('be.visible');\n    cy.get('[data-testid=\"character-count\"]').should('contain', '0/500');\n\n    // Type 100 characters\n    cy.get('[data-testid=\"textarea-input\"]').type('This is a test of the character count limit.');\n    cy.get('[data-testid=\"character-count\"]').should('contain', '100/500');\n\n    // Verify character count updates in real-time\n    cy.get('[data-testid=\"textarea-input\"]').type('This is a longer test to see if the count updates correctly.');\n    cy.get('[data-testid=\"character-count\"]').should('contain', '200/500');\n\n    // Verify character count does not exceed 500\n    cy.get('[data-testid=\"textarea-input\"]').type('This is a very long test string to ensure the limit is respected.');\n    cy.get('[data-testid=\"character-count\"]').should('contain', '500/500');\n\n    // Verify character count is displayed even when textarea is empty\n    cy.get('[data-testid=\"textarea-input\"]').clear();\n    cy.get('[data-testid=\"character-count\"]').should('contain', '0/500');\n\n    // Verify character count is not displayed when textarea is not focused\n    cy.get('[data-testid=\"textarea-input\"]').blur();\n    cy.get('[data-testid=\"character-count\"]').should('not.exist');\n\n    // Verify character count is visible when textarea is focused\n    cy.get('[data-testid=\"textarea-input\"]').focus();\n    cy.get('[data-testid=\"character-count\"]').should('be.visible');\n\n    // Verify character count is updated when textarea loses focus\n    cy.get('[data-testid=\"textarea-input\"]').blur();\n    cy.get('[data-testid=\"character-count\"]').should('contain', '0/500');\n  });\n\n  it('should prevent pasting text exceeding 500 characters and display error message', () => {\n    // Verify initial state: empty textarea with 0 characters displayed\n    cy.get('[data-testid=\"textarea-input\"]').should('be.visible');\n    cy.get('[data-testid=\"character-count\"]').should('contain', '0/500');\n\n    // Type 499 characters\n    cy.get('[data-testid=\"textarea-input\"]').type('This is a test of the character count limit.');\n    cy.get('[data-testid=\"character-count\"]').should('contain', '499/500');\n\n    // Attempt to paste text exceeding 500 characters\n    cy.get('[data-testid=\"textarea-input\"]').paste('This is a very long text that exceeds the limit.');\n\n    // Verify character count does not exceed 500\n    cy.get('[data-testid=\"character-count\"]').should('contain', '500/500');\n\n    // Verify error message is displayed when pasting exceeds limit\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Cannot paste text longer than 500 characters');\n\n    // Verify error message disappears when pasting valid text\n    cy.get('[data-testid=\"textarea-input\"]').clear();\n    cy.get('[data-testid=\"textarea-input\"]').type('This is a valid test');\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7097,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.2322,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 431.78,
+      "feedback_used": ""
+    }
+  ]
+}

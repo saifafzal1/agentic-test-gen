@@ -1,0 +1,13 @@
+{
+  "id": "TC_072",
+  "category": "api_response_handling",
+  "complexity": "medium",
+  "user_story": "As a user, I want file download to trigger when clicking an export button.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('File Download Functionality', () => {\n    const downloadUrl = '/api/export'; // Adjust the URL as necessary\n\n    beforeEach(() => {\n        cy.visit('/your-page-url'); // Replace with the actual page URL\n    });\n\n    it('should trigger file download when export button is clicked', () => {\n        cy.intercept('GET', downloadUrl).as('fileDownload');\n        \n        cy.get('button#export-button').click(); // Replace with the actual selector for the export button\n        \n        cy.wait('@fileDownload').then((interception) => {\n            expect(interception.response.statusCode).to.eq(200);\n            expect(interception.response.headers['content-type']).to.include('application/octet-stream');\n        });\n        \n        cy.get('a[download]').should('exist'); // Check if the download link is present\n    });\n\n    it('should handle file download failure gracefully', () => {\n        cy.intercept('GET', downloadUrl, {\n            statusCode: 500,\n            body: { error: 'Internal Server Error' }\n        }).as('fileDownloadError');\n        \n        cy.get('button#export-button').click(); // Replace with the actual selector for the export button\n        \n        cy.wait('@fileDownloadError').then((interception) => {\n            expect(interception.response.statusCode).to.eq(500);\n            cy.get('.error-message').should('contain', 'Failed to download file'); // Adjust the selector for error message\n        });\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 306,
+  "latency_s": 5.06,
+  "timestamp": "2026-06-19T16:29:53.703410"
+}

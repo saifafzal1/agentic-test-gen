@@ -1,0 +1,13 @@
+{
+  "id": "TC_002",
+  "category": "authentication",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see an error message when I enter an incorrect password.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Authentication - Incorrect Password Error Message', () => {\n  const validEmail = 'testuser@example.com';\n  const incorrectPassword = 'wrongpassword123';\n  const correctPassword = 'correctpassword123';\n  const loginUrl = 'http://localhost:3000/login';\n  const errorMessageSelector = '[data-testid=\"error-message\"]';\n  const emailInputSelector = '[data-testid=\"email-input\"]';\n  const passwordInputSelector = '[data-testid=\"password-input\"]';\n  const loginButtonSelector = '[data-testid=\"login-button\"]';\n\n  beforeEach(() => {\n    cy.visit(loginUrl);\n  });\n\n  it('should display error message when user enters incorrect password', () => {\n    cy.get(emailInputSelector).type(validEmail);\n    cy.get(passwordInputSelector).type(incorrectPassword);\n    cy.get(loginButtonSelector).click();\n\n    cy.get(errorMessageSelector)\n      .should('be.visible')\n      .and('contain', 'Invalid email or password');\n  });\n\n  it('should display error message with specific text for multiple incorrect password attempts', () => {\n    cy.get(emailInputSelector).type(validEmail);\n    cy.get(passwordInputSelector).type(incorrectPassword);\n    cy.get(loginButtonSelector).click();\n\n    cy.get(errorMessageSelector)\n      .should('be.visible')\n      .and('have.text', 'Invalid email or password');\n\n    cy.get(passwordInputSelector).clear().type('anotherincorrectpassword');\n    cy.get(loginButtonSelector).click();\n\n    cy.get(errorMessageSelector)\n      .should('be.visible')\n      .and('contain', 'Invalid email or password');\n  });\n\n  it('should not display error message when correct password is entered', () => {\n    cy.get(emailInputSelector).type(validEmail);\n    cy.get(passwordInputSelector).type(correctPassword);\n    cy.get(loginButtonSelector).click();\n\n    cy.get(errorMessageSelector).should('not.exist');\n    cy.url().should('not.include', '/login');\n  });\n\n  it('should clear error message when user modifies password field after error', () => {\n    cy.get(emailInputSelector).type(validEmail);\n    cy.get(passwordInputSelector).type(incorrectPassword);\n    cy.get(loginButtonSelector).click();\n\n    cy.get(errorMessageSelector).should('be.visible');\n\n    cy.get(passwordInputSelector).clear().type(correctPassword);\n\n    cy.get(errorMessageSelector).should('not.be.visible');\n  });\n});",
+  "prompt_tokens": 121,
+  "completion_tokens": 645,
+  "latency_s": 3.92,
+  "timestamp": "2026-06-19T17:04:36.518027"
+}

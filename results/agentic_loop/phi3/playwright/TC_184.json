@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_184",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8315,
+  "total_latency_s": 51.977,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload - Set Title and Description', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should successfully set title and description for an uploaded file', async ({ page }) => {\n    // Intercept the file upload API\n    await page.route('**/api/files/upload', (route) => {\n      route.continue();\n    });\n\n    // Upload a file using getByLabel\n    const fileInput = page.getByLabel('Upload File');\n    await fileInput.setInputFiles('fixtures/sample-file.pdf');\n\n    // Verify file is listed\n    const fileList = page.getByRole('listbox', { name: /files/i });\n    await expect(fileList).toBeVisible();\n\n    // Set title using getByLabel\n    const titleInput = page.getByLabel('File Title');\n    await expect(titleInput).toBeVisible();\n    await titleInput.fill('Sample PDF Document');\n\n    // Set description using getByLabel\n    const descriptionInput = page.getByLabel('File Description');\n    await expect(descriptionInput).toBeVisible();\n    await descriptionInput.fill('This is a sample PDF document for testing file upload functionality.');\n\n    // Submit the form\n    const submitButton = page.getByRole('button', { name: /upload/i });\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('File uploaded successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify title and description are set in the file details\n    const fileDetails = page.getByText('Sample PDF Document');\n    await expect(fileDetails).toBeVisible();\n\n    const fileDescription = page.getByText('This is a sample PDF document for testing file upload functionality.');\n    await expect(fileDescription).toBeVisible();\n\n    // Verify file is listed with title and description\n    const fileItem = page.getByText('Sample PDF Document');\n    await expect(fileItem).toBeVisible();\n  });\n\n  test('should handle empty title and description input', async ({ page }) => {\n    // Upload a file using getByLabel\n    const fileInput = page.getByLabel('Upload File');\n    await fileInput.setInputFiles('fixtures/sample-file.pdf');\n\n    // Verify file is listed\n    const fileList = page.getByRole('listbox', { name: /files/i });\n    await expect(fileList).toBeVisible();\n\n    // Set title using getByLabel\n    const titleInput = page.getByLabel('File Title');\n    await expect(titleInput).toBeVisible();\n    await titleInput.fill('');\n\n    // Set description using getByLabel\n    const descriptionInput = page.getByLabel('File Description');\n    await expect(descriptionInput).toBeVisible();\n    await descriptionInput.fill('');\n\n    // Submit the form\n    const submitButton = page.getByRole('button', { name: /upload/i });\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('File uploaded successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify file is listed without title and description\n    const fileItem = page.getByText('Sample PDF Document');\n    await expect(fileItem).toBeVisible();\n\n    // Verify no title or description is displayed\n    const titleDisplay = page.getByText('Sample PDF Document');\n    await expect(titleDisplay).not.toBeVisible();\n\n    const descriptionDisplay = page.getByText('This is a sample PDF document for testing file upload functionality.');\n    await expect(descriptionDisplay).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8315,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4385,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 51.977,
+      "feedback_used": ""
+    }
+  ]
+}

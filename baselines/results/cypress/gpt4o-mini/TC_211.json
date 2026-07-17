@@ -1,0 +1,13 @@
+{
+  "id": "TC_211",
+  "category": "accessibility",
+  "complexity": "complex",
+  "user_story": "As a user, I want dynamic content updates to be announced by screen readers.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Dynamic Content Updates Accessibility', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should announce dynamic content updates to screen readers', () => {\n        // Simulate a dynamic content update\n        cy.get('#dynamic-content').should('exist');\n        cy.get('#update-button').click(); // Assume this button triggers the update\n\n        // Check if the updated content is present\n        cy.get('#dynamic-content').should('contain', 'New content has been loaded');\n\n        // Verify that the screen reader announces the update\n        cy.get('#dynamic-content').invoke('attr', 'aria-live').should('equal', 'polite');\n    });\n\n    it('should not announce updates when aria-live is set to off', () => {\n        // Simulate a dynamic content update\n        cy.get('#dynamic-content').should('exist');\n        cy.get('#update-button').click(); // Assume this button triggers the update\n\n        // Check if the updated content is present\n        cy.get('#dynamic-content').should('contain', 'New content has been loaded');\n\n        // Verify that the screen reader does not announce the update\n        cy.get('#dynamic-content').invoke('attr', 'aria-live').should('equal', 'off');\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 270,
+  "latency_s": 2.91,
+  "timestamp": "2026-06-19T16:38:26.561234"
+}

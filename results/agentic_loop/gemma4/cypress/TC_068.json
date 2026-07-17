@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_068",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7961,
+  "total_latency_s": 71.481,
+  "final_script": "describe('Live Data Timestamp Display', () => {\n  beforeEach(() => {\n    cy.visit('/live-data');\n  });\n\n  it('should display the last updated timestamp when live data is available', () => {\n    cy.intercept('GET', '/api/live-data').as('getLiveData');\n    cy.wait('@getLiveData');\n\n    cy.get('[data-testid=\"live-data-container\"]').should('be.visible');\n    cy.get('[data-testid=\"last-updated-timestamp\"]').should('be.visible');\n    cy.get('[data-testid=\"last-updated-timestamp\"]').should('contain', 'Updated:');\n    cy.get('[data-testid=\"last-updated-timestamp\"]').should('contain', '2 minutes ago');\n    cy.get('[data-testid=\"data-value\"]').should('contain', '15.2');\n  });\n\n  it('should display \"No data available\" when live data is not yet updated', () => {\n    cy.intercept('GET', '/api/live-data', {\n      statusCode: 200,\n      body: {\n        data: null,\n        lastUpdated: null\n      }\n    }).as('getLiveDataEmpty');\n    cy.wait('@getLiveDataEmpty');\n\n    cy.get('[data-testid=\"live-data-container\"]').should('be.visible');\n    cy.get('[data-testid=\"last-updated-timestamp\"]').should('be.visible');\n    cy.get('[data-testid=\"last-updated-timestamp\"]').should('contain', 'No data available');\n    cy.get('[data-testid=\"data-value\"]').should('contain', 'N/A');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7961,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5202,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.481,
+      "feedback_used": ""
+    }
+  ]
+}

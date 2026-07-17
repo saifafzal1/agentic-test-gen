@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_130",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8191,
+  "total_latency_s": 73.307,
+  "final_script": "describe('Modal Backdrop Close Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/modal-page');\n  });\n\n  it('should close modal when backdrop is clicked', () => {\n    // Open the modal\n    cy.get('[data-testid=\"open-modal-button\"]').click();\n    \n    // Verify modal is visible\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-title\"]').should('contain', 'Modal Title');\n    \n    // Verify modal content is visible\n    cy.get('[data-testid=\"modal-content\"]').should('be.visible');\n    \n    // Click on the backdrop\n    cy.get('[data-testid=\"modal-backdrop\"]').click();\n    \n    // Verify modal is closed\n    cy.get('[data-testid=\"modal-dialog\"]').should('not.exist');\n    \n    // Verify modal is no longer visible\n    cy.get('[data-testid=\"modal-dialog\"]').should('not.be.visible');\n  });\n\n  it('should not close modal when backdrop is clicked while modal is disabled', () => {\n    // Open the modal\n    cy.get('[data-testid=\"open-modal-button\"]').click();\n    \n    // Disable the modal\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-dialog\"]').should('have.attr', 'disabled');\n    \n    // Verify modal is still visible and disabled\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-dialog\"]').should('have.attr', 'disabled');\n    \n    // Click on the backdrop\n    cy.get('[data-testid=\"modal-backdrop\"]').click();\n    \n    // Verify modal is still visible and disabled\n    cy.get('[data-testid=\"modal-dialog\"]').should('be.visible');\n    cy.get('[data-testid=\"modal-dialog\"]').should('have.attr', 'disabled');\n    \n    // Verify modal content is still visible\n    cy.get('[data-testid=\"modal-content\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8191,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5969,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.307,
+      "feedback_used": ""
+    }
+  ]
+}

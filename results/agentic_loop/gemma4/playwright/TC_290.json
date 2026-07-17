@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_290",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8158,
+  "total_latency_s": 72.578,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Profile Update Confirmation Message', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/profile');\n  });\n\n  test('should display confirmation message after successful profile update', async ({ page }) => {\n    // Verify profile form is visible\n    const profileForm = page.getByRole('form', { name: /profile/i });\n    await expect(profileForm).toBeVisible();\n\n    // Get and fill first name input using getByLabel\n    const firstNameInput = page.getByLabel('First Name');\n    await firstNameInput.fill('John');\n\n    // Get and fill last name input using getByLabel\n    const lastNameInput = page.getByLabel('Last Name');\n    await lastNameInput.fill('Doe');\n\n    // Get and fill email input using getByLabel\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('john.doe@example.com');\n\n    // Get and click save button using getByRole\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await saveButton.click();\n\n    // Wait for confirmation message to appear\n    const confirmationMessage = page.getByText(/profile updated successfully/i);\n    await expect(confirmationMessage).toBeVisible();\n\n    // Verify confirmation message has success styling\n    await expect(confirmationMessage).toHaveClass(/success-message/);\n\n    // Verify profile details are updated\n    const firstNameDisplay = page.getByText('John');\n    await expect(firstNameDisplay).toBeVisible();\n\n    const lastNameDisplay = page.getByText('Doe');\n    await expect(lastNameDisplay).toBeVisible();\n  });\n\n  test('should not display confirmation message when profile update fails', async ({ page }) => {\n    // Get and fill first name input using getByLabel\n    const firstNameInput = page.getByLabel('First Name');\n    await firstNameInput.fill('InvalidName');\n\n    // Get and fill last name input using getByLabel\n    const lastNameInput = page.getByLabel('Last Name');\n    await lastNameInput.fill('Doe');\n\n    // Get and fill email input using getByLabel\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('invalid-email');\n\n    // Get and click save button using getByRole\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await saveButton.click();\n\n    // Wait for error message to appear\n    const errorMessage = page.getByText(/error updating profile/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify confirmation message does not exist\n    const confirmationMessage = page.getByText(/profile updated successfully/i);\n    await expect(confirmationMessage).not.toBeVisible();\n\n    // Verify error message has error styling\n    await expect(errorMessage).toHaveClass(/error-message/);\n\n    // Verify form fields are still populated with invalid data\n    await expect(firstNameInput).toHaveValue('InvalidName');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8158,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.386,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.578,
+      "feedback_used": ""
+    }
+  ]
+}

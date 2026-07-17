@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_174",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8594,
+  "total_latency_s": 425.489,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload - Maximum Size Limit Error', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should display error message when file exceeds maximum size limit', async ({ page }) => {\n    // Setup: intercept the file upload API call\n    await page.route('**/api/upload', (route) => {\n      route.abort('File too large');\n    });\n\n    // Locate and interact with file input using getByLabel\n    const fileInput = page.getByLabel('Upload file');\n    await expect(fileInput).toBeVisible();\n    await fileInput.setInputFiles('fixtures/large-file.zip');\n\n    // Verify error message appears\n    const errorMessage = page.getByText('File size exceeds maximum limit');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error icon is displayed\n    const errorIcon = page.getByRole('img', { name: /error/i });\n    await expect(errorIcon).toBeVisible();\n\n    // Verify error message is visible\n    await expect(errorMessage).toBeVisible();\n\n    // Verify file input is still visible\n    await expect(fileInput).toBeVisible();\n  });\n\n  test('should not display error message when file is within size limit', async ({ page }) => {\n    // Setup: intercept the file upload API call\n    await page.route('**/api/upload', (route) => {\n      route.continue();\n    });\n\n    // Locate and interact with file input using getByLabel\n    const fileInput = page.getByLabel('Upload file');\n    await expect(fileInput).toBeVisible();\n    await fileInput.setInputFiles('fixtures/small-file.txt');\n\n    // Verify error message does not appear\n    const errorMessage = page.getByText('File size exceeds maximum limit');\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify success message appears\n    const successMessage = page.getByText('File uploaded successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify file input is still visible\n    await expect(fileInput).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8594,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5312,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 425.489,
+      "feedback_used": ""
+    }
+  ]
+}

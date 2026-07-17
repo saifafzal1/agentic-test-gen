@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_087",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8485,
+  "total_latency_s": 72.685,
+  "final_script": "describe('Comment on Record Feature', () => {\n  beforeEach(() => {\n    cy.visit('/records');\n    cy.intercept('GET', '/api/records/1').as('getRecord');\n    cy.intercept('POST', '/api/records/1/comments').as('postComment');\n    cy.get('[data-testid=\"record-1\"]').should('be.visible');\n  });\n\n  it('should successfully add a comment to a record', () => {\n    cy.wait('@getRecord');\n    cy.get('[data-testid=\"comment-input\"]').should('be.visible');\n    cy.get('[data-testid=\"comment-input\"]').type('This is a test comment');\n    cy.get('[data-testid=\"submit-comment-btn\"]').click();\n    cy.wait('@postComment');\n    cy.get('[data-testid=\"comment-list\"]').should('be.visible');\n    cy.get('[data-testid=\"comment-item\"]').should('contain', 'This is a test comment');\n    cy.get('[data-testid=\"comment-item\"]').should('be.visible');\n    cy.get('[data-testid=\"comment-count\"]').should('contain', '1');\n  });\n\n  it('should display error message when submitting an empty comment', () => {\n    cy.wait('@getRecord');\n    cy.get('[data-testid=\"comment-input\"]').should('be.visible');\n    cy.get('[data-testid=\"comment-input\"]').type(' ');\n    cy.get('[data-testid=\"submit-comment-btn\"]').click();\n    cy.wait('@postComment');\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Comment cannot be empty');\n    cy.get('[data-testid=\"comment-item\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8485,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.695,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.685,
+      "feedback_used": ""
+    }
+  ]
+}

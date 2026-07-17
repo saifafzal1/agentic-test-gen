@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_138",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8383,
+  "total_latency_s": 47.969,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mobile Responsive Modal', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/modal');\n  });\n\n  test('should display modal responsively on mobile devices', async ({ page }) => {\n    // Setup: Open modal using getByRole\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n\n    // Verify modal content is visible\n    const modalContent = page.getByRole('main');\n    await expect(modalContent).toBeVisible();\n\n    // Verify modal title is visible\n    const modalTitle = page.getByRole('heading', { name: /modal title/i });\n    await expect(modalTitle).toBeVisible();\n\n    // Verify close button is visible\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify modal is responsive on mobile\n    await page.setViewportSize({ width: 375, height: 667 });\n    await expect(modal).toHaveStyle('max-width: 100%');\n    await expect(modalContent).toHaveStyle('max-width: 100%');\n\n    // Verify modal content is readable on mobile\n    await expect(modalContent).toHaveTextContent('Modal content');\n\n    // Verify close button is accessible\n    await expect(closeButton).toBeEnabled();\n\n    // Verify modal is closed when close button is clicked\n    await closeButton.click();\n    await expect(modal).not.toBeVisible();\n  });\n\n  test('should handle modal overflow on large mobile screens', async ({ page }) => {\n    // Setup: Open modal using getByRole\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n\n    // Verify modal content is visible\n    const modalContent = page.getByRole('main');\n    await expect(modalContent).toBeVisible();\n\n    // Verify modal title is visible\n    const modalTitle = page.getByRole('heading', { name: /modal title/i });\n    await expect(modalTitle).toBeVisible();\n\n    // Verify close button is visible\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify modal is responsive on large mobile\n    await page.setViewportSize({ width: 600, height: 1000 });\n    await expect(modal).toHaveStyle('max-width: 100%');\n    await expect(modalContent).toHaveStyle('max-width: 100%');\n\n    // Verify modal content does not overflow\n    await expect(modalContent).not.toHaveClass(/overflow/);\n\n    // Verify modal content is still readable\n    await expect(modalContent).toHaveTextContent('Modal content');\n\n    // Verify close button is still accessible\n    await expect(closeButton).toBeEnabled();\n\n    // Verify modal is closed when close button is clicked\n    await closeButton.click();\n    await expect(modal).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8383,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5609,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 47.969,
+      "feedback_used": ""
+    }
+  ]
+}

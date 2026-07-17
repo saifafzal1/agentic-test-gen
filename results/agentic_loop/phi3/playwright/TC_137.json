@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_137",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8339,
+  "total_latency_s": 845.434,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Scroll Lock', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should prevent scrolling of the page behind the modal when modal is open', async ({ page }) => {\n    // Open modal using getByRole\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n\n    // Verify modal has a scrollable content area\n    const modalContent = page.locator('[data-testid=\"modal-content\"]');\n    await expect(modalContent).toBeVisible();\n\n    // Verify page content is not scrollable\n    const pageContent = page.locator('[data-testid=\"page-content\"]');\n    await expect(pageContent).toBeVisible();\n    await expect(pageContent).not.toBeScrollable();\n\n    // Verify modal content is scrollable\n    await expect(modalContent).toBeScrollable();\n\n    // Scroll to bottom of modal content\n    await modalContent.evaluate((el) => el.scrollTop = el.scrollHeight);\n\n    // Verify page content remains at top\n    await expect(pageContent).toHaveScrollTop(0);\n\n    // Close modal using getByRole\n    const closeButton = page.getByRole('button', { name: /close modal/i });\n    await closeButton.click();\n\n    // Verify modal is closed\n    await expect(modal).not.toBeVisible();\n\n    // Verify page content is scrollable again\n    await expect(pageContent).toBeScrollable();\n  });\n\n  test('should restore page scrollability when modal is closed', async ({ page }) => {\n    // Open modal using getByRole\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n\n    // Verify page content is not scrollable\n    const pageContent = page.locator('[data-testid=\"page-content\"]');\n    await expect(pageContent).toBeVisible();\n    await expect(pageContent).not.toBeScrollable();\n\n    // Scroll to bottom of modal content\n    const modalContent = page.locator('[data-testid=\"modal-content\"]');\n    await modalContent.evaluate((el) => el.scrollTop = el.scrollHeight);\n\n    // Close modal using getByRole\n    const closeButton = page.getByRole('button', { name: /close modal/i });\n    await closeButton.click();\n\n    // Verify modal is closed\n    await expect(modal).not.toBeVisible();\n\n    // Verify page content is scrollable again\n    await expect(pageContent).toBeScrollable();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5182,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4805,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 421.783,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8339,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5465,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 423.651,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

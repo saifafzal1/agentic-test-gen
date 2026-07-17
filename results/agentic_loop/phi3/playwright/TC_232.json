@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_232",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.4825,
+  "total_latency_s": 693.645,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Responsive Data Tables - Vertical Stacking on Small Screens', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/data-tables');\n  });\n\n  test('should stack data tables vertically on small screens', async ({ page }) => {\n    // Setup: Load the page with multiple data tables\n    await page.route('**/api/data-tables/list', async (route) => {\n      await route.continue();\n    });\n\n    // Verify initial state: Data tables should be horizontal\n    const table1 = page.getByRole('table');\n    await expect(table1).toBeVisible();\n    const table2 = page.getByRole('table');\n    await expect(table2).toBeVisible();\n    const table3 = page.getByRole('table');\n    await expect(table3).toBeVisible();\n\n    // Verify table headers are visible\n    const table1Header = page.getByRole('heading', { name: /table 1/i });\n    await expect(table1Header).toBeVisible();\n    const table2Header = page.getByRole('heading', { name: /table 2/i });\n    await expect(table2Header).toBeVisible();\n    const table3Header = page.getByRole('heading', { name: /table 3/i });\n    await expect(table3Header).toBeVisible();\n\n    // Verify table rows are visible\n    const table1Row = page.getByRole('row', { name: /row 1/i });\n    await expect(table1Row).toBeVisible();\n    const table2Row = page.getByRole('row', { name: /row 2/i });\n    await expect(table2Row).toBeVisible();\n    const table3Row = page.getByRole('row', { name: /row 3/i });\n    await expect(table3Row).toBeVisible();\n\n    // Set viewport width to trigger responsive behavior\n    await page.setViewportSize({ width: 320, height: 480 });\n\n    // Verify tables stack vertically\n    const table1Stacked = page.getByRole('table');\n    await expect(table1Stacked).toHaveClass(/stacked/i);\n    const table2Stacked = page.getByRole('table');\n    await expect(table2Stacked).toHaveClass(/stacked/i);\n    const table3Stacked = page.getByRole('table');\n    await expect(table3Stacked).toHaveClass(/stacked/i);\n\n    // Verify table headers are still visible\n    await expect(table1Header).toBeVisible();\n    await expect(table2Header).toBeVisible();\n    await expect(table3Header).toBeVisible();\n\n    // Verify table rows are still visible\n    await expect(table1Row).toBeVisible();\n    await expect(table2Row).toBeVisible();\n    await expect(table3Row).toBeVisible();\n\n    // Verify table content is accessible\n    const table1Cell = page.getByRole('cell', { name: /cell 1/i });\n    await expect(table1Cell).toBeVisible();\n    const table2Cell = page.getByRole('cell', { name: /cell 2/i });\n    await expect(table2Cell).toBeVisible();\n    const table3Cell = page.getByRole('cell', { name: /cell 3/i });\n    await expect(table3Cell).toBeVisible();\n\n    // Verify responsive breakpoints are applied\n    await page.setViewportSize({ width: 768, height: 1024 });\n    const table1Stacked = page.getByRole('table');\n    await expect(table1Stacked).not.toHaveClass(/stacked/i);\n    const table2Stacked = page.getByRole('table');\n    await expect(table2Stacked).not.toHaveClass(/stacked/i);\n    const table3Stacked = page.getByRole('table');\n    await expect(table3Stacked).not.toHaveClass(/stacked/i);\n\n    // Verify table headers are still visible\n    await expect(table1Header).toBe",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4825,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3618,
+        "missing_keywords": [],
+        "assertion_count": 25,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 54.134,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4768,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3427,
+        "missing_keywords": [],
+        "assertion_count": 30,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 287.17,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.4693,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.3177,
+        "missing_keywords": [],
+        "assertion_count": 40,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 352.341,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

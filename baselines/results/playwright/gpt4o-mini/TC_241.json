@@ -1,0 +1,13 @@
+{
+  "id": "TC_241",
+  "category": "responsive",
+  "complexity": "complex",
+  "user_story": "As a user, I want the dashboard sidebar to become a bottom nav bar on mobile.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dashboard Sidebar Responsiveness', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display sidebar on desktop', async ({ page }) => {\n    await page.setViewportSize({ width: 1280, height: 800 });\n    const sidebar = page.getByRole('navigation', { name: 'Sidebar' });\n    await expect(sidebar).toBeVisible();\n  });\n\n  test('should display bottom nav bar on mobile', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 667 });\n    const bottomNavBar = page.getByRole('navigation', { name: 'Bottom Navigation' });\n    await expect(bottomNavBar).toBeVisible();\n    const sidebar = page.getByRole('navigation', { name: 'Sidebar' });\n    await expect(sidebar).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 203,
+  "latency_s": 4.26,
+  "timestamp": "2026-06-19T17:00:03.320096"
+}

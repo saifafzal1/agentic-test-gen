@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_270",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7824,
+  "total_latency_s": 72.257,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Unread Notification Visual Distinction', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should visually distinguish unread notifications from read ones', async ({ page }) => {\n    // Verify notification list is visible\n    const notificationList = page.getByRole('region', { name: /notifications/i });\n    await expect(notificationList).toBeVisible();\n\n    // Verify unread notification has distinct styling (e.g, a badge or different background)\n    const unreadNotification = page.getByText('New message from John');\n    await expect(unreadNotification).toBeVisible();\n    await expect(unreadNotification).toHaveClass(/unread-badge/);\n\n    // Verify read notification has standard styling\n    const readNotification = page.getByText('System update');\n    await expect(readNotification).toBeVisible();\n    await expect(readNotification).not.toHaveClass(/unread-badge/);\n\n    // Verify unread notification has a distinct background color\n    const unreadBg = page.locator('[data-testid=\"unread-notification-bg\"]');\n    await expect(unreadBg).toHaveCSS('background-color', /rgba\\(255, 100, 0, 0.1\\)/);\n\n    // Verify read notification has standard background color\n    const readBg = page.locator('[data-testid=\"read-notification-bg\"]');\n    await expect(readBg).toHaveCSS('background-color', /rgba\\(25, 111, 159, 0.1\\)/);\n\n    // Verify unread notification has a notification count badge\n    const unreadBadge = page.locator('[data-testid=\"unread-count-badge\"]');\n    await expect(unreadBadge).toBeVisible();\n    await expect(unreadBadge).toContainText('1');\n  });\n\n  test('should remove visual distinction when unread notification is marked as read', async ({ page }) => {\n    // Verify unread notification is visible and styled distinctly\n    const unreadNotification = page.getByText('Meeting reminder');\n    await expect(unreadNotification).toBeVisible();\n    await expect(unreadNotification).toHaveClass(/unread-badge/);\n\n    // Click the mark as read button\n    const markAsReadButton = page.getByRole('button', { name: /mark as read/i });\n    await markAsReadButton.click();\n\n    // Wait for the notification to update\n    await page.waitForTimeout(500);\n\n    // Verify unread badge is removed\n    await expect(unreadNotification).not.toHaveClass(/unread-badge/);\n\n    // Verify background color reverts to standard read style\n    const unreadBg = page.locator('[data-testid=\"unread-notification-bg\"]');\n    await expect(unreadBg).not.toHaveCSS('background-color', /rgba\\(255, 100, 0, 0.1\\)/);\n\n    // Verify read notification styling is applied\n    const readBg = page.locator('[data-testid=\"read-notification-bg\"]');\n    await expect(readBg).toHaveCSS('background-color', /rgba\\(25, 119, 168, 0.1\\)/);\n\n    // Verify notification count badge is removed\n    const unreadBadge = page.locator('[data-testid=\"unread-count-badge\"]');\n    await expect(unreadBadge).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7824,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3747,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.257,
+      "feedback_used": ""
+    }
+  ]
+}

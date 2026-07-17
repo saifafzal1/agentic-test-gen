@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_210",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8166,
+  "total_latency_s": 74.871,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('ARIA Landmarks for Page Regions', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/page-with-landmarks');\n  });\n\n  test('should define page regions using ARIA landmarks', async ({ page }) => {\n    // Verify main content region exists\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeVisible();\n    await expect(mainContent).toHaveAttribute('aria-label', /main content/);\n\n    // Verify header region exists\n    const header = page.getByRole('banner');\n    await expect(header).toBeVisible();\n    await expect(header).toHaveAttribute('aria-label', /header/);\n\n    // Verify navigation region exists\n    const nav = page.getByRole('navigation');\n    await expect(nav).toBeVisible();\n    await expect(nav).toHaveAttribute('aria-label', /navigation/);\n\n    // Verify main content has correct heading structure\n    const mainHeading = page.getByRole('heading', { name: /main content/ });\n    await expect(mainHeading).toBeVisible();\n    await expect(mainHeading).toHaveAttribute('aria-level', '1');\n\n    // Verify footer region exists\n    const footer = page.getByRole('contentinfo');\n    await expect(footer).toBeVisible();\n    await expect(footer).toHaveAttribute('aria-label', /footer/);\n\n    // Verify sidebar region exists\n    const sidebar = page.getByRole('complementary');\n    await expect(sidebar).toBeVisible();\n    await expect(sidebar).toHaveAttribute('aria-label', /sidebar/);\n  });\n\n  test('should handle missing or invalid ARIA landmarks gracefully', async ({ page }) => {\n    // Intercept API call to simulate missing landmark data\n    await page.route('**/api/page-data', route => {\n      route.abort('failed');\n    });\n\n    // Reload page to test error handling\n    await page.reload();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/page content could not be loaded/);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify main content area is still accessible with fallback\n    const mainContent = page.getByRole('main');\n    await expect(mainContent).toBeVisible();\n    await expect(mainContent).toContainText('Fallback content');\n\n    // Verify navigation still functions\n    const nav = page.getByRole('navigation');\n    await expect(nav).toBeVisible();\n    await expect(nav).toContainText('Home');\n\n    // Verify footer is still present\n    const footer = page.getByRole('contentinfo');\n    await expect(footer).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8166,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4885,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 74.871,
+      "feedback_used": ""
+    }
+  ]
+}

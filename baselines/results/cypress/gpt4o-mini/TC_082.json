@@ -1,0 +1,13 @@
+{
+  "id": "TC_082",
+  "category": "crud_operations",
+  "complexity": "complex",
+  "user_story": "As a user, I want to reorder list items by drag and drop.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Reorder List Items by Drag and Drop', () => {\n    beforeEach(() => {\n        cy.visit('/your-page-url'); // Replace with your actual page URL\n    });\n\n    it('should successfully reorder list items using drag and drop', () => {\n        const itemToDrag = 'Item 1'; // Replace with the actual item text\n        const targetPosition = 'Item 3'; // Replace with the actual target item text\n\n        cy.get('.list-item') // Replace with the actual selector for list items\n            .contains(itemToDrag)\n            .trigger('mousedown', { which: 1 });\n\n        cy.get('.list-item') // Replace with the actual selector for list items\n            .contains(targetPosition)\n            .trigger('mousemove')\n            .trigger('mouseup', { force: true });\n\n        cy.get('.list-item') // Replace with the actual selector for list items\n            .eq(1) // Assuming the item is moved to the second position\n            .should('contain', itemToDrag);\n    });\n\n    it('should not reorder list items if drag is canceled', () => {\n        const itemToDrag = 'Item 2'; // Replace with the actual item text\n        const originalPosition = 1; // Assuming original position is 1\n\n        cy.get('.list-item') // Replace with the actual selector for list items\n            .contains(itemToDrag)\n            .trigger('mousedown', { which: 1 });\n\n        cy.get('body').trigger('mouseup'); // Cancel the drag\n\n        cy.get('.list-item') // Replace with the actual selector for list items\n            .eq(originalPosition)\n            .should('contain', itemToDrag); // Verify it remains in the original position\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 361,
+  "latency_s": 4.89,
+  "timestamp": "2026-06-19T16:30:37.354472"
+}

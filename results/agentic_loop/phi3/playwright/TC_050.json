@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_050",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7806,
+  "total_latency_s": 855.854,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Deep Link Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should load the correct page using deep links', async ({ page }) => {\n    // Setup: intercept the root route\n    await page.route('**/dashboard', (route) => {\n      route.continue();\n    });\n\n    // Test: navigate to deep link\n    const dashboardLink = page.getByRole('link', { name: /dashboard/i });\n    await expect(dashboardLink).toBeVisible();\n    await dashboardLink.click();\n\n    // Verify the dashboard page is loaded\n    const dashboardTitle = page.getByRole('heading', { name: /dashboard/i });\n    await expect(dashboardTitle).toBeVisible();\n\n    const userList = page.getByRole('region', { name: /users/i });\n    await expect(userList).toBeVisible();\n\n    // Verify the URL contains the deep link path\n    const url = page.url();\n    expect(url).toContain('/dashboard');\n\n    // Verify the page title is correct\n    await expect(dashboardTitle).toContainText('Dashboard');\n\n    // Verify the page has the correct content\n    const userCount = page.getByText('5 users');\n    await expect(userCount).toBeVisible();\n\n    // Verify the navigation back button works\n    const backButton = page.getByRole('button', { name: /back/i });\n    await expect(backButton).toBeVisible();\n    await backButton.click();\n\n    // Verify we are back to the root\n    const rootTitle = page.getByRole('heading', { name: /home/i });\n    await expect(rootTitle).toBeVisible();\n\n    // Verify the URL is back to root\n    const rootUrl = page.url();\n    expect(rootUrl).toContain('/');\n  });\n\n  test('should handle deep links with query parameters', async ({ page }) => {\n    // Setup: intercept the root route\n    await page.route('**/dashboard', (route) => {\n      route.continue();\n    });\n\n    // Test: navigate to deep link with query parameters\n    const dashboardLink = page.getByRole('link', { name: /dashboard/i });\n    await expect(dashboardLink).toBeVisible();\n    await dashboardLink.click();\n\n    // Verify the dashboard page is loaded\n    const dashboardTitle = page.getByRole('heading', { name: /dashboard/i });\n    await expect(dashboardTitle).toBeVisible();\n\n    // Verify the URL contains the deep link path and query parameters\n    const url = page.url();\n    expect(url).toContain('/dashboard');\n    expect(url).toContain('?filter=active');\n\n    // Verify the page has the correct content based on query parameters\n    const activeUsers = page.getByText('3 active users');\n    await expect(activeUsers).toBeVisible();\n\n    // Verify the page title is correct\n    await expect(dashboardTitle).toContainText('Dashboard');\n\n    // Verify the navigation back button works\n    const backButton = page.getByRole('button', { name: /back/i });\n    await expect(backButton).toBeVisible();\n    await backButton.click();\n\n    // Verify we are back to the root\n    const rootTitle = page.getByRole('heading', { name: /home/i });\n    await expect(rootTitle).toBeVisible();\n\n    // Verify the URL is back to root\n    const rootUrl = page.url();\n    expect(rootUrl).toContain('/');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.475,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3165,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 566.446,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7806,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3687,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 289.408,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

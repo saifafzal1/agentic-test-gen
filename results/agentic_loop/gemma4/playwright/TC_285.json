@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_285",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8374,
+  "total_latency_s": 184.644,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Public Profile Page - Shared Information Display', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/profile/user123');\n  });\n\n  test('should display user profile with shared information when logged in', async ({ page }) => {\n    // Verify profile page title is visible\n    const profileTitle = page.getByRole('heading', { name: /user profile/i });\n    await expect(profileTitle).toBeVisible();\n\n    // Verify user name is displayed using getByRole\n    const userName = page.getByRole('heading', { name: /john doe/i });\n    await expect(userName).toBeVisible();\n\n    // Verify bio is displayed using getByText\n    const userBio = page.getByText(/senior developer and writer/i);\n    await expect(userBio).toBeVisible();\n\n    // Verify profile picture is displayed using getByLabel\n    const profilePic = page.getByLabel(/profile picture/i);\n    await expect(profilePic).toBeVisible();\n\n    // Verify contact email is displayed using getByText\n    const contactEmail = page.getByText(/john.doe@example.com/i);\n    await expect(contactEmail).toBeVisible();\n\n    // Verify website link is displayed using getByText\n    const websiteLink = page.getByText(/johnsmith.com/i);\n    await expect(websiteLink).toBeVisible();\n\n    // Verify social media links are present using getByRole\n    const twitterLink = page.getByRole('link', { name: /twitter/i });\n    await expect(twitterLink).toBeVisible();\n\n    const linkedinLink = page.getByRole('link', { name: /linkedin/i });\n    await expect(linkedinLink).toBeVisible();\n\n    // Verify profile is marked as public\n    const publicStatus = page.getByText(/public profile/i);\n    await expect(publicStatus).toBeVisible();\n  });\n\n  test('should handle missing shared information gracefully', async ({ page }) => {\n    // Navigate to a profile with minimal shared data\n    await page.goto('/profile/user444');\n\n    // Verify profile page loads\n    const profileTitle = page.getByRole('heading', { name: /user profile/i });\n    await expect(profileTitle).toBeVisible();\n\n    // Verify user name is displayed\n    const userName = page.getByRole('heading', { name: /jane smith/i });\n    await expect(userName).toBeVisible();\n\n    // Verify bio placeholder is displayed when bio is missing\n    const bioPlaceholder = page.getByText(/no bio available/i);\n    await expect(bioPlaceholder).toBeVisible();\n\n    // Verify contact email placeholder is displayed\n    const emailPlaceholder = page.getByText(/contact information not shared/i);\n    await expect(emailPlaceholder).toBeVisible();\n\n    // Verify website link placeholder is displayed\n    const websitePlaceholder = page.getByText(/website not available/i);\n    await expect(websitePlaceholder).toBeVisible();\n\n    // Verify social media links are not displayed when not shared\n    const twitterLink = page.getByRole('link', { name: /twitter/i });\n    await expect(twitterLink).not.toBeVisible();\n\n    const linkedinLink = page.getByRole('link', { name: /linkedin/i });\n    await expect(linkedinLink).not.toBeVisible();\n\n    // Verify public status is still visible\n    const publicStatus = page.getByText(/public profile/i);\n    await expect(publicStatus).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5123,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.461,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.435,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8374,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4579,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 112.209,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

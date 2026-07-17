@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_044",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8078,
+  "total_latency_s": 384.716,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Click Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should navigate to relevant content when clicking a notification', async ({ page }) => {\n    // Verify notification is visible\n    const notification = page.getByRole('alert');\n    await expect(notification).toBeVisible();\n\n    // Verify notification contains relevant content\n    const notificationText = page.getByText('New message from John');\n    await expect(notificationText).toBeVisible();\n\n    // Verify navigation button is present\n    const navButton = page.getByRole('button', { name: /view message/i });\n    await expect(navButton).toBeVisible();\n\n    // Click the navigation button\n    await navButton.click();\n\n    // Verify navigation route is correct\n    const route = page.route('**/messages/123', route => {\n      route.abort('Route intercepted');\n    });\n\n    await expect(route).toBeFired();\n\n    // Verify content is displayed\n    const messageContent = page.getByText('Message from John');\n    await expect(messageContent).toBeVisible();\n\n    // Verify navigation button is disabled\n    await expect(navButton).toBeDisabled();\n  });\n\n  test('should handle multiple notifications and navigate to the last clicked one', async ({ page }) => {\n    // Click first notification\n    const firstNotification = page.getByRole('alert');\n    await firstNotification.click();\n\n    // Verify first notification is removed\n    await expect(firstNotification).not.toBeVisible();\n\n    // Click second notification\n    const secondNotification = page.getByRole('alert');\n    await secondNotification.click();\n\n    // Verify second notification is visible\n    await expect(secondNotification).toBeVisible();\n\n    // Verify navigation button is present\n    const navButton = page.getByRole('button', { name: /view message/i });\n    await expect(navButton).toBeVisible();\n\n    // Click the navigation button\n    await navButton.click();\n\n    // Verify navigation route is correct\n    const route = page.route('**/messages/456', route => {\n      route.abort('Route intercepted');\n    });\n\n    await expect(route).toBeFired();\n\n    // Verify content is displayed\n    const messageContent = page.getByText('Message from Jane');\n    await expect(messageContent).toBeVisible();\n\n    // Verify navigation button is disabled\n    await expect(navButton).toBeDisabled();\n\n    // Verify first notification is still visible\n    await expect(firstNotification).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8078,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4593,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 384.716,
+      "feedback_used": ""
+    }
+  ]
+}

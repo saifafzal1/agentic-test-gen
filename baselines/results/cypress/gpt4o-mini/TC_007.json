@@ -1,0 +1,13 @@
+{
+  "id": "TC_007",
+  "category": "authentication",
+  "complexity": "complex",
+  "user_story": "As a user, I want to stay logged in with a 'Remember Me' checkbox.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('User Authentication - Remember Me Functionality', () => {\n    beforeEach(() => {\n        cy.visit('/login');\n    });\n\n    it('should log in the user and remember them when \"Remember Me\" is checked', () => {\n        cy.get('input[name=\"username\"]').type('testuser');\n        cy.get('input[name=\"password\"]').type('password123');\n        cy.get('input[name=\"rememberMe\"]').check();\n        cy.get('button[type=\"submit\"]').click();\n\n        // Verify that the user is redirected to the dashboard\n        cy.url().should('include', '/dashboard');\n\n        // Close the browser and reopen to check if the user is still logged in\n        cy.reload();\n        cy.visit('/login');\n        cy.url().should('not.include', '/login');\n    });\n\n    it('should log in the user but not remember them when \"Remember Me\" is not checked', () => {\n        cy.get('input[name=\"username\"]').type('testuser');\n        cy.get('input[name=\"password\"]').type('password123');\n        cy.get('input[name=\"rememberMe\"]').uncheck();\n        cy.get('button[type=\"submit\"]').click();\n\n        // Verify that the user is redirected to the dashboard\n        cy.url().should('include', '/dashboard');\n\n        // Close the browser and reopen to check if the user is logged out\n        cy.reload();\n        cy.visit('/login');\n        cy.url().should('include', '/login');\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 303,
+  "latency_s": 4.76,
+  "timestamp": "2026-06-19T16:25:40.364802"
+}

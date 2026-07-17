@@ -1,0 +1,13 @@
+{
+  "id": "TC_084",
+  "category": "crud_operations",
+  "complexity": "medium",
+  "user_story": "As a user, I want to export a list of records to CSV.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Export Records to CSV', () => {\n    beforeEach(() => {\n        cy.visit('/records'); // Replace with the actual URL of the records page\n    });\n\n    it('should successfully export records to CSV', () => {\n        cy.get('button#export-csv').click(); // Replace with the actual selector for the export button\n        cy.wait(2000); // Wait for the export to complete, adjust as necessary\n        cy.readFile('cypress/downloads/records.csv').should('exist'); // Adjust the path as necessary\n        cy.readFile('cypress/downloads/records.csv').should('contain', 'Header1,Header2,Header3'); // Check for expected headers\n    });\n\n    it('should handle export failure gracefully', () => {\n        cy.intercept('GET', '/api/records/export', { statusCode: 500 }).as('exportFailure'); // Mocking a failure response\n        cy.get('button#export-csv').click();\n        cy.wait('@exportFailure');\n        cy.get('.error-message').should('be.visible').and('contain', 'Failed to export records'); // Adjust the selector and message as necessary\n    });\n});",
+  "prompt_tokens": 109,
+  "completion_tokens": 246,
+  "latency_s": 3.82,
+  "timestamp": "2026-06-19T16:30:44.993878"
+}

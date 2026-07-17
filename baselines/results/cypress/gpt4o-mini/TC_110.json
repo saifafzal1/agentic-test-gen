@@ -1,0 +1,13 @@
+{
+  "id": "TC_110",
+  "category": "async_await",
+  "complexity": "simple",
+  "user_story": "As a user, I want async data fetching to not block the initial page render.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Async Data Fetching', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Replace with the actual URL of the application\n    });\n\n    it('should render the initial page without blocking while fetching data', () => {\n        cy.intercept('GET', '/api/data', { fixture: 'data.json' }).as('fetchData');\n        \n        cy.get('.loading-indicator').should('be.visible'); // Assuming there's a loading indicator\n\n        cy.wait('@fetchData');\n\n        cy.get('.loading-indicator').should('not.exist'); // Loading indicator should disappear\n        cy.get('.data-container').should('be.visible'); // Data container should be visible\n    });\n\n    it('should handle fetch failure gracefully', () => {\n        cy.intercept('GET', '/api/data', { statusCode: 500 }).as('fetchDataError');\n\n        cy.get('.loading-indicator').should('be.visible');\n\n        cy.wait('@fetchDataError');\n\n        cy.get('.loading-indicator').should('not.exist');\n        cy.get('.error-message').should('be.visible').and('contain', 'Failed to fetch data'); // Assuming there's an error message\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 244,
+  "latency_s": 3.76,
+  "timestamp": "2026-06-19T16:32:33.105225"
+}

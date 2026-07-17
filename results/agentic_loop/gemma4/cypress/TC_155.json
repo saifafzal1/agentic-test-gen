@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_155",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8308,
+  "total_latency_s": 72.368,
+  "final_script": "describe('Empty State Illustration - Table List', () => {\n  beforeEach(() => {\n    cy.visit('/table/items');\n  });\n\n  it('should display empty state illustration when table has no data', () => {\n    // Intercept the API call to return an empty array\n    cy.intercept('GET', '/api/table/items', {\n      statusCode: 200,\n      body: {\n        data: [],\n        total: 0\n      }\n    }).as('getEmptyTableData');\n\n    // Trigger the table data load\n    cy.get('[data-testid=\"load-table-button\"]').click();\n\n    // Wait for the API response\n    cy.wait('@getEmptyTableData');\n\n    // Verify the empty state illustration is visible\n    cy.get('[data-testid=\"empty-state-illustration\"]').should('be.visible');\n\n    // Verify the illustration contains the correct message\n    cy.get('[data-testid=\"empty-state-message\"]').should('contain', 'No items found');\n\n    // Verify the table body is empty\n    cy.get('[data-testid=\"table-body\"]').should('be.visible');\n    cy.get('[data-testid=\"table-row\"]').should('not.exist');\n\n    // Verify the empty state action button is present\n    cy.get('[data-testid=\"refresh-button\"]').should('be.visible');\n  });\n\n  it('should hide empty state illustration when data is loaded', () => {\n    // Intercept the API call to return data\n    cy.intercept('GET', '/api/table/items', {\n      statusCode: 200,\n      body: {\n        data: [\n          { id: 1, name: 'Item 1', status: 'active' },\n          { id: 2, name: 'Item 2', status: 'inactive' }\n        ],\n        total: 2\n      }\n    }).as('getPopulatedTableData');\n\n    // Trigger the table data load\n    cy.get('[data-testid=\"load-table-button\"]').click();\n\n    // Wait for the API response\n    cy.wait('@getPopulatedTableData');\n\n    // Verify the empty state illustration is hidden\n    cy.get('[data-testid=\"empty-state-illustration\"]').should('not.exist');\n\n    // Verify the table rows are visible\n    cy.get('[data-testid=\"table-row\"]').should('have.length', 2);\n\n    // Verify the table contains data\n    cy.get('[data-testid=\"table-row\"]').first().should('contain', 'Item 1');\n    cy.get('[data-testid=\"table-row\"]').last().should('contain', 'Item 2');\n\n    // Verify the table header is visible\n    cy.get('[data-testid=\"table-header\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8308,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.6359,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.368,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_109",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8669,
+  "total_latency_s": 72.189,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Spinner Visibility', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should display spinner while login request is in progress', async ({ page }) => {\n    // Intercept the login API call\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('blockedbyclient');\n    });\n\n    // Get email input by label\n    const emailInput = page.getByLabel('Email Address');\n    await expect(emailInput).toBeVisible();\n    await emailInput.fill('user@example.com');\n\n    // Get password input by label\n    const passwordInput = page.getByLabel('Password');\n    await expect(passwordInput).toBeVisible();\n    await passwordInput.fill('Password123');\n\n    // Get login button by role\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await expect(loginButton).toBeVisible();\n\n    // Click login button\n    await loginButton.click();\n\n    // Wait for spinner to appear\n    const spinner = page.getByRole('status', { name: /loading/i });\n    await expect(spinner).toBeVisible();\n\n    // Verify spinner has correct class\n    await expect(spinner).toHaveClass(/spinner-active/);\n\n    // Verify login button is disabled\n    await expect(loginButton).toBeDisabled();\n\n    // Verify spinner is visible\n    await expect(spinner).toBeVisible();\n  });\n\n  test('should hide spinner and show error message on failed login', async ({ page }) => {\n    // Intercept the login API call and return an error response\n    await page.route('**/api/auth/login', (route) => {\n      route.fulfill({\n        status: 401,\n        contentType: 'application/json',\n        body: JSON.stringify({ error: 'Invalid credentials' }),\n      });\n    });\n\n    // Get email input by label\n    const emailInput = page.getByLabel('Email Address');\n    await expect(emailInput).toBeVisible();\n    await emailInput.fill('user@example.com');\n\n    // Get password input by label\n    const passwordInput = page.getByLabel('Password');\n    await expect(passwordInput).toBeVisible();\n    await passwordInput.fill('wrongpassword');\n\n    // Get login button by role\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await expect(loginButton).toBeVisible();\n\n    // Click login button\n    await loginButton.click();\n\n    // Wait for spinner to appear\n    const spinner = page.getByRole('status', { name: /loading/i });\n    await expect(spinner).toBeVisible();\n\n    // Wait for spinner to disappear\n    await page.waitForTimeout(1000);\n\n    // Verify spinner is no longer visible\n    await expect(spinner).not.toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/invalid credentials/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify login button is enabled again\n    await expect(loginButton).not.toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8669,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5564,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.189,
+      "feedback_used": ""
+    }
+  ]
+}

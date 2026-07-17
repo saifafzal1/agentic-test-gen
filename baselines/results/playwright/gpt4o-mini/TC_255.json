@@ -1,0 +1,13 @@
+{
+  "id": "TC_255",
+  "category": "payment_flow",
+  "complexity": "medium",
+  "user_story": "As a user, I want to change my billing address during checkout.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Billing Address Change during Checkout', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com/checkout');\n    await page.fill('input[name=\"email\"]', 'user@example.com');\n    await page.fill('input[name=\"password\"]', 'password123');\n    await page.click('button[type=\"submit\"]');\n  });\n\n  test('should allow user to change billing address', async ({ page }) => {\n    await page.click(getByText('Change Billing Address'));\n    await page.fill(getByLabel('Street Address'), '123 New St');\n    await page.fill(getByLabel('City'), 'New City');\n    await page.fill(getByLabel('State'), 'New State');\n    await page.fill(getByLabel('Zip Code'), '12345');\n    await page.click(getByText('Save Address'));\n    \n    const successMessage = await page.locator(getByText('Billing address updated successfully'));\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should display error for invalid billing address', async ({ page }) => {\n    await page.click(getByText('Change Billing Address'));\n    await page.fill(getByLabel('Street Address'), '');\n    await page.fill(getByLabel('City'), 'New City');\n    await page.fill(getByLabel('State'), 'New State');\n    await page.fill(getByLabel('Zip Code'), '12345');\n    await page.click(getByText('Save Address'));\n    \n    const errorMessage = await page.locator(getByText('Street Address is required'));\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 131,
+  "completion_tokens": 347,
+  "latency_s": 17.28,
+  "timestamp": "2026-06-19T17:01:27.834351"
+}

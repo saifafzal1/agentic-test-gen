@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_170",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.799,
+  "total_latency_s": 877.521,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload Progress Bar', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should display progress bar for each file being uploaded', async ({ page }) => {\n    // Intercept the API call to get file upload status\n    await page.route('**/api/upload/status', (route) => {\n      route.continue();\n    });\n\n    // Locate and click the file input using getByRole\n    const fileInput = page.getByRole('button', { name: /choose file/i });\n    await fileInput.click();\n\n    // Locate and select a file using getByLabel\n    const fileSelect = page.getByLabel(/select file/i);\n    await fileSelect.setInputFiles('fixtures/sample-file.pdf');\n\n    // Verify progress bar is visible\n    const progressBar = page.getByRole('progressbar');\n    await expect(progressBar).toBeVisible();\n\n    // Verify progress bar has a value\n    const progressValue = page.getByText(/100%/i);\n    await expect(progressValue).toBeVisible();\n\n    // Verify progress bar is styled correctly\n    await expect(progressBar).toHaveClass(/progress-bar/i);\n\n    // Verify upload status is displayed\n    const uploadStatus = page.getByText(/uploading/i);\n    await expect(uploadStatus).toBeVisible();\n\n    // Verify progress bar updates as file uploads\n    await page.waitForTimeout(100);\n    const updatedProgressValue = page.getByText(/50%/i);\n    await expect(updatedProgressValue).toBeVisible();\n\n    // Verify progress bar reaches 100%\n    const finalProgressValue = page.getByText(/100%/i);\n    await expect(finalProgressValue).toBeVisible();\n\n    // Verify success message is displayed\n    const successMessage = page.getByText(/file uploaded successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify file name is displayed\n    const fileName = page.getByText(/sample-file.pdf/i);\n    await expect(fileName).toBeVisible();\n\n    // Verify file preview is displayed\n    const filePreview = page.getByRole('img', { name: /sample-file.pdf/i });\n    await expect(filePreview).toBeVisible();\n\n    // Verify file upload button is disabled after upload\n    const uploadButton = page.getByRole('button', { name: /upload file/i });\n    await expect(uploadButton).toBeDisabled();\n  });\n\n  test('should handle multiple file uploads with individual progress bars', async ({ page }) => {\n    // Intercept the API call to get file upload status\n    await page.route('**/api/upload/status', (route) => {\n      route.continue();\n    });\n\n    // Locate and click the file input using getByRole\n    const fileInput = page.getByRole('button', { name: /choose file/i });\n    await fileInput.click();\n\n    // Locate and select multiple files using getByLabel\n    const fileSelect = page.getByLabel(/select file/i);\n    await fileSelect.setInputFiles('fixtures/sample-file1.pdf', 'fixtures/sample-file2.pdf');\n\n    // Verify multiple progress bars are visible\n    const progressBar1 = page.getByRole('progressbar');\n    await expect(progressBar1).toBeVisible();\n    const progressBar2 = page.getByRole('progressbar');\n    await expect(progressBar2).toBeVisible();\n\n    // Verify each progress bar has a value\n    const progressValue1 = page.getByText(/100%/i);\n    await expect(progressValue1).toBeVisible();\n    const progressValue2 = page.getByText(/100%/i);\n    await expect(progressValue2).toBeVisible();\n\n    // Verify progress bars are styled correctly\n    await expect(progressBar1).toHaveClass(/progress-bar/i);\n    await expect(progressBar2).toHaveClass(/progress-bar/i);\n\n    // Verify upload status is displayed for each file\n    const uploadStatus1 = page.getByText(/uploading/i);\n    await expect(uploadStatus1).toBeVisible();\n    const uploadStatus2 = page.getByText(/uploading/i);\n    await expect(uploadStatus2).toBeVisible();\n\n    // Verify success message is displayed for each file\n    const successMessage1 = page.getByText(/file 1 uploaded successfully/i);\n    await expect(successMessage1).toBeVisible();\n    const successMessage2 = page.getByText(/file 2 uploaded successfully/i);\n    await expect(successMessage2).toBeVisible();\n\n    // Verify file names are displayed for each file\n    const fileName1 = page.getByText(/sample-file1.pdf/i);\n    await expect(fileName1).toBeVisible();\n    const fileName2 = page.getByText(/sample-file2.pdf/i);\n    await expect(fileName2).toBeVisible();\n\n    // Verify file preview is displayed for each file\n    const filePreview1 = page.getByRole('img', { name: /sample-file1.pdf/i });\n    await expect(filePreview1).toBeVisible();\n    const filePreview2 = page.getByRole('img', { name: /sample-file2.pdf/i });\n    await expect(filePreview2).toBeVisible();\n\n    // Verify file upload button is disabled after upload\n    const uploadButton = page.getByRole('button', { name: /upload file/i });\n    await expect(uploadButton).toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4888,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.3626,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 356.957,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.799,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3301,
+        "missing_keywords": [],
+        "assertion_count": 25,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 520.564,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_143",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7948,
+  "total_latency_s": 72.64,
+  "final_script": "describe('Image Gallery Lightbox Modal', () => {\n  beforeEach(() => {\n    cy.visit('/gallery');\n  });\n\n  it('should open lightbox modal when clicking an image in gallery', () => {\n    // Verify gallery is visible\n    cy.get('[data-testid=\"image-gallery\"]').should('be.visible');\n    \n    // Verify images are present\n    cy.get('[data-testid=\"gallery-image\"]').should('have.length.greaterThan', 0);\n    \n    // Click the first image to open lightbox\n    cy.get('[data-testid=\"gallery-image\"]').first().click();\n    \n    // Verify lightbox modal is visible\n    cy.get('[data-testid=\"lightbox-modal\"]').should('be.visible');\n    \n    // Verify modal contains the clicked image\n    cy.get('[data-testid=\"lightbox-image\"]').should('be.visible');\n    cy.get('[data-testid=\"lightbox-image\"]').should('have.attr', 'src');\n    \n    // Verify close button is visible\n    cy.get('[data-testid=\"lightbox-close-button\"]').should('be.visible');\n    \n    // Verify modal has overlay\n    cy.get('[data-testid=\"lightbox-overlay\"]').should('be.visible');\n  });\n\n  it('should close lightbox modal when clicking close button or pressing escape', () => {\n    // Open lightbox by clicking an image\n    cy.get('[data-testid=\"gallery-image\"]').first().click();\n    cy.get('[data-testid=\"lightbox-modal\"]').should('be.visible');\n    \n    // Close lightbox by clicking the close button\n    cy.get('[data-testid=\"lightbox-close-button\"]').click();\n    \n    // Verify lightbox is closed\n    cy.get('[data-testid=\"lightbox-modal\"]').should('not.exist');\n    \n    // Open lightbox again\n    cy.get('[data-testid=\"gallery-image\"]').first().click();\n    cy.get('[data-testid=\"lightbox-modal\"]').should('be.visible');\n    \n    // Close lightbox by pressing escape key\n    cy.get('body').type('{esc}');\n    \n    // Verify lightbox is closed\n    cy.get('[data-testid=\"lightbox-modal\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7948,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5159,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.64,
+      "feedback_used": ""
+    }
+  ]
+}

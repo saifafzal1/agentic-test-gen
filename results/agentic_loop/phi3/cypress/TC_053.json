@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_053",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7345,
+  "total_latency_s": 31.958,
+  "final_script": "describe('Dropdown Menu Keyboard Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/dropdown');\n  });\n\n  it('should navigate dropdown menu items using arrow keys', () => {\n    // Verify dropdown is visible\n    cy.get('[data-testid=\"dropdown-menu\"]').should('be.visible');\n\n    // Verify initial focus is on first item\n    cy.get('[data-testid=\"dropdown-item-1\"]').should('have.focus');\n\n    // Press down arrow key to move focus to next item\n    cy.get('body').type('{down arrow}');\n    cy.get('[data-testid=\"dropdown-item-2\"]').should('have.focus');\n\n    // Press down arrow key again to move to last item\n    cy.get('body').type('{down arrow}');\n    cy.get('[data-testid=\"dropdown-item-3\"]').should('have.focus');\n\n    // Press up arrow key to move focus to previous item\n    cy.get('body').type('{up arrow}');\n    cy.get('[data-testid=\"dropdown-item-2\"]').should('have.focus');\n\n    // Press down arrow key to move back to first item\n    cy.get('body').type('{down arrow}');\n    cy.get('[data-testid=\"dropdown-item-1\"]').should('have.focus');\n\n    // Verify navigation works in both directions\n    cy.get('body').type('{up arrow}');\n    cy.get('[data-testid=\"dropdown-item-1\"]').should('have.focus');\n\n    // Verify focus returns to first item when reaching top or bottom\n    cy.get('body').type('{down arrow}');\n    cy.get('[data-testid=\"dropdown-item-1\"]').should('have.focus');\n  });\n\n  it('should not navigate when dropdown is closed', () => {\n    // Close dropdown menu\n    cy.get('[data-testid=\"dropdown-menu\"]').should('be.visible');\n    cy.get('[data-testid=\"dropdown-close-btn\"]').click();\n    cy.get('[data-testid=\"dropdown-menu\"]').should('not.exist');\n\n    // Verify dropdown is closed\n    cy.get('[data-testid=\"dropdown-menu\"]').should('not.exist');\n\n    // Press arrow keys should not navigate\n    cy.get('body').type('{down arrow}');\n    cy.get('body').type('{up arrow}');\n\n    // Verify no focus change occurs\n    cy.get('[data-testid=\"dropdown-item-1\"]').should('not.have.focus');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7345,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3149,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 31.958,
+      "feedback_used": ""
+    }
+  ]
+}

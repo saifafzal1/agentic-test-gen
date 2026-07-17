@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_041",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8028,
+  "total_latency_s": 71.591,
+  "final_script": "describe('404 Page Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should display 404 page for invalid URL', () => {\n    cy.visit('/this-page-does-not-exist');\n    cy.get('[data-testid=\"page-title\"]').should('contain', '404');\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Page Not Found');\n    cy.get('[data-testid=\"back-to-home-button\"]').should('be.visible');\n    cy.get('[data-testid=\"back-to-home-button\"]').click();\n    cy.url().should('eq', Cypress.config().baseUrl);\n  });\n\n  it('should handle multiple invalid URL attempts and redirect to home', () => {\n    cy.visit('/non-existent-page');\n    cy.get('[data-testid=\"page-title\"]').should('contain', '404');\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"back-to-home-button\"]').click();\n    cy.url().should('eq', Cypress.config().baseUrl);\n    cy.visit('/another-invalid-path');\n    cy.get('[data-testid=\"page-title\"]').should('contain', '440');\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"back-to-home-button\"]').click();\n    cy.url().should('eq', Cypress.config().baseUrl);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8028,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5426,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.591,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_084",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7772,
+  "total_latency_s": 72.277,
+  "final_script": "describe('Export Records to CSV', () => {\n  beforeEach(() => {\n    cy.visit('/records');\n  });\n\n  it('should successfully export a list of records to CSV', () => {\n    // Intercept the CSV export API call\n    cy.intercept('GET', '/api/records/export/csv').as('exportCSV');\n\n    // Verify records are displayed\n    cy.get('[data-testid=\"record-list\"]').should('be.visible');\n    cy.get('[data-testid=\"record-item\"]').should('have.length.greaterThan', 0);\n\n    // Click the export button\n    cy.get('[data-testid=\"export-csv-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@exportCSV');\n\n    // Verify success message appears\n    cy.get('[data-testid=\"export-success-message\"]')\n      .should('be.visible')\n      .should('contain', 'Export successful');\n\n    // Verify download link/button appears\n    cy.get('[data-testid=\"download-csv-button\"]')\n      .should('be.visible')\n      .should('contain', 'Download CSV');\n\n    // Verify download link has correct href\n    cy.get('[data-testid=\"download-csv-button\"]').should('have.attr', 'href');\n    cy.get('[data-testid=\"download-csv-button\"]').should('have.attr', 'href').and('include', '.csv');\n  });\n\n  it('should handle empty record list export gracefully', () => {\n    // Filter to show no records\n    cy.get('[data-testid=\"filter-input\"]').type('nonexistent-filter');\n    cy.get('[data-testid=\"apply-filter-button\"]').click();\n\n    // Verify no records are displayed\n    cy.get('[data-testid=\"record-list\"]').should('be.visible');\n    cy.get('[data-testid=\"record-item\"]').should('not.exist');\n\n    // Intercept the export API call\n    cy.intercept('GET', '/api/records/export/csv').as('exportEmptyCSV');\n\n    // Click the export button\n    cy.get('[data-testid=\"export-csv-button\"]').click();\n\n    // Wait for the API call\n    cy.wait('@exportEmptyCSV');\n\n    // Verify success message appears with appropriate content\n    cy.get('[data-testid=\"export-success-message\"]')\n      .should('be.visible')\n      .should('contain', 'Export successful');\n\n    // Verify download button appears even with empty list\n    cy.get('[data-testid=\"download-csv-button\"]')\n      .should('be.visible')\n      .should('contain', 'Download CSV');\n\n    // Verify download link is present\n    cy.get('[data-testid=\"download-csv-button\"]').should('have.attr', 'href');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7772,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4575,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.277,
+      "feedback_used": ""
+    }
+  ]
+}

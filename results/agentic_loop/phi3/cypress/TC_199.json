@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_199",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7491,
+  "total_latency_s": 322.469,
+  "final_script": "describe('Active Filter Tags Display', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should display active filter tags above search results when multiple filters are applied', () => {\n    // Setup: Apply multiple filters\n    cy.get('[data-testid=\"filter-checkbox-category\"]').click();\n    cy.get('[data-testid=\"filter-checkbox-price\"]').click();\n    cy.get('[data-testid=\"filter-checkbox-brand\"]').click();\n\n    // Verify filter checkboxes are checked\n    cy.get('[data-testid=\"filter-checkbox-category\"]').should('be.checked');\n    cy.get('[data-testid=\"filter-checkbox-price\"]').should('be.checked');\n    cy.get('[data-testid=\"filter-checkbox-brand\"]').should('be.checked');\n\n    // Verify filter tags are visible and contain correct values\n    cy.get('[data-testid=\"filter-tag-container\"]').should('be.visible');\n    cy.get('[data-testid=\"filter-tag-category\"]').should('contain', 'Category');\n    cy.get('[data-testid=\"filter-tag-price\"]').should('contain', 'Price');\n    cy.get('[data-testid=\"filter-tag-brand\"]').should('contain', 'Brand');\n\n    // Verify filter tags are styled as expected\n    cy.get('[data-testid=\"filter-tag-category\"]').should('have.css', 'color', 'blue');\n    cy.get('[data-testid=\"filter-tag-price\"]').should('have.css', 'color', 'green');\n    cy.get('[data-testid=\"filter-tag-brand\"]').should('have.css', 'color', 'red');\n\n    // Verify search results are displayed with applied filters\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"search-result-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify filter tags are above search results\n    cy.get('[data-testid=\"filter-tag-container\"]').should('be.above', '[data-testid=\"search-results\"]');\n  });\n\n  it('should hide filter tags when no filters are applied', () => {\n    // Setup: Clear all filters\n    cy.get('[data-testid=\"filter-checkbox-category\"]').click();\n    cy.get('[data-testid=\"filter-checkbox-price\"]').click();\n    cy.get('[data-testid=\"filter-checkbox-brand\"]').click();\n\n    // Verify filter checkboxes are checked\n    cy.get('[data-testid=\"filter-checkbox-category\"]').should('be.checked');\n    cy.get('[data-testid=\"filter-checkbox-price\"]').should('be.checked');\n    cy.get('[data-testid=\"filter-checkbox-brand\"]').should('be.checked');\n\n    // Clear filters\n    cy.get('[data-testid=\"filter-checkbox-category\"]').click();\n    cy.get('[data-testid=\"filter-checkbox-price\"]').click();\n    cy.get('[data-testid=\"filter-checkbox-brand\"]').click();\n\n    // Verify filter tags are hidden\n    cy.get('[data-testid=\"filter-tag-container\"]').should('not.exist');\n\n    // Verify search results are displayed without filter tags\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"search-result-item\"]').should('have.length.greaterThan', 0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7491,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3636,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 322.469,
+      "feedback_used": ""
+    }
+  ]
+}

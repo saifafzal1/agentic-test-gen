@@ -1,0 +1,13 @@
+{
+  "id": "TC_117",
+  "category": "async_await",
+  "complexity": "medium",
+  "user_story": "As a user, I want race conditions in search to be handled so only the latest result shows.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Race Condition Handling in Search', () => {\n    beforeEach(() => {\n        cy.visit('/search'); // Replace with the actual search page URL\n    });\n\n    it('should display the latest search result when multiple requests are made', () => {\n        cy.intercept('GET', '/api/search*', (req) => {\n            req.reply((res) => {\n                res.send({ results: ['Result 1', 'Result 2', 'Result 3'] });\n            });\n        }).as('searchRequest');\n\n        cy.get('input[name=\"search\"]').type('test{enter}');\n        cy.wait('@searchRequest');\n\n        cy.intercept('GET', '/api/search*', (req) => {\n            req.reply((res) => {\n                res.send({ results: ['Latest Result'] });\n            });\n        }).as('latestSearchRequest');\n\n        cy.get('input[name=\"search\"]').type('test again{enter}');\n        cy.wait('@latestSearchRequest');\n\n        cy.get('.search-results').should('contain', 'Latest Result');\n    });\n\n    it('should not display outdated results when a new search is initiated', () => {\n        cy.intercept('GET', '/api/search*', (req) => {\n            req.reply((res) => {\n                res.send({ results: ['Outdated Result'] });\n            });\n        }).as('outdatedSearchRequest');\n\n        cy.get('input[name=\"search\"]').type('old search{enter}');\n        cy.wait('@outdatedSearchRequest');\n\n        cy.intercept('GET', '/api/search*', (req) => {\n            req.reply((res) => {\n                res.send({ results: ['New Search Result'] });\n            });\n        }).as('newSearchRequest');\n\n        cy.get('input[name=\"search\"]').type('new search{enter}');\n        cy.wait('@newSearchRequest');\n\n        cy.get('.search-results').should('not.contain', 'Outdated Result');\n        cy.get('.search-results').should('contain', 'New Search Result');\n    });\n});",
+  "prompt_tokens": 115,
+  "completion_tokens": 416,
+  "latency_s": 5.91,
+  "timestamp": "2026-06-19T16:33:04.195857"
+}

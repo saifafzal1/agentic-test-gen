@@ -1,0 +1,13 @@
+{
+  "id": "TC_054",
+  "category": "navigation",
+  "complexity": "medium",
+  "user_story": "As a user, I want the page title to update when navigating between sections.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Page Title Update on Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('should update the title when navigating to the About section', async ({ page }) => {\n    await page.getByRole('link', { name: 'About' }).click();\n    await expect(page).toHaveTitle('About Us - Example'); // Replace with the expected title\n  });\n\n  test('should update the title when navigating to the Contact section', async ({ page }) => {\n    await page.getByRole('link', { name: 'Contact' }).click();\n    await expect(page).toHaveTitle('Contact Us - Example'); // Replace with the expected title\n  });\n});",
+  "prompt_tokens": 132,
+  "completion_tokens": 176,
+  "latency_s": 2.92,
+  "timestamp": "2026-06-19T16:47:02.628163"
+}

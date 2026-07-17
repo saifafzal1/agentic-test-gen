@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_118",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7762,
+  "total_latency_s": 703.9,
+  "final_script": "describe('Checkout Flow - Sequential Async Steps', () => {\n  beforeEach(() => {\n    cy.visit('/checkout');\n  });\n\n  it('should complete checkout flow in order with sequential async steps', () => {\n    // Step 1: Add item to cart\n    cy.get('[data-testid=\"add-to-cart-button\"]').click();\n    cy.intercept('POST', '/api/cart/add').as('addToCart');\n    cy.wait('@addToCart');\n\n    // Step 2: Proceed to checkout\n    cy.get('[data-testid=\"proceed-to-checkout-button\"]').click();\n    cy.intercept('GET', '/api/checkout/initiate').as('initiateCheckout');\n    cy.wait('@initiateCheckout');\n\n    // Step 3: Enter shipping information\n    cy.get('[data-testid=\"shipping-address-input\"]').type('123 Main St');\n    cy.get('[data-testid=\"shipping-city-input\"]').type('Anytown');\n    cy.get('[data-testid=\"shipping-state-input\"]').type('CA');\n    cy.get('[data-testid=\"shipping-zip-code-input\"]').type('90210');\n    cy.intercept('POST', '/api/checkout/shipping').as('setShipping');\n    cy.wait('@setShipping');\n\n    // Step 4: Enter payment information\n    cy.get('[data-testid=\"payment-method-select\"]').click();\n    cy.get('[data-testid=\"credit-card-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"expiration-date-input\"]').type('12/25');\n    cy.get('[data-testid=\"cvv-input\"]').type('123');\n    cy.intercept('POST', '/api/checkout/payment').as('processPayment');\n    cy.wait('@processPayment');\n\n    // Step 5: Confirm and submit order\n    cy.get('[data-testid=\"confirm-order-button\"]').click();\n    cy.intercept('POST', '/api/checkout/complete').as('completeOrder');\n    cy.wait('@completeOrder');\n\n    // Verify success message\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'Order completed successfully');\n\n    // Verify order details\n    cy.get('[data-testid=\"order-summary\"]').should('be.visible');\n    cy.get('[data-testid=\"order-id\"]').should('contain', 'ORD-123456');\n    cy.get('[data-testid=\"order-total\"]').should('contain', '$100.00');\n  });\n\n  it('should handle failure in sequential async steps and display error messages', () => {\n    // Step 1: Add item to cart\n    cy.get('[data-testid=\"add-to-cart-button\"]').click();\n    cy.intercept('POST', '/api/cart/add').as('addToCart');\n    cy.wait('@addToCart');\n\n    // Step 2: Proceed to checkout\n    cy.get('[data-testid=\"proceed-to-checkout-button\"]').click();\n    cy.intercept('GET', '/api/checkout/initiate').as('initiateCheckout');\n    cy.wait('@initiateCheckout');\n\n    // Step 3: Enter invalid shipping information\n    cy.get('[data-testid=\"shipping-address-input\"]').type('123 Main St');\n    cy.get('[data-testid=\"shipping-city-input\"]').type('Invalid City');\n    cy.get('[data-testid=\"shipping-state-input\"]').type('CA');\n    cy.get('[data-testid=\"shipping-zip-code-input\"]').type('90210');\n    cy.intercept('POST', '/api/checkout/shipping').as('setShipping');\n    cy.wait('@setShipping');\n\n    // Step 4: Attempt to enter payment information\n    cy.get('[data-testid=\"payment-method-select\"]').click();\n    cy.get('[data-testid=\"credit-card-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"expiration-date-input\"]').type('12/25');\n    cy.get('[data-testid=\"cvv-input\"]').type('123');\n    cy.intercept('POST', '/api/checkout/payment').as('processPayment');\n    cy.wait('@processPayment');\n\n    // Step 5: Attempt to confirm and submit order\n    cy.get('[data-testid=\"confirm-order-button\"]').click();\n    cy.intercept('POST', '/api/checkout/complete').as('completeOrder');\n    cy.wait('@completeOrder');\n\n    // Verify error message\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Invalid shipping address');\n\n    // Verify order was not completed\n    cy.get('[data-testid=\"success-message\"]').should('not.exist');\n    cy.get('[data-testid=\"order-summary\"]').should('not.be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4957,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.4256,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 353.237,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7762,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4541,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 350.663,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

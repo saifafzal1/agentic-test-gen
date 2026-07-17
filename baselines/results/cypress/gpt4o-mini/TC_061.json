@@ -1,0 +1,13 @@
+{
+  "id": "TC_061",
+  "category": "api_response_handling",
+  "complexity": "complex",
+  "user_story": "As a user, I want optimistic UI updates when liking a post.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Optimistic UI Updates for Liking a Post', () => {\n    const postId = '12345';\n\n    beforeEach(() => {\n        cy.intercept('POST', `/api/posts/${postId}/like`, {\n            statusCode: 200,\n            body: { success: true, likes: 1 },\n        }).as('likePost');\n\n        cy.visit('/posts');\n    });\n\n    it('should optimistically update the like count when the like button is clicked', () => {\n        cy.get(`[data-testid=\"post-${postId}\"]`).within(() => {\n            cy.get('[data-testid=\"like-button\"]').click();\n            cy.get('[data-testid=\"like-count\"]').should('contain', '1');\n        });\n\n        cy.wait('@likePost').its('response.statusCode').should('eq', 200);\n    });\n\n    it('should handle like failure gracefully', () => {\n        cy.intercept('POST', `/api/posts/${postId}/like`, {\n            statusCode: 500,\n            body: { success: false, message: 'Internal Server Error' },\n        }).as('likePostFail');\n\n        cy.get(`[data-testid=\"post-${postId}\"]`).within(() => {\n            cy.get('[data-testid=\"like-button\"]').click();\n            cy.get('[data-testid=\"like-count\"]').should('contain', '1');\n        });\n\n        cy.wait('@likePostFail');\n\n        cy.get(`[data-testid=\"post-${postId}\"]`).within(() => {\n            cy.get('[data-testid=\"error-message\"]').should('be.visible').and('contain', 'Internal Server Error');\n            cy.get('[data-testid=\"like-count\"]').should('contain', '0');\n        });\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 354,
+  "latency_s": 5.46,
+  "timestamp": "2026-06-19T16:29:06.980164"
+}

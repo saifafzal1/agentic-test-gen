@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_062",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8241,
+  "total_latency_s": 51.384,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Form Submission with Stale Data Invalidation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should invalidate stale data after successful form submission', async ({ page }) => {\n    // Setup: Fill form with stale data\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('John Doe');\n\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('john.doe@example.com');\n\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify initial stale data is displayed\n    const nameDisplay = page.getByText('John Doe');\n    await expect(nameDisplay).toBeVisible();\n\n    const emailDisplay = page.getByText('john.doe@example.com');\n    await expect(emailDisplay).toBeVisible();\n\n    // Wait for API response\n    const responsePromise = page.waitForResponse(response =>\n      response.url().includes('/api/form-submission') && response.status() === 200\n    );\n\n    await responsePromise;\n\n    // Verify success message\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify data is no longer stale\n    const updatedNameDisplay = page.getByText('Jane Smith');\n    await expect(updatedNameDisplay).toBeVisible();\n\n    const updatedEmailDisplay = page.getByText('jane.smith@example.com');\n    await expect(updatedEmailDisplay).toBeVisible();\n\n    // Verify error message is not displayed\n    const errorMessage = page.getByText('Error');\n    await expect(errorMessage).not.toBeVisible();\n  });\n\n  test('should handle failed form submission and retain stale data', async ({ page }) => {\n    // Setup: Fill form with stale data\n    const nameInput = page.getByLabel('Full Name');\n    await nameInput.fill('John Doe');\n\n    const emailInput = page.getByLabel('Email Address');\n    await emailInput.fill('john.doe@example.com');\n\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify initial stale data is displayed\n    const nameDisplay = page.getByText('John Doe');\n    await expect(nameDisplay).toBeVisible();\n\n    const emailDisplay = page.getByText('john.doe@example.com');\n    await expect(emailDisplay).toBeVisible();\n\n    // Simulate failed API response\n    await page.route('**/api/form-submission', route => {\n      route.abort('Failed to process form');\n    });\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('Error submitting form');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify stale data is still displayed\n    await expect(nameDisplay).toBeVisible();\n    await expect(emailDisplay).toBeVisible();\n\n    // Verify form is still visible and editable\n    const formContainer = page.locator('[data-testid=\"form-container\"]');\n    await expect(formContainer).toBeVisible();\n\n    const nameInput = page.getByLabel('Full Name');\n    await expect(nameInput).toBeVisible();\n\n    const emailInput = page.getByLabel('Email Address');\n    await expect(emailInput).toBeVisible();\n\n    // Verify form is still editable\n    await nameInput.fill('John Doe');\n    await emailInput.fill('john.doe@example.com');\n\n    // Verify form is still visible\n    await expect(formContainer).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8241,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4138,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 51.384,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_068",
+  "category": "api_response_handling",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see the last updated timestamp for live data.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Last Updated Timestamp for Live Data', () => {\n    beforeEach(() => {\n        cy.intercept('GET', '/api/live-data', {\n            statusCode: 200,\n            body: {\n                data: {\n                    lastUpdated: '2023-10-01T12:00:00Z'\n                }\n            }\n        }).as('getLiveData');\n        cy.visit('/live-data-page');\n    });\n\n    it('should display the last updated timestamp correctly', () => {\n        cy.wait('@getLiveData');\n        cy.get('.last-updated-timestamp').should('contain', '2023-10-01T12:00:00Z');\n    });\n\n    it('should handle missing last updated timestamp gracefully', () => {\n        cy.intercept('GET', '/api/live-data', {\n            statusCode: 200,\n            body: {\n                data: {}\n            }\n        }).as('getLiveDataMissingTimestamp');\n        cy.reload();\n        cy.wait('@getLiveDataMissingTimestamp');\n        cy.get('.last-updated-timestamp').should('not.exist');\n    });\n});",
+  "prompt_tokens": 112,
+  "completion_tokens": 226,
+  "latency_s": 3.59,
+  "timestamp": "2026-06-19T16:29:34.746098"
+}

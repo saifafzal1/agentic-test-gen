@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_080",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7531,
+  "total_latency_s": 190.518,
+  "final_script": "describe('Record Created and Last Modified Dates', () => {\n  beforeEach(() => {\n    cy.visit('/records');\n  });\n\n  it('should display created and last modified dates on a record', () => {\n    // Intercept the API call to fetch records\n    cy.intercept('GET', '/api/records').as('getRecords');\n    cy.get('[data-testid=\"load-records-button\"]').click();\n    cy.wait('@getRecords');\n\n    // Verify the record list is displayed\n    cy.get('[data-testid=\"record-list\"]').should('be.visible');\n    cy.get('[data-testid=\"record-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify the created date is displayed for the first record\n    cy.get('[data-testid=\"record-item:first\"]').within(() => {\n      cy.get('[data-testid=\"created-date\"]').should('be.visible');\n      cy.get('[data-testid=\"created-date\"]').should('contain', 'Created:');\n    });\n\n    // Verify the last modified date is displayed for the first record\n    cy.get('[data-testid=\"record-item:first\"]').within(() => {\n      cy.get('[data-testid=\"last-modified-date\"]').should('be.visible');\n      cy.get('[data-testid=\"last-modified-date\"]').should('contain', 'Last Modified:');\n    });\n\n    // Verify both dates are present and formatted correctly\n    cy.get('[data-testid=\"record-item:first\"]').within(() => {\n      cy.get('[data-testid=\"created-date\"]').should('have.length', 1);\n      cy.get('[data-testid=\"last-modified-date\"]').should('have.length', 1);\n    });\n  });\n\n  it('should handle missing dates gracefully when record is created without modification', () => {\n    // Intercept the API call with a record that has no last modified date\n    cy.intercept('GET', '/api/records', {\n      statusCode: 200,\n      body: [\n        {\n          id: 1,\n          name: 'New Record',\n          created_at: '2023-10-26T10:00:00Z',\n          last_modified_at: null\n        }\n      ]\n    }).as('getRecordsWithNullModifiedDate');\n    cy.get('[data-testid=\"load-records-button\"]').click();\n    cy.wait('@getRecordsWithNullModifiedDate');\n\n    // Verify the record is displayed\n    cy.get('[data-testid=\"record-item\"]').should('have.length', 1);\n\n    // Verify created date is displayed\n    cy.get('[data-testid=\"record-item\"]').within(() => {\n      cy.get('[data-testid=\"created-date\"]').should('be.visible');\n      cy.get('[data-testid=\"created-date\"]').should('contain', 'Created:');\n    });\n\n    // Verify last modified date displays a placeholder or \"N/A\" when null\n    cy.get('[data-testid=\"record-item\"]').within(() => {\n      cy.get('[data-testid=\"last-modified-date\"]').should('be.visible');\n      cy.get('[data-testid=\"last-modified-date\"]').should('contain', 'Never modified');\n    });\n\n    // Verify the record still functions normally\n    cy.get('[data-testid=\"record-item\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4743,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3542,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 72.714,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7531,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3769,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 117.804,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

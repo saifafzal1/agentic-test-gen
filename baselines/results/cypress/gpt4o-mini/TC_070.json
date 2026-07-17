@@ -1,0 +1,13 @@
+{
+  "id": "TC_070",
+  "category": "api_response_handling",
+  "complexity": "complex",
+  "user_story": "As a user, I want a toast notification when a background sync completes.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Background Sync Notification', () => {\n    beforeEach(() => {\n        cy.visit('/'); // Adjust the URL to your application's base URL\n    });\n\n    it('should display a toast notification when background sync completes', () => {\n        // Simulate background sync completion\n        cy.intercept('POST', '/api/sync', {\n            statusCode: 200,\n            body: { message: 'Sync completed successfully' },\n        }).as('syncRequest');\n\n        // Trigger the background sync\n        cy.get('button#start-sync').click(); // Adjust selector to your application's button\n\n        // Wait for the sync request to complete\n        cy.wait('@syncRequest');\n\n        // Assert that the toast notification is displayed\n        cy.get('.toast-notification') // Adjust selector to your application's toast notification\n            .should('be.visible')\n            .and('contain', 'Sync completed successfully');\n    });\n\n    it('should not display a toast notification if background sync fails', () => {\n        // Simulate background sync failure\n        cy.intercept('POST', '/api/sync', {\n            statusCode: 500,\n            body: { message: 'Sync failed' },\n        }).as('syncRequest');\n\n        // Trigger the background sync\n        cy.get('button#start-sync').click(); // Adjust selector to your application's button\n\n        // Wait for the sync request to complete\n        cy.wait('@syncRequest');\n\n        // Assert that the toast notification is not displayed\n        cy.get('.toast-notification') // Adjust selector to your application's toast notification\n            .should('not.exist');\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 329,
+  "latency_s": 4.58,
+  "timestamp": "2026-06-19T16:29:44.539667"
+}

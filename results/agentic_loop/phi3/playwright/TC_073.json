@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_073",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8276,
+  "total_latency_s": 254.415,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Task Creation Form', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/tasks');\n  });\n\n  test('should successfully create a new task with valid form data', async ({ page }) => {\n    // Verify the form is visible\n    const form = page.getByRole('form', { name: /create task/i });\n    await expect(form).toBeVisible();\n\n    // Fill out the form fields using getByLabel\n    const titleInput = page.getByLabel(/task title/i);\n    await titleInput.fill('New Task');\n\n    const descriptionInput = page.getByLabel(/task description/i);\n    await descriptionInput.fill('This is a new task description');\n\n    const dueDateInput = page.getByLabel(/due date/i);\n    await dueDateInput.fill('2023-12-31');\n\n    // Verify the save button is enabled\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await expect(saveButton).toBeEnabled();\n\n    // Click the save button\n    await saveButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/task created successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify the task is listed in the tasks table\n    const tasksTable = page.getByRole('table', { name: /tasks/i });\n    await expect(tasksTable).toBeVisible();\n\n    const taskRows = page.locator('[data-testid=\"task-row\"]');\n    await expect(taskRows).toHaveCount(1);\n\n    // Verify the task details are displayed\n    const taskName = page.getByText('New Task');\n    await expect(taskName).toBeVisible();\n\n    const taskDescription = page.getByText('This is a new task description');\n    await expect(taskDescription).toBeVisible();\n\n    const taskDueDate = page.getByText('2023-12-31');\n    await expect(taskDueDate).toBeVisible();\n  });\n\n  test('should display error when creating a task with invalid data', async ({ page }) => {\n    // Fill out the form fields using getByLabel\n    const titleInput = page.getByLabel(/task title/i);\n    await titleInput.fill('');\n\n    const descriptionInput = page.getByLabel(/task description/i);\n    await descriptionInput.fill('');\n\n    const dueDateInput = page.getByLabel(/due date/i);\n    await dueDateInput.fill('invalid date');\n\n    // Verify the save button is disabled\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await expect(saveButton).not.toBeEnabled();\n\n    // Click the save button\n    await saveButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/please fill all required fields/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the form is still visible\n    const form = page.getByRole('form', { name: /create task/i });\n    await expect(form).toBeVisible();\n\n    // Verify the task is not listed in the tasks table\n    const tasksTable = page.getByRole('table', { name: /tasks/i });\n    await expect(tasksTable).toBeVisible();\n\n    const taskRows = page.locator('[data-testid=\"task-row\"]');\n    await expect(taskRows).toHaveCount(0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8276,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4254,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 254.415,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_286",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8284,
+  "total_latency_s": 40.693,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Google Account Connection to User Profile', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/profile');\n  });\n\n  test('should successfully connect Google account to user profile', async ({ page }) => {\n    // Verify connection button is visible\n    const connectButton = page.getByRole('button', { name: /connect account/i });\n    await expect(connectButton).toBeVisible();\n\n    // Click connect button\n    await connectButton.click();\n\n    // Verify modal opens\n    const modal = page.locator('[data-testid=\"google-auth-modal\"]');\n    await expect(modal).toBeVisible();\n\n    // Verify email input is visible\n    const emailInput = page.getByLabel(/email/i);\n    await expect(emailInput).toBeVisible();\n\n    // Verify password input is visible\n    const passwordInput = page.getByLabel(/password/i);\n    await expect(passwordInput).toBeVisible();\n\n    // Verify login button is visible\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await expect(loginButton).toBeVisible();\n\n    // Fill email and password\n    await emailInput.fill('user@example.com');\n    await passwordInput.fill('password123');\n\n    // Click login button\n    await loginButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/account connected/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify user profile is updated\n    const profileName = page.getByText(/John Doe/i);\n    await expect(profileName).toBeVisible();\n\n    // Verify user is logged in\n    const userName = page.getByText(/Welcome, John Doe/i);\n    await expect(userName).toBeVisible();\n\n    // Verify user is redirected to profile page\n    await expect(page).toHaveURL(/profile/i);\n  });\n\n  test('should display error when Google account is not found', async ({ page }) => {\n    // Click connect button\n    const connectButton = page.getByRole('button', { name: /connect account/i });\n    await connectButton.click();\n\n    // Verify modal opens\n    const modal = page.locator('[data-testid=\"google-auth-modal\"]');\n    await expect(modal).toBeVisible();\n\n    // Verify error message is visible\n    const errorMessage = page.getByText(/account not found/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify connection button is still visible\n    await expect(connectButton).toBeVisible();\n\n    // Verify user is not logged in\n    const userName = page.getByText(/Welcome, John Doe/i);\n    await expect(userName).not.toBeVisible();\n\n    // Verify user is still on profile page\n    await expect(page).toHaveURL(/profile/i);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8284,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.428,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 40.693,
+      "feedback_used": ""
+    }
+  ]
+}

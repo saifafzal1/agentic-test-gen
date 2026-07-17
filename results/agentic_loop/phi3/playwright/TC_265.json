@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_265",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7819,
+  "total_latency_s": 343.565,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Click Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notifications');\n  });\n\n  test('should navigate to related content when clicking a notification', async ({ page }) => {\n    // Verify notification list is visible\n    const notificationList = page.getByRole('region', { name: /notifications/i });\n    await expect(notificationList).toBeVisible();\n\n    // Verify notification item has correct role and label\n    const notificationItem = page.getByRole('button', { name: /new post/i });\n    await expect(notificationItem).toBeVisible();\n\n    // Verify notification content is visible\n    const notificationContent = page.getByText(/new post/i);\n    await expect(notificationContent).toBeVisible();\n\n    // Verify navigation link is present and visible\n    const navigationLink = page.getByRole('link', { name: /read post/i });\n    await expect(navigationLink).toBeVisible();\n\n    // Click notification item\n    await notificationItem.click();\n\n    // Verify navigation link is now active\n    await expect(navigationLink).toBeActive();\n\n    // Verify navigation URL is correct\n    const navigationUrl = page.url();\n    expect(navigationUrl).toContain('/posts/123');\n\n    // Verify related content is visible\n    const relatedContent = page.getByRole('region', { name: /related content/i });\n    await expect(relatedContent).toBeVisible();\n\n    // Verify content title is present\n    const contentTitle = page.getByText(/related content/i);\n    await expect(contentTitle).toBeVisible();\n\n    // Verify content body is visible\n    const contentBody = page.getByText(/this is related content/i);\n    await expect(contentBody).toBeVisible();\n\n    // Verify back button is present\n    const backButton = page.getByRole('button', { name: /back to notifications/i });\n    await expect(backButton).toBeVisible();\n  });\n\n  test('should handle edge case: notification item is disabled and should not navigate', async ({ page }) => {\n    // Verify notification list is visible\n    const notificationList = page.getByRole('region', { name: /notifications/i });\n    await expect(notificationList).toBeVisible();\n\n    // Verify notification item is disabled\n    const notificationItem = page.getByRole('button', { name: /new post/i });\n    await expect(notificationItem).toBeDisabled();\n\n    // Verify notification content is visible\n    const notificationContent = page.getByText(/new post/i);\n    await expect(notificationContent).toBeVisible();\n\n    // Verify navigation link is not visible\n    const navigationLink = page.getByRole('link', { name: /read post/i });\n    await expect(navigationLink).not.toBeVisible();\n\n    // Verify notification item is still visible\n    await expect(notificationItem).toBeVisible();\n\n    // Verify notification item is still disabled\n    await expect(notificationItem).toBeDisabled();\n\n    // Verify no navigation occurs\n    await expect(page).toHaveURL(/\\/notifications/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7819,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3731,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 343.565,
+      "feedback_used": ""
+    }
+  ]
+}

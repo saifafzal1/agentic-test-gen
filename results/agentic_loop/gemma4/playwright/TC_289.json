@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_289",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8418,
+  "total_latency_s": 72.402,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Language Preference Setting in Profile Settings', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/profile/settings');\n  });\n\n  test('should successfully set language preference and update UI', async ({ page }) => {\n    // Verify profile settings page loads\n    const settingsHeader = page.getByRole('heading', { name: /profile settings/i });\n    await expect(settingsHeader).toBeVisible();\n\n    // Verify language dropdown is visible and has default value\n    const languageSelect = page.getByLabel(/language/i);\n    await expect(languageSelect).toBeVisible();\n    await expect(languageSelect).toHaveValue('en-US');\n\n    // Set language to Spanish\n    await languageSelect.selectOption('es-ES');\n\n    // Verify language selection is updated in dropdown\n    await expect(languageSelect).toHaveValue('es-ES');\n\n    // Click save button\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await saveButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText(/language preference updated successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify language dropdown reflects the new selection\n    await expect(languageSelect).toHaveValue('es-ES');\n\n    // Verify page content is displayed in Spanish\n    const welcomeMessage = page.getByText(/bienvenido/i);\n    await expect(welcomeMessage).toBeVisible();\n  });\n\n  test('should handle invalid language selection and display error message', async ({ page }) => {\n    // Verify profile settings page loads\n    const settingsHeader = page.getByRole('heading', { name: /profile settings/i });\n    await expect(settingsHeader).toBeVisible();\n\n    // Set language to invalid option\n    const languageSelect = page.getByLabel(/language/i);\n    await languageSelect.selectOption('invalid-lang');\n\n    // Click save button\n    const saveButton = page.getByRole('button', { name: /save/i });\n    await saveButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByText(/invalid language selection/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify language dropdown did not change\n    await expect(languageSelect).toHaveValue('en-US');\n\n    // Verify success message does not appear\n    const successMessage = page.getByText(/language preference updated successfully/i);\n    await expect(successMessage).not.toBeVisible();\n\n    // Verify page content remains in English\n    const welcomeMessage = page.getByText(/welcome/i);\n    await expect(welcomeMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8418,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4727,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.402,
+      "feedback_used": ""
+    }
+  ]
+}

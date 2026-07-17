@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_194",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7562,
+  "total_latency_s": 365.983,
+  "final_script": "describe('Faceted Search - Update Results Without Full Page Reload', () => {\n  beforeEach(() => {\n    cy.visit('/search');\n  });\n\n  it('should update search results in real-time as user filters', () => {\n    // Initial search results\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n    cy.get('[data-testid=\"result-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify initial results\n    cy.get('[data-testid=\"result-item\"]').first().should('contain', 'Product A');\n\n    // Apply first filter (Category: Electronics)\n    cy.get('[data-testid=\"category-filter\"]').click();\n    cy.get('[data-testid=\"category-filter-option\"]').click({ force: true });\n    cy.get('[data-testid=\"category-filter-option-electronics\"]').click();\n\n    // Verify results are filtered\n    cy.get('[data-testid=\"result-item\"]').first().should('contain', 'Electronics');\n    cy.get('[data-testid=\"result-item\"]').first().should('not.contain', 'Clothing');\n\n    // Apply second filter (Price: $500+)\n    cy.get('[data-testid=\"price-filter\"]').click();\n    cy.get('[data-testid=\"price-filter-option\"]').click({ force: true });\n    cy.get('[data-testid=\"price-filter-option-500\"]').click();\n\n    // Verify results are further filtered\n    cy.get('[data-testid=\"result-item\"]').first().should('contain', 'Electronics');\n    cy.get('[data-testid=\"result-item\"]').first().should('contain', '$500');\n\n    // Verify no full page reload\n    cy.get('[data-testid=\"page-reload-indicator\"]').should('not.exist');\n\n    // Verify search results are still visible\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n  });\n\n  it('should handle edge case where no results match filters', () => {\n    // Apply filters to narrow down results\n    cy.get('[data-testid=\"category-filter\"]').click();\n    cy.get('[data-testid=\"category-filter-option\"]').click({ force: true });\n    cy.get('[data-testid=\"category-filter-option-books\"]').click();\n\n    cy.get('[data-testid=\"price-filter\"]').click();\n    cy.get('[data-testid=\"price-filter-option\"]').click({ force: true });\n    cy.get('[data-testid=\"price-filter-option-10\"]').click();\n\n    // Verify no results are displayed\n    cy.get('[data-testid=\"result-item\"]').should('not.exist');\n\n    // Verify no page reload occurs\n    cy.get('[data-testid=\"page-reload-indicator\"]').should('not.exist');\n\n    // Verify user is presented with no results message\n    cy.get('[data-testid=\"no-results-message\"]').should('be.visible');\n    cy.get('[data-testid=\"no-results-message\"]').should('contain', 'No results found');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7562,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3874,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 365.983,
+      "feedback_used": ""
+    }
+  ]
+}

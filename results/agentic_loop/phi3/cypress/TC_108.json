@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_108",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7672,
+  "total_latency_s": 325.238,
+  "final_script": "describe('Payment Card Declined Error State', () => {\n  beforeEach(() => {\n    cy.visit('/payment');\n  });\n\n  it('should display clear error message when payment card is declined', () => {\n    // Intercept the payment API call\n    cy.intercept('POST', '/api/payment/process', {\n      statusCode: 400,\n      body: {\n        error: 'Card declined',\n        message: 'The card you entered was declined. Please try a different card or contact your bank.'\n      }\n    }).as('paymentFailed');\n\n    // Fill in payment form\n    cy.get('[data-testid=\"card-number-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"expiry-date-input\"]').type('12/25');\n    cy.get('[data-testid=\"cvv-input\"]').type('123');\n\n    // Submit payment\n    cy.get('[data-testid=\"submit-payment-btn\"]').click();\n\n    // Wait for payment API response\n    cy.wait('@paymentFailed');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"payment-error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Card declined');\n\n    // Verify error message contains specific text\n    cy.get('[data-testid=\"payment-error-message\"]')\n      .should('contain', 'Please try a different card or contact your bank.');\n\n    // Verify success button is disabled\n    cy.get('[data-testid=\"success-btn\"]')\n      .should('be.disabled');\n\n    // Verify retry button is visible\n    cy.get('[data-testid=\"retry-btn\"]')\n      .should('be.visible');\n  });\n\n  it('should handle multiple declined attempts and show retry limit', () => {\n    // Intercept the payment API call multiple times\n    cy.intercept('POST', '/api/payment/process', {\n      times: 3,\n      statusCode: 400,\n      body: {\n        error: 'Card declined',\n        message: 'The card you entered was declined. Please try a different card or contact your bank.'\n      }\n    }).as('paymentFailed');\n\n    // Fill in payment form\n    cy.get('[data-testid=\"card-number-input\"]').type('4111111111111111');\n    cy.get('[data-testid=\"expiry-date-input\"]').type('12/25');\n    cy.get('[data-testid=\"cvv-input\"]').type('123');\n\n    // Submit payment multiple times\n    cy.get('[data-testid=\"submit-payment-btn\"]').click();\n    cy.get('[data-testid=\"submit-payment-btn\"]').click();\n    cy.get('[data-testid=\"submit-payment-btn\"]').click();\n\n    // Wait for payment API response\n    cy.wait('@paymentFailed');\n\n    // Verify error message is still visible after multiple attempts\n    cy.get('[data-testid=\"payment-error-message\"]')\n      .should('be.visible')\n      .should('contain', 'Card declined');\n\n    // Verify retry button is still visible\n    cy.get('[data-testid=\"retry-btn\"]')\n      .should('be.visible');\n\n    // Verify retry limit is displayed\n    cy.get('[data-testid=\"retry-limit-message\"]')\n      .should('be.visible')\n      .should('contain', 'You have reached the maximum number of retry attempts.');\n\n    // Verify success button remains disabled\n    cy.get('[data-testid=\"success-btn\"]')\n      .should('be.disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7672,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4241,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 325.238,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_054",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7887,
+  "total_latency_s": 71.187,
+  "final_script": "describe('Page Title Update on Section Navigation', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should update page title when navigating between sections', () => {\n    // Verify initial page title\n    cy.title().should('include', 'Home');\n    \n    // Navigate to About section\n    cy.get('[data-testid=\"nav-about-button\"]').click();\n    \n    // Verify page title updates to About\n    cy.title().should('include', 'About Us');\n    \n    // Navigate to Contact section\n    cy.get('[data-testid=\"nav-contact-button\"]').click();\n    \n    // Verify page title updates to Contact\n    cy.title().should('include', 'Contact');\n    \n    // Navigate back to Home section\n    cy.get('[data-testid=\"nav-home-button\"]').click();\n    \n    // Verify page title updates back to Home\n    cy.title().should('include', 'Home');\n  });\n\n  it('should handle navigation with invalid section links gracefully', () => {\n    // Verify initial page title\n    cy.title().should('include', 'Home');\n    \n    // Attempt to navigate to a non-existent section\n    cy.get('[data-testid=\"nav-invalid-button\"]').click();\n    \n    // Verify page title does not change or shows error state\n    cy.title().should('include', 'Home');\n    \n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Section not found');\n    \n    // Verify navigation buttons are still functional\n    cy.get('[data-testid=\"nav-about-button\"]').click();\n    cy.title().should('include', 'About Us');\n    \n    // Verify error message is cleared\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7887,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4955,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.187,
+      "feedback_used": ""
+    }
+  ]
+}

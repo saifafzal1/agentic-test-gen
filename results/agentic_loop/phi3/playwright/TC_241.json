@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_241",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.8044,
+  "total_latency_s": 510.141,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dashboard Sidebar to Bottom Nav Bar Transition on Mobile', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should transition sidebar to bottom nav bar on mobile view', async ({ page }) => {\n    // Verify sidebar is visible on desktop\n    const sidebar = page.getByRole('navigation', { name: /dashboard/i });\n    await expect(sidebar).toBeVisible();\n\n    // Verify sidebar contains expected links\n    const homeLink = page.getByRole('link', { name: /home/i });\n    await expect(homeLink).toBeVisible();\n\n    const settingsLink = page.getByRole('link', { name: /settings/i });\n    await expect(settingsLink).toBeVisible();\n\n    const userLink = page.getByRole('link', { name: /user/i });\n    await expect(userLink).toBeVisible();\n\n    // Verify sidebar has correct initial state\n    const sidebarState = page.getByRole('status', { name: /sidebar/i });\n    await expect(sidebarState).toContainText('sidebar');\n\n    // Navigate to mobile view\n    await page.evaluate(() => {\n      window.innerWidth = 375;\n    });\n\n    // Verify sidebar disappears and bottom nav appears\n    const sidebar = page.getByRole('navigation', { name: /dashboard/i });\n    await expect(sidebar).not.toBeVisible();\n\n    const bottomNav = page.getByRole('navigation', { name: /bottom nav/i });\n    await expect(bottomNav).toBeVisible();\n\n    // Verify bottom nav contains expected links\n    const homeLink = page.getByRole('link', { name: /home/i });\n    await expect(homeLink).toBeVisible();\n\n    const settingsLink = page.getByRole('link', { name: /settings/i });\n    await expect(settingsLink).toBeVisible();\n\n    const userLink = page.getByRole('link', { name: /user/i });\n    await expect(userLink).toBeVisible();\n\n    // Verify sidebar state is updated\n    const sidebarState = page.getByRole('status', { name: /sidebar/i });\n    await expect(sidebarState).toContainText('bottom nav');\n\n    // Verify responsive design is applied\n    const viewportWidth = page.evaluate(() => window.innerWidth);\n    expect(viewportWidth).toBeLessThan(768);\n  });\n\n  test('should handle edge case where sidebar is already in bottom nav state', async ({ page }) => {\n    // Navigate to mobile view\n    await page.evaluate(() => {\n      window.innerWidth = 375;\n    });\n\n    // Verify sidebar is already in bottom nav state\n    const sidebar = page.getByRole('navigation', { name: /dashboard/i });\n    await expect(sidebar).not.toBeVisible();\n\n    const bottomNav = page.getByRole('navigation', { name: /bottom nav/i });\n    await expect(bottomNav).toBeVisible();\n\n    // Verify sidebar state is correct\n    const sidebarState = page.getByRole('status', { name: /bottom nav/i });\n    await expect(sidebarState).toContainText('bottom nav');\n\n    // Verify links are still visible\n    const homeLink = page.getByRole('link', { name: /home/i });\n    await expect(homeLink).toBeVisible();\n\n    const settingsLink = page.getByRole('link', { name: /settings/i });\n    await expect(settingsLink).toBeVisible();\n\n    const userLink = page.getByRole('link', { name: /user/i });\n    await expect(userLink).toBeVisible();\n\n    // Verify responsive design is still applied\n    const viewportWidth = page.evaluate(() => window.innerWidth);\n    expect(viewportWidth).toBeLessThan(768);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5164,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.4746,
+        "missing_keywords": [],
+        "assertion_count": 23,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 57.324,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.8044,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4481,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 452.817,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

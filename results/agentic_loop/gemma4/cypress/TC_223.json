@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_223",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7479,
+  "total_latency_s": 72.45,
+  "final_script": "describe('Document Language Declaration in HTML Tag', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should declare document language in html tag and render content correctly', () => {\n    // Verify html tag exists\n    cy.get('html').should('be.visible');\n\n    // Verify lang attribute is present and correct\n    cy.get('html').should('have.attr', 'lang', 'en');\n\n    // Verify content is rendered with correct language\n    cy.get('[data-testid=\"main-heading\"]').should('contain', 'Welcome');\n    cy.get('[data-testid=\"paragraph-text\"]').should('contain', 'This is a sample paragraph');\n\n    // Verify accessibility features are available\n    cy.get('[data-testid=\"aria-label\"]').should('be.visible');\n    cy.get('[data-testid=\"aria-label\"]').should('have.attr', 'aria-label');\n\n    // Verify language is respected by browser\n    cy.get('body').should('have.attr', 'lang', 'en');\n  });\n\n  it('should handle missing lang attribute and display fallback', () => {\n    // Intercept the page load with missing lang attribute\n    cy.intercept('GET', '/').as('pageLoad');\n    cy.visit('/');\n\n    // Verify html tag exists\n    cy.get('html').should('be.visible');\n\n    // Verify lang attribute is missing or empty\n    cy.get('html').should('not.have.attr', 'lang');\n\n    // Verify fallback language is used\n    cy.get('body').should('have.attr', 'lang', 'und');\n\n    // Verify content is still rendered\n    cy.get('[data-testid=\"main-heading\"]').should('contain', 'Welcome');\n    cy.get('[data-testid=\"paragraph-text\"]').should('contain', 'This is a sample paragraph');\n\n    // Verify accessibility features are still available\n    cy.get('[data-testid=\"aria-label\"]').should('be.visible');\n    cy.get('[data-testid=\"aria-label\"]').should('have.attr', 'aria-label');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7479,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3598,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.45,
+      "feedback_used": ""
+    }
+  ]
+}

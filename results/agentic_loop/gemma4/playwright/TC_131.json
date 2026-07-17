@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_131",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8541,
+  "total_latency_s": 72.058,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Focus Trapping', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/modal-page');\n  });\n\n  test('should trap focus inside an open modal', async ({ page }) => {\n    // Open the modal\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modal = page.getByRole('dialog', { name: /modal dialog/i });\n    await expect(modal).toBeVisible();\n\n    // Verify focus is on the modal's first interactive element\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeFocused();\n\n    // Verify background content is not focused\n    const backgroundContent = page.getByText('Page Content');\n    await expect(backgroundContent).not.toBeFocused();\n\n    // Verify focus remains inside modal when tabbing\n    await closeButton.press('Tab');\n    const modalInput = page.getByLabel(/modal input/i);\n    await expect(modalInput).toBeFocused();\n\n    // Verify focus remains inside modal when pressing Shift+Tab\n    await modalInput.press('Shift+Tab');\n    await expect(closeButton).toBeFocused();\n\n    // Verify focus remains inside modal when pressing Escape\n    await page.keyboard.press('Escape');\n    await expect(modal).not.toBeVisible();\n  });\n\n  test('should restore focus to trigger element when modal is closed', async ({ page }) => {\n    // Open the modal\n    const openButton = page.getByRole('button', { name: /open modal/i });\n    await openButton.click();\n\n    // Verify modal is visible\n    const modal = page.getByRole('dialog', { name: /modal dialog/i });\n    await expect(modal).toBeVisible();\n\n    // Verify focus is on the modal's first interactive element\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeFocused();\n\n    // Close the modal using the close button\n    await closeButton.click();\n\n    // Verify modal is no longer visible\n    await expect(modal).not.toBeVisible();\n\n    // Verify focus is restored to the open button\n    await expect(openButton).toBeFocused();\n\n    // Verify background content is accessible again\n    const backgroundContent = page.getByText('Page Content');\n    await expect(backgroundContent).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8541,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5138,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.058,
+      "feedback_used": ""
+    }
+  ]
+}

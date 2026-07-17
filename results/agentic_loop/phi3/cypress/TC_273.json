@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_273",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7412,
+  "total_latency_s": 63.249,
+  "final_script": "describe('Notification Preferences Management', () => {\n  beforeEach(() => {\n    cy.visit('/settings');\n  });\n\n  it('should successfully update notification preferences', () => {\n    // Verify initial notification settings are displayed\n    cy.get('[data-testid=\"notification-settings-section\"]').should('be.visible');\n    cy.get('[data-testid=\"email-notifications-checkbox\"]').should('be.checked');\n    cy.get('[data-testid=\"sms-notifications-checkbox\"]').should('not.be.checked');\n    cy.get('[data-testid=\"push-notifications-checkbox\"]').should('not.be.checked');\n\n    // Navigate to notification settings\n    cy.get('[data-testid=\"notification-settings-toggle\"]').click();\n\n    // Verify settings are now expanded\n    cy.get('[data-testid=\"notification-settings-section\"]').should('be.visible');\n\n    // Uncheck email notifications\n    cy.get('[data-testid=\"email-notifications-checkbox\"]').click();\n    cy.get('[data-testid=\"email-notifications-checkbox\"]').should('not.be.checked');\n\n    // Verify SMS notifications are now checked\n    cy.get('[data-testid=\"sms-notifications-checkbox\"]').click();\n    cy.get('[data-testid=\"sms-notifications-checkbox\"]').should('be.checked');\n\n    // Verify push notifications are still unchecked\n    cy.get('[data-testid=\"push-notifications-checkbox\"]').should('not.be.checked');\n\n    // Save changes\n    cy.get('[data-testid=\"save-preferences-button\"]').click();\n\n    // Verify success message appears\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Notification preferences updated');\n\n    // Verify settings are still visible\n    cy.get('[data-testid=\"notification-settings-section\"]').should('be.visible');\n  });\n\n  it('should handle invalid input when updating notification preferences', () => {\n    // Navigate to notification settings\n    cy.get('[data-testid=\"notification-settings-toggle\"]').click();\n\n    // Attempt to uncheck all notifications\n    cy.get('[data-testid=\"email-notifications-checkbox\"]').click();\n    cy.get('[data-testid=\"sms-notifications-checkbox\"]').click();\n    cy.get('[data-testid=\"push-notifications-checkbox\"]').click();\n\n    // Verify all notifications are now unchecked\n    cy.get('[data-testid=\"email-notifications-checkbox\"]').should('not.be.checked');\n    cy.get('[data-testid=\"sms-notifications-checkbox\"]').should('not.be.checked');\n    cy.get('[data-testid=\"push-notifications-checkbox\"]').should('not.be.checked');\n\n    // Attempt to save with invalid state\n    cy.get('[data-testid=\"save-preferences-button\"]').click();\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please select at least one notification type');\n\n    // Verify settings are still visible\n    cy.get('[data-testid=\"notification-settings-section\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7412,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3373,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 63.249,
+      "feedback_used": ""
+    }
+  ]
+}

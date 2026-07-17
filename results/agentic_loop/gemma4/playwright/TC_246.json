@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_246",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.818,
+  "total_latency_s": 71.707,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Card Decline Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/payment');\n  });\n\n  test('should display error message when card is declined', async ({ page }) => {\n    // Locate and fill card number input using getByLabel\n    const cardNumberInput = page.getByLabel('Card Number');\n    await cardNumberInput.fill('4111111111111111');\n\n    // Locate and fill expiry date input using getByLabel\n    const expiryDateInput = page.getByLabel('Expiry Date');\n    await expiryDateInput.fill('12/25');\n\n    // Locate and fill CVV input using getByLabel\n    const cvvInput = page.getByLabel('CVV');\n    await cvvInput.fill('123');\n\n    // Locate and click submit button using getByRole\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Wait for error message to appear\n    await page.waitForTimeout(500);\n\n    // Verify error message is visible using getByRole\n    const errorMessage = page.getByRole('alert');\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).toContainText('Card declined');\n\n    // Verify error message contains specific decline reason\n    await expect(errorMessage).toContainText('Please try another card');\n\n    // Verify payment form is still visible\n    const paymentForm = page.locator('[data-testid=\"payment-form\"]');\n    await expect(paymentForm).toBeVisible();\n  });\n\n  test('should allow user to retry payment after card decline', async ({ page }) => {\n    // Locate and fill card number input using getByLabel\n    const cardNumberInput = page.getByLabel('Card Number');\n    await cardNumberInput.fill('4111111111111111');\n\n    // Locate and fill expiry date input using getByLabel\n    const expiryDateInput = page.getByLabel('Expiry Date');\n    await expiryDateInput.fill('12/25');\n\n    // Locate and fill CVV input using getByLabel\n    const cvvInput = page.getByLabel('CVV');\n    await cvvInput.fill('123');\n\n    // Locate and click submit button using getByRole\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify error message appears\n    const errorMessage = page.getByRole('alert');\n    await expect(errorMessage).toBeVisible();\n    await expect(errorMessage).toContainText('Card declined');\n\n    // Locate and clear card number input using getByLabel\n    await cardNumberInput.clear();\n\n    // Locate and fill with valid card number\n    await cardNumberInput.fill('4211111111111111');\n\n    // Locate and fill expiry date input using getByLabel\n    await expiryDateInput.fill('01/26');\n\n    // Locate and fill CVV input using getByLabel\n    await cvvInput.fill('412');\n\n    // Locate and click submit button again using getByRole\n    await submitButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByRole('status');\n    await expect(successMessage).toBeVisible();\n    await expect(successMessage).toContainText('Payment successful');\n\n    // Verify error message is no longer visible\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.818,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.3933,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 71.707,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_229",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7866,
+  "total_latency_s": 37.18,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Image Responsive Scaling on Mobile', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/images');\n  });\n\n  test('should scale images down to fit the screen width on mobile devices', async ({ page }) => {\n    // Set viewport to mobile width\n    await page.setViewportSize({ width: 375, height: 667 });\n\n    // Verify image scales down\n    const image = page.getByRole('img', { name: /sample image/i });\n    await expect(image).toBeVisible();\n    await expect(image).toHaveAttribute('width', '375px');\n    await expect(image).toHaveAttribute('height', '500px');\n\n    // Verify image maintains aspect ratio\n    const aspectRatio = parseFloat(image.evaluate((el) => el.naturalWidth / el.naturalHeight).toString());\n    expect(aspectRatio).toBeGreaterThan(0);\n\n    // Verify image is not stretched\n    const imageWidth = await image.evaluate((el) => el.clientWidth);\n    const imageHeight = await image.evaluate((el) => el.clientHeight);\n    expect(imageWidth).toBeLessThanOrEqual(375);\n    expect(imageHeight).toBeLessThanOrEqual(500);\n\n    // Verify image is visible and not cut off\n    await expect(image).toBeVisible();\n    await expect(image).not.toHaveClass(/cut-off/i);\n  });\n\n  test('should maintain image quality when scaling down on mobile devices', async ({ page }) => {\n    // Set viewport to mobile width\n    await page.setViewportSize({ width: 375, height: 667 });\n\n    // Verify image scales down without losing quality\n    const image = page.getByRole('img', { name: /sample image/i });\n    await expect(image).toBeVisible();\n    const imageWidth = await image.evaluate((el) => el.clientWidth);\n    const imageHeight = await image.evaluate((el) => el.clientHeight);\n    const imageSize = imageWidth * imageHeight;\n\n    // Verify image size is not excessively small\n    expect(imageSize).toBeGreaterThan(10000);\n\n    // Verify image is not pixelated\n    const imageSrc = await image.evaluate((el) => el.src);\n    expect(imageSrc).toContain('image/jpeg');\n    expect(imageSrc).toContain('image/png');\n\n    // Verify image is not blurry\n    const imageQuality = await image.evaluate((el) => el.naturalWidth / el.naturalHeight);\n    expect(imageQuality).toBeGreaterThan(0.5);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7866,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.3888,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 37.18,
+      "feedback_used": ""
+    }
+  ]
+}

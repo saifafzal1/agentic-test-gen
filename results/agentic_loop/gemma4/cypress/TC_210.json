@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_210",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7661,
+  "total_latency_s": 73.544,
+  "final_script": "describe('ARIA Landmarks for Page Regions', () => {\n  beforeEach(() => {\n    cy.visit('/page-with-landmarks');\n  });\n\n  it('should correctly define page regions using ARIA landmarks', () => {\n    // Verify main content region exists\n    cy.get('[role=\"main\"]').should('be.visible');\n    cy.get('[role=\"main\"]').should('have.attr', 'aria-label');\n    cy.get('[role=\"main\"]').should('contain', 'Main Content');\n\n    // Verify navigation region exists\n    cy.get('[role=\"navigation\"]').should('be.visible');\n    cy.get('[role=\"navigation\"]').should('have.attr', 'aria-label');\n    cy.get('[role=\"navigation\"]').should('contain', 'Primary Navigation');\n\n    // Verify header region exists\n    cy.get('[role=\"banner\"]').should('be.visible');\n    cy.get('[role=\"banner\"]').should('have.attr', 'aria-label');\n    cy.get('[role=\"banner\"]').should('contain', 'Site Header');\n\n    // Verify footer region exists\n    cy.get('[role=\"contentinfo\"]').should('be.visible');\n    cy.get('[role=\"contentinfo\"]').should('have.attr', 'aria-label');\n    cy.get('[role=\"contentinfo\"]').should('contain', 'Footer Information');\n\n    // Verify sidebar region exists\n    cy.get('[role=\"complementary\"]').should('be.visible');\n    cy.get('[role=\"complementary\"]').should('have.attr', 'aria-label');\n    cy.get('[role=\"complementary\"]').should('contain', 'Sidebar');\n\n    // Verify landmark roles are correctly applied\n    cy.get('[role=\"main\"]').should('have.attr', 'role', 'main');\n    cy.get('[role=\"navigation\"]').should('have.attr', 'role', 'navigation');\n    cy.get('[role=\"banner\"]').should('have.attr', 'role', 'banner');\n    cy.get('[role=\"contentinfo\"]').should('have.attr', 'role', 'contentinfo');\n    cy.get('[role=\"complementary\"]').should('have.attr', 'role', 'complementary');\n  });\n\n  it('should handle missing or invalid landmark roles gracefully', () => {\n    // Navigate to a page with missing landmarks\n    cy.visit('/page-without-landmarks');\n\n    // Verify main content is still accessible even without explicit landmark role\n    cy.get('[data-testid=\"main-content\"]').should('be.visible');\n    cy.get('[data-testid=\"main-content\"]').should('contain', 'Page Content');\n\n    // Verify navigation is still present\n    cy.get('[data-testid=\"nav-menu\"]').should('be.visible');\n    cy.get('[data-testid=\"nav-menu\"]').should('contain', 'Menu');\n\n    // Verify that the page does not crash when landmarks are missing\n    cy.get('[data-testid=\"footer\"]').should('be.visible');\n    cy.get('[data-testid=\"footer\"]').should('contain', 'Copyright');\n\n    // Verify that the page still functions without all landmarks\n    cy.get('[data-testid=\"search-button\"]').click();\n    cy.get('[data-testid=\"search-results\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7661,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4205,
+        "missing_keywords": [],
+        "assertion_count": 27,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.544,
+      "feedback_used": ""
+    }
+  ]
+}

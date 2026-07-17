@@ -1,0 +1,13 @@
+{
+  "id": "TC_218",
+  "category": "accessibility",
+  "complexity": "simple",
+  "user_story": "As a user with motor impairment, I want click targets to be at least 44x44px.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Accessibility - Click Targets Size', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://example.com'); // Replace with the actual URL\n  });\n\n  test('Verify click targets are at least 44x44px', async ({ page }) => {\n    const buttons = await page.getByRole('button');\n    for (const button of buttons) {\n      const box = await button.boundingBox();\n      expect(box).toBeTruthy();\n      expect(box.width).toBeGreaterThanOrEqual(44);\n      expect(box.height).toBeGreaterThanOrEqual(44);\n    }\n  });\n\n  test('Verify links are at least 44x44px', async ({ page }) => {\n    const links = await page.getByRole('link');\n    for (const link of links) {\n      const box = await link.boundingBox();\n      expect(box).toBeTruthy();\n      expect(box.width).toBeGreaterThanOrEqual(44);\n      expect(box.height).toBeGreaterThanOrEqual(44);\n    }\n  });\n});",
+  "prompt_tokens": 137,
+  "completion_tokens": 235,
+  "latency_s": 4.66,
+  "timestamp": "2026-06-19T16:58:24.034055"
+}

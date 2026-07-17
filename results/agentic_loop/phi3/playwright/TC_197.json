@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_197",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8685,
+  "total_latency_s": 409.476,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Search Input Focus on / Key Press', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/search');\n  });\n\n  test('should focus search input when / is pressed', async ({ page }) => {\n    // Verify search input is visible and not focused\n    const searchInput = page.getByLabel('Search');\n    await expect(searchInput).toBeVisible();\n    await expect(searchInput).not.toBeFocused();\n\n    // Press / key\n    await page.keyboard.press('\\\\');\n\n    // Verify search input is now focused\n    await expect(searchInput).toBeFocused();\n\n    // Verify search input has placeholder text\n    await expect(searchInput).toHaveValue('');\n\n    // Verify search button is visible and enabled\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await expect(searchButton).toBeVisible();\n    await expect(searchButton).toBeEnabled();\n\n    // Verify search results container is visible\n    const searchResults = page.locator('[data-testid=\"search-results\"]');\n    await expect(searchResults).toBeVisible();\n  });\n\n  test('should not focus search input when / is pressed outside of input', async ({ page }) => {\n    // Verify search input is visible and not focused\n    const searchInput = page.getByLabel('Search');\n    await expect(searchInput).toBeVisible();\n    await expect(searchInput).not.toBeFocused();\n\n    // Press / key\n    await page.keyboard.press('\\\\');\n\n    // Verify search input is still not focused\n    await expect(searchInput).not.toBeFocused();\n\n    // Verify search button is still visible and enabled\n    const searchButton = page.getByRole('button', { name: /search/i });\n    await expect(searchButton).toBeVisible();\n    await expect(searchButton).toBeEnabled();\n\n    // Verify search results container is still visible\n    const searchResults = page.locator('[data-testid=\"search-results\"]');\n    await expect(searchResults).toBeVisible();\n\n    // Verify search input placeholder text is still present\n    await expect(searchInput).toHaveValue('');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8685,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5616,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 409.476,
+      "feedback_used": ""
+    }
+  ]
+}

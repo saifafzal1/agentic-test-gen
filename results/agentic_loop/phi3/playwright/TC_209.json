@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_209",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7795,
+  "total_latency_s": 57.555,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Screen Reader Error Message Announcement', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/form');\n  });\n\n  test('should announce error messages for invalid email input using screen reader', async ({ page }) => {\n    // Setup: intercept the form submission with an invalid email\n    await page.route('**/api/form-submit', (route) => {\n      route.abort('API call failed');\n    });\n\n    // Intercept the API response with error\n    await page.route('**/api/form-submit', (route) => {\n      route.continue({\n        status: 500,\n        body: JSON.stringify({ error: 'Invalid email format' })\n      });\n    });\n\n    // Intercept the API response with success\n    await page.route('**/api/form-submit', (route) => {\n      route.continue({\n        status: 200,\n        body: JSON.stringify({ success: true })\n      });\n    });\n\n    // Setup: intercept the API call\n    await page.route('**/api/form-submit', (route) => {\n      route.continue({\n        status: 200,\n        body: JSON.stringify({ success: true })\n      });\n    });\n\n    // Setup: intercept the API call with error\n    await page.route('**/api/form-submit', (route) => {\n      route.continue({\n        status: 500,\n        body: JSON.stringify({ error: 'Invalid email format' })\n      });\n    });\n\n    // Setup: intercept the API call with success\n    await page.route('**/api/form-submit', (route) => {\n      route.continue({\n        status: 200,\n        body: JSON.stringify({ success: true })\n      });\n    });\n\n    // Fill in the email field with invalid value\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('invalid-email');\n\n    // Fill in the password field\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('password123');\n\n    // Click the submit button\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify error message is announced by screen reader\n    const errorMessage = page.getByText('Invalid email format');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message is announced by screen reader\n    await expect(page).toHaveRole('alert');\n\n    // Verify success message is not announced\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).not.toBeVisible();\n  });\n\n  test('should announce error messages for empty required fields using screen reader', async ({ page }) => {\n    // Setup: intercept the form submission with success\n    await page.route('**/api/form-submit', (route) => {\n      route.continue({\n        status: 200,\n        body: JSON.stringify({ success: true })\n      });\n    });\n\n    // Fill in the email field with empty value\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('');\n\n    // Fill in the password field\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('password123');\n\n    // Click the submit button\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify error message is announced by screen reader\n    const errorMessage = page.getByText('Email is required');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message is announced by screen reader\n    await expect(page).toHaveRole('alert');\n\n    // Verify success message is not announced\n    const successMessage = page.getByText('Form submitted successfully');\n    await expect(successMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7795,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.2652,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 57.555,
+      "feedback_used": ""
+    }
+  ]
+}

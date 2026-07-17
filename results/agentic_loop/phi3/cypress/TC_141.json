@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_141",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7828,
+  "total_latency_s": 308.7,
+  "final_script": "describe('Video Modal Pause Functionality', () => {\n  beforeEach(() => {\n    cy.visit('/video-modal');\n  });\n\n  it('should pause the video when modal is closed', () => {\n    // Open the modal\n    cy.get('[data-testid=\"open-video-modal-btn\"]').click();\n    cy.get('[data-testid=\"video-modal\"]').should('be.visible');\n\n    // Verify video is playing\n    cy.get('[data-testid=\"video-player\"]').should('have.attr', 'src');\n    cy.get('[data-testid=\"video-player\"]').should('be.visible');\n\n    // Get the video element\n    cy.get('[data-testid=\"video-player\"]').then(($videoPlayer) => {\n      const video = $videoPlayer[0];\n      const videoElement = video.querySelector('video');\n      const playbackRate = videoElement.getAttribute('playbackRate');\n      expect(playbackRate).to.equal('1');\n    });\n\n    // Close the modal\n    cy.get('[data-testid=\"close-video-modal-btn\"]').click();\n\n    // Verify modal is hidden\n    cy.get('[data-testid=\"video-modal\"]').should('not.exist');\n\n    // Verify video is paused\n    cy.get('[data-testid=\"video-player\"]').then(($videoPlayer) => {\n      const videoElement = $videoPlayer[0].querySelector('video');\n      const playbackRate = videoElement.getAttribute('playbackRate');\n      expect(playbackRate).to.equal('0');\n    });\n  });\n\n  it('should handle edge case when modal is closed while video is buffering', () => {\n    // Open the modal\n    cy.get('[data-testid=\"open-video-modal-btn\"]').click();\n    cy.get('[data-testid=\"video-modal\"]').should('be.visible');\n\n    // Verify video is buffering\n    cy.get('[data-testid=\"video-player\"]').then(($videoPlayer) => {\n      const videoElement = $videoPlayer[0].querySelector('video');\n      const buffered = videoElement.getAttribute('buffered');\n      expect(buffered).to.not.be.empty;\n    });\n\n    // Close the modal while buffering\n    cy.get('[data-testid=\"close-video-modal-btn\"]').click();\n\n    // Verify modal is hidden\n    cy.get('[data-testid=\"video-modal\"]').should('not.exist');\n\n    // Verify video is paused\n    cy.get('[data-testid=\"video-player\"]').then(($videoPlayer) => {\n      const videoElement = $videoPlayer[0].querySelector('video');\n      const playbackRate = videoElement.getAttribute('playbackRate');\n      expect(playbackRate).to.equal('0');\n    });\n\n    // Verify buffered content is still available\n    cy.get('[data-testid=\"video-player\"]').then(($videoPlayer) => {\n      const videoElement = $videoPlayer[0].querySelector('video');\n      const buffered = videoElement.getAttribute('buffered');\n      expect(buffered).to.not.be.empty;\n    });\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7828,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4759,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 308.7,
+      "feedback_used": ""
+    }
+  ]
+}

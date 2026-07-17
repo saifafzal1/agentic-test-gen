@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_176",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.7828,
+  "total_latency_s": 1060.757,
+  "final_script": "describe('File Upload Retry Without Re-selection', () => {\n  beforeEach(() => {\n    cy.visit('/file-upload');\n  });\n\n  it('should successfully retry a failed upload without re-selecting the file', () => {\n    // Intercept the file upload API call\n    cy.intercept('POST', '/api/upload', {\n      statusCode: 500,\n      body: { error: 'Server error' }\n    }).as('uploadFailed');\n\n    // Attempt to upload a file\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/test-file.pdf', { force: true });\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Verify initial upload attempt was made\n    cy.wait('@uploadFailed');\n    cy.get('[data-testid=\"upload-status\"]').should('contain', 'Failed');\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Server error');\n\n    // Retry button should be visible\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n\n    // Click retry button\n    cy.get('[data-testid=\"retry-button\"]').click();\n\n    // Verify retry was triggered\n    cy.wait('@uploadFailed');\n\n    // Verify error message is still visible\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n\n    // Verify file input still has the same file selected\n    cy.get('[data-testid=\"file-input\"]').should('have.value', 'cypress/fixtures/test-file.pdf');\n\n    // Verify retry button is still visible\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n\n    // Click retry button again\n    cy.get('[data-testid=\"retry-button\"]').click();\n\n    // Verify retry was successful\n    cy.wait('@uploadFailed');\n    cy.get('[data-testid=\"upload-status\"]').should('contain', 'Success');\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'File uploaded successfully');\n\n    // Verify file was uploaded\n    cy.get('[data-testid=\"uploaded-files\"]').should('contain', 'test-file.pdf');\n  });\n\n  it('should handle retry when file is already selected and upload fails', () => {\n    // Intercept the file upload API call\n    cy.intercept('POST', '/api/upload', {\n      statusCode: 500,\n      body: { error: 'Server error' }\n    }).as('uploadFailed');\n\n    // Select a file\n    cy.get('[data-testid=\"file-input\"]').selectFile('cypress/fixtures/test-file.pdf', { force: true });\n\n    // Verify file is selected\n    cy.get('[data-testid=\"file-input\"]').should('have.value', 'cypress/fixtures/test-file.pdf');\n\n    // Click upload button\n    cy.get('[data-testid=\"upload-button\"]').click();\n\n    // Verify initial upload attempt was made\n    cy.wait('@uploadFailed');\n    cy.get('[data-testid=\"upload-status\"]').should('contain', 'Failed');\n\n    // Verify retry button is visible\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n\n    // Click retry button\n    cy.get('[data-testid=\"retry-button\"]').click();\n\n    // Verify retry was triggered\n    cy.wait('@uploadFailed');\n\n    // Verify error message is still visible\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n\n    // Verify retry button is still visible\n    cy.get('[data-testid=\"retry-button\"]').should('be.visible');\n\n    // Click retry button again\n    cy.get('[data-testid=\"retry-button\"]').click();\n\n    // Verify retry was successful\n    cy.wait('@uploadFailed');\n    cy.get('[data-testid=\"upload-status\"]').should('contain', 'Success');\n    cy.get('[data-testid=\"success-message\"]').should('be.visible').should('contain', 'File uploaded successfully');\n\n    // Verify file was uploaded\n    cy.get('[data-testid=\"uploaded-files\"]').should('contain', 'test-file.pdf');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.5055,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.4583,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 814.082,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.7828,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.476,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 246.675,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

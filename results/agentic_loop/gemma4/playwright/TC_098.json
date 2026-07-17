@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_098",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8179,
+  "total_latency_s": 76.676,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Error Boundary - UI Crash Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display fallback screen when UI component crashes', async ({ page }) => {\n    // Verify dashboard is visible\n    const dashboard = page.getByRole('main');\n    await expect(dashboard).toBeVisible();\n\n    // Click on a component that is designed to crash\n    const crashButton = page.getByRole('button', { name: /crash component/i });\n    await crashButton.click();\n\n    // Wait for error boundary to catch the crash\n    await page.waitForTimeout(500);\n\n    // Verify fallback screen is displayed\n    const fallbackScreen = page.getByRole('region', { name: /fallback/i });\n    await expect(fallbackScreen).toBeVisible();\n\n    // Verify error message is visible\n    const errorMessage = page.getByText(/an unexpected error occurred/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify user can navigate away from fallback\n    const navigateButton = page.getByRole('button', { name: /navigate away/i });\n    await expect(navigateButton).toBeVisible();\n    await navigateButton.click();\n\n    // Verify user is back on dashboard\n    await expect(dashboard).toBeVisible();\n  });\n\n  test('should not display fallback screen when component loads successfully', async ({ page }) => {\n    // Verify dashboard is visible\n    const dashboard = page.getByRole('main');\n    await expect(dashboard).toBeVisible();\n\n    // Verify crash button is not visible\n    const crashButton = page.getByRole('button', { name: /crash component/i });\n    await expect(crashButton).not.toBeVisible();\n\n    // Verify fallback screen is not visible\n    const fallbackScreen = page.getByRole('region', { name: /fallback/i });\n    await expect(fallbackScreen).not.toBeVisible();\n\n    // Verify error message is not visible\n    const errorMessage = page.getByText(/an unexpected error occurred/i);\n    await expect(errorMessage).not.toBeVisible();\n\n    // Verify user can interact with dashboard elements\n    const profileAvatar = page.getByRole('img', { name: /user profile/i });\n    await expect(profileAvatar).toBeVisible();\n    await profileAvatar.click();\n\n    // Verify profile menu appears\n    const profileMenu = page.getByRole('menu');\n    await expect(profileMenu).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8179,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4931,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 76.676,
+      "feedback_used": ""
+    }
+  ]
+}

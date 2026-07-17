@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_152",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.78,
+  "total_latency_s": 72.291,
+  "final_script": "describe('Expand Row to View Nested Details', () => {\n  beforeEach(() => {\n    cy.visit('/table');\n  });\n\n  it('should expand a row and display nested details', () => {\n    // Verify table is visible\n    cy.get('[data-testid=\"data-table\"]').should('be.visible');\n    \n    // Verify first row is visible\n    cy.get('[data-testid=\"table-row-1\"]').should('be.visible');\n    cy.get('[data-testid=\"row-1-name\"]').should('contain', 'Product A');\n    \n    // Verify expand button is visible and clickable\n    cy.get('[data-testid=\"expand-row-btn-1\"]').should('be.visible');\n    cy.get('[data-testid=\"expand-row-btn-1\"]').click();\n    \n    // Verify nested details are now visible\n    cy.get('[data-testid=\"nested-details-row-1\"]').should('be.visible');\n    cy.get('[data-testid=\"nested-details-row-1\"]').should('have.class', 'expanded');\n    \n    // Verify nested details contain expected information\n    cy.get('[data-testid=\"nested-details-row-1\"]').should('contain', 'SKU: 123');\n    cy.get('[data-testid=\"nested-details-row-1\"]').should('contain', 'Category: Electronics');\n    \n    // Verify expand button changes state (e.g., to collapse)\n    cy.get('[data-testid=\"expand-row-btn-1\"]').should('contain', 'Collapse');\n  });\n\n  it('should collapse an expanded row and hide nested details', () => {\n    // Expand the first row\n    cy.get('[data-testid=\"expand-row-btn-1\"]').click();\n    cy.get('[data-testid=\"nested-details-row-1\"]').should('be.visible');\n    \n    // Verify nested details are visible before collapse\n    cy.get('[data-testid=\"nested-details-row-1\"]').should('contain', 'SKU: 123');\n    \n    // Click expand button again to collapse\n    cy.get('[data-testid=\"expand-row-btn-1\"]').click();\n    \n    // Verify nested details are now hidden\n    cy.get('[data-testid=\"nested-details-row-1\"]').should('not.exist');\n    \n    // Verify row is no longer expanded\n    cy.get('[data-testid=\"expand-row-btn-1\"]').should('contain', 'Expand');\n    \n    // Verify other rows are still visible\n    cy.get('[data-testid=\"table-row-2\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.78,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.4667,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.291,
+      "feedback_used": ""
+    }
+  ]
+}

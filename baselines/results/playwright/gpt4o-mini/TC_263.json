@@ -1,0 +1,13 @@
+{
+  "id": "TC_263",
+  "category": "notifications",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a badge count on the notification bell icon.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Badge Count', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://your-application-url.com');\n  });\n\n  test('should display notification bell icon', async ({ page }) => {\n    const bellIcon = page.getByRole('img', { name: /notification bell/i });\n    await expect(bellIcon).toBeVisible();\n  });\n\n  test('should display correct badge count on notification bell icon', async ({ page }) => {\n    const bellIcon = page.getByRole('img', { name: /notification bell/i });\n    const badgeCount = bellIcon.locator('.badge-count'); // Assuming badge count has a class 'badge-count'\n    \n    await expect(badgeCount).toBeVisible();\n    await expect(badgeCount).toHaveText('3'); // Replace '3' with the expected count\n  });\n});",
+  "prompt_tokens": 133,
+  "completion_tokens": 196,
+  "latency_s": 2.63,
+  "timestamp": "2026-06-19T17:02:02.198233"
+}

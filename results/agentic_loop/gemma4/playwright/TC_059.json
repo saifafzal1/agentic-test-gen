@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_059",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7965,
+  "total_latency_s": 118.896,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Data Refresh After Mutation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/data-table');\n  });\n\n  test('should refresh data automatically after a successful mutation', async ({ page }) => {\n    // Verify initial data is displayed\n    const tableBody = page.getByRole('row', { name: /data row/i });\n    await expect(tableBody).toBeVisible();\n    const initialRowCount = await page.getByRole('row').count();\n    expect(initialRowCount).toBeGreaterThan(0);\n\n    // Perform mutation (delete an item)\n    const deleteButton = page.getByRole('button', { name: /delete/i });\n    await deleteButton.click();\n\n    // Wait for API response and data refresh\n    await page.waitForResponse(response => \n      response.url().includes('/api/data') && response.status() === 200\n    );\n\n    // Verify data has been refreshed\n    const updatedRowCount = await page.getByRole('row').count();\n    expect(updatedRowCount).toBeLessThan(initialRowCount);\n\n    // Verify success message is displayed\n    const successMessage = page.getByText(/item deleted successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify the deleted item is no longer in the table\n    const deletedItemRow = page.getByRole('row', { name: /deleted item/i });\n    await expect(deletedItemRow).not.toBeVisible();\n  });\n\n  test('should handle mutation failure and not refresh data', async ({ page }) => {\n    // Intercept the mutation API call and simulate failure\n    await page.route('**/api/data', route => {\n      route.abort('failed');\n    });\n\n    // Verify initial data is displayed\n    const tableBody = page.getByRole('row', { name: /data row/i });\n    await expect(tableBody).toBeVisible();\n    const initialRowCount = await page.getByRole('row').count();\n    expect(initialRowCount).toBeGreaterThan(0);\n\n    // Perform mutation (update an item)\n    const updateButton = page.getByRole('button', { name: /update/i });\n    await updateButton.click();\n\n    // Wait for API response (which will fail)\n    await page.waitForTimeout(500);\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/failed to update item/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify data has NOT been refreshed (row count remains the same)\n    const updatedRowCount = await page.getByRole('row').count();\n    expect(updatedRowCount).toBe(initialRowCount);\n\n    // Verify the original item is still visible\n    const originalItemRow = page.getByRole('row', { name: /original item/i });\n    await expect(originalItemRow).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7965,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4217,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 118.896,
+      "feedback_used": ""
+    }
+  ]
+}

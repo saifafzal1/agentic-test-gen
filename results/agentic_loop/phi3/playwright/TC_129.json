@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_129",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8437,
+  "total_latency_s": 28.978,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Modal Close by Escape Key', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/modal');\n  });\n\n  test('should close modal when Escape key is pressed', async ({ page }) => {\n    // Verify modal is visible\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n\n    // Verify modal has close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify modal has content\n    const modalContent = page.locator('[data-testid=\"modal-content\"]');\n    await expect(modalContent).toBeVisible();\n\n    // Press Escape key\n    await page.keyboard.press('Escape');\n\n    // Verify modal is closed\n    await expect(modal).not.toBeVisible();\n\n    // Verify close button is disabled\n    await expect(closeButton).toBeDisabled();\n\n    // Verify page content is visible\n    const pageContent = page.getByRole('main');\n    await expect(pageContent).toBeVisible();\n  });\n\n  test('should not close modal when Escape key is pressed outside modal', async ({ page }) => {\n    // Verify modal is visible\n    const modal = page.getByRole('dialog');\n    await expect(modal).toBeVisible();\n\n    // Verify modal has close button\n    const closeButton = page.getByRole('button', { name: /close/i });\n    await expect(closeButton).toBeVisible();\n\n    // Verify modal has content\n    const modalContent = page.locator('[data-testid=\"modal-content\"]');\n    await expect(modalContent).toBeVisible();\n\n    // Press Escape key\n    await page.keyboard.press('Escape');\n\n    // Verify modal is still visible\n    await expect(modal).toBeVisible();\n\n    // Verify close button is still enabled\n    await expect(closeButton).toBeEnabled();\n\n    // Verify modal content is still visible\n    await expect(modalContent).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8437,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5789,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 28.978,
+      "feedback_used": ""
+    }
+  ]
+}

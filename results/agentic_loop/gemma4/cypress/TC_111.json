@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_111",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7457,
+  "total_latency_s": 72.416,
+  "final_script": "describe('Multiple Concurrent API Calls Resolution', () => {\n  beforeEach(() => {\n    cy.visit('/dashboard');\n  });\n\n  it('should resolve multiple concurrent API calls before displaying data', () => {\n    // Intercept the first API call\n    cy.intercept('GET', '/api/user/profile').as('userProfile');\n    // Intercept the second API call\n    cy.intercept('GET', '/api/user/settings').as('userSettings');\n    // Intercept the third API call\n    cy.intercept('GET', '/api/user/notifications').as('userNotifications');\n\n    // Click the button to trigger all three API calls concurrently\n    cy.get('[data-testid=\"load-dashboard-btn\"]').click();\n\n    // Wait for all three API calls to complete\n    cy.wait('@userProfile');\n    cy.wait('@userSettings');\n    cy.wait('@userNotifications');\n\n    // Verify that the data is displayed after all calls resolve\n    cy.get('[data-testid=\"profile-data\"]').should('be.visible');\n    cy.get('[data-testid=\"settings-data\"]').should('contain', 'dark mode');\n    cy.get('[data-testid=\"notifications-count\"]').should('contain', '3');\n\n    // Verify the loading indicator is no longer visible\n    cy.get('[data-testid=\"loading-spinner\"]').should('not.exist');\n  });\n\n  it('should handle API call failures and display error messages', () => {\n    // Intercept the first API call successfully\n    cy.intercept('GET', '/api/user/profile', {\n      statusCode: 200,\n      body: { id: 1, name: 'John Doe' }\n    }).as('userProfile');\n\n    // Intercept the second API call with a failure\n    cy.intercept('GET', '/api/user/settings', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' }\n    }).as('userSettingsFailed');\n\n    // Intercept the third API call successfully\n    cy.intercept('GET', '/api/user/notifications', {\n      statusCode: 200,\n      body: { count: 5 }\n    }).as('userNotifications');\n\n    // Click the button to trigger all three API calls\n    cy.get('[data-testid=\"load-dashboard-btn\"]').click();\n\n    // Wait for all three API calls to complete\n    cy.wait('@userProfile');\n    cy.wait('@userSettingsFailed');\n    cy.wait('@userNotifications');\n\n    // Verify successful data is displayed\n    cy.get('[data-testid=\"profile-data\"]').should('be.visible');\n    cy.get('[data-testid=\"notifications-count\"]').should('contain', '5');\n\n    // Verify error message is displayed for failed call\n    cy.get('[data-testid=\"settings-error\"]').should('be.visible');\n    cy.get('[data-testid=\"settings-error\"]').should('contain', 'Internal Server Error');\n\n    // Verify loading indicator is gone\n    cy.get('[data-testid=\"loading-spinner\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7457,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.3523,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.416,
+      "feedback_used": ""
+    }
+  ]
+}

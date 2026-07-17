@@ -1,0 +1,13 @@
+{
+  "id": "TC_253",
+  "category": "payment_flow",
+  "complexity": "complex",
+  "user_story": "As a user, I want to see a loading state while my payment is processing.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Payment Flow', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/payment');\n  });\n\n  test('should display loading state during payment processing', async ({ page }) => {\n    await page.fill(getByLabel('Card Number'), '4111 1111 1111 1111');\n    await page.fill(getByLabel('Expiry Date'), '12/23');\n    await page.fill(getByLabel('CVC'), '123');\n    await page.click(getByRole('button', { name: 'Pay Now' }));\n\n    const loadingIndicator = page.getByText('Processing your payment...');\n    await expect(loadingIndicator).toBeVisible();\n  });\n\n  test('should hide loading state after payment processing', async ({ page }) => {\n    await page.fill(getByLabel('Card Number'), '4111 1111 1111 1111');\n    await page.fill(getByLabel('Expiry Date'), '12/23');\n    await page.fill(getByLabel('CVC'), '123');\n    await page.click(getByRole('button', { name: 'Pay Now' }));\n\n    const loadingIndicator = page.getByText('Processing your payment...');\n    await expect(loadingIndicator).toBeVisible();\n\n    // Simulate payment processing completion\n    await page.waitForTimeout(3000); // Adjust time as necessary for the test\n\n    await expect(loadingIndicator).not.toBeVisible();\n    await expect(page.getByText('Payment Successful')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 134,
+  "completion_tokens": 327,
+  "latency_s": 6.21,
+  "timestamp": "2026-06-19T17:01:04.747385"
+}

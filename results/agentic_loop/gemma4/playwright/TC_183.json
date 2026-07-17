@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_183",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.822,
+  "total_latency_s": 81.443,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Virus Scan Status for Uploaded Files', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/file-upload');\n  });\n\n  test('should display virus scan status for uploaded files', async ({ page }) => {\n    // Upload a file\n    const fileInput = page.getByLabel('Upload file');\n    await fileInput.setInputFiles('playwright/fixtures/sample.pdf');\n\n    // Verify file name appears\n    const fileNameDisplay = page.getByText('sample.pdf');\n    await expect(fileNameDisplay).toBeVisible();\n\n    // Click upload button\n    const uploadButton = page.getByRole('button', { name: 'Upload' });\n    await uploadButton.click();\n\n    // Wait for upload to complete\n    await page.waitForResponse(response => \n      response.url().includes('/api/upload') && response.status() === 200\n    );\n\n    // Verify success message\n    const successMessage = page.getByText('File uploaded successfully');\n    await expect(successMessage).toBeVisible();\n\n    // Verify virus scan status is displayed\n    const scanStatus = page.getByText('Virus Scan: Complete');\n    await expect(scanStatus).toBeVisible();\n\n    // Verify scan result is clean\n    const scanResult = page.getByText('No viruses found');\n    await expect(scanResult).toBeVisible();\n\n    // Verify file is listed in scan results\n    const fileList = page.getByRole('region', { name: 'Scan Results' });\n    await expect(fileList).toBeVisible();\n  });\n\n  test('should handle virus scan failure and display appropriate error', async ({ page }) => {\n    // Intercept the upload API call and simulate a virus detection\n    await page.route('**/api/upload', route => {\n      route.abort('failed');\n    });\n\n    // Upload a file\n    const fileInput = page.getByLabel('Upload file');\n    await fileInput.setInputFiles('playwright/fixtures/malicious.exe');\n\n    // Click upload button\n    const uploadButton = page.getByRole('button', { name: 'Upload' });\n    await uploadButton.click();\n\n    // Wait for error response\n    await page.waitForResponse(response => \n      response.url().includes('/api/upload') && response.status() === 400\n    );\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('Virus detected');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify scan status shows failure\n    const scanStatus = page.getByText('Virus Scan: Failed');\n    await expect(scanStatus).toBeVisible();\n\n    // Verify scan result shows virus\n    const scanResult = page.getByText('Virus detected: Trojan.');\n    await expect(scanResult).toBeVisible();\n\n    // Verify file is not listed in clean results\n    const fileList = page.getByRole('region', { name: 'Scan Results' });\n    await expect(fileList).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.822,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4066,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 81.443,
+      "feedback_used": ""
+    }
+  ]
+}

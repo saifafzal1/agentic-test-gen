@@ -1,0 +1,13 @@
+{
+  "id": "TC_008",
+  "category": "authentication",
+  "complexity": "simple",
+  "user_story": "As a user, I want to see a loading spinner while my login request is processing.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Login Loading Spinner', () => {\n    beforeEach(() => {\n        cy.visit('/login');\n    });\n\n    it('should display loading spinner while login request is processing', () => {\n        cy.get('input[name=\"username\"]').type('testuser');\n        cy.get('input[name=\"password\"]').type('password123');\n        cy.get('button[type=\"submit\"]').click();\n        \n        cy.get('.loading-spinner').should('be.visible');\n        \n        // Simulate waiting for the login request to complete\n        cy.intercept('POST', '/api/login', {\n            statusCode: 200,\n            body: { token: 'fakeToken' }\n        }).as('loginRequest');\n\n        cy.wait('@loginRequest');\n        cy.get('.loading-spinner').should('not.exist');\n    });\n\n    it('should not display loading spinner if login fails', () => {\n        cy.get('input[name=\"username\"]').type('testuser');\n        cy.get('input[name=\"password\"]').type('wrongpassword');\n        cy.get('button[type=\"submit\"]').click();\n        \n        cy.get('.loading-spinner').should('be.visible');\n        \n        // Simulate waiting for the login request to complete\n        cy.intercept('POST', '/api/login', {\n            statusCode: 401,\n            body: { error: 'Invalid credentials' }\n        }).as('loginRequest');\n\n        cy.wait('@loginRequest');\n        cy.get('.loading-spinner').should('not.exist');\n        cy.get('.error-message').should('contain', 'Invalid credentials');\n    });\n});",
+  "prompt_tokens": 111,
+  "completion_tokens": 316,
+  "latency_s": 4.67,
+  "timestamp": "2026-06-19T16:25:45.336528"
+}

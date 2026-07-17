@@ -1,0 +1,13 @@
+{
+  "id": "TC_187",
+  "category": "search_filter",
+  "complexity": "complex",
+  "user_story": "As a user, I want to filter search results by category using checkboxes.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Search Filter by Category', () => {\n    beforeEach(() => {\n        cy.visit('/search');\n    });\n\n    it('should filter search results by selected category', () => {\n        cy.get('input[type=\"checkbox\"][value=\"electronics\"]').check();\n        cy.get('input[type=\"checkbox\"][value=\"books\"]').check();\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.get('.search-results').should('exist');\n        cy.get('.search-results .item').each(($item) => {\n            cy.wrap($item).find('.category').should('match', /electronics|books/);\n        });\n    });\n\n    it('should show all results when no category is selected', () => {\n        cy.get('button[type=\"submit\"]').click();\n\n        cy.get('.search-results').should('exist');\n        cy.get('.search-results .item').should('have.length.greaterThan', 0);\n    });\n});",
+  "prompt_tokens": 110,
+  "completion_tokens": 190,
+  "latency_s": 3.39,
+  "timestamp": "2026-06-19T16:37:00.767485"
+}

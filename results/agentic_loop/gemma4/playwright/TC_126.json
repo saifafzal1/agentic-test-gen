@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_126",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8195,
+  "total_latency_s": 72.085,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Animated Transitions Between Async Page Loads', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dashboard');\n  });\n\n  test('should display animated transition when navigating between async page loads', async ({ page }) => {\n    // Verify initial page is loaded\n    const welcomeMessage = page.getByRole('heading', { name: /welcome/i });\n    await expect(welcomeMessage).toBeVisible();\n\n    // Click button to trigger async page load\n    const loadButton = page.getByRole('button', { name: /load data/i });\n    await loadButton.click();\n\n    // Wait for transition animation to complete\n    await page.waitForTimeout(500);\n\n    // Verify loading spinner is visible during transition\n    const loadingSpinner = page.getByRole('status', { name: /loading/i });\n    await expect(loadingSpinner).toBeVisible();\n\n    // Wait for data to load\n    await page.waitForTimeout(1000);\n\n    // Verify loading spinner is no longer visible\n    await expect(loadingSpinner).not.toBeVisible();\n\n    // Verify new content is displayed\n    const dataTable = page.getByRole('table');\n    await expect(dataTable).toBeVisible();\n\n    // Verify data rows are present\n    const dataRows = page.getByRole('row');\n    await expect(dataRows).toHaveCount(5);\n\n    // Verify animated transition class is applied\n    const contentContainer = page.locator('[data-testid=\"content-container\"]');\n    await expect(contentContainer).toHaveClass(/transition-active/);\n  });\n\n  test('should handle multiple async page loads with animated transitions', async ({ page }) => {\n    // First async page load\n    const loadButton = page.getByRole('button', { name: /load data/i });\n    await loadButton.click();\n\n    // Wait for first transition\n    await page.waitForTimeout(500);\n\n    // Verify loading spinner is visible\n    const loadingSpinner = page.getByRole('status', { name: /loading/i });\n    await expect(loadingSpinner).toBeVisible();\n\n    // Wait for data to load\n    await page.waitForTimeout(1000);\n\n    // Verify data table is visible\n    const dataTable = page.getByRole('table');\n    await expect(dataTable).toBeVisible();\n\n    // Second async page load\n    await loadButton.click();\n\n    // Wait for second transition\n    await page.waitForTimeout(500);\n\n    // Verify loading spinner is visible again\n    await expect(loadingSpinner).toBeVisible();\n\n    // Wait for data to load\n    await page.waitForTimeout(1000);\n\n    // Verify data table is still visible and updated\n    await expect(dataTable).toBeVisible();\n    const dataRows = page.getByRole('row');\n    await expect(dataRows).toHaveCount(5);\n\n    // Verify transition animation class is applied on second load\n    const contentContainer = page.locator('[data-testid=\"content-container\"]');\n    await expect(contentContainer).toHaveClass(/transition-active/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8195,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.4985,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.085,
+      "feedback_used": ""
+    }
+  ]
+}

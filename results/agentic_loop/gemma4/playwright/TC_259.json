@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_259",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.8343,
+  "total_latency_s": 72.534,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Success Toast Notification on Record Save', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/records');\n  });\n\n  test('should display success toast notification after saving a record', async ({ page }) => {\n    // Locate and fill record name input using getByLabel\n    const recordNameInput = page.getByLabel('Record Name');\n    await recordNameInput.fill('Test Record');\n\n    // Locate and fill description textarea using getByLabel\n    const descriptionTextarea = page.getByLabel('Description');\n    await descriptionTextarea.fill('This is a test description.');\n\n    // Locate and click save button using getByRole\n    const saveButton = page.getByRole('button', { name: 'Save Record' });\n    await saveButton.click();\n\n    // Wait for API response and toast to appear\n    await page.waitForResponse(response => \n      response.url().includes('/api/records') && response.status() === 201\n    );\n\n    // Verify success toast notification is visible\n    const successToast = page.getByText('Record saved successfully');\n    await expect(successToast).toBeVisible();\n\n    // Verify toast has success styling (e.g, green background)\n    const toastContainer = page.locator('[data-testid=\"toast-container\"]');\n    await expect(toastContainer).toBeVisible();\n    await expect(toastContainer).toHaveClass(/toast-success/);\n\n    // Verify toast has correct duration and fades out\n    await page.waitForTimeout(3000);\n    await expect(successToast).not.toBeVisible();\n  });\n\n  test('should not display success toast when record save fails', async ({ page }) => {\n    // Locate and fill record name input using getByLabel\n    const recordNameInput = page.getByLabel('Record Name');\n    await recordNameInput.fill('Invalid Record');\n\n    // Locate and fill description textarea using getByLabel\n    const descriptionTextarea = page.getByLabel('Description');\n    await descriptionTextarea.fill('This record is invalid.');\n\n    // Locate and click save button using getByRole\n    const saveButton = page.getByRole('button', { name: 'Save Record' });\n    await saveButton.click();\n\n    // Wait for API response with error status\n    await page.waitForResponse(response => \n      response.url().includes('/api/records') && response.status() === 400\n    );\n\n    // Verify success toast does not appear\n    const successToast = page.getByText('Record saved successfully');\n    await expect(successToast).not.toBeVisible();\n\n    // Verify error toast appears instead\n    const errorToast = page.getByText('Failed to save record');\n    await expect(errorToast).toBeVisible();\n\n    // Verify error toast has error styling (e.g., red background)\n    const toastContainer = page.locator('[data-testid=\"toast-container\"]');\n    await expect(toastContainer).toBeVisible();\n    await expect(toastContainer).toHaveClass(/toast-error/);\n\n    // Verify error toast has correct duration and fades out\n    await page.waitForTimeout(3000);\n    await expect(errorToast).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.8343,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.4478,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 72.534,
+      "feedback_used": ""
+    }
+  ]
+}

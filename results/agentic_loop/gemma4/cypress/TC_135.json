@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_135",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.7939,
+  "total_latency_s": 73.377,
+  "final_script": "describe('Right-Side Drawer/Slide-in Panel', () => {\n  beforeEach(() => {\n    cy.visit('/drawer-panel');\n  });\n\n  it('should open the drawer from the right when the trigger button is clicked', () => {\n    // Verify drawer is initially closed\n    cy.get('[data-testid=\"drawer-panel\"]').should('not.exist');\n    cy.get('[data-testid=\"drawer-trigger-button\"]').should('be.visible');\n\n    // Click the trigger button to open the drawer\n    cy.get('[data-testid=\"drawer-trigger-button\"]').click();\n\n    // Verify drawer appears from the right\n    cy.get('[data-testid=\"drawer-panel\"]').should('be.visible');\n    cy.get('[data-testid=\"drawer-panel\"]').should('have.css', 'transform', 'translateX(0px)');\n    cy.get('[data-testid=\"drawer-panel\"]').should('have.css', 'right', '0px');\n\n    // Verify drawer content is visible\n    cy.get('[data-testid=\"drawer-header\"]').should('contain', 'Drawer Menu');\n    cy.get('[data-testid=\"drawer-close-button\"]').should('be.visible');\n\n    // Verify drawer overlay is visible\n    cy.get('[data-testid=\"drawer-overlay\"]').should('be.visible');\n  });\n\n  it('should close the drawer when the close button or overlay is clicked', () => {\n    // Open the drawer first\n    cy.get('[data-testid=\"drawer-trigger-button\"]').click();\n    cy.get('[data-testid=\"drawer-panel\"]').should('be.visible');\n\n    // Close the drawer using the close button\n    cy.get('[data-testid=\"drawer-close-button\"]').click();\n    cy.get('[data-testid=\"drawer-panel\"]').should('not.exist');\n\n    // Re-open the drawer\n    cy.get('[data-testid=\"drawer-trigger-button\"]').click();\n    cy.get('[data-testid=\"drawer-panel\"]').should('be.visible');\n\n    // Close the drawer by clicking the overlay\n    cy.get('[data-testid=\"drawer-overlay\"]').click();\n    cy.get('[data-testid=\"drawer-panel\"]').should('not.exist');\n\n    // Verify drawer can be reopened\n    cy.get('[data-testid=\"drawer-trigger-button\"]').click();\n    cy.get('[data-testid=\"drawer-panel\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.7939,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5132,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 73.377,
+      "feedback_used": ""
+    }
+  ]
+}

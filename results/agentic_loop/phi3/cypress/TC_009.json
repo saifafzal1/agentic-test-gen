@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_009",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.4971,
+  "total_latency_s": 875.986,
+  "final_script": "describe('Account Lock After Failed Login Attempts', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should lock account after 5 failed login attempts', () => {\n    // Setup: Create admin user\n    cy.get('[data-testid=\"create-user-btn\"]').click();\n    cy.get('[data-testid=\"email-input\"]').type('admin@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('SecurePassword123!');\n    cy.get('[data-testid=\"create-user-button\"]').click();\n    cy.get('[data-testid=\"user-list\"]').should('be.visible');\n    cy.get('[data-testid=\"user-item\"]').should('contain', 'admin@example.com');\n\n    // First failed attempt\n    cy.get('[data-testid=\"login-form\"]').within(() => {\n      cy.get('[data-testid=\"email-input\"]').type('admin@example.com');\n      cy.get('[data-testid=\"password-input\"]').type('WrongPassword123!');\n      cy.get('[data-testid=\"login-button\"]').click();\n    });\n    cy.get('[data-testid=\"login-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid credentials');\n\n    // Second failed attempt\n    cy.get('[data-testid=\"login-form\"]').within(() => {\n      cy.get('[data-testid=\"email-input\"]').type('admin@example.com');\n      cy.get('[data-testid=\"password-input\"]').type('WrongPassword123!');\n      cy.get('[data-testid=\"login-button\"]').click();\n    });\n    cy.get('[data-testid=\"login-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid credentials');\n\n    // Third failed attempt\n    cy.get('[data-testid=\"login-form\"]').within(() => {\n      cy.get('[data-testid=\"email-input\"]').type('admin@example.com');\n      cy.get('[data-testid=\"password-input\"]').type('WrongPassword123!');\n      cy.get('[data-testid=\"login-button\"]').click();\n    });\n    cy.get('[data-testid=\"login-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid credentials');\n\n    // Fourth failed attempt\n    cy.get('[data-testid=\"login-form\"]').within(() => {\n      cy.get('[data-testid=\"email-input\"]').type('admin@example.com');\n      cy.get('[data-testid=\"password-input\"]').type('WrongPassword123!');\n      cy.get('[data-testid=\"login-button\"]').click();\n    });\n    cy.get('[data-testid=\"login-error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid credentials');\n\n    // Fifth failed attempt\n    cy.get('[data-testid=\"login-form\"]').within(() => {\n      cy.get('[data-testid=\"email-input\"]').type('admin@example.com');\n      cy.get('[data-testid=\"password-input\"]').type('WrongPassword123!');\n      cy.get('[data-testid=\"login-button\"]').click();\n    });\n\n    // Verify account is locked\n    cy.get('[data-testid=\"user-list\"]').should('not.exist');\n    cy.get('[data-testid=\"login-form\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Account locked');\n    cy.get('[data-testid=\"lock-account-",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.4971,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.4302,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 54.829,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.4655,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3249,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 408.171,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.4615,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.3116,
+        "missing_keywords": [],
+        "assertion_count": 28,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 412.986,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}
