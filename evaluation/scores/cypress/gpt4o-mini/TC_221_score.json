@@ -1,0 +1,37 @@
+{
+  "id": "TC_221",
+  "model": "gpt4o-mini",
+  "framework": "cypress",
+  "category": "accessibility",
+  "complexity": "simple",
+  "rouge_l": {
+    "precision": 0.4815,
+    "recall": 0.1024,
+    "f1": 0.1688
+  },
+  "token_f1": {
+    "precision": 0.5455,
+    "recall": 0.1475,
+    "f1": 0.2323
+  },
+  "quality": {
+    "keyword_hits": {
+      "describe(": true,
+      "it(": true,
+      "cy.visit(": true,
+      "cy.get(": true,
+      "cy.click(": false,
+      "cy.type(": false,
+      "cy.should(": false,
+      "beforeEach(": true,
+      "cy.intercept(": false
+    },
+    "keyword_score": 0.5556,
+    "line_count": 15,
+    "char_count": 538,
+    "no_fences": true
+  },
+  "latency_s": 1.76,
+  "prompt_tokens": 107,
+  "completion_tokens": 117
+}

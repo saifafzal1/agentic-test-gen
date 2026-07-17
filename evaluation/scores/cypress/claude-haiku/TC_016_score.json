@@ -1,0 +1,37 @@
+{
+  "id": "TC_016",
+  "model": "claude-haiku",
+  "framework": "cypress",
+  "category": "authentication",
+  "complexity": "complex",
+  "rouge_l": {
+    "precision": 0.1816,
+    "recall": 0.52,
+    "f1": 0.2692
+  },
+  "token_f1": {
+    "precision": 0.2553,
+    "recall": 0.5455,
+    "f1": 0.3478
+  },
+  "quality": {
+    "keyword_hits": {
+      "describe(": true,
+      "it(": true,
+      "cy.visit(": true,
+      "cy.get(": true,
+      "cy.click(": false,
+      "cy.type(": false,
+      "cy.should(": false,
+      "beforeEach(": true,
+      "cy.intercept(": false
+    },
+    "keyword_score": 0.5556,
+    "line_count": 139,
+    "char_count": 5787,
+    "no_fences": true
+  },
+  "latency_s": 12.5,
+  "prompt_tokens": 126,
+  "completion_tokens": 1800
+}

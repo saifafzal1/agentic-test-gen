@@ -1,0 +1,37 @@
+{
+  "id": "TC_261",
+  "model": "claude-haiku",
+  "framework": "cypress",
+  "category": "notifications",
+  "complexity": "medium",
+  "rouge_l": {
+    "precision": 0.3125,
+    "recall": 0.4321,
+    "f1": 0.3627
+  },
+  "token_f1": {
+    "precision": 0.4105,
+    "recall": 0.4483,
+    "f1": 0.4286
+  },
+  "quality": {
+    "keyword_hits": {
+      "describe(": true,
+      "it(": true,
+      "cy.visit(": true,
+      "cy.get(": true,
+      "cy.click(": false,
+      "cy.type(": false,
+      "cy.should(": false,
+      "beforeEach(": true,
+      "cy.intercept(": false
+    },
+    "keyword_score": 0.5556,
+    "line_count": 94,
+    "char_count": 3403,
+    "no_fences": true
+  },
+  "latency_s": 5.37,
+  "prompt_tokens": 119,
+  "completion_tokens": 961
+}

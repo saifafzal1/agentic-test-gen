@@ -1,0 +1,37 @@
+{
+  "id": "TC_198",
+  "model": "gpt4o-mini",
+  "framework": "cypress",
+  "category": "search_filter",
+  "complexity": "medium",
+  "rouge_l": {
+    "precision": 0.4828,
+    "recall": 0.1657,
+    "f1": 0.2467
+  },
+  "token_f1": {
+    "precision": 0.5854,
+    "recall": 0.2609,
+    "f1": 0.3609
+  },
+  "quality": {
+    "keyword_hits": {
+      "describe(": true,
+      "it(": true,
+      "cy.visit(": true,
+      "cy.get(": true,
+      "cy.click(": false,
+      "cy.type(": false,
+      "cy.should(": false,
+      "beforeEach(": true,
+      "cy.intercept(": false
+    },
+    "keyword_score": 0.5556,
+    "line_count": 18,
+    "char_count": 716,
+    "no_fences": true
+  },
+  "latency_s": 2.41,
+  "prompt_tokens": 114,
+  "completion_tokens": 166
+}

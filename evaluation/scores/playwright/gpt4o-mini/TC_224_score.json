@@ -1,0 +1,37 @@
+{
+  "id": "TC_224",
+  "model": "gpt4o-mini",
+  "framework": "playwright",
+  "category": "accessibility",
+  "complexity": "simple",
+  "rouge_l": {
+    "precision": 0.5822,
+    "recall": 0.2962,
+    "f1": 0.3926
+  },
+  "token_f1": {
+    "precision": 0.5625,
+    "recall": 0.2647,
+    "f1": 0.36
+  },
+  "quality": {
+    "keyword_hits": {
+      "test.describe(": true,
+      "test(": true,
+      "page.goto(": true,
+      "getByRole(": true,
+      "getByLabel(": false,
+      "getByText(": true,
+      "expect(": true,
+      "test.beforeEach(": true,
+      "await ": true
+    },
+    "keyword_score": 0.8889,
+    "line_count": 36,
+    "char_count": 1327,
+    "no_fences": true
+  },
+  "latency_s": 4.75,
+  "prompt_tokens": 132,
+  "completion_tokens": 295
+}
