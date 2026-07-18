@@ -40,10 +40,12 @@ WILP & Work Integrated Learning Programme \\
 \bottomrule
 \end{longtable}
 
-\chapter*{References}
-\addcontentsline{toc}{chapter}{References}
-
+% The thebibliography environment generates its own chapter heading
+% (renamed from "Bibliography" to "References" via \renewcommand{\bibname}
+% in main.tex), so no manual \chapter* is needed here -- adding one would
+% produce a duplicate heading.
 \begin{thebibliography}{24}
+\addcontentsline{toc}{chapter}{References}
 
 \bibitem{chen2021humaneval} M. Chen et al., ``Evaluating Large Language Models Trained on Code,'' arXiv:2107.03374, 2021.
 

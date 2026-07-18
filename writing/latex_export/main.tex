@@ -1,0 +1,48 @@
+%!TeX program = xelatex
+% Compile with XeLaTeX or LuaLaTeX (required: the chapters contain Unicode
+% math symbols -- chi-square, multiplication sign, superscript exponents --
+% that pdfLaTeX will not render correctly).
+% Overleaf reads the "%!TeX program" line above to auto-select the engine.
+\documentclass[12pt, a4paper]{report}
+
+\usepackage{fontspec}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+
+% Rename the auto-generated bibliography heading from "Bibliography"
+% to "References" (BITS format).
+\renewcommand{\bibname}{References}
+
+\title{Agentic Artificial Intelligence System for Autonomous Test Script Generation and Optimization}
+\author{Saif Afzal}
+\date{August 2026}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+\input{CoverPage}
+\end{titlepage}
+
+\pagenumbering{roman}
+\input{FrontMatter}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\clearpage
+\pagenumbering{arabic}
+
+\input{Intro_LitReview_Chapters}
+\input{Architecture_Chapter}
+\input{Implementation_Chapter}
+\input{Evaluation_Chapter}
+\input{Conclusion_Chapter}
+
+\input{BackMatter}
+
+\end{document}

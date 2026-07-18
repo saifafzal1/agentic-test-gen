@@ -77,10 +77,8 @@ per-system result should first be treated as a possible measurement
 artefact, not necessarily as a genuine capability gap, before it is
 accepted into the analysis.
 
-\emph{\textbf{Table 5.1: Zero-shot baseline performance (n = 279 per
-framework)}}
-
 \begin{longtable}[]{@{}llllll@{}}
+\caption{Zero-shot baseline performance (n = 279 per framework)}\tabularnewline
 \toprule
 \endhead
 \textbf{Model} & \textbf{Framework} & \textbf{ROUGE-L F1} &
@@ -110,9 +108,8 @@ the 0.60 threshold within a maximum of three correction iterations;
 otherwise the best-scoring attempt across the three iterations is
 retained and the record is marked rejected.
 
-\emph{\textbf{Table 5.2: BMAD agentic loop outcomes, complete dataset}}
-
 \begin{longtable}[]{@{}lllll@{}}
+\caption{BMAD agentic loop outcomes, complete dataset}\tabularnewline
 \toprule
 \endhead
 \textbf{Model} & \textbf{Framework} & \textbf{Accepted} & \textbf{Total}
@@ -143,10 +140,8 @@ against the held-out ground truth --- to allow direct comparison between
 zero-shot and fine-tuned approaches irrespective of the BMAD acceptance
 mechanism, which only governs the fine-tuned systems.
 
-\emph{\textbf{Table 5.3: Mean ROUGE-L F1 across all eight systems (n =
-279 each)}}
-
 \begin{longtable}[]{@{}llll@{}}
+\caption{Mean ROUGE-L F1 across all eight systems (n = 279 each)}\tabularnewline
 \toprule
 \endhead
 \textbf{System} & \textbf{Framework} & \textbf{Mean ROUGE-L F1} &
@@ -181,17 +176,16 @@ systems as independent groups, to establish whether the differences
 observed in Table 5.3 exceed what would be expected from sampling
 variation alone.
 
-\emph{\textbf{Table 5.4: One-way ANOVA results}}
-
 \begin{longtable}[]{@{}llll@{}}
+\caption{One-way ANOVA results}\tabularnewline
 \toprule
 \endhead
 \textbf{Comparison} & \textbf{Groups} & \textbf{F statistic} &
 \textbf{p-value} \\
-All eight systems & 8 & 225.63 & 1.01 × 10⁻²⁵³ \\
-Cypress only (4 models) & 4 & 182.90 & 2.18 × 10⁻⁹⁶ \\
-Playwright only (4 models) & 4 & 311.72 & 7.74 × 10⁻¹⁴⁷ \\
-Baseline vs. fine-tuned (collapsed) & 2 & 1091.20 & 3.84 × 10⁻¹⁹⁵ \\
+All eight systems & 8 & 225.63 & 1.01 $\times 10^{-253}$ \\
+Cypress only (4 models) & 4 & 182.90 & 2.18 $\times 10^{-96}$ \\
+Playwright only (4 models) & 4 & 311.72 & 7.74 $\times 10^{-147}$ \\
+Baseline vs. fine-tuned (collapsed) & 2 & 1091.20 & 3.84 $\times 10^{-195}$ \\
 \bottomrule
 \end{longtable}
 
@@ -209,28 +203,26 @@ substantively relevant pairwise comparisons per framework: each
 fine-tuned model against each baseline, and the two fine-tuned models
 against each other.
 
-\emph{\textbf{Table 5.5: Paired Wilcoxon signed-rank tests (n = 279 per
-test)}}
-
 \begin{longtable}[]{@{}llll@{}}
+\caption{Paired Wilcoxon signed-rank tests (n = 279 per test)}\tabularnewline
 \toprule
 \endhead
 \textbf{Comparison} & \textbf{Framework} & \textbf{Mean Diff.} &
 \textbf{p-value} \\
-Gemma 4 E4B vs. Claude Haiku & Cypress & +0.147 & 1.17 × 10⁻⁴⁰ \\
-Gemma 4 E4B vs. Claude Haiku & Playwright & +0.146 & 9.01 × 10⁻⁴⁷ \\
-Gemma 4 E4B vs. GPT-4o-mini & Cypress & +0.137 & 1.28 × 10⁻³⁸ \\
-Gemma 4 E4B vs. GPT-4o-mini & Playwright & +0.148 & 1.74 × 10⁻⁴⁴ \\
-Phi-3 Mini vs. Claude Haiku & Cypress & +0.090 & 8.76 × 10⁻²⁷ \\
-Phi-3 Mini vs. Claude Haiku & Playwright & +0.091 & 6.96 × 10⁻³⁸ \\
-Phi-3 Mini vs. GPT-4o-mini & Cypress & +0.079 & 5.44 × 10⁻²⁴ \\
-Phi-3 Mini vs. GPT-4o-mini & Playwright & +0.094 & 9.89 × 10⁻³⁴ \\
-Gemma 4 E4B vs. Phi-3 Mini & Cypress & +0.058 & 6.76 × 10⁻²³ \\
-Gemma 4 E4B vs. Phi-3 Mini & Playwright & +0.054 & 6.42 × 10⁻³² \\
+Gemma 4 E4B vs. Claude Haiku & Cypress & +0.147 & 1.17 $\times 10^{-40}$ \\
+Gemma 4 E4B vs. Claude Haiku & Playwright & +0.146 & 9.01 $\times 10^{-47}$ \\
+Gemma 4 E4B vs. GPT-4o-mini & Cypress & +0.137 & 1.28 $\times 10^{-38}$ \\
+Gemma 4 E4B vs. GPT-4o-mini & Playwright & +0.148 & 1.74 $\times 10^{-44}$ \\
+Phi-3 Mini vs. Claude Haiku & Cypress & +0.090 & 8.76 $\times 10^{-27}$ \\
+Phi-3 Mini vs. Claude Haiku & Playwright & +0.091 & 6.96 $\times 10^{-38}$ \\
+Phi-3 Mini vs. GPT-4o-mini & Cypress & +0.079 & 5.44 $\times 10^{-24}$ \\
+Phi-3 Mini vs. GPT-4o-mini & Playwright & +0.094 & 9.89 $\times 10^{-34}$ \\
+Gemma 4 E4B vs. Phi-3 Mini & Cypress & +0.058 & 6.76 $\times 10^{-23}$ \\
+Gemma 4 E4B vs. Phi-3 Mini & Playwright & +0.054 & 6.42 $\times 10^{-32}$ \\
 \bottomrule
 \end{longtable}
 
-All ten paired comparisons are significant at p \textless{} 10⁻²², an
+All ten paired comparisons are significant at p \textless{} $10^{-22}$, an
 extremely conservative bar given the already stringent p \textless{}
 0.05 convention. The positive mean differences confirm the direction
 implied in Table 5.3: fine-tuning improves ground-truth alignment over
@@ -247,9 +239,8 @@ Table 5.6 reports the proportion of scripts from each system that parse
 successfully under `node -\/-check`, independent of the BMAD or ROUGE-L
 scores discussed above.
 
-\emph{\textbf{Table 5.6: Syntax validity by system (n = 279 each)}}
-
 \begin{longtable}[]{@{}lllll@{}}
+\caption{Syntax validity by system (n = 279 each)}\tabularnewline
 \toprule
 \endhead
 \textbf{System} & \textbf{Framework} & \textbf{Valid} & \textbf{Total} &
@@ -270,12 +261,12 @@ validity is associated with system category (baseline versus
 fine-tuned), collapsing across model and framework. The resulting
 contingency table is 1,110 valid and 6 invalid scripts on the baseline
 side, against an identical 1,110 valid and 6 invalid on the fine-tuned
-side (χ² = 0.00, df = 1, p = 1.00), indicating no detectable association
+side ($\chi^2$ = 0.00, df = 1, p = 1.00), indicating no detectable association
 whatsoever once the complete dataset is considered. This is a materially
 different and more favourable conclusion than an earlier interim
 analysis conducted on a partial subset of the dataset, which had found
 fine-tuned syntax validity trailing baseline validity at a statistically
-significant level (χ² = 26.08, p = 3.27 × 10⁻⁷). Completing the full run
+significant level ($\chi^2$ = 26.08, p = 3.27 $\times 10^{-7}$). Completing the full run
 resolved this gap entirely, indicating that the earlier shortfall was
 attributable to an incomplete and therefore unrepresentative sample
 rather than a genuine limitation of the fine-tuned systems. The
@@ -289,7 +280,7 @@ The 279-story dataset spans sixteen functional categories
 (authentication, CRUD operations, form validation, and so on). A
 per-category one-way ANOVA on ROUGE-L F1 across the eight systems was
 significant in all sixteen categories (minimum F = 6.94, maximum p =
-1.11 × 10⁻⁶), confirming that the overall system-quality ranking
+1.11 $\times 10^{-6}$), confirming that the overall system-quality ranking
 established in Section 5.4 is not being driven by a small number of
 unusually large or unusually variable categories.
 
@@ -299,10 +290,8 @@ management. Table 5.7 isolates these two categories to illustrate the
 pattern; the fine-tuned advantage over baseline narrows sharply relative
 to the framework-wide averages in Table 5.3.
 
-\emph{\textbf{Table 5.7: Mean ROUGE-L F1 for the two weakest Cypress
-categories}}
-
 \begin{longtable}[]{@{}lllll@{}}
+\caption{Mean ROUGE-L F1 for the two weakest Cypress categories}\tabularnewline
 \toprule
 \endhead
 \textbf{Category} & \textbf{GPT-4o-mini} & \textbf{Claude Haiku} &
@@ -344,11 +333,11 @@ dissertation. First, the ranking Gemma 4 E4B \textgreater{} Phi-3 Mini
 \textgreater{} zero-shot baselines is not an artefact of aggregation: it
 holds without a single exception across both frameworks and across all
 sixteen user-story categories, and it is confirmed by a paired
-non-parametric test at p \textless{} 10⁻²² in every one of the ten
+non-parametric test at p \textless{} $10^{-22}$ in every one of the ten
 pairwise comparisons examined. Second, this quality gain is not
 purchased at the cost of syntactic reliability: once evaluated on the
 complete dataset, fine-tuned and baseline systems are statistically
-indistinguishable on syntax validity (χ² = 0, p = 1.00). Third, the
+indistinguishable on syntax validity ($\chi^2$ = 0, p = 1.00). Third, the
 residual cases where the fine-tuned advantage narrows --- principally
 the responsive-design and user-profile categories on Cypress --- trace
 to a known limitation of lexical-overlap metrics such as ROUGE-L rather
