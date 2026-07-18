@@ -1,4 +1,4 @@
-\textbf{RESULTS AND EVALUATION}
+\chapter{Results and Evaluation}
 
 This chapter presents the complete comparative evaluation of the four
 candidate test-script generation systems constructed in this
@@ -16,7 +16,7 @@ Section 5.6 examines syntactic validity; Section 5.7 analyses
 category-level error patterns; and Section 5.8 discusses the findings as
 a whole.
 
-\textbf{5.1 Evaluation Methodology}
+\section{Evaluation Methodology}
 
 Four complementary evaluation lenses are applied, each targeting a
 different failure mode that a single metric cannot capture in isolation.
@@ -58,7 +58,7 @@ and evaluation token accuracy as previously reported. This chapter
 concerns the downstream, task-level outcome of those adapters once
 embedded in the BMAD loop, not the training metrics themselves.
 
-\textbf{5.2 Zero-Shot Baseline Performance}
+\section{Zero-Shot Baseline Performance}
 
 Table 5.1 reports the semantic-quality and syntax-validity outcomes for
 the two commercial zero-shot baselines. One methodological correction is
@@ -101,7 +101,7 @@ approximate correctly from a natural-language description than Cypress's
 more implementation-specific selector conventions, even without any
 framework-specific training.
 
-\textbf{5.3 Fine-Tuned Model Performance in the BMAD Loop}
+\section{Fine-Tuned Model Performance in the BMAD Loop}
 
 Table 5.2 reports the outcome of running all 279 stories per framework
 through the BMAD build--measure--assess--decide loop for each fine-tuned
@@ -136,7 +136,7 @@ ceiling is insufficient within three iterations. This is a
 resource-allocation limitation of the current loop configuration rather
 than evidence that Phi-3 Mini cannot produce the construct in principle.
 
-\textbf{5.4 Comparative Semantic Quality Across All Systems}
+\section{Comparative Semantic Quality Across All Systems}
 
 Table 5.3 places all eight systems on the same axis --- mean ROUGE-L F1
 against the held-out ground truth --- to allow direct comparison between
@@ -172,9 +172,9 @@ of the sixteen user-story categories in the dataset without exception
 --- a notably stable result given the variation in mean score magnitude
 across categories.
 
-\textbf{5.5 Statistical Significance Testing}
+\section{Statistical Significance Testing}
 
-\textbf{5.5.1 Omnibus Analysis of Variance}
+\subsection{Omnibus Analysis of Variance}
 
 A one-way ANOVA was conducted on ROUGE-L F1 scores treating the eight
 systems as independent groups, to establish whether the differences
@@ -200,7 +200,7 @@ overwhelming margin, confirming that system identity accounts for a
 substantial share of the variance in output quality, both overall and
 within each framework considered separately.
 
-\textbf{5.5.2 Paired Wilcoxon Signed-Rank Tests}
+\subsection{Paired Wilcoxon Signed-Rank Tests}
 
 Because the omnibus ANOVA does not indicate which specific pairs of
 systems differ, and because the same 279 stories were scored by every
@@ -241,7 +241,7 @@ makes no assumption of normally distributed differences, provides strong
 evidence that the observed advantage of fine-tuning is a genuine effect
 rather than an artefact of averaging.
 
-\textbf{5.6 Syntactic Validity Analysis}
+\section{Syntactic Validity Analysis}
 
 Table 5.6 reports the proportion of scripts from each system that parse
 successfully under `node -\/-check`, independent of the BMAD or ROUGE-L
@@ -283,7 +283,7 @@ practical conclusion is that fine-tuning delivers its substantial
 ROUGE-L gain (Section 5.4) without any measurable cost in syntactic
 reliability.
 
-\textbf{5.7 Category-Level Error Analysis}
+\section{Category-Level Error Analysis}
 
 The 279-story dataset spans sixteen functional categories
 (authentication, CRUD operations, form validation, and so on). A
@@ -337,7 +337,7 @@ reported ROUGE-L gap between fine-tuned and baseline systems should be
 read as a lower bound on the true semantic-quality gap in categories
 with idiosyncratic reference vocabulary.
 
-\textbf{5.8 Discussion}
+\section{Discussion}
 
 Three findings taken together support the central claim of this
 dissertation. First, the ranking Gemma 4 E4B \textgreater{} Phi-3 Mini

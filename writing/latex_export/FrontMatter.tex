@@ -1,4 +1,5 @@
-\textbf{ABSTRACT}
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
 
 Software quality assurance teams routinely face a bottleneck that
 automation has not yet resolved: authoring and maintaining the
@@ -68,7 +69,8 @@ India \\
 \bottomrule
 \end{longtable}
 
-\textbf{ACKNOWLEDGEMENTS}
+\chapter*{Acknowledgements}
+\addcontentsline{toc}{chapter}{Acknowledgements}
 
 I am sincerely grateful to my supervisor, Mr. Bilal Hasan Khan,
 Associate Director at 3Pillar Global, Noida, for his consistent
@@ -89,104 +91,16 @@ Finally, I am grateful to my family for their patience and support
 across the many hours, including several extended unattended computation
 runs, that this research required.
 
-\textbf{CONTENTS}
+% NOTE: the manual Contents / List of Figures / List of Tables sections
+% that were here (with placeholder page numbers, carried over from the
+% Word draft) have been removed. Put these three lines in main.tex
+% instead, right after \begin{document} and before \include{chapters/...}
+% -- LaTeX generates all three automatically and correctly from the
+% \chapter/\section/\subsection commands used throughout:
+%
+%   \tableofcontents
+%   \listoffigures
+%   \listoftables
+%
+% (End of removed block.)
 
-\emph{Page numbers below are placeholders and will be finalised once all
-chapters are merged into a single paginated document; the structure and
-section numbering are final.}
-
-Abstracti
-
-Acknowledgementsii
-
-List of Figuresiii
-
-List of Tablesiv
-
-Abbreviationsv
-
-1. Introduction and Broad Area of Work1
-
-2. Literature Review3
-
-3. System Design and Architecture6
-
-3.1 Data Layer7
-
-3.2 Baseline Inference Engine7
-
-3.3 Fine-Tuning Module7
-
-3.4 BMAD Agentic Correction Loop8
-
-3.5 Evaluation and Statistical Analysis Module8
-
-3.6 Design Rationale9
-
-4. Implementation10
-
-4.1 Development Environment and Repository Organisation10
-
-4.2 Dataset Generation and Preparation11
-
-4.3 Zero-Shot Baseline Inference11
-
-4.4 QLoRA Fine-Tuning12
-
-4.5 The BMAD Agentic Correction Loop12
-
-4.6 Evaluation Tooling15
-
-4.7 Summary15
-
-5. Results and Evaluation16
-
-5.1 Evaluation Methodology16
-
-5.2 Zero-Shot Baseline Performance17
-
-5.3 Fine-Tuned Model Performance in the BMAD Loop18
-
-5.4 Comparative Semantic Quality Across All Systems18
-
-5.5 Statistical Significance Testing19
-
-5.6 Syntactic Validity Analysis21
-
-5.7 Category-Level Error Analysis22
-
-5.8 Discussion23
-
-6. Conclusion and Future Work24
-
-6.1 Conclusion24
-
-6.2 Limitations25
-
-6.3 Future Work26
-
-6.4 Concluding Remarks27
-
-References28
-
-\textbf{LIST OF FIGURES}
-
-Figure 3.1: End-to-end system architecture6
-
-\textbf{LIST OF TABLES}
-
-Table 2.1: Literature gaps and how this dissertation addresses them
-
-Table 5.1: Zero-shot baseline performance (n = 279 per framework)
-
-Table 5.2: BMAD agentic loop outcomes, complete dataset
-
-Table 5.3: Mean ROUGE-L F1 across all eight systems (n = 279 each)
-
-Table 5.4: One-way ANOVA results
-
-Table 5.5: Paired Wilcoxon signed-rank tests (n = 279 per test)
-
-Table 5.6: Syntax validity by system (n = 279 each)
-
-Table 5.7: Mean ROUGE-L F1 for the two weakest Cypress categories

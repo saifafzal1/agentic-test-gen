@@ -1,4 +1,4 @@
-\textbf{IMPLEMENTATION}
+\chapter{Implementation}
 
 This chapter describes how the five architectural components introduced
 earlier were realised in practice: the repository and
@@ -14,7 +14,7 @@ reported here in full because the diagnosis and correction of that
 unreliability is itself a substantive piece of engineering work
 underpinning the validity of the results in Chapter 5.
 
-\textbf{4.1 Development Environment and Repository Organisation}
+\section{Development Environment and Repository Organisation}
 
 Development was distributed across two machines according to
 computational demand. Mac A, an Apple M4 Pro with 48 GB of unified
@@ -42,7 +42,7 @@ implementation used to produce the results in Chapter 5; and
 final-submission, into which phase6-rebuild has been merged as the basis
 for this dissertation.
 
-\textbf{4.2 Dataset Generation and Preparation}
+\section{Dataset Generation and Preparation}
 
 The 279-story dataset was produced by a generation script that
 synthesises Jira-style user stories paired with a Cypress and a
@@ -56,7 +56,7 @@ scripts, so that fine-tuning and baseline evaluation for a given
 framework never has visibility of the other framework's syntax during
 training or prompting.
 
-\textbf{4.3 Zero-Shot Baseline Inference}
+\section{Zero-Shot Baseline Inference}
 
 The baseline runner issues one API request per user story to each of the
 two commercial models under evaluation, GPT-4o-mini and Claude Haiku,
@@ -70,7 +70,7 @@ excluded after its free-tier request quota proved insufficient for the
 558 calls required across both frameworks; this decision is recorded in
 the codebase rather than silently omitted.
 
-\textbf{4.4 QLoRA Fine-Tuning}
+\section{QLoRA Fine-Tuning}
 
 Each of the four adapters --- Phi-3 Mini and Gemma 4 E4B, one instance
 per framework --- was produced by a dedicated fine-tuning script
@@ -93,7 +93,7 @@ shorter Phi-3 Mini training times reported in the mid-semester results
 (under one hour per framework, against 3.78 and 5.71 hours for Gemma 4
 E4B).
 
-\textbf{4.5 The BMAD Agentic Correction Loop}
+\section{The BMAD Agentic Correction Loop}
 
 The agentic loop is the central engineering artefact of this
 dissertation. It implements a Build--Measure--Assess--Decide cycle: for
@@ -106,7 +106,7 @@ Build for a further attempt, up to a configurable maximum of three
 iterations, after which the best-scoring candidate across all attempts
 is retained regardless of whether it cleared the threshold.
 
-\textbf{4.5.1 Original Implementation and Its Failure Modes}
+\subsection{Original Implementation and Its Failure Modes}
 
 The loop was first implemented as two separate processes communicating
 over HTTP: a FastAPI/uvicorn inference server that loaded a fine-tuned
@@ -161,7 +161,7 @@ test scripts, yet was capable of terminating a multi-hour unattended
 run. This observation motivated a architectural revision rather than a
 further round of point fixes.
 
-\textbf{4.5.2 Rearchitected Single-Process Implementation}
+\subsection{Rearchitected Single-Process Implementation}
 
 The corrected implementation, on which all results in Chapter 5 are
 based, removes the HTTP boundary entirely. Model loading, prompt
@@ -205,7 +205,7 @@ than an identical one, since re-requesting ``the complete script'' at an
 unchanged budget simply reproduces the same cutoff. The ceiling is
 capped to bound worst-case latency per record.
 
-\textbf{4.5.3 Execution Reliability Engineering}
+\subsection{Execution Reliability Engineering}
 
 Beyond the single-process architectural change, three operational
 measures were adopted to make the full-dataset run practical on a single
@@ -242,7 +242,7 @@ dedicated server.
   cleanup.
 \end{itemize}
 
-\textbf{4.6 Evaluation Tooling}
+\section{Evaluation Tooling}
 
 Two categories of evaluation tooling were implemented to produce the
 results in Chapter 5. Independent syntax validation runs Node.js's
@@ -260,7 +260,7 @@ the one-way ANOVA, paired Wilcoxon signed-rank tests, chi-square test of
 independence, and category-level error matrices reported throughout
 Chapter 5.
 
-\textbf{4.7 Summary}
+\section{Summary}
 
 The implementation delivers all five architectural components introduced
 earlier: a framework-isolated dataset pipeline, a resumable zero-shot

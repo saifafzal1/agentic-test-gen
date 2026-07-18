@@ -1,6 +1,6 @@
-\textbf{CONCLUSION AND FUTURE WORK}
+\chapter{Conclusion and Future Work}
 
-\textbf{6.1 Conclusion}
+\section{Conclusion}
 
 This dissertation set out to investigate whether a domain-fine-tuned
 large language model, embedded inside an agentic self-correction loop,
@@ -65,7 +65,7 @@ idiosyncratic, non-derivable naming conventions, a qualification that
 should inform how future work in this area interprets ROUGE-L-based
 comparisons.
 
-\textbf{6.2 Limitations}
+\section{Limitations}
 
 Several limitations qualify the scope of the conclusions reported above
 and should be considered when generalising the findings beyond the
@@ -124,12 +124,12 @@ conditions under which this study was conducted.
   priority direction for future work below.
 \end{itemize}
 
-\textbf{6.3 Future Work}
+\section{Future Work}
 
 The limitations identified above translate directly into concrete
 directions for extending this research.
 
-\textbf{6.3.1 Execution-Based Validation}
+\subsection{Execution-Based Validation}
 
 The most consequential extension is to move beyond static and lexical
 evaluation toward execution-based validation: running each generated
@@ -144,7 +144,7 @@ stage inserted between the current syntax check and the composite-score
 computation, feeding pass/fail outcomes back as an additional term in
 the acceptance threshold.
 
-\textbf{6.3.2 Human Evaluation}
+\subsection{Human Evaluation}
 
 A structured human evaluation, in which practising QA engineers rate a
 sample of generated scripts for readability, maintainability, and
@@ -155,7 +155,7 @@ assess whether an engineer would accept a generated script into a pull
 request with minimal edits --- a criterion that ultimately determines
 the practical value of the system studied here.
 
-\textbf{6.3.3 Broader Framework and Domain Coverage}
+\subsection{Broader Framework and Domain Coverage}
 
 Extending the framework-isolated fine-tuning methodology used here to
 Selenium WebDriver, Appium-based mobile test automation, and API-level
@@ -165,7 +165,7 @@ browser-based UI testing, and would allow a single organisation's full
 test-automation surface to be addressed by variants of the same agentic
 loop.
 
-\textbf{6.3.4 Larger-Scale and Multi-Seed Training}
+\subsection{Larger-Scale and Multi-Seed Training}
 
 Repeating the QLoRA fine-tuning procedure across multiple random seeds
 per adapter would quantify training-run variance and strengthen the
@@ -175,7 +175,7 @@ anonymised production backlogs rather than synthetic generation, would
 additionally test whether the fine-tuning gains reported here persist on
 more heterogeneous and less internally consistent user-story phrasing.
 
-\textbf{6.3.5 Adaptive Token Budgeting}
+\subsection{Adaptive Token Budgeting}
 
 The token-budget-bound rejections identified in Section 6.2 could be
 addressed directly by predicting an appropriate generation length from
@@ -185,7 +185,7 @@ only after a truncated first attempt --- a refinement that would likely
 narrow the residual accept-rate gap between Phi-3 Mini and Gemma 4 E4B
 on Playwright.
 
-\textbf{6.3.6 Multi-Agent Specialisation}
+\subsection{Multi-Agent Specialisation}
 
 The current architecture applies a single agentic loop uniformly across
 all categories of user story. A natural extension is to decompose the
@@ -196,7 +196,7 @@ responsive-design viewport handling, the category identified in Chapter
 that dispatches each incoming story to the most appropriate specialist
 before the shared Build--Measure--Assess--Decide cycle proceeds.
 
-\textbf{6.4 Concluding Remarks}
+\section{Concluding Remarks}
 
 Taken as a whole, this dissertation provides statistically robust
 evidence that parameter-efficient fine-tuning, combined with an agentic

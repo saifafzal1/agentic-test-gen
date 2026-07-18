@@ -1,4 +1,4 @@
-\textbf{3. SYSTEM DESIGN AND ARCHITECTURE}
+\chapter{System Design and Architecture}
 
 The system constructed for this dissertation is organised as a
 five-component pipeline, shown in Figure 3.1: a shared data layer feeds
@@ -17,7 +17,7 @@ described in Chapter 4.
 
 \emph{\textbf{Figure 3.1: End-to-end system architecture}}
 
-\textbf{3.1 Data Layer}
+\section{Data Layer}
 
 The data layer is the single source of truth consumed by every
 downstream component. It comprises the 279-story dataset described in
@@ -30,7 +30,7 @@ framework has no access whatsoever to the other framework's syntax,
 eliminating a class of cross-contamination that would otherwise be
 possible if a single mixed-framework file were filtered downstream.
 
-\textbf{3.2 Baseline Inference Engine}
+\section{Baseline Inference Engine}
 
 The baseline inference engine routes each user story to the two
 commercial large language models under evaluation --- GPT-4o-mini and
@@ -43,7 +43,7 @@ independent of the fine-tuning and agentic-loop components: a baseline
 result for a given story can be produced, and was in practice produced,
 before the corresponding fine-tuned adapters existed.
 
-\textbf{3.3 Fine-Tuning Module}
+\section{Fine-Tuning Module}
 
 The fine-tuning module applies QLoRA adapters to two frozen open-weight
 base models, Phi-3 Mini and Gemma 4 E4B, using the framework-isolated
@@ -57,7 +57,7 @@ mixed-framework corpus --- is the architectural mechanism by which
 framework isolation, established at the data layer, is preserved through
 to the trained model itself.
 
-\textbf{3.4 BMAD Agentic Correction Loop}
+\section{BMAD Agentic Correction Loop}
 
 The BMAD loop is the component responsible for turning a single
 fine-tuned generation attempt into an accepted, quality-checked script.
@@ -76,7 +76,7 @@ accepted or best-effort script plus its full scoring history); Chapter 4
 describes how this unit is realised in code, including a significant
 revision to how the Build stage communicates with the underlying model.
 
-\textbf{3.5 Evaluation and Statistical Analysis Module}
+\section{Evaluation and Statistical Analysis Module}
 
 The evaluation module is the only component with visibility into the
 outputs of both generation paths simultaneously. It applies two
@@ -95,7 +95,7 @@ are assessed identically and impartially regardless of which system ---
 commercial baseline or fine-tuned adapter --- produced the script being
 scored.
 
-\textbf{3.6 Design Rationale}
+\section{Design Rationale}
 
 Three architectural decisions recur across the components described
 above and are stated explicitly here because they are foundational to
