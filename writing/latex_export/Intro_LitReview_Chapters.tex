@@ -97,7 +97,11 @@ explicit criterion: HumanEval and MBPP evaluate general-purpose function
 synthesis, and the unit-test generation work of Liu et al. targets
 arbitrary application code rather than the domain-specific object model,
 locator conventions, and assertion idioms of a browser-automation
-framework such as Cypress or Playwright.
+framework such as Cypress or Playwright. Studies of hand-authored UI
+test suites, such as Leotta et al.'s comparison of Selenium WebDriver
+design patterns {[}15{]}, confirm that writing and maintaining such
+scripts carries a substantial engineering cost in its own right ---
+precisely the cost that automated generation seeks to reduce.
 
 Because full-parameter fine-tuning of a billion-parameter model demands
 GPU infrastructure well beyond consumer hardware, this dissertation

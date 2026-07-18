@@ -59,7 +59,8 @@ training or prompting.
 \section{Zero-Shot Baseline Inference}
 
 The baseline runner issues one API request per user story to each of the
-two commercial models under evaluation, GPT-4o-mini and Claude Haiku,
+two commercial models under evaluation, GPT-4o-mini {[}17{]} and Claude
+Haiku {[}16{]},
 and persists the response together with prompt and completion token
 counts, latency, and a timestamp as an individual JSON record. A
 per-model, per-framework summary file records aggregate completion
@@ -72,8 +73,9 @@ the codebase rather than silently omitted.
 
 \section{QLoRA Fine-Tuning}
 
-Each of the four adapters --- Phi-3 Mini and Gemma 4 E4B, one instance
-per framework --- was produced by a dedicated fine-tuning script
+Each of the four adapters --- Phi-3 Mini and Gemma 4 E4B {[}19{]}, one
+instance per framework --- was produced by a dedicated fine-tuning
+script
 applying Low-Rank Adaptation {[}6{]} under 4-bit quantisation (QLoRA)
 {[}7{]} to the frozen base model, using the framework-isolated training
 split described in Section 4.2. Training and inference both execute on

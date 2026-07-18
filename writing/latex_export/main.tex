@@ -11,6 +11,9 @@
 \usepackage{graphicx}
 \usepackage[margin=1in]{geometry}
 \usepackage{hyperref}
+% Double spacing per WILP guideline sec 1.2(b) ("typed in double space").
+\usepackage{setspace}
+\doublespacing
 
 % Rename the auto-generated bibliography heading from "Bibliography"
 % to "References" (BITS format).
@@ -22,12 +25,20 @@
 
 \begin{document}
 
+% Page order per WILP guidelines + final-report checklist:
+% Cover -> Title page -> Certificate -> Acknowledgements -> Abstract
+% Sheet -> TOC/LOF/LOT -> Chapters 1-6 -> Abbreviations -> References
+% -> Checklist (last page).
+
 \begin{titlepage}
 \centering
 \input{CoverPage}
 \end{titlepage}
 
+\input{TitlePage}
+
 \pagenumbering{roman}
+\input{CertificatePage}
 \input{FrontMatter}
 
 \tableofcontents
@@ -44,5 +55,7 @@
 \input{Conclusion_Chapter}
 
 \input{BackMatter}
+
+\input{ChecklistPage}
 
 \end{document}

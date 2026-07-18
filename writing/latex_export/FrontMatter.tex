@@ -1,61 +1,92 @@
+% Per the WILP guidelines (sec 1.2), Acknowledgements is the second page
+% (after the title page / certificate) and the Abstract Sheet is the third.
+
+\chapter*{Acknowledgements}
+\addcontentsline{toc}{chapter}{Acknowledgements}
+
+% Guideline order: Head of the organization -> Supervisor & Additional
+% Examiner -> Professional Expert / In-charge -> Faculty mentor -> others.
+% Bracketed [TO FILL] items below need real names before submission.
+
+I express my sincere gratitude to \textbf{[TO FILL: Name, Head of the
+Organization]}, 3Pillar Global, for fostering an environment supportive
+of applied research alongside professional responsibilities.
+
+I am deeply grateful to my supervisor, Mr.~Bilal Hasan Khan, Associate
+Director at 3Pillar Global, Noida, for his consistent guidance,
+technical scrutiny, and constructive feedback throughout every phase of
+this dissertation, from the initial dataset design through to the final
+statistical evaluation. His willingness to engage closely with both the
+research questions and the practical engineering challenges encountered
+along the way materially shaped the quality of this work. I also thank
+my additional examiner, \textbf{[TO FILL: Name, Designation ---
+Additional Examiner]}, for their careful review of this dissertation.
+
+I thank my faculty mentor, \textbf{[TO FILL: Faculty Mentor Name]}, and
+the Birla Institute of Technology and Science, Pilani, Work Integrated
+Learning Programmes Division, for the structure, milestones, and
+academic rigour that this dissertation was held to at each stage of
+submission.
+
+Finally, I am grateful to my family for their patience and support
+across the many hours, including several extended unattended computation
+runs, that this research required.
+
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
 
-Software quality assurance teams routinely face a bottleneck that
-automation has not yet resolved: authoring and maintaining the
-end-to-end test scripts that verify application behaviour remains a
-manual, time-consuming task requiring both programming skill and
-detailed familiarity with a specific test-automation framework. This
-dissertation investigates whether a domain-specific,
-parameter-efficiently fine-tuned open-weight language model, embedded
-inside an autonomous agentic correction loop, can close this gap by
-translating natural-language user stories directly into syntactically
-valid and semantically faithful test scripts, at a quality level
-competitive with or exceeding much larger zero-shot commercial systems.
+% Abstract Sheet per Appendix-C of the WILP guidelines: header fields,
+% Key Words, Project Areas, then a <=200-word abstract and signatures.
 
-A curated dataset of 279 Jira-style user stories, each paired with an
-independently authored Cypress and Playwright reference script, was
-constructed and validated across sixteen functional categories and three
-complexity tiers. Two commercial large language models, GPT-4o-mini and
-Claude Haiku, were evaluated as zero-shot baselines. Two open-weight
-models, Phi-3 Mini and Gemma 4 E4B, were adapted through QLoRA
-parameter-efficient fine-tuning on Apple Silicon hardware into four
-framework-isolated adapters, and embedded in a
-Build--Measure--Assess--Decide (BMAD) agentic correction loop that
-autonomously generates, statically inspects, scores, and iteratively
-revises each candidate script against a composite quality threshold.
+\begin{longtable}[]{@{}p{0.34\textwidth}p{0.60\textwidth}@{}}
+\toprule
+\endhead
+Organization & 3Pillar Global \\
+Location & Noida, Uttar Pradesh, India \\
+Duration & \textbf{[TO FILL: duration]} \\
+Date of Start & \textbf{[TO FILL]} \\
+Date of Submission & \textbf{[TO FILL]} \\
+Title of the Project & Agentic Artificial Intelligence (AI) System for
+Autonomous Test Script Generation and Optimization \\
+ID No.~/ Name of the student & 2024AA05546 / Saif Afzal \\
+Name and Designation of the Supervisor & Bilal Hasan Khan, Associate
+Director, 3Pillar Global, Noida \\
+Name and Designation of the Additional Examiner & \textbf{[TO FILL]} \\
+Name of the Faculty Mentor & \textbf{[TO FILL]} \\
+Key Words & Test Script Generation; Large Language Models; QLoRA
+Fine-Tuning; Agentic AI; Cypress; Playwright; Automated Software
+Testing \\
+Project Areas & AI-Assisted Software Engineering; Test Automation;
+Machine Learning \\
+\bottomrule
+\end{longtable}
 
-All eight resulting systems --- two baselines and two fine-tuned models,
-each evaluated on both frameworks --- were compared on the complete
-279-story held-out dataset using paired statistical testing, since every
-system was scored against the identical set of stories. The results show
-that fine-tuning produces a large and remarkably consistent improvement
-in ground-truth semantic alignment: the ranking Gemma 4 E4B
-\textgreater{} Phi-3 Mini \textgreater{} commercial baselines holds
-without a single exception across both frameworks and across all sixteen
-user-story categories, confirmed by ten paired Wilcoxon signed-rank
-tests each significant at p \textless{} $10^{-22}$ and an overall analysis of
-variance (F = 225.63, p = 1.01 $\times 10^{-253}$). This quality gain was found
-not to come at the cost of syntactic reliability: on the complete
-dataset, fine-tuned and baseline systems are statistically
-indistinguishable in syntax validity ($\chi^2$ = 0.00, p = 1.00). The
-strongest configuration, Gemma 4 E4B on Cypress, reached a 100\% BMAD
-acceptance rate across all 279 held-out stories.
+\textbf{Abstract:}
 
-Beyond the headline result, this dissertation makes two methodological
-contributions of independent interest: the identification and correction
-of two measurement artefacts during evaluation (an unstripped Markdown
-code fence that had suppressed a baseline model's apparent
-syntax-validity score, and an incomplete-sample effect that had
-understated fine-tuned syntax reliability), and a category-level
-analysis showing that residual gaps between fine-tuned and baseline
-systems in certain categories are attributable to a known limitation of
-lexical-overlap metrics such as ROUGE-L rather than to a genuine
-capability gap. The dissertation concludes that agentic,
-fine-tuning-based test-script generation is a practically viable and
-statistically well-supported approach, and identifies execution-based
-validation, human evaluation, and broader framework coverage as the most
-consequential directions for future work.
+Authoring and maintaining end-to-end test scripts remains a manual,
+skill-intensive bottleneck in software quality assurance. This
+dissertation investigates whether an open-weight language model,
+fine-tuned parameter-efficiently and embedded in an autonomous agentic
+correction loop, can translate natural-language user stories directly
+into syntactically valid and semantically faithful test scripts. A
+dataset of 279 Jira-style user stories, each paired with Cypress and
+Playwright reference scripts across sixteen functional categories, was
+constructed. Two commercial models (GPT-4o-mini, Claude Haiku) served as
+zero-shot baselines; two open-weight models (Phi-3 Mini, Gemma 4 E4B)
+were fine-tuned via QLoRA on Apple Silicon and embedded in a
+Build--Measure--Assess--Decide (BMAD) loop that generates, scores, and
+iteratively revises each script. Across 2,232 paired evaluations,
+fine-tuning produced a large, consistent improvement in semantic
+alignment: the ranking Gemma 4 E4B \textgreater{} Phi-3 Mini
+\textgreater{} baselines held across both frameworks and all sixteen
+categories (ten paired Wilcoxon tests, p \textless{} $10^{-22}$; ANOVA
+F = 225.63), with no loss of syntactic validity ($\chi^2$ = 0.00, p =
+1.00). The strongest configuration, Gemma 4 E4B on Cypress, achieved
+100\% BMAD acceptance across all 279 stories. The results establish
+agentic, fine-tuning-based test-script generation as a practically
+viable and statistically well-supported approach.
+
+\vspace{2em}
 
 \begin{longtable}[]{@{}ll@{}}
 \toprule
@@ -69,38 +100,6 @@ India \\
 \bottomrule
 \end{longtable}
 
-\chapter*{Acknowledgements}
-\addcontentsline{toc}{chapter}{Acknowledgements}
-
-I am sincerely grateful to my supervisor, Mr. Bilal Hasan Khan,
-Associate Director at 3Pillar Global, Noida, for his consistent
-guidance, technical scrutiny, and constructive feedback throughout every
-phase of this dissertation, from the initial dataset design through to
-the final statistical evaluation. His willingness to engage closely with
-both the research questions and the practical engineering challenges
-encountered along the way materially shaped the quality of this work.
-
-I thank 3Pillar Global for providing an environment supportive of
-applied research alongside professional responsibilities, and I
-acknowledge the Birla Institute of Technology and Science, Pilani, and
-the Work Integrated Learning Programme for the structure, milestones,
-and academic rigour that this dissertation was held to at each stage of
-submission.
-
-Finally, I am grateful to my family for their patience and support
-across the many hours, including several extended unattended computation
-runs, that this research required.
-
-% NOTE: the manual Contents / List of Figures / List of Tables sections
-% that were here (with placeholder page numbers, carried over from the
-% Word draft) have been removed. Put these three lines in main.tex
-% instead, right after \begin{document} and before \include{chapters/...}
-% -- LaTeX generates all three automatically and correctly from the
-% \chapter/\section/\subsection commands used throughout:
-%
-%   \tableofcontents
-%   \listoffigures
-%   \listoftables
-%
-% (End of removed block.)
-
+% NOTE: \tableofcontents, \listoffigures, and \listoftables are emitted
+% by main.tex immediately after this file -- LaTeX generates all three
+% automatically from the \chapter/\section/\subsection commands.
