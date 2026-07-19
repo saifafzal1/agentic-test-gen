@@ -63,18 +63,32 @@ def main():
     parser.add_argument("--max-tokens", type=int,   default=1024)
     parser.add_argument("--limit",      type=int,   default=None,
                         help="Process only first N records (for smoke testing)")
+    parser.add_argument("--data",       type=str,   default=str(DATASET),
+                        help="Dataset file: JSON array or JSONL "
+                             "(default data/dataset_final.json)")
+    parser.add_argument("--out-dir",    type=str,   default=str(RESULTS_DIR),
+                        help="Base results directory; per-combo outputs go to "
+                             "<out-dir>/<model>/<framework>/ "
+                             "(default results/agentic_loop)")
     args = parser.parse_args()
 
     # ── Load dataset ──────────────────────────────────────────────────────────
-    with open(DATASET) as f:
-        records = json.load(f)
+    # Records without a "{framework}_script" field (e.g. the grounded
+    # execution-validation stories, which have no reference script) get an
+    # empty exemplar; the scorer treats that as a neutral 0.5 ROUGE-L term.
+    data_path = Path(args.data)
+    with open(data_path) as f:
+        if data_path.suffix == ".jsonl":
+            records = [json.loads(line) for line in f if line.strip()]
+        else:
+            records = json.load(f)
     if args.limit:
         records = records[: args.limit]
 
     exemplars = _exemplar_index(records, args.framework)
 
     # ── Output directory ──────────────────────────────────────────────────────
-    out_dir = RESULTS_DIR / args.model / args.framework
+    out_dir = Path(args.out_dir) / args.model / args.framework
     out_dir.mkdir(parents=True, exist_ok=True)
 
     # ── Resume: skip already-completed records ────────────────────────────────
