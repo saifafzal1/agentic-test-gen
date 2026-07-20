@@ -1,0 +1,834 @@
+{
+  "study": "Tier-1 runtime-load validation of all dissertation scripts",
+  "method": "Playwright: `playwright test --list` collection; Cypress: emulated collection phase (suite bodies executed, test/hook callbacks registered) in Node",
+  "per_system": [
+    {
+      "system": "phi3",
+      "kind": "fine-tuned",
+      "framework": "cypress",
+      "loads_ok": 273,
+      "total": 279,
+      "load_valid_pct": 97.8
+    },
+    {
+      "system": "phi3",
+      "kind": "fine-tuned",
+      "framework": "playwright",
+      "loads_ok": 214,
+      "total": 279,
+      "load_valid_pct": 76.7
+    },
+    {
+      "system": "gemma4",
+      "kind": "fine-tuned",
+      "framework": "cypress",
+      "loads_ok": 279,
+      "total": 279,
+      "load_valid_pct": 100.0
+    },
+    {
+      "system": "gemma4",
+      "kind": "fine-tuned",
+      "framework": "playwright",
+      "loads_ok": 270,
+      "total": 279,
+      "load_valid_pct": 96.8
+    },
+    {
+      "system": "gpt4o-mini",
+      "kind": "baseline",
+      "framework": "cypress",
+      "loads_ok": 279,
+      "total": 279,
+      "load_valid_pct": 100.0
+    },
+    {
+      "system": "gpt4o-mini",
+      "kind": "baseline",
+      "framework": "playwright",
+      "loads_ok": 279,
+      "total": 279,
+      "load_valid_pct": 100.0
+    },
+    {
+      "system": "claude-haiku",
+      "kind": "baseline",
+      "framework": "cypress",
+      "loads_ok": 273,
+      "total": 279,
+      "load_valid_pct": 97.8
+    },
+    {
+      "system": "claude-haiku",
+      "kind": "baseline",
+      "framework": "playwright",
+      "loads_ok": 238,
+      "total": 279,
+      "load_valid_pct": 85.3
+    }
+  ],
+  "failures": [
+    {
+      "system": "phi3",
+      "framework": "cypress",
+      "tc_id": "TC_009",
+      "error": "Unterminated string constant. (62:11)"
+    },
+    {
+      "system": "phi3",
+      "framework": "cypress",
+      "tc_id": "TC_025",
+      "error": "Identifier 'currentDate' has already been declared. (11:49)"
+    },
+    {
+      "system": "phi3",
+      "framework": "cypress",
+      "tc_id": "TC_078",
+      "error": "Unterminated string constant. (74:68)"
+    },
+    {
+      "system": "phi3",
+      "framework": "cypress",
+      "tc_id": "TC_084",
+      "error": "Unexpected token (85:32)"
+    },
+    {
+      "system": "phi3",
+      "framework": "cypress",
+      "tc_id": "TC_090",
+      "error": "Unterminated string constant. (88:11)"
+    },
+    {
+      "system": "phi3",
+      "framework": "cypress",
+      "tc_id": "TC_224",
+      "error": "Unexpected token, expected \",\" (46:22)"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_004",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_004.spec.ts: Identifier 'loginButton' has already been declared. (31:10)\n\n  29 |\n  30 |     // Attempt to submit the form without filling in required"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_007",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_007.spec.ts: Unexpected token (101:31)\n\n   99 |\n  100 |     // Verify user is redirected to home page\n> 101 |     const homePage = page.getBy\n      |"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_009",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_009.spec.ts: Identifier 'lockMessage' has already been declared. (150:10)\n\n  148 |\n  149 |     // Verify account is no longer locked\n> 150 |     cons"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_011",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_011.spec.ts: Unexpected token (108:29)\n\n  106 |     await expect(strengthIcon).toBeVisible();\n  107 |\n> 108 |     // Verify success message\n      |  "
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_012",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_012.spec.ts: Identifier 'sessionInfo' has already been declared. (60:10)\n\n  58 |\n  59 |     // Verify session is still active\n> 60 |     const sessio"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_013",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_013.spec.ts: Unexpected token (117:7)\n\n  115 |     await page.route('**/api/session/invalidate', (route) => {\n  116 |       route.abort('failed');\n> "
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_027",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_027.spec.ts: Unexpected token (89:23)\n\n  87 |\n  88 |     // Verify auto-formatting works for ZIP codes with uppercase letters\n> 89 |     await zipInp"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_029",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_029.spec.ts: Identifier 'nameInput' has already been declared. (44:10)\n\n  42 |\n  43 |     // Verify form data is still present\n> 44 |     const nameI"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_031",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_031.spec.ts: Identifier 'sizeLimitTooltipMessage' has already been declared. (91:10)\n\n  89 |\n  90 |     // Verify the file input has a size limit too"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_037",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_037.spec.ts: Identifier 'nameInput' has already been declared. (78:10)\n\n  76 |\n  77 |     // Verify form fields are still visible\n> 78 |     const na"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_039",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_039.spec.ts: Identifier 'contactLink' has already been declared. (31:10)\n\n  29 |\n  30 |     // Navigate to Contact page\n> 31 |     const contactLink "
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_040",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_040.spec.ts: Identifier 'contactLink' has already been declared. (43:10)\n\n  41 |\n  42 |     // Verify contact link is visible and has correct href\n> "
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_042",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_042.spec.ts: Identifier 'tab2' has already been declared. (63:10)\n\n  61 |\n  62 |     // Verify tab 2 is not visible\n> 63 |     const tab2 = page.getB"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_045",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_045.spec.ts: Identifier 'navLinkCount' has already been declared. (47:10)\n\n  45 |\n  46 |     // Verify navigation is not duplicated\n> 47 |     const "
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_059",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_059.spec.ts: Identifier 'dataCount' has already been declared. (89:10)\n\n  87 |\n  88 |     // Verify data count remains the same\n> 89 |     const data"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_061",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_061.spec.ts: Identifier 'likeButton' has already been declared. (23:10)\n\n  21 |\n  22 |     // Get the like button using getByRole\n> 23 |     const li"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_062",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_062.spec.ts: Identifier 'nameInput' has already been declared. (84:10)\n\n  82 |     await expect(formContainer).toBeVisible();\n  83 |\n> 84 |     const"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_067",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_067.spec.ts: Identifier 'pollingStatus' has already been declared. (25:10)\n\n  23 |\n  24 |     // Verify polling is active\n> 25 |     const pollingSta"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_069",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_069.spec.ts: Identifier 'cachedData' has already been declared. (91:10)\n\n  89 |\n  90 |     // Verify cache is invalidated\n> 91 |     const cachedData"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_082",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_082.spec.ts: Identifier 'secondItem' has already been declared. (47:10)\n\n  45 |\n  46 |     // Drag second item to first position\n> 47 |     const sec"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_084",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_084.spec.ts: Unexpected token (88:41)\n\n  86 |\n  87 |     // Verify export button in dialog has correct data-testid\n> 88 |     await expect(exportButt"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_089",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_089.spec.ts: Unexpected token (96:21)\n\n  94 |\n  95 |     // Verify error page has a timestamp\n> 96 |     const timestamp =\n     |                    "
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_091",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_091.spec.ts: Identifier 'emailError' has already been declared. (35:10)\n\n  33 |\n  34 |     // Verify no error messages appear for valid fields\n> 35 |"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_103",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_103.spec.ts: Missing initializer in const declaration. (102:12)\n\n  100 |\n  101 |     // Verify retry button is visible\n> 102 |     const re\n      |  "
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_109",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_109.spec.ts: Identifier 'loginButton' has already been declared. (74:10)\n\n  72 |\n  73 |     // Click login button\n> 74 |     const loginButton = page"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_114",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_114.spec.ts: Identifier 'lazyComponentContent' has already been declared. (33:10)\n\n  31 |\n  32 |     // Verify content is now visible\n> 33 |     cons"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_118",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_118.spec.ts: Identifier 'cartCount' has already been declared. (74:10)\n\n  72 |\n  73 |     // Step 13: Verify order in cart\n> 74 |     const cartCount"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_120",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_120.spec.ts: Identifier 'errorMessage' has already been declared. (96:10)\n\n  94 |\n  95 |     // Verify error state is cleared\n> 96 |     const errorM"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_121",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_121.spec.ts: Identifier 'retryButton' has already been declared. (84:10)\n\n  82 |\n  83 |     // Verify error dialog is closed when retry is clicked\n> "
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_124",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_124.spec.ts: Unexpected token (105:29)\n\n  103 |     // Verify task is still listed after initial refresh\n  104 |     await page.reload();\n> 105 |    "
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_131",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_131.spec.ts: Identifier 'footerCloseButton' has already been declared. (70:10)\n\n  68 |\n  69 |     // Verify modal has a close button in footer\n> 70 |"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_147",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_147.spec.ts: Unexpected token (94:17)\n\n  92 |     // Click second column header to sort by age\n  93 |     const secondHeader = page.getByRole('column"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_148",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_148.spec.ts: Identifier 'resultCount' has already been declared. (46:10)\n\n  44 |     expect(filteredRowCount).toBeLessThanOrEqual(10);\n  45 |\n> 46 | "
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_155",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_155.spec.ts: Identifier 'emptyMessage' has already been declared. (68:10)\n\n  66 |\n  67 |     // Verify empty state message disappears\n> 68 |     cons"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_158",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_158.spec.ts: Identifier 'hoverState' has already been declared. (102:10)\n\n  100 |\n  101 |     // Verify hover state is not active\n> 102 |     const h"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_165",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_165.spec.ts: Identifier 'printButton' has already been declared. (68:10)\n\n  66 |\n  67 |     // Verify print button is present\n> 68 |     const printB"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_175",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_175.spec.ts: Identifier 'fileInput' has already been declared. (23:10)\n\n  21 |\n  22 |     // Locate and click the file using getByRole\n> 23 |     con"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_176",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_176.spec.ts: Unexpected token (109:73)\n\n  107 |\n  108 |     // Verify success message is not visible\n> 109 |     const successMessage = page.getByTex"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_177",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_177.spec.ts: Identifier 'uploadButton' has already been declared. (16:10)\n\n  14 |     await fileInput.setInputFiles('fixtures/sample-document.pdf');\n"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_182",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_182.spec.ts: Unexpected token (101:13)\n\n   99 |     await expect(fileInput).toBeVisible();\n  100 |\n> 101 |     // Verify\n      |              ^"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_186",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_186.spec.ts: Identifier 'resultCount' has already been declared. (38:10)\n\n  36 |\n  37 |     // Verify results are displayed\n> 38 |     const resultCo"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_187",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_187.spec.ts: Unexpected token (95:6)\n\n  93 |     await allCategories.check();\n  94 |\n> 95 |     //\n     |       ^"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_191",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_191.spec.ts: Identifier 'suggestionItems' has already been declared. (93:10)\n\n  91 |\n  92 |     // Verify no suggestions are displayed\n> 93 |     con"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_192",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_192.spec.ts: Unexpected token (96:22)\n\n  94 |     // Type an empty search term\n  95 |     const searchInput = page.getByPlaceholder('Search...');\n> 9"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_196",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_196.spec.ts: Identifier 'shareButton' has already been declared. (33:10)\n\n  31 |\n  32 |     // Verify share button is visible\n> 33 |     const shareB"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_199",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_199.spec.ts: Identifier 'secondFilterTag' has already been declared. (48:10)\n\n  46 |     // Verify filter tags are displayed in correct order\n  47 | "
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_203",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_203.spec.ts: Identifier 'filterDropdown' has already been declared. (84:10)\n\n  82 |\n  83 |     // Verify filter dropdown is closed\n> 84 |     const f"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_210",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_210.spec.ts: Identifier 'mainContent' has already been declared. (57:10)\n\n  55 |\n  56 |     // Verify main content region has updated content\n> 57 | "
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_215",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_215.spec.ts: Identifier 'section1NavButton' has already been declared. (123:10)\n\n  121 |\n  122 |     // Verify reading order using getByRole and getB"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_232",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_232.spec.ts: Identifier 'table1Stacked' has already been declared. (69:10)\n\n  67 |     // Verify responsive breakpoints are applied\n  68 |     await "
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_241",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_241.spec.ts: Identifier 'sidebar' has already been declared. (33:10)\n\n  31 |\n  32 |     // Verify sidebar disappears and bottom nav appears\n> 33 |   "
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_244",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_244.spec.ts: Unexpected token (96:35)\n\n  94 |     await expect(cvvInput).toBeVisible();\n  95 |\n> 96 |     // Fill in invalid card details\n     |     "
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_245",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_245.spec.ts: Identifier 'errorIcon' has already been declared. (98:10)\n\n   96 |\n   97 |     // Verify error icon is no longer displayed\n>  98 |     c"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_252",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_252.spec.ts: Unexpected token (92:40)\n\n  90 |     await zipCodeInput.fill('12345');\n  91 |\n> 92 |     // Verify payment button is disabled\n     |    "
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_253",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_253.spec.ts: Identifier 'successMessage' has already been declared. (75:10)\n\n  73 |\n  74 |     // Verify success message is now visible\n> 75 |     co"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_254",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_254.spec.ts: Unterminated string constant. (96:21)\n\n  94 |\n  95 |     // Intercept the API call to get cart total\n> 96 |     await page.route('**/api"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_256",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_256.spec.ts: Unterminated string constant. (110:21)\n\n  108 |\n  109 |     // Setup: intercept the API call to get order delivery date\n> 110 |     awai"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_257",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_257.spec.ts: Identifier 'quantityInput' has already been declared. (29:10)\n\n  27 |\n  28 |     // Increase quantity to 3\n> 29 |     const quantityInpu"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_260",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_260.spec.ts: Identifier 'closeButton' has already been declared. (42:10)\n\n  40 |\n  41 |     // Verify the toast has a close button\n> 42 |     const c"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_270",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_270.spec.ts: Identifier 'unreadNotification' has already been declared. (100:10)\n\n   98 |\n   99 |     // Verify unread notification is no longer visi"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_272",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_272.spec.ts: Identifier 'notificationCount' has already been declared. (72:10)\n\n  70 |     // Verify each notification is visible\n  71 |     const no"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_275",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_275.spec.ts: Identifier 'countText' has already been declared. (33:10)\n\n  31 |\n  32 |     // Verify notification count is now zero\n> 33 |     const c"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_277",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_277.spec.ts: Unexpected token (79:55)\n\n  77 |\n  78 |     // Verify the preview image has correct z-index\n> 79 |     const previewZIndex = await previ"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_287",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_287.spec.ts: Unexpected token (91:46)\n\n  89 |\n  90 |     // Verify logout button is disabled for Session 6\n> 91 |     await expect(session6LogoutButt"
+    },
+    {
+      "system": "phi3",
+      "framework": "playwright",
+      "tc_id": "TC_288",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_288.spec.ts: Unexpected keyword 'export'. (101:10)\n\n   99 |\n  100 |     // Verify export button is disabled in dialog\n> 101 |     const export\n      "
+    },
+    {
+      "system": "gemma4",
+      "framework": "playwright",
+      "tc_id": "TC_010",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_010.spec.ts: Identifier 'googleButton' has already been declared. (77:10)\n\n  75 |\n  76 |     // Verify Google login button is still available\n> 77 | "
+    },
+    {
+      "system": "gemma4",
+      "framework": "playwright",
+      "tc_id": "TC_094",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_094.spec.ts: Unexpected token (101:9)\n\n   99 |     // Verify edit form is disabled\n  100 |     const johnDoeNameInput = page.getByLabel('Name');\n> 10"
+    },
+    {
+      "system": "gemma4",
+      "framework": "playwright",
+      "tc_id": "TC_102",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_102.spec.ts: Identifier 'submitButton' has already been declared. (67:10)\n\n  65 |\n  66 |     // Verify form was submitted successfully\n> 67 |     con"
+    },
+    {
+      "system": "gemma4",
+      "framework": "playwright",
+      "tc_id": "TC_121",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_121.spec.ts: Legacy octal literals are not allowed in strict mode. (27:41)\n\n  25 |           status: 200,\n  26 |           contentType: 'application/"
+    },
+    {
+      "system": "gemma4",
+      "framework": "playwright",
+      "tc_id": "TC_138",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_138.spec.ts: Missing semicolon. (56:58)\n\n  54 |     // Verify modal has desktop styling (e.g., max-width)\n  55 |     const modalWrapper = page.locato"
+    },
+    {
+      "system": "gemma4",
+      "framework": "playwright",
+      "tc_id": "TC_144",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_144.spec.ts: Identifier 'tab3' has already been declared. (84:10)\n\n  82 |\n  83 |     // Click on the third tab\n> 84 |     const tab3 = page.getByRole"
+    },
+    {
+      "system": "gemma4",
+      "framework": "playwright",
+      "tc_id": "TC_156",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_156.spec.ts: Unexpected token, expected \",\" (29:56)\n\n  27 |     const lastRowNumber = page.locator('[data-testid=\"row-number-cell\"]').last();\n  28 | "
+    },
+    {
+      "system": "gemma4",
+      "framework": "playwright",
+      "tc_id": "TC_240",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_240.spec.ts: Missing semicolon. (99:56)\n\n   97 |     const secondField = fieldElements.nth(1);\n   98 |     \n>  99 |     const firstDisplay = await fi"
+    },
+    {
+      "system": "gemma4",
+      "framework": "playwright",
+      "tc_id": "TC_275",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_275.spec.ts: Identifier 'count' has already been declared. (21:10)\n\n  19 |     // Read all notifications\n  20 |     const notificationItems = page.ge"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "cypress",
+      "tc_id": "TC_036",
+      "error": "Unterminated string constant. (139:47)"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "cypress",
+      "tc_id": "TC_085",
+      "error": "Unexpected token (153:57)"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "cypress",
+      "tc_id": "TC_088",
+      "error": "Unterminated string constant. (160:54)"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "cypress",
+      "tc_id": "TC_118",
+      "error": "Unterminated string constant. (125:11)"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "cypress",
+      "tc_id": "TC_244",
+      "error": "Unexpected token (219:55)"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "cypress",
+      "tc_id": "TC_252",
+      "error": "Unexpected token (148:48)"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_007",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_007.spec.ts: Unexpected token (189:25)\n\n  187 |\n  188 |     // Wait for redirect to login page\n> 189 |     await page.waitForURL\n      |             "
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_012",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_012.spec.ts: Unterminated regular expression. (200:41)\n\n  198 |\n  199 |     // Should see error message or be redirected to login\n> 200 |     const e"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_016",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_016.spec.ts: Unexpected token (197:42)\n\n  195 |     }\n  196 |\n> 197 |     // Verify CAPTCHA container has proper\n      |                             "
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_022",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_022.spec.ts: Unexpected token (211:27)\n\n  209 |     await discountInput.blur();\n  210 |     \n> 211 |     // Verify each field is\n      |             "
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_037",
+      "error": "Error: Cannot find module 'nodemailer'\nRequire stack:\n- /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_037.spec.ts\n- /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/node_modules/pla"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_049",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_049.spec.ts: Unexpected token (193:47)\n\n  191 |     const productsAfterBack = page.getByTestId('product-item');\n  192 |     const countAfterBack = aw"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_061",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_061.spec.ts: Unexpected token (174:65)\n\n  172 |     const secondCountFinal = await secondPost.getByTestId('like-count').textContent();\n  173 |     \n>"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_069",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_069.spec.ts: Unterminated string constant. (30:20)\n\n  28 |\n  29 |     // Navigate to page that makes API call\n> 30 |     await page.goto('data:text/h"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_079",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_079.spec.ts: Unexpected token (193:26)\n\n  191 |     // Click on the record\n  192 |     await firstRecord.click();\n> 193 |     await page.waitForLoad\n"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_085",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_085.spec.ts: Unexpected token (189:30)\n\n  187 |\n  188 |     // Wait for dialog\n> 189 |     const importDialog = page.\n      |                        "
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_088",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_088.spec.ts: Unexpected token, expected \")\" (168:57)\n\n  166 |     // Verify suggestions are filtered (should contain 'test' in their text)\n  167 |   "
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_094",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_094.spec.ts: Unexpected token (179:10)\n\n  177 |     await page.getByRole('button', { name: /save|create/i }).click();\n  178 |     \n> 179 |     // Get"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_106",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_106.spec.ts: Unexpected token (78:67)\n\n  76 |     await page.locator('#lastName').fill('Doe');\n  77 |     await page.locator('#email').fill('john@exa"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_112",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_112.spec.ts: Unexpected token (196:25)\n\n  194 |           const uploadStatus = document.getElementById('upload-status');\n  195 |           if (upload"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_115",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_115.spec.ts: Unterminated string constant. (16:20)\n\n  14 |\n  15 |     // Navigate to the search page\n> 16 |     await page.goto('data:text/html,<html"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_120",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_120.spec.ts: Unexpected token (228:5)\n\n  226 |     const status = page.locator('#status');\n  227 |     await expect(status).toHaveAttribute('data-con"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_126",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_126.spec.ts: Unexpected token (206:36)\n\n  204 |     const loadButton = page.getByRole('button', { name: 'Load Page 1' });\n  205 |     \n> 206 |     //"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_132",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_132.spec.ts: Unexpected token (244:29)\n\n  242 |     await confirmButton.click();\n  243 |     \n> 244 |     // Verify modal is hidden\n      |          "
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_133",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_133.spec.ts: Unterminated template. (6:27)\n\n  4 |   test.beforeEach(async ({ page }) => {\n  5 |     await page.goto('about:blank');\n> 6 |     await p"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_134",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_134.spec.ts: Unexpected token (222:9)\n\n  220 |\n  221 |     // Click Cancel button\n> 222 |     await\n      |          ^"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_135",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_135.spec.ts: Unexpected token (238:6)\n\n  236 |     await expect(drawer).toHaveClass(/open/);\n  237 |     \n> 238 |     //\n      |       ^"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_136",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_136.spec.ts: Unexpected token (214:54)\n\n  212 |     \n  213 |     // Verify modal body scrolled\n> 214 |     const scrolledPosition = await modalBody.e"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_138",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_138.spec.ts: Unexpected token (252:39)\n\n  250 |     const boundingBox = await modalContent.boundingBox();\n  251 |     \n> 252 |     expect(boundingBox"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_144",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_144.spec.ts: Unexpected token (227:50)\n\n  225 |     \n  226 |     // Verify Advanced tab is now active\n> 227 |     const advancedTab = page.getByRole("
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_160",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_160.spec.ts: Unterminated template. (176:27)\n\n  174 |   test('should maintain summary row visibility when scrolling', async ({ page }) => {\n  175 |  "
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_162",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_162.spec.ts: Unexpected token, expected \",\" (110:19)\n\n  108 |             const timestamp = new Date(Date.now() - Math.random() * 1000000000).toISOSt"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_166",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_166.spec.ts: Unexpected token, expected \",\" (97:48)\n\n   95 |               const checkedCount = document.querySelectorAll('.row-checkbox:checked').le"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_169",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_169.spec.ts: Unexpected token (170:69)\n\n  168 |       const uploadBtn = document.getElementById('uploadBtn') as HTMLButtonElement;\n  169 |       cons"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_175",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_175.spec.ts: Unexpected token, expected \",\" (204:10)\n\n  202 |     \n  203 |     await fileInput.setInputFiles({\n> 204 |       name\n      |           ^"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_184",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_184.spec.ts: Unexpected token, expected \",\" (104:19)\n\n  102 |\n  103 |             filesList.innerHTML = uploadedFiles.map((file, index) => `\n> 104 | "
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_196",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_196.spec.ts: Unexpected token (175:50)\n\n  173 |     expect(complexUrl).toContain('category=sports');\n  174 |     expect(complexUrl).toContain('brand="
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_204",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_204.spec.ts: Unterminated string constant. (133:40)\n\n  131 |\n  132 |     // Verify image with aria-describedby\n> 133 |     const describedImage = pag"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_207",
+      "error": "Error: Cannot find module 'axe-playwright'\nRequire stack:\n- /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_207.spec.ts\n- /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/node_modules"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_208",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_208.spec.ts: Unexpected token (177:10)\n\n  175 |     const searchInput = page.locator('input[type=\"search\"]');\n  176 |     const searchAriaLabel = awa"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_211",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_211.spec.ts: Unexpected token, expected \",\" (186:14)\n\n  184 |     expect(liveRegionHidden).toBeNull();\n  185 |     expect(alertRegionHidden).toBeNull"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_237",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_237.spec.ts: Unexpected token (198:35)\n\n  196 |     await page.touchscreen.tap(centerX, centerY);\n  197 |\n> 198 |     await page.waitForTimeout(300);"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_244",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_244.spec.ts: Unexpected token (184:17)\n\n  182 |\n  183 |     // Verify updated value\n> 184 |     await expect(\n      |                  ^"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_247",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_247.spec.ts: Unexpected token (171:47)\n\n  169 |     // Get first discounted total\n  170 |     const firstDiscountedTotal = page.getByText(/total.*\\$\\"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_268",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_268.spec.ts: Unexpected token (178:40)\n\n  176 |\n  177 |     // Verify filter is still applied\n> 178 |     const notificationItems = page.getBy\n      "
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_271",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_271.spec.ts: Unexpected token (221:27)\n\n  219 |     // Verify snackbar is no longer visible\n  220 |     const isVisible = await snackbar.isVisible();"
+    },
+    {
+      "system": "claude-haiku",
+      "framework": "playwright",
+      "tc_id": "TC_286",
+      "error": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_286.spec.ts: Unterminated regular expression. (198:44)\n\n  196 |\n  197 |     // Verify connection status is still shown\n> 198 |     const connectedSta"
+    }
+  ]
+}
