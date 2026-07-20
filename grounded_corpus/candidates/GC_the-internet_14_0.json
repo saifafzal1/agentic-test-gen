@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to receive feedback when I press keys in the input field so that I can confirm my input actions are recognized. Acceptance Criteria: When I press a key, the corresponding key name should be displayed in the result area identified by the selector 'p' with id 'result'. If I press a key that is not mapped, no output should be displayed.",
+  "complexity": "simple",
+  "cypress_script": "describe('Keyboard Input Feedback', () => {\n  it('should display the pressed key in the result area', () => {\n    cy.visit('https://the-internet.herokuapp.com/key_presses');\n    cy.get('#target').type('A');\n    cy.get('#result').should('be.visible');\n  });\n\n  it('should not change the URL when pressing an unsupported key', () => {\n    cy.visit('https://the-internet.herokuapp.com/key_presses');\n    cy.get('#target').type('{ctrl}');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/key_presses');\n    cy.get('#result').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Keyboard Input Feedback', () => {\n  test('should display the pressed key in the result area', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/key_presses');\n    await page.fill('#target', 'A');\n    const result = await page.locator('#result');\n    await expect(result).toBeVisible();\n  });\n\n  test('should not change the URL when pressing an unsupported key', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/key_presses');\n    await page.fill('#target', '');\n    await page.keyboard.press('Control');\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/key_presses');\n    const result = await page.locator('#result');\n    await expect(result).toBeVisible();\n  });\n});",
+  "id": "GC_the-internet_14_0",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/key_presses",
+  "category": "error_states",
+  "latency_s": 6.8
+}

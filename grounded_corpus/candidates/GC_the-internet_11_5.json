@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to verify that the images on the 'Broken Images' page are accessible and their integrity is intact, so that I can ensure the resources are properly linked and displayed. Acceptance Criteria: \n1. The page title should be 'The Internet'. \n2. The heading should be 'Broken Images'. \n3. The 'flash-messages' div with id 'flash-messages' should be present. \n4. The 'content' div with id 'content' should be visible and contain images with specified dimensions.",
+  "complexity": "simple",
+  "cypress_script": "describe('Broken Images Page Accessibility', () => {\n  it('should display the page title and heading', () => {\n    cy.visit('https://the-internet.herokuapp.com/broken_images');\n    cy.title().should('eq', 'The Internet');\n    cy.get('h1').should('have.text', 'Broken Images');\n  });\n\n  it('should not display any valid images', () => {\n    cy.visit('https://the-internet.herokuapp.com/broken_images');\n    cy.get('#content').within(() => {\n      cy.get('img').should('have.length', 2);\n      cy.get('img').each(($img) => {\n        cy.wrap($img).should('have.attr', 'src').and('match', /broken-image/);\n      });\n    });\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\ntest.describe('Broken Images Page Accessibility', () => {\n  test('should display the page title and heading', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/broken_images');\n    expect(await page.title()).toBe('The Internet');\n    const heading = await page.locator('h1');\n    await expect(heading).toHaveText('Broken Images');\n  });\n\n  test('should not display any valid images', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/broken_images');\n    const images = await page.locator('#content img');\n    expect(await images.count()).toBe(2);\n    for (let i = 0; i < await images.count(); i++) {\n      const src = await images.nth(i).getAttribute('src');\n      expect(src).toMatch(/broken-image/);\n    }\n  });\n});",
+  "id": "GC_the-internet_11_5",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/broken_images",
+  "category": "accessibility",
+  "latency_s": 5.8
+}

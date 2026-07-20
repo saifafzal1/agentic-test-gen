@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to add and remove elements on the 'Add/Remove Elements' page so that I can dynamically manage my list of elements. Acceptance Criteria: 1. When I click the 'Add Element' button, a new element is added to the page. 2. The URL remains the same after adding an element. 3. I can remove an added element, and it should disappear from the page. 4. The 'flash-messages' div (id: 'flash-messages') should be present at all times.",
+  "complexity": "simple",
+  "cypress_script": "describe('Add/Remove Elements Tests', () => {\n  it('should add an element when the Add Element button is clicked', () => {\n    cy.visit('https://the-internet.herokuapp.com/add_remove_elements/');\n    cy.get('button').contains('Add Element').click();\n    cy.get('#elements').children().should('have.length', 1);\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/add_remove_elements/');\n  });\n\n  it('should not add multiple elements when the Add Element button is not clicked', () => {\n    cy.visit('https://the-internet.herokuapp.com/add_remove_elements/');\n    cy.get('#elements').children().should('have.length', 0);\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/add_remove_elements/');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Add/Remove Elements Tests', () => {\n  test('should add an element when the Add Element button is clicked', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/add_remove_elements/');\n    await page.click('button:has-text(\"Add Element\")');\n    const elementsCount = await page.locator('#elements').count();\n    expect(elementsCount).toBe(1);\n    expect(page.url()).toBe('https://the-internet.herokuapp.com/add_remove_elements/');\n  });\n\n  test('should not add multiple elements when the Add Element button is not clicked', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/add_remove_elements/');\n    const elementsCount = await page.locator('#elements').count();\n    expect(elementsCount).toBe(0);\n    expect(page.url()).toBe('https://the-internet.herokuapp.com/add_remove_elements/');\n  });\n});",
+  "id": "GC_the-internet_03_3",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/add_remove_elements/",
+  "category": "crud_operations",
+  "latency_s": 8.6
+}

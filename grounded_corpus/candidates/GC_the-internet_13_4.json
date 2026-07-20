@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to view profiles of users by hovering over their avatars so that I can access their profiles easily. Acceptance Criteria: \n1. When a user hovers over an avatar, the 'View profile' link is displayed. \n2. The URLs for the profiles are correct: \n   - User 1: '/users/1' \n   - User 2: '/users/2' \n   - User 3: '/users/3'",
+  "complexity": "simple",
+  "cypress_script": "describe('User Avatars Profile Links', () => {\n  it('should display the profile link on hover for User 1', () => {\n    cy.visit('https://the-internet.herokuapp.com/hovers');\n    cy.get('.figure').first().trigger('mouseover');\n    cy.get('a').contains('View profile').should('be.visible');\n    cy.get('a').contains('View profile').click();\n    cy.url().should('include', '/users/1');\n  });\n\n  it('should not navigate to a profile if the avatar is not hovered', () => {\n    cy.visit('https://the-internet.herokuapp.com/hovers');\n    cy.get('.figure').first().should('be.visible');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/hovers');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Avatars Profile Links', () => {\n  test('should display the profile link on hover for User 1', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/hovers');\n    const user1Avatar = page.locator('.figure').nth(0);\n    await user1Avatar.hover();\n    const profileLink = page.locator('a').filter({ hasText: 'View profile' });\n    await expect(profileLink).toBeVisible();\n    await profileLink.click();\n    await expect(page).toHaveURL(/.*\\/users\\/1/);\n  });\n\n  test('should not navigate to a profile if the avatar is not hovered', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/hovers');\n    const user1Avatar = page.locator('.figure').nth(0);\n    await expect(user1Avatar).toBeVisible();\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/hovers');\n  });\n});",
+  "id": "GC_the-internet_13_4",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/hovers",
+  "category": "user_profile",
+  "latency_s": 6.9
+}

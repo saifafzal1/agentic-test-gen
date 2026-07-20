@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to verify the accessibility and integrity of images on the Broken Images page so that I can ensure that images are displayed correctly and are accessible to all users. Acceptance Criteria: 1. The page has a title 'The Internet'. 2. The heading 'Broken Images' is visible. 3. The page includes image elements, and broken images should not be displayed. 4. The footer 'Powered by Elemental Selenium' is visible.",
+  "complexity": "simple",
+  "cypress_script": "describe('Image Accessibility and Integrity', () => {\n  it('should display the Broken Images heading and footer', () => {\n    cy.visit('https://the-internet.herokuapp.com/broken_images');\n    cy.get('h1').should('have.text', 'Broken Images');\n    cy.get('#page-footer').should('be.visible');\n  });\n  it('should not display broken images', () => {\n    cy.visit('https://the-internet.herokuapp.com/broken_images');\n    cy.get('#content').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\n test.describe('Image Accessibility and Integrity', () => {\n   test('should display the Broken Images heading and footer', async ({ page }) => {\n     await page.goto('https://the-internet.herokuapp.com/broken_images');\n     const heading = await page.locator('h1');\n     await expect(heading).toHaveText('Broken Images');\n     const footer = await page.locator('#page-footer');\n     await expect(footer).toBeVisible();\n   });\n   test('should not display broken images', async ({ page }) => {\n     await page.goto('https://the-internet.herokuapp.com/broken_images');\n     const content = await page.locator('#content');\n     await expect(content).toBeVisible();\n   });\n });",
+  "id": "GC_the-internet_11_2",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/broken_images",
+  "category": "accessibility",
+  "latency_s": 5.2
+}

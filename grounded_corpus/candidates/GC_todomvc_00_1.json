@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to be able to add, complete, and delete todos in the TodoMVC application so that I can manage my tasks efficiently. Acceptance Criteria: 1. The user can add a new todo by typing in the input field with `data-testid: text-input` and pressing Enter. 2. The user can complete a todo by clicking the checkbox with `id: toggle-all`. 3. The user can delete completed todos by clicking the button with `class: clear-completed`. 4. The todo list updates correctly after each action, and the URL remains the same when adding an empty todo.",
+  "complexity": "simple",
+  "cypress_script": "describe('TodoMVC CRUD Operations', () => {\n  it('should add a new todo', () => {\n    cy.visit('https://todomvc.com/examples/react/dist/');\n    cy.get('[data-testid=text-input]').type('New Todo{enter}');\n    cy.get('[data-testid=todo-list]').children().should('have.length', 1);\n  });\n  it('should not add an empty todo', () => {\n    cy.visit('https://todomvc.com/examples/react/dist/');\n    cy.get('[data-testid=text-input]').type('{enter}');\n    cy.url().should('eq', 'https://todomvc.com/examples/react/dist/');\n    cy.get('[data-testid=todo-list]').children().should('have.length', 0);\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('TodoMVC CRUD Operations', () => {\n  test('should add a new todo', async ({ page }) => {\n    await page.goto('https://todomvc.com/examples/react/dist/');\n    await page.fill('[data-testid=text-input]', 'New Todo');\n    await page.press('[data-testid=text-input]', 'Enter');\n    const todos = await page.locator('[data-testid=todo-list]').locator('li');\n    expect(await todos.count()).toBe(1);\n  });\n  test('should not add an empty todo', async ({ page }) => {\n    await page.goto('https://todomvc.com/examples/react/dist/');\n    await page.press('[data-testid=text-input]', 'Enter');\n    expect(page.url()).toBe('https://todomvc.com/examples/react/dist/');\n    const todos = await page.locator('[data-testid=todo-list]').locator('li');\n    expect(await todos.count()).toBe(0);\n  });\n});",
+  "id": "GC_todomvc_00_1",
+  "app": "todomvc",
+  "base_url": "https://todomvc.com",
+  "page": "/examples/react/dist/",
+  "category": "crud_operations",
+  "latency_s": 9.0
+}

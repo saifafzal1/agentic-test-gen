@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to add, complete, and delete tasks in my todo list so that I can manage my tasks effectively. Acceptance Criteria: \n1. I can add a new todo by typing in the input field with aria-label 'New Todo Input' and pressing enter. \n2. I can complete a todo by clicking the toggle-all checkbox with data-testid 'toggle-all'. \n3. I can delete completed todos by clicking the button with class 'clear-completed'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Todo List CRUD Operations', () => {\n  it('should add a new todo item successfully', () => {\n    cy.visit('https://todomvc.com/examples/react/dist/');\n    cy.get('[aria-label=\"New Todo Input\"]').type('New Todo{enter}');\n    cy.get('[data-testid=\"todo-list\"]').children().should('have.length', 1);\n  });\n\n  it('should not change the URL when trying to add an empty todo', () => {\n    cy.visit('https://todomvc.com/examples/react/dist/');\n    cy.get('[aria-label=\"New Todo Input\"]').type('{enter}');\n    cy.url().should('eq', 'https://todomvc.com/examples/react/dist/');\n    cy.get('[data-testid=\"todo-list\"]').children().should('have.length', 0);\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Todo List CRUD Operations', () => {\n  test('should add a new todo item successfully', async ({ page }) => {\n    await page.goto('https://todomvc.com/examples/react/dist/');\n    await page.fill('[aria-label=\"New Todo Input\"]', 'New Todo');\n    await page.keyboard.press('Enter');\n    const todoList = await page.locator('[data-testid=\"todo-list\"]').locator('li');\n    await expect(todoList).toHaveCount(1);\n  });\n\n  test('should not change the URL when trying to add an empty todo', async ({ page }) => {\n    await page.goto('https://todomvc.com/examples/react/dist/');\n    await page.fill('[aria-label=\"New Todo Input\"]', '');\n    await page.keyboard.press('Enter');\n    await expect(page).toHaveURL('https://todomvc.com/examples/react/dist/');\n    const todoList = await page.locator('[data-testid=\"todo-list\"]').locator('li');\n    await expect(todoList).toHaveCount(0);\n  });\n});",
+  "id": "GC_todomvc_00_2",
+  "app": "todomvc",
+  "base_url": "https://todomvc.com",
+  "page": "/examples/react/dist/",
+  "category": "crud_operations",
+  "latency_s": 8.1
+}

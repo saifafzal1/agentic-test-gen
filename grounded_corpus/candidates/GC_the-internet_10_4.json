@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to input a numeric value in the numeric input field on the Inputs page so that I can validate that the input accepts numbers. The acceptance criteria are as follows: \n1. The numeric input field should be present in the DOM and be functional. \n2. When a valid number is entered, the input should allow the entry. \n3. When an invalid (non-numeric) value is entered, the input should not change the current URL.",
+  "complexity": "simple",
+  "cypress_script": "describe('Numeric Input Field Tests', () => {\n  it('should accept a valid number', () => {\n    cy.visit('https://the-internet.herokuapp.com/inputs');\n    cy.get('input[type=\"number\"]').type('123').should('have.value', '123');\n  });\n  it('should not change URL when invalid input is provided', () => {\n    cy.visit('https://the-internet.herokuapp.com/inputs');\n    cy.get('input[type=\"number\"]').type('abc');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/inputs');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\n test.describe('Numeric Input Field Tests', () => {\n   test('should accept a valid number', async ({ page }) => {\n     await page.goto('https://the-internet.herokuapp.com/inputs');\n     await page.fill('input[type=\"number\"]', '123');\n     const value = await page.inputValue('input[type=\"number\"]');\n     expect(value).toBe('123');\n   });\n   test('should not change URL when invalid input is provided', async ({ page }) => {\n     await page.goto('https://the-internet.herokuapp.com/inputs');\n     await page.fill('input[type=\"number\"]', 'abc');\n     expect(page.url()).toBe('https://the-internet.herokuapp.com/inputs');\n   });\n });",
+  "id": "GC_the-internet_10_4",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/inputs",
+  "category": "form_validation",
+  "latency_s": 4.7
+}

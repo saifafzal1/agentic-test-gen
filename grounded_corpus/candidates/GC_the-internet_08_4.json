@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to receive notification messages after performing specific actions so that I can be informed about the success or failure of those actions.",
+  "complexity": "simple",
+  "cypress_script": "describe('Notification Messages', () => {\n  it('should display a notification message when the link is clicked', () => {\n    cy.visit('https://the-internet.herokuapp.com/notification_message_rendered');\n    cy.get('a[href=\"/notification_message\"]').click();\n    cy.url().should('include', '/notification_message');\n    cy.get('#flash-messages').should('be.visible');\n  });\n\n  it('should not change the URL when the page is loaded without interaction', () => {\n    cy.visit('https://the-internet.herokuapp.com/notification_message_rendered');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/notification_message_rendered');\n    cy.get('#flash-messages').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Messages', () => {\n  test('should display a notification message when the link is clicked', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/notification_message_rendered');\n    await page.click('a[href=\"/notification_message\"]');\n    await expect(page).toHaveURL(/.*notification_message/);\n    await expect(page.locator('#flash-messages')).toBeVisible();\n  });\n\n  test('should not change the URL when the page is loaded without interaction', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/notification_message_rendered');\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/notification_message_rendered');\n    await expect(page.locator('#flash-messages')).toBeVisible();\n  });\n});",
+  "id": "GC_the-internet_08_4",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/notification_message_rendered",
+  "category": "notifications",
+  "latency_s": 6.6
+}

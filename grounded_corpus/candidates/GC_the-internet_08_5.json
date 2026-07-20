@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to see a notification message when I click the link so that I can be informed of actions taken. Acceptance criteria: 1. When I navigate to 'https://the-internet.herokuapp.com/notification_message_rendered', I should see the heading 'Notification Message'. 2. When I click the link 'Click here', I should be redirected to the same page and see the notification message visible in the element with id 'flash-messages'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Notification Messages', () => {\n  it('should display a notification message when clicking the link', () => {\n    cy.visit('https://the-internet.herokuapp.com/notification_message_rendered');\n    cy.get('a').contains('Click here').click();\n    cy.url().should('include', '/notification_message_rendered');\n    cy.get('#flash-messages').should('be.visible');\n  });\n\n  it('should not change the URL when the page is visited directly', () => {\n    cy.visit('https://the-internet.herokuapp.com/notification_message_rendered');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/notification_message_rendered');\n    cy.get('#flash-messages').should('not.exist');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Messages', () => {\n  test('should display a notification message when clicking the link', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/notification_message_rendered');\n    await page.click('a:has-text(\"Click here\")');\n    await expect(page).toHaveURL(/notification_message_rendered/);\n    await expect(page.locator('#flash-messages')).toBeVisible();\n  });\n\n  test('should not change the URL when the page is visited directly', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/notification_message_rendered');\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/notification_message_rendered');\n    await expect(page.locator('#flash-messages')).not.toBeVisible();\n  });\n});",
+  "id": "GC_the-internet_08_5",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/notification_message_rendered",
+  "category": "notifications",
+  "latency_s": 7.7
+}

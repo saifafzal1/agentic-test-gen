@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to add, complete, and delete todos in the TodoMVC application so that I can manage my tasks efficiently. Acceptance Criteria: \n1. I can add a new todo by typing in the input field with placeholder 'What needs to be done?' (selector: 'input[data-testid=\"text-input\"]') and pressing Enter. \n2. I can complete a todo by using the toggle all checkbox (selector: 'input[data-testid=\"toggle-all\"]'). \n3. I can delete a completed todo by clicking the 'Clear completed' button (selector: 'button.clear-completed').",
+  "complexity": "simple",
+  "cypress_script": "describe('Todo List Functionality', () => {\n  it('should add a new todo item', () => {\n    cy.visit('https://todomvc.com/examples/react/dist/');\n    cy.get('input[data-testid=\"text-input\"]').type('New Todo Item{enter}');\n    cy.get('ul[data-testid=\"todo-list\"]').should('contain', 'New Todo Item');\n  });\n\n  it('should not add a todo when the input is empty', () => {\n    cy.visit('https://todomvc.com/examples/react/dist/');\n    cy.get('input[data-testid=\"text-input\"]').clear().type('{enter}');\n    cy.url().should('eq', 'https://todomvc.com/examples/react/dist/');\n    cy.get('ul[data-testid=\"todo-list\"]').should('not.contain', '');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Todo List Functionality', () => {\n  test('should add a new todo item', async ({ page }) => {\n    await page.goto('https://todomvc.com/examples/react/dist/');\n    await page.fill('input[data-testid=\"text-input\"]', 'New Todo Item');\n    await page.keyboard.press('Enter');\n    await expect(page.locator('ul[data-testid=\"todo-list\"]').locator('text=New Todo Item')).toBeVisible();\n  });\n\n  test('should not add a todo when the input is empty', async ({ page }) => {\n    await page.goto('https://todomvc.com/examples/react/dist/');\n    await page.fill('input[data-testid=\"text-input\"]', '');\n    await page.keyboard.press('Enter');\n    await expect(page).toHaveURL('https://todomvc.com/examples/react/dist/');\n    await expect(page.locator('ul[data-testid=\"todo-list\"]').locator('text=')).not.toBeVisible();\n  });\n});",
+  "id": "GC_todomvc_00_4",
+  "app": "todomvc",
+  "base_url": "https://todomvc.com",
+  "page": "/examples/react/dist/",
+  "category": "crud_operations",
+  "latency_s": 9.5
+}

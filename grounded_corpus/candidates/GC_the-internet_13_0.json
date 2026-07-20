@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to hover over user avatars to reveal their profile links so that I can view their profiles. Acceptance Criteria: When I hover over the first user avatar, I should see a link with text 'View profile' that navigates to '/users/1'. The same behavior should occur for the second and third user avatars, with links to '/users/2' and '/users/3' respectively.",
+  "complexity": "simple",
+  "cypress_script": "describe('User Avatars Profile Links', () => {\n  it('should reveal profile link on hover for the first user', () => {\n    cy.visit('https://the-internet.herokuapp.com/hovers');\n    cy.get('div.figure').first().trigger('mouseover');\n    cy.contains('View profile').should('be.visible');\n    cy.get('div.figure').first().find('a').should('have.attr', 'href', '/users/1');\n  });\n\n  it('should not navigate away when hovering', () => {\n    cy.visit('https://the-internet.herokuapp.com/hovers');\n    cy.get('div.figure').first().trigger('mouseover');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/hovers');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Avatars Profile Links', () => {\n  test('should reveal profile link on hover for the first user', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/hovers');\n    await page.hover('div.figure');\n    await expect(page.locator('text=View profile')).toBeVisible();\n    const link = await page.locator('div.figure a').first().getAttribute('href');\n    expect(link).toBe('/users/1');\n  });\n\n  test('should not navigate away when hovering', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/hovers');\n    await page.hover('div.figure');\n    expect(page.url()).toBe('https://the-internet.herokuapp.com/hovers');\n  });\n});",
+  "id": "GC_the-internet_13_0",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/hovers",
+  "category": "user_profile",
+  "latency_s": 6.0
+}

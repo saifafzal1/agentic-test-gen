@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to click on a link that opens a new window so that I can navigate to a different page without losing my current context. Acceptance criteria: When I click the link with text 'Click Here', a new window should open, and the URL should change to 'http://elementalselenium.com/'. The original page should still be visible with the heading 'Opening a new window'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Opening links in new windows', () => {\n  it('should open a new window when clicking on Click Here', () => {\n    cy.visit('https://the-internet.herokuapp.com/windows');\n    cy.contains('Click Here').click();\n    cy.url().should('eq', 'http://elementalselenium.com/');\n  });\n\n  it('should not navigate away from the original page when Click Here is clicked', () => {\n    cy.visit('https://the-internet.herokuapp.com/windows');\n    cy.contains('Click Here').click();\n    cy.url().should('eq', 'http://elementalselenium.com/');\n    cy.get('#content').should('be.visible');\n    cy.contains('Opening a new window').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Opening links in new windows', () => {\n  test('should open a new window when clicking on Click Here', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/windows');\n    await page.click('text=Click Here');\n    await page.waitForURL('http://elementalselenium.com/');\n  });\n\n  test('should not navigate away from the original page when Click Here is clicked', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/windows');\n    await page.click('text=Click Here');\n    await page.waitForURL('http://elementalselenium.com/');\n    await expect(page.locator('#content')).toBeVisible();\n    await expect(page.locator('text=Opening a new window')).toBeVisible();\n  });\n});",
+  "id": "GC_the-internet_12_3",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/windows",
+  "category": "navigation",
+  "latency_s": 7.7
+}

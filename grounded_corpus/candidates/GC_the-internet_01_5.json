@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to be able to check and uncheck checkboxes on the checkbox form so that I can make selections as needed.\nAcceptance Criteria:\n- The page must have checkboxes that can be interacted with.\n- Checkbox 1 and Checkbox 2 must be visible on the page.\n- The URL must remain the same after interacting with the checkboxes.",
+  "complexity": "simple",
+  "cypress_script": "describe('Checkbox Form Functionality', () => {\n  it('should allow the user to check and uncheck checkboxes', () => {\n    cy.visit('https://the-internet.herokuapp.com/checkboxes');\n    cy.get('input[type=\"checkbox\"]').first().check();\n    cy.get('input[type=\"checkbox\"]').first().should('be.checked');\n    cy.get('input[type=\"checkbox\"]').first().uncheck();\n    cy.get('input[type=\"checkbox\"]').first().should('not.be.checked');\n  });\n\n  it('should not change the URL when no checkboxes are checked', () => {\n    cy.visit('https://the-internet.herokuapp.com/checkboxes');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/checkboxes');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Checkbox Form Functionality', () => {\n  test('should allow the user to check and uncheck checkboxes', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/checkboxes');\n    const checkbox1 = page.locator('input[type=\"checkbox\"]').nth(0);\n    await checkbox1.check();\n    await expect(checkbox1).toBeChecked();\n    await checkbox1.uncheck();\n    await expect(checkbox1).not.toBeChecked();\n  });\n\n  test('should not change the URL when no checkboxes are checked', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/checkboxes');\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/checkboxes');\n  });\n});",
+  "id": "GC_the-internet_01_5",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/checkboxes",
+  "category": "form_validation",
+  "latency_s": 7.5
+}

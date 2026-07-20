@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to receive feedback when I press keys in the input field so that I can confirm my keyboard input is recognized. Acceptance Criteria: \n1. When a key is pressed, the input field with id 'target' should reflect the key pressed. \n2. The result should be displayed in the paragraph with id 'result'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Keyboard Input Feedback', () => {\n  it('should display the pressed key on the input field', () => {\n    cy.visit('https://the-internet.herokuapp.com/key_presses');\n    cy.get('#target').type('A');\n    cy.get('#result').should('be.visible');\n  });\n\n  it('should not change the URL when a key is pressed', () => {\n    cy.visit('https://the-internet.herokuapp.com/key_presses');\n    cy.get('#target').clear();\n    cy.get('#target').type('{backspace}');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/key_presses');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Keyboard Input Feedback', () => {\n  test('should display the pressed key on the input field', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/key_presses');\n    await page.fill('#target', 'A');\n    await expect(page.locator('#result')).toBeVisible();\n  });\n\n  test('should not change the URL when a key is pressed', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/key_presses');\n    await page.fill('#target', '');\n    await page.press('#target', 'Backspace');\n    await expect(page.url()).toBe('https://the-internet.herokuapp.com/key_presses');\n  });\n});",
+  "id": "GC_the-internet_14_4",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/key_presses",
+  "category": "error_states",
+  "latency_s": 5.0
+}

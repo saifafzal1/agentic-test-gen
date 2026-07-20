@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to be able to open a new window when I click on the 'Click Here' link so that I can access additional content without losing my current page. Acceptance Criteria: 1. When I click on the link with text 'Click Here', a new window should open. 2. The URL of the new window should not be the same as the original page. 3. The original page should still be accessible after the new window is opened.",
+  "complexity": "simple",
+  "cypress_script": "describe('Opening Links in New Windows', () => {\n  it('should open a new window when clicking the link', () => {\n    cy.visit('https://the-internet.herokuapp.com/windows');\n    cy.get('a').contains('Click Here').click();\n    cy.url().should('not.eq', 'https://the-internet.herokuapp.com/windows');\n  });\n\n  it('should remain on the original page when the link is clicked', () => {\n    cy.visit('https://the-internet.herokuapp.com/windows');\n    cy.get('a').contains('Click Here').click();\n    cy.get('#content').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Opening Links in New Windows', () => {\n  test('should open a new window when clicking the link', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/windows');\n    const [newPage] = await Promise.all([\n      page.waitForEvent('popup'),\n      page.click('a:has-text(\"Click Here\")'),\n    ]);\n    expect(newPage.url()).not.toBe('https://the-internet.herokuapp.com/windows');\n  });\n\n  test('should remain on the original page when the link is clicked', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/windows');\n    await page.click('a:has-text(\"Click Here\")');\n    expect(await page.isVisible('#content')).toBeTruthy();\n  });\n});",
+  "id": "GC_the-internet_12_1",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/windows",
+  "category": "navigation",
+  "latency_s": 6.4
+}

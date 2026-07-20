@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to click on the 'Click Here' link to open a new window so that I can access additional content without losing my current context. Acceptance Criteria: \n1. When I click on the link with text 'Click Here', a new window should open. \n2. The URL should change to 'https://the-internet.herokuapp.com/windows/new'. \n3. The original page should remain accessible and visible, specifically the element with id 'content' which contains the text 'Opening a new window Click Here'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Opening Links in New Windows', () => {\n  it('should open a new window when clicking the link', () => {\n    cy.visit('https://the-internet.herokuapp.com/windows');\n    cy.get('a').contains('Click Here').click();\n    cy.url().should('include', '/windows/new');\n  });\n\n  it('should not navigate away from the original page', () => {\n    cy.visit('https://the-internet.herokuapp.com/windows');\n    cy.get('a').contains('Click Here').click();\n    cy.get('#content').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Opening Links in New Windows', () => {\n  test('should open a new window when clicking the link', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/windows');\n    await page.click('text=Click Here');\n    await page.waitForURL('**/windows/new');\n  });\n\n  test('should not navigate away from the original page', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/windows');\n    await page.click('text=Click Here');\n    await expect(page.locator('#content')).toBeVisible();\n  });\n});",
+  "id": "GC_the-internet_12_2",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/windows",
+  "category": "navigation",
+  "latency_s": 6.9
+}

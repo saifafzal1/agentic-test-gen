@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to add, complete, and delete todos in the TodoMVC application so that I can manage my tasks efficiently. Acceptance Criteria: 1. When I enter a todo in the input field with aria-label 'New Todo Input' and press enter, the todo should appear in the list. 2. When I click the checkbox with id 'toggle-all', all todos should be marked as completed. 3. When I click the button with class 'clear-completed', all completed todos should be removed from the list.",
+  "complexity": "simple",
+  "cypress_script": "describe('Todo List CRUD Operations', () => {\n  it('should add a todo item', () => {\n    cy.visit('https://todomvc.com/examples/react/dist/');\n    cy.get('[aria-label=\"New Todo Input\"]').type('Test Todo{enter}');\n    cy.get('[data-testid=\"todo-list\"] li').should('have.length', 1);\n  });\n\n  it('should not add an empty todo item', () => {\n    cy.visit('https://todomvc.com/examples/react/dist/');\n    cy.get('[aria-label=\"New Todo Input\"]').type('{enter}');\n    cy.get('[data-testid=\"todo-list\"] li').should('have.length', 0);\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Todo List CRUD Operations', () => {\n  test('should add a todo item', async ({ page }) => {\n    await page.goto('https://todomvc.com/examples/react/dist/');\n    await page.fill('[aria-label=\"New Todo Input\"]', 'Test Todo');\n    await page.press('[aria-label=\"New Todo Input\"]', 'Enter');\n    const todoList = await page.locator('[data-testid=\"todo-list\"] li');\n    await expect(todoList).toHaveCount(1);\n  });\n\n  test('should not add an empty todo item', async ({ page }) => {\n    await page.goto('https://todomvc.com/examples/react/dist/');\n    await page.press('[aria-label=\"New Todo Input\"]', 'Enter');\n    const todoList = await page.locator('[data-testid=\"todo-list\"] li');\n    await expect(todoList).toHaveCount(0);\n  });\n});",
+  "id": "GC_todomvc_00_3",
+  "app": "todomvc",
+  "base_url": "https://todomvc.com",
+  "page": "/examples/react/dist/",
+  "category": "crud_operations",
+  "latency_s": 7.3
+}

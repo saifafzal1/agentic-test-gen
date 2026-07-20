@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to ensure that all images on the broken images page are accessible and their integrity can be verified, so that I can confirm the proper loading of images. Acceptance Criteria: 1. The page title must be 'The Internet'. 2. The heading must be 'Broken Images'. 3. The footer must display 'Powered by Elemental Selenium'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Broken Images Page Accessibility Tests', () => {\n  it('should display the title and heading correctly', () => {\n    cy.visit('https://the-internet.herokuapp.com/broken_images');\n    cy.title().should('eq', 'The Internet');\n    cy.get('h1').contains('Broken Images');\n  });\n  it('should not display any images', () => {\n    cy.visit('https://the-internet.herokuapp.com/broken_images');\n    cy.get('#content').should('contain.text', 'Broken Images');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Broken Images Page Accessibility Tests', () => {\n  test('should display the title and heading correctly', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/broken_images');\n    expect(await page.title()).toBe('The Internet');\n    await expect(page.locator('h1')).toHaveText('Broken Images');\n  });\n  test('should not display any images', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/broken_images');\n    await expect(page.locator('#content')).toContainText('Broken Images');\n  });\n});",
+  "id": "GC_the-internet_11_4",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/broken_images",
+  "category": "accessibility",
+  "latency_s": 5.0
+}

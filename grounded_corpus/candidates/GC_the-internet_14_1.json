@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to see feedback on my keyboard input so that I can confirm that my keystrokes are being recognized correctly. Acceptance Criteria: When I type a key, the corresponding key value should be displayed in the paragraph with id 'result'. The input field with id 'target' should accept keyboard input.",
+  "complexity": "simple",
+  "cypress_script": "describe('Keyboard Input Feedback', () => {\n  it('should display the correct key when a key is pressed', () => {\n    cy.visit('https://the-internet.herokuapp.com/key_presses');\n    cy.get('#target').type('A');\n    cy.get('#result').should('be.visible');\n  });\n\n  it('should not change the URL when a key is pressed', () => {\n    cy.visit('https://the-internet.herokuapp.com/key_presses');\n    cy.get('#target').type('A');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/key_presses');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Keyboard Input Feedback', () => {\n  test('should display the correct key when a key is pressed', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/key_presses');\n    await page.fill('#target', 'A');\n    const resultVisible = await page.isVisible('#result');\n    expect(resultVisible).toBe(true);\n  });\n\n  test('should not change the URL when a key is pressed', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/key_presses');\n    await page.fill('#target', 'A');\n    expect(page.url()).toBe('https://the-internet.herokuapp.com/key_presses');\n  });\n});",
+  "id": "GC_the-internet_14_1",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/key_presses",
+  "category": "error_states",
+  "latency_s": 5.6
+}

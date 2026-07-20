@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to enter a numeric value in the input field on the Inputs page so that I can validate the form's numeric input functionality.\n\nAcceptance Criteria:\n1. The numeric input field must be present on the page and be of type 'number' (selector: 'input[type=\"number\"]').\n2. When a valid number is entered, the input field retains the value entered.\n3. When a non-numeric value (like a letter) is entered, the input should not change the value in the field.\n4. The page URL remains unchanged after entering invalid data.",
+  "complexity": "simple",
+  "cypress_script": "describe('Numeric Input Field', () => {\n  it('should retain valid numeric input', () => {\n    cy.visit('https://the-internet.herokuapp.com/inputs');\n    cy.get('input[type=\"number\"]').type('42').should('have.value', '42');\n  });\n\n  it('should not change value on invalid input', () => {\n    cy.visit('https://the-internet.herokuapp.com/inputs');\n    cy.get('input[type=\"number\"]').type('abc').should('have.value', '');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/inputs');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Numeric Input Field', () => {\n  test('should retain valid numeric input', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/inputs');\n    const numericInput = page.locator('input[type=\"number\"]');\n    await numericInput.fill('42');\n    await expect(numericInput).toHaveValue('42');\n  });\n\n  test('should not change value on invalid input', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/inputs');\n    const numericInput = page.locator('input[type=\"number\"]');\n    await numericInput.fill('abc');\n    await expect(numericInput).toHaveValue('');\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/inputs');\n  });\n});",
+  "id": "GC_the-internet_10_2",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/inputs",
+  "category": "form_validation",
+  "latency_s": 5.5
+}

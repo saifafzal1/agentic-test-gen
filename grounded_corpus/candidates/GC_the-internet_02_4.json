@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to select an option from the dropdown menu so that I can filter the content based on my choice. \nAcceptance Criteria:\n1. The dropdown with id 'dropdown' should be visible.\n2. Selecting 'Option 1' from the dropdown should not change the URL and the dropdown should remain displayed.\n3. Selecting an empty option should not change the URL and should keep the dropdown visible.",
+  "complexity": "simple",
+  "cypress_script": "describe('Dropdown Selection Functionality', () => {\n  it('should select Option 1 from the dropdown', () => {\n    cy.visit('https://the-internet.herokuapp.com/dropdown');\n    cy.get('#dropdown').select('Option 1');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/dropdown');\n    cy.get('#dropdown').should('be.visible');\n  });\n  it('should not change URL when selecting an empty option', () => {\n    cy.visit('https://the-internet.herokuapp.com/dropdown');\n    cy.get('#dropdown').select('');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/dropdown');\n    cy.get('#dropdown').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dropdown Selection Functionality', () => {\n  test('should select Option 1 from the dropdown', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/dropdown');\n    await page.selectOption('#dropdown', '1');\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/dropdown');\n    await expect(page.locator('#dropdown')).toBeVisible();\n  });\n  test('should not change URL when selecting an empty option', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/dropdown');\n    await page.selectOption('#dropdown', '');\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/dropdown');\n    await expect(page.locator('#dropdown')).toBeVisible();\n  });\n});",
+  "id": "GC_the-internet_02_4",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/dropdown",
+  "category": "search_filter",
+  "latency_s": 7.4
+}

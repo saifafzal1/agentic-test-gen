@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to add and remove elements dynamically on the page so that I can test the functionality of adding and removing elements as needed. Acceptance Criteria: \n1. When I click the button with text 'Add Element', a new element should be added to the div with id 'elements'. \n2. The new element should be removable by clicking on it. \n3. The URL should remain the same throughout these actions.",
+  "complexity": "simple",
+  "cypress_script": "describe('Add and Remove Elements', () => {\n  it('should add an element when the button is clicked', () => {\n    cy.visit('https://the-internet.herokuapp.com/add_remove_elements/');\n    cy.get('button').contains('Add Element').click();\n    cy.get('#elements').children().should('have.length', 1);\n  });\n\n  it('should not add more elements if button is not clicked', () => {\n    cy.visit('https://the-internet.herokuapp.com/add_remove_elements/');\n    cy.get('#elements').children().should('have.length', 0);\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Add and Remove Elements', () => {\n  test('should add an element when the button is clicked', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/add_remove_elements/');\n    await page.click('button:has-text(\"Add Element\")');\n    const elements = await page.locator('#elements').count();\n    expect(elements).toBe(1);\n  });\n\n  test('should not add more elements if button is not clicked', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/add_remove_elements/');\n    const elements = await page.locator('#elements').count();\n    expect(elements).toBe(0);\n  });\n});",
+  "id": "GC_the-internet_03_4",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/add_remove_elements/",
+  "category": "crud_operations",
+  "latency_s": 9.7
+}

@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to hover over user avatars to reveal profile links so that I can view more information about the users. Acceptance Criteria: When I hover over an avatar, I should see a link \"View profile\" that allows me to view the user's profile. The user avatars are located within the content area identified by the ID \"content\".",
+  "complexity": "simple",
+  "cypress_script": "describe('User Avatars Profile Links', () => {\n  it('should reveal profile links on hover', () => {\n    cy.visit('https://the-internet.herokuapp.com/hovers');\n    cy.get('div#content .figure').first().trigger('mouseover');\n    cy.contains('View profile').should('be.visible');\n  });\n\n  it('should not navigate when hovering without clicking', () => {\n    cy.visit('https://the-internet.herokuapp.com/hovers');\n    cy.get('div#content .figure').first().trigger('mouseover');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/hovers');\n    cy.contains('View profile').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('User Avatars Profile Links', () => {\n  test('should reveal profile links on hover', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/hovers');\n    const avatar = page.locator('div#content .figure').first();\n    await avatar.hover();\n    await expect(page.locator('text=View profile')).toBeVisible();\n  });\n\n  test('should not navigate when hovering without clicking', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/hovers');\n    const avatar = page.locator('div#content .figure').first();\n    await avatar.hover();\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/hovers');\n    await expect(page.locator('text=View profile')).toBeVisible();\n  });\n});",
+  "id": "GC_the-internet_13_2",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/hovers",
+  "category": "user_profile",
+  "latency_s": 5.8
+}

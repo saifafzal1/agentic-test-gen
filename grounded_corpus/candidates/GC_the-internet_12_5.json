@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to open a new window when I click on the 'Click Here' link so that I can access additional content without losing my place on the current page.",
+  "complexity": "simple",
+  "cypress_script": "describe('Opening links in new windows', () => {\n  it('should open a new window when the link is clicked', () => {\n    cy.visit('https://the-internet.herokuapp.com/windows');\n    cy.get('a').contains('Click Here').click();\n    cy.url().should('not.eq', 'https://the-internet.herokuapp.com/windows');\n  });\n\n  it('should remain on the same page when the link is not clicked', () => {\n    cy.visit('https://the-internet.herokuapp.com/windows');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/windows');\n    cy.get('div#content').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Opening links in new windows', () => {\n  test('should open a new window when the link is clicked', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/windows');\n    const [newPage] = await Promise.all([\n      page.waitForEvent('popup'),\n      page.click('text=Click Here')\n    ]);\n    expect(newPage.url()).not.toBe('https://the-internet.herokuapp.com/windows');\n  });\n\n  test('should remain on the same page when the link is not clicked', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/windows');\n    expect(page.url()).toBe('https://the-internet.herokuapp.com/windows');\n    await expect(page.locator('div#content')).toBeVisible();\n  });\n});",
+  "id": "GC_the-internet_12_5",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/windows",
+  "category": "navigation",
+  "latency_s": 6.6
+}
