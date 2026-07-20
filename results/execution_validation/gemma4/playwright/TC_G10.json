@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G10",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 79.231,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Product Detail Page Navigation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/');\n  });\n\n  test('should navigate to product detail page and return to catalogue', async ({ page }) => {\n    // Login with standard user\n    const usernameInput = page.getByLabel('Username');\n    const passwordInput = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: /login/i });\n\n    await usernameInput.fill('standard_user');\n    await passwordInput.fill('secret_sauce');\n    await loginButton.click();\n\n    // Verify login success\n    await expect(page.getByRole('heading', { name: /products/i })).toBeVisible();\n\n    // Click on the first product name to navigate to detail page\n    const firstProductName = page.getByRole('link', { name: /sauce-labs red v3/i });\n    await firstProductName.click();\n\n    // Verify navigation to product detail page\n    await expect(page).toHaveURL(/inventory-item/);\n    await expect(page.getByRole('heading', { name: /sauce-labs red v3/i })).toBeVisible();\n\n    // Click back button to return to catalogue\n    const backButton = page.getByRole('button', { name: /back to products/i });\n    await backButton.click();\n\n    // Verify return to catalogue page\n    await expect(page).toHaveURL(/inventory/);\n    await expect(page.getByRole('heading', { name: /products/i })).toBeVisible();\n  });\n\n  test('should handle navigation when product detail page is not found', async ({ page }) => {\n    // Login with standard user\n    const usernameInput = page.getByLabel('Username');\n    const passwordInput = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: /login/i });\n\n    await usernameInput.fill('standard_user');\n    await passwordInput.fill('secret_sauce');\n    await loginButton.click();\n\n    // Click on a product name\n    const firstProductName = page.getByRole('link', { name: /sauce-labs red v3/i });\n    await firstProductName.click();\n\n    // Verify navigation to product detail page\n    await expect(page).toHaveURL(/inventory-item/);\n\n    // Attempt to click back button\n    const backButton = page.getByRole('button', { name: /back to products/i });\n    await backButton.click();\n\n    // Verify return to catalogue page\n    await expect(page).toHaveURL(/inventory/);\n    await expect(page.getByRole('heading', { name: /products/i })).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.231,
+      "feedback_used": ""
+    }
+  ]
+}

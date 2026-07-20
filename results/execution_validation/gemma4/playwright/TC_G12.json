@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G12",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 79.342,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Accessible Product Images and Login Fields', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com');\n  });\n\n  test('should display accessible product images and login fields', async ({ page }) => {\n    // Verify login fields have placeholder attributes\n    const usernameField = page.getByLabel('Username');\n    const passwordField = page.getByLabel('Password');\n    await expect(usernameField).toHaveAttribute('placeholder', 'Enter your username');\n    await expect(passwordField).toHaveAttribute('placeholder', 'Enter your password');\n\n    // Verify login button is accessible\n    const loginButton = page.getByRole('button', { name: 'Login' });\n    await expect(loginButton).toBeVisible();\n\n    // Login with standard user credentials\n    await usernameField.fill('standard_user');\n    await passwordField.fill('secret_sauce');\n    await loginButton.click();\n\n    // Wait for inventory page to load\n    await page.waitForURL('https://www.saucedemo.com/inventory.');\n\n    // Verify product images have alt attributes\n    const productImages = page.locator('[data-testid=\"inventory-item-img\"]');\n    const imageCount = await productImages.count();\n    expect(imageCount).toBeGreaterThan(0);\n\n    for (let i = 0; i < imageCount; i++) {\n      const img = productImages.nth(i);\n      const altText = await img.getAttribute('alt');\n      expect(altText).not.toBeNull();\n      expect(altText).not.toBe('');\n    }\n  });\n\n  test('should handle login with invalid credentials and still display accessible fields', async ({ page }) => {\n    // Verify login fields have placeholder attributes\n    const usernameField = page.getByLabel('Username');\n    const passwordField = page.getByLabel('Password');\n    await expect(usernameField).toHaveAttribute('placeholder', 'Enter your username');\n    await expect(passwordField).toHaveAttribute('placeholder', 'Enter your password');\n\n    // Attempt login with invalid credentials\n    await usernameField.fill('invaliduser');\n    await passwordField.fill('wrongpassword');\n    const loginButton = page.getByRole('button', { name: 'Login' });\n    await loginButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('Epic sadface: Username and password do not match');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify login fields are still accessible and retain placeholder attributes\n    await expect(usernameField).toHaveAttribute('placeholder', 'Enter your username');\n    await expect(passwordField).toHaveAttribute('placeholder', 'Enter your password');\n\n    // Verify product images still have alt attributes even on error\n    const productImages = page.locator('[data-testid=\"inventory-item-img\"]');\n    const imageCount = await productImages.count();\n    expect(imageCount).toBeGreaterThan(0);\n\n    for (let i = 0; i < imageCount; i++) {\n      const img = productImages.nth(i);\n      const altText = await img.getAttribute('alt');\n      expect(altText).not.toBeNull();\n      expect(altText).not.toBe('');\n    }\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.342,
+      "feedback_used": ""
+    }
+  ]
+}

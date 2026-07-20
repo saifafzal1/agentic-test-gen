@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G20",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.82,
+  "total_latency_s": 79.275,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dropdown Selection', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/dropdown');\n  });\n\n  test('should select an option from the dropdown and apply the value', async ({ page }) => {\n    // Verify dropdown initially shows disabled prompt\n    const dropdown = page.getByRole('combobox', { name: /Please select an option/i });\n    await expect(dropdown).toBeVisible();\n    await expect(dropdown).toHaveValue('option1');\n\n    // Select the option with text 'Option 2'\n    const option2 = page.getByRole('option', { name: /Option 2/i });\n    await option2.click();\n\n    // Verify the select element now has the correct value\n    await expect(dropdown).toHaveValue('option2');\n\n    // Verify the selected option is visible and highlighted\n    await expect(option2).toBeVisible();\n    await expect(option2).toHaveAttribute('aria-selected', 'true');\n  });\n\n  test('should handle selecting the first and last options', async ({ page }) => {\n    // Select the first option\n    const option1 = page.getByRole('option', { name: /Option 1/i });\n    await option1.click();\n\n    // Verify the select element has the correct value\n    await expect(page.getByRole('combobox', { name: /Please select an option/i })).toHaveValue('option1');\n\n    // Select the last option\n    const optionLast = page.getByRole('option', { name: /Option 4/i });\n    await optionLast.click();\n\n    // Verify the select element has the correct value\n    await expect(page.getByRole('combobox', { name: /Please select an option/i })).toHaveValue('option4');\n\n    // Verify the last option is selected\n    await expect(optionLast).toHaveAttribute('aria-selected', 'true');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.82,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.275,
+      "feedback_used": ""
+    }
+  ]
+}

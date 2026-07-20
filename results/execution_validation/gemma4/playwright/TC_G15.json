@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G15",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.82,
+  "total_latency_s": 79.307,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Element Manager - Add and Delete Elements', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/add_remove_elements/');\n  });\n\n  test('should add and delete elements successfully', async ({ page }) => {\n    // Verify initial state\n    const addButton = page.getByRole('button', { name: /add element/i });\n    await expect(addButton).toBeVisible();\n    const deleteButton = page.getByRole('button', { name: /delete element/i });\n    await expect(deleteButton).toBeVisible();\n    const listContainer = page.locator('[data-testid=\"element-list-container\"]');\n    await expect(listContainer).toBeVisible();\n\n    // Add first element\n    await addButton.click();\n    const addedElement = page.locator('[data-testid=\"added-manually\"]');\n    await expect(addedElement).toHaveCount(1);\n    const deleteBtn1 = page.getByRole('button', { name: /delete/i });\n    await expect(deleteBtn1).toBeVisible();\n\n    // Add second element\n    await addButton.click();\n    await expect(addedElement).toHaveCount(2);\n    const deleteBtn2 = page.getByRole('button', { name: /delete/i });\n    await expect(deleteBtn2).toBeVisible();\n\n    // Delete first element\n    await deleteBtn1.click();\n    await expect(addedElement).toHaveCount(1);\n    await expect(deleteBtn1).not.toBeVisible();\n    await expect(deleteBtn2).toBeVisible();\n\n    // Delete second element\n    await deleteBtn2.click();\n    await expect(addedElement).toHaveCount(0);\n    await expect(deleteBtn2).not.toBeVisible();\n  });\n\n  test('should handle multiple additions and deletions correctly', async ({ page }) => {\n    // Add three elements\n    const addButton = page.getByRole('button', { name: /add element/i });\n    await addButton.click();\n    await addButton.click();\n    await addButton.click();\n    const addedElements = page.locator('[data-testid=\"added-manually\"]');\n    await expect(addedElements).toHaveCount(3);\n\n    // Delete the middle element\n    const deleteButtons = page.getByRole('button', { name: /delete/i });\n    await deleteButtons.nth(1).click();\n    await expect(addedElements).toHaveCount(2);\n    await expect(deleteButtons).toHaveCount(2);\n\n    // Delete the first element\n    await deleteButtons.nth(0).click();\n    await expect(addedElements).toHaveCount(1);\n    await expect(deleteButtons).toHaveCount(1);\n\n    // Delete the last element\n    await deleteButtons.nth(0).click();\n    await expect(addedElements).toHaveCount(0);\n    await expect(deleteButtons).toHaveCount(0);\n\n    // Verify list is empty\n    const listContainer = page.locator('[data-testid=\"element-list-container\"]');\n    await expect(listContainer).toBeVisible();\n    const emptyMessage = page.getByText(/no elements/i);\n    await expect(emptyMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.82,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.307,
+      "feedback_used": ""
+    }
+  ]
+}

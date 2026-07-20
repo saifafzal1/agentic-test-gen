@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G24",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.82,
+  "total_latency_s": 150.232,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('HTTP Status Code Reporting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/status_codes');\n  });\n\n  test('should navigate to and display 200 status code page with correct body text', async ({ page }) => {\n    // Locate and click the 200 status code link using getByRole\n    const statusCode200Link = page.getByRole('link', { name: /200/i });\n    await statusCode200Link.click();\n\n    // Verify navigation to /status_codes/200\n    await expect(page).toHaveURL(/status_codes\\/200/);\n\n    // Verify page body contains the expected text\n    const pageBody = page.getByText(/This page returned a 200 status code/i);\n    await expect(pageBody).toBeVisible();\n\n    // Verify page title contains the expected text\n    const pageTitle = page.getByText(/200 status code/i);\n    await expect(pageTitle).toBeVisible();\n  });\n\n  test('should navigate to and display 404 status code page with correct body text', async ({ page }) => {\n    // Locate and click the 404 status code link using getByRole\n    const statusCode404Link = page.getByRole('link', { name: /404/i });\n    await statusCode404Link.click();\n\n    // Verify navigation to /status_codes/404\n    await expect(page).toHaveURL(/status_codes\\/404/);\n\n    // Verify page body contains the expected text\n    const pageBody = page.getByText(/This page returned a 404 status code/i);\n    await expect(pageBody).toBeVisible();\n\n    // Verify page title contains the expected text\n    const pageTitle = page.getByText(/404 status code/i);\n    await expect(pageTitle).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.82,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 150.232,
+      "feedback_used": ""
+    }
+  ]
+}

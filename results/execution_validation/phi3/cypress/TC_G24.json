@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G24",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 211.131,
+  "final_script": "describe('HTTP Status Code Reporting', () => {\n  beforeEach(() => {\n    cy.visit('/status_codes');\n  });\n\n  it('should navigate to specific status code page and verify response text', () => {\n    // Click the link for status code 200\n    cy.get('[data-testid=\"status-code-200-link\"]').click();\n    \n    // Wait for navigation\n    cy.intercept('GET', '/status_codes/200').as('statusCode200');\n    cy.wait('@statusCode200');\n    \n    // Verify URL contains status code\n    cy.url().should('include', '/status_codes/200');\n    \n    // Verify page body contains expected text\n    cy.get('[data-testid=\"page-body\"]').should('contain', 'This page returned a 200 status code');\n    \n    // Return to /status_codes\n    cy.visit('/status_codes');\n  });\n\n  it('should handle 404 status code and verify error message', () => {\n    // Click the link for status code 404\n    cy.get('[data-testid=\"status-code-404-link\"]').click();\n    \n    // Wait for navigation\n    cy.intercept('GET', '/status_codes/404').as('statusCode404');\n    cy.wait('@statusCode404');\n    \n    // Verify URL contains status code\n    cy.url().should('include', '/status_codes/404');\n    \n    // Verify page body contains expected error message\n    cy.get('[data-testid=\"page-body\"]').should('contain', 'This page returned a 404 status code');\n    \n    // Verify error icon is visible\n    cy.get('[data-testid=\"error-icon\"]').should('be.visible');\n    \n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    \n    // Return to /status_codes\n    cy.visit('/status_codes');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 211.131,
+      "feedback_used": ""
+    }
+  ]
+}

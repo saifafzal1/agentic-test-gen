@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G18",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 79.065,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload Functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/upload');\n  });\n\n  test('should successfully upload a file and display confirmation', async ({ page }) => {\n    // Setup: intercept the file upload API endpoint\n    await page.route('**/upload', (route) => {\n      route.continue();\n    });\n\n    // Setup: intercept the file upload response\n    await page.route('**/upload', (route) => {\n      route.abort('blockedbyclient');\n    });\n\n    // Setup: intercept the file upload response with success status\n    await page.route('**/upload', (route) => {\n      route.continue({\n        status: 200,\n        contentType: 'application/json',\n        body: JSON.stringify({\n          success: true,\n          message: 'File uploaded successfully',\n          filename: 'test-document.pdf',\n          size: 10240\n        }),\n      });\n    });\n\n    // Action: select a file using getByLabel\n    const fileInput = page.getByLabel('Choose file');\n    await fileInput.setInputFiles('test-document.pdf');\n\n    // Action: click the submit button using getByRole\n    const submitButton = page.getByRole('button', { name: /upload/i });\n    await submitButton.click();\n\n    // Wait for navigation and confirmation\n    await page.waitForURL('**/upload/success');\n\n    // Assertion: verify success heading is displayed\n    const successHeading = page.getByRole('heading', { name: /file uploaded/i });\n    await expect(successHeading).toBeVisible();\n\n    // Assertion: verify uploaded file name is displayed\n    const uploadedFileName = page.getByText('test-document.pdf');\n    await expect(uploadedFileName).toBeVisible();\n\n    // Assertion: verify success message is present\n    const successMessage = page.getByText('File uploaded successfully');\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should handle file upload failure and display error message', async ({ page }) => {\n    // Setup: intercept the file upload API endpoint\n    await page.route('**/upload', (route) => {\n      route.abort('blockedbyclient');\n    });\n\n    // Setup: intercept the file upload response with error status\n    await page.route('**/upload', (route) => {\n      route.continue({\n        status: 500,\n        contentType: 'application/json',\n        body: JSON.stringify({\n          success: false,\n          message: 'Server error during upload',\n          error: 'Internal server error'\n        }),\n      });\n    });\n\n    // Action: select a file using getByLabel\n    const fileInput = page.getByLabel('Choose file');\n    await fileInput.setInputFiles('large-file.zip');\n\n    // Action: click the submit button using getByRole\n    const submitButton = page.getByRole('button', { name: /upload/i });\n    await submitButton.click();\n\n    // Wait for error state\n    await page.waitForTimeout(500);\n\n    // Assertion: verify error heading is displayed\n    const errorHeading = page.getByRole('heading', { name: /file upload failed/i });\n    await expect(errorHeading).toBeVisible();\n\n    // Assertion: verify error message is displayed\n    const errorMessage = page.getByText('Server error during upload');\n    await expect(errorMessage).toBeVisible();\n\n    // Assertion: verify success heading is NOT visible\n    const successHeading = page.getByRole('heading', { name: /file uploaded/i });\n    await expect(successHeading).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.065,
+      "feedback_used": ""
+    }
+  ]
+}

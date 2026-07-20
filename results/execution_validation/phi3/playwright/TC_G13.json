@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G13",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 463.047,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Secure Area Login - Returning User', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should successfully log in a returning user and navigate to secure area with success flash banner', async ({ page }) => {\n    // Setup: intercept the login API call\n    await page.route('**/api/auth/login', (route) => {\n      route.continue();\n    });\n\n    // Intercept the successful response\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('failed');\n    });\n\n    // Intercept the redirect to secure area\n    await page.route('**/api/auth/login', (route) => {\n      route.continue();\n    });\n\n    // Locate and fill in username and password fields\n    const usernameInput = page.getByLabel('Username');\n    await usernameInput.fill('tomsmith');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('SuperSecretPassword!');\n\n    // Locate and click the submit button\n    const loginButton = page.getByRole('button', { name: /submit/i });\n    await loginButton.click();\n\n    // Wait for navigation to complete\n    await page.waitForURL('**/secure');\n\n    // Verify the URL contains '/secure'\n    const secureUrl = page.url();\n    expect(secureUrl).toContain('/secure');\n\n    // Verify the success flash banner is visible\n    const successFlash = page.getByText('You logged into a secure area!');\n    await expect(successFlash).toBeVisible();\n\n    // Verify the page content is as expected\n    const secureContent = page.getByText('Secure Area Content');\n    await expect(secureContent).toBeVisible();\n  });\n\n  test('should display error message when login fails due to invalid credentials', async ({ page }) => {\n    // Setup: intercept the login API call\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('failed');\n    });\n\n    // Locate and fill in username and password fields\n    const usernameInput = page.getByLabel('Username');\n    await usernameInput.fill('invaliduser');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('WrongPassword!');\n\n    // Locate and click the submit button\n    const loginButton = page.getByRole('button', { name: /submit/i });\n    await loginButton.click();\n\n    // Wait for error message to appear\n    const errorMessage = page.getByText('Invalid username or password');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the page does not navigate to secure area\n    const secureUrl = page.url();\n    expect(secureUrl).not.toContain('/secure');\n\n    // Verify the error message is displayed\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 463.047,
+      "feedback_used": ""
+    }
+  ]
+}

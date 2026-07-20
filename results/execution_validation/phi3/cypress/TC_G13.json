@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G13",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 232.563,
+  "final_script": "describe('Login to Secure Area - Returning User', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should successfully log in a returning user and navigate to secure area', () => {\n    // Intercept the login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n\n    // Fill in the login form\n    cy.get('[data-testid=\"username-input\"]').type('tomsmith');\n    cy.get('[data-testid=\"password-input\"]').type('SuperSecretPassword!');\n\n    // Submit the login form\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for the login API response\n    cy.wait('@loginRequest');\n\n    // Verify successful login redirect\n    cy.url().should('include', '/secure');\n\n    // Verify flash banner appears with success message\n    cy.get('[data-testid=\"flash-banner\"]').should('be.visible');\n    cy.get('[data-testid=\"flash-banner\"]').should('contain', 'You logged into a secure area!');\n\n    // Verify user is now in secure area\n    cy.get('[data-testid=\"secure-content\"]').should('be.visible');\n  });\n\n  it('should handle login failure and display error message', () => {\n    // Intercept the login API call with a failed response\n    cy.intercept('POST', '/api/auth/login', {\n      statusCode: 401,\n      body: { error: 'Invalid credentials' }\n    }).as('loginRequestFail');\n\n    // Fill in the login form with incorrect credentials\n    cy.get('[data-testid=\"username-input\"]').type('invaliduser');\n    cy.get('[data-testid=\"password-input\"]').type('WrongPassword');\n\n    // Submit the login form\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for the failed login API response\n    cy.wait('@loginRequestFail');\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid credentials');\n\n    // Verify user is not redirected to secure area\n    cy.url().should('not.include', '/secure');\n\n    // Verify login form is still visible for retry\n    cy.get('[data-testid=\"username-input\"]').should('be.visible');\n    cy.get('[data-testid=\"password-input\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 232.563,
+      "feedback_used": ""
+    }
+  ]
+}

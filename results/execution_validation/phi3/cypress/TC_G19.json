@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G19",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 353.034,
+  "final_script": "describe('Checkbox State Management', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/checkboxes');\n  });\n\n  it('should toggle checkbox states and update form correctly', () => {\n    // Verify initial state: first checkbox unchecked, second checked\n    cy.get('[data-testid=\"checkbox-one\"]').should('have.value', '');\n    cy.get('[data-testid=\"checkbox-two\"]').should('have.value', 'on');\n\n    // Verify form has correct initial state\n    cy.get('[data-testid=\"form-status\"]').should('contain', 'Both checkboxes are checked');\n\n    // Toggle first checkbox\n    cy.get('[data-testid=\"checkbox-one\"]').click();\n\n    // Verify first checkbox is now checked\n    cy.get('[data-testid=\"checkbox-one\"]').should('have.value', 'on');\n\n    // Verify second checkbox remains checked\n    cy.get('[data-testid=\"checkbox-two\"]').should('have.value', 'on');\n\n    // Verify form reflects updated state\n    cy.get('[data-testid=\"form-status\"]').should('contain', 'Both checkboxes are checked');\n\n    // Toggle second checkbox\n    cy.get('[data-testid=\"checkbox-two\"]').click();\n\n    // Verify first checkbox remains checked\n    cy.get('[data-testid=\"checkbox-one\"]').should('have.value', 'on');\n\n    // Verify second checkbox is now unchecked\n    cy.get('[data-testid=\"checkbox-two\"]').should('have.value', '');\n\n    // Verify form reflects updated state\n    cy.get('[data-testid=\"form-status\"]').should('contain', 'Only checkbox one is checked');\n  });\n\n  it('should handle edge case: toggling a disabled checkbox', () => {\n    // Verify initial state: first checkbox unchecked, second checked\n    cy.get('[data-testid=\"checkbox-one\"]').should('have.value', '');\n    cy.get('[data-testid=\"checkbox-two\"]').should('have.value', 'on');\n\n    // Verify form has correct initial state\n    cy.get('[data-testid=\"form-status\"]').should('contain', 'Both checkboxes are checked');\n\n    // Toggle first checkbox\n    cy.get('[data-testid=\"checkbox-one\"]').click();\n\n    // Verify first checkbox is now checked\n    cy.get('[data-testid=\"checkbox-one\"]').should('have.value', 'on');\n\n    // Verify second checkbox remains checked\n    cy.get('[data-testid=\"checkbox-two\"]').should('have.value', 'on');\n\n    // Verify form reflects updated state\n    cy.get('[data-testid=\"form-status\"]').should('contain', 'Both checkboxes are checked');\n\n    // Disable first checkbox\n    cy.get('[data-testid=\"checkbox-one\"]').click();\n    cy.get('[data-testid=\"checkbox-one\"]').should('have.attr', 'disabled');\n\n    // Toggle disabled first checkbox\n    cy.get('[data-testid=\"checkbox-one\"]').click();\n\n    // Verify first checkbox remains disabled and unchecked\n    cy.get('[data-testid=\"checkbox-one\"]').should('have.attr', 'disabled');\n    cy.get('[data-testid=\"checkbox-one\"]').should('have.value', '');\n\n    // Verify second checkbox remains checked\n    cy.get('[data-testid=\"checkbox-two\"]').should('have.value', 'on');\n\n    // Verify form reflects updated state\n    cy.get('[data-testid=\"form-status\"]').should('contain', 'Only checkbox two is checked');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 353.034,
+      "feedback_used": ""
+    }
+  ]
+}

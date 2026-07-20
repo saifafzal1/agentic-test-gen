@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G14",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 77.424,
+  "final_script": "describe('Login Page Password Validation', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/login');\n  });\n\n  it('should display error message when submitting wrong password', () => {\n    cy.get('[data-testid=\"username-input\"]').type('tomsmith');\n    cy.get('[data-testid=\"password-input\"]').type('wrongpassword');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    cy.url().should('include', '/login');\n    cy.get('[data-testid=\"flash-error\"]').should('be.visible');\n    cy.get('[data-testid=\"flash-error\"]').should('contain', 'Your password is invalid!');\n    cy.get('[data-testid=\"flash-error\"]').should('have.class', 'flash-error');\n  });\n\n  it('should not navigate away when password is invalid', () => {\n    cy.get('[data-testid=\"username-input\"]').type('tomsmith');\n    cy.get('[data-testid=\"password-input\"]').type('wrongpassword');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    cy.get('[data-testid=\"login-form\"]').should('be.visible');\n    cy.get('[data-testid=\"flash-error\"]').should('be.visible');\n    cy.get('[data-testid=\"flash-error\"]').should('contain', 'Your password is invalid!');\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 77.424,
+      "feedback_used": ""
+    }
+  ]
+}

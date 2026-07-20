@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G05",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 77.621,
+  "final_script": "describe('Product List Display - Inventory Page', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should display all 6 product cards with complete details after login', () => {\n    cy.get('[data-testid=\"user-name-input\"]').type('standard_user');\n    cy.get('[data-testid=\"password-input\"]').type('secret_sauce');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    cy.url().should('include', '/inventory.');\n    cy.get('[data-testid=\"inventory-item\"]').should('be.visible');\n    cy.get('[data-testid=\"inventory-item\"]').should('have.length', 6);\n\n    cy.get('[data-testid=\"inventory-item\"]').each(($item) => {\n      cy.wrap($item).within(() => {\n        cy.get('[data-testid=\"inventory-item-name\"]').should('be.visible').should('not.have.length', 0);\n        cy.get('[data-testid=\"inventory-item-price\"]').should('be.visible').should('match', /^\\$\\d+\\.\\d{2}/);\n      });\n    });\n  });\n\n  it('should handle edge case when product list is empty or partially loaded', () => {\n    cy.get('[data-testid=\"user-name-input\"]').type('standard_user');\n    cy.get('[data-testid=\"password-input\"]').type('secret_sauce');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Intercept the inventory API call and return an empty array\n    cy.intercept('GET', '/api/inventory').as('getInventory');\n    cy.wait('@getInventory');\n\n    cy.get('[data-testid=\"inventory-item\"]').should('not.exist');\n    cy.get('[data-testid=\"empty-state-message\"]').should('be.visible').should('contain', 'No products found');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 77.621,
+      "feedback_used": ""
+    }
+  ]
+}

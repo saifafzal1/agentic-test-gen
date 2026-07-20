@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G14",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 79.057,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Page - Invalid Password Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/login');\n  });\n\n  test('should display error message when submitting wrong password', async ({ page }) => {\n    // Locate and fill username field using getByLabel\n    const usernameField = page.getByLabel('Username');\n    await usernameField.fill('tomsmith');\n\n    // Locate and fill password field using getByLabel\n    const passwordField = page.getByLabel('Password');\n    await passwordField.fill('wrongpassword');\n\n    // Locate and click submit button using getByRole\n    const submitButton = page.getByRole('button', { name: /login/i });\n    await submitButton.click();\n\n    // Verify the user remains on the login page\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/login');\n\n    // Verify the error flash banner is visible\n    const errorBanner = page.locator('.flash.error');\n    await expect(errorBanner).toBeVisible();\n\n    // Verify the error message contains the expected text\n    await expect(errorBanner).toContainText('Your password is invalid!');\n  });\n\n  test('should not navigate away when password fails validation', async ({ page }) => {\n    // Locate and fill username field using getByLabel\n    const usernameField = page.getByLabel('Username');\n    await usernameField.fill('tomsmith');\n\n    // Locate and fill password field with wrong password using getByLabel\n    const passwordField = page.getByLabel('Password');\n    await passwordField.fill('wrongpassword');\n\n    // Locate and click submit button using getByRole\n    const submitButton = page.getByRole('button', { name: /login/i });\n    await submitButton.click();\n\n    // Verify the page URL has not changed\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/login');\n\n    // Verify the error banner is visible\n    const errorBanner = page.locator('.flash.error');\n    await expect(errorBanner).toBeVisible();\n\n    // Verify the error message is displayed\n    await expect(errorBanner).toContainText('Your password is invalid!');\n\n    // Verify the login form elements are still present and enabled\n    await expect(usernameField).toBeVisible();\n    await expect(passwordField).toBeVisible();\n    await expect(submitButton).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.057,
+      "feedback_used": ""
+    }
+  ]
+}

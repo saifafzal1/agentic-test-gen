@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G17",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 311.984,
+  "final_script": "describe('Dynamic Loading - Reveal Hidden Content After Asynchronous Wait', () => {\n  beforeEach(() => {\n    cy.visit('/dynamic_loading/1');\n  });\n\n  it('should reveal hidden content after asynchronous load with loading indicator', () => {\n    // Verify initial state: loading indicator is hidden\n    cy.get('[data-testid=\"loading-indicator\"]').should('not.exist');\n    cy.get('[data-testid=\"finish-button\"]').should('be.visible');\n\n    // Click Start button to initiate loading\n    cy.get('[data-testid=\"start-button\"]').click();\n\n    // Verify loading indicator appears\n    cy.get('[data-testid=\"loading-indicator\"]').should('be.visible');\n\n    // Wait for the asynchronous operation to complete\n    cy.intercept('GET', '/api/load-content').as('loadContent');\n    cy.wait('@loadContent');\n\n    // Verify loading indicator disappears\n    cy.get('[data-testid=\"loading-indicator\"]').should('not.exist');\n\n    // Verify 'finish' element becomes visible with content\n    cy.get('[data-testid=\"finish-button\"]').should('be.visible');\n    cy.get('[data-testid=\"finish-content\"]').should('contain', 'Hello World!');\n\n    // Verify loading state is no longer active\n    cy.get('[data-testid=\"loading-indicator\"]').should('not.exist');\n  });\n\n  it('should handle failed asynchronous load and display error message', () => {\n    // Intercept the API call with a 500 error\n    cy.intercept('GET', '/api/load-content', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' }\n    }).as('loadContentError');\n\n    // Click Start button to initiate loading\n    cy.get('[data-testid=\"start-button\"]').click();\n\n    // Verify loading indicator appears\n    cy.get('[data-testid=\"loading-indicator\"]').should('be.visible');\n\n    // Wait for the failed API call\n    cy.wait('@loadContentError');\n\n    // Verify loading indicator disappears\n    cy.get('[data-testid=\"loading-indicator\"]').should('not.exist');\n\n    // Verify error message is displayed instead of content\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Failed to load content');\n\n    // Verify 'finish' button is still visible but disabled\n    cy.get('[data-testid=\"finish-button\"]').should('be.visible');\n    cy.get('[data-testid=\"finish-button\"]').should('be.disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 311.984,
+      "feedback_used": ""
+    }
+  ]
+}

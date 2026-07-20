@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G15",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.82,
+  "total_latency_s": 295.34,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Add and Delete Elements - Element Manager', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/add_remove_elements');\n  });\n\n  test('should add two elements and delete one, leaving one added-manually button on the page', async ({ page }) => {\n    // Verify initial state\n    const initialCount = page.locator('[data-testid=\"element-count\"]').count();\n    expect(initialCount).toBe(0);\n\n    // Add first element\n    const addButton = page.getByRole('button', { name: /add element/i });\n    await addButton.click();\n\n    // Verify first delete button appears\n    const firstDeleteButton = page.getByRole('button', { name: /delete/i });\n    await expect(firstDeleteButton).toBeVisible();\n\n    // Add second element\n    await addButton.click();\n\n    // Verify second delete button appears\n    const secondDeleteButton = page.getByRole('button', { name: /delete/i });\n    await expect(secondDeleteButton).toBeVisible();\n\n    // Verify element count is now 2\n    const updatedCount = page.locator('[data-testid=\"element-count\"]').count();\n    expect(updatedCount).toBe(2);\n\n    // Click first delete button\n    await firstDeleteButton.click();\n\n    // Verify only one added-manually button remains\n    const remainingDeleteButton = page.getByRole('button', { name: /delete/i });\n    await expect(remainingDeleteButton).toBeVisible();\n\n    // Verify element count is now 1\n    const finalCount = page.locator('[data-testid=\"element-count\"]').count();\n    expect(finalCount).toBe(1);\n  });\n\n  test('should handle adding and deleting multiple elements with error handling', async ({ page }) => {\n    // Verify initial state\n    const initialCount = page.locator('[data-testid=\"element-count\"]').count();\n    expect(initialCount).toBe(0);\n\n    // Add multiple elements\n    const addButton = page.getByRole('button', { name: /add element/i });\n    await addButton.click();\n    await addButton.click();\n    await addButton.click();\n\n    // Verify element count is now 3\n    const updatedCount = page.locator('[data-testid=\"element-count\"]').count();\n    expect(updatedCount).toBe(3);\n\n    // Verify all delete buttons are visible\n    const deleteButtons = page.locator('[data-testid=\"delete-button\"]');\n    await expect(deleteButtons).toHaveCount(3);\n\n    // Click first delete button\n    const firstDeleteButton = page.getByRole('button', { name: /delete/i });\n    await firstDeleteButton.click();\n\n    // Verify second delete button is now visible\n    const secondDeleteButton = page.getByRole('button', { name: /delete/i });\n    await expect(secondDeleteButton).toBeVisible();\n\n    // Click second delete button\n    await secondDeleteButton.click();\n\n    // Verify only one delete button remains\n    const remainingDeleteButton = page.getByRole('button', { name: /delete/i });\n    await expect(remainingDeleteButton).toBeVisible();\n\n    // Verify element count is now 2\n    const finalCount = page.locator('[data-testid=\"element-count\"]').count();\n    expect(finalCount).toBe(2);\n\n    // Verify error message is displayed when clicking delete button on empty list\n    const errorMessage = page.getByText(/no elements to delete/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message disappears after adding a new element\n    await addButton.click();\n    await expect(errorMessage).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.82,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 295.34,
+      "feedback_used": ""
+    }
+  ]
+}

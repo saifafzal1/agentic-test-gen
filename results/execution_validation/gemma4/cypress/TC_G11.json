@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G11",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 77.562,
+  "final_script": "describe('Sauce Demo Mobile Responsiveness', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should display inventory page and burger menu on mobile viewport', () => {\n    cy.viewport(375, 860);\n    cy.get('[data-testid=\"user-name-input\"]').type('standard_user');\n    cy.get('[data-testid=\"password-input\"]').type('secret_sauce');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    cy.url().should('include', '/inventory.');\n    cy.get('[data-testid=\"inventory-page\"]').should('be.visible');\n    cy.get('[data-testid=\"inventory-item\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"burger-menu-btn\"]').should('be.visible');\n    cy.get('[data-testid=\"burger-menu-btn\"]').should('have.attr', 'aria-expanded', 'false');\n  });\n\n  it('should open burger menu and display logout link on mobile viewport', () => {\n    cy.viewport(375, 860);\n    cy.get('[data-testid=\"user-name-input\"]').type('standard_user');\n    cy.get('[data-testid=\"password-input\"]').type('secret_sauce');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    cy.get('[data-testid=\"burger-menu-btn\"]').click();\n    cy.get('[data-testid=\"burger-menu-btn\"]').should('have.attr', 'aria-expanded', 'true');\n    cy.get('[data-testid=\"bm-menu\"]').should('be.visible');\n    cy.get('[data-testid=\"logout_sidebar_link\"]').should('be.visible');\n    cy.get('[data-testid=\"logout_sidebar-link\"]').should('contain', 'Logout');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 77.562,
+      "feedback_used": ""
+    }
+  ]
+}

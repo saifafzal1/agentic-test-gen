@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G23",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.82,
+  "total_latency_s": 273.07,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Home Page Navigation - A/B Testing Example', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should navigate from home page to A/B Testing example page and back', async ({ page }) => {\n    // Verify welcome heading is visible on home page\n    const welcomeHeading = page.getByRole('heading', { name: /welcome to the-internet/i });\n    await expect(welcomeHeading).toBeVisible();\n\n    // Verify available examples heading is visible\n    const availableExamplesHeading = page.getByRole('heading', { name: /available examples/i });\n    await expect(availableExamplesHeading).toBeVisible();\n\n    // Click the A/B Testing link\n    const abTestingLink = page.getByRole('link', { name: /a/i });\n    await abTestingLink.click();\n\n    // Verify navigation to A/B Testing page\n    const abTestingPageHeading = page.getByRole('heading', { name: /a/i });\n    await expect(abTestingPageHeading).toBeVisible();\n\n    // Verify URL contains '/abtest'\n    const url = page.url();\n    expect(url).toContain('/abtest');\n\n    // Verify A/B Testing page content is visible\n    const abTestingContent = page.getByText(/a/i);\n    await expect(abTestingContent).toBeVisible();\n\n    // Navigate back to home page\n    const backButton = page.getByRole('button', { name: /back/i });\n    await backButton.click();\n\n    // Verify welcome heading is visible again\n    await expect(welcomeHeading).toBeVisible();\n\n    // Verify available examples heading is visible again\n    await expect(availableExamplesHeading).toBeVisible();\n\n    // Verify URL is back to root\n    const rootUrl = page.url();\n    expect(rootUrl).toBe('/');\n  });\n\n  test('should handle navigation to A/B Testing page with invalid link', async ({ page }) => {\n    // Verify welcome heading is visible on home page\n    const welcomeHeading = page.getByRole('heading', { name: /welcome to the-internet/i });\n    await expect(welcomeHeading).toBeVisible();\n\n    // Click a non-existent link\n    const invalidLink = page.getByRole('link', { name: /invalid/i });\n    await invalidLink.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/page not found/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify welcome heading is still visible\n    await expect(welcomeHeading).toBeVisible();\n\n    // Verify available examples heading is still visible\n    const availableExamplesHeading = page.getByRole('heading', { name: /available examples/i });\n    await expect(availableExamplesHeading).toBeVisible();\n\n    // Verify URL is still root\n    const rootUrl = page.url();\n    expect(rootUrl).toBe('/');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.82,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 273.07,
+      "feedback_used": ""
+    }
+  ]
+}

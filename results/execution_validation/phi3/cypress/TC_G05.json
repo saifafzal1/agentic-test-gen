@@ -1,0 +1,44 @@
+{
+  "tc_id": "TC_G05",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.79,
+  "total_latency_s": 461.381,
+  "final_script": "describe('Product List Display - Inventory Page', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com/inventory.html');\n    cy.get('[data-testid=\"login-form\"]').within(() => {\n      cy.get('[data-testid=\"email-input\"]').type('standard_user@example.com');\n      cy.get('[data-testid=\"password-input\"]').type('secret_sauce');\n      cy.get('[data-testid=\"login-button\"]').click();\n    });\n  });\n\n  it('should display complete product cards with non-empty names and prices starting with $', () => {\n    cy.get('[data-testid=\"inventory-list\"]').should('be.visible');\n    cy.get('[data-testid=\"inventory-item\"]').should('have.length.exactly', 6);\n\n    cy.get('[data-testid=\"inventory-item\"]').each(($item, index) => {\n      cy.get(`[data-testid=\"inventory-item-name\"]`).should('be.visible');\n      cy.get(`[data-testid=\"inventory-item-name\"]`).should('contain.text');\n\n      cy.get(`[data-testid=\"inventory-item-price\"]`).should('be.visible');\n      cy.get(`[data-testid=\"inventory-item-price\"]`).should('contain.text');\n      cy.get(`[data-testid=\"inventory-item-price\"]`).should('startWith', '$');\n\n      cy.get(`[data-testid=\"inventory-item-name\"]`).should('have.length.greaterThan', 0);\n      cy.get(`[data-testid=\"inventory-item-price\"]`).should('have.length.greaterThan', 0);\n    });\n  });\n\n  it('should handle empty inventory list gracefully', () => {\n    cy.visit('https://www.saucedemo.com/inventory.html');\n    cy.get('[data-testid=\"inventory-list\"]').should('be.visible');\n\n    cy.get('[data-testid=\"inventory-item\"]').should('not.exist');\n\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'No products available');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.198,
+        "syntax": 0.12,
+        "assertion": 0.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          ".should("
+        ],
+        "assertion_count": 0,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: .should(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2",
+        "complete": false
+      },
+      "latency_s": 228.32,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 233.061,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: .should(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2"
+    }
+  ]
+}

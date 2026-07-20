@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G11",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 479.369,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mobile Inventory Page Usability', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/sauce-demo');\n  });\n\n  test('should display inventory page and burger menu on mobile portrait viewport', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 812 });\n    await expect(page).toHaveURL(/sauce-demo/);\n\n    const usernameInput = page.getByLabel('Username');\n    await expect(usernameInput).toBeVisible();\n    await expect(usernameInput).toHaveValue('standard_user');\n\n    const passwordInput = page.getByLabel('Password');\n    await expect(passwordInput).toBeVisible();\n    await expect(passwordInput).toHaveValue('secret_sauce');\n\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await expect(loginButton).toBeVisible();\n\n    await loginButton.click();\n\n    const inventoryPage = page.getByRole('region', { name: /inventory/i });\n    await expect(inventoryPage).toBeVisible();\n\n    const burgerMenuBtn = page.getByRole('button', { id: '#react-burger-menu-btn' });\n    await expect(burgerMenuBtn).toBeVisible();\n\n    const sideMenu = page.locator('.bm-menu');\n    await expect(sideMenu).toBeVisible();\n\n    const logoutLink = page.getByRole('link', { id: '#logout_sidebar_link' });\n    await expect(logoutLink).toBeVisible();\n  });\n\n  test('should open and close burger menu on mobile portrait viewport', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 812 });\n    const burgerMenuBtn = page.getByRole('button', { id: '#react-burger-menu-btn' });\n    await expect(burgerMenuBtn).toBeVisible();\n\n    // Open burger menu\n    await burgerMenuBtn.click();\n    const sideMenu = page.locator('.bm-menu');\n    await expect(sideMenu).toBeVisible();\n\n    // Verify logout link is visible\n    const logoutLink = page.getByRole('link', { id: '#logout_sidebar_link' });\n    await expect(logoutLink).toBeVisible();\n\n    // Close burger menu\n    await burgerMenuBtn.click();\n    await expect(sideMenu).not.toBeVisible();\n\n    // Verify burger menu button is still visible\n    await expect(burgerMenuBtn).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 479.369,
+      "feedback_used": ""
+    }
+  ]
+}

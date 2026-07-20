@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_G09",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.85,
+  "total_latency_s": 838.201,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Checkout Form Validation - Required Fields', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n    await page.getByRole('button', { name: /sign in/i }).click();\n    await page.getByLabel(/standard_user/i).click();\n    await page.getByLabel(/secret_sauce/i).click();\n    await page.getByRole('button', { name: /sign in/i }).click();\n    await page.getByRole('button', { name: /sign up/i }).click();\n    await page.getByLabel(/standard_user/i).click();\n    await page.getByLabel(/secret_sauce/i).click();\n    await page.getByRole('button', { name: /sign in/i }).click();\n  });\n\n  test('should display error when postal code is missing', async ({ page }) => {\n    await page.getByRole('button', { name: /add to cart/i }).click();\n    await page.getByRole('button', { name: /add to cart/i }).click();\n    await page.getByRole('button', { name: /add to cart/i }).click();\n    await page.getByRole('button', { name: /add to cart/i }).click();\n    await page.getByRole('button', { name: /checkout/i }).click();\n\n    const firstNameInput = page.getByLabel(/first name/i);\n    await firstNameInput.fill('Saif');\n\n    const lastNameInput = page.getByLabel(/last name/i);\n    await lastNameInput.fill('Afzal');\n\n    const postalCodeInput = page.getByLabel(/postal code/i);\n    await postalCodeInput.fill('');\n\n    const continueButton = page.getByRole('button', { name: /continue/i });\n    await expect(continueButton).toBeDisabled();\n\n    const errorContainer = page.getByTestId('error');\n    await expect(errorContainer).toBeVisible();\n    await expect(errorContainer).toContainText('Postal Code is required');\n  });\n\n  test('should allow checkout with all required fields filled', async ({ page }) => {\n    await page.getByRole('button', { name: /add to cart/i }).click();\n    await page.getByRole('button', { name: /add to cart/i }).click();\n    await page.getByRole('button', { name: /add to cart/i }).click();\n    await page.getByRole('button', { name: /checkout/i }).click();\n\n    const firstNameInput = page.getByLabel(/first name/i);\n    await firstNameInput.fill('Saif');\n\n    const lastNameInput = page.getByLabel(/last name/i);\n    await lastNameInput.fill('Afzal');\n\n    const postalCodeInput = page.getByLabel(/postal code/i);\n    await postalCodeInput.fill('12345');\n\n    const continueButton = page.getByRole('button', { name: /continue/i });\n    await expect(continueButton).not.toBeDisabled();\n\n    const errorContainer = page.getByTestId('error');\n    await expect(errorContainer).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.455,
+        "syntax": 0.2,
+        "assertion": 0.75,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 3,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 532.664,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 5,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 305.537,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

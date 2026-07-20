@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G05",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 331.004,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Product List Display - Complete Cards', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/inventory');\n  });\n\n  test('should display 6 complete product cards with non-empty names and prices starting with $', async ({ page }) => {\n    // Verify login page is visible\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await expect(loginButton).toBeVisible();\n\n    // Click login button\n    await loginButton.click();\n\n    // Verify login form is visible\n    const emailInput = page.getByLabel(/email/i);\n    const passwordInput = page.getByLabel(/password/i);\n    const loginButton = page.getByRole('button', { name: /log in/i });\n\n    await expect(emailInput).toBeVisible();\n    await expect(passwordInput).toBeVisible();\n\n    // Fill in login credentials\n    await emailInput.fill('standard_user@example.com');\n    await passwordInput.fill('secret_sauce');\n\n    // Click login button\n    await loginButton.click();\n\n    // Verify login success message\n    const successMessage = page.getByText(/logged in successfully/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify product list is displayed\n    const productList = page.getByRole('list', { name: /products/i });\n    await expect(productList).toBeVisible();\n\n    // Verify there are exactly 6 product cards\n    const productCards = page.locator('[data-testid=\"product-card\"]');\n    const cardCount = await productCards.count();\n    expect(cardCount).toBe(6);\n\n    // Verify each card has a name element with non-empty text\n    for (let i = 0; i < 6; i++) {\n      const card = await productCards.nth(i);\n      const name = await card.getByRole('heading').textContent();\n      expect(name).toBeDefined();\n      expect(name).not.toBe('');\n    }\n\n    // Verify each card has a price element with text starting with $\n    for (let i = 0; i < 6; i++) {\n      const card = await productCards.nth(i);\n      const price = await card.getByRole('paragraph').textContent();\n      expect(price).toMatch(/^\\$/);\n    }\n  });\n\n  test('should handle empty product list with error message', async ({ page }) => {\n    // Verify login page is visible\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await expect(loginButton).toBeVisible();\n\n    // Click login button\n    await loginButton.click();\n\n    // Verify login form is visible\n    const emailInput = page.getByLabel(/email/i);\n    const passwordInput = page.getByLabel(/password/i);\n    const loginButton = page.getByRole('button', { name: /log in/i });\n\n    await expect(emailInput).toBeVisible();\n    await expect(passwordInput).toBeVisible();\n\n    // Fill in login credentials\n    await emailInput.fill('standard_user@example.com');\n    await passwordInput.fill('wrong_password');\n\n    // Click login button\n    await loginButton.click();\n\n    // Verify login failed message\n    const errorMessage = page.getByText(/invalid credentials/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify product list is empty\n    const productList = page.getByRole('list', { name: /products/i });\n    await expect(productList).toBeVisible();\n    const productCards = page.locator('[data-testid=\"product-card\"]');\n    const cardCount = await productCards.count();\n    expect(cardCount).toBe(0);\n\n    // Verify error message is displayed\n    const errorText = page.getByText(/please try again/i);\n    await expect(errorText).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 331.004,
+      "feedback_used": ""
+    }
+  ]
+}

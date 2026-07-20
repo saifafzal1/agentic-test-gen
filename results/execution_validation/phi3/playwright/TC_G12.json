@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_G12",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.85,
+  "total_latency_s": 833.767,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Accessible Product Images and Login Fields', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should have accessible attributes for product images and login fields', async ({ page }) => {\n    // Verify login fields have accessible attributes\n    const usernameField = page.getByLabel('Username');\n    await expect(usernameField).toBeVisible();\n    await expect(usernameField).toHaveAttribute('placeholder', 'Enter username');\n\n    const passwordField = page.getByLabel('Password');\n    await expect(passwordField).toBeVisible();\n    await expect(passwordField).toHaveAttribute('placeholder', 'Enter password');\n\n    // Verify login button is accessible\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await expect(loginButton).toBeVisible();\n\n    // Verify login form is accessible\n    const loginForm = page.locator('[data-testid=\"login-form\"]');\n    await expect(loginForm).toBeVisible();\n\n    // Verify product images have accessible alt attributes\n    const productItems = page.locator('[data-testid=\"inventory-item\"]');\n    await expect(productItems).toHaveCount(3);\n\n    const firstProductImage = page.locator('[data-testid=\"inventory-item-img\"]');\n    await expect(firstProductImage).toBeVisible();\n    await expect(firstProductImage).toHaveAttribute('alt', 'Product 1 description');\n\n    const secondProductImage = page.locator('[data-testid=\"inventory-item-img\"]');\n    await expect(secondProductImage).toBeVisible();\n    await expect(secondProductImage).toHaveAttribute('alt', 'Product 2 description');\n\n    const thirdProductImage = page.locator('[data-testid=\"inventory-item-img\"]');\n    await expect(thirdProductImage).toBeVisible();\n    await expect(thirdProductImage).toHaveAttribute('alt', 'Product 3 description');\n\n    // Verify login with standard_user\n    await usernameField.fill('standard_user');\n    await passwordField.fill('secret_sauce');\n    await loginButton.click();\n\n    // Verify successful login message is visible\n    const successMessage = page.getByText('Login successful');\n    await expect(successMessage).toBeVisible();\n\n    // Verify product images still have accessible alt attributes after login\n    await expect(firstProductImage).toHaveAttribute('alt', 'Product 1 description');\n    await expect(secondProductImage).toHaveAttribute('alt', 'Product 2 description');\n    await expect(thirdProductImage).toHaveAttribute('alt', 'Product 3 description');\n  });\n\n  test('should handle login failure and maintain accessible product images', async ({ page }) => {\n    // Verify login form is visible\n    const loginForm = page.locator('[data-testid=\"login-form\"]');\n    await expect(loginForm).toBeVisible();\n\n    // Verify login button is accessible\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await expect(loginButton).toBeVisible();\n\n    // Verify login form is accessible\n    await expect(loginForm).toBeVisible();\n\n    // Verify product images have accessible alt attributes\n    const productItems = page.locator('[data-testid=\"inventory-item\"]');\n    await expect(productItems).toHaveCount(3);\n\n    const firstProductImage = page.locator('[data-testid=\"inventory-item-img\"]');\n    await expect(firstProductImage).toBeVisible();\n    await expect(firstProductImage).toHaveAttribute('alt', 'Product 1 description');\n\n    const secondProductImage = page.locator('[data-testid=\"inventory-item-img\"]');\n    await expect(secondProductImage).toBeVisible();\n    await expect(secondProductImage).toHaveAttribute('alt', 'Product 2 description');\n\n    const thirdProductImage = page.locator('[data-testid=\"inventory-item-img\"]');\n    await expect(thirdProductImage).toBeVisible();\n    await expect(thirdProductImage).toHaveAttribute('alt', 'Product 3 description');\n\n    // Attempt to login with invalid credentials\n    await usernameField.fill('invalid_user');\n    await passwordField.fill('wrong_password');\n    await loginButton.click();\n\n    // Verify login error message is visible\n    const errorMessage = page.getByText('Invalid credentials');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify product images still have accessible alt attributes after login failure\n    await expect(firstProductImage).toHaveAttribute('alt', 'Product 1 description');\n    await expect(secondProductImage).toHaveAttribute('alt', 'Product 2 description');\n    await expect(thirdProductImage).toHaveAttribute('alt', 'Product 3 description');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.53,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 337.115,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 31,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 496.652,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

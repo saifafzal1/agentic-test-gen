@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G03",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 222.326,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Logout Functionality - Standard User', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n    await page.getByLabel('Sign in').click();\n    await page.getByLabel('standard_user').fill('standard_user');\n    await page.getByLabel('secret_sauce').fill('secret_sauce');\n    await page.getByRole('button', { name: /sign in/i }).click();\n    await page.waitForURL('**/dashboard');\n  });\n\n  test('should log out successfully and return to login page', async ({ page }) => {\n    // Verify user is signed in\n    const dashboardTitle = page.getByRole('heading', { name: /dashboard/i });\n    await expect(dashboardTitle).toBeVisible();\n\n    // Click burger menu button to open side menu\n    const burgerMenuBtn = page.getByRole('button', { name: /menu/i });\n    await expect(burgerMenuBtn).toBeVisible();\n    await burgerMenuBtn.click();\n\n    // Verify side menu is visible\n    const sideMenu = page.getByRole('navigation', { name: /side menu/i });\n    await expect(sideMenu).toBeVisible();\n\n    // Click logout link\n    const logoutLink = page.getByRole('link', { href: /logout/i });\n    await expect(logoutLink).toBeVisible();\n    await logoutLink.click();\n\n    // Verify user is redirected to login page\n    await expect(page).toHaveURL(/login/);\n\n    // Verify login button is visible again\n    const loginButton = page.getByRole('button', { name: /sign in/i });\n    await expect(loginButton).toBeVisible();\n  });\n\n  test('should handle logout failure and display error message', async ({ page }) => {\n    // Mock API response for logout failure\n    await page.route('**/api/auth/logout', (route) => {\n      route.abort('failed');\n    });\n\n    // Click burger menu button to open side menu\n    const burgerMenuBtn = page.getByRole('button', { name: /menu/i });\n    await expect(burgerMenuBtn).toBeVisible();\n    await burgerMenuBtn.click();\n\n    // Click logout link\n    const logoutLink = page.getByRole('link', { href: /logout/i });\n    await expect(logoutLink).toBeVisible();\n    await logoutLink.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/error/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify login button is still visible\n    const loginButton = page.getByRole('button', { name: /sign in/i });\n    await expect(loginButton).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 222.326,
+      "feedback_used": ""
+    }
+  ]
+}

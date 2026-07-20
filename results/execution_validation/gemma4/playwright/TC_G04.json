@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G04",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 79.164,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Form Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com');\n  });\n\n  test('should display error when both username and password fields are empty', async ({ page }) => {\n    // Verify login button is visible\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await expect(loginButton).toBeVisible();\n\n    // Verify error container is not visible initially\n    const errorContainer = page.locator('[data-test=\"error\"]');\n    await expect(errorContainer).not.toBeVisible();\n\n    // Click login button with empty fields\n    await loginButton.click();\n\n    // Verify error container is now visible\n    await expect(errorContainer).toBeVisible();\n\n    // Verify error message contains 'Username is required'\n    const errorMessage = page.getByText(/Username is required/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error message contains 'Password is required'\n    const passwordError = page.getByText(/Password is required/i);\n    await expect(passwordError).toBeVisible();\n  });\n\n  test('should display error when only password field is filled', async ({ page }) => {\n    // Fill username field with valid data\n    const usernameInput = page.getByLabel(/username/i);\n    await usernameInput.fill('standard_user');\n\n    // Verify username field has value\n    await expect(usernameInput).toHaveValue('standard_user');\n\n    // Click login button with empty password field\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await loginButton.click();\n\n    // Verify error container is visible\n    const errorContainer = page.locator('[data-test=\"error\"]');\n    await expect(errorContainer).toBeVisible();\n\n    // Verify error message contains 'Password is required'\n    const passwordError = page.getByText(/Password is required/i);\n    await expect(passwordError).toBeVisible();\n\n    // Verify error message does not contain 'Username is required'\n    const usernameError = page.getByText(/Username is required/i);\n    await expect(usernameError).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.164,
+      "feedback_used": ""
+    }
+  ]
+}

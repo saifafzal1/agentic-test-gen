@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_G18",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.53,
+  "total_latency_s": 965.317,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload - Upload Confirmation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/upload');\n  });\n\n  test('should successfully upload a small text file and display confirmation', async ({ page }) => {\n    // Locate and click the file input using getByRole\n    const fileInput = page.getByRole('button', { name: /choose file/i });\n    await fileInput.click();\n\n    // Locate and select a small text file using getByLabel\n    const fileSelect = page.getByLabel(/select file/i);\n    await fileSelect.click();\n\n    // Locate and click the submit button using getByRole\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Wait for the upload confirmation page to load\n    await page.waitForURL('**/upload-confirmation');\n\n    // Verify the page title contains 'File Uploaded!'\n    const pageTitle = page.getByRole('heading', { name: /file uploaded/i });\n    await expect(pageTitle).toBeVisible();\n\n    // Verify the uploaded file's name is displayed\n    const uploadedFiles = page.getByRole('region', { name: /uploaded files/i });\n    await expect(uploadedFiles).toBeVisible();\n    const fileName = page.getByText(/sample.txt/i);\n    await expect(fileName).toBeVisible();\n\n    // Verify the confirmation message is visible\n    const confirmationMessage = page.getByText(/file uploaded successfully/i);\n    await expect(confirmationMessage).toBeVisible();\n  });\n\n  test('should handle empty file selection and display error message', async ({ page }) => {\n    // Locate and click the file input using getByRole\n    const fileInput = page.getByRole('button', { name: /choose file/i });\n    await fileInput.click();\n\n    // Locate and click the submit button using getByRole\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Wait for the error page to load\n    await page.waitForURL('**/upload-error');\n\n    // Verify the error message is displayed\n    const errorMessage = page.getByText(/no file selected/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the file input is still visible\n    await expect(fileInput).toBeVisible();\n\n    // Verify the file input is still enabled\n    await expect(fileInput).toBeEnabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.53,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 291.991,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.53,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 290.484,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.53,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 382.842,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

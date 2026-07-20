@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_G24",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.82,
+  "total_latency_s": 205.798,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('HTTP Status Code Reporting', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/status_codes');\n  });\n\n  test('should display correct status code message when clicking 200', async ({ page }) => {\n    // Verify initial page loads\n    await expect(page).toHaveURL(/status_codes/);\n    const statusMessage = page.getByText('This page returned a 200 status code');\n    await expect(statusMessage).not.toBeVisible();\n\n    // Click the 200 link using getByRole\n    const statusLink = page.getByRole('link', { name: '200' });\n    await statusLink.click();\n\n    // Verify navigation to the correct URL\n    await expect(page).toHaveURL(/status_codes\\/200/);\n\n    // Verify the status message is displayed\n    await expect(statusMessage).toBeVisible();\n    await expect(statusMessage).toContainText('200 status code');\n\n    // Verify the status code is displayed in the page\n    const statusCodeDisplay = page.getByText('200');\n    await expect(statusCodeDisplay).toBeVisible();\n\n    // Verify the response time is displayed\n    const responseTime = page.getByText(/Response time/);\n    await expect(responseTime).toBeVisible();\n  });\n\n  test('should display correct status code message when clicking 404', async ({ page }) => {\n    // Verify initial page loads\n    await expect(page).toHaveURL(/status_codes/);\n\n    // Click the 400 link using getByRole\n    const statusLink = page.getByRole('link', { name: '400' });\n    await statusLink.click();\n\n    // Verify navigation to the correct URL\n    await expect(page).toHaveURL(/status_codes\\/400/);\n\n    // Verify the status message is displayed\n    const statusMessage = page.getByText('This page returned a 400 status code');\n    await expect(statusMessage).toBeVisible();\n\n    // Verify the status code is displayed in the page\n    const statusCodeDisplay = page.getByText('400');\n    await expect(statusCodeDisplay).toBeVisible();\n\n    // Verify the response time is displayed\n    const responseTime = page.getByText(/Response time/);\n    await expect(responseTime).toBeVisible();\n\n    // Navigate back to the main status codes page\n    await page.goto('https://the-internet.herokuapp.com/status_codes');\n    await expect(page).toHaveURL(/status_codes/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.524,
+        "syntax": 0.185,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 79.212,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.82,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 126.586,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

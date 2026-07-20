@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G16",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.82,
+  "total_latency_s": 78.986,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('JavaScript Confirm Dialog', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/javascript_alerts');\n  });\n\n  test('should handle JS confirm dialog and record user choice', async ({ page }) => {\n    // Click the button to open the confirm dialog\n    const confirmButton = page.getByRole('button', { name: /click for js confirm/i });\n    await confirmButton.click();\n\n    // Accept the confirm dialog\n    const confirmDialog = page.locator('[data-testid=\"confirm-dialog\"]');\n    await confirmDialog.getByRole('button', { name: /ok/i }).click();\n\n    // Verify the result element shows 'You clicked: Ok'\n    const resultElement = page.locator('#result');\n    await expect(resultElement).toContainText('You clicked: Ok');\n\n    // Verify the confirmation dialog is closed\n    await expect(confirmDialog).not.toBeVisible();\n  });\n\n  test('should handle JS confirm dialog and record user choice when dismissing', async ({ page }) => {\n    // Click the button to open the confirm dialog\n    const confirmButton = page.getByRole('button', { name: /click for js confirm/i });\n    await confirmButton.click();\n\n    // Dismiss the confirm dialog\n    const confirmDialog = page.locator('[data-testid=\"confirm-dialog\"]');\n    await confirmDialog.getByRole('button', { name: /cancel/i }).click();\n\n    // Verify the result element shows 'You clicked Cancel'\n    const resultElement = page.locator('#result');\n    await expect(resultElement).toContainText('You clicked Cancel');\n\n    // Verify the confirmation dialog is closed\n    await expect(confirmDialog).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.82,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 4,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 78.986,
+      "feedback_used": ""
+    }
+  ]
+}

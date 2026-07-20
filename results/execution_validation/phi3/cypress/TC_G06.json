@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G06",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 320.688,
+  "final_script": "describe('Product Sort by Price - Cheapest First', () => {\n  beforeEach(() => {\n    cy.visit('/');\n    cy.login('standard_user', 'secret_sauce');\n  });\n\n  it('should sort products by price in ascending order when selecting \"lohi\" option', () => {\n    // Verify initial product list is displayed\n    cy.get('[data-testid=\"product-list\"]').should('be.visible');\n    cy.get('[data-testid=\"product-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify initial sort option is not selected\n    cy.get('[data-testid=\"product-sort-dropdown\"]').should('contain', 'Price');\n\n    // Verify \"lohi\" option is available\n    cy.get('[data-testid=\"product-sort-dropdown\"]').should('contain', 'Price');\n    cy.get('[data-testid=\"product-sort-option-lohi\"]').should('be.visible');\n\n    // Click \"lohi\" option to sort by price\n    cy.get('[data-testid=\"product-sort-option-lohi\"]').click();\n\n    // Verify sort state is updated\n    cy.get('[data-testid=\"product-sort-dropdown\"]').should('contain', 'Price');\n    cy.get('[data-testid=\"product-sort-option-lohi\"]').should('be.visible');\n\n    // Verify products are now sorted by price in ascending order\n    cy.get('[data-testid=\"product-item\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"product-item\"]').first().should('contain', 'Price: $1');\n    cy.get('[data-testid=\"product-item\"]').last().should('contain', 'Price: $10');\n  });\n\n  it('should handle edge case where all products have the same price', () => {\n    // Verify initial product list is displayed\n    cy.get('[data-testid=\"product-list\"]').should('be.visible');\n    cy.get('[data-testid=\"product-item\"]').should('have.length.greaterThan', 0);\n\n    // Verify initial sort option is not selected\n    cy.get('[data-testid=\"product-sort-dropdown\"]').should('contain', 'Price');\n\n    // Click \"lohi\" option to sort by price\n    cy.get('[data-testid=\"product-sort-option-lohi\"]').click();\n\n    // Verify sort state is updated\n    cy.get('[data-testid=\"product-sort-dropdown\"]').should('contain', 'Price');\n    cy.get('[data-testid=\"product-sort-option-lohi\"]').should('be.visible');\n\n    // Verify products are still displayed in the same order (no change)\n    cy.get('[data-testid=\"product-item\"]').first().should('contain', 'Price: $1');\n    cy.get('[data-testid=\"product-item\"]').last().should('contain', 'Price: $1');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 17,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 320.688,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G02",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 79.174,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Error States - Locked Out User', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com');\n  });\n\n  test('should display locked out error message when using locked user credentials', async ({ page }) => {\n    // Locate and fill username field using getByLabel\n    const usernameField = page.getByLabel('Username');\n    await usernameField.fill('locked_out_user');\n\n    // Locate and fill password field using getByLabel\n    const passwordField = page.getByLabel('Password');\n    await passwordField.fill('secret_sauce');\n\n    // Locate and click login button using getByRole\n    const loginButton = page.getByRole('button', { name: 'Login' });\n    await loginButton.click();\n\n    // Wait for error message to appear\n    await page.waitForSelector('[data-test=\"error\"]');\n\n    // Verify error container is visible\n    const errorContainer = page.locator('[data-test=\"error\"]');\n    await expect(errorContainer).toBeVisible();\n\n    // Verify error message contains specific text\n    const errorMessage = page.getByText(/Sorry, this user has been locked out/);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify user is still on the login page\n    const loginPageUrl = page.url();\n    expect(loginPageUrl).toContain('saucedemo.com/login');\n  });\n\n  test('should not navigate to inventory page when locked out user attempts login', async ({ page }) => {\n    // Locate and fill username field using getByLabel\n    const usernameField = page.getByLabel('Username');\n    await usernameField.fill('locked_out_user');\n\n    // Locate and fill password field using getByLabel\n    const passwordField = page.getByLabel('Password');\n    await passwordField.fill('secret_sauce');\n\n    // Locate and click login button using getByRole\n    const loginButton = page.getByRole('button', { name: 'Login' });\n    await loginButton.click();\n\n    // Wait for error message to appear\n    await page.waitForSelector('[data-test=\"error\"]');\n\n    // Verify error message is displayed\n    const errorContainer = page.locator('[data-test=\"error\"]');\n    await expect(errorContainer).toBeVisible();\n\n    // Verify inventory page URL is not present\n    const inventoryUrl = page.url();\n    expect(inventoryUrl).not.toContain('inventory.html');\n\n    // Verify login button is still visible and enabled\n    const loginButtonAfterError = page.getByRole('button', { name: 'Login' });\n    await expect(loginButtonAfterError).toBeVisible();\n    await expect(loginButtonAfterError).not.toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.174,
+      "feedback_used": ""
+    }
+  ]
+}

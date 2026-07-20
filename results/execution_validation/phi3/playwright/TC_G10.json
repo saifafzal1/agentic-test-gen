@@ -1,0 +1,66 @@
+{
+  "tc_id": "TC_G10",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.162,
+  "total_latency_s": 1825.103,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Product Catalog Navigation - Open Detail and Return to Catalogue', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n    await page.route('**/api/auth/login', route => {\n      route.continue();\n    });\n    await page.route('**/api/auth/login', route => {\n      route.abort('failed');\n    });\n    await page.route('**/api/auth/login', route => {\n      route.continue();\n    });\n    await page.route('**/api/auth/login', route => {\n      route.abort('failed');\n    });\n    await page.route('**/api/auth/login', route => {\n      route.continue();\n    });\n    await page.route('**/api/auth/login', route => {\n      route.abort('failed');\n    });\n    await page.route('**/api/auth/login', route => {\n      route.continue();\n    });\n    await page.route('**/api/auth/login', route => {\n      route.abort('failed');\n    });\n    await page.route('**/api/auth/login', route => {\n      route.continue();\n    });\n    await page.route('**/api/auth/login', route => {\n      route.abort('failed');\n    });\n    await page.route('**/api/auth/login', route => {\n      route.continue();\n    });\n    await page.route('**/api/auth/login', route => {\n      route.abort('failed');\n    });\n    await page.route('**/api/auth/login', route => {\n      route.continue();\n    });\n    await page.route('**/api/auth/login', route => {\n      route.abort('failed');\n    });\n    await page.route('**/api/auth/login', route => {\n      route.continue();\n    });\n    await page.route('**/api/auth/login', route => {\n      route.abort('failed');\n    });\n    await page.route('**/api/auth/login', route => {\n      route.continue();\n    });\n    await page.route('**/api/auth/login', route => {\n      route.abort('failed');\n    });\n    await page.route('**/api/auth/login', route => {\n      route.continue();\n    });\n    await page.route('**/api/auth/login', route => {\n      route.abort('failed');\n    });\n    await page.route('**/api/auth/login', route => {\n      route.continue();\n    });\n    await page.route('**/api/auth/login', route => {\n      route.abort('failed');\n    });\n    await page.route('**/api/auth/login', route => {\n      route.continue();\n    });\n    await page.route('**/api/auth/login', route => {\n      route.abort('failed');\n    });\n    await page.route('**/api/auth/login', route => {\n      route.continue();\n    });\n    await page.route('**/api/auth/login', route => {\n      route.abort('failed');\n    });\n    await page.route('**/api/auth/login', route => {\n      route.continue();\n    });\n    await page.route('**/api/auth/login', route => {\n      route.abort('failed');\n    });\n    await page.route('**/api/auth/login', route => {\n      route.continue();\n    });\n    await page.route('**/api/auth/login', route => {\n      route.abort('failed');\n    });\n    await page.route('**/api/auth/login', route => {\n      route.continue();\n    });\n    await page.route('**/api/auth/login', route => {\n      route.abort('failed');\n    });\n    await page.route('**/api/auth/login', route => {\n      route.continue();\n    });\n    await page.route('**/api/auth/login', route => {\n      route.abort('failed",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.162,
+        "syntax": 0.03,
+        "assertion": 0.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "expect(",
+          "test("
+        ],
+        "assertion_count": 0,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(, test(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2",
+        "complete": false
+      },
+      "latency_s": 543.755,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.162,
+        "syntax": 0.03,
+        "assertion": 0.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "expect(",
+          "test("
+        ],
+        "assertion_count": 0,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(, test(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2",
+        "complete": false
+      },
+      "latency_s": 614.99,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(, test(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2"
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.162,
+        "syntax": 0.03,
+        "assertion": 0.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "expect(",
+          "test("
+        ],
+        "assertion_count": 0,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(, test(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2",
+        "complete": false
+      },
+      "latency_s": 666.358,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: expect(, test(; Insufficient assertions \u2014 found 0 in 1 block(s), need at least 2"
+    }
+  ]
+}

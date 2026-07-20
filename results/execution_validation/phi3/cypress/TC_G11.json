@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G11",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 82.887,
+  "final_script": "describe('Mobile Responsive Sauce Demo Store', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should display inventory page on mobile portrait viewport and show burger menu button', () => {\n    // Set viewport to mobile portrait\n    cy.viewport('iphone-x');\n\n    // Verify viewport size\n    cy.window().then((win) => {\n      expect(win.innerWidth).to.equal(375);\n      expect(win.innerHeight).to.equal(812);\n    });\n\n    // Verify login button is visible\n    cy.get('[data-testid=\"login-btn\"]').should('be.visible');\n\n    // Verify burger menu button is visible\n    cy.get('[data-testid=\"react-burger-menu-btn\"]').should('be.visible');\n\n    // Verify burger menu opens\n    cy.get('[data-testid=\"react-burger-menu-btn\"]').click();\n    cy.get('[data-testid=\"bm-menu\"]').should('be.visible');\n\n    // Verify logout link is visible inside the side menu\n    cy.get('[data-testid=\"logout-sidebar-link\"]').should('be.visible');\n  });\n\n  it('should handle burger menu click and logout link visibility on mobile portrait', () => {\n    // Set viewport to mobile portrait\n    cy.viewport('iphone-x');\n\n    // Verify burger menu button is visible\n    cy.get('[data-testid=\"react-burger-menu-btn\"]').should('be.visible');\n\n    // Click burger menu button\n    cy.get('[data-testid=\"react-burger-menu-btn\"]').click();\n\n    // Verify side menu is open\n    cy.get('[data-testid=\"bm-menu\"]').should('be.visible');\n\n    // Verify logout link is visible inside the side menu\n    cy.get('[data-testid=\"logout-sidebar-link\"]').should('be.visible');\n\n    // Click logout link\n    cy.get('[data-testid=\"logout-sidebar-link\"]').click();\n\n    // Verify logout confirmation appears\n    cy.get('[data-testid=\"logout-confirmation\"]').should('be.visible');\n\n    // Verify burger menu closes\n    cy.get('[data-testid=\"react-burger-menu-btn\"]').should('not.be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 82.887,
+      "feedback_used": ""
+    }
+  ]
+}

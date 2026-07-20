@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G20",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.82,
+  "total_latency_s": 491.26,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dropdown Selection Test', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dropdown');\n  });\n\n  test('should display disabled prompt and allow selection of option 2', async ({ page }) => {\n    // Verify initial disabled prompt is visible\n    const prompt = page.getByRole('status');\n    await expect(prompt).toContainText('Please select an option');\n\n    // Verify dropdown is disabled initially\n    const dropdown = page.getByRole('combobox');\n    await expect(dropdown).toBeDisabled();\n\n    // Verify dropdown has no selected option initially\n    const options = page.locator('[data-testid=\"dropdown-options\"]');\n    await expect(options).toHaveCount(3);\n\n    // Verify option 2 is visible\n    const option2 = page.getByText('Option 2');\n    await expect(option2).toBeVisible();\n\n    // Verify option 2 is not selected\n    const selectedValue = page.getByRole('option', { name: /option 2/i });\n    await expect(selectedValue).not.toBeSelected();\n\n    // Click on option 2 to select it\n    await option2.click();\n\n    // Verify dropdown is now enabled\n    await expect(dropdown).not.toBeDisabled();\n\n    // Verify option 2 is now selected\n    await expect(selectedValue).toBeSelected();\n\n    // Verify dropdown value is set to '2'\n    const value = page.getByRole('heading', { name: /value: 2/i });\n    await expect(value).toBeVisible();\n\n    // Verify prompt is no longer visible\n    await expect(prompt).not.toBeVisible();\n  });\n\n  test('should handle selection of multiple options and apply them', async ({ page }) => {\n    // Verify initial disabled prompt is visible\n    const prompt = page.getByRole('status');\n    await expect(prompt).toContainText('Please select an option');\n\n    // Verify dropdown is disabled initially\n    const dropdown = page.getByRole('combobox');\n    await expect(dropdown).toBeDisabled();\n\n    // Verify dropdown has no selected option initially\n    const options = page.locator('[data-testid=\"dropdown-options\"]');\n    await expect(options).toHaveCount(3);\n\n    // Verify option 1 is visible\n    const option1 = page.getByText('Option 1');\n    await expect(option1).toBeVisible();\n\n    // Verify option 2 is visible\n    const option2 = page.getByText('Option 2');\n    await expect(option2).toBeVisible();\n\n    // Verify option 3 is visible\n    const option3 = page.getByText('Option 3');\n    await expect(option3).toBeVisible();\n\n    // Click on option 1 to select it\n    await option1.click();\n\n    // Verify option 1 is now selected\n    const selectedValue1 = page.getByRole('option', { name: /option 1/i });\n    await expect(selectedValue1).toBeSelected();\n\n    // Click on option 2 to select it\n    await option2.click();\n\n    // Verify option 2 is now selected\n    const selectedValue2 = page.getByRole('option', { name: /option 2/i });\n    await expect(selectedValue2).toBeSelected();\n\n    // Verify dropdown value is set to '1,2'\n    const value = page.getByRole('heading', { name: /value: 1,2/i });\n    await expect(value).toBeVisible();\n\n    // Verify prompt is no longer visible\n    await expect(prompt).not.toBeVisible();\n\n    // Verify dropdown is still enabled\n    await expect(dropdown).not.toBeDisabled();\n\n    // Verify option 3 is still visible\n    await expect(option3).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.82,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 491.26,
+      "feedback_used": ""
+    }
+  ]
+}

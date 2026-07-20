@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G06",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 79.15,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Product Sorting by Price', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/');\n  });\n\n  test('should sort products by price in ascending order when selecting \"lohi\"', async ({ page }) => {\n    // Login with standard user\n    const usernameInput = page.getByLabel('Username');\n    const passwordInput = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: /login/i });\n\n    await usernameInput.fill('standard_user');\n    await passwordInput.fill('secret_sauce');\n    await loginButton.click();\n\n    // Wait for inventory page to load\n    await page.waitForURL('https://www.saucedemo.com/inventory.');\n\n    // Verify products are visible\n    const productItems = page.locator('[data-testid=\"inventory-item\"]');\n    await expect(productItems).toHaveCount(6);\n\n    // Get initial prices to verify sorting later\n    const initialPrices = await page.locator('[data-testid=\"inventory-item-price\"]').allTextContents();\n    const initialPriceNumbers = initialPrices.map(price => parseFloat(price.replace('$', '')));\n\n    // Select \"lohi\" option from sort dropdown\n    const sortDropdown = page.getByLabel('Sort by');\n    await sortDropdown.selectOption({ value: 'lohi' });\n\n    // Wait for sorting to complete\n    await page.waitForTimeout(500);\n\n    // Verify products are reordered\n    const sortedPrices = await page.locator('[data-testid=\"inventory-item-price\"]').allTextContents();\n    const sortedPriceNumbers = sortedPrices.map(price => parseFloat(price.replace('$', '')));\n\n    // Verify prices are in ascending order\n    for (let i = 0; i < sortedPriceNumbers.length - 1; i++) {\n      expect(sortedPriceNumbers[i]).toBeLessThanOrEqual(sortedPriceNumbers[i + 1]);\n    }\n\n    // Verify the first item is the cheapest\n    expect(sortedPriceNumbers[0]).toBe(19.99);\n  });\n\n  test('should handle edge case when sorting with multiple items having the same price', async ({ page }) => {\n    // Login with standard user\n    const usernameInput = page.getByLabel('Username');\n    const passwordInput = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: /login/i });\n\n    await usernameInput.fill('standard_user');\n    await passwordInput.fill('secret_sauce');\n    await loginButton.click();\n\n    // Wait for inventory page to load\n    await page.waitForURL('https://www.saucedemo.com/inventory.');\n\n    // Verify products are visible\n    const productItems = page.locator('[data-testid=\"inventory-item\"]');\n    await expect(productItems).toHaveCount(6);\n\n    // Select \"lohi\" option from sort dropdown\n    const sortDropdown = page.getByLabel('Sort by');\n    await sortDropdown.selectOption({ value: 'lohi' });\n\n    // Wait for sorting to complete\n    await page.waitForTimeout(500);\n\n    // Verify all prices are in ascending order\n    const sortedPrices = await page.locator('[data-testid=\"inventory-item-price\"]').allTextContents();\n    const sortedPriceNumbers = sortedPrices.map(price => parseFloat(price.replace('$', '')));\n\n    for (let i = 0; i < sortedPriceNumbers.length - 1; i++) {\n      expect(sortedPriceNumbers[i]).toBeLessThanOrEqual(sortedPriceNumbers[i + 1]);\n    }\n\n    // Verify the last item is the most expensive\n    expect(sortedPriceNumbers[sortedPriceNumbers.length - 1]).toBe(100);\n\n    // Verify the sort indicator is visible\n    const sortIndicator = page.getByText('Price: low to high');\n    await expect(sortIndicator).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.15,
+      "feedback_used": ""
+    }
+  ]
+}

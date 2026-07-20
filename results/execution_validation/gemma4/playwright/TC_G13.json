@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G13",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 79.167,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Secure Area Login - Returning User', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/login');\n  });\n\n  test('should successfully log in a returning user and access secure area', async ({ page }) => {\n    // Verify login form fields are visible\n    const usernameField = page.getByLabel('Username');\n    const passwordField = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await expect(usernameField).toBeVisible();\n    await expect(passwordField).toBeVisible();\n    await expect(loginButton).toBeVisible();\n\n    // Fill in credentials\n    await usernameField.fill('tomsmith');\n    await passwordField.fill('SuperSecretPassword!');\n\n    // Click login button\n    await loginButton.click();\n\n    // Verify navigation to secure area\n    await expect(page).toHaveURL(/.*secure/);\n\n    // Verify success flash banner is displayed\n    const successBanner = page.locator('.flash.success');\n    await expect(successBanner).toBeVisible();\n    await expect(successBanner).toContainText('You logged into a secure area!');\n\n    // Verify secure content is visible\n    const secureContent = page.getByText('Secure Area');\n    await expect(secureContent).toBeVisible();\n  });\n\n  test('should display error message when login fails with invalid credentials', async ({ page }) => {\n    // Fill in invalid credentials\n    const usernameField = page.getByLabel('Username');\n    const passwordField = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: /login/i });\n\n    await usernameField.fill('wronguser');\n    await passwordField.fill('wrongpassword');\n\n    // Click login button\n    await loginButton.click();\n\n    // Verify user remains on login page\n    await expect(page).toHaveURL(/.*login/);\n\n    // Verify error message is displayed\n    const errorBanner = page.locator('.flash.error');\n    await expect(errorBanner).toBeVisible();\n    await expect(errorBanner).toContainText('Invalid username or password');\n\n    // Verify secure content is not visible\n    const secureContent = page.getByText('Secure Area');\n    await expect(secureContent).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.167,
+      "feedback_used": ""
+    }
+  ]
+}

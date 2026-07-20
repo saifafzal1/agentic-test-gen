@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G07",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 317.943,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Shopping Cart - Add and Remove Product', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should add a product to the cart and update cart badge', async ({ page }) => {\n    // Login as standard_user\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await loginButton.click();\n    const emailInput = page.getByLabel(/email/i);\n    await emailInput.fill('standard_user@example.com');\n    const passwordInput = page.getByLabel(/password/i);\n    await passwordInput.fill('secret_sauce');\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await loginButton.click();\n\n    // Verify successful login\n    const welcomeMessage = page.getByText(/Welcome, standard_user/i);\n    await expect(welcomeMessage).toBeVisible();\n\n    // Navigate to product page\n    const productLink = page.getByRole('link', { name: /sauce labs backpack/i });\n    await productLink.click();\n\n    // Verify product page is loaded\n    const productName = page.getByText(/sauce labs backpack/i);\n    await expect(productName).toBeVisible();\n\n    // Click add to cart button\n    const addToCartButton = page.getByRole('button', { name: /add to cart/i });\n    await addToCartButton.click();\n\n    // Verify cart badge shows '1'\n    const cartBadge = page.getByTestId('shopping_cart_badge');\n    await expect(cartBadge).toContainText('1');\n\n    // Verify button label changes to 'Remove'\n    const removeButton = page.getByRole('button', { name: /remove/i });\n    await expect(removeButton).toBeVisible();\n\n    // Verify remove button is enabled\n    await expect(removeButton).toBeEnabled();\n  });\n\n  test('should remove a product from the cart and update cart badge', async ({ page }) => {\n    // Login as standard_user\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await loginButton.click();\n    const emailInput = page.getByLabel(/email/i);\n    await emailInput.fill('standard_user@example.com');\n    const passwordInput = page.getByLabel(/password/i);\n    await passwordInput.fill('secret_sauce');\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await loginButton.click();\n\n    // Verify successful login\n    const welcomeMessage = page.getByText(/Welcome, standard_user/i);\n    await expect(welcomeMessage).toBeVisible();\n\n    // Navigate to product page\n    const productLink = page.getByRole('link', { name: /sauce labs backpack/i });\n    await productLink.click();\n\n    // Verify product page is loaded\n    const productName = page.getByText(/sauce labs backpack/i);\n    await expect(productName).toBeVisible();\n\n    // Click add to cart button\n    const addToCartButton = page.getByRole('button', { name: /add to cart/i });\n    await addToCartButton.click();\n\n    // Verify cart badge shows '1'\n    const cartBadge = page.getByTestId('shopping_cart_badge');\n    await expect(cartBadge).toContainText('1');\n\n    // Click remove button\n    const removeButton = page.getByRole('button', { name: /remove/i });\n    await removeButton.click();\n\n    // Verify cart badge shows '0'\n    await expect(cartBadge).toContainText('0');\n\n    // Verify remove button is disabled\n    await expect(removeButton).toBeDisabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 317.943,
+      "feedback_used": ""
+    }
+  ]
+}

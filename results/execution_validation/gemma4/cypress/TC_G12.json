@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G12",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 77.633,
+  "final_script": "describe('Product Page Accessibility - Screen Reader Support', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should display product images with alt attributes after successful login', () => {\n    // Login with standard user\n    cy.get('[data-test=\"user-name\"]').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n\n    // Verify login success\n    cy.url().should('include', '/inventory.');\n\n    // Verify product images have alt attributes\n    cy.get('[data-testid=\"inventory-item-img\"]').each(($img) => {\n      cy.wrap($img).should('have.attr', 'alt');\n      cy.wrap($img).should('not.have.attr', 'alt', '');\n    });\n\n    // Verify at least one product image exists\n    cy.get('[data-testid=\"inventory-item-img\"]').should('have.length.greaterThan', 0);\n  });\n\n  it('should display login fields with placeholder attributes', () => {\n    // Verify username field has placeholder\n    cy.get('[data-testid=\"user-name\"]').should('have.attr', 'placeholder');\n    cy.get('[data-testid=\"user-name\"]').should('not.have.attr', 'placeholder', '');\n\n    // Verify password field has placeholder\n    cy.get('[data-testid=\"password\"]').should('have.attr', 'placeholder');\n    cy.get('[data-testid=\"password\"]').should('not.have.attr', 'placeholder', '');\n\n    // Verify login button is visible\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n\n    // Verify login button has accessible name\n    cy.get('[data-testid=\"login-button\"]').should('have.attr', 'aria-label');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 77.633,
+      "feedback_used": ""
+    }
+  ]
+}

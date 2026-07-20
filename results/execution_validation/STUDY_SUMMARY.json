@@ -1,0 +1,65 @@
+{
+  "study": "Tier-2 execution-based validation, 24 grounded stories x 4 fine-tuned systems",
+  "per_combo": [
+    {
+      "model": "gemma4",
+      "framework": "cypress",
+      "records": 24,
+      "bmad_accepted": 24,
+      "avg_bmad_score": 0.79,
+      "specs_passing": 0,
+      "tests_total": 48,
+      "tests_passing": 0,
+      "load_errors": 0,
+      "saucedemo_passing": "0/12",
+      "theinternet_passing": "0/12"
+    },
+    {
+      "model": "gemma4",
+      "framework": "playwright",
+      "records": 24,
+      "bmad_accepted": 24,
+      "avg_bmad_score": 0.839,
+      "specs_passing": 1,
+      "tests_total": 46,
+      "tests_passing": 2,
+      "load_errors": 1,
+      "saucedemo_passing": "0/12",
+      "theinternet_passing": "1/12"
+    },
+    {
+      "model": "phi3",
+      "framework": "cypress",
+      "records": 24,
+      "bmad_accepted": 23,
+      "avg_bmad_score": 0.779,
+      "specs_passing": 0,
+      "tests_total": 40,
+      "tests_passing": 0,
+      "load_errors": 0,
+      "saucedemo_passing": "0/12",
+      "theinternet_passing": "0/12"
+    },
+    {
+      "model": "phi3",
+      "framework": "playwright",
+      "records": 24,
+      "bmad_accepted": 21,
+      "avg_bmad_score": 0.783,
+      "specs_passing": 1,
+      "tests_total": 38,
+      "tests_passing": 2,
+      "load_errors": 5,
+      "saucedemo_passing": "0/12",
+      "theinternet_passing": "1/12"
+    }
+  ],
+  "overall": {
+    "specs_fully_passing": 2,
+    "specs_total": 96,
+    "individual_tests_passing": 4,
+    "individual_tests_total": 172,
+    "bmad_static_accept": 92
+  },
+  "headline_finding": "BMAD static acceptance 92/96 (95.8%) vs execution pass 2/96 (2.1%). Dominant failure: models impose the training corpus selector convention (data-testid) over the explicit real selectors stated in the story (47/48 cypress scripts; 24/48 playwright). Secondary: invented URL routes, nonexistent custom commands (cy.login), fabricated network intercepts."
+}

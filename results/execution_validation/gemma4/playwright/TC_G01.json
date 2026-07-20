@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G01",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 89.671,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Customer Login to Sauce Demo Store', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com');\n  });\n\n  test('should successfully log in a registered customer and reach the product catalogue', async ({ page }) => {\n    // Locate and fill username field using getByRole\n    const usernameField = page.getByLabel('Username');\n    await expect(usernameField).toBeVisible();\n    await usernameField.fill('standard_user');\n\n    // Locate and fill password field using getByRole\n    const passwordField = page.getByLabel('Password');\n    await expect(passwordField).toBeVisible();\n    await passwordField.fill('secret_sauce');\n\n    // Locate and click login button using getByRole\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await expect(loginButton).toBeVisible();\n    await loginButton.click();\n\n    // Verify successful login by checking URL\n    await expect(page).toHaveURL(/.*inventory\\.html/);\n\n    // Verify page title element contains 'Products'\n    const pageTitle = page.getByText('Products');\n    await expect(pageTitle).toBeVisible();\n  });\n\n  test('should display error message when login credentials are invalid', async ({ page }) => {\n    // Locate and fill username field using getByRole\n    const usernameField = page.getByLabel('Username');\n    await expect(usernameField).toBeVisible();\n    await usernameField.fill('invalid_user');\n\n    // Locate and fill password field using getByRole\n    const passwordField = page.getByLabel('Password');\n    await expect(passwordField).toBeVisible();\n    await passwordField.fill('wrong_password');\n\n    // Locate and click login button using getByRole\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await expect(loginButton).toBeVisible();\n    await loginButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('Epic sadface: Username and password do not match');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify user is still on login page\n    await expect(page).toHaveURL(/.*login\\.html/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 89.671,
+      "feedback_used": ""
+    }
+  ]
+}

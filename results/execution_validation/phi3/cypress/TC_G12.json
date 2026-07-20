@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G12",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 221.865,
+  "final_script": "describe('Accessible Product Images and Login Fields', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should have accessible attributes on login fields and product images', () => {\n    // Verify login fields have non-empty placeholder attributes\n    cy.get('[data-testid=\"username\"]').should('have.attr', 'placeholder', 'Username');\n    cy.get('[data-testid=\"password\"]').should('have.attr', 'placeholder', 'Password');\n\n    // Verify login fields are visible and focusable\n    cy.get('[data-testid=\"username\"]').should('be.visible');\n    cy.get('[data-testid=\"password\"]').should('be.visible');\n    cy.get('[data-testid=\"username\"]').click();\n    cy.get('[data-testid=\"password\"]').click();\n\n    // Verify login form is submitted with correct credentials\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n    cy.wait('@loginRequest');\n\n    // Verify successful login redirects to dashboard\n    cy.url().should('include', '/dashboard');\n\n    // Verify product images have non-empty alt attributes\n    cy.get('[data-testid=\"inventory-item\"]').each(($item) => {\n      cy.wrap($item).should('have.attr', 'alt');\n    });\n\n    // Verify at least one product image has a descriptive alt attribute\n    cy.get('[data-testid=\"inventory-item\"]').first().should('have.attr', 'alt', 'Product description');\n  });\n\n  it('should handle edge case: missing alt attributes on product images', () => {\n    // Navigate to product page\n    cy.visit('/product/1');\n\n    // Verify product image has missing alt attribute\n    cy.get('[data-testid=\"inventory-item\"]').first().should('have.attr', 'alt', '');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Missing alt attribute');\n\n    // Verify error message is accessible\n    cy.get('[data-testid=\"error-message\"]').should('have.attr', 'aria-live', 'polite');\n\n    // Verify user can correct the issue\n    cy.get('[data-testid=\"inventory-item\"]').first().click();\n    cy.get('[data-testid=\"alt-field\"]').type('Product description');\n    cy.get('[data-testid=\"alt-field\"]').type('{enter}');\n\n    // Verify error message disappears\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n\n    // Verify product image now has a non-empty alt attribute\n    cy.get('[data-testid=\"inventory-item\"]').first().should('have.attr', 'alt', 'Product description');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 221.865,
+      "feedback_used": ""
+    }
+  ]
+}

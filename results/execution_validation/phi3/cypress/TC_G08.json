@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_G08",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.79,
+  "total_latency_s": 736.672,
+  "final_script": "describe('Full Checkout Process - Sauce Labs Backpack', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.get('[data-testid=\"email-input\"]').type('standard_user@example.com');\n    cy.get('[data-testid=\"password-input\"]').type('secret_sauce');\n    cy.get('[data-testid=\"login-button\"]').click();\n  });\n\n  it('should complete checkout and confirm order successfully', () => {\n    // Add backpack to cart\n    cy.get('[data-testid=\"add-to-cart-sauce-labs-backpack\"]').click();\n    cy.get('[data-testid=\"cart-link\"]').click();\n\n    // Verify cart information form is displayed\n    cy.get('[data-testid=\"checkout-form\"]').should('be.visible');\n\n    // Fill checkout form\n    cy.get('[data-testid=\"firstName\"]').type('Saif');\n    cy.get('[data-testid=\"lastName\"]').type('Afzal');\n    cy.get('[data-testid=\"postalCode\"]').type('201301');\n    cy.get('[data-testid=\"continue-button\"]').click();\n\n    // Verify overview page is displayed\n    cy.get('[data-testid=\"order-summary\"]').should('be.visible');\n    cy.get('[data-testid=\"order-summary\"]').should('contain', 'Backpack');\n\n    // Verify total is displayed\n    cy.get('[data-testid=\"total-price\"]').should('be.visible');\n    cy.get('[data-testid=\"total-price\"]').should('contain', '$19.99');\n\n    // Verify shipping options are displayed\n    cy.get('[data-testid=\"shipping-options\"]').should('be.visible');\n\n    // Verify payment options are displayed\n    cy.get('[data-testid=\"payment-methods\"]').should('be.visible');\n\n    // Verify continue button is visible\n    cy.get('[data-testid=\"continue-button\"]').should('be.visible');\n\n    // Click continue button\n    cy.get('[data-testid=\"continue-button\"]').click();\n\n    // Verify confirmation header is displayed\n    cy.get('[data-testid=\"complete-header\"]').should('be.visible');\n    cy.get('[data-testid=\"complete-header\"]').should('contain', 'Thank you for your order!');\n\n    // Verify success message\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Order confirmed');\n\n    // Verify order details are visible\n    cy.get('[data-testid=\"order-details\"]').should('be.visible');\n    cy.get('[data-testid=\"order-details\"]').should('contain', 'Backpack');\n\n    // Verify order number is displayed\n    cy.get('[data-testid=\"order-number\"]').should('be.visible');\n    cy.get('[data-testid=\"order-number\"]').should('contain', '123456');\n\n    // Verify order status is 'Processing'\n    cy.get('[data-testid=\"order-status\"]').should('contain', 'Processing');\n\n    // Verify order is in the cart\n    cy.get('[data-testid=\"cart-item\"]').should('be.visible');\n\n    // Verify checkout button is still visible\n    cy.get('[data-testid=\"checkout-button\"]').should('be.visible');\n\n    // Verify order can be canceled\n    cy.get('[data-testid=\"cancel-order-button\"]').should('be.visible');\n  });\n\n  it('should handle edge case when shipping address is invalid', () => {\n    // Add backpack to cart\n    cy.get('[data-testid=\"add-to-cart-sauce-labs-backpack\"]').click();\n    cy.get('[data-testid=\"cart-link\"]').click();\n\n    // Fill checkout form with valid details\n    cy.get('[data-testid=\"firstName\"]').type('Saif');\n    cy.get('[data-testid=\"lastName\"]').type('Afzal');\n    cy.get('[data-testid=\"postalCode\"]').type('201301');\n    cy.get('[data-testid=\"continue-button\"]').click();\n\n    // Verify shipping address validation error\n    cy.get('[data-testid=\"shipping-address-error\"]').should('be.visible');\n    cy.get('[data-testid=\"shipping-address-error\"]').should('contain', 'Please enter a valid address');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid shipping address');\n\n    // Verify user can correct the address\n    cy.get('[data-testid=\"shipping-address-input\"]').type('123 Main St, Anytown, USA');\n    cy.get('[data-testid=\"continue-button\"]').click();\n\n    // Verify error message disappears\n    cy.get('[data-testid=\"shipping-address-error\"]').should('not.exist');\n\n    // Verify order continues to process\n    cy.get('[data-testid=\"order-status\"]').should('contain', 'Processing');\n\n    // Verify order can be canceled\n    cy.get('[data-testid=\"cancel-order-button\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.518,
+        "syntax": 0.17,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 351.31,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 27,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 385.362,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

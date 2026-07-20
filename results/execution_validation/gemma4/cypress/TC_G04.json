@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G04",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 79.81,
+  "final_script": "describe('Login Form Validation', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should display error messages when both username and password fields are empty', () => {\n    // Attempt to submit the login form with empty fields\n    cy.get('[data-test=\"login-button\"]').click();\n\n    // Verify the error container is visible\n    cy.get('[data-test=\"error\"]').should('be.visible');\n\n    // Verify the error message for username is displayed\n    cy.get('[data-test=\"error\"]').should('contain', 'Username is required');\n\n    // Verify the error message for password is displayed\n    cy.get('[data-test=\"error\"]').should('contain', 'Password is required');\n\n    // Verify the login button is still enabled\n    cy.get('[data-test=\"login-button\"]').should('not.be.disabled');\n  });\n\n  it('should display error message when only password field is empty', () => {\n    // Enter username only\n    cy.get('[data-test=\"user-input\"]').type('standard_user');\n\n    // Attempt to submit the login form\n    cy.get('[data-test=\"login-button\"]').click();\n\n    // Verify the error container is visible\n    cy.get('[data-test=\"error\"]').should('be.visible');\n\n    // Verify the error message for password is displayed\n    cy.get('[data-test=\"error\"]').should('contain', 'Password is required');\n\n    // Verify the error message for username is NOT displayed\n    cy.get('[data-test=\"error\"]').should('not.contain', 'Username is required');\n\n    // Verify the login button is still enabled\n    cy.get('[data-test=\"login-button\"]').should('not.be.disabled');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.81,
+      "feedback_used": ""
+    }
+  ]
+}

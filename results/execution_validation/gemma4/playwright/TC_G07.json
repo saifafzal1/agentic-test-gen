@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G07",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 79.373,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Add and Remove Product from Cart', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com');\n  });\n\n  test('should successfully add and remove a product from the cart', async ({ page }) => {\n    // Login with standard user\n    const usernameInput = page.getByLabel('Username');\n    const passwordInput = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: 'Login' });\n\n    await usernameInput.fill('standard_user');\n    await passwordInput.fill('secret_sauce');\n    await loginButton.click();\n\n    // Verify login success\n    await expect(page.getByRole('heading', { name: 'Products' })).toBeVisible();\n\n    // Add product to cart\n    const backpackButton = page.getByTestId('add-to-cart-sauce-labs-backpack');\n    await backpackButton.click();\n\n    // Verify cart badge shows 1\n    const cartBadge = page.locator('.shopping_cart_badge');\n    await expect(cartBadge).toHaveText('1');\n\n    // Verify button label changes to 'Remove'\n    await expect(backpackButton).toHaveText('Remove');\n\n    // Remove product from cart\n    await backpackButton.click();\n\n    // Verify cart badge is empty\n    await expect(cartBadge).toHaveText('0');\n\n    // Verify button label changes back to 'Add to Cart'\n    await expect(backpackButton).toHaveText('Add to Cart');\n  });\n\n  test('should handle multiple items in cart and remove them individually', async ({ page }) => {\n    // Login with standard user\n    const usernameInput = page.getByLabel('Username');\n    const passwordInput = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: 'Login' });\n\n    await usernameInput.fill('standard_user');\n    await passwordInput.fill('secret_sauce');\n    await loginButton.click();\n\n    // Add first product\n    const backpackButton = page.getByTestId('add-to-cart-sauce-labs-backpack');\n    await backpackButton.click();\n\n    // Verify cart badge shows 1\n    const cartBadge = page.locator('.shopping_cart_badge');\n    await expect(cartBadge).toHaveText('1');\n\n    // Add second product\n    const phoneButton = page.getByTestId('add-to-cart-sauce-labs-phone');\n    await phoneButton.click();\n\n    // Verify cart badge shows 2\n    await expect(cartBadge).toHaveText('2');\n\n    // Remove first product\n    await backpackButton.click();\n\n    // Verify cart badge shows 1\n    await expect(cartBadge).toHaveText('1');\n\n    // Verify backpack button label changes back to 'Add to Cart'\n    await expect(backpackButton).toHaveText('Add to Cart');\n\n    // Remove second product\n    await phoneButton.click();\n\n    // Verify cart badge is empty\n    await expect(cartBadge).toHaveText('0');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.373,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G23",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.82,
+  "total_latency_s": 78.983,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Catalogue Navigation - The Internet Herokuapp', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/');\n  });\n\n  test('should navigate from home page to example page and back successfully', async ({ page }) => {\n    // Verify home page heading\n    const welcomeHeading = page.getByRole('heading', { name: /Welcome to the Internet/i });\n    await expect(welcomeHeading).toBeVisible();\n\n    // Verify home page available examples heading\n    const availableExamplesHeading = page.getByRole('heading', { name: /Available Examples/i });\n    await expect(availableExamplesHeading).toBeVisible();\n\n    // Click on A/B Testing link\n    const abTestLink = page.getByRole('link', { name: /A/i });\n    await abTestLink.click();\n\n    // Verify navigation to A/B Testing page\n    await expect(page).toHaveURL(/abtest/);\n\n    // Verify A/B Testing page heading\n    const abTestHeading = page.getByRole('heading', { name: /A/i });\n    await expect(abTestHeading).toBeVisible();\n\n    // Verify A/B Testing page content\n    const abTestContent = page.getByText(/A/i);\n    await expect(abTestContent).toBeVisible();\n\n    // Navigate back to home page\n    await page.goBack();\n\n    // Verify return to home page\n    await expect(page).toHaveURL(/index.html/);\n\n    // Verify home page heading is visible again\n    await expect(welcomeHeading).toBeVisible();\n  });\n\n  test('should handle navigation when example page does not exist', async ({ page }) => {\n    // Verify home page heading\n    const welcomeHeading = page.getByRole('heading', { name: /Welcome to the Internet/i });\n    await expect(welcomeHeading).toBeVisible();\n\n    // Attempt to click on a non-existent example link\n    const nonExistentLink = page.getByRole('link', { name: /non-existent-page/i });\n    \n    // Verify link does not exist before clicking\n    const linkExists = await nonExistentLink.isVisible();\n    expect(linkExists).toBe(false);\n\n    // Verify no navigation occurs\n    const initialUrl = page.url();\n    \n    // Attempt to click the non-existent link (should fail gracefully)\n    try {\n      await nonExistentLink.click();\n    } catch (error) {\n      // Expected error when clicking non-existent element\n    }\n\n    // Verify we are still on the home page\n    await expect(page).toHaveURL(/index.html/);\n    await expect(welcomeHeading).toBeVisible();\n    \n    // Verify available examples heading is still visible\n    await expect(availableExamplesHeading).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.82,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 78.983,
+      "feedback_used": ""
+    }
+  ]
+}

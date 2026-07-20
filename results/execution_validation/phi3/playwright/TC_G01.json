@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G01",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 138.256,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Customer Login to Sauce Demo Store', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should successfully log in with valid credentials and redirect to product catalogue', async ({ page }) => {\n    // Locate and fill in the username field\n    const usernameInput = page.getByLabel('Username');\n    await usernameInput.fill('standard_user');\n\n    // Locate and fill in the password field\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('secret_sauce');\n\n    // Locate and click the login button\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await loginButton.click();\n\n    // Wait for the redirect to complete\n    await page.waitForURL('*://www.saucedemo.com/inventory.html');\n\n    // Verify the page title contains 'Products'\n    const pageTitle = page.getByText('Products');\n    await expect(pageTitle).toBeVisible();\n\n    // Verify the page title text\n    await expect(pageTitle).toContainText('Products');\n\n    // Verify the URL contains '/inventory.html'\n    const currentURL = page.url();\n    expect(currentURL).toContain('/inventory.html');\n  });\n\n  test('should display error message when logging in with invalid credentials', async ({ page }) => {\n    // Locate and fill in the username field\n    const usernameInput = page.getByLabel('Username');\n    await usernameInput.fill('invalid_user');\n\n    // Locate and fill in the password field\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('wrong_password');\n\n    // Locate and click the login button\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await loginButton.click();\n\n    // Wait for error message to appear\n    const errorMessage = page.getByText(/invalid credentials/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the error message is displayed\n    await expect(errorMessage).toBeVisible();\n\n    // Verify the page title is still 'Products'\n    const pageTitle = page.getByText('Products');\n    await expect(pageTitle).toBeVisible();\n\n    // Verify the URL remains the same\n    const currentURL = page.url();\n    expect(currentURL).toContain('/inventory.html');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 138.256,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G14",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 435.162,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Password Mistyping - Error State', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should display clear failure message when password is invalid', async ({ page }) => {\n    // Locate and fill username using getByLabel\n    const usernameInput = page.getByLabel('Username');\n    await usernameInput.fill('tomsmith');\n\n    // Locate and fill password using getByLabel\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('wrongpassword');\n\n    // Locate and click submit button using getByRole\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify we are still on the login page\n    const loginPageTitle = page.getByRole('heading', { name: /login/i });\n    await expect(loginPageTitle).toBeVisible();\n\n    // Verify flash banner is visible with error message\n    const flashBanner = page.getByTestId('flash.error');\n    await expect(flashBanner).toBeVisible();\n\n    // Verify error message contains the expected text\n    await expect(flashBanner).toContainText('Your password is invalid!');\n\n    // Verify error message is visible and styled appropriately\n    await expect(flashBanner).toHaveClass(/alert-danger/);\n  });\n\n  test('should not display error message when password is correct', async ({ page }) => {\n    // Locate and fill username using getByLabel\n    const usernameInput = page.getByLabel('Username');\n    await usernameInput.fill('tomsmith');\n\n    // Locate and fill password using getByLabel\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('correctpassword');\n\n    // Locate and click submit button using getByRole\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await submitButton.click();\n\n    // Verify we are redirected to the dashboard\n    const dashboardPageTitle = page.getByRole('heading', { name: /dashboard/i });\n    await expect(dashboardPageTitle).toBeVisible();\n\n    // Verify error banner is not visible\n    const flashBanner = page.getByTestId('flash.error');\n    await expect(flashBanner).not.toBeVisible();\n\n    // Verify success message is visible\n    const successMessage = page.getByText(/successfully logged in/i);\n    await expect(successMessage).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 435.162,
+      "feedback_used": ""
+    }
+  ]
+}

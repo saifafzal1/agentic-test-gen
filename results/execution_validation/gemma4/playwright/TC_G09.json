@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G09",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 79.613,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Checkout Form Required Field Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com');\n  });\n\n  test('should display error when postal code is missing on checkout', async ({ page }) => {\n    // Login with standard user\n    const usernameInput = page.getByLabel('Username');\n    const passwordInput = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: 'Login' });\n\n    await usernameInput.fill('standard_user');\n    await passwordInput.fill('secret_sauce');\n    await loginButton.click();\n\n    // Add backpack to cart\n    const backpackButton = page.getByTestId('add-to-cart-sauce-labs-backpack');\n    await backpackButton.click();\n\n    // Open cart\n    const cartLink = page.getByTestId('shopping_cart_link');\n    await cartLink.click();\n\n    // Proceed to checkout\n    const checkoutButton = page.getByTestId('checkout');\n    await checkoutButton.click();\n\n    // Fill first name and last name\n    const firstNameInput = page.getByTestId('firstName');\n    const lastNameInput = page.getByTestId('lastName');\n    const emailInput = page.getByTestId('email');\n    const phoneInput = page.getByTestId('phone');\n    const addressInput = page.getByTestId('address');\n    const postalCodeInput = page.getByTestId('postalCode');\n\n    await firstNameInput.fill('Saif');\n    await lastNameInput.fill('Afzal');\n    await emailInput.fill('saif.afzal@example.com');\n    await phoneInput.fill('1234567');\n    await addressInput.fill('123 Main St');\n    \n    // Attempt to continue without postal code\n    const continueButton = page.getByTestId('continue');\n    await continueButton.click();\n\n    // Verify error message appears\n    const errorContainer = page.getByTestId('error');\n    await expect(errorContainer).toBeVisible();\n    await expect(errorContainer).toContainText('Postal Code is required');\n    \n    // Verify postal code field still has placeholder/empty value\n    await expect(postalCodeInput).toHaveValue('');\n  });\n\n  test('should allow checkout when all required fields are filled', async ({ page }) => {\n    // Login with standard user\n    const usernameInput = page.getByLabel('Username');\n    const passwordInput = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: 'Login' });\n\n    await usernameInput.fill('standard_user');\n    await passwordInput.fill('secret_sauce');\n    await loginButton.click();\n\n    // Add backpack to cart\n    const backpackButton = page.getByTestId('add-to-cart-sauce-labs-backpack');\n    await backpackButton.click();\n\n    // Open cart\n    const cartLink = page.getByTestId('shopping_cart-link');\n    await cartLink.click();\n\n    // Proceed to checkout\n    const checkoutButton = page.getByTestId('checkout');\n    await checkoutButton.click();\n\n    // Fill all required fields\n    const firstNameInput = page.getByTestId('firstName');\n    const lastNameInput = page.getByTestId('lastName');\n    const emailInput = page.getByTestId('email');\n    const phoneInput = page.getByTestId('phone');\n    const addressInput = page.getByTestId('address');\n    const postalCodeInput = page.getByTestId('postalCode');\n\n    await firstNameInput.fill('Saif');\n    await lastNameInput.fill('Afzal');\n    await emailInput.fill('saif.afzal@example.com');\n    await phoneInput.fill('1234456');\n    await addressInput.fill('123 Main St');\n    await postalCodeInput.fill('12345');\n\n    // Click continue button\n    const continueButton = page.getByTestId('continue');\n    await continueButton.click();\n\n    // Verify success message appears\n    const successMessage = page.getByText('Checkout successful');\n    await expect(successMessage).toBeVisible();\n\n    // Verify user is redirected to confirmation page\n    await expect(page).toHaveURL(/.*confirmation/);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 5,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.613,
+      "feedback_used": ""
+    }
+  ]
+}

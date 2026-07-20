@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G17",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.82,
+  "total_latency_s": 79.172,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dynamic Loading Page - Async Content Reveal', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/dynamic_loading/1');\n  });\n\n  test('should reveal hidden content after asynchronous load', async ({ page }) => {\n    // Verify initial state\n    const finishElement = page.getByRole('button', { name: /finish/i });\n    await expect(finishElement).toBeHidden();\n\n    const startButton = page.getByRole('button', { name: /start/i });\n    await expect(startButton).toBeVisible();\n\n    // Click Start button\n    await startButton.click();\n\n    // Verify loading indicator appears\n    const loadingIndicator = page.getByText(/loading/i);\n    await expect(loadingIndicator).toBeVisible();\n\n    // Wait for loading to complete (up to 10 seconds)\n    await page.waitForTimeout(10000);\n\n    // Verify loading indicator disappears\n    await expect(loadingIndicator).not.toBeVisible();\n\n    // Verify finish element is now visible\n    await expect(finishElement).toBeVisible();\n\n    // Verify finish element contains expected text\n    await expect(finishElement).toContainText('Hello World!');\n  });\n\n  test('should handle slow loading and still reveal content', async ({ page }) => {\n    // Intercept the API call to simulate a slow response\n    await page.route('**/api/load-content', (route) => {\n      setTimeout(() => {\n        route.continue();\n      }, 15000);\n    });\n\n    // Click Start button\n    const startButton = page.getByRole('button', { name: /start/i });\n    await startButton.click();\n\n    // Verify loading indicator appears\n    const loadingIndicator = page.getByText(/loading/i);\n    await expect(loadingIndicator).toBeVisible();\n\n    // Wait for the slow response (15 seconds)\n    await page.waitForTimeout(15500);\n\n    // Verify loading indicator disappears\n    await expect(loadingIndicator).not.toBeVisible();\n\n    // Verify finish element is now visible\n    const finishElement = page.getByRole('button', { name: /finish/i });\n    await expect(finishElement).toBeVisible();\n\n    // Verify finish element contains expected text\n    await expect(finishElement).toContainText('Hello World!');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.82,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.172,
+      "feedback_used": ""
+    }
+  ]
+}

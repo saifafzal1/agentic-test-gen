@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G04",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 300.1,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Form Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should display error messages for missing required fields', async ({ page }) => {\n    // Intercept the login API call\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('API call not allowed');\n    });\n\n    // Get login button by role\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await expect(loginButton).toBeVisible();\n\n    // Get error container by role\n    const errorContainer = page.getByRole('region', { name: /error/i });\n    await expect(errorContainer).toBeVisible();\n\n    // Get username input by label\n    const usernameInput = page.getByLabel(/username/i);\n    await expect(usernameInput).toBeVisible();\n\n    // Get password input by label\n    const passwordInput = page.getByLabel(/password/i);\n    await expect(passwordInput).toBeVisible();\n\n    // Verify error messages are visible\n    await expect(errorContainer).toContainText('Username is required');\n\n    // Verify error messages are visible\n    await expect(errorContainer).toContainText('Password is required');\n\n    // Verify error messages are visible\n    await expect(errorContainer).toContainText('Email is required');\n\n    // Verify error messages are visible\n    await expect(errorContainer).toContainText('Password is required');\n\n    // Verify error messages are visible\n    await expect(errorContainer).toContainText('Username is required');\n\n    // Verify error messages are visible\n    await expect(errorContainer).toContainText('Email is required');\n\n    // Verify error messages are visible\n    await expect(errorContainer).toContainText('Password is required');\n  });\n\n  test('should display error messages when only username is entered', async ({ page }) => {\n    // Intercept the login API call\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('API call not allowed');\n    });\n\n    // Get login button by role\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await expect(loginButton).toBeVisible();\n\n    // Get error container by role\n    const errorContainer = page.getByRole('region', { name: /error/i });\n    await expect(errorContainer).toBeVisible();\n\n    // Get username input by label\n    const usernameInput = page.getByLabel(/username/i);\n    await expect(usernameInput).toBeVisible();\n\n    // Get password input by label\n    const passwordInput = page.getByLabel(/password/i);\n    await expect(passwordInput).toBeVisible();\n\n    // Enter only username\n    await usernameInput.fill('standard_user');\n\n    // Verify error message for missing password\n    await expect(errorContainer).toContainText('Password is required');\n\n    // Verify error message for missing email\n    await expect(errorContainer).toContainText('Email is required');\n\n    // Verify error message for missing username\n    await expect(errorContainer).toContainText('Username is required');\n\n    // Verify error message for missing password\n    await expect(errorContainer).toContainText('Password is required');\n\n    // Verify error message for missing email\n    await expect(errorContainer).toContainText('Email is required');\n\n    // Verify error message for missing username\n    await expect(errorContainer).toContainText('Username is required');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 21,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 300.1,
+      "feedback_used": ""
+    }
+  ]
+}

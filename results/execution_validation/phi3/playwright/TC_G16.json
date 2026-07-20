@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G16",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.82,
+  "total_latency_s": 386.784,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('JavaScript Alert Confirmation Dialog', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/javascript_alerts');\n  });\n\n  test('should display confirm dialog and record user choice', async ({ page }) => {\n    // Locate the button using getByRole\n    const confirmButton = page.getByRole('button', { name: /click for js confirm/i });\n    await expect(confirmButton).toBeVisible();\n    \n    // Click the confirm button to open the dialog\n    await confirmButton.click();\n    \n    // Wait for the confirm dialog to appear\n    const confirmDialog = page.locator('[data-testid=\"confirm-dialog\"]');\n    await expect(confirmDialog).toBeVisible();\n    \n    // Verify the dialog contains the correct message\n    const confirmMessage = page.getByText('Are you sure you want to proceed?');\n    await expect(confirmMessage).toBeVisible();\n    \n    // Verify the confirm button is visible\n    const confirmButton = page.getByRole('button', { name: /confirm/i });\n    await expect(confirmButton).toBeVisible();\n    \n    // Verify the cancel button is visible\n    const cancelButton = page.getByRole('button', { name: /cancel/i });\n    await expect(cancelButton).toBeVisible();\n    \n    // Verify the result element is hidden by default\n    const resultElement = page.getByText('You clicked:');\n    await expect(resultElement).not.toBeVisible();\n    \n    // Click the confirm button\n    await confirmButton.click();\n    \n    // Verify the result element shows 'You clicked: Ok'\n    await expect(resultElement).toContainText('You clicked: Ok');\n    \n    // Verify the dialog is closed\n    await expect(confirmDialog).not.toBeVisible();\n  });\n\n  test('should handle dismissing the dialog on a second attempt', async ({ page }) => {\n    // Locate the confirm button using getByRole\n    const confirmButton = page.getByRole('button', { name: /click for js confirm/i });\n    await expect(confirmButton).toBeVisible();\n    \n    // Click the confirm button to open the dialog\n    await confirmButton.click();\n    \n    // Wait for the confirm dialog to appear\n    const confirmDialog = page.locator('[data-testid=\"confirm-dialog\"]');\n    await expect(confirmDialog).toBeVisible();\n    \n    // Verify the confirm button is visible\n    const confirmButton = page.getByRole('button', { name: /confirm/i });\n    await expect(confirmButton).toBeVisible();\n    \n    // Verify the cancel button is visible\n    const cancelButton = page.getByRole('button', { name: /cancel/i });\n    await expect(cancelButton).toBeVisible();\n    \n    // Verify the result element is hidden by default\n    const resultElement = page.getByText('You clicked:');\n    await expect(resultElement).not.toBeVisible();\n    \n    // Click the confirm button\n    await confirmButton.click();\n    \n    // Verify the result element shows 'You clicked: Ok'\n    await expect(resultElement).toContainText('You clicked: Ok');\n    \n    // Click the confirm button again to dismiss the dialog\n    await confirmButton.click();\n    \n    // Verify the result element shows 'You clicked: Cancel'\n    await expect(resultElement).toContainText('You clicked: Cancel');\n    \n    // Verify the dialog is closed\n    await expect(confirmDialog).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.82,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 386.784,
+      "feedback_used": ""
+    }
+  ]
+}

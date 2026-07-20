@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G03",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 79.202,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Logout from Side Menu', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com');\n  });\n\n  test('should successfully log out a signed-in user from the side menu', async ({ page }) => {\n    // Login with standard user credentials\n    const usernameInput = page.getByLabel('Username');\n    const passwordInput = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: 'Login' });\n\n    await usernameInput.fill('standard_user');\n    await passwordInput.fill('secret_sauce');\n    await loginButton.click();\n\n    // Verify user is logged in\n    const inventoryItem = page.getByText('inventory');\n    await expect(inventoryItem).toBeVisible();\n\n    // Open the side menu using the burger menu button\n    const burgerMenuButton = page.getByRole('button', { name: /burger menu/i });\n    await burgerMenuButton.click();\n\n    // Verify side menu is open\n    const sideMenu = page.locator('[data-testid=\"side-menu\"]');\n    await expect(sideMenu).toBeVisible();\n\n    // Click the logout link\n    const logoutLink = page.getByRole('link', { name: /logout/i });\n    await logoutLink.click();\n\n    // Verify user is redirected to login page\n    await expect(page).toHaveURL('https://www.saucedemo.com/');\n    await expect(inventoryItem).not.toBeVisible();\n\n    // Verify login button is visible again\n    await expect(loginButton).toBeVisible();\n  });\n\n  test('should handle logout when side menu is not open', async ({ page }) => {\n    // Login with standard user credentials\n    const usernameInput = page.getByLabel('Username');\n    const passwordInput = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: 'Login' });\n\n    await usernameInput.fill('standard_user');\n    await passwordInput.fill('secret_sauce');\n    await loginButton.click();\n\n    // Verify user is logged in\n    const inventoryItem = page.getByText('inventory');\n    await expect(inventoryItem).toBeVisible();\n\n    // Click the logout link directly (should not open menu first)\n    const logoutLink = page.getByRole('link', { name: /logout/i });\n    await logoutLink.click();\n\n    // Verify user is redirected to login page\n    await expect(page).toHaveURL('https://www.saucedemo.com/');\n    await expect(inventoryItem).not.toBeVisible();\n\n    // Verify login button is visible again\n    await expect(loginButton).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.202,
+      "feedback_used": ""
+    }
+  ]
+}

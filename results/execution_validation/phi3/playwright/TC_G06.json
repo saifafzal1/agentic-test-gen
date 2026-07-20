@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_G06",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.85,
+  "total_latency_s": 740.067,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Product Sort by Price - Cheapest First', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n    await page.waitForLoadState('networkidle');\n  });\n\n  test('should sort products by price in ascending order when selecting \"lohi\" from sort dropdown', async ({ page }) => {\n    // Login as standard_user\n    await page.route('**/api/auth/login', (route) => {\n      route.continue();\n    });\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('failed');\n    });\n    await page.route('**/api/auth/login', (route) => {\n      route.continue();\n    });\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('failed');\n    });\n    await page.route('**/api/auth/login', (route) => {\n      route.continue();\n    });\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('failed');\n    });\n    await page.route('**/api/auth/login', (route) => {\n      route.continue();\n    });\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('failed');\n    });\n    await page.route('**/api/auth/login', (route) => {\n      route.continue();\n    });\n\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('failed');\n    });\n\n    await page.route('**/api/auth/login', (route) => {\n      route.continue();\n    });\n\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('failed');\n    });\n\n    await page.route('**/api/auth/login', (route) => {\n      route.continue();\n    });\n\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('failed');\n    });\n\n    await page.route('**/api/auth/login', (route) => {\n      route.continue();\n    });\n\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('failed');\n    });\n\n    await page.route('**/api/auth/login', (route) => {\n      route.continue();\n    });\n\n    // Fill login form\n    const emailInput = page.getByLabel('Email');\n    await emailInput.fill('standard_user@saucedemo.com');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('secret_sauce');\n\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await loginButton.click();\n\n    // Wait for login success\n    await page.waitForURL('**/dashboard');\n\n    // Verify welcome message\n    const welcomeMessage = page.getByText(/Welcome, standard_user/i);\n    await expect(welcomeMessage).toBeVisible();\n\n    // Navigate to product list\n    await page.goto('/products');\n\n    // Verify products are displayed\n    const productList = page.getByTestId('product-list');\n    await expect(productList).toBeVisible();\n\n    // Verify sort dropdown is visible\n    const sortDropdown = page.getByRole('combobox', { name: /sort by price/i });\n    await expect(sortDropdown).toBeVisible();\n\n    // Select \"lohi\" option\n    const lohiOption = page.getByRole('option', { name: /lohi/i });\n    await lohiOption.click();\n\n    // Verify products are sorted by price\n    const firstProductPrice = page.getByTestId('inventory_item_price').first();\n    const firstProductPriceValue = await firstProductPrice.evaluate((el) => parseFloat(el.textContent.replace(/[^0-9.]/g, '')));\n    const secondProductPrice = page.getByTestId('inventory_item_price').nth(1);\n    const secondProductPriceValue = await secondProductPrice.evaluate((el) => parseFloat(el.textContent.replace(/[^0-9.]/g, '')));\n\n    await expect(firstProductPriceValue).toBeLessThan(secondProductPriceValue);\n\n    // Verify list is reordered\n    const productItems = page.locator('[data-testid=\"product-item\"]');\n    const productCount = await productItems.count();\n    await expect(productCount).toBeGreaterThan(0);\n  });\n\n  test('should handle empty product list when no items are available', async ({ page }) => {\n    // Navigate to product list\n    await page.goto('/products');\n\n    // Verify empty list message\n    const emptyListMessage = page.getByText(/No products found/i);\n    await expect(emptyListMessage).toBeVisible();\n\n    // Verify no products are displayed\n    const productList = page.getByTestId('product-list');\n    await expect(productList).not.toBeVisible();\n\n    // Verify sort dropdown is still visible\n    const sortDropdown = page.getByRole('combobox', { name: /sort by price/i });\n    await expect(sortDropdown).toBeVisible();\n\n    // Verify no products are listed\n    const productItems = page.locator('[data-testid=\"product-item\"]');\n    const productCount = await productItems.count();\n    await expect(productCount).toBe(0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.53,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 352.209,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 387.858,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G08",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 80.601,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Full Checkout Flow - Standard User', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/');\n  });\n\n  test('should successfully complete a full checkout with standard user credentials', async ({ page }) => {\n    // Login with standard user credentials\n    const usernameInput = page.getByLabel('Username');\n    const passwordInput = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: 'Login' });\n\n    await usernameInput.fill('standard_user');\n    await passwordInput.fill('secret_sauce');\n    await loginButton.click();\n\n    // Add backpack to cart\n    const backpackItem = page.getByTestId('add-to-cart-sauce-labs-backpack');\n    await backpackItem.click();\n\n    // Navigate to cart\n    const cartLink = page.getByRole('link', { name: 'Shopping Cart' });\n    await cartLink.click();\n\n    // Proceed to checkout\n    const checkoutButton = page.getByTestId('checkout');\n    await checkoutButton.click();\n\n    // Fill in checkout information\n    const firstNameInput = page.getByTestId('firstName');\n    const lastNameInput = page.getByTestId('lastName');\n    const postalCodeInput = page.getByTestId('postalCode');\n    const continueButton = page.getByTestId('continue');\n\n    await firstNameInput.fill('Saif');\n    await lastNameInput.fill('Afzal');\n    await postalCodeInput.fill('20001');\n    await continueButton.click();\n\n    // Verify overview page and item total\n    const itemTotal = page.getByText('$29.99');\n    await expect(itemTotal).toBeVisible();\n\n    // Complete checkout\n    const finishButton = page.getByTestId('finish');\n    await finishButton.click();\n\n    // Verify confirmation message\n    const confirmationHeader = page.getByRole('heading', { name: 'Thank you for your order!' });\n    await expect(confirmationHeader).toBeVisible();\n  });\n\n  test('should handle checkout with invalid postal code and prevent order completion', async ({ page }) => {\n    // Login with standard user credentials\n    const usernameInput = page.getByLabel('Username');\n    const passwordInput = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: 'Login' });\n\n    await usernameInput.fill('standard_user');\n    await passwordInput.fill('secret_sauce');\n    await loginButton.click();\n\n    // Add backpack to cart\n    const backpackItem = page.getByTestId('add-to-to-cart-sauce-labs-backpack');\n    await backpackItem.click();\n\n    // Navigate to cart\n    const cartLink = page.getByRole('link', { name: 'Shopping Cart' });\n    await cartLink.click();\n\n    // Proceed to checkout\n    const checkoutButton = page.getByTestId('checkout');\n    await checkoutButton.click();\n\n    // Fill in checkout information with invalid postal code\n    const firstNameInput = page.getByTestId('firstName');\n    const lastNameInput = page.getByTestId('lastName');\n    const postalCodeInput = page.getByTestId('postalCode');\n    const continueButton = page.getByTestId('continue');\n\n    await firstNameInput.fill('Saif');\n    await lastNameInput.fill('Afzal');\n    await postalCodeInput.fill('invalid-zip');\n    await continueButton.click();\n\n    // Verify error message for invalid postal code\n    const postalCodeError = page.getByText('Please enter a valid postal code');\n    await expect(postalCodeError).toBeVisible();\n\n    // Verify order was not completed\n    const confirmationHeader = page.getByRole('heading', { name: 'Thank you for your order!' });\n    await expect(confirmationHeader).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 4,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 80.601,
+      "feedback_used": ""
+    }
+  ]
+}

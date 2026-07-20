@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G17",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.82,
+  "total_latency_s": 417.786,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dynamic Content Loading - The Internet', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/dynamic_loading/1');\n  });\n\n  test('should reveal hidden content after asynchronous load', async ({ page }) => {\n    // Verify initial state: #finish is hidden\n    const finishButton = page.getByRole('button', { name: /start/i });\n    await expect(finishButton).toBeVisible();\n\n    const finishElement = page.getByText('Hello World!');\n    await expect(finishElement).not.toBeVisible();\n\n    // Click Start button to initiate loading\n    await finishButton.click();\n\n    // Wait for loading indicator to appear\n    const loadingIndicator = page.getByText('Loading...');\n    await expect(loadingIndicator).toBeVisible();\n\n    // Wait for loading to complete\n    await page.waitForTimeout(10000);\n\n    // Verify loading indicator is gone\n    await expect(loadingIndicator).not.toBeVisible();\n\n    // Verify #finish element is now visible with content\n    await expect(finishElement).toBeVisible();\n    await expect(finishElement).toContainText('Hello World!');\n\n    // Verify page title is correct\n    const pageTitle = page.getByText(/dynamic loading/i);\n    await expect(pageTitle).toBeVisible();\n  });\n\n  test('should handle failed content load gracefully', async ({ page }) => {\n    // Mock failed response\n    await page.route('**/api/content', (route) => {\n      route.abort('Failed to load content');\n    });\n\n    // Click Start button to initiate loading\n    const startButton = page.getByRole('button', { name: /start/i });\n    await expect(startButton).toBeVisible();\n    await startButton.click();\n\n    // Wait for loading indicator to appear\n    const loadingIndicator = page.getByText('Loading...');\n    await expect(loadingIndicator).toBeVisible();\n\n    // Wait for loading to complete\n    await page.waitForTimeout(10000);\n\n    // Verify loading indicator is still visible (failed to load)\n    await expect(loadingIndicator).toBeVisible();\n\n    // Verify #finish element is still hidden\n    const finishElement = page.getByText('Hello World!');\n    await expect(finishElement).not.toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/content could not be loaded/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify page title is still correct\n    const pageTitle = page.getByText(/dynamic loading/i);\n    await expect(pageTitle).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.82,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 13,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 417.786,
+      "feedback_used": ""
+    }
+  ]
+}

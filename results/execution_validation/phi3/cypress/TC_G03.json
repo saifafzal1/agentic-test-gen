@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G03",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 167.186,
+  "final_script": "describe('Logout from Side Menu', () => {\n  beforeEach(() => {\n    cy.visit('/');\n    cy.login('standard_user', 'secret_sauce');\n  });\n\n  it('should log out successfully and return to login page', () => {\n    // Verify user is signed in\n    cy.get('[data-testid=\"user-name\"]').should('be.visible').should('contain', 'standard_user');\n    cy.get('[data-testid=\"user-email\"]').should('be.visible').should('contain', 'standard_user@example.com');\n\n    // Click burger menu button to open side menu\n    cy.get('[data-testid=\"react-burger-menu-btn\"]').click();\n    cy.get('[data-testid=\"sidebar-menu\"]').should('be.visible');\n\n    // Click logout link\n    cy.get('[data-testid=\"logout_sidebar_link\"]').click();\n\n    // Verify user is redirected to login page\n    cy.url().should('include', '/login');\n\n    // Verify login button is visible again\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n\n    // Verify session has ended (e.g., no user data is displayed)\n    cy.get('[data-testid=\"user-name\"]').should('not.exist');\n    cy.get('[data-testid=\"user-email\"]').should('not.exist');\n  });\n\n  it('should handle logout when user is already logged out', () => {\n    // Verify user is already logged out\n    cy.get('[data-testid=\"user-name\"]').should('not.exist');\n    cy.get('[data-testid=\"user-email\"]').should('not.exist');\n\n    // Click burger menu button to open side menu\n    cy.get('[data-testid=\"react-burger-menu-btn\"]').click();\n    cy.get('[data-testid=\"sidebar-menu\"]').should('be.visible');\n\n    // Click logout link\n    cy.get('[data-testid=\"logout_sidebar_link\"]').click();\n\n    // Verify user is redirected to login page\n    cy.url().should('include', '/login');\n\n    // Verify login button is visible again\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n\n    // Verify session has ended (e.g., no user data is displayed)\n    cy.get('[data-testid=\"user-name\"]').should('not.exist');\n    cy.get('[data-testid=\"user-email\"]').should('not.exist');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 16,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 167.186,
+      "feedback_used": ""
+    }
+  ]
+}

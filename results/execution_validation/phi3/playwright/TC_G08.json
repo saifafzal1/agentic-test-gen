@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_G08",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.53,
+  "total_latency_s": 1136.772,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Full Checkout Process - Sauce Labs Backpack', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/');\n  });\n\n  test('should complete checkout and confirm order for Sauce Labs Backpack', async ({ page }) => {\n    // Login using standard_user credentials\n    const usernameInput = page.getByLabel('Username');\n    await usernameInput.fill('standard_user');\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('secret_sauce');\n    const loginButton = page.getByRole('button', { name: /sign in/i });\n    await loginButton.click();\n\n    // Verify login success\n    const welcomeMessage = page.getByText('Welcome, standard_user');\n    await expect(welcomeMessage).toBeVisible();\n\n    // Navigate to the product page\n    const productLink = page.getByRole('link', { name: /sauce labs backpack/i });\n    await productLink.click();\n\n    // Verify product page loads\n    const productName = page.getByText('Sauce Labs Backpack');\n    await expect(productName).toBeVisible();\n\n    // Add to cart\n    const addToCartButton = page.getByRole('button', { name: /add to cart/i });\n    await addToCartButton.click();\n\n    // Verify cart link is visible\n    const cartLink = page.getByRole('link', { name: /cart/i });\n    await expect(cartLink).toBeVisible();\n\n    // Click cart link\n    await cartLink.click();\n\n    // Verify checkout information form is displayed\n    const checkoutForm = page.getByRole('form', { name: /checkout information/i });\n    await expect(checkoutForm).toBeVisible();\n\n    // Fill checkout form\n    const firstNameInput = page.getByLabel('First Name');\n    await firstNameInput.fill('Saif');\n\n    const lastNameInput = page.getByLabel('Last Name');\n    await lastNameInput.fill('Afzal');\n\n    const postalCodeInput = page.getByLabel('Postal Code');\n    await postalCodeInput.fill('201301');\n\n    // Verify overview page is displayed\n    const overviewLink = page.getByRole('link', { name: /order overview/i });\n    await overviewLink.click();\n\n    const overviewPage = page.getByRole('region', { name: /order overview/i });\n    await expect(overviewPage).toBeVisible();\n\n    // Verify item total is displayed\n    const itemTotal = page.getByText('Total: $199.99');\n    await expect(itemTotal).toBeVisible();\n\n    // Click finish button\n    const finishButton = page.getByRole('button', { name: /finish/i });\n    await finishButton.click();\n\n    // Verify confirmation header is displayed\n    const confirmationHeader = page.getByRole('heading', { name: /confirmation/i });\n    await expect(confirmationHeader).toBeVisible();\n\n    // Verify success message\n    const successMessage = page.getByText('Thank you for your order!');\n    await expect(successMessage).toBeVisible();\n\n    // Verify complete header\n    const completeHeader = page.getByRole('heading', { name: /complete/i });\n    await expect(completeHeader).toBeVisible();\n\n    // Verify order confirmation page\n    const orderConfirmationPage = page.getByRole('region', { name: /order confirmation/i });\n    await expect(orderConfirmationPage).toBeVisible();\n  });\n\n  test('should handle invalid postal code and display error message during checkout', async ({ page }) => {\n    // Login using standard_user credentials\n    const usernameInput = page.getByLabel('Username');\n    await usernameInput.fill('standard_user');\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('secret_sauce');\n    const loginButton = page.getByRole('button', { name: /sign in/i });\n    await loginButton",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.53,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 306.747,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.53,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 25,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 383.081,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.53,
+        "syntax": 0.2,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 38,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 446.944,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

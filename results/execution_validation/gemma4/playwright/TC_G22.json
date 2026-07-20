@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G22",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.82,
+  "total_latency_s": 78.982,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Message Rendering', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/notification_message_rendered');\n  });\n\n  test('should display notification after clicking the action link', async ({ page }) => {\n    // Verify initial state\n    const flashElement = page.locator('#flash');\n    await expect(flashElement).not.toBeVisible();\n\n    // Click the action link\n    const clickLink = page.getByRole('link', { name: 'Click here' });\n    await clickLink.click();\n\n    // Verify notification appears\n    await expect(flashElement).toBeVisible();\n\n    // Verify notification text contains success message\n    const notificationText = await flashElement.textContent();\n    expect(notificationText).toContain('Action successful');\n\n    // Verify notification has a close button\n    const closeButton = page.locator('[data-testid=\"close-button\"]');\n    await expect(closeButton).toBeVisible();\n\n    // Dismiss the notification\n    await closeButton.click();\n\n    // Verify notification is dismissed\n    await expect(flashElement).not.toBeVisible();\n  });\n\n  test('should handle notification with unsuccessful action and dismiss it', async ({ page }) => {\n    // Click the action link\n    const clickLink = page.getByRole('link', { name: 'Click here' });\n    await clickLink.click();\n\n    // Verify notification appears\n    const flashElement = page.locator('#flash');\n    await expect(flashElement).toBeVisible();\n\n    // Verify notification text contains unsuccessful message\n    const notificationText = await flashElement.textContent();\n    expect(notificationText).toContain('Action unsuccessful');\n\n    // Verify notification has a close button\n    const closeButton = page.locator('[data-testid=\"close-button\"]');\n    await expect(closeButton).toBeVisible();\n\n    // Dismiss the notification\n    await closeButton.click();\n\n    // Verify notification is dismissed\n    await expect(flashElement).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.82,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 78.982,
+      "feedback_used": ""
+    }
+  ]
+}

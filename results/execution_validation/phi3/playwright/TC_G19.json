@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G19",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.82,
+  "total_latency_s": 404.295,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Checkbox State Management', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/checkboxes');\n  });\n\n  test('should toggle checkbox states correctly and update form state', async ({ page }) => {\n    // Verify initial state: first checkbox unchecked, second checked\n    const firstCheckbox = page.getByRole('checkbox', { name: /first option/i });\n    await expect(firstCheckbox).toBeUnchecked();\n\n    const secondCheckbox = page.getByRole('checkbox', { name: /second option/i });\n    await expect(secondCheckbox).toBeChecked();\n\n    // Verify form submission button is disabled when no checkboxes are checked\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).toBeDisabled();\n\n    // Toggle first checkbox to check both\n    await firstCheckbox.click();\n    await expect(firstCheckbox).toBeChecked();\n    await expect(secondCheckbox).toBeChecked();\n\n    // Verify form submission button is now enabled\n    await expect(submitButton).not.toBeDisabled();\n\n    // Verify form data is updated to reflect both checkboxes being checked\n    const formData = await page.evaluate(() => {\n      const inputs = document.querySelectorAll('input[type=\"checkbox\"]');\n      return Array.from(inputs).reduce((acc, input) => {\n        acc[input.name] = input.checked;\n        return acc;\n      }, {});\n    });\n    expect(formData).toEqual({ firstOption: true, secondOption: true });\n\n    // Verify form is still visible and accessible\n    await expect(page).toBeVisible();\n  });\n\n  test('should handle unchecking second checkbox and leave only first checked', async ({ page }) => {\n    // Verify initial state: first checkbox unchecked, second checked\n    const firstCheckbox = page.getByRole('checkbox', { name: /first option/i });\n    await expect(firstCheckbox).toBeUnchecked();\n\n    const secondCheckbox = page.getByRole('checkbox', { name: /second option/i });\n    await expect(secondCheckbox).toBeChecked();\n\n    // Toggle second checkbox to uncheck\n    await secondCheckbox.click();\n    await expect(secondCheckbox).toBeUnchecked();\n\n    // Verify only first checkbox remains checked\n    await expect(firstCheckbox).toBeChecked();\n\n    // Verify form submission button is still enabled\n    const submitButton = page.getByRole('button', { name: /submit/i });\n    await expect(submitButton).not.toBeDisabled();\n\n    // Verify form data reflects only first checkbox being checked\n    const formData = await page.evaluate(() => {\n      const inputs = document.querySelectorAll('input[type=\"checkbox\"]');\n      return Array.from(inputs).reduce((acc, input) => {\n        acc[input.name] = input.checked;\n        return acc;\n      }, {});\n    });\n    expect(formData).toEqual({ firstOption: true, secondOption: false });\n\n    // Verify form is still visible and accessible\n    await expect(page).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.82,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 15,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 404.295,
+      "feedback_used": ""
+    }
+  ]
+}

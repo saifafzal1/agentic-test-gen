@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G09",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 315.488,
+  "final_script": "describe('Checkout Form Validation - Required Fields', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n    cy.login('standard_user', 'secret_sauce');\n  });\n\n  it('should display error when only firstName is filled and lastName is empty', () => {\n    cy.get('[data-testid=\"add-to-cart-sauce-labs-backpack\"]').click();\n    cy.get('[data-testid=\"shopping_cart_link\"]').click();\n    cy.get('[data-testid=\"checkout\"]').click();\n\n    cy.get('[data-testid=\"firstName\"]').type('Saif');\n    cy.get('[data-testid=\"lastName\"]').should('be.visible');\n    cy.get('[data-testid=\"lastName\"]').type('');\n\n    cy.get('[data-testid=\"continue\"]').click();\n\n    cy.get('[data-testid=\"error\"]').should('be.visible');\n    cy.get('[data-testid=\"error\"]').should('contain', 'Postal Code is required');\n  });\n\n  it('should display error when only lastName is filled and firstName is empty', () => {\n    cy.get('[data-testid=\"add-to-cart-sauce-labs-backpack\"]').click();\n    cy.get('[data-testid=\"shopping_cart_link\"]').click();\n    cy.get('[data-testid=\"checkout\"]').click();\n\n    cy.get('[data-testid=\"lastName\"]').type('Afzal');\n    cy.get('[data-testid=\"firstName\"]').should('be.visible');\n    cy.get('[data-testid=\"firstName\"]').type('');\n\n    cy.get('[data-testid=\"continue\"]').click();\n\n    cy.get('[data-testid=\"error\"]').should('be.visible');\n    cy.get('[data-testid=\"error\"]').should('contain', 'First Name is required');\n  });\n\n  it('should display error when both firstName and lastName are empty', () => {\n    cy.get('[data-testid=\"add-to-cart-sauce-labs-backpack\"]').click();\n    cy.get('[data-testid=\"shopping_cart_link\"]').click();\n    cy.get('[data-testid=\"checkout\"]').click();\n\n    cy.get('[data-testid=\"firstName\"]').should('be.visible');\n    cy.get('[data-testid=\"firstName\"]').type('');\n\n    cy.get('[data-testid=\"lastName\"]').should('be.visible');\n    cy.get('[data-testid=\"lastName\"]').type('');\n\n    cy.get('[data-testid=\"continue\"]').click();\n\n    cy.get('[data-testid=\"error\"]').should('be.visible');\n    cy.get('[data-testid=\"error\"]').should('contain', 'First Name and Last Name are required');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 315.488,
+      "feedback_used": ""
+    }
+  ]
+}

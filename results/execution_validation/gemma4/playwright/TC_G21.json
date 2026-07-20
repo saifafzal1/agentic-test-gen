@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G21",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.82,
+  "total_latency_s": 79.059,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Table Data Review - Table #table1', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/tables');\n  });\n\n  test('should display table with correct header and row count', async ({ page }) => {\n    // Verify table exists\n    const table = page.getByRole('table', { name: /table/i });\n    await expect(table).toBeVisible();\n\n    // Verify table has header row\n    const headerRow = page.locator('[data-testid=\"table-header-row\"]');\n    await expect(headerRow).toBeVisible();\n\n    // Verify header cells contain correct column names\n    const headerCells = page.locator('[data-testid=\"table-header-cell\"]');\n    const columnNames = await headerCells.allTextContents();\n    expect(columnNames).toHaveLength(4;);\n    expect(columnNames).toContain('Last Name');\n    expect(columnNames).toContain('First Name');\n    expect(columnNames).toContain('Email');\n    expect(columnNames).toContain('Due');\n\n    // Verify table body contains 4 rows\n    const tableBody = page.locator('[data-testid=\"table-body\"]');\n    const rows = page.locator('[data-testid=\"table-row\"]').filter({ has: page.getByText('Smith') });\n    const rowCount = await rows.count();\n    expect(rowCount).toBe(4;);\n\n    // Verify table has data rows\n    const dataRows = page.locator('[data-testid=\"table-row\"]').filter({ has: page.getByText('Smith') }).first();\n    await expect(dataRows).toBeVisible();\n  });\n\n  test('should verify specific record data exists in the table', async ({ page }) => {\n    // Verify table is visible\n    const table = page.getByRole('table', { name: /table/i });\n    await expect(table).toBeVisible();\n\n    // Verify the row containing 'Smith' exists\n    const smithRow = page.locator('[data-testid=\"table-row\"]').filter({ has: page.getByText('Smith') }).first();\n    await expect(smithRow).toBeVisible();\n\n    // Verify the email 'jsmith@gmail.com' exists in the same row\n    const emailCell = smithRow.locator('[data-testid=\"table-cell\"]').filter({ has: page.getByText('jsmith@gmail.com') });\n    await expect(emailCell).toBeVisible();\n\n    // Verify the email cell is in the correct column (Email)\n    const emailColumn = page.locator('[data-testid=\"table-header-cell\"]').filter({ has: page.getByText('Email') });\n    const emailColumnIndex = await emailColumn.evaluate((el) => {\n      const cells = Array.from(el.parentElement.querySelectorAll('[data-testid=\"table-cell\"]'));\n      return cells.indexOf(el);\n    });\n    expect(emailColumnIndex).toBeGreaterThanOrEqual(0);\n\n    // Verify the last name 'Smith' is in the correct column (Last Name)\n    const lastNameCell = smithRow.locator('[data-testid=\"table-cell\"]').filter({ has: page.getByText('Smith') });\n    const lastNameColumnIndex = await lastNameCell.evaluate((el) => {\n      const cells = Array.from(el.parentElement.querySelectorAll('[data-testid=\"table-cell\"]'));\n      return cells.indexOf(el);\n    });\n    expect(lastNameColumnIndex).toBeGreaterThanOrEqual(0);\n\n    // Verify the row contains all expected data points\n    const rowData = await smithRow.locator('[data-testid=\"table-cell\"]').allTextContents();\n    expect(rowData).toHaveLength(4);\n    expect(rowData).toContain('Smith');\n    expect(rowData).toContain('John');\n    expect(rowData).toContain('jsmith@gmail.com');\n    expect(rowData).toContain('2023-10-20');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.82,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 19,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.059,
+      "feedback_used": ""
+    }
+  ]
+}

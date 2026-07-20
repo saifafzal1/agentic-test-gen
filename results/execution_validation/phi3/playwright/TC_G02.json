@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G02",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 202.717,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Locked-Out Customer Login Error Message', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/login');\n  });\n\n  test('should display clear error message when locked-out user attempts to log in', async ({ page }) => {\n    // Setup: intercept the login API with a locked-out response\n    await page.route('**/api/auth/login', (route) => {\n      route.abort('failed');\n    });\n\n    // Intercept the locked-out response\n    await page.route('**/api/auth/login', (route) => {\n      route.continue({\n        status: 403,\n        body: JSON.stringify({\n          success: false,\n          message: 'User locked out',\n          error: 'User has exceeded maximum login attempts'\n        })\n      });\n    });\n\n    // Attempt to log in with locked-out credentials\n    const usernameInput = page.getByLabel('Username');\n    await usernameInput.fill('locked_out_user');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('secret_sauce');\n\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await loginButton.click();\n\n    // Verify error message is displayed\n    const errorContainer = page.getByTestId('error');\n    await expect(errorContainer).toBeVisible();\n\n    const errorMessage = page.getByText('Sorry, this user has been locked out');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify error container has correct data-test attribute\n    await expect(errorContainer).toHaveAttribute('data-test', 'error');\n\n    // Verify user is not redirected to dashboard\n    const dashboardLink = page.getByRole('link', { name: /dashboard/i });\n    await expect(dashboardLink).not.toBeVisible();\n\n    // Verify login form is still visible\n    const loginForm = page.locator('[data-testid=\"login-form\"]');\n    await expect(loginForm).toBeVisible();\n  });\n\n  test('should not display error message when user is not locked out', async ({ page }) => {\n    // Setup: intercept the login API with a success response\n    await page.route('**/api/auth/login', (route) => {\n      route.continue({\n        status: 200,\n        body: JSON.stringify({\n          success: true,\n          message: 'Login successful',\n          user: {\n            id: '123',\n            username: 'unlocked_user'\n          }\n        })\n      });\n    });\n\n    // Attempt to log in with valid credentials\n    const usernameInput = page.getByLabel('Username');\n    await usernameInput.fill('unlocked_user');\n\n    const passwordInput = page.getByLabel('Password');\n    await passwordInput.fill('correct_password');\n\n    const loginButton = page.getByRole('button', { name: /log in/i });\n    await loginButton.click();\n\n    // Verify user is redirected to dashboard\n    const dashboardLink = page.getByRole('link', { name: /dashboard/i });\n    await expect(dashboardLink).toBeVisible();\n\n    // Verify error container is not displayed\n    const errorContainer = page.getByTestId('error');\n    await expect(errorContainer).not.toBeVisible();\n\n    // Verify login form is not visible\n    const loginForm = page.locator('[data-testid=\"login-form\"]');\n    await expect(loginForm).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 8,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 202.717,
+      "feedback_used": ""
+    }
+  ]
+}

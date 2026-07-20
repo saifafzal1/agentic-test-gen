@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G11",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 79.249,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Sauce Demo Mobile Responsiveness', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com');\n  });\n\n  test('should display inventory page and burger menu on mobile viewport', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 860 });\n\n    // Login with standard user\n    const usernameInput = page.getByLabel('Username');\n    const passwordInput = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: /login/i });\n\n    await usernameInput.fill('standard_user');\n    await passwordInput.fill('secret_sauce');\n    await loginButton.click();\n\n    // Verify inventory page is visible\n    const inventoryItems = page.getByRole('region', { name: /inventory/i });\n    await expect(inventoryItems).toBeVisible();\n\n    // Verify burger menu button is visible\n    const burgerMenuButton = page.getByRole('button', { name: /burger menu/i });\n    await expect(burgerMenuButton).toBeVisible();\n\n    // Verify inventory items are displayed\n    const itemCards = page.getByRole('region', { name: /inventory item/i });\n    await expect(itemCards).toHaveCount(6);\n  });\n\n  test('should open side menu with logout link on mobile viewport', async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 860 });\n\n    // Login with standard user\n    const usernameInput = page.getByLabel('Username');\n    const passwordInput = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: /login/i });\n\n    await usernameInput.fill('standard_user');\n    await passwordInput.fill('secret_sauce');\n    await loginButton.click();\n\n    // Verify inventory page is visible\n    const inventoryItems = page.getByRole('region', { name: /inventory/i });\n    await expect(inventoryItems).toBeVisible();\n\n    // Open burger menu\n    const burgerMenuButton = page.getByRole('button', { name: /burger menu/i });\n    await burgerMenuButton.click();\n\n    // Verify side menu is open\n    const sideMenu = page.locator('[data-testid=\"bm-menu\"]');\n    await expect(sideMenu).toBeVisible();\n\n    // Verify logout link is visible inside the side menu\n    const logoutLink = page.getByRole('link', { name: /logout/i });\n    await expect(logoutLink).toBeVisible();\n\n    // Verify logout link is clickable\n    await expect(logoutLink).toBeEnabled();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 7,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.249,
+      "feedback_used": ""
+    }
+  ]
+}

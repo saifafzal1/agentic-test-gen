@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G21",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.82,
+  "total_latency_s": 506.34,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Data Reviewer - Verify Table Records', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/tables');\n  });\n\n  test('should verify table #table1 has correct header and rows', async ({ page }) => {\n    // Verify table header exists\n    const tableHeader = page.getByRole('heading', { name: /last name|first name|email|due/i });\n    await expect(tableHeader).toBeVisible();\n\n    // Verify header contains correct column headings\n    const headers = page.getByRole('rowheader', { name: /last name|first name|email|due/i });\n    await expect(headers).toHaveCount(4);\n\n    const headerTexts = await page.evaluate(() => {\n      const headers = Array.from(document.querySelectorAll('[data-testid=\"table-header\"]'));\n      return headers.map(header => header.textContent.trim());\n    });\n    expect(headerTexts).toEqual(['Last Name', 'First Name', 'Email', 'Due']);\n\n    // Verify table body contains 4 rows\n    const tableBody = page.getByRole('row', { name: /row/i });\n    await expect(tableBody).toHaveCount(4);\n\n    // Verify one row contains the email 'jsmith@gmail.com'\n    const emailRow = page.getByText('jsmith@gmail.com');\n    await expect(emailRow).toBeVisible();\n\n    // Verify the same row contains the last name 'Smith'\n    const lastNameCell = page.getByText('Smith');\n    await expect(lastNameCell).toBeVisible();\n\n    // Verify the row contains the correct email and last name\n    const rowText = await emailRow.evaluate((el) => el.textContent.trim());\n    expect(rowText).toContain('jsmith@gmail.com');\n    expect(rowText).toContain('Smith');\n  });\n\n  test('should verify table #table1 has correct data in each cell', async ({ page }) => {\n    // Verify table header exists\n    const tableHeader = page.getByRole('heading', { name: /last name|first name|email|due/i });\n    await expect(tableHeader).toBeVisible();\n\n    // Verify table body contains 4 rows\n    const tableBody = page.getByRole('row', { name: /row/i });\n    await expect(tableBody).toHaveCount(4);\n\n    // Verify each row has the correct data\n    const rows = page.getByRole('row', { name: /row/i });\n    for (let i = 0; i < rows.length; i++) {\n      const row = rows.nth(i);\n      const lastNameCell = row.getByText('Smith');\n      const firstNameCell = row.getByText('John');\n      const emailCell = row.getByText('jsmith@gmail.com');\n      const dueCell = row.getByText('2023-12-31');\n\n      await expect(lastNameCell).toBeVisible();\n      await expect(firstNameCell).toBeVisible();\n      await expect(emailCell).toBeVisible();\n      await expect(dueCell).toBeVisible();\n    }\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.82,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 14,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 506.34,
+      "feedback_used": ""
+    }
+  ]
+}

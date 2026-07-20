@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G22",
+  "framework": "playwright",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.82,
+  "total_latency_s": 438.955,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Message Rendered - Feedback', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('/notification_message_rendered');\n  });\n\n  test('should display notification with success message on click', async ({ page }) => {\n    // Verify initial state - no notification visible\n    const flashElement = page.getByTestId('flash');\n    await expect(flashElement).not.toBeVisible();\n\n    // Locate and click the 'Click here' link using getByRole\n    const clickLink = page.getByRole('link', { name: /click here/i });\n    await clickLink.click();\n\n    // Verify notification flash element becomes visible\n    await expect(flashElement).toBeVisible();\n\n    // Verify success message is displayed\n    const successMessage = page.getByText(/Action successful/i);\n    await expect(successMessage).toBeVisible();\n\n    // Verify close icon is present and clickable\n    const closeIcon = page.getByRole('button', { name: /close/i });\n    await expect(closeIcon).toBeVisible();\n\n    // Verify close icon has correct aria-label\n    await expect(closeIcon).toHaveAttribute('aria-label', 'Close notification');\n\n    // Verify notification is dismissed on close\n    await closeIcon.click();\n    await expect(flashElement).not.toBeVisible();\n  });\n\n  test('should display notification with error message on click', async ({ page }) => {\n    // Verify initial state - no notification visible\n    const flashElement = page.getByTestId('flash');\n    await expect(flashElement).not.toBeVisible();\n\n    // Locate and click the 'Click here' link using getByRole\n    const clickLink = page.getByRole('link', { name: /click here/i });\n    await clickLink.click();\n\n    // Verify notification flash element becomes visible\n    await expect(flashElement).toBeVisible();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText(/Action unsuccessful/i);\n    await expect(errorMessage).toBeVisible();\n\n    // Verify close icon is present and clickable\n    const closeIcon = page.getByRole('button', { name: /close/i });\n    await expect(closeIcon).toBeVisible();\n\n    // Verify close icon has correct aria-label\n    await expect(closeIcon).toHaveAttribute('aria-label', 'Close notification');\n\n    // Verify notification is dismissed on close\n    await closeIcon.click();\n    await expect(flashElement).not.toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.82,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 12,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 438.955,
+      "feedback_used": ""
+    }
+  ]
+}

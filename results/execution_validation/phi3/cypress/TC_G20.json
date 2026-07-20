@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G20",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 337.18,
+  "final_script": "describe('Dropdown Selection Test - The Internet', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/dropdown');\n  });\n\n  it('should display disabled prompt and allow selection of an option', () => {\n    // Verify initial state: disabled prompt is visible\n    cy.get('[data-testid=\"dropdown\"]').should('be.visible');\n    cy.get('[data-testid=\"dropdown-value\"]').should('contain', 'Please select an option');\n\n    // Intercept the API call to get dropdown options\n    cy.intercept('GET', '/api/dropdown-options').as('getDropdownOptions');\n\n    // Verify dropdown is disabled\n    cy.get('[data-testid=\"dropdown-value\"]').should('have.class', 'disabled');\n\n    // Click on the dropdown to open it\n    cy.get('[data-testid=\"dropdown-trigger\"]').click();\n\n    // Verify dropdown is now visible\n    cy.get('[data-testid=\"dropdown\"]').should('be.visible');\n\n    // Verify prompt is gone\n    cy.get('[data-testid=\"dropdown-value\"]').should('not.contain', 'Please select an option');\n\n    // Verify options are displayed\n    cy.get('[data-testid=\"dropdown-option\"]').should('be.visible');\n    cy.get('[data-testid=\"dropdown-option\"]').should('have.length.greaterThan', 0);\n\n    // Select 'Option 2'\n    cy.get('[data-testid=\"dropdown-option\"]').eq(1).click();\n\n    // Verify value is set to '2'\n    cy.get('[data-testid=\"dropdown-value\"]').should('contain', '2');\n\n    // Verify 'Option 2' is now selected\n    cy.get('[data-testid=\"dropdown-option\"]').eq(1).should('have.class', 'selected');\n\n    // Verify disabled prompt is gone\n    cy.get('[data-testid=\"dropdown-value\"]').should('not.contain', 'Please select an option');\n  });\n\n  it('should handle edge case when selecting disabled option', () => {\n    // Verify initial state: disabled prompt is visible\n    cy.get('[data-testid=\"dropdown\"]').should('be.visible');\n    cy.get('[data-testid=\"dropdown-value\"]').should('contain', 'Please select an option');\n\n    // Intercept the API call to get dropdown options\n    cy.intercept('GET', '/api/dropdown-options').as('getDropdownOptions');\n\n    // Open dropdown\n    cy.get('[data-testid=\"dropdown-trigger\"]').click();\n\n    // Verify dropdown is visible\n    cy.get('[data-testid=\"dropdown\"]').should('be.visible');\n\n    // Verify prompt is gone\n    cy.get('[data-testid=\"dropdown-value\"]').should('not.contain', 'Please select an option');\n\n    // Verify options are displayed\n    cy.get('[data-testid=\"dropdown-option\"]').should('be.visible');\n\n    // Attempt to select a disabled option (e.g., 'Option 3')\n    cy.get('[data-testid=\"dropdown-option\"]').eq(2).click();\n\n    // Verify disabled prompt reappears\n    cy.get('[data-testid=\"dropdown-value\"]').should('contain', 'Please select an option');\n\n    // Verify no value is set\n    cy.get('[data-testid=\"dropdown-value\"]').should('not.contain', '2');\n\n    // Verify disabled option is not selected\n    cy.get('[data-testid=\"dropdown-option\"]').eq(2).should('not.have.class', 'selected');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 18,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 337.18,
+      "feedback_used": ""
+    }
+  ]
+}

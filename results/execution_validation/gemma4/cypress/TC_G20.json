@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G20",
+  "framework": "cypress",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 77.225,
+  "final_script": "describe('Dropdown Selection on the Internet Heroku App', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/dropdown');\n  });\n\n  it('should select an option from the dropdown and apply the value', () => {\n    // Verify initial state\n    cy.get('[data-testid=\"dropdown-select\"]').should('be.visible');\n    cy.get('[data-testid=\"dropdown-select\"]').should('have.value', '');\n    cy.get('[data-testid=\"dropdown-select\"]').should('contain', 'Please select an option');\n\n    // Select the second option\n    cy.get('[data-testid=\"dropdown-select\"]').select('Option 2');\n\n    // Verify selection was applied\n    cy.get('[data-testid=\"dropdown-select\"]').should('have.value', '2');\n    cy.get('[data-testid=\"dropdown-select\"]').should('contain', 'Option 2');\n    cy.get('[data-testid=\"dropdown-select\"]').should('not.contain', 'Please select an option');\n  });\n\n  it('should handle selecting the first option and verify its value', () => {\n    // Verify initial state\n    cy.get('[data-testid=\"dropdown-select\"]').should('be.visible');\n    cy.get('[data-testid=\"dropdown-select\"]').should('have.value', '');\n\n    // Select the first option\n    cy.get('[data-testid=\"dropdown-select\"]').select('Option 1');\n\n    // Verify selection was applied\n    cy.get('[data-testid=\"dropdown-select\"]').should('have.value', '1');\n    cy.get('[data-testid=\"dropdown-select\"]').should('contain', 'Option 1');\n    cy.get('[data-testid=\"dropdown-select\"]').should('not.contain', 'Please select an option');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 77.225,
+      "feedback_used": ""
+    }
+  ]
+}

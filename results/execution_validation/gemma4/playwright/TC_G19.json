@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G19",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.82,
+  "total_latency_s": 79.233,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Checkbox States on the Internet Herokuapp', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/checkboxes');\n  });\n\n  test('should toggle checkbox states correctly when clicking', async ({ page }) => {\n    // Verify initial states\n    const checkbox1 = page.getByRole('checkbox', { name: /checkbox 1/i });\n    const checkbox2 = page.getByRole('checkbox', { name: /checkbox 2/i });\n    await expect(checkbox1).not.toBeChecked();\n    await expect(checkbox2).toBeChecked();\n\n    // Check checkbox 1\n    await checkbox1.click();\n    await expect(checkbox1).toBeChecked();\n    await expect(checkbox2).toBeChecked();\n\n    // Uncheck checkbox 1\n    await checkbox1.click();\n    await expect(checkbox1).not.toBeChecked();\n    await expect(checkbox2).toBeChecked();\n\n    // Check checkbox 1 again\n    await checkbox1.click();\n    await expect(checkbox1).toBeChecked();\n    await expect(checkbox2).toBeChecked();\n  });\n\n  test('should maintain correct checkbox states when toggling checkbox 2', async ({ page }) => {\n    // Verify initial states\n    const checkbox1 = page.getByRole('checkbox', { name: /checkbox 1/i });\n    const checkbox2 = page.getByRole('checkbox', { name: /checkbox 2/i });\n    await expect(checkbox1).not.toBeChecked();\n    await expect(checkbox2).toBeChecked();\n\n    // Check checkbox 1\n    await checkbox1.click();\n    await expect(checkbox1).toBeChecked();\n    await expect(checkbox2).toBeChecked();\n\n    // Uncheck checkbox 1\n    await checkbox1.click();\n    await expect(checkbox1).not.toBeChecked();\n    await expect(checkbox2).toBeChecked();\n\n    // Uncheck checkbox 2\n    await checkbox2.click();\n    await expect(checkbox1).not.toBeChecked();\n    await expect(checkbox2).not.toBeChecked();\n\n    // Check checkbox 1\n    await checkbox1.click();\n    await expect(checkbox1).toBeChecked();\n    await expect(checkbox2).not.toBeChecked();\n\n    // Check checkbox 2\n    await checkbox2.click();\n    await expect(checkbox1).toBeChecked();\n    await expect(checkbox2).toBeChecked();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.82,
+        "syntax": 0.925,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 20,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.233,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G10",
+  "framework": "cypress",
+  "model_key": "phi3",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 268.331,
+  "final_script": "describe('Product Catalog Navigation - Return to Catalogue', () => {\n  beforeEach(() => {\n    cy.visit('/');\n    cy.login('standard_user', 'secret_sauce');\n  });\n\n  it('should navigate to product detail page and return to catalogue', () => {\n    // Verify initial catalogue page is loaded\n    cy.get('[data-testid=\"catalogue-title\"]').should('contain', 'Products');\n\n    // Click on the first product name to navigate to detail page\n    cy.get('[data-testid=\"inventory-item-name\"]').first().click();\n\n    // Verify we are on product detail page\n    cy.url().should('include', '/inventory-item.html');\n    cy.get('[data-testid=\"product-name\"]').should('be.visible');\n\n    // Verify product detail page URL contains 'inventory-item.html'\n    cy.url().should('include', '/inventory-item.html');\n\n    // Click the back button to return to catalogue\n    cy.get('[data-testid=\"back-to-products\"]').click();\n\n    // Verify we are back on catalogue page\n    cy.url().should('include', '/inventory.html');\n\n    // Verify catalogue title is visible\n    cy.get('[data-testid=\"catalogue-title\"]').should('contain', 'Products');\n  });\n\n  it('should handle edge case: clicking back button when already on catalogue', () => {\n    // Verify initial catalogue page is loaded\n    cy.get('[data-testid=\"catalogue-title\"]').should('contain', 'Products');\n\n    // Click the back button to verify it does not navigate away\n    cy.get('[data-testid=\"back-to-products\"]').click();\n\n    // Verify URL remains the same\n    cy.url().should('include', '/inventory.html');\n\n    // Verify catalogue title is still visible\n    cy.get('[data-testid=\"catalogue-title\"]').should('contain', 'Products');\n\n    // Verify back button is still clickable\n    cy.get('[data-testid=\"back-to-products\"]').should('be.visible');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 268.331,
+      "feedback_used": ""
+    }
+  ]
+}

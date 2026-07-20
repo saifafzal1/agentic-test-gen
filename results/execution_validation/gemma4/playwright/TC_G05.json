@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G05",
+  "framework": "playwright",
+  "model_key": "gemma4",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.85,
+  "total_latency_s": 79.2,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Inventory Page Product List Display', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com');\n  });\n\n  test('should display exactly 6 complete product cards after successful login', async ({ page }) => {\n    // Login with standard user credentials\n    const usernameInput = page.getByLabel('Username');\n    const passwordInput = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: 'Log in' });\n\n    await usernameInput.fill('standard_user');\n    await passwordInput.fill('secret_sauce');\n    await loginButton.click();\n\n    // Wait for inventory page to load\n    await page.waitForURL('https://www.saucedemo.com/inventory.');\n\n    // Verify product list container is visible\n    const inventoryContainer = page.getByTestId('inventory-container');\n    await expect(inventoryContainer).toBeVisible();\n\n    // Verify exactly 6 product cards are displayed\n    const productCards = page.getByTestId('inventory-item');\n    const cardCount = await productCards.count();\n    expect(cardCount).toBe(6);\n\n    // Verify each product card contains a name and price\n    for (let i = 0; i < 6; i++) {\n      const card = productCards.nth(i);\n      const nameElement = card.getByTestId('inventory-item-name');\n      const priceElement = card.getByTestId('inventory-item-price');\n\n      await expect(nameElement).toBeVisible();\n      await expect(priceElement).toBeVisible();\n\n      const nameText = await nameElement.textContent();\n      const priceText = await priceElement.textContent();\n\n      expect(nameText).not.toBeNull();\n      expect(nameText.trim()).not.toBe('');\n      expect(priceText).toMatch(/^\\$\\d+\\.\\d{2}$/);\n    }\n  });\n\n  test('should handle login failure and display no product cards', async ({ page }) => {\n    // Attempt login with invalid credentials\n    const usernameInput = page.getByLabel('Username');\n    const passwordInput = page.getByLabel('Password');\n    const loginButton = page.getByRole('button', { name: 'Log in' });\n\n    await usernameInput.fill('invalid_user');\n    await passwordInput.fill('wrongpassword');\n    await loginButton.click();\n\n    // Verify error message is displayed\n    const errorMessage = page.getByText('Username and password do not match');\n    await expect(errorMessage).toBeVisible();\n\n    // Verify inventory page is not loaded\n    const inventoryContainer = page.getByTestId('inventory-container');\n    await expect(inventoryContainer).not.toBeVisible();\n\n    // Verify no product cards are present\n    const productCards = page.getByTestId('inventory-item');\n    const cardCount = await productCards.count();\n    expect(cardCount).toBe(0);\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.85,
+        "syntax": 1.0,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 10,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 79.2,
+      "feedback_used": ""
+    }
+  ]
+}
