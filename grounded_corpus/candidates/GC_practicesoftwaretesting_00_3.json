@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to filter products in the tool shop product catalogue by entering a search term and selecting categories, so that I can find specific tools easily.",
+  "complexity": "simple",
+  "cypress_script": "describe('Tool Shop Product Catalogue', () => {\n  it('should search for a product and display results', () => {\n    cy.visit('https://practicesoftwaretesting.com/');\n    cy.get('#search-query').type('Hammer');\n    cy.get('[data-test=\"search-submit\"]').click();\n    cy.url().should('include', 'search');\n  });\n\n  it('should not change the URL when searching with an empty query', () => {\n    cy.visit('https://practicesoftwaretesting.com/');\n    cy.get('[data-test=\"search-submit\"]').click();\n    cy.url().should('eq', 'https://practicesoftwaretesting.com/');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Tool Shop Product Catalogue', () => {\n  test('should search for a product and display results', async ({ page }) => {\n    await page.goto('https://practicesoftwaretesting.com/');\n    await page.fill('#search-query', 'Hammer');\n    await page.click('[data-test=\"search-submit\"]');\n    await expect(page).toHaveURL(/search/);\n  });\n\n  test('should not change the URL when searching with an empty query', async ({ page }) => {\n    await page.goto('https://practicesoftwaretesting.com/');\n    await page.click('[data-test=\"search-submit\"]');\n    await expect(page).toHaveURL('https://practicesoftwaretesting.com/');\n  });\n});",
+  "id": "GC_practicesoftwaretesting_00_3",
+  "app": "practicesoftwaretesting",
+  "base_url": "https://practicesoftwaretesting.com",
+  "page": "/",
+  "category": "search_filter",
+  "latency_s": 6.1
+}

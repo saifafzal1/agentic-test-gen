@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to be able to start and stop the progress bar on the Progress Bar page so that I can see the progress of the loading process. Acceptance Criteria: \n1. When I click the button with id 'startStopButton' and the text 'Start', the progress bar should begin to fill. \n2. When I click the same button again, the progress should stop, and the button text should change to 'Start' again.",
+  "complexity": "simple",
+  "cypress_script": "describe('Progress Bar Functionality', () => {\n  it('should start the progress bar', () => {\n    cy.visit('https://demoqa.com/progress-bar');\n    cy.get('#startStopButton').click();\n    // Assuming the progress bar starts filling, we check if the button is still present.\n    cy.get('#startStopButton').should('be.visible');\n  });\n\n  it('should not change URL when clicking the start/stop button', () => {\n    cy.visit('https://demoqa.com/progress-bar');\n    cy.url().should('eq', 'https://demoqa.com/progress-bar');\n    cy.get('#startStopButton').click();\n    cy.get('#startStopButton').click();\n    cy.url().should('eq', 'https://demoqa.com/progress-bar');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Progress Bar Functionality', () => {\n  test('should start the progress bar', async ({ page }) => {\n    await page.goto('https://demoqa.com/progress-bar');\n    await page.click('#startStopButton');\n    // Assuming the progress bar starts filling, we check if the button is still present.\n    const button = await page.$('#startStopButton');\n    expect(button).toBeTruthy();\n  });\n\n  test('should not change URL when clicking the start/stop button', async ({ page }) => {\n    await page.goto('https://demoqa.com/progress-bar');\n    await expect(page).toHaveURL('https://demoqa.com/progress-bar');\n    await page.click('#startStopButton');\n    await page.click('#startStopButton');\n    await expect(page).toHaveURL('https://demoqa.com/progress-bar');\n  });\n});",
+  "id": "GC_demoqa_05_3",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/progress-bar",
+  "category": "async_await",
+  "latency_s": 5.8
+}

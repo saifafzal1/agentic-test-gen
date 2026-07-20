@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to browse products on mobile devices using a burger menu, so that I can easily navigate through the product offerings. Acceptance Criteria: 1. The user can open the menu by clicking the button with id 'react-burger-menu-btn'. 2. The menu should display the link with data-test 'inventory-sidebar-link' for accessing all items. 3. The user can close the menu by clicking the button with id 'react-burger-cross-btn'. 4. The product links like 'item_0_title_link', 'item_1_title_link', etc., should be visible and accessible.",
+  "complexity": "simple",
+  "cypress_script": "describe('Mobile viewport product browsing via burger menu', () => {\n  it('should open and close the burger menu', () => {\n    cy.visit('https://www.saucedemo.com/inventory.html');\n    cy.get('[data-test=\"react-burger-menu-btn\"]').click();\n    cy.get('[data-test=\"inventory-sidebar-link\"]').should('be.visible');\n    cy.get('[data-test=\"react-burger-cross-btn\"]').click();\n    cy.get('[data-test=\"inventory-sidebar-link\"]').should('not.be.visible');\n  });\n\n  it('should not navigate when opening the menu', () => {\n    cy.visit('https://www.saucedemo.com/inventory.html');\n    cy.get('[data-test=\"react-burger-menu-btn\"]').click();\n    cy.url().should('eq', 'https://www.saucedemo.com/inventory.html');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mobile viewport product browsing via burger menu', () => {\n  test('should open and close the burger menu', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/inventory.html');\n    await page.click('[data-test=\"react-burger-menu-btn\"]');\n    await expect(page.locator('[data-test=\"inventory-sidebar-link\"]')).toBeVisible();\n    await page.click('[data-test=\"react-burger-cross-btn\"]');\n    await expect(page.locator('[data-test=\"inventory-sidebar-link\"]')).not.toBeVisible();\n  });\n\n  test('should not navigate when opening the menu', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/inventory.html');\n    await page.click('[data-test=\"react-burger-menu-btn\"]');\n    await expect(page.url()).toBe('https://www.saucedemo.com/inventory.html');\n  });\n});",
+  "id": "GC_saucedemo_05_2",
+  "app": "saucedemo",
+  "base_url": "https://www.saucedemo.com",
+  "page": "/inventory.html",
+  "category": "responsive",
+  "latency_s": 9.9
+}

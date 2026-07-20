@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to upload a file so that I can share documents through the application. I also want to be able to download a sample file provided by the application. Acceptance Criteria: When a user selects a file using the input field with id 'uploadFile', the file should be uploaded successfully. The user should also be able to click the 'Download' button (class 'btn btn-primary') to download a sample file.",
+  "complexity": "simple",
+  "cypress_script": "describe('File Upload and Download Functionality', () => {\n  it('should upload a file successfully', () => {\n    cy.visit('https://demoqa.com/upload-download');\n    const filePath = 'exampleFile.txt'; // Assuming this file exists in the fixture\n    cy.get('#uploadFile').attachFile(filePath);\n    // Add assertion to verify the file has been uploaded successfully. (Assuming some visible change occurs)\n  });\n  it('should not change the URL when attempting to upload a non-existent file', () => {\n    cy.visit('https://demoqa.com/upload-download');\n    cy.get('#uploadFile').attachFile('nonExistentFile.txt');\n    cy.url().should('eq', 'https://demoqa.com/upload-download');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload and Download Functionality', () => {\n  test('should upload a file successfully', async ({ page }) => {\n    await page.goto('https://demoqa.com/upload-download');\n    const filePath = 'exampleFile.txt'; // Assuming this file exists in the fixture\n    await page.setInputFiles('#uploadFile', filePath);\n    // Add assertion to verify the file has been uploaded successfully. (Assuming some visible change occurs)\n  });\n  test('should not change the URL when attempting to upload a non-existent file', async ({ page }) => {\n    await page.goto('https://demoqa.com/upload-download');\n    await page.setInputFiles('#uploadFile', 'nonExistentFile.txt');\n    await expect(page).toHaveURL('https://demoqa.com/upload-download');\n  });\n});",
+  "id": "GC_demoqa_04_4",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/upload-download",
+  "category": "file_upload",
+  "latency_s": 5.5
+}

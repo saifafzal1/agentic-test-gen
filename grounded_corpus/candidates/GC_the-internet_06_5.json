@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to view sortable data tables so that I can easily find and organize information. \nAcceptance Criteria:\n- The page displays a title 'Data Tables'.\n- The table with ID 'table1' is visible and contains the expected headers.\n- The table with ID 'table2' is visible and contains the expected headers.",
+  "complexity": "simple",
+  "cypress_script": "describe('Sortable Data Tables', () => {\n  it('should display sortable data tables correctly', () => {\n    cy.visit('https://the-internet.herokuapp.com/tables');\n    cy.get('h3').contains('Data Tables');\n    cy.get('#table1').should('be.visible');\n    cy.get('#table2').should('be.visible');\n  });\n\n  it('should not navigate away on invalid action', () => {\n    cy.visit('https://the-internet.herokuapp.com/tables');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/tables');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Sortable Data Tables', () => {\n  test('should display sortable data tables correctly', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/tables');\n    await expect(page.locator('h3')).toHaveText('Data Tables');\n    await expect(page.locator('#table1')).toBeVisible();\n    await expect(page.locator('#table2')).toBeVisible();\n  });\n\n  test('should not navigate away on invalid action', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/tables');\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/tables');\n  });\n});",
+  "id": "GC_the-internet_06_5",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/tables",
+  "category": "table_list",
+  "latency_s": 7.7
+}

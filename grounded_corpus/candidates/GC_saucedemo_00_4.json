@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to be able to log in to the application using my credentials so that I can access my account and use the features of the application. \nAcceptance Criteria:\n1. When I enter a valid username 'standard_user' in the input with data-test='username' and a valid password 'secret_sauce' in the input with data-test='password', clicking the button with data-test='login-button' should successfully log me in and redirect me to the homepage.\n2. If I attempt to log in with an empty username and password, the URL should remain the same, and I should see the login form with the input fields still visible.",
+  "complexity": "simple",
+  "cypress_script": "describe('Login Page Tests', () => {\n  it('should log in with valid credentials', () => {\n    cy.visit('https://www.saucedemo.com/');\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n    cy.url().should('not.include', 'saucedemo.com');\n  });\n\n  it('should not log in with empty credentials', () => {\n    cy.visit('https://www.saucedemo.com/');\n    cy.get('[data-test=\"login-button\"]').click();\n    cy.url().should('eq', 'https://www.saucedemo.com/');\n    cy.get('[data-test=\"username\"]').should('be.visible');\n    cy.get('[data-test=\"password\"]').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Page Tests', () => {\n  test('should log in with valid credentials', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/');\n    await page.fill('[data-test=\"username\"]', 'standard_user');\n    await page.fill('[data-test=\"password\"]', 'secret_sauce');\n    await page.click('[data-test=\"login-button\"]');\n    await expect(page).toHaveURL(/\\/inventory\\.html$/);\n  });\n\n  test('should not log in with empty credentials', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/');\n    await page.click('[data-test=\"login-button\"]');\n    await expect(page).toHaveURL('https://www.saucedemo.com/');\n    await expect(page.locator('[data-test=\"username\"]')).toBeVisible();\n    await expect(page.locator('[data-test=\"password\"]')).toBeVisible();\n  });\n});",
+  "id": "GC_saucedemo_00_4",
+  "app": "saucedemo",
+  "base_url": "https://www.saucedemo.com",
+  "page": "/",
+  "category": "authentication",
+  "latency_s": 9.4
+}

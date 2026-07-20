@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to be able to start and stop the progress bar so that I can control the loading process visually. Acceptance Criteria: 1. When I click the button with id 'startStopButton' and its text is 'Start', the progress bar should start. 2. When I click the same button again and its text changes to 'Stop', the progress bar should stop.",
+  "complexity": "simple",
+  "cypress_script": "describe('Progress Bar Functionality', () => {\n  it('should start the progress bar when clicked', () => {\n    cy.visit('https://demoqa.com/progress-bar');\n    cy.get('#startStopButton').click();\n    cy.url().should('include', '/progress-bar');\n    // Add an assertion here to verify the progress bar is in a starting state, if applicable\n  });\n\n  it('should not change URL when button is clicked while progress is ongoing', () => {\n    cy.get('#startStopButton').click();\n    cy.get('#startStopButton').click();\n    cy.url().should('include', '/progress-bar');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Progress Bar Functionality', () => {\n  test('should start the progress bar when clicked', async ({ page }) => {\n    await page.goto('https://demoqa.com/progress-bar');\n    await page.click('#startStopButton');\n    await expect(page).toHaveURL(/progress-bar/);\n    // Add an assertion here to verify the progress bar is in a starting state, if applicable\n  });\n\n  test('should not change URL when button is clicked while progress is ongoing', async ({ page }) => {\n    await page.click('#startStopButton');\n    await page.click('#startStopButton');\n    await expect(page).toHaveURL(/progress-bar/);\n  });\n});",
+  "id": "GC_demoqa_05_5",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/progress-bar",
+  "category": "async_await",
+  "latency_s": 4.8
+}

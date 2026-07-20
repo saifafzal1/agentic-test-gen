@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to interact with JavaScript alert dialogs on the page so that I can see the alerts and confirm or prompt actions. Acceptance Criteria: 1. When I click the button with text 'Click for JS Alert', a JavaScript alert should appear. 2. When I click the button with text 'Click for JS Confirm', a JavaScript confirm dialog should appear. 3. When I click the button with text 'Click for JS Prompt', a JavaScript prompt dialog should appear. 4. The element with id 'result' should be present on the page.",
+  "complexity": "simple",
+  "cypress_script": "describe('JavaScript Alerts', () => {\n  it('should display JS Alert and close it', () => {\n    cy.visit('https://the-internet.herokuapp.com/javascript_alerts');\n    cy.contains('button', 'Click for JS Alert').click();\n    cy.on('window:alert', (text) => {\n      expect(text).to.eq('I am a JS Alert');\n    });\n    cy.url().should('include', 'javascript_alerts');\n  });\n\n  it('should handle JS Confirm without confirming', () => {\n    cy.visit('https://the-internet.herokuapp.com/javascript_alerts');\n    cy.contains('button', 'Click for JS Confirm').click();\n    cy.on('window:confirm', () => false);\n    cy.get('#result').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('JavaScript Alerts', () => {\n  test('should display JS Alert and close it', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/javascript_alerts');\n    await page.click('text=Click for JS Alert');\n    page.on('dialog', async dialog => {\n      expect(dialog.message()).toBe('I am a JS Alert');\n      await dialog.dismiss();\n    });\n    await expect(page).toHaveURL(/javascript_alerts/);\n  });\n\n  test('should handle JS Confirm without confirming', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/javascript_alerts');\n    await page.click('text=Click for JS Confirm');\n    page.on('dialog', async dialog => {\n      await dialog.dismiss();\n    });\n    await expect(page.locator('#result')).toBeVisible();\n  });\n});",
+  "id": "GC_the-internet_07_4",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/javascript_alerts",
+  "category": "modal_dialog",
+  "latency_s": 10.8
+}

@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to view the list of test cases on the Automation Exercise website so that I can understand the available test scenarios for UI testing.",
+  "complexity": "simple",
+  "cypress_script": "describe('Test Case Listing Functionality', () => {\n  it('should display the test cases list', () => {\n    cy.visit('https://automationexercise.com/test_cases');\n    cy.get('a[href=\"#collapse1\"]').should('be.visible');\n    cy.get('a[href=\"#collapse2\"]').should('be.visible');\n    cy.get('a[href=\"#collapse3\"]').should('be.visible');\n    cy.get('a[href=\"#collapse4\"]').should('be.visible');\n    cy.get('a[href=\"#collapse5\"]').should('be.visible');\n  });\n\n  it('should not change the URL when clicking an inactive test case', () => {\n    cy.visit('https://automationexercise.com/test_cases');\n    cy.get('a[href=\"#collapse1\"]').click();\n    cy.url().should('eq', 'https://automationexercise.com/test_cases');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Test Case Listing Functionality', () => {\n  test('should display the test cases list', async ({ page }) => {\n    await page.goto('https://automationexercise.com/test_cases');\n    await expect(page.locator('a[href=\"#collapse1\"]')).toBeVisible();\n    await expect(page.locator('a[href=\"#collapse2\"]')).toBeVisible();\n    await expect(page.locator('a[href=\"#collapse3\"]')).toBeVisible();\n    await expect(page.locator('a[href=\"#collapse4\"]')).toBeVisible();\n    await expect(page.locator('a[href=\"#collapse5\"]')).toBeVisible();\n  });\n\n  test('should not change the URL when clicking an inactive test case', async ({ page }) => {\n    await page.goto('https://automationexercise.com/test_cases');\n    await page.click('a[href=\"#collapse1\"]');\n    await expect(page.url()).toBe('https://automationexercise.com/test_cases');\n  });\n});",
+  "id": "GC_automationexercise_03_0",
+  "app": "automationexercise",
+  "base_url": "https://automationexercise.com",
+  "page": "/test_cases",
+  "category": "table_list",
+  "latency_s": 7.7
+}

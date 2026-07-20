@@ -1,0 +1,17 @@
+{
+  "user_story": "As a user, I want to fill out the checkout information form so that I can proceed with my order. The form should require my first name, last name, and postal code. If I leave these fields empty and click the 'Continue' button, I should remain on the same page to correct my input.",
+  "acceptance_criteria": [
+    "The form should have input fields with the IDs 'first-name', 'last-name', and 'postal-code'.",
+    "The 'Continue' button must be present with the data-test attribute 'continue'.",
+    "If the form is submitted without filling in the required fields, the URL must remain https://www.saucedemo.com/checkout-step-one.html."
+  ],
+  "complexity": "simple",
+  "cypress_script": "describe('Checkout Information Form', () => {\n  it('should submit form with valid inputs and navigate to next page', () => {\n    cy.visit('https://www.saucedemo.com/checkout-step-one.html');\n    cy.get('[data-test=\"firstName\"]').type('John');\n    cy.get('[data-test=\"lastName\"]').type('Doe');\n    cy.get('[data-test=\"postalCode\"]').type('12345');\n    cy.get('[data-test=\"continue\"]').click();\n    cy.url().should('not.eq', 'https://www.saucedemo.com/checkout-step-one.html');\n  });\n  it('should not navigate if fields are empty', () => {\n    cy.visit('https://www.saucedemo.com/checkout-step-one.html');\n    cy.get('[data-test=\"continue\"]').click();\n    cy.url().should('eq', 'https://www.saucedemo.com/checkout-step-one.html');\n    cy.get('[data-test=\"firstName\"]').should('be.visible');\n    cy.get('[data-test=\"lastName\"]').should('be.visible');\n    cy.get('[data-test=\"postalCode\"]').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\ntest.describe('Checkout Information Form', () => {\n  test('should submit form with valid inputs and navigate to next page', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/checkout-step-one.html');\n    await page.fill('[data-test=\"firstName\"]', 'John');\n    await page.fill('[data-test=\"lastName\"]', 'Doe');\n    await page.fill('[data-test=\"postalCode\"]', '12345');\n    await page.click('[data-test=\"continue\"]');\n    await expect(page).toHaveURL(/checkout-step-two/);\n  });\n  test('should not navigate if fields are empty', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/checkout-step-one.html');\n    await page.click('[data-test=\"continue\"]');\n    await expect(page).toHaveURL('https://www.saucedemo.com/checkout-step-one.html');\n    await expect(page.locator('[data-test=\"firstName\"]')).toBeVisible();\n    await expect(page.locator('[data-test=\"lastName\"]')).toBeVisible();\n    await expect(page.locator('[data-test=\"postalCode\"]')).toBeVisible();\n  });\n});",
+  "id": "GC_saucedemo_03_2",
+  "app": "saucedemo",
+  "base_url": "https://www.saucedemo.com",
+  "page": "/checkout-step-one.html",
+  "category": "payment_flow",
+  "latency_s": 10.1
+}

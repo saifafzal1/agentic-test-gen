@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to navigate to HTTP status code pages so that I can understand the meaning of various HTTP status codes. Acceptance Criteria: When I visit the URL 'https://the-internet.herokuapp.com/status_codes', I should see the heading 'Status Codes' and be able to click on status codes 200, 301, 404, and 500 which are represented as links. The element with ID 'flash-messages' should remain visible throughout my interaction.",
+  "complexity": "simple",
+  "cypress_script": "describe('HTTP Status Codes Page', () => {\n  it('should navigate to the 200 status code page', () => {\n    cy.visit('https://the-internet.herokuapp.com/status_codes');\n    cy.contains('200').click();\n    cy.url().should('include', 'status_codes/200');\n  });\n\n  it('should not change URL when clicking an invalid link', () => {\n    cy.visit('https://the-internet.herokuapp.com/status_codes');\n    cy.get('#flash-messages').should('be.visible');\n    cy.contains('here').click();\n    cy.url().should('not.include', 'status_codes');\n    cy.get('#flash-messages').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('HTTP Status Codes Page', () => {\n  test('should navigate to the 200 status code page', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/status_codes');\n    await page.click('text=200');\n    await expect(page).toHaveURL(/status_codes\\/200/);\n  });\n\n  test('should not change URL when clicking an invalid link', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/status_codes');\n    await expect(page.locator('#flash-messages')).toBeVisible();\n    await page.click('text=here');\n    await expect(page).not.toHaveURL(/status_codes/);\n    await expect(page.locator('#flash-messages')).toBeVisible();\n  });\n});",
+  "id": "GC_the-internet_09_3",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/status_codes",
+  "category": "api_response_handling",
+  "latency_s": 6.2
+}

@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to search for products on the product list page so that I can find specific items quickly. Acceptance Criteria: When I enter a search term in the input field with id 'search_product' and click the button with id 'submit_search', the product list should update to show results matching my search term.",
+  "complexity": "simple",
+  "cypress_script": "describe('Product Search Functionality', () => {\n  it('should search for a product successfully', () => {\n    cy.visit('https://automationexercise.com/products');\n    cy.get('#search_product')\n      .type('Tshirt');\n    cy.get('#submit_search').click();\n    cy.url().should('include', 'search=Tshirt');\n    cy.get('.google-anno').should('be.visible');\n  });\n\n  it('should not change the URL on empty search', () => {\n    cy.visit('https://automationexercise.com/products');\n    cy.get('#search_product').clear();\n    cy.get('#submit_search').click();\n    cy.url().should('eq', 'https://automationexercise.com/products');\n    cy.get('#search_product').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Product Search Functionality', () => {\n  test('should search for a product successfully', async ({ page }) => {\n    await page.goto('https://automationexercise.com/products');\n    await page.fill('#search_product', 'Tshirt');\n    await page.click('#submit_search');\n    await expect(page).toHaveURL(/search=Tshirt/);\n    await expect(page.locator('.google-anno')).toBeVisible();\n  });\n\n  test('should not change the URL on empty search', async ({ page }) => {\n    await page.goto('https://automationexercise.com/products');\n    await page.fill('#search_product', '');\n    await page.click('#submit_search');\n    await expect(page).toHaveURL('https://automationexercise.com/products');\n    await expect(page.locator('#search_product')).toBeVisible();\n  });\n});",
+  "id": "GC_automationexercise_01_3",
+  "app": "automationexercise",
+  "base_url": "https://automationexercise.com",
+  "page": "/products",
+  "category": "search_filter",
+  "latency_s": 7.1
+}

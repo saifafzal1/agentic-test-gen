@@ -100,6 +100,9 @@ def main():
     n = 0
     for prof_path in sorted(PROFILES.glob("*.json")):
         prof = json.loads(prof_path.read_text())
+        if prof.get("skip"):
+            print(f"  skip app {prof['key']} (marked skip in profile)")
+            continue
         for pi, page in enumerate(prof["pages"]):
             if page.get("error"):
                 continue
@@ -107,7 +110,7 @@ def main():
             n_elements = sum(len(dom.get(k, [])) for k in
                              ("inputs", "buttons", "links", "selects",
                               "data_test_elements", "ids"))
-            if n_elements < 8:
+            if n_elements < 4:
                 print(f"  skip {prof['key']}{page['path']} (sparse DOM: "
                       f"{n_elements} elements)")
                 continue
@@ -122,15 +125,27 @@ def main():
                     category=page["category"], dom=dom_summary(page["dom"]),
                     auth_note=AUTH_NOTES.get(prof["key"], ""))
                 t = time.time()
-                resp = client.chat.completions.create(
-                    model="gpt-4o-mini",
-                    response_format={"type": "json_object"},
-                    messages=[{"role": "system", "content": SYSTEM},
-                              {"role": "user", "content": prompt}],
-                    # v2 evidence: 0.7-temp variants admitted at 38%,
-                    # 1.0-temp at 17% -- cap at 0.7.
-                    max_tokens=4000, temperature=min(0.4 + 0.15 * k, 0.7))
-                data = json.loads(resp.choices[0].message.content)
+                data = None
+                for attempt in range(3):
+                    try:
+                        resp = client.chat.completions.create(
+                            model="gpt-4o-mini",
+                            response_format={"type": "json_object"},
+                            messages=[{"role": "system", "content": SYSTEM},
+                                      {"role": "user", "content": prompt}],
+                            # v2 evidence: 0.7-temp admitted at 38%,
+                            # 1.0-temp at 17% -- cap at 0.7.
+                            max_tokens=4000,
+                            temperature=min(0.4 + 0.15 * k, 0.7))
+                        data = json.loads(resp.choices[0].message.content)
+                        break
+                    except (json.JSONDecodeError, Exception) as e:  # noqa: BLE001
+                        print(f"  {cid} attempt {attempt+1} failed: "
+                              f"{str(e)[:100]}")
+                        time.sleep(2 * (attempt + 1))
+                if data is None:
+                    print(f"  {cid} SKIPPED after 3 attempts")
+                    continue
                 data.update(id=cid, app=prof["key"], base_url=prof["base_url"],
                             page=page["path"], category=page["category"],
                             latency_s=round(time.time() - t, 1))

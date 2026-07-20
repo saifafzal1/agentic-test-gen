@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to manage my shopping cart so that I can view the items I intend to purchase and continue shopping or proceed to checkout.\n\nAcceptance Criteria:\n- The cart page should display the header 'Your Cart' using the selector [data-test=\"primary-header\"].\n- The cart should have a 'Continue Shopping' button that is visible using the selector [data-test=\"continue-shopping\"].\n- The cart should have a 'Checkout' button that is visible using the selector [data-test=\"checkout\"].",
+  "complexity": "simple",
+  "cypress_script": "describe('Shopping Cart Page', () => {\n  it('should display shopping cart items and allow checkout', () => {\n    cy.visit('https://www.saucedemo.com/cart.html');\n    cy.get('[data-test=\"primary-header\"]').should('be.visible').and('have.text', 'Your Cart');\n    cy.get('[data-test=\"continue-shopping\"]').should('be.visible');\n    cy.get('[data-test=\"checkout\"]').should('be.visible');\n  });\n\n  it('should not navigate away when continue shopping is clicked', () => {\n    cy.visit('https://www.saucedemo.com/cart.html');\n    cy.get('[data-test=\"continue-shopping\"]').click();\n    cy.url().should('eq', 'https://www.saucedemo.com/cart.html');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Shopping Cart Page', () => {\n  test('should display shopping cart items and allow checkout', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/cart.html');\n    await expect(page.locator('[data-test=\"primary-header\"]')).toBeVisible();\n    await expect(page.locator('[data-test=\"primary-header\"]')).toHaveText('Your Cart');\n    await expect(page.locator('[data-test=\"continue-shopping\"]')).toBeVisible();\n    await expect(page.locator('[data-test=\"checkout\"]')).toBeVisible();\n  });\n\n  test('should not navigate away when continue shopping is clicked', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/cart.html');\n    await page.click('[data-test=\"continue-shopping\"]');\n    await expect(page).toHaveURL('https://www.saucedemo.com/cart.html');\n  });\n});",
+  "id": "GC_saucedemo_02_5",
+  "app": "saucedemo",
+  "base_url": "https://www.saucedemo.com",
+  "page": "/cart.html",
+  "category": "crud_operations",
+  "latency_s": 6.7
+}

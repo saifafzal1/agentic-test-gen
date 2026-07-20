@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to be able to view the API endpoint documentation list so that I can understand the available APIs for practice. Acceptance Criteria: The page should display the title 'Automation Practice for API Testing', include headings 'APIs List for practice' and 'Subscription', and provide a list of API links which are functional and direct to the correct endpoints.",
+  "complexity": "simple",
+  "cypress_script": "describe('API Endpoint Documentation List', () => {\n  it('should display the API documentation with correct title and headings', () => {\n    cy.visit('https://automationexercise.com/api_list');\n    cy.get('h1').contains('Automation Practice for API Testing');\n    cy.get('h2').contains('APIs List for practice');\n    cy.get('h2').contains('Subscription');\n  });\n\n  it('should not navigate away when clicking an invalid link', () => {\n    cy.visit('https://automationexercise.com/api_list');\n    cy.get('a[href=\"#invalid_link\"]').click();\n    cy.url().should('eq', 'https://automationexercise.com/api_list');\n    cy.get('h1').contains('Automation Practice for API Testing');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('API Endpoint Documentation List', () => {\n  test('should display the API documentation with correct title and headings', async ({ page }) => {\n    await page.goto('https://automationexercise.com/api_list');\n    await expect(page.locator('h1')).toHaveText('Automation Practice for API Testing');\n    await expect(page.locator('h2')).toHaveText('APIs List for practice');\n    await expect(page.locator('h2')).toHaveText('Subscription');\n  });\n\n  test('should not navigate away when clicking an invalid link', async ({ page }) => {\n    await page.goto('https://automationexercise.com/api_list');\n    await page.click('a[href=\"#invalid_link\"]');\n    await expect(page).toHaveURL('https://automationexercise.com/api_list');\n    await expect(page.locator('h1')).toHaveText('Automation Practice for API Testing');\n  });\n});",
+  "id": "GC_automationexercise_04_5",
+  "app": "automationexercise",
+  "base_url": "https://automationexercise.com",
+  "page": "/api_list",
+  "category": "api_response_handling",
+  "latency_s": 6.6
+}

@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to view the list of test cases on the Automation Exercise website so that I can select and learn about various testing scenarios. Acceptance Criteria: The user should be able to see the heading 'Test Cases' and a list of test cases, including 'Test Case 1: Register User', 'Test Case 2: Login User with correct email and password', and others, with links that expand to show details. The main page URL should be 'https://automationexercise.com/test_cases'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Test Cases Listing', () => {\n  it('should display the test cases correctly', () => {\n    cy.visit('https://automationexercise.com/test_cases');\n    cy.get('h2').contains('Test Cases').should('be.visible');\n    cy.get('a').contains('Test Case 1: Register User').should('be.visible');\n    cy.get('a').contains('Test Case 2: Login User with correct email and password').should('be.visible');\n  });\n\n  it('should not navigate when clicking a test case link without expected action', () => {\n    cy.visit('https://automationexercise.com/test_cases');\n    cy.get('a').contains('Test Case 1: Register User').click();\n    cy.url().should('eq', 'https://automationexercise.com/test_cases');\n    cy.get('#collapse1').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Test Cases Listing', () => {\n  test('should display the test cases correctly', async ({ page }) => {\n    await page.goto('https://automationexercise.com/test_cases');\n    await expect(page.locator('h2')).toHaveText('Test Cases');\n    await expect(page.locator('a').withText('Test Case 1: Register User')).toBeVisible();\n    await expect(page.locator('a').withText('Test Case 2: Login User with correct email and password')).toBeVisible();\n  });\n\n  test('should not navigate when clicking a test case link without expected action', async ({ page }) => {\n    await page.goto('https://automationexercise.com/test_cases');\n    await page.locator('a').withText('Test Case 1: Register User').click();\n    await expect(page).toHaveURL('https://automationexercise.com/test_cases');\n    await expect(page.locator('#collapse1')).toBeVisible();\n  });\n});",
+  "id": "GC_automationexercise_03_1",
+  "app": "automationexercise",
+  "base_url": "https://automationexercise.com",
+  "page": "/test_cases",
+  "category": "table_list",
+  "latency_s": 7.4
+}

@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to interact with alert and confirm dialogs on the Alerts page so that I can verify their functionality. Acceptance Criteria: 1. Clicking the button with ID 'alertButton' triggers an alert dialog. 2. Clicking the button with ID 'confirmButton' triggers a confirm dialog. 3. The user can confirm or cancel the confirm dialog and the subsequent actions are verified.",
+  "complexity": "simple",
+  "cypress_script": "describe('Alerts Page Tests', () => {\n  it('should trigger alert dialog', () => {\n    cy.visit('https://demoqa.com/alerts');\n    cy.get('#alertButton').click();\n    cy.on('window:alert', (str) => {\n      expect(str).to.eq('You clicked a button');\n    });\n  });\n\n  it('should trigger confirm dialog and cancel', () => {\n    cy.visit('https://demoqa.com/alerts');\n    cy.get('#confirmButton').click();\n    cy.on('window:confirm', () => false);\n    cy.url().should('eq', 'https://demoqa.com/alerts');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Alerts Page Tests', () => {\n  test('should trigger alert dialog', async ({ page }) => {\n    await page.goto('https://demoqa.com/alerts');\n    page.on('dialog', dialog => {\n      expect(dialog.message()).toBe('You clicked a button');\n      dialog.accept();\n    });\n    await page.click('#alertButton');\n  });\n\n  test('should trigger confirm dialog and cancel', async ({ page }) => {\n    await page.goto('https://demoqa.com/alerts');\n    page.on('dialog', dialog => {\n      expect(dialog.type()).toBe('confirm');\n      dialog.dismiss();\n    });\n    await page.click('#confirmButton');\n    await expect(page).toHaveURL('https://demoqa.com/alerts');\n  });\n});",
+  "id": "GC_demoqa_01_1",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/alerts",
+  "category": "modal_dialog",
+  "latency_s": 7.4
+}

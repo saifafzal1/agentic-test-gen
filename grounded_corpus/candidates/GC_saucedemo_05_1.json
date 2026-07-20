@@ -1,0 +1,12 @@
+{
+  "user_story": "As a mobile user, I want to browse products using a burger menu so that I can easily navigate through the items available in the inventory.",
+  "complexity": "simple",
+  "cypress_script": "describe('Mobile-Viewport Product Browsing via Burger Menu', () => {\n  it('should open the burger menu and display all items', () => {\n    cy.visit('https://www.saucedemo.com/inventory.html');\n    cy.get('[data-test=\"open-menu\"]').click();\n    cy.get('[data-test=\"inventory-sidebar-link\"]').should('be.visible');\n    cy.get('[data-test=\"about-sidebar-link\"]').should('be.visible');\n    cy.get('[data-test=\"logout-sidebar-link\"]').should('be.visible');\n    cy.get('[data-test=\"reset-sidebar-link\"]').should('be.visible');\n  });\n\n  it('should not navigate to a new page when clicking the close button', () => {\n    cy.visit('https://www.saucedemo.com/inventory.html');\n    cy.get('[data-test=\"open-menu\"]').click();\n    cy.get('[data-test=\"close-menu\"]').click();\n    cy.url().should('eq', 'https://www.saucedemo.com/inventory.html');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mobile-Viewport Product Browsing via Burger Menu', () => {\n  test('should open the burger menu and display all items', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/inventory.html');\n    await page.click('[data-test=\"open-menu\"]');\n    await expect(page.locator('[data-test=\"inventory-sidebar-link\"]')).toBeVisible();\n    await expect(page.locator('[data-test=\"about-sidebar-link\"]')).toBeVisible();\n    await expect(page.locator('[data-test=\"logout-sidebar-link\"]')).toBeVisible();\n    await expect(page.locator('[data-test=\"reset-sidebar-link\"]')).toBeVisible();\n  });\n\n  test('should not navigate to a new page when clicking the close button', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/inventory.html');\n    await page.click('[data-test=\"open-menu\"]');\n    await page.click('[data-test=\"close-menu\"]');\n    await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html');\n  });\n});",
+  "id": "GC_saucedemo_05_1",
+  "app": "saucedemo",
+  "base_url": "https://www.saucedemo.com",
+  "page": "/inventory.html",
+  "category": "responsive",
+  "latency_s": 10.6
+}

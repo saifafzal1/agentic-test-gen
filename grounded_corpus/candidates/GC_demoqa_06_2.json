@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to click on links that issue API calls to verify their status responses, ensuring that the application behaves as expected when navigating through various links.",
+  "complexity": "simple",
+  "cypress_script": "describe('API Response Handling on Links Page', () => {\n  it('should navigate to the Home page successfully when clicking on the Home link', () => {\n    cy.visit('https://demoqa.com/links');\n    cy.get('#simpleLink').click();\n    cy.url().should('eq', 'https://demoqa.com/');\n  });\n  it('should not change the URL when clicking on the Bad Request link', () => {\n    cy.visit('https://demoqa.com/links');\n    cy.get('#bad-request').click();\n    cy.url().should('eq', 'https://demoqa.com/links');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\n test.describe('API Response Handling on Links Page', () => {\n   test('should navigate to the Home page successfully when clicking on the Home link', async ({ page }) => {\n     await page.goto('https://demoqa.com/links');\n     await page.click('#simpleLink');\n     expect(page.url()).toBe('https://demoqa.com/');\n   });\n   test('should not change the URL when clicking on the Bad Request link', async ({ page }) => {\n     await page.goto('https://demoqa.com/links');\n     await page.click('#bad-request');\n     expect(page.url()).toBe('https://demoqa.com/links');\n   });\n });",
+  "id": "GC_demoqa_06_2",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/links",
+  "category": "api_response_handling",
+  "latency_s": 5.3
+}

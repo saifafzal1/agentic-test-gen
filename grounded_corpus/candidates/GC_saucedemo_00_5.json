@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to log in to the application using my username and password, so that I can access my account. The login process must verify credentials and allow access to the application. \n\nAcceptance Criteria: \n1. The user can enter their username in the input field with selector [data-test=\"username\"]. \n2. The user can enter their password in the input field with selector [data-test=\"password\"]. \n3. Upon clicking the login button with selector [data-test=\"login-button\"], the user is redirected to a valid page if the credentials are correct. \n4. If the login form is submitted with empty fields, the URL should not change and the login container with selector [data-test=\"login-container\"] should remain visible.",
+  "complexity": "simple",
+  "cypress_script": "describe('Login Page', () => {\n  it('should log in with valid credentials', () => {\n    cy.visit('https://www.saucedemo.com/');\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n    cy.url().should('not.eq', 'https://www.saucedemo.com/');\n  });\n\n  it('should not log in with empty credentials', () => {\n    cy.visit('https://www.saucedemo.com/');\n    cy.get('[data-test=\"login-button\"]').click();\n    cy.url().should('eq', 'https://www.saucedemo.com/');\n    cy.get('[data-test=\"login-container\"]').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Page', () => {\n  test('should log in with valid credentials', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/');\n    await page.fill('[data-test=\"username\"]', 'standard_user');\n    await page.fill('[data-test=\"password\"]', 'secret_sauce');\n    await page.click('[data-test=\"login-button\"]');\n    await expect(page).toHaveURL(/^(?!.*saucedemo.com).*/);\n  });\n\n  test('should not log in with empty credentials', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/');\n    await page.click('[data-test=\"login-button\"]');\n    await expect(page).toHaveURL('https://www.saucedemo.com/');\n    await expect(page.locator('[data-test=\"login-container\"]').isVisible()).toBeTruthy();\n  });\n});",
+  "id": "GC_saucedemo_00_5",
+  "app": "saucedemo",
+  "base_url": "https://www.saucedemo.com",
+  "page": "/",
+  "category": "authentication",
+  "latency_s": 8.8
+}

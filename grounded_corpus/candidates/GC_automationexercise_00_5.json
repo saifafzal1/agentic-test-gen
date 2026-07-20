@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to log in to my account so that I can access my profile and manage my information. Acceptance Criteria: 1. I should be able to enter my email address in the input field with the placeholder 'Email Address' (selector: 'input[name=\"email\"]'). 2. I should be able to enter my password in the input field with the placeholder 'Password' (selector: 'input[name=\"password\"]'). 3. After clicking the 'Login' button (selector: 'button[type=\"submit\"]:contains(\"Login\")'), I should be redirected to my account page.",
+  "complexity": "simple",
+  "cypress_script": "describe('Login functionality', () => {\n  it('should log in successfully with valid credentials', () => {\n    cy.visit('https://automationexercise.com/login');\n    cy.get('input[name=\"email\"]').type('test@example.com');\n    cy.get('input[name=\"password\"]').type('password123');\n    cy.get('button[type=\"submit\"]').contains('Login').click();\n    cy.url().should('include', '/account');\n  });\n  it('should not log in with empty credentials', () => {\n    cy.visit('https://automationexercise.com/login');\n    cy.get('button[type=\"submit\"]').contains('Login').click();\n    cy.url().should('include', '/login');\n    cy.get('input[name=\"email\"]').should('be.visible');\n    cy.get('input[name=\"password\"]').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\ntest.describe('Login functionality', () => {\n  test('should log in successfully with valid credentials', async ({ page }) => {\n    await page.goto('https://automationexercise.com/login');\n    await page.fill('input[name=\"email\"]', 'test@example.com');\n    await page.fill('input[name=\"password\"]', 'password123');\n    await page.click('button[type=\"submit\"]').filter({ hasText: 'Login' });\n    await expect(page).toHaveURL(/.*\\/account/);\n  });\n  test('should not log in with empty credentials', async ({ page }) => {\n    await page.goto('https://automationexercise.com/login');\n    await page.click('button[type=\"submit\"]').filter({ hasText: 'Login' });\n    await expect(page).toHaveURL('https://automationexercise.com/login');\n    await expect(page.locator('input[name=\"email\"]')).toBeVisible();\n    await expect(page.locator('input[name=\"password\"]')).toBeVisible();\n  });\n});",
+  "id": "GC_automationexercise_00_5",
+  "app": "automationexercise",
+  "base_url": "https://automationexercise.com",
+  "page": "/login",
+  "category": "authentication",
+  "latency_s": 8.3
+}

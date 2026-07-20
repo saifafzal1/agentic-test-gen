@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to log in to the application so that I can access the main features. Acceptance Criteria: \n1. The user must be able to enter their username in the input field identified by [data-test=\"username\"]. \n2. The user must be able to enter their password in the input field identified by [data-test=\"password\"]. \n3. Upon submitting valid credentials, the user should be redirected to the main application page, and the URL should change. \n4. If the user submits the form without entering any credentials, the login button identified by [data-test=\"login-button\"] should not cause a redirect.",
+  "complexity": "simple",
+  "cypress_script": "describe('Login Page', () => {\n  it('should log in with valid credentials', () => {\n    cy.visit('https://www.saucedemo.com/')\n    cy.get('[data-test=\"username\"]').type('standard_user')\n    cy.get('[data-test=\"password\"]').type('secret_sauce')\n    cy.get('[data-test=\"login-button\"]').click()\n    cy.url().should('not.eq', 'https://www.saucedemo.com/')\n  })\n  it('should not log in with empty credentials', () => {\n    cy.visit('https://www.saucedemo.com/')\n    cy.get('[data-test=\"login-button\"]').click()\n    cy.url().should('eq', 'https://www.saucedemo.com/')\n    cy.get('[data-test=\"login-container\"]').should('be.visible')\n  })\n})",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Page', () => {\n  test('should log in with valid credentials', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/')\n    await page.fill('[data-test=\"username\"]', 'standard_user')\n    await page.fill('[data-test=\"password\"]', 'secret_sauce')\n    await page.click('[data-test=\"login-button\"]')\n    await expect(page).toHaveURL(/^(?!https:\\/\\/www\\.saucedemo\\.com\\/).+/)\n  })\n  test('should not log in with empty credentials', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/')\n    await page.click('[data-test=\"login-button\"]')\n    await expect(page).toHaveURL('https://www.saucedemo.com/')\n    await expect(page.locator('[data-test=\"login-container\"]')).toBeVisible()\n  })\n})",
+  "id": "GC_saucedemo_00_3",
+  "app": "saucedemo",
+  "base_url": "https://www.saucedemo.com",
+  "page": "/",
+  "category": "authentication",
+  "latency_s": 8.6
+}

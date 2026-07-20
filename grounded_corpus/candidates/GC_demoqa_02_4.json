@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to be able to select a color from the 'Select Menu' so that I can filter items based on my preference. Acceptance Criteria: The user can select a color from the dropdown with id 'oldSelectMenu'. The available options are Red, Blue, Green, Yellow, Purple, Black, White, Voilet, Indigo, Magenta, Aqua. Upon selection, the URL remains the same, and the selected color is displayed.",
+  "complexity": "simple",
+  "cypress_script": "describe('Select Menu Functionality', () => {\n  it('should allow the user to select a color', () => {\n    cy.visit('https://demoqa.com/select-menu');\n    cy.get('#oldSelectMenu').select('Red');\n    cy.url().should('eq', 'https://demoqa.com/select-menu');\n  });\n  it('should not change the URL when no color is selected', () => {\n    cy.visit('https://demoqa.com/select-menu');\n    cy.get('#oldSelectMenu').select('');\n    cy.url().should('eq', 'https://demoqa.com/select-menu');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Select Menu Functionality', () => {\n  test('should allow the user to select a color', async ({ page }) => {\n    await page.goto('https://demoqa.com/select-menu');\n    await page.selectOption('#oldSelectMenu', 'Red');\n    expect(page.url()).toBe('https://demoqa.com/select-menu');\n  });\n  test('should not change the URL when no color is selected', async ({ page }) => {\n    await page.goto('https://demoqa.com/select-menu');\n    await page.selectOption('#oldSelectMenu', '');\n    expect(page.url()).toBe('https://demoqa.com/select-menu');\n  });\n});",
+  "id": "GC_demoqa_02_4",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/select-menu",
+  "category": "search_filter",
+  "latency_s": 5.2
+}

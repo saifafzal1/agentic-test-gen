@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to log in to my account using the login form on the Automation Exercise website, so that I can access my user account and perform actions such as shopping. Acceptance Criteria: \n1. The user can enter their email in the input with placeholder 'Email Address' and their password in the input with placeholder 'Password'. \n2. Upon clicking the button with text 'Login', the user is redirected to the appropriate page, confirming successful login. \n3. If the user submits the form without entering an email or password, the URL should not change and the login form should still be visible.",
+  "complexity": "simple",
+  "cypress_script": "describe('Login Functionality', () => {\n  it('should log in with valid credentials', () => {\n    cy.visit('https://automationexercise.com/login');\n    cy.get('input[placeholder=\"Email Address\"]').type('valid@example.com');\n    cy.get('input[placeholder=\"Password\"]').type('validPassword');\n    cy.get('button.btn.btn-default').contains('Login').click();\n    cy.url().should('not.include', '/login');\n  });\n  it('should not log in with empty credentials', () => {\n    cy.visit('https://automationexercise.com/login');\n    cy.get('button.btn.btn-default').contains('Login').click();\n    cy.url().should('include', '/login');\n    cy.get('section#form').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Functionality', () => {\n  test('should log in with valid credentials', async ({ page }) => {\n    await page.goto('https://automationexercise.com/login');\n    await page.fill('input[placeholder=\"Email Address\"]', 'valid@example.com');\n    await page.fill('input[placeholder=\"Password\"]', 'validPassword');\n    await page.click('button.btn.btn-default');\n    await expect(page).toHaveURL(/^(?!.*\\/login).*/);\n  });\n  test('should not log in with empty credentials', async ({ page }) => {\n    await page.goto('https://automationexercise.com/login');\n    await page.click('button.btn.btn-default');\n    await expect(page).toHaveURL(/.*\\/login/);\n    await expect(page.locator('section#form')).toBeVisible();\n  });\n});",
+  "id": "GC_automationexercise_00_3",
+  "app": "automationexercise",
+  "base_url": "https://automationexercise.com",
+  "page": "/login",
+  "category": "authentication",
+  "latency_s": 8.3
+}

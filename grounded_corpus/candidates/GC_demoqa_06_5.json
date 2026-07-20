@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to verify that the links on the Links page issue API calls that return the correct HTTP status responses so that I can ensure the application is functioning as expected. Acceptance Criteria: 1. When I click on the link with text 'Created', the URL should not change, and the expected error should be handled. 2. When I click on the link with text 'Unauthorized', the URL should not change, and the expected error should also be handled.",
+  "complexity": "simple",
+  "cypress_script": "describe('API Response Handling Tests', () => {\n  it('should handle the Created link correctly', () => {\n    cy.visit('https://demoqa.com/links');\n    cy.get('a#created').click();\n    cy.url().should('eq', 'https://demoqa.com/links');\n  });\n\n  it('should handle the Unauthorized link correctly', () => {\n    cy.visit('https://demoqa.com/links');\n    cy.get('a#unauthorized').click();\n    cy.url().should('eq', 'https://demoqa.com/links');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('API Response Handling Tests', () => {\n  test('should handle the Created link correctly', async ({ page }) => {\n    await page.goto('https://demoqa.com/links');\n    await page.click('a#created');\n    await expect(page).toHaveURL('https://demoqa.com/links');\n  });\n\n  test('should handle the Unauthorized link correctly', async ({ page }) => {\n    await page.goto('https://demoqa.com/links');\n    await page.click('a#unauthorized');\n    await expect(page).toHaveURL('https://demoqa.com/links');\n  });\n});",
+  "id": "GC_demoqa_06_5",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/links",
+  "category": "api_response_handling",
+  "latency_s": 5.7
+}

@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to access HTTP status code pages so that I can understand the different responses returned by a web server. Acceptance Criteria: 1. When I visit the page at https://the-internet.herokuapp.com/status_codes, I should see the heading 'Status Codes'. 2. I should be able to click on the link '200' and be redirected to the URL https://the-internet.herokuapp.com/status_codes/200. 3. If I click on the link '404', I should be redirected to the URL https://the-internet.herokuapp.com/status_codes/404.",
+  "complexity": "simple",
+  "cypress_script": "describe('HTTP Status Codes Page', () => {\n  it('should navigate to 200 status code page', () => {\n    cy.visit('https://the-internet.herokuapp.com/status_codes');\n    cy.get('a').contains('200').click();\n    cy.url().should('include', '/status_codes/200');\n  });\n  it('should not navigate for invalid status code', () => {\n    cy.visit('https://the-internet.herokuapp.com/status_codes');\n    cy.get('a').contains('404').click();\n    cy.url().should('include', '/status_codes/404');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('HTTP Status Codes Page', () => {\n  test('should navigate to 200 status code page', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/status_codes');\n    await page.click('a:has-text(\"200\")');\n    expect(page.url()).toContain('/status_codes/200');\n  });\n  test('should not navigate for invalid status code', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/status_codes');\n    await page.click('a:has-text(\"404\")');\n    expect(page.url()).toContain('/status_codes/404');\n  });\n});",
+  "id": "GC_the-internet_09_4",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/status_codes",
+  "category": "api_response_handling",
+  "latency_s": 6.0
+}

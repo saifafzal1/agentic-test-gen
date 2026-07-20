@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to select a car from a dropdown menu so that I can choose my preferred vehicle from the list of options provided. Acceptance Criteria: When I visit the 'Select Menu' page at 'https://demoqa.com/select-menu', I should see a dropdown menu with the id 'cars'. When I select 'Volvo' from the dropdown, it should be selected successfully. If I do not select any option and try to submit, I should remain on the same page without any navigation away from 'https://demoqa.com/select-menu'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Select Menu Widget Tests', () => {\n  it('should select a car successfully', () => {\n    cy.visit('https://demoqa.com/select-menu');\n    cy.get('select#cars').select('Volvo');\n    cy.get('select#cars').should('have.value', 'volvo');\n  });\n  it('should not navigate away when no selection is made', () => {\n    cy.visit('https://demoqa.com/select-menu');\n    cy.get('select#cars').select('');\n    cy.url().should('eq', 'https://demoqa.com/select-menu');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Select Menu Widget Tests', () => {\n  test('should select a car successfully', async ({ page }) => {\n    await page.goto('https://demoqa.com/select-menu');\n    await page.selectOption('select#cars', 'volvo');\n    const selectedValue = await page.$eval('select#cars', el => el.value);\n    expect(selectedValue).toBe('volvo');\n  });\n  test('should not navigate away when no selection is made', async ({ page }) => {\n    await page.goto('https://demoqa.com/select-menu');\n    await page.selectOption('select#cars', '');\n    expect(page.url()).toBe('https://demoqa.com/select-menu');\n  });\n});",
+  "id": "GC_demoqa_02_1",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/select-menu",
+  "category": "search_filter",
+  "latency_s": 6.1
+}

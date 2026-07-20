@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to search and filter products in the tool shop product catalogue so that I can easily find the items I am looking for. Acceptance Criteria: 1. The search input with id 'search-query' should be present for entering search terms. 2. The 'Search' button with data-test 'search-submit' should be available to submit the search query. 3. Filters for categories should be present as checkboxes with data-test attributes like 'category-01KY0AZ7BZR2BTQAJ63XPN9FCH' for users to refine their search. 4. The page URL should change when a valid search is submitted, and the results should be displayed accordingly.",
+  "complexity": "simple",
+  "cypress_script": "describe('Tool Shop Product Catalogue', () => {\n  it('should successfully search for a product', () => {\n    cy.visit('https://practicesoftwaretesting.com/');\n    cy.get('#search-query').type('drill');\n    cy.get('[data-test=\"search-submit\"]').click();\n    cy.url().should('include', 'drill');\n  });\n\n  it('should not change URL on empty search', () => {\n    cy.visit('https://practicesoftwaretesting.com/');\n    cy.get('[data-test=\"search-submit\"]').click();\n    cy.url().should('eq', 'https://practicesoftwaretesting.com/');\n    cy.get('#search-query').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Tool Shop Product Catalogue', () => {\n  test('should successfully search for a product', async ({ page }) => {\n    await page.goto('https://practicesoftwaretesting.com/');\n    await page.fill('#search-query', 'drill');\n    await page.click('[data-test=\"search-submit\"]');\n    await expect(page).toHaveURL(/drill/);\n  });\n\n  test('should not change URL on empty search', async ({ page }) => {\n    await page.goto('https://practicesoftwaretesting.com/');\n    await page.click('[data-test=\"search-submit\"]');\n    await expect(page).toHaveURL('https://practicesoftwaretesting.com/');\n    await expect(page.locator('#search-query')).toBeVisible();\n  });\n});",
+  "id": "GC_practicesoftwaretesting_00_4",
+  "app": "practicesoftwaretesting",
+  "base_url": "https://practicesoftwaretesting.com",
+  "page": "/",
+  "category": "search_filter",
+  "latency_s": 7.5
+}

@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to ensure that all product images have appropriate alt-texts for improved accessibility so that users with visual impairments can understand the content of the images. Additionally, I want to verify that all form fields are accessible, ensuring that the application is usable by individuals relying on assistive technologies.",
+  "complexity": "simple",
+  "cypress_script": "describe('Product Image Alt-Texts and Accessible Form Fields', () => {\n  it('should display product images with correct alt-texts', () => {\n    cy.visit('https://www.saucedemo.com/inventory.html');\n    cy.get('[data-test=\"item-0-title-link\"]').should('be.visible');\n    // Assume alt-text for the first item is 'Sauce Labs Bike Light'\n    cy.get('img[data-test=\"open-menu\"]').should('have.attr', 'alt', 'Open Menu');\n  });\n\n  it('should not change URL when accessing the page directly', () => {\n    cy.visit('https://www.saucedemo.com/inventory.html');\n    cy.url().should('eq', 'https://www.saucedemo.com/inventory.html');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Product Image Alt-Texts and Accessible Form Fields', () => {\n  test('should display product images with correct alt-texts', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/inventory.html');\n    await expect(page.locator('[data-test=\"item-0-title-link\"]').first()).toBeVisible();\n    // Assume alt-text for the first item is 'Sauce Labs Bike Light'\n    const openMenuImage = page.locator('img[data-test=\"open-menu\"]');\n    await expect(openMenuImage).toHaveAttribute('alt', 'Open Menu');\n  });\n\n  test('should not change URL when accessing the page directly', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/inventory.html');\n    await expect(page.url()).toBe('https://www.saucedemo.com/inventory.html');\n  });\n});",
+  "id": "GC_saucedemo_06_2",
+  "app": "saucedemo",
+  "base_url": "https://www.saucedemo.com",
+  "page": "/inventory.html",
+  "category": "accessibility",
+  "latency_s": 5.9
+}

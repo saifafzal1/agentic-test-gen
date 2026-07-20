@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to start and stop the progress bar so that I can see the progress of an operation. Acceptance Criteria: 1. When I click the button with id 'startStopButton' and its text is 'Start', the progress bar should start progressing. 2. When I click the button with id 'startStopButton' and its text is 'Stop', the progress should stop. 3. The URL should remain the same: 'https://demoqa.com/progress-bar'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Progress Bar Functionality', () => {\n  it('should start the progress bar', () => {\n    cy.visit('https://demoqa.com/progress-bar');\n    cy.get('#startStopButton').click();\n    // Assert that the button text changes to 'Stop'\n    cy.get('#startStopButton').should('have.text', 'Stop');\n  });\n\n  it('should not change URL when clicking start/stop', () => {\n    cy.visit('https://demoqa.com/progress-bar');\n    cy.get('#startStopButton').click();\n    cy.url().should('eq', 'https://demoqa.com/progress-bar');\n    cy.get('#startStopButton').click();\n    cy.url().should('eq', 'https://demoqa.com/progress-bar');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Progress Bar Functionality', () => {\n  test('should start the progress bar', async ({ page }) => {\n    await page.goto('https://demoqa.com/progress-bar');\n    await page.click('#startStopButton');\n    // Assert that the button text changes to 'Stop'\n    const buttonText = await page.textContent('#startStopButton');\n    expect(buttonText).toBe('Stop');\n  });\n\n  test('should not change URL when clicking start/stop', async ({ page }) => {\n    await page.goto('https://demoqa.com/progress-bar');\n    await page.click('#startStopButton');\n    await page.click('#startStopButton');\n    expect(page.url()).toBe('https://demoqa.com/progress-bar');\n  });\n});",
+  "id": "GC_demoqa_05_0",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/progress-bar",
+  "category": "async_await",
+  "latency_s": 6.2
+}

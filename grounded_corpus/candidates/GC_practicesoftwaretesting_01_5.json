@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to log in to my account using my email and password so that I can access my personalized dashboard. The login form should accept valid credentials and redirect me upon successful login. If I do not enter any credentials, the form should not proceed, and I should remain on the login page.",
+  "complexity": "simple",
+  "cypress_script": "describe('Login Form', () => {\n  it('should log in successfully with valid credentials', () => {\n    cy.visit('https://practicesoftwaretesting.com/auth/login');\n    cy.get('#email').type('user@example.com');\n    cy.get('#password').type('password123');\n    cy.get('[data-test=\"login-submit\"]').click();\n    cy.url().should('not.include', '/auth/login');\n  });\n  it('should not log in with empty credentials', () => {\n    cy.visit('https://practicesoftwaretesting.com/auth/login');\n    cy.get('[data-test=\"login-submit\"]').click();\n    cy.url().should('include', '/auth/login');\n    cy.get('[data-test=\"nav-sign-in\"]').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Form', () => {\n  test('should log in successfully with valid credentials', async ({ page }) => {\n    await page.goto('https://practicesoftwaretesting.com/auth/login');\n    await page.fill('#email', 'user@example.com');\n    await page.fill('#password', 'password123');\n    await page.click('[data-test=\"login-submit\"]');\n    await expect(page).toHaveURL(/^(?!.*auth\\/login).*/);\n  });\n  test('should not log in with empty credentials', async ({ page }) => {\n    await page.goto('https://practicesoftwaretesting.com/auth/login');\n    await page.click('[data-test=\"login-submit\"]');\n    await expect(page).toHaveURL('https://practicesoftwaretesting.com/auth/login');\n    await expect(page.locator('[data-test=\"nav-sign-in\"]')).toBeVisible();\n  });\n});",
+  "id": "GC_practicesoftwaretesting_01_5",
+  "app": "practicesoftwaretesting",
+  "base_url": "https://practicesoftwaretesting.com",
+  "page": "/auth/login",
+  "category": "authentication",
+  "latency_s": 5.2
+}

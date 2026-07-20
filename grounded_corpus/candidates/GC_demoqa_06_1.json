@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to test the links on the Links page to ensure they issue the correct API calls and handle the responses properly, so that I can verify the application's reliability. Acceptance Criteria: \n1. When I click on the link with text 'Created', it should not navigate away from the page and the URL should remain the same. \n2. When I click on the link with text 'No Content', it should also not navigate away and the URL should remain the same.",
+  "complexity": "simple",
+  "cypress_script": "describe('Links API responses', () => {\n  it('should handle Created link without navigation', () => {\n    cy.visit('https://demoqa.com/links');\n    cy.get('a#created').click();\n    cy.url().should('eq', 'https://demoqa.com/links');\n  });\n\n  it('should handle No Content link without navigation', () => {\n    cy.visit('https://demoqa.com/links');\n    cy.get('a#no-content').click();\n    cy.url().should('eq', 'https://demoqa.com/links');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\ntest.describe('Links API responses', () => {\n  test('should handle Created link without navigation', async ({ page }) => {\n    await page.goto('https://demoqa.com/links');\n    await page.click('a#created');\n    await expect(page).toHaveURL('https://demoqa.com/links');\n  });\n\n  test('should handle No Content link without navigation', async ({ page }) => {\n    await page.goto('https://demoqa.com/links');\n    await page.click('a#no-content');\n    await expect(page).toHaveURL('https://demoqa.com/links');\n  });\n});",
+  "id": "GC_demoqa_06_1",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/links",
+  "category": "api_response_handling",
+  "latency_s": 5.7
+}

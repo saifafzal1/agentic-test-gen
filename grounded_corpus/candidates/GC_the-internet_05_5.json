@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to upload a file so that I can share documents with the application. Acceptance Criteria: 1. The file input field should be present with the selector 'input#file-upload'. 2. Clicking the 'Upload' button with the selector 'input#file-submit' should submit the file. 3. The URL should change to reflect the upload action. 4. If no file is uploaded and the 'Upload' button is clicked, the URL should remain unchanged.",
+  "complexity": "simple",
+  "cypress_script": "describe('File Upload Functionality', () => {\n  it('should successfully upload a file', () => {\n    cy.visit('https://the-internet.herokuapp.com/upload');\n    cy.get('input#file-upload').attachFile('example.txt');\n    cy.get('input#file-submit').click();\n    cy.url().should('include', '/upload');\n  });\n\n  it('should not change the URL when no file is uploaded', () => {\n    cy.visit('https://the-internet.herokuapp.com/upload');\n    cy.get('input#file-submit').click();\n    cy.url().should('include', '/upload');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload Functionality', () => {\n  test('should successfully upload a file', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/upload');\n    await page.setInputFiles('input#file-upload', 'example.txt');\n    await page.click('input#file-submit');\n    await expect(page).toHaveURL(/.*upload/);\n  });\n\n  test('should not change the URL when no file is uploaded', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/upload');\n    await page.click('input#file-submit');\n    await expect(page).toHaveURL(/.*upload/);\n  });\n});",
+  "id": "GC_the-internet_05_5",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/upload",
+  "category": "file_upload",
+  "latency_s": 6.0
+}

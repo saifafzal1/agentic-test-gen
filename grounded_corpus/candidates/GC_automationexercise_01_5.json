@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to search for products by entering keywords in the search bar so that I can quickly find specific items in the product list. Acceptance Criteria: 1. The search input field with id 'search_product' must be visible. 2. When a valid product name is entered in the search input field and the search button with id 'submit_search' is clicked, the results should reflect the searched product. 3. If the search input field is submitted empty, the product list should remain unchanged and the URL should not change.",
+  "complexity": "simple",
+  "cypress_script": "describe('Product Search Functionality', () => {\n  it('should display search results for a valid product', () => {\n    cy.visit('https://automationexercise.com/products');\n    cy.get('#search_product').type('Tshirt');\n    cy.get('#submit_search').click();\n    cy.url().should('include', 'search');\n    cy.get('.google-anno').should('be.visible');\n  });\n  it('should not change the product list for an empty search', () => {\n    cy.visit('https://automationexercise.com/products');\n    cy.get('#submit_search').click();\n    cy.url().should('eq', 'https://automationexercise.com/products');\n    cy.get('#search_product').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Product Search Functionality', () => {\n  test('should display search results for a valid product', async ({ page }) => {\n    await page.goto('https://automationexercise.com/products');\n    await page.fill('#search_product', 'Tshirt');\n    await page.click('#submit_search');\n    await expect(page).toHaveURL(/search/);\n    await expect(page.locator('.google-anno')).toBeVisible();\n  });\n  test('should not change the product list for an empty search', async ({ page }) => {\n    await page.goto('https://automationexercise.com/products');\n    await page.click('#submit_search');\n    await expect(page).toHaveURL('https://automationexercise.com/products');\n    await expect(page.locator('#search_product')).toBeVisible();\n  });\n});",
+  "id": "GC_automationexercise_01_5",
+  "app": "automationexercise",
+  "base_url": "https://automationexercise.com",
+  "page": "/products",
+  "category": "search_filter",
+  "latency_s": 6.9
+}

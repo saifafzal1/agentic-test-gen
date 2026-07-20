@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to view the list of test cases on the Automation Exercise website so that I can understand the functionalities being tested. I should be able to see the test case titles and their descriptions when I click on them.",
+  "complexity": "simple",
+  "cypress_script": "describe('Test Case Listing Page', () => {\n  it('should display the test case titles', () => {\n    cy.visit('https://automationexercise.com/test_cases');\n    cy.contains('Test Cases').should('be.visible');\n    cy.get('a[href=\"#collapse1\"]').should('be.visible');\n    cy.get('a[href=\"#collapse2\"]').should('be.visible');\n    cy.get('a[href=\"#collapse3\"]').should('be.visible');\n  });\n\n  it('should not change the URL when a test case title is clicked without expanding', () => {\n    cy.visit('https://automationexercise.com/test_cases');\n    cy.get('a[href=\"#collapse1\"]').click();\n    cy.url().should('eq', 'https://automationexercise.com/test_cases');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Test Case Listing Page', () => {\n  test('should display the test case titles', async ({ page }) => {\n    await page.goto('https://automationexercise.com/test_cases');\n    await expect(page.locator('text=Test Cases')).toBeVisible();\n    await expect(page.locator('a[href=\"#collapse1\"]').toBeVisible();\n    await expect(page.locator('a[href=\"#collapse2\"]').toBeVisible();\n    await expect(page.locator('a[href=\"#collapse3\"]').toBeVisible();\n  });\n\n  test('should not change the URL when a test case title is clicked without expanding', async ({ page }) => {\n    await page.goto('https://automationexercise.com/test_cases');\n    await page.click('a[href=\"#collapse1\"]');\n    await expect(page).toHaveURL('https://automationexercise.com/test_cases');\n  });\n});",
+  "id": "GC_automationexercise_03_2",
+  "app": "automationexercise",
+  "base_url": "https://automationexercise.com",
+  "page": "/test_cases",
+  "category": "table_list",
+  "latency_s": 5.8
+}

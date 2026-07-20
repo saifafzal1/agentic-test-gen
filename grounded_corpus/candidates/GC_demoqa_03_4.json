@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to manage my data in an editable web table by adding, editing, and deleting records so that I can maintain an up-to-date list of information. Acceptance Criteria: I can click the button with id 'addNewRecordButton' to add a new record. After adding a record, the record should appear in the table. I can edit an existing record by interacting with the respective row in the table. I can delete a record and it should no longer be visible in the table.",
+  "complexity": "medium",
+  "cypress_script": "describe('Editable Web Table CRUD Operations', () => {\n  it('should add a new record successfully', () => {\n    cy.visit('https://demoqa.com/webtables');\n    cy.get('#addNewRecordButton').click();\n    // Assuming fields to fill in are present in the DOM after clicking the button\n    // Fill in the record details (not provided in the inventory)\n    // Submit the form (not provided in the inventory)\n    // Verify the new record is present in the table (not provided in the inventory)\n  });\n\n  it('should not add a record with empty fields', () => {\n    cy.visit('https://demoqa.com/webtables');\n    cy.get('#addNewRecordButton').click();\n    // Attempt to submit an empty form (not provided in the inventory)\n    // Verify the URL did not change\n    cy.url().should('eq', 'https://demoqa.com/webtables');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Editable Web Table CRUD Operations', () => {\n  test('should add a new record successfully', async ({ page }) => {\n    await page.goto('https://demoqa.com/webtables');\n    await page.click('#addNewRecordButton');\n    // Fill in the record details (not provided in the inventory)\n    // Submit the form (not provided in the inventory)\n    // Verify the new record is present in the table (not provided in the inventory)\n  });\n\n  test('should not add a record with empty fields', async ({ page }) => {\n    await page.goto('https://demoqa.com/webtables');\n    await page.click('#addNewRecordButton');\n    // Attempt to submit an empty form (not provided in the inventory)\n    // Verify the URL did not change\n    await expect(page).toHaveURL('https://demoqa.com/webtables');\n  });\n});",
+  "id": "GC_demoqa_03_4",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/webtables",
+  "category": "crud_operations",
+  "latency_s": 8.8
+}

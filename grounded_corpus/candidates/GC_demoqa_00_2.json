@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to fill out the text box form so that I can provide my full name, email, current address, and permanent address. Upon submission, I expect my inputs to be processed and displayed correctly.",
+  "complexity": "simple",
+  "cypress_script": "describe('Text Box Form', () => {\n  it('should submit the form with valid data', () => {\n    cy.visit('https://demoqa.com/text-box');\n    cy.get('#userName').type('John Doe');\n    cy.get('#userEmail').type('john.doe@example.com');\n    cy.get('#currentAddress').type('123 Main St');\n    cy.get('#permanentAddress').type('456 Elm St');\n    cy.get('#submit').click();\n    cy.url().should('include', '/text-box');\n  });\n\n  it('should not change the URL when the form is submitted empty', () => {\n    cy.visit('https://demoqa.com/text-box');\n    cy.get('#submit').click();\n    cy.url().should('include', '/text-box');\n    cy.get('#userName').should('be.visible');\n    cy.get('#userEmail').should('be.visible');\n    cy.get('#currentAddress').should('be.visible');\n    cy.get('#permanentAddress').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Text Box Form', () => {\n  test('should submit the form with valid data', async ({ page }) => {\n    await page.goto('https://demoqa.com/text-box');\n    await page.fill('#userName', 'John Doe');\n    await page.fill('#userEmail', 'john.doe@example.com');\n    await page.fill('#currentAddress', '123 Main St');\n    await page.fill('#permanentAddress', '456 Elm St');\n    await page.click('#submit');\n    await expect(page).toHaveURL(/.*text-box/);\n  });\n\n  test('should not change the URL when the form is submitted empty', async ({ page }) => {\n    await page.goto('https://demoqa.com/text-box');\n    await page.click('#submit');\n    await expect(page).toHaveURL(/.*text-box/);\n    await expect(page.locator('#userName')).toBeVisible();\n    await expect(page.locator('#userEmail')).toBeVisible();\n    await expect(page.locator('#currentAddress')).toBeVisible();\n    await expect(page.locator('#permanentAddress')).toBeVisible();\n  });\n});",
+  "id": "GC_demoqa_00_2",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/text-box",
+  "category": "form_validation",
+  "latency_s": 8.4
+}

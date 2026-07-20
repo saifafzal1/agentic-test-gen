@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to test the links on the Links page to ensure they correctly issue API calls and respond with the appropriate status, so that I can verify the functionality of the application.\n\nAcceptance Criteria:\n1. When I click on the link with text 'Created', I should not navigate away from the Links page, and the URL should remain as 'https://demoqa.com/links'.\n2. When I click on the link with text 'No Content', I should not navigate away from the Links page, and the URL should remain as 'https://demoqa.com/links'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Links Page API Response Handling', () => {\n  it('should navigate to the Created link and remain on the Links page', () => {\n    cy.visit('https://demoqa.com/links');\n    cy.get('a#created').click();\n    cy.url().should('eq', 'https://demoqa.com/links');\n  });\n  it('should navigate to the No Content link and remain on the Links page', () => {\n    cy.visit('https://demoqa.com/links');\n    cy.get('a#no-content').click();\n    cy.url().should('eq', 'https://demoqa.com/links');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Links Page API Response Handling', () => {\n  test('should navigate to the Created link and remain on the Links page', async ({ page }) => {\n    await page.goto('https://demoqa.com/links');\n    await page.click('a#created');\n    await expect(page).toHaveURL('https://demoqa.com/links');\n  });\n  test('should navigate to the No Content link and remain on the Links page', async ({ page }) => {\n    await page.goto('https://demoqa.com/links');\n    await page.click('a#no-content');\n    await expect(page).toHaveURL('https://demoqa.com/links');\n  });\n});",
+  "id": "GC_demoqa_06_4",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/links",
+  "category": "api_response_handling",
+  "latency_s": 6.2
+}

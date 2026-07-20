@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to ensure that all product images on the inventory page have appropriate alt-texts for accessibility, so that visually impaired users can understand the content of the images. Additionally, I want to confirm that the form fields are accessible and can be interacted with correctly.",
+  "complexity": "simple",
+  "cypress_script": "describe('Inventory Page Accessibility Tests', () => {\n  it('should display product images with alt-texts', () => {\n    cy.visit('https://www.saucedemo.com/inventory.html');\n    cy.get('[data-test=\"item-0-title-link\"]').should('be.visible');\n    cy.get('[data-test=\"item-1-title-link\"]').should('be.visible');\n    cy.get('[data-test=\"item-2-title-link\"]').should('be.visible');\n    cy.get('[data-test=\"item-3-title-link\"]').should('be.visible');\n    cy.get('[data-test=\"item-4-title-link\"]').should('be.visible');\n    cy.get('[data-test=\"item-5-title-link\"]').should('be.visible');\n  });\n\n  it('should not navigate when clicking on an image without a valid link', () => {\n    cy.visit('https://www.saucedemo.com/inventory.html');\n    cy.get('[data-test=\"item-4-title-link\"]').click();\n    cy.url().should('eq', 'https://www.saucedemo.com/inventory.html');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\n test.describe('Inventory Page Accessibility Tests', () => {\n   test('should display product images with alt-texts', async ({ page }) => {\n     await page.goto('https://www.saucedemo.com/inventory.html');\n     await expect(page.locator('[data-test=\"item-0-title-link\"]')).toBeVisible();\n     await expect(page.locator('[data-test=\"item-1-title-link\"]')).toBeVisible();\n     await expect(page.locator('[data-test=\"item-2-title-link\"]')).toBeVisible();\n     await expect(page.locator('[data-test=\"item-3-title-link\"]')).toBeVisible();\n     await expect(page.locator('[data-test=\"item-4-title-link\"]')).toBeVisible();\n     await expect(page.locator('[data-test=\"item-5-title-link\"]')).toBeVisible();\n   });\n\n   test('should not navigate when clicking on an image without a valid link', async ({ page }) => {\n     await page.goto('https://www.saucedemo.com/inventory.html');\n     await page.click('[data-test=\"item-4-title-link\"]');\n     await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html');\n   });\n });",
+  "id": "GC_saucedemo_06_5",
+  "app": "saucedemo",
+  "base_url": "https://www.saucedemo.com",
+  "page": "/inventory.html",
+  "category": "accessibility",
+  "latency_s": 7.8
+}

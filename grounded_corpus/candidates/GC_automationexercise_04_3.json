@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to view the API endpoint documentation list on the 'API Testing' page so that I can understand the available APIs for practice. I should be able to see the headings and links to each API's documentation.",
+  "complexity": "simple",
+  "cypress_script": "describe('API endpoint documentation list', () => {\n  it('should display the API list correctly', () => {\n    cy.visit('https://automationexercise.com/api_list');\n    cy.get('h1').contains('Automation Practice for API Testing');\n    cy.get('h2').contains('APIs List for practice');\n    cy.get('a').contains('API 1: Get All Products List').should('be.visible');\n    cy.get('a').contains('API 2: POST To All Products List').should('be.visible');\n    cy.get('a').contains('API 3: Get All Brands List').should('be.visible');\n    cy.get('a').contains('API 4: PUT To All Brands List').should('be.visible');\n  });\n\n  it('should not change the URL when clicking on an invalid link', () => {\n    cy.visit('https://automationexercise.com/api_list');\n    cy.get('a').contains('Invalid API Link').click();\n    cy.url().should('eq', 'https://automationexercise.com/api_list');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('API endpoint documentation list', () => {\n  test('should display the API list correctly', async ({ page }) => {\n    await page.goto('https://automationexercise.com/api_list');\n    await expect(page.locator('h1')).toContainText('Automation Practice for API Testing');\n    await expect(page.locator('h2')).toContainText('APIs List for practice');\n    await expect(page.locator('a').withText('API 1: Get All Products List')).toBeVisible();\n    await expect(page.locator('a').withText('API 2: POST To All Products List')).toBeVisible();\n    await expect(page.locator('a').withText('API 3: Get All Brands List')).toBeVisible();\n    await expect(page.locator('a').withText('API 4: PUT To All Brands List')).toBeVisible();\n  });\n\n  test('should not change the URL when clicking on an invalid link', async ({ page }) => {\n    await page.goto('https://automationexercise.com/api_list');\n    await page.click('text=Invalid API Link');\n    await expect(page).toHaveURL('https://automationexercise.com/api_list');\n  });\n});",
+  "id": "GC_automationexercise_04_3",
+  "app": "automationexercise",
+  "base_url": "https://automationexercise.com",
+  "page": "/api_list",
+  "category": "api_response_handling",
+  "latency_s": 7.1
+}

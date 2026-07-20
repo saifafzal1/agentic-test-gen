@@ -1,0 +1,18 @@
+{
+  "user_story": "As a mobile user, I want to view and browse products using the burger menu so that I can easily navigate the inventory on smaller screens.",
+  "acceptance_criteria": [
+    "The burger menu can be opened with the button having id 'react-burger-menu-btn'.",
+    "The menu contains a link to 'All Items' with data-test 'inventory-sidebar-link'.",
+    "The menu can be closed with the button having id 'react-burger-cross-btn'.",
+    "All product items are visible in the inventory when the menu is closed."
+  ],
+  "complexity": "simple",
+  "cypress_script": "describe('Mobile Viewport Product Browsing via Burger Menu', () => {\n  it('should open and close the burger menu successfully', () => {\n    cy.visit('https://www.saucedemo.com/inventory.html');\n    cy.get('[id=\"react-burger-menu-btn\"]').click();\n    cy.get('[data-test=\"inventory-sidebar-link\"]').should('be.visible');\n    cy.get('[id=\"react-burger-cross-btn\"]').click();\n    cy.get('[data-test=\"inventory-sidebar-link\"]').should('not.exist');\n  });\n\n  it('should not navigate when clicking the burger menu link without proper login', () => {\n    cy.visit('https://www.saucedemo.com/inventory.html');\n    cy.get('[id=\"react-burger-menu-btn\"]').click();\n    cy.get('[data-test=\"inventory-sidebar-link\"]').click();\n    cy.url().should('eq', 'https://www.saucedemo.com/inventory.html');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mobile Viewport Product Browsing via Burger Menu', () => {\n  test('should open and close the burger menu successfully', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/inventory.html');\n    await page.click('[id=\"react-burger-menu-btn\"]');\n    await expect(page.locator('[data-test=\"inventory-sidebar-link\"]')).toBeVisible();\n    await page.click('[id=\"react-burger-cross-btn\"]');\n    await expect(page.locator('[data-test=\"inventory-sidebar-link\"]')).toBeHidden();\n  });\n\n  test('should not navigate when clicking the burger menu link without proper login', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/inventory.html');\n    await page.click('[id=\"react-burger-menu-btn\"]');\n    await page.click('[data-test=\"inventory-sidebar-link\"]');\n    await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html');\n  });\n});",
+  "id": "GC_saucedemo_05_3",
+  "app": "saucedemo",
+  "base_url": "https://www.saucedemo.com",
+  "page": "/inventory.html",
+  "category": "responsive",
+  "latency_s": 9.3
+}

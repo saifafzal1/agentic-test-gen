@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to test the links on the Links page to ensure they issue the correct API calls and receive the appropriate status responses, so that I can verify the functionality of the application.",
+  "complexity": "medium",
+  "cypress_script": "describe('Links Page API Response Handling', () => {\n  it('should navigate to the Home page on clicking the Home link', () => {\n    cy.visit('https://demoqa.com/links');\n    cy.get('#simpleLink').click();\n    cy.url().should('eq', 'https://demoqa.com/');\n  });\n\n  it('should not navigate anywhere when clicking the Created link', () => {\n    cy.visit('https://demoqa.com/links');\n    cy.get('#created').click();\n    cy.url().should('eq', 'https://demoqa.com/links');\n    cy.get('#simpleLink').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Links Page API Response Handling', () => {\n  test('should navigate to the Home page on clicking the Home link', async ({ page }) => {\n    await page.goto('https://demoqa.com/links');\n    await page.click('#simpleLink');\n    await expect(page).toHaveURL('https://demoqa.com/');\n  });\n\n  test('should not navigate anywhere when clicking the Created link', async ({ page }) => {\n    await page.goto('https://demoqa.com/links');\n    await page.click('#created');\n    await expect(page).toHaveURL('https://demoqa.com/links');\n    await expect(page.locator('#simpleLink')).toBeVisible();\n  });\n});",
+  "id": "GC_demoqa_06_0",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/links",
+  "category": "api_response_handling",
+  "latency_s": 5.2
+}

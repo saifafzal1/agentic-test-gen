@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to log into the application using my credentials so that I can access secure areas of the site. \nAcceptance Criteria: \n- The login form should accept a username input field with the selector 'input[id=\"username\"]'. \n- The login form should accept a password input field with the selector 'input[id=\"password\"]'. \n- Upon entering valid credentials (username: 'tomsmith', password: 'SuperSecretPassword!') and clicking the 'Login' button (selector 'button[class=\"radius\"]'), the user should be redirected to a secure area. \n- If the login form is submitted without any credentials, the user should remain on the login page (URL: 'https://the-internet.herokuapp.com/login').",
+  "complexity": "simple",
+  "cypress_script": "describe('Login Form', () => {\n  it('should log in with valid credentials', () => {\n    cy.visit('https://the-internet.herokuapp.com/login');\n    cy.get('input[id=\"username\"]').type('tomsmith');\n    cy.get('input[id=\"password\"]').type('SuperSecretPassword!');\n    cy.get('button[class=\"radius\"]').click();\n    cy.url().should('not.eq', 'https://the-internet.herokuapp.com/login');\n  });\n  it('should not log in with empty credentials', () => {\n    cy.visit('https://the-internet.herokuapp.com/login');\n    cy.get('button[class=\"radius\"]').click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/login');\n    cy.get('div[id=\"flash-messages\"]').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Form', () => {\n  test('should log in with valid credentials', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/login');\n    await page.fill('input[id=\"username\"]', 'tomsmith');\n    await page.fill('input[id=\"password\"]', 'SuperSecretPassword!');\n    await page.click('button[class=\"radius\"]');\n    await expect(page).toHaveURL(/^(?!.*login).*/);\n  });\n  test('should not log in with empty credentials', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/login');\n    await page.click('button[class=\"radius\"]');\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/login');\n    await expect(page.locator('div[id=\"flash-messages\"]').isVisible()).toBeTruthy();\n  });\n});",
+  "id": "GC_the-internet_00_4",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/login",
+  "category": "authentication",
+  "latency_s": 6.5
+}

@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to be able to interact with alert and confirm dialogs so that I can receive notifications and confirm actions. \nAcceptance Criteria:\n1. Clicking the button with id 'alertButton' should trigger an alert dialog.\n2. Clicking the button with id 'confirmButton' should trigger a confirm dialog and the user should be able to confirm or cancel the action.\n3. The URL should remain the same after interacting with the dialogs.",
+  "complexity": "simple",
+  "cypress_script": "describe('Alert and Confirm Dialogs', () => {\n  it('should display alert dialog when alert button is clicked', () => {\n    cy.visit('https://demoqa.com/alerts');\n    cy.get('#alertButton').click();\n    cy.on('window:alert', (str) => {\n      expect(str).to.exist;\n    });\n  });\n\n  it('should not change URL when confirm dialog is triggered', () => {\n    cy.visit('https://demoqa.com/alerts');\n    cy.get('#confirmButton').click();\n    cy.on('window:confirm', (str) => {\n      return true; // Simulate clicking OK\n    });\n    cy.url().should('eq', 'https://demoqa.com/alerts');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Alert and Confirm Dialogs', () => {\n  test('should display alert dialog when alert button is clicked', async ({ page }) => {\n    await page.goto('https://demoqa.com/alerts');\n    await page.click('#alertButton');\n    page.on('dialog', dialog => {\n      expect(dialog.message()).toBeTruthy();\n      dialog.dismiss();\n    });\n  });\n\n  test('should not change URL when confirm dialog is triggered', async ({ page }) => {\n    await page.goto('https://demoqa.com/alerts');\n    await page.click('#confirmButton');\n    page.on('dialog', dialog => {\n      dialog.accept(); // Simulate clicking OK\n    });\n    expect(page.url()).toBe('https://demoqa.com/alerts');\n  });\n});",
+  "id": "GC_demoqa_01_2",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/alerts",
+  "category": "modal_dialog",
+  "latency_s": 7.2
+}

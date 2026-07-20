@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to be able to view the items in my shopping cart so that I can proceed to checkout or continue shopping. \nAcceptance Criteria:\n1. The shopping cart page should display the header with the text 'Your Cart' (element: [data-test=\"title\"]).\n2. The page should have a button to 'Continue Shopping' (element: [data-test=\"continue-shopping\"]).\n3. The page should have a button to 'Checkout' (element: [data-test=\"checkout\"]).",
+  "complexity": "simple",
+  "cypress_script": "describe('Shopping Cart Page Tests', () => {\n  it('should display the shopping cart with items', () => {\n    cy.visit('https://www.saucedemo.com/cart.html');\n    cy.get('[data-test=\"title\"]').should('be.visible');\n    cy.get('[data-test=\"continue-shopping\"]').should('be.visible');\n    cy.get('[data-test=\"checkout\"]').should('be.visible');\n  });\n  it('should not navigate away from the cart page when clicking continue shopping', () => {\n    cy.visit('https://www.saucedemo.com/cart.html');\n    cy.get('[data-test=\"continue-shopping\"]').click();\n    cy.url().should('eq', 'https://www.saucedemo.com/cart.html');\n    cy.get('[data-test=\"title\"]').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Shopping Cart Page Tests', () => {\n  test('should display the shopping cart with items', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/cart.html');\n    await expect(page.locator('[data-test=\"title\"]')).toBeVisible();\n    await expect(page.locator('[data-test=\"continue-shopping\"]')).toBeVisible();\n    await expect(page.locator('[data-test=\"checkout\"]')).toBeVisible();\n  });\n  test('should not navigate away from the cart page when clicking continue shopping', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/cart.html');\n    await page.click('[data-test=\"continue-shopping\"]');\n    await expect(page).toHaveURL('https://www.saucedemo.com/cart.html');\n    await expect(page.locator('[data-test=\"title\"]')).toBeVisible();\n  });\n});",
+  "id": "GC_saucedemo_02_3",
+  "app": "saucedemo",
+  "base_url": "https://www.saucedemo.com",
+  "page": "/cart.html",
+  "category": "crud_operations",
+  "latency_s": 7.6
+}

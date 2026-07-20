@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to be able to interact with alert and confirm dialogs on the Alerts page so that I can see how the application handles these interactions. Acceptance Criteria: 1. When I click the button with id 'alertButton', an alert dialog should appear. 2. When I click the button with id 'confirmButton', a confirm dialog should appear. 3. The URL should remain the same after interactions with the dialogs.",
+  "complexity": "simple",
+  "cypress_script": "describe('Alert and Confirm Dialogs', () => {\n  it('should show alert dialog when alert button is clicked', () => {\n    cy.visit('https://demoqa.com/alerts');\n    cy.get('#alertButton').click();\n    cy.on('window:alert', (text) => {\n      expect(text).to.exist;\n    });\n  });\n  it('should not change URL when confirm button is clicked', () => {\n    cy.visit('https://demoqa.com/alerts');\n    cy.get('#confirmButton').click();\n    cy.url().should('eq', 'https://demoqa.com/alerts');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\ntest.describe('Alert and Confirm Dialogs', () => {\n  test('should show alert dialog when alert button is clicked', async ({ page }) => {\n    await page.goto('https://demoqa.com/alerts');\n    await page.click('#alertButton');\n    page.on('dialog', dialog => {\n      expect(dialog).toBeDefined();\n      dialog.dismiss();\n    });\n  });\n  test('should not change URL when confirm button is clicked', async ({ page }) => {\n    await page.goto('https://demoqa.com/alerts');\n    await page.click('#confirmButton');\n    await expect(page).toHaveURL('https://demoqa.com/alerts');\n  });\n});",
+  "id": "GC_demoqa_01_4",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/alerts",
+  "category": "modal_dialog",
+  "latency_s": 9.0
+}

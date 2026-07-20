@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to log into my account so that I can access my personal information on the Automation Exercise website. Acceptance criteria: When I enter valid credentials and click the 'Login' button (selector: 'button[class=\"btn btn-default\"][text=\"Login\"]'), I should be redirected to my account page.",
+  "complexity": "simple",
+  "cypress_script": "describe('Login Functionality', () => {\n  it('should log in with valid credentials', () => {\n    cy.visit('https://automationexercise.com/login');\n    cy.get('input[name=\"email\"]').type('valid-email@example.com');\n    cy.get('input[name=\"password\"]').type('validPassword');\n    cy.get('button[class=\"btn btn-default\"][text=\"Login\"]').click();\n    cy.url().should('include', '/account');\n  });\n\n  it('should not log in with empty credentials', () => {\n    cy.visit('https://automationexercise.com/login');\n    cy.get('button[class=\"btn btn-default\"][text=\"Login\"]').click();\n    cy.url().should('include', '/login');\n    cy.get('div[id=\"form\"]').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Functionality', () => {\n  test('should log in with valid credentials', async ({ page }) => {\n    await page.goto('https://automationexercise.com/login');\n    await page.fill('input[name=\"email\"]', 'valid-email@example.com');\n    await page.fill('input[name=\"password\"]', 'validPassword');\n    await page.click('button[class=\"btn btn-default\"][text=\"Login\"]');\n    await expect(page).toHaveURL(/.*\\/account/);\n  });\n\n  test('should not log in with empty credentials', async ({ page }) => {\n    await page.goto('https://automationexercise.com/login');\n    await page.click('button[class=\"btn btn-default\"][text=\"Login\"]');\n    await expect(page).toHaveURL(/.*\\/login/);\n    await expect(page.locator('div[id=\"form\"]').isVisible()).toBeTruthy();\n  });\n});",
+  "id": "GC_automationexercise_00_4",
+  "app": "automationexercise",
+  "base_url": "https://automationexercise.com",
+  "page": "/login",
+  "category": "authentication",
+  "latency_s": 6.7
+}

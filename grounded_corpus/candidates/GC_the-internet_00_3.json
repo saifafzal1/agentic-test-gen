@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to log into the application using my credentials so that I can access secure areas. Acceptance Criteria: 1. The login form is displayed when I visit the URL 'https://the-internet.herokuapp.com/login'. 2. I can enter my username in the input field with id 'username'. 3. I can enter my password in the input field with id 'password'. 4. When I click the 'Login' button (class 'radius'), I am redirected to a logged-in page (not specified here, but the URL should change). 5. If I submit an empty form, the URL remains the same and the 'Login Page' heading is still visible.",
+  "complexity": "simple",
+  "cypress_script": "describe('Login Form', () => {\n  it('should log in with valid credentials', () => {\n    cy.visit('https://the-internet.herokuapp.com/login');\n    cy.get('#username').type('tomsmith');\n    cy.get('#password').type('SuperSecretPassword!');\n    cy.get('.radius').click();\n    cy.url().should('not.eq', 'https://the-internet.herokuapp.com/login');\n  });\n\n  it('should not log in with empty credentials', () => {\n    cy.visit('https://the-internet.herokuapp.com/login');\n    cy.get('.radius').click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/login');\n    cy.get('h1').should('contain', 'Login Page');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Form', () => {\n  test('should log in with valid credentials', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/login');\n    await page.fill('#username', 'tomsmith');\n    await page.fill('#password', 'SuperSecretPassword!');\n    await page.click('.radius');\n    await expect(page).toHaveURL(/^(?!https://the-internet.herokuapp.com/login).*/);\n  });\n\n  test('should not log in with empty credentials', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/login');\n    await page.click('.radius');\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/login');\n    await expect(page.locator('h1')).toContainText('Login Page');\n  });\n});",
+  "id": "GC_the-internet_00_3",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/login",
+  "category": "authentication",
+  "latency_s": 6.7
+}

@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to manage my records in a web table, allowing me to add, edit, and delete entries seamlessly. This will help me maintain accurate data without unnecessary complications.",
+  "complexity": "simple",
+  "cypress_script": "describe('Editable Web Table CRUD Operations', () => {\n  it('should add a new record successfully', () => {\n    cy.visit('https://demoqa.com/webtables');\n    cy.get('#addNewRecordButton').click();\n    // Assume the modal for adding a record appears here\n    // Assuming there are inputs for first name, last name, age, email, and salary\n    cy.get('input[placeholder=\"Type to search\"]').type('John');\n    cy.url().should('include', '/webtables');\n  });\n\n  it('should not allow adding a record with empty fields', () => {\n    cy.visit('https://demoqa.com/webtables');\n    cy.get('#addNewRecordButton').click();\n    // Submitting the form without filling it should not change the URL\n    cy.get('button[type=\"button\"]').first().click(); // Assuming this is the submit\n    cy.url().should('include', '/webtables');\n    cy.get('#searchBox').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Editable Web Table CRUD Operations', () => {\n  test('should add a new record successfully', async ({ page }) => {\n    await page.goto('https://demoqa.com/webtables');\n    await page.click('#addNewRecordButton');\n    await page.fill('input[placeholder=\"Type to search\"]', 'John');\n    await expect(page).toHaveURL(/webtables/);\n  });\n\n  test('should not allow adding a record with empty fields', async ({ page }) => {\n    await page.goto('https://demoqa.com/webtables');\n    await page.click('#addNewRecordButton');\n    await page.click('button[type=\"button\"]').first(); // Assuming this is the submit\n    await expect(page).toHaveURL(/webtables/);\n    await expect(page.locator('#searchBox')).toBeVisible();\n  });\n});",
+  "id": "GC_demoqa_03_3",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/webtables",
+  "category": "crud_operations",
+  "latency_s": 7.3
+}

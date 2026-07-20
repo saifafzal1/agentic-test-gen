@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to upload a file and download a sample file so that I can test the file upload and download functionality of the application. Acceptance Criteria: 1. The user can upload a file using the input element with id 'uploadFile'. 2. The user can download a file by clicking the button with id 'downloadButton'.",
+  "complexity": "simple",
+  "cypress_script": "describe('File Upload and Download Tests', () => {\n  it('should upload a file successfully', () => {\n    cy.visit('https://demoqa.com/upload-download');\n    const filePath = 'path/to/your/file.txt'; // Adjust the path to your test file\n    cy.get('#uploadFile').attachFile(filePath);\n    // Add assertions here if needed, but we focus on the upload functionality\n  });\n\n  it('should not change the URL when no file is uploaded', () => {\n    cy.visit('https://demoqa.com/upload-download');\n    cy.get('#uploadFile').should('exist');\n    // Assert that the URL is still the same after attempting to upload without a file\n    cy.url().should('eq', 'https://demoqa.com/upload-download');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload and Download Tests', () => {\n  test('should upload a file successfully', async ({ page }) => {\n    await page.goto('https://demoqa.com/upload-download');\n    const filePath = 'path/to/your/file.txt'; // Adjust the path to your test file\n    await page.setInputFiles('#uploadFile', filePath);\n    // Add assertions here if needed, but we focus on the upload functionality\n  });\n\n  test('should not change the URL when no file is uploaded', async ({ page }) => {\n    await page.goto('https://demoqa.com/upload-download');\n    await expect(page.locator('#uploadFile')).toBeVisible();\n    // Assert that the URL is still the same after attempting to upload without a file\n    await expect(page).toHaveURL('https://demoqa.com/upload-download');\n  });\n});",
+  "id": "GC_demoqa_04_0",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/upload-download",
+  "category": "file_upload",
+  "latency_s": 5.9
+}

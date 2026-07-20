@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to upload a file and download a sample image to test the upload and download functionality of the application. This will allow me to verify that files can be successfully uploaded and downloaded without issues.",
+  "complexity": "simple",
+  "cypress_script": "describe('File Upload and Download Tests', () => {\n  it('should upload a file successfully', () => {\n    cy.visit('https://demoqa.com/upload-download');\n    const filePath = 'path/to/your/file.txt'; // Use an appropriate test file path\n    cy.get('#uploadFile').attachFile(filePath);\n    // Assert that the file is uploaded by checking if the input is visible\n    cy.get('#uploadFile').should('be.visible');\n  });\n\n  it('should download the sample image', () => {\n    cy.visit('https://demoqa.com/upload-download');\n    cy.get('#downloadButton').should('be.visible').click();\n    // Check that the URL remains the same after the download\n    cy.url().should('eq', 'https://demoqa.com/upload-download');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload and Download Tests', () => {\n  test('should upload a file successfully', async ({ page }) => {\n    await page.goto('https://demoqa.com/upload-download');\n    const filePath = 'path/to/your/file.txt'; // Use an appropriate test file path\n    await page.setInputFiles('#uploadFile', filePath);\n    // Assert that the file input is visible\n    const uploadInput = await page.locator('#uploadFile');\n    await expect(uploadInput).toBeVisible();\n  });\n\n  test('should download the sample image', async ({ page }) => {\n    await page.goto('https://demoqa.com/upload-download');\n    await page.click('#downloadButton');\n    // Check that the URL remains the same after the download\n    await expect(page).toHaveURL('https://demoqa.com/upload-download');\n  });\n});",
+  "id": "GC_demoqa_04_3",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/upload-download",
+  "category": "file_upload",
+  "latency_s": 5.2
+}

@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to upload files to the application so that I can share documents easily. Acceptance criteria: \n1. When a file is selected using the input with id 'file-upload', the user can click the submit button with id 'file-submit' to upload the file. \n2. Upon a successful file upload, the URL should not change, and the flash messages div with id 'flash-messages' should be visible.",
+  "complexity": "simple",
+  "cypress_script": "describe('File Upload Functionality', () => {\n  it('should upload a file successfully', () => {\n    cy.visit('https://the-internet.herokuapp.com/upload');\n    const filePath = 'path/to/your/file.txt';\n    cy.get('#file-upload').attachFile(filePath);\n    cy.get('#file-submit').click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/upload');\n    cy.get('#flash-messages').should('be.visible');\n  });\n\n  it('should not upload if no file is selected', () => {\n    cy.visit('https://the-internet.herokuapp.com/upload');\n    cy.get('#file-submit').click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/upload');\n    cy.get('#flash-messages').should('not.exist');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload Functionality', () => {\n  test('should upload a file successfully', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/upload');\n    const filePath = 'path/to/your/file.txt';\n    await page.setInputFiles('#file-upload', filePath);\n    await page.click('#file-submit');\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/upload');\n    await expect(page.locator('#flash-messages')).toBeVisible();\n  });\n\n  test('should not upload if no file is selected', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/upload');\n    await page.click('#file-submit');\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/upload');\n    await expect(page.locator('#flash-messages')).not.toBeVisible();\n  });\n});",
+  "id": "GC_the-internet_05_3",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/upload",
+  "category": "file_upload",
+  "latency_s": 7.5
+}

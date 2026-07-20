@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to select a car from the 'Select Menu' so that I can proceed with my choice in the application. The system should allow me to select from options available in the dropdown and retain the selection until I make another choice.",
+  "complexity": "simple",
+  "cypress_script": "describe('Select Menu Widgets', () => {\n  it('should allow a user to select a car from the dropdown', () => {\n    cy.visit('https://demoqa.com/select-menu');\n    cy.get('#cars').select('Volvo');\n    cy.get('#cars').should('have.value', 'volvo');\n  });\n  it('should not change URL on selecting an option', () => {\n    cy.visit('https://demoqa.com/select-menu');\n    cy.get('#cars').select('Saab');\n    cy.url().should('eq', 'https://demoqa.com/select-menu');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Select Menu Widgets', () => {\n  test('should allow a user to select a car from the dropdown', async ({ page }) => {\n    await page.goto('https://demoqa.com/select-menu');\n    await page.selectOption('#cars', 'volvo');\n    const value = await page.locator('#cars').inputValue();\n    expect(value).toBe('volvo');\n  });\n  test('should not change URL on selecting an option', async ({ page }) => {\n    await page.goto('https://demoqa.com/select-menu');\n    await page.selectOption('#cars', 'saab');\n    expect(page.url()).toBe('https://demoqa.com/select-menu');\n  });\n});",
+  "id": "GC_demoqa_02_3",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/select-menu",
+  "category": "search_filter",
+  "latency_s": 5.8
+}

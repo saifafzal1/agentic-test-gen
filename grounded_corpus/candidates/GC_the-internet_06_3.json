@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to view sortable data tables so that I can easily sort and analyze data presented in the tables. Acceptance Criteria: The page must display a heading with 'Data Tables' and two tables with IDs 'table1' and 'table2'. Each table must have sortable columns and links to 'edit' and 'delete' actions for each entry.",
+  "complexity": "simple",
+  "cypress_script": "describe('Sortable Data Tables', () => {\n  it('should display two sortable tables', () => {\n    cy.visit('https://the-internet.herokuapp.com/tables');\n    cy.get('h1').should('contain', 'Data Tables');\n    cy.get('#table1').should('be.visible');\n    cy.get('#table2').should('be.visible');\n  });\n\n  it('should not change the URL when clicking on a non-functional link', () => {\n    cy.visit('https://the-internet.herokuapp.com/tables');\n    cy.get('a').contains('edit').first().click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/tables');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Sortable Data Tables', () => {\n  test('should display two sortable tables', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/tables');\n    await expect(page.locator('h1')).toHaveText('Data Tables');\n    await expect(page.locator('#table1')).toBeVisible();\n    await expect(page.locator('#table2')).toBeVisible();\n  });\n\n  test('should not change the URL when clicking on a non-functional link', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/tables');\n    await page.click('a:has-text(edit)');\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/tables');\n  });\n});",
+  "id": "GC_the-internet_06_3",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/tables",
+  "category": "table_list",
+  "latency_s": 7.1
+}

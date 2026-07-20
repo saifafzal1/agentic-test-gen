@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to select a color from a dropdown menu so that I can choose my preferred color from the available options.",
+  "complexity": "simple",
+  "cypress_script": "describe('Select Menu Widgets', () => {\n  it('should select a color from the dropdown', () => {\n    cy.visit('https://demoqa.com/select-menu');\n    cy.get('#oldSelectMenu').select('Red');\n    cy.url().should('include', '/select-menu');\n  });\n  it('should not change the URL when selecting an option without interaction', () => {\n    cy.visit('https://demoqa.com/select-menu');\n    cy.get('#oldSelectMenu').select('');\n    cy.url().should('include', '/select-menu');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Select Menu Widgets', () => {\n  test('should select a color from the dropdown', async ({ page }) => {\n    await page.goto('https://demoqa.com/select-menu');\n    await page.selectOption('#oldSelectMenu', 'red');\n    await expect(page).toHaveURL(/select-menu/);\n  });\n  test('should not change the URL when selecting an option without interaction', async ({ page }) => {\n    await page.goto('https://demoqa.com/select-menu');\n    await page.selectOption('#oldSelectMenu', '');\n    await expect(page).toHaveURL(/select-menu/);\n  });\n});",
+  "id": "GC_demoqa_02_0",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/select-menu",
+  "category": "search_filter",
+  "latency_s": 5.4
+}

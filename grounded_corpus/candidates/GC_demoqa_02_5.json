@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to select a car from the dropdown menu so that I can choose my preferred vehicle. I want to ensure that I can select options without any issues.",
+  "complexity": "simple",
+  "cypress_script": "describe('Select Menu Widgets', () => {\n  it('should select a car from the dropdown successfully', () => {\n    cy.visit('https://demoqa.com/select-menu');\n    cy.get('select#cars').select('Volvo').should('have.value', 'volvo');\n  });\n  it('should not change the URL when no selection is made', () => {\n    cy.visit('https://demoqa.com/select-menu');\n    cy.get('select#cars').select('').should('have.value', '');\n    cy.url().should('eq', 'https://demoqa.com/select-menu');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Select Menu Widgets', () => {\n  test('should select a car from the dropdown successfully', async ({ page }) => {\n    await page.goto('https://demoqa.com/select-menu');\n    await page.selectOption('select#cars', 'volvo');\n    const value = await page.locator('select#cars').inputValue();\n    expect(value).toBe('volvo');\n  });\n\n  test('should not change the URL when no selection is made', async ({ page }) => {\n    await page.goto('https://demoqa.com/select-menu');\n    await page.selectOption('select#cars', '');\n    const value = await page.locator('select#cars').inputValue();\n    expect(value).toBe('');\n    expect(page.url()).toBe('https://demoqa.com/select-menu');\n  });\n});",
+  "id": "GC_demoqa_02_5",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/select-menu",
+  "category": "search_filter",
+  "latency_s": 5.1
+}

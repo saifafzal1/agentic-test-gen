@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to browse products in a mobile viewport using a burger menu so that I can easily navigate through the available items. Acceptance Criteria: 1. The user can open the menu by clicking the button with id 'react-burger-menu-btn'. 2. The user can see the 'All Items' link in the menu with data-test 'inventory-sidebar-link'. 3. The user can close the menu by clicking the button with id 'react-burger-cross-btn'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Mobile viewport product browsing via burger menu', () => {\n  it('should open and close the burger menu successfully', () => {\n    cy.visit('https://www.saucedemo.com/inventory.html');\n    cy.get('[data-test=\"open-menu\"]').click();\n    cy.get('[data-test=\"inventory-sidebar-link\"]').should('be.visible');\n    cy.get('#react-burger-cross-btn').click();\n    cy.get('[data-test=\"open-menu\"]').should('be.visible');\n  });\n\n  it('should not show the menu items when the menu is closed', () => {\n    cy.visit('https://www.saucedemo.com/inventory.html');\n    cy.get('[data-test=\"open-menu\"]').click();\n    cy.get('#react-burger-cross-btn').click();\n    cy.get('[data-test=\"inventory-sidebar-link\"]').should('not.exist');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Mobile viewport product browsing via burger menu', () => {\n  test('should open and close the burger menu successfully', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/inventory.html');\n    await page.click('[data-test=\"open-menu\"]');\n    await expect(page.locator('[data-test=\"inventory-sidebar-link\"]')).toBeVisible();\n    await page.click('#react-burger-cross-btn');\n    await expect(page.locator('[data-test=\"open-menu\"]')).toBeVisible();\n  });\n\n  test('should not show the menu items when the menu is closed', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/inventory.html');\n    await page.click('[data-test=\"open-menu\"]');\n    await page.click('#react-burger-cross-btn');\n    await expect(page.locator('[data-test=\"inventory-sidebar-link\"]')).toBeHidden();\n  });\n});",
+  "id": "GC_saucedemo_05_0",
+  "app": "saucedemo",
+  "base_url": "https://www.saucedemo.com",
+  "page": "/inventory.html",
+  "category": "responsive",
+  "latency_s": 7.9
+}

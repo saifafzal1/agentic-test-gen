@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to test links that issue API calls so that I can verify the response status for each link. The expected behavior is that when I click a link, it should either navigate to a new URL or display an appropriate response based on the link clicked.",
+  "complexity": "simple",
+  "cypress_script": "describe('Links API Response Handling', () => {\n  it('should navigate to Home when clicking the Home link', () => {\n    cy.visit('https://demoqa.com/links');\n    cy.get('#simpleLink').click();\n    cy.url().should('eq', 'https://demoqa.com/');\n  });\n  it('should not navigate when clicking the Bad Request link', () => {\n    cy.visit('https://demoqa.com/links');\n    cy.get('#bad-request').click();\n    cy.url().should('eq', 'https://demoqa.com/links');\n    cy.get('#bad-request').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Links API Response Handling', () => {\n  test('should navigate to Home when clicking the Home link', async ({ page }) => {\n    await page.goto('https://demoqa.com/links');\n    await page.click('#simpleLink');\n    await expect(page).toHaveURL('https://demoqa.com/');\n  });\n  test('should not navigate when clicking the Bad Request link', async ({ page }) => {\n    await page.goto('https://demoqa.com/links');\n    await page.click('#bad-request');\n    await expect(page).toHaveURL('https://demoqa.com/links');\n    await expect(page.locator('#bad-request')).toBeVisible();\n  });\n});",
+  "id": "GC_demoqa_06_3",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/links",
+  "category": "api_response_handling",
+  "latency_s": 4.8
+}

@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to log in to my bank account so that I can access my banking services. \nAcceptance Criteria: \n1. The login form must include a username input field with the selector 'input[name=\"username\"]'. \n2. The login form must include a password input field with the selector 'input[name=\"password\"]'. \n3. The login button must be visible and clickable with the selector 'input[value=\"Log In\"]'. \n4. After successful login, the user should be redirected to the homepage.",
+  "complexity": "simple",
+  "cypress_script": "describe('Bank Login and Navigation', () => {\n  it('should log in successfully with valid credentials', () => {\n    cy.visit('https://parabank.parasoft.com/parabank/index.htm');\n    cy.get('input[name=\"username\"]').type('validUsername');\n    cy.get('input[name=\"password\"]').type('validPassword');\n    cy.get('input[value=\"Log In\"]').click();\n    cy.url().should('include', 'index.htm');\n  });\n\n  it('should not log in with empty credentials', () => {\n    cy.visit('https://parabank.parasoft.com/parabank/index.htm');\n    cy.get('input[value=\"Log In\"]').click();\n    cy.url().should('include', 'index.htm');\n    cy.get('div#loginPanel').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Bank Login and Navigation', () => {\n  test('should log in successfully with valid credentials', async ({ page }) => {\n    await page.goto('https://parabank.parasoft.com/parabank/index.htm');\n    await page.fill('input[name=\"username\"]', 'validUsername');\n    await page.fill('input[name=\"password\"]', 'validPassword');\n    await page.click('input[value=\"Log In\"]');\n    await expect(page).toHaveURL(/index.htm/);\n  });\n\n  test('should not log in with empty credentials', async ({ page }) => {\n    await page.goto('https://parabank.parasoft.com/parabank/index.htm');\n    await page.click('input[value=\"Log In\"]');\n    await expect(page).toHaveURL(/index.htm/);\n    await expect(page.locator('div#loginPanel')).toBeVisible();\n  });\n});",
+  "id": "GC_parabank_00_5",
+  "app": "parabank",
+  "base_url": "https://parabank.parasoft.com",
+  "page": "/parabank/index.htm",
+  "category": "authentication",
+  "latency_s": 7.8
+}

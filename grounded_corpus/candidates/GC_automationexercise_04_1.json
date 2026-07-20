@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to view the API endpoint documentation list so that I can understand the available APIs for testing. Acceptance Criteria: The page should display the title 'Automation Practice for API Testing', headings 'APIs List for practice' and 'Subscription', and the API links should be visible. The user should be able to subscribe by entering an email in the input field with id 'susbscribe_email' and clicking the button with id 'subscribe'.",
+  "complexity": "simple",
+  "cypress_script": "describe('API endpoint documentation list', () => {\n  it('should display the API documentation with correct elements', () => {\n    cy.visit('https://automationexercise.com/api_list');\n    cy.get('h1').contains('Automation Practice for API Testing');\n    cy.get('h2').contains('APIs List for practice');\n    cy.get('#susbscribe_email').should('be.visible');\n    cy.get('#subscribe').should('be.visible');\n  });\n\n  it('should not change URL on empty subscribe', () => {\n    cy.visit('https://automationexercise.com/api_list');\n    cy.get('#subscribe').click();\n    cy.url().should('eq', 'https://automationexercise.com/api_list');\n    cy.get('#susbscribe_email').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('API endpoint documentation list', () => {\n  test('should display the API documentation with correct elements', async ({ page }) => {\n    await page.goto('https://automationexercise.com/api_list');\n    await expect(page.locator('h1')).toHaveText('Automation Practice for API Testing');\n    await expect(page.locator('h2')).toHaveText('APIs List for practice');\n    await expect(page.locator('#susbscribe_email')).toBeVisible();\n    await expect(page.locator('#subscribe')).toBeVisible();\n  });\n\n  test('should not change URL on empty subscribe', async ({ page }) => {\n    await page.goto('https://automationexercise.com/api_list');\n    await page.click('#subscribe');\n    await expect(page.url()).toBe('https://automationexercise.com/api_list');\n    await expect(page.locator('#susbscribe_email')).toBeVisible();\n  });\n});",
+  "id": "GC_automationexercise_04_1",
+  "app": "automationexercise",
+  "base_url": "https://automationexercise.com",
+  "page": "/api_list",
+  "category": "api_response_handling",
+  "latency_s": 7.8
+}
