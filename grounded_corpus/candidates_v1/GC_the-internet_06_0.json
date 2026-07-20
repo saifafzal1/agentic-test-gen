@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to view sortable data tables so that I can easily find and organize information. Acceptance Criteria: 1. The page should display a table with the ID 'table1' and class 'tablesorter'. 2. The table should have headings including 'Last Name', 'First Name', 'Email', 'Due', 'Web Site', and 'Action'. 3. The page should contain links with text 'edit' and 'delete' for each entry in the table.",
+  "complexity": "medium",
+  "cypress_script": "describe('Sortable Data Tables', () => { it('should display sortable data tables', () => { cy.visit('https://the-internet.herokuapp.com/tables'); cy.get('#table1').should('exist'); cy.get('#table1').find('th').should('contain', 'Last Name'); cy.get('#table1').find('th').should('contain', 'First Name'); cy.get('#table1').find('th').should('contain', 'Email'); cy.get('#table1').find('th').should('contain', 'Due'); cy.get('#table1').find('th').should('contain', 'Web Site'); cy.get('#table1').find('th').should('contain', 'Action'); }); it('should not find a non-existing table', () => { cy.visit('https://the-internet.herokuapp.com/tables'); cy.get('#non-existing-table').should('not.exist'); }); });",
+  "playwright_script": "import { test, expect } from '@playwright/test'; test('Sortable Data Tables', async ({ page }) => { await page.goto('https://the-internet.herokuapp.com/tables'); const table1 = await page.locator('#table1'); await expect(table1).toBeVisible(); await expect(table1.locator('th')).toHaveText(['Last Name', 'First Name', 'Email', 'Due', 'Web Site', 'Action']); const nonExistingTable = await page.locator('#non-existing-table'); await expect(nonExistingTable).toHaveCount(0); });",
+  "id": "GC_the-internet_06_0",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/tables",
+  "category": "table_list",
+  "latency_s": 6.0
+}

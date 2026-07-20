@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to receive a notification message after clicking a link so that I can be informed of the action's result. Acceptance Criteria: 1. When the user navigates to the page at 'https://the-internet.herokuapp.com/notification_message_rendered', they should see the heading 'Notification Message'. 2. Upon clicking the link 'Click here', a notification message should be displayed in the 'div' with id 'flash-messages'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Notification Messages', () => { it('should display a notification message when clicking the link', () => { cy.visit('https://the-internet.herokuapp.com/notification_message_rendered'); cy.get('a').contains('Click here').click(); cy.get('#flash-messages').should('contain', 'You successfully clicked an alert'); }); it('should not display a notification message when the page is loaded', () => { cy.visit('https://the-internet.herokuapp.com/notification_message_rendered'); cy.get('#flash-messages').should('not.exist'); }); });",
+  "playwright_script": "import { test, expect } from '@playwright/test'; test('Notification Messages', async ({ page }) => { await page.goto('https://the-internet.herokuapp.com/notification_message_rendered'); await page.click('text=Click here'); const flashMessages = await page.locator('#flash-messages'); await expect(flashMessages).toContainText('You successfully clicked an alert'); }); test('should not display a notification message when the page is loaded', async ({ page }) => { await page.goto('https://the-internet.herokuapp.com/notification_message_rendered'); const flashMessages = await page.locator('#flash-messages'); await expect(flashMessages).toHaveCount(0); }); }",
+  "id": "GC_the-internet_08_0",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/notification_message_rendered",
+  "category": "notifications",
+  "latency_s": 5.3
+}

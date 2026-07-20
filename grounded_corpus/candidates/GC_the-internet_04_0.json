@@ -1,12 +1,12 @@
 {
-  "user_story": "As a user, I want to see 'Hello World!' displayed after clicking the 'Start' button so that I can confirm that the content loads asynchronously.",
+  "user_story": "As a user, I want to see the content loaded asynchronously after clicking the 'Start' button, so that I can verify that the page functions correctly. Acceptance Criteria: \n1. When I click the 'Start' button, I should see the content with ID 'finish' become visible. \n2. The URL should remain the same: 'https://the-internet.herokuapp.com/dynamic_loading/1'. \n3. The content with ID 'finish' should display the text 'Hello World!'.",
   "complexity": "simple",
-  "cypress_script": "describe('Asynchronously Loaded Content', () => { it('should display Hello World! after clicking Start', () => { cy.visit('https://the-internet.herokuapp.com/dynamic_loading/1'); cy.get('#start button').click(); cy.get('#finish').should('contain', 'Hello World!'); }); it('should not display Hello World! before clicking Start', () => { cy.visit('https://the-internet.herokuapp.com/dynamic_loading/1'); cy.get('#finish').should('not.exist'); }); });",
-  "playwright_script": "import { test, expect } from '@playwright/test'; test('Asynchronously Loaded Content', async ({ page }) => { await page.goto('https://the-internet.herokuapp.com/dynamic_loading/1'); await page.click('#start button'); await expect(page.locator('#finish')).toHaveText('Hello World!'); }); test('should not display Hello World! before clicking Start', async ({ page }) => { await page.goto('https://the-internet.herokuapp.com/dynamic_loading/1'); const finishLocator = page.locator('#finish'); await expect(finishLocator).toHaveCount(0); }); });",
+  "cypress_script": "describe('Asynchronously Loaded Content', () => {\n  it('should load content after clicking Start button', () => {\n    cy.visit('https://the-internet.herokuapp.com/dynamic_loading/1');\n    cy.get('#start button').click();\n    cy.get('#finish').should('be.visible');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/dynamic_loading/1');\n    cy.get('#finish').contains('Hello World!');\n  });\n\n  it('should not show finish content before clicking Start button', () => {\n    cy.visit('https://the-internet.herokuapp.com/dynamic_loading/1');\n    cy.get('#finish').should('not.exist');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Asynchronously Loaded Content', () => {\n  test('should load content after clicking Start button', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/dynamic_loading/1');\n    await page.click('#start button');\n    await expect(page.locator('#finish')).toBeVisible();\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/dynamic_loading/1');\n    await expect(page.locator('#finish')).toHaveText('Hello World!');\n  });\n\n  test('should not show finish content before clicking Start button', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/dynamic_loading/1');\n    await expect(page.locator('#finish')).toBeHidden();\n  });\n});",
   "id": "GC_the-internet_04_0",
   "app": "the-internet",
   "base_url": "https://the-internet.herokuapp.com",
   "page": "/dynamic_loading/1",
   "category": "async_await",
-  "latency_s": 3.2
+  "latency_s": 6.7
 }

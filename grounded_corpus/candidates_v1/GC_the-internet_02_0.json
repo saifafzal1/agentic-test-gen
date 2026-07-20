@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to select an option from the dropdown menu so that I can filter my choices accordingly. The dropdown should allow me to select 'Option 1' or 'Option 2', and it should default to 'Please select an option'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Dropdown Selection', () => { it('should select Option 1 from the dropdown', () => { cy.visit('https://the-internet.herokuapp.com/dropdown'); cy.get('#dropdown').select('Option 1'); cy.get('#dropdown').should('have.value', '1'); }); it('should not allow selection of an invalid option', () => { cy.visit('https://the-internet.herokuapp.com/dropdown'); cy.get('#dropdown').select('Please select an option'); cy.get('#dropdown').should('have.value', ''); }); });",
+  "playwright_script": "import { test, expect } from '@playwright/test'; test('Dropdown Selection', async ({ page }) => { await page.goto('https://the-internet.herokuapp.com/dropdown'); await page.selectOption('#dropdown', '1'); const value = await page.locator('#dropdown').inputValue(); expect(value).toBe('1'); await page.selectOption('#dropdown', ''); const invalidValue = await page.locator('#dropdown').inputValue(); expect(invalidValue).toBe(''); });",
+  "id": "GC_the-internet_02_0",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/dropdown",
+  "category": "search_filter",
+  "latency_s": 3.6
+}

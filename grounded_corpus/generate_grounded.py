@@ -44,12 +44,21 @@ Write ONE Jira-style user story for this page's "{feature}" functionality and
 two matching test scripts. Requirements:
 - The user story must include acceptance criteria that cite the exact
   selectors from the inventory (quote them literally).
-- cypress_script: complete Cypress JavaScript spec; visit the full URL
-  {url} directly; describe() with exactly 2 it() tests (one happy path,
+- cypress_script: complete Cypress JavaScript spec; cy.visit the full URL
+  {url}; ONE describe() containing exactly 2 it() tests (one happy path,
   one edge/negative case that this page genuinely supports).
 - playwright_script: the equivalent complete Playwright TypeScript spec
-  (import from '@playwright/test'; page.goto the full URL).
-- Assertions must only reference elements/texts from the inventory.
+  (import from '@playwright/test'; ONE test.describe() containing exactly
+  2 test() blocks; page.goto the full URL).
+- ASSERTION RULES (critical): assert ONLY on (a) elements present in the
+  inventory, (b) URL changes, or (c) text strings that appear verbatim in
+  the inventory. The inventory is a snapshot BEFORE any interaction --
+  you do NOT know what messages appear after clicks, so never assert on
+  guessed message wording; assert visibility/count/URL instead.
+- FORMATTING (critical): write the code multi-line with real newline
+  characters (\\n) inside the JSON strings -- normal indented code, one
+  statement per line, never the whole script on a single line. Balance
+  all braces; end each spec with the describe's closing marker only.
 - No markdown fences. Return strict JSON:
 {{"user_story": "...", "complexity": "simple|medium|complex",
   "cypress_script": "...", "playwright_script": "..."}}"""
@@ -102,7 +111,7 @@ def main():
                     response_format={"type": "json_object"},
                     messages=[{"role": "system", "content": SYSTEM},
                               {"role": "user", "content": prompt}],
-                    max_tokens=3000, temperature=0.4 + 0.3 * k)
+                    max_tokens=4000, temperature=0.4 + 0.3 * k)
                 data = json.loads(resp.choices[0].message.content)
                 data.update(id=cid, app=prof["key"], base_url=prof["base_url"],
                             page=page["path"], category=page["category"],
