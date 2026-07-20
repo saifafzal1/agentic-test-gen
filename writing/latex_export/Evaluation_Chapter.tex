@@ -274,6 +274,35 @@ practical conclusion is that fine-tuning delivers its substantial
 ROUGE-L gain (Section 5.4) without any measurable cost in syntactic
 reliability.
 
+Subsequent to this analysis, a third and final measurement artefact was
+identified --- this time in the validity instrument itself.
+\texttt{node --check} verifies that a file parses, but the V8 engine it
+relies on parses function bodies lazily: code inside a test callback is
+only syntax-scanned, not fully analysed, so a defect such as the same
+\texttt{const} identifier being declared twice within one test body ---
+which crashes the test framework's collection phase the moment the file
+is loaded --- passes the check undetected. Re-validating all 2,232
+scripts under a strictly stronger criterion, namely whether each script
+loads and registers as a test suite in its actual target framework
+(Playwright's own collection phase; a full abstract-syntax-tree parse
+combined with an emulated collection phase for Cypress), lowers overall
+validity from 99.5\% to 94.3\% and re-opens a statistically significant
+gap in favour of the baselines: 95.8\% of baseline scripts load
+successfully against 92.8\% of fine-tuned scripts ($\chi^2$ = 8.55, p =
+3.5 $\times 10^{-3}$). Three observations qualify this result. The gap
+is concentrated almost entirely in Playwright, where long generated
+files repeatedly re-declare locator constants within a single test
+body; it affects a commercial baseline as well --- Claude Haiku falls
+to 85.3\% under the stricter check while GPT-4o-mini is unaffected at
+100\% --- indicating a long-output failure mode rather than a purely
+fine-tuning-induced defect; and the strongest configuration in this
+study, Gemma 4 E4B on Cypress, remains at a perfect 100\% under the
+stricter criterion. The conclusion of the preceding paragraph therefore
+holds at the level that instrument measures --- parse validity --- but
+carries an instrument-level qualification: under framework-load
+validation, fine-tuning exhibits a modest, Playwright-specific
+reliability cost.
+
 \section{Category-Level Error Analysis}
 
 The 279-story dataset spans sixteen functional categories
@@ -335,9 +364,12 @@ holds without a single exception across both frameworks and across all
 sixteen user-story categories, and it is confirmed by a paired
 non-parametric test at p \textless{} $10^{-22}$ in every one of the ten
 pairwise comparisons examined. Second, this quality gain is not
-purchased at the cost of syntactic reliability: once evaluated on the
-complete dataset, fine-tuned and baseline systems are statistically
-indistinguishable on syntax validity ($\chi^2$ = 0, p = 1.00). Third, the
+purchased at the cost of syntactic reliability at the parse level: once
+evaluated on the complete dataset, fine-tuned and baseline systems are
+statistically indistinguishable on syntax validity ($\chi^2$ = 0, p =
+1.00), though the stricter framework-load validation reported at the end
+of Section 5.6 qualifies this with a modest, Playwright-specific gap.
+Third, the
 residual cases where the fine-tuned advantage narrows --- principally
 the responsive-design and user-profile categories on Cypress --- trace
 to a known limitation of lexical-overlap metrics such as ROUGE-L rather
