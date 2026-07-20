@@ -67,7 +67,10 @@ def main():
                 ok = res["status"] == "passed" and res["tests"] >= 2
                 report.append(dict(id=cand["id"], framework=framework,
                                    status=res["status"], tests=res["tests"],
-                                   passed=res["passed"], admitted=ok))
+                                   passed=res["passed"], admitted=ok,
+                                   failures=[f.get("message", "")[:200] for f
+                                             in res.get("failures", [])][:3],
+                                   detail=(res.get("detail") or "")[:200]))
                 print(f"  {cand['id']:<28} {framework:<10} {res['status']:<11} "
                       f"({res['passed']}/{res['tests']}) "
                       f"{'ADMITTED' if ok else 'rejected'}")

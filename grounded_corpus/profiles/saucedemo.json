@@ -1188,6 +1188,2162 @@
           }
         ]
       }
+    },
+    {
+      "path": "/checkout-step-one.html",
+      "feature": "checkout information form",
+      "category": "payment_flow",
+      "requires_auth": true,
+      "url": "https://www.saucedemo.com/checkout-step-one.html",
+      "dom": {
+        "title": "Swag Labs",
+        "headings": [],
+        "inputs": [
+          {
+            "tag": "input",
+            "id": "first-name",
+            "data-test": "firstName",
+            "name": "firstName",
+            "type": "text",
+            "placeholder": "First Name",
+            "class": "input_error form_input"
+          },
+          {
+            "tag": "input",
+            "id": "last-name",
+            "data-test": "lastName",
+            "name": "lastName",
+            "type": "text",
+            "placeholder": "Last Name",
+            "class": "input_error form_input"
+          },
+          {
+            "tag": "input",
+            "id": "postal-code",
+            "data-test": "postalCode",
+            "name": "postalCode",
+            "type": "text",
+            "placeholder": "Zip/Postal Code",
+            "class": "input_error form_input"
+          },
+          {
+            "tag": "input",
+            "id": "continue",
+            "data-test": "continue",
+            "name": "continue",
+            "type": "submit",
+            "value": "Continue",
+            "class": "submit-button btn btn_primary cart_button btn_action"
+          }
+        ],
+        "buttons": [
+          {
+            "tag": "button",
+            "id": "react-burger-menu-btn",
+            "type": "button",
+            "text": "Open Menu"
+          },
+          {
+            "tag": "button",
+            "id": "react-burger-cross-btn",
+            "type": "button",
+            "text": "Close Menu"
+          },
+          {
+            "tag": "button",
+            "id": "cancel",
+            "data-test": "cancel",
+            "name": "cancel",
+            "class": "btn btn_secondary back btn_medium cart_cancel_link",
+            "text": "Cancel"
+          },
+          {
+            "tag": "input",
+            "id": "continue",
+            "data-test": "continue",
+            "name": "continue",
+            "type": "submit",
+            "value": "Continue",
+            "class": "submit-button btn btn_primary cart_button btn_action"
+          }
+        ],
+        "links": [
+          {
+            "tag": "a",
+            "id": "inventory_sidebar_link",
+            "data-test": "inventory-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "All Items"
+          },
+          {
+            "tag": "a",
+            "id": "about_sidebar_link",
+            "data-test": "about-sidebar-link",
+            "href": "https://saucelabs.com/",
+            "class": "bm-item menu-item",
+            "text": "About"
+          },
+          {
+            "tag": "a",
+            "id": "logout_sidebar_link",
+            "data-test": "logout-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Logout"
+          },
+          {
+            "tag": "a",
+            "id": "reset_sidebar_link",
+            "data-test": "reset-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Reset App State"
+          },
+          {
+            "tag": "a",
+            "data-test": "social-twitter",
+            "href": "https://twitter.com/saucelabs",
+            "text": "Twitter"
+          },
+          {
+            "tag": "a",
+            "data-test": "social-facebook",
+            "href": "https://www.facebook.com/saucelabs",
+            "text": "Facebook"
+          },
+          {
+            "tag": "a",
+            "data-test": "social-linkedin",
+            "href": "https://www.linkedin.com/company/sauce-labs/",
+            "text": "LinkedIn"
+          }
+        ],
+        "selects": [],
+        "data_test_elements": [
+          {
+            "tag": "div",
+            "id": "header_container",
+            "data-test": "header-container",
+            "class": "header_container",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "div",
+            "data-test": "primary-header",
+            "class": "primary_header",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "img",
+            "data-test": "open-menu",
+            "class": "bm-icon"
+          },
+          {
+            "tag": "a",
+            "id": "inventory_sidebar_link",
+            "data-test": "inventory-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "All Items"
+          },
+          {
+            "tag": "a",
+            "id": "about_sidebar_link",
+            "data-test": "about-sidebar-link",
+            "href": "https://saucelabs.com/",
+            "class": "bm-item menu-item",
+            "text": "About"
+          },
+          {
+            "tag": "a",
+            "id": "logout_sidebar_link",
+            "data-test": "logout-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Logout"
+          },
+          {
+            "tag": "a",
+            "id": "reset_sidebar_link",
+            "data-test": "reset-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Reset App State"
+          },
+          {
+            "tag": "img",
+            "data-test": "close-menu",
+            "class": "bm-cross"
+          },
+          {
+            "tag": "a",
+            "data-test": "shopping-cart-link",
+            "class": "shopping_cart_link"
+          },
+          {
+            "tag": "div",
+            "data-test": "secondary-header",
+            "class": "header_secondary_container",
+            "text": "Checkout: Your Information"
+          },
+          {
+            "tag": "span",
+            "data-test": "title",
+            "class": "title",
+            "text": "Checkout: Your Information"
+          },
+          {
+            "tag": "div",
+            "id": "checkout_info_container",
+            "data-test": "checkout-info-container",
+            "class": "checkout_info_container",
+            "text": "Cancel"
+          },
+          {
+            "tag": "input",
+            "id": "first-name",
+            "data-test": "firstName",
+            "name": "firstName",
+            "type": "text",
+            "placeholder": "First Name",
+            "class": "input_error form_input"
+          },
+          {
+            "tag": "input",
+            "id": "last-name",
+            "data-test": "lastName",
+            "name": "lastName",
+            "type": "text",
+            "placeholder": "Last Name",
+            "class": "input_error form_input"
+          },
+          {
+            "tag": "input",
+            "id": "postal-code",
+            "data-test": "postalCode",
+            "name": "postalCode",
+            "type": "text",
+            "placeholder": "Zip/Postal Code",
+            "class": "input_error form_input"
+          },
+          {
+            "tag": "button",
+            "id": "cancel",
+            "data-test": "cancel",
+            "name": "cancel",
+            "class": "btn btn_secondary back btn_medium cart_cancel_link",
+            "text": "Cancel"
+          },
+          {
+            "tag": "input",
+            "id": "continue",
+            "data-test": "continue",
+            "name": "continue",
+            "type": "submit",
+            "value": "Continue",
+            "class": "submit-button btn btn_primary cart_button btn_action"
+          },
+          {
+            "tag": "footer",
+            "data-test": "footer",
+            "class": "footer",
+            "text": "TwitterFacebookLinkedIn© 2026 Sauce Labs. All Rights Reserve"
+          },
+          {
+            "tag": "a",
+            "data-test": "social-twitter",
+            "href": "https://twitter.com/saucelabs",
+            "text": "Twitter"
+          },
+          {
+            "tag": "a",
+            "data-test": "social-facebook",
+            "href": "https://www.facebook.com/saucelabs",
+            "text": "Facebook"
+          },
+          {
+            "tag": "a",
+            "data-test": "social-linkedin",
+            "href": "https://www.linkedin.com/company/sauce-labs/",
+            "text": "LinkedIn"
+          },
+          {
+            "tag": "div",
+            "data-test": "footer-copy",
+            "class": "footer_copy",
+            "text": "© 2026 Sauce Labs. All Rights Reserved. Terms of Service | P"
+          }
+        ],
+        "ids": [
+          {
+            "tag": "div",
+            "id": "root",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "div",
+            "id": "page_wrapper",
+            "class": "page_wrapper",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "div",
+            "id": "contents_wrapper",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "div",
+            "id": "header_container",
+            "data-test": "header-container",
+            "class": "header_container",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "div",
+            "id": "menu_button_container",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose Menu"
+          },
+          {
+            "tag": "button",
+            "id": "react-burger-menu-btn",
+            "type": "button",
+            "text": "Open Menu"
+          },
+          {
+            "tag": "div",
+            "class": "bm-menu-wrap",
+            "text": "All ItemsAboutLogoutReset App StateClose Menu"
+          },
+          {
+            "tag": "a",
+            "id": "inventory_sidebar_link",
+            "data-test": "inventory-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "All Items"
+          },
+          {
+            "tag": "a",
+            "id": "about_sidebar_link",
+            "data-test": "about-sidebar-link",
+            "href": "https://saucelabs.com/",
+            "class": "bm-item menu-item",
+            "text": "About"
+          },
+          {
+            "tag": "a",
+            "id": "logout_sidebar_link",
+            "data-test": "logout-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Logout"
+          },
+          {
+            "tag": "a",
+            "id": "reset_sidebar_link",
+            "data-test": "reset-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Reset App State"
+          },
+          {
+            "tag": "button",
+            "id": "react-burger-cross-btn",
+            "type": "button",
+            "text": "Close Menu"
+          },
+          {
+            "tag": "div",
+            "id": "shopping_cart_container",
+            "class": "shopping_cart_container"
+          },
+          {
+            "tag": "div",
+            "id": "checkout_info_container",
+            "data-test": "checkout-info-container",
+            "class": "checkout_info_container",
+            "text": "Cancel"
+          },
+          {
+            "tag": "input",
+            "id": "first-name",
+            "data-test": "firstName",
+            "name": "firstName",
+            "type": "text",
+            "placeholder": "First Name",
+            "class": "input_error form_input"
+          },
+          {
+            "tag": "input",
+            "id": "last-name",
+            "data-test": "lastName",
+            "name": "lastName",
+            "type": "text",
+            "placeholder": "Last Name",
+            "class": "input_error form_input"
+          },
+          {
+            "tag": "input",
+            "id": "postal-code",
+            "data-test": "postalCode",
+            "name": "postalCode",
+            "type": "text",
+            "placeholder": "Zip/Postal Code",
+            "class": "input_error form_input"
+          },
+          {
+            "tag": "button",
+            "id": "cancel",
+            "data-test": "cancel",
+            "name": "cancel",
+            "class": "btn btn_secondary back btn_medium cart_cancel_link",
+            "text": "Cancel"
+          },
+          {
+            "tag": "input",
+            "id": "continue",
+            "data-test": "continue",
+            "name": "continue",
+            "type": "submit",
+            "value": "Continue",
+            "class": "submit-button btn btn_primary cart_button btn_action"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/checkout-step-two.html",
+      "feature": "checkout overview and totals",
+      "category": "payment_flow",
+      "requires_auth": true,
+      "url": "https://www.saucedemo.com/checkout-step-two.html",
+      "dom": {
+        "title": "Swag Labs",
+        "headings": [],
+        "inputs": [],
+        "buttons": [
+          {
+            "tag": "button",
+            "id": "react-burger-menu-btn",
+            "type": "button",
+            "text": "Open Menu"
+          },
+          {
+            "tag": "button",
+            "id": "react-burger-cross-btn",
+            "type": "button",
+            "text": "Close Menu"
+          },
+          {
+            "tag": "button",
+            "id": "cancel",
+            "data-test": "cancel",
+            "name": "cancel",
+            "class": "btn btn_secondary back btn_medium cart_cancel_link",
+            "text": "Cancel"
+          },
+          {
+            "tag": "button",
+            "id": "finish",
+            "data-test": "finish",
+            "name": "finish",
+            "class": "btn btn_action btn_medium cart_button",
+            "text": "Finish"
+          }
+        ],
+        "links": [
+          {
+            "tag": "a",
+            "id": "inventory_sidebar_link",
+            "data-test": "inventory-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "All Items"
+          },
+          {
+            "tag": "a",
+            "id": "about_sidebar_link",
+            "data-test": "about-sidebar-link",
+            "href": "https://saucelabs.com/",
+            "class": "bm-item menu-item",
+            "text": "About"
+          },
+          {
+            "tag": "a",
+            "id": "logout_sidebar_link",
+            "data-test": "logout-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Logout"
+          },
+          {
+            "tag": "a",
+            "id": "reset_sidebar_link",
+            "data-test": "reset-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Reset App State"
+          },
+          {
+            "tag": "a",
+            "data-test": "social-twitter",
+            "href": "https://twitter.com/saucelabs",
+            "text": "Twitter"
+          },
+          {
+            "tag": "a",
+            "data-test": "social-facebook",
+            "href": "https://www.facebook.com/saucelabs",
+            "text": "Facebook"
+          },
+          {
+            "tag": "a",
+            "data-test": "social-linkedin",
+            "href": "https://www.linkedin.com/company/sauce-labs/",
+            "text": "LinkedIn"
+          }
+        ],
+        "selects": [],
+        "data_test_elements": [
+          {
+            "tag": "div",
+            "id": "header_container",
+            "data-test": "header-container",
+            "class": "header_container",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "div",
+            "data-test": "primary-header",
+            "class": "primary_header",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "img",
+            "data-test": "open-menu",
+            "class": "bm-icon"
+          },
+          {
+            "tag": "a",
+            "id": "inventory_sidebar_link",
+            "data-test": "inventory-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "All Items"
+          },
+          {
+            "tag": "a",
+            "id": "about_sidebar_link",
+            "data-test": "about-sidebar-link",
+            "href": "https://saucelabs.com/",
+            "class": "bm-item menu-item",
+            "text": "About"
+          },
+          {
+            "tag": "a",
+            "id": "logout_sidebar_link",
+            "data-test": "logout-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Logout"
+          },
+          {
+            "tag": "a",
+            "id": "reset_sidebar_link",
+            "data-test": "reset-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Reset App State"
+          },
+          {
+            "tag": "img",
+            "data-test": "close-menu",
+            "class": "bm-cross"
+          },
+          {
+            "tag": "a",
+            "data-test": "shopping-cart-link",
+            "class": "shopping_cart_link"
+          },
+          {
+            "tag": "div",
+            "data-test": "secondary-header",
+            "class": "header_secondary_container",
+            "text": "Checkout: Overview"
+          },
+          {
+            "tag": "span",
+            "data-test": "title",
+            "class": "title",
+            "text": "Checkout: Overview"
+          },
+          {
+            "tag": "div",
+            "id": "checkout_summary_container",
+            "data-test": "checkout-summary-container",
+            "class": "checkout_summary_container",
+            "text": "QTYDescriptionPayment Information:SauceCard #31337Shipping I"
+          },
+          {
+            "tag": "div",
+            "data-test": "cart-list",
+            "class": "cart_list",
+            "text": "QTYDescription"
+          },
+          {
+            "tag": "div",
+            "data-test": "cart-quantity-label",
+            "class": "cart_quantity_label",
+            "text": "QTY"
+          },
+          {
+            "tag": "div",
+            "data-test": "cart-desc-label",
+            "class": "cart_desc_label",
+            "text": "Description"
+          },
+          {
+            "tag": "div",
+            "data-test": "payment-info-label",
+            "class": "summary_info_label",
+            "text": "Payment Information:"
+          },
+          {
+            "tag": "div",
+            "data-test": "payment-info-value",
+            "class": "summary_value_label",
+            "text": "SauceCard #31337"
+          },
+          {
+            "tag": "div",
+            "data-test": "shipping-info-label",
+            "class": "summary_info_label",
+            "text": "Shipping Information:"
+          },
+          {
+            "tag": "div",
+            "data-test": "shipping-info-value",
+            "class": "summary_value_label",
+            "text": "Free Pony Express Delivery!"
+          },
+          {
+            "tag": "div",
+            "data-test": "total-info-label",
+            "class": "summary_info_label",
+            "text": "Price Total"
+          },
+          {
+            "tag": "div",
+            "data-test": "subtotal-label",
+            "class": "summary_subtotal_label",
+            "text": "Item total: $0"
+          },
+          {
+            "tag": "div",
+            "data-test": "tax-label",
+            "class": "summary_tax_label",
+            "text": "Tax: $0.00"
+          },
+          {
+            "tag": "div",
+            "data-test": "total-label",
+            "class": "summary_total_label",
+            "text": "Total: $0.00"
+          },
+          {
+            "tag": "button",
+            "id": "cancel",
+            "data-test": "cancel",
+            "name": "cancel",
+            "class": "btn btn_secondary back btn_medium cart_cancel_link",
+            "text": "Cancel"
+          },
+          {
+            "tag": "button",
+            "id": "finish",
+            "data-test": "finish",
+            "name": "finish",
+            "class": "btn btn_action btn_medium cart_button",
+            "text": "Finish"
+          },
+          {
+            "tag": "footer",
+            "data-test": "footer",
+            "class": "footer",
+            "text": "TwitterFacebookLinkedIn© 2026 Sauce Labs. All Rights Reserve"
+          },
+          {
+            "tag": "a",
+            "data-test": "social-twitter",
+            "href": "https://twitter.com/saucelabs",
+            "text": "Twitter"
+          },
+          {
+            "tag": "a",
+            "data-test": "social-facebook",
+            "href": "https://www.facebook.com/saucelabs",
+            "text": "Facebook"
+          },
+          {
+            "tag": "a",
+            "data-test": "social-linkedin",
+            "href": "https://www.linkedin.com/company/sauce-labs/",
+            "text": "LinkedIn"
+          },
+          {
+            "tag": "div",
+            "data-test": "footer-copy",
+            "class": "footer_copy",
+            "text": "© 2026 Sauce Labs. All Rights Reserved. Terms of Service | P"
+          }
+        ],
+        "ids": [
+          {
+            "tag": "div",
+            "id": "root",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "div",
+            "id": "page_wrapper",
+            "class": "page_wrapper",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "div",
+            "id": "contents_wrapper",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "div",
+            "id": "header_container",
+            "data-test": "header-container",
+            "class": "header_container",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "div",
+            "id": "menu_button_container",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose Menu"
+          },
+          {
+            "tag": "button",
+            "id": "react-burger-menu-btn",
+            "type": "button",
+            "text": "Open Menu"
+          },
+          {
+            "tag": "div",
+            "class": "bm-menu-wrap",
+            "text": "All ItemsAboutLogoutReset App StateClose Menu"
+          },
+          {
+            "tag": "a",
+            "id": "inventory_sidebar_link",
+            "data-test": "inventory-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "All Items"
+          },
+          {
+            "tag": "a",
+            "id": "about_sidebar_link",
+            "data-test": "about-sidebar-link",
+            "href": "https://saucelabs.com/",
+            "class": "bm-item menu-item",
+            "text": "About"
+          },
+          {
+            "tag": "a",
+            "id": "logout_sidebar_link",
+            "data-test": "logout-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Logout"
+          },
+          {
+            "tag": "a",
+            "id": "reset_sidebar_link",
+            "data-test": "reset-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Reset App State"
+          },
+          {
+            "tag": "button",
+            "id": "react-burger-cross-btn",
+            "type": "button",
+            "text": "Close Menu"
+          },
+          {
+            "tag": "div",
+            "id": "shopping_cart_container",
+            "class": "shopping_cart_container"
+          },
+          {
+            "tag": "div",
+            "id": "checkout_summary_container",
+            "data-test": "checkout-summary-container",
+            "class": "checkout_summary_container",
+            "text": "QTYDescriptionPayment Information:SauceCard #31337Shipping I"
+          },
+          {
+            "tag": "button",
+            "id": "cancel",
+            "data-test": "cancel",
+            "name": "cancel",
+            "class": "btn btn_secondary back btn_medium cart_cancel_link",
+            "text": "Cancel"
+          },
+          {
+            "tag": "button",
+            "id": "finish",
+            "data-test": "finish",
+            "name": "finish",
+            "class": "btn btn_action btn_medium cart_button",
+            "text": "Finish"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/inventory.html",
+      "feature": "mobile-viewport product browsing via burger menu",
+      "category": "responsive",
+      "requires_auth": true,
+      "url": "https://www.saucedemo.com/inventory.html",
+      "dom": {
+        "title": "Swag Labs",
+        "headings": [],
+        "inputs": [],
+        "buttons": [
+          {
+            "tag": "button",
+            "id": "react-burger-menu-btn",
+            "type": "button",
+            "text": "Open Menu"
+          },
+          {
+            "tag": "button",
+            "id": "react-burger-cross-btn",
+            "type": "button",
+            "text": "Close Menu"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-backpack",
+            "data-test": "add-to-cart-sauce-labs-backpack",
+            "name": "add-to-cart-sauce-labs-backpack",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-bike-light",
+            "data-test": "add-to-cart-sauce-labs-bike-light",
+            "name": "add-to-cart-sauce-labs-bike-light",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-bolt-t-shirt",
+            "data-test": "add-to-cart-sauce-labs-bolt-t-shirt",
+            "name": "add-to-cart-sauce-labs-bolt-t-shirt",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-fleece-jacket",
+            "data-test": "add-to-cart-sauce-labs-fleece-jacket",
+            "name": "add-to-cart-sauce-labs-fleece-jacket",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-onesie",
+            "data-test": "add-to-cart-sauce-labs-onesie",
+            "name": "add-to-cart-sauce-labs-onesie",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-test.allthethings()-t-shirt-(red)",
+            "data-test": "add-to-cart-test.allthethings()-t-shirt-(red)",
+            "name": "add-to-cart-test.allthethings()-t-shirt-(red)",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          }
+        ],
+        "links": [
+          {
+            "tag": "a",
+            "id": "inventory_sidebar_link",
+            "data-test": "inventory-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "All Items"
+          },
+          {
+            "tag": "a",
+            "id": "about_sidebar_link",
+            "data-test": "about-sidebar-link",
+            "href": "https://saucelabs.com/",
+            "class": "bm-item menu-item",
+            "text": "About"
+          },
+          {
+            "tag": "a",
+            "id": "logout_sidebar_link",
+            "data-test": "logout-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Logout"
+          },
+          {
+            "tag": "a",
+            "id": "reset_sidebar_link",
+            "data-test": "reset-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Reset App State"
+          },
+          {
+            "tag": "a",
+            "id": "item_4_title_link",
+            "data-test": "item-4-title-link",
+            "href": "#",
+            "text": "Sauce Labs Backpack"
+          },
+          {
+            "tag": "a",
+            "id": "item_0_title_link",
+            "data-test": "item-0-title-link",
+            "href": "#",
+            "text": "Sauce Labs Bike Light"
+          },
+          {
+            "tag": "a",
+            "id": "item_1_title_link",
+            "data-test": "item-1-title-link",
+            "href": "#",
+            "text": "Sauce Labs Bolt T-Shirt"
+          },
+          {
+            "tag": "a",
+            "id": "item_5_title_link",
+            "data-test": "item-5-title-link",
+            "href": "#",
+            "text": "Sauce Labs Fleece Jacket"
+          },
+          {
+            "tag": "a",
+            "id": "item_2_title_link",
+            "data-test": "item-2-title-link",
+            "href": "#",
+            "text": "Sauce Labs Onesie"
+          },
+          {
+            "tag": "a",
+            "id": "item_3_title_link",
+            "data-test": "item-3-title-link",
+            "href": "#",
+            "text": "Test.allTheThings() T-Shirt (Red)"
+          },
+          {
+            "tag": "a",
+            "data-test": "social-twitter",
+            "href": "https://twitter.com/saucelabs",
+            "text": "Twitter"
+          },
+          {
+            "tag": "a",
+            "data-test": "social-facebook",
+            "href": "https://www.facebook.com/saucelabs",
+            "text": "Facebook"
+          },
+          {
+            "tag": "a",
+            "data-test": "social-linkedin",
+            "href": "https://www.linkedin.com/company/sauce-labs/",
+            "text": "LinkedIn"
+          }
+        ],
+        "selects": [
+          {
+            "tag": "select",
+            "data-test": "product-sort-container",
+            "class": "product_sort_container",
+            "text": "Name (A to Z)Name (Z to A)Price (low to high)Price (high to ",
+            "options": [
+              {
+                "value": "az",
+                "text": "Name (A to Z)"
+              },
+              {
+                "value": "za",
+                "text": "Name (Z to A)"
+              },
+              {
+                "value": "lohi",
+                "text": "Price (low to high)"
+              },
+              {
+                "value": "hilo",
+                "text": "Price (high to low)"
+              }
+            ]
+          }
+        ],
+        "data_test_elements": [
+          {
+            "tag": "div",
+            "id": "header_container",
+            "data-test": "header-container",
+            "class": "header_container",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "div",
+            "data-test": "primary-header",
+            "class": "primary_header",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "img",
+            "data-test": "open-menu",
+            "class": "bm-icon"
+          },
+          {
+            "tag": "a",
+            "id": "inventory_sidebar_link",
+            "data-test": "inventory-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "All Items"
+          },
+          {
+            "tag": "a",
+            "id": "about_sidebar_link",
+            "data-test": "about-sidebar-link",
+            "href": "https://saucelabs.com/",
+            "class": "bm-item menu-item",
+            "text": "About"
+          },
+          {
+            "tag": "a",
+            "id": "logout_sidebar_link",
+            "data-test": "logout-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Logout"
+          },
+          {
+            "tag": "a",
+            "id": "reset_sidebar_link",
+            "data-test": "reset-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Reset App State"
+          },
+          {
+            "tag": "img",
+            "data-test": "close-menu",
+            "class": "bm-cross"
+          },
+          {
+            "tag": "a",
+            "data-test": "shopping-cart-link",
+            "class": "shopping_cart_link"
+          },
+          {
+            "tag": "div",
+            "data-test": "secondary-header",
+            "class": "header_secondary_container",
+            "text": "ProductsName (A to Z)Name (A to Z)Name (Z to A)Price (low to"
+          },
+          {
+            "tag": "span",
+            "data-test": "title",
+            "class": "title",
+            "text": "Products"
+          },
+          {
+            "tag": "span",
+            "data-test": "active-option",
+            "class": "active_option",
+            "text": "Name (A to Z)"
+          },
+          {
+            "tag": "select",
+            "data-test": "product-sort-container",
+            "class": "product_sort_container",
+            "text": "Name (A to Z)Name (Z to A)Price (low to high)Price (high to "
+          },
+          {
+            "tag": "div",
+            "id": "inventory_container",
+            "data-test": "inventory-container",
+            "class": "inventory_container",
+            "text": "Sauce Labs Backpackcarry.allTheThings() with the sleek, stre"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-list",
+            "class": "inventory_list",
+            "text": "Sauce Labs Backpackcarry.allTheThings() with the sleek, stre"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item",
+            "class": "inventory_item",
+            "text": "Sauce Labs Backpackcarry.allTheThings() with the sleek, stre"
+          },
+          {
+            "tag": "a",
+            "id": "item_4_img_link",
+            "data-test": "item-4-img-link",
+            "href": "#"
+          },
+          {
+            "tag": "img",
+            "data-test": "inventory-item-sauce-labs-backpack-img",
+            "class": "inventory_item_img"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-description",
+            "class": "inventory_item_description",
+            "text": "Sauce Labs Backpackcarry.allTheThings() with the sleek, stre"
+          },
+          {
+            "tag": "a",
+            "id": "item_4_title_link",
+            "data-test": "item-4-title-link",
+            "href": "#",
+            "text": "Sauce Labs Backpack"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-name",
+            "class": "inventory_item_name ",
+            "text": "Sauce Labs Backpack"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-desc",
+            "class": "inventory_item_desc",
+            "text": "carry.allTheThings() with the sleek, streamlined Sly Pack th"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-price",
+            "class": "inventory_item_price",
+            "text": "$29.99"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-backpack",
+            "data-test": "add-to-cart-sauce-labs-backpack",
+            "name": "add-to-cart-sauce-labs-backpack",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item",
+            "class": "inventory_item",
+            "text": "Sauce Labs Bike LightA red light isn't the desired state in "
+          },
+          {
+            "tag": "a",
+            "id": "item_0_img_link",
+            "data-test": "item-0-img-link",
+            "href": "#"
+          },
+          {
+            "tag": "img",
+            "data-test": "inventory-item-sauce-labs-bike-light-img",
+            "class": "inventory_item_img"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-description",
+            "class": "inventory_item_description",
+            "text": "Sauce Labs Bike LightA red light isn't the desired state in "
+          },
+          {
+            "tag": "a",
+            "id": "item_0_title_link",
+            "data-test": "item-0-title-link",
+            "href": "#",
+            "text": "Sauce Labs Bike Light"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-name",
+            "class": "inventory_item_name ",
+            "text": "Sauce Labs Bike Light"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-desc",
+            "class": "inventory_item_desc",
+            "text": "A red light isn't the desired state in testing but it sure h"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-price",
+            "class": "inventory_item_price",
+            "text": "$9.99"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-bike-light",
+            "data-test": "add-to-cart-sauce-labs-bike-light",
+            "name": "add-to-cart-sauce-labs-bike-light",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item",
+            "class": "inventory_item",
+            "text": "Sauce Labs Bolt T-ShirtGet your testing superhero on with th"
+          },
+          {
+            "tag": "a",
+            "id": "item_1_img_link",
+            "data-test": "item-1-img-link",
+            "href": "#"
+          },
+          {
+            "tag": "img",
+            "data-test": "inventory-item-sauce-labs-bolt-t-shirt-img",
+            "class": "inventory_item_img"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-description",
+            "class": "inventory_item_description",
+            "text": "Sauce Labs Bolt T-ShirtGet your testing superhero on with th"
+          },
+          {
+            "tag": "a",
+            "id": "item_1_title_link",
+            "data-test": "item-1-title-link",
+            "href": "#",
+            "text": "Sauce Labs Bolt T-Shirt"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-name",
+            "class": "inventory_item_name ",
+            "text": "Sauce Labs Bolt T-Shirt"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-desc",
+            "class": "inventory_item_desc",
+            "text": "Get your testing superhero on with the Sauce Labs bolt T-shi"
+          }
+        ],
+        "ids": [
+          {
+            "tag": "div",
+            "id": "root",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "div",
+            "id": "page_wrapper",
+            "class": "page_wrapper",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "div",
+            "id": "contents_wrapper",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "div",
+            "id": "header_container",
+            "data-test": "header-container",
+            "class": "header_container",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "div",
+            "id": "menu_button_container",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose Menu"
+          },
+          {
+            "tag": "button",
+            "id": "react-burger-menu-btn",
+            "type": "button",
+            "text": "Open Menu"
+          },
+          {
+            "tag": "div",
+            "class": "bm-menu-wrap",
+            "text": "All ItemsAboutLogoutReset App StateClose Menu"
+          },
+          {
+            "tag": "a",
+            "id": "inventory_sidebar_link",
+            "data-test": "inventory-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "All Items"
+          },
+          {
+            "tag": "a",
+            "id": "about_sidebar_link",
+            "data-test": "about-sidebar-link",
+            "href": "https://saucelabs.com/",
+            "class": "bm-item menu-item",
+            "text": "About"
+          },
+          {
+            "tag": "a",
+            "id": "logout_sidebar_link",
+            "data-test": "logout-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Logout"
+          },
+          {
+            "tag": "a",
+            "id": "reset_sidebar_link",
+            "data-test": "reset-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Reset App State"
+          },
+          {
+            "tag": "button",
+            "id": "react-burger-cross-btn",
+            "type": "button",
+            "text": "Close Menu"
+          },
+          {
+            "tag": "div",
+            "id": "shopping_cart_container",
+            "class": "shopping_cart_container"
+          },
+          {
+            "tag": "div",
+            "id": "inventory_container",
+            "text": "Sauce Labs Backpackcarry.allTheThings() with the sleek, stre"
+          },
+          {
+            "tag": "div",
+            "id": "inventory_container",
+            "data-test": "inventory-container",
+            "class": "inventory_container",
+            "text": "Sauce Labs Backpackcarry.allTheThings() with the sleek, stre"
+          },
+          {
+            "tag": "a",
+            "id": "item_4_img_link",
+            "data-test": "item-4-img-link",
+            "href": "#"
+          },
+          {
+            "tag": "a",
+            "id": "item_4_title_link",
+            "data-test": "item-4-title-link",
+            "href": "#",
+            "text": "Sauce Labs Backpack"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-backpack",
+            "data-test": "add-to-cart-sauce-labs-backpack",
+            "name": "add-to-cart-sauce-labs-backpack",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "a",
+            "id": "item_0_img_link",
+            "data-test": "item-0-img-link",
+            "href": "#"
+          },
+          {
+            "tag": "a",
+            "id": "item_0_title_link",
+            "data-test": "item-0-title-link",
+            "href": "#",
+            "text": "Sauce Labs Bike Light"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-bike-light",
+            "data-test": "add-to-cart-sauce-labs-bike-light",
+            "name": "add-to-cart-sauce-labs-bike-light",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "a",
+            "id": "item_1_img_link",
+            "data-test": "item-1-img-link",
+            "href": "#"
+          },
+          {
+            "tag": "a",
+            "id": "item_1_title_link",
+            "data-test": "item-1-title-link",
+            "href": "#",
+            "text": "Sauce Labs Bolt T-Shirt"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-bolt-t-shirt",
+            "data-test": "add-to-cart-sauce-labs-bolt-t-shirt",
+            "name": "add-to-cart-sauce-labs-bolt-t-shirt",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "a",
+            "id": "item_5_img_link",
+            "data-test": "item-5-img-link",
+            "href": "#"
+          },
+          {
+            "tag": "a",
+            "id": "item_5_title_link",
+            "data-test": "item-5-title-link",
+            "href": "#",
+            "text": "Sauce Labs Fleece Jacket"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-fleece-jacket",
+            "data-test": "add-to-cart-sauce-labs-fleece-jacket",
+            "name": "add-to-cart-sauce-labs-fleece-jacket",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "a",
+            "id": "item_2_img_link",
+            "data-test": "item-2-img-link",
+            "href": "#"
+          },
+          {
+            "tag": "a",
+            "id": "item_2_title_link",
+            "data-test": "item-2-title-link",
+            "href": "#",
+            "text": "Sauce Labs Onesie"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-onesie",
+            "data-test": "add-to-cart-sauce-labs-onesie",
+            "name": "add-to-cart-sauce-labs-onesie",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "a",
+            "id": "item_3_img_link",
+            "data-test": "item-3-img-link",
+            "href": "#"
+          },
+          {
+            "tag": "a",
+            "id": "item_3_title_link",
+            "data-test": "item-3-title-link",
+            "href": "#",
+            "text": "Test.allTheThings() T-Shirt (Red)"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-test.allthethings()-t-shirt-(red)",
+            "data-test": "add-to-cart-test.allthethings()-t-shirt-(red)",
+            "name": "add-to-cart-test.allthethings()-t-shirt-(red)",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/inventory.html",
+      "feature": "product image alt-texts and accessible form fields",
+      "category": "accessibility",
+      "requires_auth": true,
+      "url": "https://www.saucedemo.com/inventory.html",
+      "dom": {
+        "title": "Swag Labs",
+        "headings": [],
+        "inputs": [],
+        "buttons": [
+          {
+            "tag": "button",
+            "id": "react-burger-menu-btn",
+            "type": "button",
+            "text": "Open Menu"
+          },
+          {
+            "tag": "button",
+            "id": "react-burger-cross-btn",
+            "type": "button",
+            "text": "Close Menu"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-backpack",
+            "data-test": "add-to-cart-sauce-labs-backpack",
+            "name": "add-to-cart-sauce-labs-backpack",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-bike-light",
+            "data-test": "add-to-cart-sauce-labs-bike-light",
+            "name": "add-to-cart-sauce-labs-bike-light",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-bolt-t-shirt",
+            "data-test": "add-to-cart-sauce-labs-bolt-t-shirt",
+            "name": "add-to-cart-sauce-labs-bolt-t-shirt",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-fleece-jacket",
+            "data-test": "add-to-cart-sauce-labs-fleece-jacket",
+            "name": "add-to-cart-sauce-labs-fleece-jacket",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-onesie",
+            "data-test": "add-to-cart-sauce-labs-onesie",
+            "name": "add-to-cart-sauce-labs-onesie",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-test.allthethings()-t-shirt-(red)",
+            "data-test": "add-to-cart-test.allthethings()-t-shirt-(red)",
+            "name": "add-to-cart-test.allthethings()-t-shirt-(red)",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          }
+        ],
+        "links": [
+          {
+            "tag": "a",
+            "id": "inventory_sidebar_link",
+            "data-test": "inventory-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "All Items"
+          },
+          {
+            "tag": "a",
+            "id": "about_sidebar_link",
+            "data-test": "about-sidebar-link",
+            "href": "https://saucelabs.com/",
+            "class": "bm-item menu-item",
+            "text": "About"
+          },
+          {
+            "tag": "a",
+            "id": "logout_sidebar_link",
+            "data-test": "logout-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Logout"
+          },
+          {
+            "tag": "a",
+            "id": "reset_sidebar_link",
+            "data-test": "reset-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Reset App State"
+          },
+          {
+            "tag": "a",
+            "id": "item_4_title_link",
+            "data-test": "item-4-title-link",
+            "href": "#",
+            "text": "Sauce Labs Backpack"
+          },
+          {
+            "tag": "a",
+            "id": "item_0_title_link",
+            "data-test": "item-0-title-link",
+            "href": "#",
+            "text": "Sauce Labs Bike Light"
+          },
+          {
+            "tag": "a",
+            "id": "item_1_title_link",
+            "data-test": "item-1-title-link",
+            "href": "#",
+            "text": "Sauce Labs Bolt T-Shirt"
+          },
+          {
+            "tag": "a",
+            "id": "item_5_title_link",
+            "data-test": "item-5-title-link",
+            "href": "#",
+            "text": "Sauce Labs Fleece Jacket"
+          },
+          {
+            "tag": "a",
+            "id": "item_2_title_link",
+            "data-test": "item-2-title-link",
+            "href": "#",
+            "text": "Sauce Labs Onesie"
+          },
+          {
+            "tag": "a",
+            "id": "item_3_title_link",
+            "data-test": "item-3-title-link",
+            "href": "#",
+            "text": "Test.allTheThings() T-Shirt (Red)"
+          },
+          {
+            "tag": "a",
+            "data-test": "social-twitter",
+            "href": "https://twitter.com/saucelabs",
+            "text": "Twitter"
+          },
+          {
+            "tag": "a",
+            "data-test": "social-facebook",
+            "href": "https://www.facebook.com/saucelabs",
+            "text": "Facebook"
+          },
+          {
+            "tag": "a",
+            "data-test": "social-linkedin",
+            "href": "https://www.linkedin.com/company/sauce-labs/",
+            "text": "LinkedIn"
+          }
+        ],
+        "selects": [
+          {
+            "tag": "select",
+            "data-test": "product-sort-container",
+            "class": "product_sort_container",
+            "text": "Name (A to Z)Name (Z to A)Price (low to high)Price (high to ",
+            "options": [
+              {
+                "value": "az",
+                "text": "Name (A to Z)"
+              },
+              {
+                "value": "za",
+                "text": "Name (Z to A)"
+              },
+              {
+                "value": "lohi",
+                "text": "Price (low to high)"
+              },
+              {
+                "value": "hilo",
+                "text": "Price (high to low)"
+              }
+            ]
+          }
+        ],
+        "data_test_elements": [
+          {
+            "tag": "div",
+            "id": "header_container",
+            "data-test": "header-container",
+            "class": "header_container",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "div",
+            "data-test": "primary-header",
+            "class": "primary_header",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "img",
+            "data-test": "open-menu",
+            "class": "bm-icon"
+          },
+          {
+            "tag": "a",
+            "id": "inventory_sidebar_link",
+            "data-test": "inventory-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "All Items"
+          },
+          {
+            "tag": "a",
+            "id": "about_sidebar_link",
+            "data-test": "about-sidebar-link",
+            "href": "https://saucelabs.com/",
+            "class": "bm-item menu-item",
+            "text": "About"
+          },
+          {
+            "tag": "a",
+            "id": "logout_sidebar_link",
+            "data-test": "logout-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Logout"
+          },
+          {
+            "tag": "a",
+            "id": "reset_sidebar_link",
+            "data-test": "reset-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Reset App State"
+          },
+          {
+            "tag": "img",
+            "data-test": "close-menu",
+            "class": "bm-cross"
+          },
+          {
+            "tag": "a",
+            "data-test": "shopping-cart-link",
+            "class": "shopping_cart_link"
+          },
+          {
+            "tag": "div",
+            "data-test": "secondary-header",
+            "class": "header_secondary_container",
+            "text": "ProductsName (A to Z)Name (A to Z)Name (Z to A)Price (low to"
+          },
+          {
+            "tag": "span",
+            "data-test": "title",
+            "class": "title",
+            "text": "Products"
+          },
+          {
+            "tag": "span",
+            "data-test": "active-option",
+            "class": "active_option",
+            "text": "Name (A to Z)"
+          },
+          {
+            "tag": "select",
+            "data-test": "product-sort-container",
+            "class": "product_sort_container",
+            "text": "Name (A to Z)Name (Z to A)Price (low to high)Price (high to "
+          },
+          {
+            "tag": "div",
+            "id": "inventory_container",
+            "data-test": "inventory-container",
+            "class": "inventory_container",
+            "text": "Sauce Labs Backpackcarry.allTheThings() with the sleek, stre"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-list",
+            "class": "inventory_list",
+            "text": "Sauce Labs Backpackcarry.allTheThings() with the sleek, stre"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item",
+            "class": "inventory_item",
+            "text": "Sauce Labs Backpackcarry.allTheThings() with the sleek, stre"
+          },
+          {
+            "tag": "a",
+            "id": "item_4_img_link",
+            "data-test": "item-4-img-link",
+            "href": "#"
+          },
+          {
+            "tag": "img",
+            "data-test": "inventory-item-sauce-labs-backpack-img",
+            "class": "inventory_item_img"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-description",
+            "class": "inventory_item_description",
+            "text": "Sauce Labs Backpackcarry.allTheThings() with the sleek, stre"
+          },
+          {
+            "tag": "a",
+            "id": "item_4_title_link",
+            "data-test": "item-4-title-link",
+            "href": "#",
+            "text": "Sauce Labs Backpack"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-name",
+            "class": "inventory_item_name ",
+            "text": "Sauce Labs Backpack"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-desc",
+            "class": "inventory_item_desc",
+            "text": "carry.allTheThings() with the sleek, streamlined Sly Pack th"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-price",
+            "class": "inventory_item_price",
+            "text": "$29.99"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-backpack",
+            "data-test": "add-to-cart-sauce-labs-backpack",
+            "name": "add-to-cart-sauce-labs-backpack",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item",
+            "class": "inventory_item",
+            "text": "Sauce Labs Bike LightA red light isn't the desired state in "
+          },
+          {
+            "tag": "a",
+            "id": "item_0_img_link",
+            "data-test": "item-0-img-link",
+            "href": "#"
+          },
+          {
+            "tag": "img",
+            "data-test": "inventory-item-sauce-labs-bike-light-img",
+            "class": "inventory_item_img"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-description",
+            "class": "inventory_item_description",
+            "text": "Sauce Labs Bike LightA red light isn't the desired state in "
+          },
+          {
+            "tag": "a",
+            "id": "item_0_title_link",
+            "data-test": "item-0-title-link",
+            "href": "#",
+            "text": "Sauce Labs Bike Light"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-name",
+            "class": "inventory_item_name ",
+            "text": "Sauce Labs Bike Light"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-desc",
+            "class": "inventory_item_desc",
+            "text": "A red light isn't the desired state in testing but it sure h"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-price",
+            "class": "inventory_item_price",
+            "text": "$9.99"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-bike-light",
+            "data-test": "add-to-cart-sauce-labs-bike-light",
+            "name": "add-to-cart-sauce-labs-bike-light",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item",
+            "class": "inventory_item",
+            "text": "Sauce Labs Bolt T-ShirtGet your testing superhero on with th"
+          },
+          {
+            "tag": "a",
+            "id": "item_1_img_link",
+            "data-test": "item-1-img-link",
+            "href": "#"
+          },
+          {
+            "tag": "img",
+            "data-test": "inventory-item-sauce-labs-bolt-t-shirt-img",
+            "class": "inventory_item_img"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-description",
+            "class": "inventory_item_description",
+            "text": "Sauce Labs Bolt T-ShirtGet your testing superhero on with th"
+          },
+          {
+            "tag": "a",
+            "id": "item_1_title_link",
+            "data-test": "item-1-title-link",
+            "href": "#",
+            "text": "Sauce Labs Bolt T-Shirt"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-name",
+            "class": "inventory_item_name ",
+            "text": "Sauce Labs Bolt T-Shirt"
+          },
+          {
+            "tag": "div",
+            "data-test": "inventory-item-desc",
+            "class": "inventory_item_desc",
+            "text": "Get your testing superhero on with the Sauce Labs bolt T-shi"
+          }
+        ],
+        "ids": [
+          {
+            "tag": "div",
+            "id": "root",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "div",
+            "id": "page_wrapper",
+            "class": "page_wrapper",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "div",
+            "id": "contents_wrapper",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "div",
+            "id": "header_container",
+            "data-test": "header-container",
+            "class": "header_container",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose MenuSwag L"
+          },
+          {
+            "tag": "div",
+            "id": "menu_button_container",
+            "text": "Open MenuAll ItemsAboutLogoutReset App StateClose Menu"
+          },
+          {
+            "tag": "button",
+            "id": "react-burger-menu-btn",
+            "type": "button",
+            "text": "Open Menu"
+          },
+          {
+            "tag": "div",
+            "class": "bm-menu-wrap",
+            "text": "All ItemsAboutLogoutReset App StateClose Menu"
+          },
+          {
+            "tag": "a",
+            "id": "inventory_sidebar_link",
+            "data-test": "inventory-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "All Items"
+          },
+          {
+            "tag": "a",
+            "id": "about_sidebar_link",
+            "data-test": "about-sidebar-link",
+            "href": "https://saucelabs.com/",
+            "class": "bm-item menu-item",
+            "text": "About"
+          },
+          {
+            "tag": "a",
+            "id": "logout_sidebar_link",
+            "data-test": "logout-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Logout"
+          },
+          {
+            "tag": "a",
+            "id": "reset_sidebar_link",
+            "data-test": "reset-sidebar-link",
+            "href": "#",
+            "class": "bm-item menu-item",
+            "text": "Reset App State"
+          },
+          {
+            "tag": "button",
+            "id": "react-burger-cross-btn",
+            "type": "button",
+            "text": "Close Menu"
+          },
+          {
+            "tag": "div",
+            "id": "shopping_cart_container",
+            "class": "shopping_cart_container"
+          },
+          {
+            "tag": "div",
+            "id": "inventory_container",
+            "text": "Sauce Labs Backpackcarry.allTheThings() with the sleek, stre"
+          },
+          {
+            "tag": "div",
+            "id": "inventory_container",
+            "data-test": "inventory-container",
+            "class": "inventory_container",
+            "text": "Sauce Labs Backpackcarry.allTheThings() with the sleek, stre"
+          },
+          {
+            "tag": "a",
+            "id": "item_4_img_link",
+            "data-test": "item-4-img-link",
+            "href": "#"
+          },
+          {
+            "tag": "a",
+            "id": "item_4_title_link",
+            "data-test": "item-4-title-link",
+            "href": "#",
+            "text": "Sauce Labs Backpack"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-backpack",
+            "data-test": "add-to-cart-sauce-labs-backpack",
+            "name": "add-to-cart-sauce-labs-backpack",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "a",
+            "id": "item_0_img_link",
+            "data-test": "item-0-img-link",
+            "href": "#"
+          },
+          {
+            "tag": "a",
+            "id": "item_0_title_link",
+            "data-test": "item-0-title-link",
+            "href": "#",
+            "text": "Sauce Labs Bike Light"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-bike-light",
+            "data-test": "add-to-cart-sauce-labs-bike-light",
+            "name": "add-to-cart-sauce-labs-bike-light",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "a",
+            "id": "item_1_img_link",
+            "data-test": "item-1-img-link",
+            "href": "#"
+          },
+          {
+            "tag": "a",
+            "id": "item_1_title_link",
+            "data-test": "item-1-title-link",
+            "href": "#",
+            "text": "Sauce Labs Bolt T-Shirt"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-bolt-t-shirt",
+            "data-test": "add-to-cart-sauce-labs-bolt-t-shirt",
+            "name": "add-to-cart-sauce-labs-bolt-t-shirt",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "a",
+            "id": "item_5_img_link",
+            "data-test": "item-5-img-link",
+            "href": "#"
+          },
+          {
+            "tag": "a",
+            "id": "item_5_title_link",
+            "data-test": "item-5-title-link",
+            "href": "#",
+            "text": "Sauce Labs Fleece Jacket"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-fleece-jacket",
+            "data-test": "add-to-cart-sauce-labs-fleece-jacket",
+            "name": "add-to-cart-sauce-labs-fleece-jacket",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "a",
+            "id": "item_2_img_link",
+            "data-test": "item-2-img-link",
+            "href": "#"
+          },
+          {
+            "tag": "a",
+            "id": "item_2_title_link",
+            "data-test": "item-2-title-link",
+            "href": "#",
+            "text": "Sauce Labs Onesie"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-sauce-labs-onesie",
+            "data-test": "add-to-cart-sauce-labs-onesie",
+            "name": "add-to-cart-sauce-labs-onesie",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          },
+          {
+            "tag": "a",
+            "id": "item_3_img_link",
+            "data-test": "item-3-img-link",
+            "href": "#"
+          },
+          {
+            "tag": "a",
+            "id": "item_3_title_link",
+            "data-test": "item-3-title-link",
+            "href": "#",
+            "text": "Test.allTheThings() T-Shirt (Red)"
+          },
+          {
+            "tag": "button",
+            "id": "add-to-cart-test.allthethings()-t-shirt-(red)",
+            "data-test": "add-to-cart-test.allthethings()-t-shirt-(red)",
+            "name": "add-to-cart-test.allthethings()-t-shirt-(red)",
+            "class": "btn btn_primary btn_small btn_inventory ",
+            "text": "Add to cart"
+          }
+        ]
+      }
     }
   ]
 }

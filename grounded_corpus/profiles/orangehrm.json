@@ -1,0 +1,154 @@
+{
+  "key": "orangehrm",
+  "base_url": "https://opensource-demo.orangehrmlive.com",
+  "auth": {
+    "path": "/web/index.php/auth/login",
+    "steps": [
+      [
+        "fill",
+        "input[name=\"username\"]",
+        "Admin"
+      ],
+      [
+        "fill",
+        "input[name=\"password\"]",
+        "admin123"
+      ],
+      [
+        "click",
+        "button[type=\"submit\"]"
+      ]
+    ]
+  },
+  "pages": [
+    {
+      "path": "/web/index.php/auth/login",
+      "feature": "HRM login form",
+      "category": "authentication",
+      "url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+      "error": "Error: page.goto: net::ERR_ABORTED at https://opensource-demo.orangehrmlive.com/web/index.php/auth/login\nCall log:\n  - navigating to \"https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"
+    },
+    {
+      "path": "/web/index.php/dashboard/index",
+      "feature": "dashboard widgets and side navigation",
+      "category": "navigation",
+      "requires_auth": true,
+      "url": "https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index",
+      "dom": {
+        "title": "OrangeHRM",
+        "headings": [],
+        "inputs": [
+          {
+            "tag": "input",
+            "name": "_token",
+            "type": "hidden",
+            "value": "e08789843126a0796766968.VhRCs4KxWXExN58GBan_igM8NB_1XaLYyql_CBTC17E.BH4g-bH2bCtH"
+          },
+          {
+            "tag": "input",
+            "name": "username",
+            "placeholder": "Username",
+            "class": "oxd-input oxd-input--focus"
+          },
+          {
+            "tag": "input",
+            "name": "password",
+            "type": "password",
+            "placeholder": "Password",
+            "class": "oxd-input oxd-input--active"
+          }
+        ],
+        "buttons": [
+          {
+            "tag": "button",
+            "type": "submit",
+            "class": "oxd-button oxd-button--medium oxd-button--main orangehrm-login-button",
+            "text": "Login"
+          }
+        ],
+        "links": [
+          {
+            "tag": "a",
+            "href": "http://www.orangehrm.com",
+            "text": "OrangeHRM, Inc"
+          }
+        ],
+        "selects": [],
+        "data_test_elements": [],
+        "ids": [
+          {
+            "tag": "div",
+            "id": "app",
+            "text": "LoginUsername : AdminPassword : admin123UsernamePassword Log"
+          },
+          {
+            "tag": "div",
+            "id": "oxd-toaster_1",
+            "class": "oxd-toast-container oxd-toast-container--bottom"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/web/index.php/pim/viewMyDetails",
+      "feature": "employee personal details form",
+      "category": "user_profile",
+      "requires_auth": true,
+      "url": "https://opensource-demo.orangehrmlive.com/web/index.php/pim/viewMyDetails",
+      "dom": {
+        "title": "OrangeHRM",
+        "headings": [],
+        "inputs": [
+          {
+            "tag": "input",
+            "name": "_token",
+            "type": "hidden",
+            "value": "e7d9021170fefe9a26be257.lpwXEDX0J6-AJFVvS5QieH-1Qhm9mwj4jypAeIypV7E.xPZ1WgazEvX2"
+          },
+          {
+            "tag": "input",
+            "name": "username",
+            "placeholder": "Username",
+            "class": "oxd-input oxd-input--focus"
+          },
+          {
+            "tag": "input",
+            "name": "password",
+            "type": "password",
+            "placeholder": "Password",
+            "class": "oxd-input oxd-input--active"
+          }
+        ],
+        "buttons": [
+          {
+            "tag": "button",
+            "type": "submit",
+            "class": "oxd-button oxd-button--medium oxd-button--main orangehrm-login-button",
+            "text": "Login"
+          }
+        ],
+        "links": [
+          {
+            "tag": "a",
+            "href": "http://www.orangehrm.com",
+            "text": "OrangeHRM, Inc"
+          }
+        ],
+        "selects": [],
+        "data_test_elements": [],
+        "ids": [
+          {
+            "tag": "div",
+            "id": "app",
+            "text": "LoginUsername : AdminPassword : admin123UsernamePassword Log"
+          },
+          {
+            "tag": "div",
+            "id": "oxd-toaster_1",
+            "class": "oxd-toast-container oxd-toast-container--bottom"
+          }
+        ]
+      }
+    }
+  ]
+}

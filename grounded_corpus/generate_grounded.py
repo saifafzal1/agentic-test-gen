@@ -55,6 +55,14 @@ two matching test scripts. Requirements:
   the inventory. The inventory is a snapshot BEFORE any interaction --
   you do NOT know what messages appear after clicks, so never assert on
   guessed message wording; assert visibility/count/URL instead.
+- The edge/negative test must also be verifiable from the inventory
+  alone: e.g. submit an empty form and assert the URL did not change or
+  an inventory element is still visible. Do NOT assert specific error
+  text unless that exact text appears in the inventory.
+- Keep each test to the simplest behaviour the page genuinely supports;
+  do not script multi-page flows beyond the page under test. Rely on
+  auto-waiting assertions (cy.get(...).should(...), await expect(...))
+  rather than fixed sleeps.
 - FORMATTING (critical): write the code multi-line with real newline
   characters (\\n) inside the JSON strings -- normal indented code, one
   statement per line, never the whole script on a single line. Balance
@@ -95,6 +103,14 @@ def main():
         for pi, page in enumerate(prof["pages"]):
             if page.get("error"):
                 continue
+            dom = page.get("dom", {})
+            n_elements = sum(len(dom.get(k, [])) for k in
+                             ("inputs", "buttons", "links", "selects",
+                              "data_test_elements", "ids"))
+            if n_elements < 8:
+                print(f"  skip {prof['key']}{page['path']} (sparse DOM: "
+                      f"{n_elements} elements)")
+                continue
             for k in range(args.per_page):
                 cid = f"GC_{prof['key']}_{pi:02d}_{k}"
                 out = CANDIDATES / f"{cid}.json"
@@ -111,7 +127,9 @@ def main():
                     response_format={"type": "json_object"},
                     messages=[{"role": "system", "content": SYSTEM},
                               {"role": "user", "content": prompt}],
-                    max_tokens=4000, temperature=0.4 + 0.3 * k)
+                    # v2 evidence: 0.7-temp variants admitted at 38%,
+                    # 1.0-temp at 17% -- cap at 0.7.
+                    max_tokens=4000, temperature=min(0.4 + 0.15 * k, 0.7))
                 data = json.loads(resp.choices[0].message.content)
                 data.update(id=cid, app=prof["key"], base_url=prof["base_url"],
                             page=page["path"], category=page["category"],

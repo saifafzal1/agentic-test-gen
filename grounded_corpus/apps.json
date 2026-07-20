@@ -5,16 +5,81 @@
       "base_url": "https://the-internet.herokuapp.com",
       "auth": null,
       "pages": [
-        {"path": "/login", "feature": "login form", "category": "authentication"},
-        {"path": "/checkboxes", "feature": "checkbox form", "category": "form_validation"},
-        {"path": "/dropdown", "feature": "dropdown selection", "category": "search_filter"},
-        {"path": "/add_remove_elements/", "feature": "add and remove elements", "category": "crud_operations"},
-        {"path": "/dynamic_loading/1", "feature": "asynchronously loaded content", "category": "async_await"},
-        {"path": "/upload", "feature": "file upload", "category": "file_upload"},
-        {"path": "/tables", "feature": "sortable data tables", "category": "table_list"},
-        {"path": "/javascript_alerts", "feature": "javascript alert dialogs", "category": "modal_dialog"},
-        {"path": "/notification_message_rendered", "feature": "notification messages", "category": "notifications"},
-        {"path": "/status_codes", "feature": "http status code pages", "category": "api_response_handling"}
+        {
+          "path": "/login",
+          "feature": "login form",
+          "category": "authentication"
+        },
+        {
+          "path": "/checkboxes",
+          "feature": "checkbox form",
+          "category": "form_validation"
+        },
+        {
+          "path": "/dropdown",
+          "feature": "dropdown selection",
+          "category": "search_filter"
+        },
+        {
+          "path": "/add_remove_elements/",
+          "feature": "add and remove elements",
+          "category": "crud_operations"
+        },
+        {
+          "path": "/dynamic_loading/1",
+          "feature": "asynchronously loaded content",
+          "category": "async_await"
+        },
+        {
+          "path": "/upload",
+          "feature": "file upload",
+          "category": "file_upload"
+        },
+        {
+          "path": "/tables",
+          "feature": "sortable data tables",
+          "category": "table_list"
+        },
+        {
+          "path": "/javascript_alerts",
+          "feature": "javascript alert dialogs",
+          "category": "modal_dialog"
+        },
+        {
+          "path": "/notification_message_rendered",
+          "feature": "notification messages",
+          "category": "notifications"
+        },
+        {
+          "path": "/status_codes",
+          "feature": "http status code pages",
+          "category": "api_response_handling"
+        },
+        {
+          "path": "/inputs",
+          "feature": "numeric input field",
+          "category": "form_validation"
+        },
+        {
+          "path": "/broken_images",
+          "feature": "image accessibility and integrity",
+          "category": "accessibility"
+        },
+        {
+          "path": "/windows",
+          "feature": "opening links in new windows",
+          "category": "navigation"
+        },
+        {
+          "path": "/hovers",
+          "feature": "user avatars revealing profile links on hover",
+          "category": "user_profile"
+        },
+        {
+          "path": "/key_presses",
+          "feature": "keyboard input feedback",
+          "category": "error_states"
+        }
       ]
     },
     {
@@ -23,15 +88,64 @@
       "auth": {
         "path": "/",
         "steps": [
-          ["fill", "[data-test=\"username\"]", "standard_user"],
-          ["fill", "[data-test=\"password\"]", "secret_sauce"],
-          ["click", "[data-test=\"login-button\"]"]
+          [
+            "fill",
+            "[data-test=\"username\"]",
+            "standard_user"
+          ],
+          [
+            "fill",
+            "[data-test=\"password\"]",
+            "secret_sauce"
+          ],
+          [
+            "click",
+            "[data-test=\"login-button\"]"
+          ]
         ]
       },
       "pages": [
-        {"path": "/", "feature": "login page", "category": "authentication"},
-        {"path": "/inventory.html", "feature": "product catalogue with sorting", "category": "table_list", "requires_auth": true},
-        {"path": "/cart.html", "feature": "shopping cart", "category": "crud_operations", "requires_auth": true}
+        {
+          "path": "/",
+          "feature": "login page",
+          "category": "authentication"
+        },
+        {
+          "path": "/inventory.html",
+          "feature": "product catalogue with sorting",
+          "category": "table_list",
+          "requires_auth": true
+        },
+        {
+          "path": "/cart.html",
+          "feature": "shopping cart",
+          "category": "crud_operations",
+          "requires_auth": true
+        },
+        {
+          "path": "/checkout-step-one.html",
+          "feature": "checkout information form",
+          "category": "payment_flow",
+          "requires_auth": true
+        },
+        {
+          "path": "/checkout-step-two.html",
+          "feature": "checkout overview and totals",
+          "category": "payment_flow",
+          "requires_auth": true
+        },
+        {
+          "path": "/inventory.html",
+          "feature": "mobile-viewport product browsing via burger menu",
+          "category": "responsive",
+          "requires_auth": true
+        },
+        {
+          "path": "/inventory.html",
+          "feature": "product image alt-texts and accessible form fields",
+          "category": "accessibility",
+          "requires_auth": true
+        }
       ]
     },
     {
@@ -39,8 +153,21 @@
       "base_url": "https://parabank.parasoft.com",
       "auth": null,
       "pages": [
-        {"path": "/parabank/index.htm", "feature": "bank login and navigation", "category": "authentication"},
-        {"path": "/parabank/register.htm", "feature": "customer registration form", "category": "form_validation"}
+        {
+          "path": "/parabank/index.htm",
+          "feature": "bank login and navigation",
+          "category": "authentication"
+        },
+        {
+          "path": "/parabank/register.htm",
+          "feature": "customer registration form",
+          "category": "form_validation"
+        },
+        {
+          "path": "/parabank/lookup.htm",
+          "feature": "forgotten login lookup form",
+          "category": "error_states"
+        }
       ]
     },
     {
@@ -48,9 +175,31 @@
       "base_url": "https://automationexercise.com",
       "auth": null,
       "pages": [
-        {"path": "/login", "feature": "login and signup forms", "category": "authentication"},
-        {"path": "/products", "feature": "product list with search", "category": "search_filter"},
-        {"path": "/contact_us", "feature": "contact form", "category": "form_validation"}
+        {
+          "path": "/login",
+          "feature": "login and signup forms",
+          "category": "authentication"
+        },
+        {
+          "path": "/products",
+          "feature": "product list with search",
+          "category": "search_filter"
+        },
+        {
+          "path": "/contact_us",
+          "feature": "contact form",
+          "category": "form_validation"
+        },
+        {
+          "path": "/test_cases",
+          "feature": "test case listing",
+          "category": "table_list"
+        },
+        {
+          "path": "/api_list",
+          "feature": "API endpoint documentation list",
+          "category": "api_response_handling"
+        }
       ]
     },
     {
@@ -58,9 +207,122 @@
       "base_url": "https://practicesoftwaretesting.com",
       "auth": null,
       "pages": [
-        {"path": "/", "feature": "tool shop product catalogue with filters", "category": "search_filter"},
-        {"path": "/auth/login", "feature": "login form", "category": "authentication"},
-        {"path": "/contact", "feature": "contact form with validation", "category": "form_validation"}
+        {
+          "path": "/",
+          "feature": "tool shop product catalogue with filters",
+          "category": "search_filter"
+        },
+        {
+          "path": "/auth/login",
+          "feature": "login form",
+          "category": "authentication"
+        },
+        {
+          "path": "/contact",
+          "feature": "contact form with validation",
+          "category": "form_validation"
+        }
+      ]
+    },
+    {
+      "key": "demoqa",
+      "base_url": "https://demoqa.com",
+      "auth": null,
+      "pages": [
+        {
+          "path": "/text-box",
+          "feature": "text box form",
+          "category": "form_validation"
+        },
+        {
+          "path": "/alerts",
+          "feature": "alert and confirm dialogs",
+          "category": "modal_dialog"
+        },
+        {
+          "path": "/select-menu",
+          "feature": "select menu widgets",
+          "category": "search_filter"
+        },
+        {
+          "path": "/webtables",
+          "feature": "editable web table with add/edit/delete",
+          "category": "crud_operations"
+        },
+        {
+          "path": "/upload-download",
+          "feature": "file upload and download",
+          "category": "file_upload"
+        },
+        {
+          "path": "/progress-bar",
+          "feature": "progress bar with start/stop",
+          "category": "async_await"
+        },
+        {
+          "path": "/links",
+          "feature": "links issuing API calls with status responses",
+          "category": "api_response_handling"
+        },
+        {
+          "path": "/automation-practice-form",
+          "feature": "student registration practice form",
+          "category": "form_validation"
+        }
+      ]
+    },
+    {
+      "key": "todomvc",
+      "base_url": "https://todomvc.com",
+      "auth": null,
+      "pages": [
+        {
+          "path": "/examples/react/dist/",
+          "feature": "todo list add/complete/delete",
+          "category": "crud_operations"
+        }
+      ]
+    },
+    {
+      "key": "orangehrm",
+      "base_url": "https://opensource-demo.orangehrmlive.com",
+      "auth": {
+        "path": "/web/index.php/auth/login",
+        "steps": [
+          [
+            "fill",
+            "input[name=\"username\"]",
+            "Admin"
+          ],
+          [
+            "fill",
+            "input[name=\"password\"]",
+            "admin123"
+          ],
+          [
+            "click",
+            "button[type=\"submit\"]"
+          ]
+        ]
+      },
+      "pages": [
+        {
+          "path": "/web/index.php/auth/login",
+          "feature": "HRM login form",
+          "category": "authentication"
+        },
+        {
+          "path": "/web/index.php/dashboard/index",
+          "feature": "dashboard widgets and side navigation",
+          "category": "navigation",
+          "requires_auth": true
+        },
+        {
+          "path": "/web/index.php/pim/viewMyDetails",
+          "feature": "employee personal details form",
+          "category": "user_profile",
+          "requires_auth": true
+        }
       ]
     }
   ]
