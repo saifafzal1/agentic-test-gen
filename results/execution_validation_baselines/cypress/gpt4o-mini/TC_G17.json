@@ -1,0 +1,13 @@
+{
+  "id": "TC_G17",
+  "category": "async_await",
+  "complexity": "complex",
+  "user_story": "As a user on https://the-internet.herokuapp.com/dynamic_loading/1, I want the page to reveal hidden content after an asynchronous wait so that I see the loaded result. Acceptance criteria: the '#finish' element is hidden initially; clicking the Start button ('#start button') shows a loading indicator '#loading'; after the loading indicator disappears, the '#finish' element becomes visible with the text 'Hello World!' (allow up to 10 seconds for the load to complete).",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Dynamic Loading Test', () => {\n    beforeEach(() => {\n        cy.visit('https://the-internet.herokuapp.com/dynamic_loading/1');\n    });\n\n    it('should reveal hidden content after loading', () => {\n        cy.get('#finish').should('not.be.visible');\n        cy.get('#start button').click();\n        cy.get('#loading').should('be.visible');\n        cy.get('#loading').should('not.exist');\n        cy.get('#finish').should('be.visible').and('contain', 'Hello World!');\n    });\n\n    it('should handle loading timeout gracefully', () => {\n        cy.get('#finish').should('not.be.visible');\n        cy.get('#start button').click();\n        cy.get('#loading').should('be.visible');\n        cy.wait(11000); // wait longer than the expected load time\n        cy.get('#finish').should('not.be.visible'); // ensure it is still not visible\n    });\n});",
+  "prompt_tokens": 194,
+  "completion_tokens": 194,
+  "latency_s": 2.89,
+  "timestamp": "2026-07-20T06:41:46.132098"
+}

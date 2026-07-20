@@ -1,0 +1,13 @@
+{
+  "id": "TC_G20",
+  "category": "search_filter",
+  "complexity": "simple",
+  "user_story": "As a user on https://the-internet.herokuapp.com/dropdown, I want to pick an option from the dropdown so that my selection is applied. Acceptance criteria: the select element '#dropdown' initially shows the disabled prompt 'Please select an option'; selecting the option with text 'Option 2' makes the select's value '2' and the 'Option 2' option becomes the selected one.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dropdown selection tests', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/dropdown');\n  });\n\n  test('should show disabled prompt initially', async ({ page }) => {\n    const dropdown = page.getByLabel('Dropdown');\n    await expect(dropdown).toHaveText('Please select an option');\n  });\n\n  test('should select Option 2 and update the value', async ({ page }) => {\n    const dropdown = page.getByLabel('Dropdown');\n    await dropdown.selectOption('2');\n    await expect(dropdown).toHaveValue('2');\n    await expect(dropdown).toHaveText('Option 2');\n  });\n});",
+  "prompt_tokens": 198,
+  "completion_tokens": 159,
+  "latency_s": 3.38,
+  "timestamp": "2026-07-20T06:43:33.248734"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_G24",
+  "category": "api_response_handling",
+  "complexity": "complex",
+  "user_story": "As a tester on https://the-internet.herokuapp.com/status_codes, I want to verify how the site reports HTTP status codes so that response handling can be checked end to end. Acceptance criteria: clicking the link with text '200' navigates to a URL containing '/status_codes/200' and the page body text contains 'This page returned a 200 status code'; returning to /status_codes and clicking the link with text '404' shows body text containing 'This page returned a 404 status code'.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('HTTP Status Codes Verification', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/status_codes');\n  });\n\n  test('Verify 200 status code page', async ({ page }) => {\n    await page.getByText('200').click();\n    await expect(page).toHaveURL(/.*\\/status_codes\\/200/);\n    await expect(page.getByText('This page returned a 200 status code')).toBeVisible();\n  });\n\n  test('Verify 404 status code page', async ({ page }) => {\n    await page.goBack();\n    await page.getByText('404').click();\n    await expect(page.getByText('This page returned a 404 status code')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 223,
+  "completion_tokens": 174,
+  "latency_s": 3.02,
+  "timestamp": "2026-07-20T06:43:49.165232"
+}

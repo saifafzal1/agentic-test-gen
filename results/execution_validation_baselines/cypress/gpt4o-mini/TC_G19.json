@@ -1,0 +1,13 @@
+{
+  "id": "TC_G19",
+  "category": "form_validation",
+  "complexity": "simple",
+  "user_story": "As a user on https://the-internet.herokuapp.com/checkboxes, I want checkbox states to change only when I toggle them so that the form reflects my choices. Acceptance criteria: the page has two 'input[type=\"checkbox\"]' elements, the first initially unchecked and the second initially checked; checking the first makes both checked; unchecking the second leaves only the first checked.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Checkboxes functionality', () => {\n    beforeEach(() => {\n        cy.visit('https://the-internet.herokuapp.com/checkboxes');\n    });\n\n    it('should check the first checkbox and make both checkboxes checked', () => {\n        cy.get('input[type=\"checkbox\"]').first().should('not.be.checked');\n        cy.get('input[type=\"checkbox\"]').eq(1).should('be.checked');\n\n        cy.get('input[type=\"checkbox\"]').first().check();\n\n        cy.get('input[type=\"checkbox\"]').first().should('be.checked');\n        cy.get('input[type=\"checkbox\"]').eq(1).should('be.checked');\n    });\n\n    it('should uncheck the second checkbox and leave only the first checked', () => {\n        cy.get('input[type=\"checkbox\"]').first().check();\n        cy.get('input[type=\"checkbox\"]').eq(1).uncheck();\n\n        cy.get('input[type=\"checkbox\"]').first().should('be.checked');\n        cy.get('input[type=\"checkbox\"]').eq(1).should('not.be.checked');\n    });\n});",
+  "prompt_tokens": 171,
+  "completion_tokens": 220,
+  "latency_s": 3.77,
+  "timestamp": "2026-07-20T06:41:53.282573"
+}

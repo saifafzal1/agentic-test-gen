@@ -1,0 +1,13 @@
+{
+  "id": "TC_G02",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a locked-out customer, I want a clear error message when I try to log in at https://www.saucedemo.com so that I understand why access is denied. Acceptance criteria: logging in with username 'locked_out_user' and password 'secret_sauce' keeps me on the login page and shows the error container [data-test=\"error\"] with text containing 'Sorry, this user has been locked out'.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Locked Out User Login', () => {\n    beforeEach(() => {\n        cy.visit('https://www.saucedemo.com');\n    });\n\n    it('should display an error message for locked out user', () => {\n        cy.get('input[data-test=\"username\"]').type('locked_out_user');\n        cy.get('input[data-test=\"password\"]').type('secret_sauce');\n        cy.get('input[data-test=\"login-button\"]').click();\n        \n        cy.get('[data-test=\"error\"]').should('be.visible')\n          .and('contain', 'Sorry, this user has been locked out');\n    });\n\n    it('should remain on the login page after failed login attempt', () => {\n        cy.get('input[data-test=\"username\"]').type('locked_out_user');\n        cy.get('input[data-test=\"password\"]').type('secret_sauce');\n        cy.get('input[data-test=\"login-button\"]').click();\n        \n        cy.url().should('eq', 'https://www.saucedemo.com/');\n    });\n});",
+  "prompt_tokens": 180,
+  "completion_tokens": 209,
+  "latency_s": 2.9,
+  "timestamp": "2026-07-20T06:40:45.702148"
+}

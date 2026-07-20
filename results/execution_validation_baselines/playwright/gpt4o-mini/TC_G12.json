@@ -1,0 +1,13 @@
+{
+  "id": "TC_G12",
+  "category": "accessibility",
+  "complexity": "medium",
+  "user_story": "As a screen-reader user, I want product images and login fields on https://www.saucedemo.com to carry accessible attributes so that assistive technology can describe them. Acceptance criteria: the login fields [data-test=\"username\"] and [data-test=\"password\"] each have a non-empty 'placeholder' attribute; after logging in with 'standard_user' / 'secret_sauce', every product image inside '.inventory_item' ('img.inventory_item_img') has a non-empty 'alt' attribute.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Accessibility checks for Saucedemo', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com');\n  });\n\n  test('Login fields have non-empty placeholder attributes', async ({ page }) => {\n    const usernameInput = page.getByLabel('Username');\n    const passwordInput = page.getByLabel('Password');\n\n    const usernamePlaceholder = await usernameInput.getAttribute('placeholder');\n    const passwordPlaceholder = await passwordInput.getAttribute('placeholder');\n\n    expect(usernamePlaceholder).not.toBeNull();\n    expect(usernamePlaceholder).not.toBe('');\n    expect(passwordPlaceholder).not.toBeNull();\n    expect(passwordPlaceholder).not.toBe('');\n  });\n\n  test('Product images have non-empty alt attributes after login', async ({ page }) => {\n    await page.fill('[data-test=\"username\"]', 'standard_user');\n    await page.fill('[data-test=\"password\"]', 'secret_sauce');\n    await page.click('[data-test=\"login-button\"]');\n\n    const productImages = await page.locator('.inventory_item img.inventory_item_img');\n\n    const altAttributes = await productImages.evaluateAll(images => images.map(img => img.alt));\n    \n    altAttributes.forEach(alt => {\n      expect(alt).not.toBeNull();\n      expect(alt).not.toBe('');\n    });\n  });\n});",
+  "prompt_tokens": 217,
+  "completion_tokens": 290,
+  "latency_s": 3.31,
+  "timestamp": "2026-07-20T06:43:01.804530"
+}

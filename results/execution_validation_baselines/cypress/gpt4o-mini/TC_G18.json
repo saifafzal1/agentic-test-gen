@@ -1,0 +1,13 @@
+{
+  "id": "TC_G18",
+  "category": "file_upload",
+  "complexity": "medium",
+  "user_story": "As a user on https://the-internet.herokuapp.com/upload, I want to upload a file so that the server confirms what it received. Acceptance criteria: selecting a small text file with the file input '#file-upload' and clicking the submit button '#file-submit' navigates to a page with the heading 'File Uploaded!' and shows the uploaded file's name inside '#uploaded-files'.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('File Upload Test', () => {\n    beforeEach(() => {\n        cy.visit('https://the-internet.herokuapp.com/upload');\n    });\n\n    it('should upload a small text file and display confirmation', () => {\n        const fileName = 'sample.txt';\n        cy.fixture(fileName).then(fileContent => {\n            cy.get('#file-upload').attachFile(fileName);\n            cy.get('#file-submit').click();\n            cy.get('h3').should('contain', 'File Uploaded!');\n            cy.get('#uploaded-files').should('contain', fileName);\n        });\n    });\n\n    it('should not upload a non-existent file and show an error', () => {\n        const nonExistentFile = 'non-existent.txt';\n        cy.get('#file-upload').attachFile(nonExistentFile);\n        cy.get('#file-submit').click();\n        cy.get('h3').should('not.exist');\n        cy.get('#uploaded-files').should('not.exist');\n    });\n});",
+  "prompt_tokens": 172,
+  "completion_tokens": 200,
+  "latency_s": 2.77,
+  "timestamp": "2026-07-20T06:41:49.203501"
+}

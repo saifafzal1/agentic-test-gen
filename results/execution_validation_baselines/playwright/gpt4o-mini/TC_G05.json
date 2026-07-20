@@ -1,0 +1,13 @@
+{
+  "id": "TC_G05",
+  "category": "table_list",
+  "complexity": "medium",
+  "user_story": "As a customer browsing https://www.saucedemo.com, I want the product list to display complete product cards so that I can compare items. Acceptance criteria: after logging in with 'standard_user' / 'secret_sauce', the inventory page shows exactly 6 product cards '.inventory_item'; every card contains a name element '.inventory_item_name' with non-empty text and a price element '.inventory_item_price' whose text starts with '$'.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Product List Display', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com');\n    await page.fill('[data-test=\"username\"]', 'standard_user');\n    await page.fill('[data-test=\"password\"]', 'secret_sauce');\n    await page.click('[data-test=\"login-button\"]');\n  });\n\n  test('should display exactly 6 product cards', async ({ page }) => {\n    const productCards = await page.getByRole('listitem', { name: /inventory_item/i });\n    expect(await productCards.count()).toBe(6);\n  });\n\n  test('each product card should have a name and price', async ({ page }) => {\n    const productCards = await page.getByRole('listitem', { name: /inventory_item/i });\n    \n    for (let i = 0; i < await productCards.count(); i++) {\n      const card = productCards.nth(i);\n      const name = await card.getByText(/inventory_item_name/i);\n      const price = await card.getByText(/inventory_item_price/i);\n      \n      expect(await name.textContent()).not.toBe('');\n      expect(await price.textContent()).toMatch(/^\\$/);\n    }\n  });\n});",
+  "prompt_tokens": 208,
+  "completion_tokens": 275,
+  "latency_s": 4.07,
+  "timestamp": "2026-07-20T06:42:32.598450"
+}

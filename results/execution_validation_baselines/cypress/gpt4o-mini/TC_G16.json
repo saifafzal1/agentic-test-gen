@@ -1,0 +1,13 @@
+{
+  "id": "TC_G16",
+  "category": "modal_dialog",
+  "complexity": "medium",
+  "user_story": "As a user on https://the-internet.herokuapp.com/javascript_alerts, I want to confirm a JavaScript dialog so that my choice is recorded. Acceptance criteria: clicking the button with text 'Click for JS Confirm' opens a native confirm dialog; accepting it makes the result element '#result' show 'You clicked: Ok'; dismissing it on a second attempt makes '#result' show 'You clicked: Cancel'.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('JavaScript Confirm Dialog Tests', () => {\n    beforeEach(() => {\n        cy.visit('https://the-internet.herokuapp.com/javascript_alerts');\n    });\n\n    it('should show \"You clicked: Ok\" when the confirm dialog is accepted', () => {\n        cy.contains('Click for JS Confirm').click();\n        cy.on('window:confirm', () => true); // Accept the confirm dialog\n        cy.get('#result').should('have.text', 'You clicked: Ok');\n    });\n\n    it('should show \"You clicked: Cancel\" when the confirm dialog is dismissed', () => {\n        cy.contains('Click for JS Confirm').click();\n        cy.on('window:confirm', () => false); // Dismiss the confirm dialog\n        cy.get('#result').should('have.text', 'You clicked: Cancel');\n    });\n});",
+  "prompt_tokens": 179,
+  "completion_tokens": 174,
+  "latency_s": 2.84,
+  "timestamp": "2026-07-20T06:41:42.934432"
+}

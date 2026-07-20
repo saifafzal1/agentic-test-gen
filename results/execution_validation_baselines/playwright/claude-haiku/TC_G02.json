@@ -1,0 +1,13 @@
+{
+  "id": "TC_G02",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a locked-out customer, I want a clear error message when I try to log in at https://www.saucedemo.com so that I understand why access is denied. Acceptance criteria: logging in with username 'locked_out_user' and password 'secret_sauce' keeps me on the login page and shows the error container [data-test=\"error\"] with text containing 'Sorry, this user has been locked out'.",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "```typescript\nimport { test, expect } from '@playwright/test';\n\ntest.describe('Locked Out User Login Error', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com');\n  });\n\n  test('should display error message when locked out user attempts to login', async ({ page }) => {\n    // Fill in the username field with locked_out_user\n    await page.getByLabel('Username').fill('locked_out_user');\n    \n    // Fill in the password field with secret_sauce\n    await page.getByLabel('Password').fill('secret_sauce');\n    \n    // Click the login button\n    await page.getByRole('button', { name: /login/i }).click();\n    \n    // Verify we remain on the login page\n    await expect(page).toHaveURL('https://www.saucedemo.com/');\n    \n    // Verify the error container is visible\n    const errorContainer = page.locator('[data-test=\"error\"]');\n    await expect(errorContainer).toBeVisible();\n    \n    // Verify the error message contains the expected text\n    await expect(errorContainer).toContainText('Sorry, this user has been locked out');\n  });\n\n  test('should keep user on login page after locked out error', async ({ page }) => {\n    // Fill in credentials for locked out user\n    await page.getByLabel('Username').fill('locked_out_user');\n    await page.getByLabel('Password').fill('secret_sauce');\n    \n    // Click login button\n    await page.getByRole('button', { name: /login/i }).click();\n    \n    // Verify the login form is still present\n    const usernameInput = page.getByLabel('Username');\n    await expect(usernameInput).toBeVisible();\n    \n    // Verify the password input is still present\n    const passwordInput = page.getByLabel('Password');\n    await expect(passwordInput).toBeVisible();\n    \n    // Verify we haven't been redirected to the inventory page\n    await expect(page).not.toHaveURL(/inventory/);\n  });\n});\n```",
+  "prompt_tokens": 224,
+  "completion_tokens": 522,
+  "latency_s": 4.0,
+  "timestamp": "2026-07-20T06:45:50.092713"
+}

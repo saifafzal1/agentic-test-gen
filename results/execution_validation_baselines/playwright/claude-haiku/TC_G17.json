@@ -1,0 +1,13 @@
+{
+  "id": "TC_G17",
+  "category": "async_await",
+  "complexity": "complex",
+  "user_story": "As a user on https://the-internet.herokuapp.com/dynamic_loading/1, I want the page to reveal hidden content after an asynchronous wait so that I see the loaded result. Acceptance criteria: the '#finish' element is hidden initially; clicking the Start button ('#start button') shows a loading indicator '#loading'; after the loading indicator disappears, the '#finish' element becomes visible with the text 'Hello World!' (allow up to 10 seconds for the load to complete).",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dynamic Loading - Async Content Reveal', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/dynamic_loading/1');\n  });\n\n  test('should hide finish element initially', async ({ page }) => {\n    const finishElement = page.locator('#finish');\n    await expect(finishElement).toBeHidden();\n  });\n\n  test('should show loading indicator when start button is clicked', async ({ page }) => {\n    const startButton = page.getByRole('button', { name: /start/i });\n    const loadingIndicator = page.locator('#loading');\n\n    await startButton.click();\n    await expect(loadingIndicator).toBeVisible();\n  });\n\n  test('should reveal finish element with correct text after loading completes', async ({ page }) => {\n    const startButton = page.getByRole('button', { name: /start/i });\n    const loadingIndicator = page.locator('#loading');\n    const finishElement = page.locator('#finish');\n\n    await startButton.click();\n    await expect(loadingIndicator).toBeVisible();\n\n    await expect(loadingIndicator).toBeHidden({ timeout: 10000 });\n    await expect(finishElement).toBeVisible();\n    await expect(finishElement).toContainText('Hello World!');\n  });\n\n  test('should complete full workflow from start to finish', async ({ page }) => {\n    const startButton = page.getByRole('button', { name: /start/i });\n    const loadingIndicator = page.locator('#loading');\n    const finishElement = page.locator('#finish');\n\n    await expect(finishElement).toBeHidden();\n\n    await startButton.click();\n    await expect(loadingIndicator).toBeVisible();\n\n    await expect(loadingIndicator).toBeHidden({ timeout: 10000 });\n    await expect(finishElement).toBeVisible();\n    await expect(finishElement).toHaveText('Hello World!');\n  });\n});",
+  "prompt_tokens": 236,
+  "completion_tokens": 516,
+  "latency_s": 3.21,
+  "timestamp": "2026-07-20T06:47:09.143953"
+}

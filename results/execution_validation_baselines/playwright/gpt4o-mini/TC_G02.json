@@ -1,0 +1,13 @@
+{
+  "id": "TC_G02",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a locked-out customer, I want a clear error message when I try to log in at https://www.saucedemo.com so that I understand why access is denied. Acceptance criteria: logging in with username 'locked_out_user' and password 'secret_sauce' keeps me on the login page and shows the error container [data-test=\"error\"] with text containing 'Sorry, this user has been locked out'.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Locked Out User Login', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com');\n  });\n\n  test('should remain on login page when locked out user tries to log in', async ({ page }) => {\n    await page.fill('input[name=\"user-name\"]', 'locked_out_user');\n    await page.fill('input[name=\"password\"]', 'secret_sauce');\n    await page.click('input[type=\"submit\"]');\n\n    const errorContainer = await page.getByTestId('error');\n    await expect(errorContainer).toBeVisible();\n  });\n\n  test('should display correct error message for locked out user', async ({ page }) => {\n    await page.fill('input[name=\"user-name\"]', 'locked_out_user');\n    await page.fill('input[name=\"password\"]', 'secret_sauce');\n    await page.click('input[type=\"submit\"]');\n\n    const errorContainer = await page.getByTestId('error');\n    await expect(errorContainer).toHaveText(/Sorry, this user has been locked out/);\n  });\n});",
+  "prompt_tokens": 203,
+  "completion_tokens": 242,
+  "latency_s": 4.07,
+  "timestamp": "2026-07-20T06:42:20.223462"
+}

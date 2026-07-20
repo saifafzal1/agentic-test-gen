@@ -1,0 +1,13 @@
+{
+  "id": "TC_G23",
+  "category": "navigation",
+  "complexity": "medium",
+  "user_story": "As a visitor to https://the-internet.herokuapp.com, I want to navigate from the home page to an example page and back so that I can explore the catalogue of examples. Acceptance criteria: the home page shows the heading 'Welcome to the-internet'; clicking the link with text 'A/B Testing' navigates to a URL containing '/abtest' and shows an 'h3' heading; navigating back returns to the home page with the 'Available Examples' heading visible.",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('The Internet - Navigation between home and example pages', () => {\n  const baseUrl = 'https://the-internet.herokuapp.com';\n\n  test.beforeEach(async ({ page }) => {\n    await page.goto(baseUrl);\n  });\n\n  test('should display welcome heading on home page', async ({ page }) => {\n    const heading = page.getByRole('heading', { name: /Welcome to the-internet/i });\n    await expect(heading).toBeVisible();\n  });\n\n  test('should navigate to A/B Testing page and display h3 heading', async ({ page }) => {\n    const abTestLink = page.getByRole('link', { name: /A\\/B Testing/i });\n    await expect(abTestLink).toBeVisible();\n    \n    await abTestLink.click();\n    \n    await expect(page).toHaveURL(/\\/abtest/);\n    \n    const h3Heading = page.locator('h3');\n    await expect(h3Heading).toBeVisible();\n  });\n\n  test('should navigate back to home page and show Available Examples heading', async ({ page }) => {\n    const abTestLink = page.getByRole('link', { name: /A\\/B Testing/i });\n    await abTestLink.click();\n    \n    await expect(page).toHaveURL(/\\/abtest/);\n    \n    await page.goBack();\n    \n    await expect(page).toHaveURL(baseUrl + '/');\n    \n    const availableExamplesHeading = page.getByRole('heading', { name: /Available Examples/i });\n    await expect(availableExamplesHeading).toBeVisible();\n  });\n\n  test('should maintain navigation history when clicking back button', async ({ page }) => {\n    const abTestLink = page.getByRole('link', { name: /A\\/B Testing/i });\n    \n    await abTestLink.click();\n    await expect(page).toHaveURL(/\\/abtest/);\n    \n    const backButton = page.getByRole('link', { name: /Elementary/i }).first();\n    await page.goBack();\n    \n    const welcomeHeading = page.getByRole('heading', { name: /Welcome to the-internet/i });\n    await expect(welcomeHeading).toBeVisible();\n  });\n});",
+  "prompt_tokens": 232,
+  "completion_tokens": 575,
+  "latency_s": 4.39,
+  "timestamp": "2026-07-20T06:47:35.561560"
+}

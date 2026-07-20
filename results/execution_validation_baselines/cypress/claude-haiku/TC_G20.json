@@ -1,0 +1,13 @@
+{
+  "id": "TC_G20",
+  "category": "search_filter",
+  "complexity": "simple",
+  "user_story": "As a user on https://the-internet.herokuapp.com/dropdown, I want to pick an option from the dropdown so that my selection is applied. Acceptance criteria: the select element '#dropdown' initially shows the disabled prompt 'Please select an option'; selecting the option with text 'Option 2' makes the select's value '2' and the 'Option 2' option becomes the selected one.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Dropdown Selection', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/dropdown');\n  });\n\n  it('should display disabled prompt initially', () => {\n    cy.get('#dropdown')\n      .should('have.value', '')\n      .should('contain', 'Please select an option');\n    \n    cy.get('#dropdown option:first')\n      .should('have.attr', 'disabled')\n      .should('have.text', 'Please select an option');\n  });\n\n  it('should select Option 2 and update the dropdown value', () => {\n    cy.get('#dropdown')\n      .select('Option 2');\n    \n    cy.get('#dropdown')\n      .should('have.value', '2');\n    \n    cy.get('#dropdown option:selected')\n      .should('have.text', 'Option 2')\n      .should('have.value', '2');\n  });\n\n  it('should handle selecting different options sequentially', () => {\n    cy.get('#dropdown')\n      .select('Option 1');\n    \n    cy.get('#dropdown')\n      .should('have.value', '1');\n    \n    cy.get('#dropdown')\n      .select('Option 2');\n    \n    cy.get('#dropdown')\n      .should('have.value', '2');\n    \n    cy.get('#dropdown option:selected')\n      .should('have.text', 'Option 2');\n  });\n});",
+  "prompt_tokens": 192,
+  "completion_tokens": 360,
+  "latency_s": 3.11,
+  "timestamp": "2026-07-20T06:45:23.237501"
+}

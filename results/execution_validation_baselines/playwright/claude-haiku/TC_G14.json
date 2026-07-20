@@ -1,0 +1,13 @@
+{
+  "id": "TC_G14",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a user who mistyped my password, I want a clear failure message at https://the-internet.herokuapp.com/login so that I can correct it. Acceptance criteria: submitting username 'tomsmith' with wrong password 'wrongpassword' via '#username', '#password' and 'button[type=\"submit\"]' keeps me on the login page and shows the flash banner '.flash.error' with text containing 'Your password is invalid!'.",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "```typescript\nimport { test, expect } from '@playwright/test';\n\ntest.describe('Login with Invalid Password', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/login');\n  });\n\n  test('should display error message when submitting with wrong password', async ({ page }) => {\n    // Fill in the username field\n    await page.locator('#username').fill('tomsmith');\n    \n    // Fill in the password field with wrong password\n    await page.locator('#password').fill('wrongpassword');\n    \n    // Click the submit button\n    await page.locator('button[type=\"submit\"]').click();\n    \n    // Verify we're still on the login page\n    expect(page.url()).toContain('/login');\n    \n    // Verify the error flash banner is visible\n    const flashBanner = page.locator('.flash.error');\n    await expect(flashBanner).toBeVisible();\n    \n    // Verify the error message contains the expected text\n    await expect(flashBanner).toContainText('Your password is invalid!');\n  });\n\n  test('should keep user on login page after failed authentication attempt', async ({ page }) => {\n    // Fill in credentials\n    await page.locator('#username').fill('tomsmith');\n    await page.locator('#password').fill('wrongpassword');\n    \n    // Submit the form\n    await page.locator('button[type=\"submit\"]').click();\n    \n    // Wait for the page to process the login attempt\n    await page.waitForURL('**/login');\n    \n    // Verify the login form is still present\n    const usernameField = page.locator('#username');\n    const passwordField = page.locator('#password');\n    const submitButton = page.locator('button[type=\"submit\"]');\n    \n    await expect(usernameField).toBeVisible();\n    await expect(passwordField).toBeVisible();\n    await expect(submitButton).toBeVisible();\n    \n    // Verify error message is displayed\n    const errorMessage = page.locator('.flash.error');\n    await expect(errorMessage).toContainText('Your password is invalid!');\n  });\n});\n```",
+  "prompt_tokens": 228,
+  "completion_tokens": 535,
+  "latency_s": 3.89,
+  "timestamp": "2026-07-20T06:46:55.700830"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_G06",
+  "category": "search_filter",
+  "complexity": "medium",
+  "user_story": "As a customer on https://www.saucedemo.com, I want to sort products by price so that I can find the cheapest item first. Acceptance criteria: after logging in with 'standard_user' / 'secret_sauce', selecting the option with value 'lohi' in the sort dropdown [data-test=\"product-sort-container\"] reorders the list so that the numeric values of the '.inventory_item_price' elements appear in ascending order.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Product Sorting by Price', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com');\n    await page.fill('[data-test=\"username\"]', 'standard_user');\n    await page.fill('[data-test=\"password\"]', 'secret_sauce');\n    await page.click('[data-test=\"login-button\"]');\n  });\n\n  test('should sort products by price from low to high', async ({ page }) => {\n    await page.selectOption('[data-test=\"product-sort-container\"]', 'lohi');\n    const prices = await page.$$eval('.inventory_item_price', elements => \n      elements.map(el => parseFloat(el.textContent.replace('$', '')))\n    );\n    const sortedPrices = [...prices].sort((a, b) => a - b);\n    expect(prices).toEqual(sortedPrices);\n  });\n\n  test('should display the cheapest item first after sorting', async ({ page }) => {\n    await page.selectOption('[data-test=\"product-sort-container\"]', 'lohi');\n    const firstItemPrice = await page.textContent('.inventory_item_price:first-child');\n    const firstPriceValue = parseFloat(firstItemPrice.replace('$', ''));\n    \n    const allPrices = await page.$$eval('.inventory_item_price', elements => \n      elements.map(el => parseFloat(el.textContent.replace('$', '')))\n    );\n    \n    expect(firstPriceValue).toBeLessThanOrEqual(Math.min(...allPrices));\n  });\n});",
+  "prompt_tokens": 207,
+  "completion_tokens": 319,
+  "latency_s": 4.28,
+  "timestamp": "2026-07-20T06:42:37.185453"
+}

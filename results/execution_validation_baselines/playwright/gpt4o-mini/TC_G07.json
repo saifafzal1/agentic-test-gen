@@ -1,0 +1,13 @@
+{
+  "id": "TC_G07",
+  "category": "crud_operations",
+  "complexity": "medium",
+  "user_story": "As a customer on https://www.saucedemo.com, I want to add and remove a product from my cart so that the cart badge stays accurate. Acceptance criteria: after logging in with 'standard_user' / 'secret_sauce', clicking [data-test=\"add-to-cart-sauce-labs-backpack\"] makes the cart badge '.shopping_cart_badge' show '1' and the button label change to 'Remove'; clicking [data-test=\"remove-sauce-labs-backpack\"] removes the badge from the page.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Cart operations', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com');\n    await page.fill('[data-test=\"username\"]', 'standard_user');\n    await page.fill('[data-test=\"password\"]', 'secret_sauce');\n    await page.click('[data-test=\"login-button\"]');\n  });\n\n  test('Add product to cart', async ({ page }) => {\n    await page.click('[data-test=\"add-to-cart-sauce-labs-backpack\"]');\n    const cartBadge = page.getByRole('link', { name: 'Cart' }).getByText('1');\n    await expect(cartBadge).toBeVisible();\n    const removeButton = page.getByRole('button', { name: 'Remove' });\n    await expect(removeButton).toBeVisible();\n  });\n\n  test('Remove product from cart', async ({ page }) => {\n    await page.click('[data-test=\"add-to-cart-sauce-labs-backpack\"]');\n    await page.click('[data-test=\"remove-sauce-labs-backpack\"]');\n    const cartBadge = page.locator('.shopping_cart_badge');\n    await expect(cartBadge).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 224,
+  "completion_tokens": 267,
+  "latency_s": 3.65,
+  "timestamp": "2026-07-20T06:42:41.137118"
+}

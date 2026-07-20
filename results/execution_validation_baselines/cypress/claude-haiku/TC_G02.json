@@ -1,0 +1,13 @@
+{
+  "id": "TC_G02",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a locked-out customer, I want a clear error message when I try to log in at https://www.saucedemo.com so that I understand why access is denied. Acceptance criteria: logging in with username 'locked_out_user' and password 'secret_sauce' keeps me on the login page and shows the error container [data-test=\"error\"] with text containing 'Sorry, this user has been locked out'.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Locked Out User Login Error Message', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should display error message when locked out user attempts to login', () => {\n    cy.get('[data-test=\"username\"]').type('locked_out_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n\n    cy.url().should('include', '/');\n    cy.get('[data-test=\"error\"]').should('be.visible');\n    cy.get('[data-test=\"error\"]').should('contain', 'Sorry, this user has been locked out');\n  });\n\n  it('should keep user on login page after failed locked out user login attempt', () => {\n    cy.get('[data-test=\"username\"]').type('locked_out_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n\n    cy.url().should('not.include', '/inventory');\n    cy.get('[data-test=\"username\"]').should('exist');\n    cy.get('[data-test=\"password\"]').should('exist');\n  });\n\n  it('should display error container with correct data-test attribute', () => {\n    cy.get('[data-test=\"username\"]').type('locked_out_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n\n    cy.get('[data-test=\"error\"]').should('have.length', 1);\n    cy.get('[data-test=\"error\"]').invoke('text').then((text) => {\n      expect(text).to.include('Sorry, this user has been locked out');\n    });\n  });\n\n  it('should display error message with exact text match', () => {\n    cy.get('[data-test=\"username\"]').type('locked_out_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n\n    cy.get('[data-test=\"error\"]').should('contain.text', 'Sorry, this user has been locked out');\n  });\n});",
+  "prompt_tokens": 201,
+  "completion_tokens": 565,
+  "latency_s": 3.6,
+  "timestamp": "2026-07-20T06:43:57.381806"
+}

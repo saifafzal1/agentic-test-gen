@@ -1,0 +1,13 @@
+{
+  "id": "TC_G13",
+  "category": "authentication",
+  "complexity": "simple",
+  "user_story": "As a returning user, I want to log in to the secure area at https://the-internet.herokuapp.com/login so that I can access protected content. Acceptance criteria: the form has fields '#username' and '#password' and a submit button 'button[type=\"submit\"]'; logging in with username 'tomsmith' and password 'SuperSecretPassword!' navigates to a URL containing '/secure' and shows the flash banner '.flash.success' with text containing 'You logged into a secure area!'.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Login to Secure Area', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/login');\n  });\n\n  it('should successfully log in with valid credentials and display success message', () => {\n    cy.get('#username').should('be.visible').type('tomsmith');\n    cy.get('#password').should('be.visible').type('SuperSecretPassword!');\n    cy.get('button[type=\"submit\"]').should('be.visible').click();\n    \n    cy.url().should('include', '/secure');\n    cy.get('.flash.success').should('be.visible').and('contain', 'You logged into a secure area!');\n  });\n\n  it('should display error message when logging in with invalid credentials', () => {\n    cy.get('#username').should('be.visible').type('invaliduser');\n    cy.get('#password').should('be.visible').type('wrongpassword');\n    cy.get('button[type=\"submit\"]').should('be.visible').click();\n    \n    cy.url().should('include', '/login');\n    cy.get('.flash.error').should('be.visible').and('contain', 'Your username is invalid!');\n  });\n\n  it('should not submit form when username field is empty', () => {\n    cy.get('#password').should('be.visible').type('SuperSecretPassword!');\n    cy.get('button[type=\"submit\"]').should('be.visible').click();\n    \n    cy.url().should('include', '/login');\n    cy.get('.flash.error').should('be.visible');\n  });\n\n  it('should not submit form when password field is empty', () => {\n    cy.get('#username').should('be.visible').type('tomsmith');\n    cy.get('button[type=\"submit\"]').should('be.visible').click();\n    \n    cy.url().should('include', '/login');\n    cy.get('.flash.error').should('be.visible');\n  });\n});",
+  "prompt_tokens": 215,
+  "completion_tokens": 483,
+  "latency_s": 3.36,
+  "timestamp": "2026-07-20T06:44:52.977718"
+}

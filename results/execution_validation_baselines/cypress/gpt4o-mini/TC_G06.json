@@ -1,0 +1,13 @@
+{
+  "id": "TC_G06",
+  "category": "search_filter",
+  "complexity": "medium",
+  "user_story": "As a customer on https://www.saucedemo.com, I want to sort products by price so that I can find the cheapest item first. Acceptance criteria: after logging in with 'standard_user' / 'secret_sauce', selecting the option with value 'lohi' in the sort dropdown [data-test=\"product-sort-container\"] reorders the list so that the numeric values of the '.inventory_item_price' elements appear in ascending order.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Product Sorting by Price', () => {\n    beforeEach(() => {\n        cy.visit('https://www.saucedemo.com');\n        cy.get('[data-test=\"username\"]').type('standard_user');\n        cy.get('[data-test=\"password\"]').type('secret_sauce');\n        cy.get('[data-test=\"login-button\"]').click();\n    });\n\n    it('should sort products by price in ascending order (happy path)', () => {\n        cy.get('[data-test=\"product-sort-container\"]').select('lohi');\n        cy.get('.inventory_item_price').then(($prices) => {\n            const priceArray = $prices.toArray().map(price => parseFloat(price.innerText.replace('$', '')));\n            const sortedPriceArray = [...priceArray].sort((a, b) => a - b);\n            expect(priceArray).to.deep.equal(sortedPriceArray);\n        });\n    });\n\n    it('should not sort products if the sort option is not selected', () => {\n        cy.get('.inventory_item_price').then(($prices) => {\n            const initialPriceArray = $prices.toArray().map(price => parseFloat(price.innerText.replace('$', '')));\n            cy.get('[data-test=\"product-sort-container\"]').select('az'); // Selecting a different sort option\n            cy.get('.inventory_item_price').then(($newPrices) => {\n                const newPriceArray = $newPrices.toArray().map(price => parseFloat(price.innerText.replace('$', '')));\n                expect(initialPriceArray).to.deep.equal(newPriceArray);\n            });\n        });\n    });\n});",
+  "prompt_tokens": 184,
+  "completion_tokens": 318,
+  "latency_s": 4.94,
+  "timestamp": "2026-07-20T06:41:04.416667"
+}

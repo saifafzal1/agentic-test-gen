@@ -1,0 +1,13 @@
+{
+  "id": "TC_G04",
+  "category": "form_validation",
+  "complexity": "simple",
+  "user_story": "As a visitor to https://www.saucedemo.com, I want the login form to validate required fields so that I know what is missing. Acceptance criteria: clicking the login button [data-test=\"login-button\"] with both fields empty shows the error container [data-test=\"error\"] with text containing 'Username is required'; entering only username 'standard_user' and clicking login shows an error containing 'Password is required'.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Form Validation', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com');\n  });\n\n  test('should show error when both fields are empty', async ({ page }) => {\n    await page.getByRole('button', { name: /login/i }).click();\n    const errorContainer = page.getByTestId('error');\n    await expect(errorContainer).toBeVisible();\n    await expect(errorContainer).toHaveText(/username is required/i);\n  });\n\n  test('should show error when only username is entered', async ({ page }) => {\n    await page.getByLabel('Username').fill('standard_user');\n    await page.getByRole('button', { name: /login/i }).click();\n    const errorContainer = page.getByTestId('error');\n    await expect(errorContainer).toBeVisible();\n    await expect(errorContainer).toHaveText(/password is required/i);\n  });\n});",
+  "prompt_tokens": 203,
+  "completion_tokens": 215,
+  "latency_s": 3.71,
+  "timestamp": "2026-07-20T06:42:28.223889"
+}

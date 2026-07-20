@@ -1,0 +1,13 @@
+{
+  "id": "TC_G16",
+  "category": "modal_dialog",
+  "complexity": "medium",
+  "user_story": "As a user on https://the-internet.herokuapp.com/javascript_alerts, I want to confirm a JavaScript dialog so that my choice is recorded. Acceptance criteria: clicking the button with text 'Click for JS Confirm' opens a native confirm dialog; accepting it makes the result element '#result' show 'You clicked: Ok'; dismissing it on a second attempt makes '#result' show 'You clicked: Cancel'.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('JavaScript Confirm Dialog', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/javascript_alerts');\n  });\n\n  test('Accepting the confirm dialog', async ({ page }) => {\n    await page.getByText('Click for JS Confirm').click();\n    const [dialog] = await Promise.all([\n      page.waitForEvent('dialog'),\n      page.getByText('Click for JS Confirm').click(),\n    ]);\n    await dialog.accept();\n    const resultText = await page.getByText('#result');\n    expect(await resultText.innerText()).toBe('You clicked: Ok');\n  });\n\n  test('Dismissing the confirm dialog', async ({ page }) => {\n    await page.getByText('Click for JS Confirm').click();\n    const [dialog] = await Promise.all([\n      page.waitForEvent('dialog'),\n      page.getByText('Click for JS Confirm').click(),\n    ]);\n    await dialog.dismiss();\n    const resultText = await page.getByText('#result');\n    expect(await resultText.innerText()).toBe('You clicked: Cancel');\n  });\n});",
+  "prompt_tokens": 202,
+  "completion_tokens": 249,
+  "latency_s": 3.74,
+  "timestamp": "2026-07-20T06:43:18.749257"
+}

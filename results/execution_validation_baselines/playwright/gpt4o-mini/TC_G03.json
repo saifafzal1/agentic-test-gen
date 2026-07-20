@@ -1,0 +1,13 @@
+{
+  "id": "TC_G03",
+  "category": "authentication",
+  "complexity": "medium",
+  "user_story": "As a signed-in customer on https://www.saucedemo.com, I want to log out from the side menu so that my session ends securely. Acceptance criteria: after logging in with 'standard_user' / 'secret_sauce', clicking the burger menu button '#react-burger-menu-btn' opens the side menu, clicking the logout link '#logout_sidebar_link' returns me to the login page, and the login button [data-test=\"login-button\"] is visible again.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Logout functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com');\n    await page.fill('[data-test=\"username\"]', 'standard_user');\n    await page.fill('[data-test=\"password\"]', 'secret_sauce');\n    await page.click('[data-test=\"login-button\"]');\n  });\n\n  test('should open side menu and log out', async ({ page }) => {\n    await page.click('#react-burger-menu-btn');\n    await page.click('#logout_sidebar_link');\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await expect(loginButton).toBeVisible();\n  });\n\n  test('should return to login page after logout', async ({ page }) => {\n    await page.click('#react-burger-menu-btn');\n    await page.click('#logout_sidebar_link');\n    await expect(page).toHaveURL('https://www.saucedemo.com/');\n    const loginButton = page.getByRole('button', { name: /login/i });\n    await expect(loginButton).toBeVisible();\n  });\n});",
+  "prompt_tokens": 212,
+  "completion_tokens": 245,
+  "latency_s": 3.68,
+  "timestamp": "2026-07-20T06:42:24.205088"
+}

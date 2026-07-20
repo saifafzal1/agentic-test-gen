@@ -1,0 +1,13 @@
+{
+  "id": "TC_G20",
+  "category": "search_filter",
+  "complexity": "simple",
+  "user_story": "As a user on https://the-internet.herokuapp.com/dropdown, I want to pick an option from the dropdown so that my selection is applied. Acceptance criteria: the select element '#dropdown' initially shows the disabled prompt 'Please select an option'; selecting the option with text 'Option 2' makes the select's value '2' and the 'Option 2' option becomes the selected one.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Dropdown selection tests', () => {\n    beforeEach(() => {\n        cy.visit('https://the-internet.herokuapp.com/dropdown');\n    });\n\n    it('should show the disabled prompt initially', () => {\n        cy.get('#dropdown').should('have.value', '');\n        cy.get('#dropdown option:first').should('have.text', 'Please select an option');\n    });\n\n    it('should select Option 2 and verify the selection', () => {\n        cy.get('#dropdown').select('Option 2');\n        cy.get('#dropdown').should('have.value', '2');\n        cy.get('#dropdown option:selected').should('have.text', 'Option 2');\n    });\n\n    it('should not allow selection of an option when the dropdown is not interacted with', () => {\n        cy.get('#dropdown').should('have.value', '');\n        cy.get('#dropdown option:selected').should('have.text', 'Please select an option');\n    });\n});",
+  "prompt_tokens": 175,
+  "completion_tokens": 194,
+  "latency_s": 3.0,
+  "timestamp": "2026-07-20T06:41:56.586029"
+}

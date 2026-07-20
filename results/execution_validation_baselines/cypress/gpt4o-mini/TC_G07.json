@@ -1,0 +1,13 @@
+{
+  "id": "TC_G07",
+  "category": "crud_operations",
+  "complexity": "medium",
+  "user_story": "As a customer on https://www.saucedemo.com, I want to add and remove a product from my cart so that the cart badge stays accurate. Acceptance criteria: after logging in with 'standard_user' / 'secret_sauce', clicking [data-test=\"add-to-cart-sauce-labs-backpack\"] makes the cart badge '.shopping_cart_badge' show '1' and the button label change to 'Remove'; clicking [data-test=\"remove-sauce-labs-backpack\"] removes the badge from the page.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Sauce Demo Cart Functionality', () => {\n    beforeEach(() => {\n        cy.visit('https://www.saucedemo.com');\n        cy.get('[data-test=\"username\"]').type('standard_user');\n        cy.get('[data-test=\"password\"]').type('secret_sauce');\n        cy.get('[data-test=\"login-button\"]').click();\n    });\n\n    it('should add a product to the cart and update the cart badge', () => {\n        cy.get('[data-test=\"add-to-cart-sauce-labs-backpack\"]').click();\n        cy.get('.shopping_cart_badge').should('have.text', '1');\n        cy.get('[data-test=\"add-to-cart-sauce-labs-backpack\"]').should('have.text', 'Remove');\n    });\n\n    it('should remove a product from the cart and update the cart badge', () => {\n        cy.get('[data-test=\"add-to-cart-sauce-labs-backpack\"]').click();\n        cy.get('[data-test=\"remove-sauce-labs-backpack\"]').click();\n        cy.get('.shopping_cart_badge').should('not.exist');\n    });\n});",
+  "prompt_tokens": 201,
+  "completion_tokens": 228,
+  "latency_s": 3.86,
+  "timestamp": "2026-07-20T06:41:08.582885"
+}

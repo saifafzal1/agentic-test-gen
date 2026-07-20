@@ -1,0 +1,13 @@
+{
+  "id": "TC_G20",
+  "category": "search_filter",
+  "complexity": "simple",
+  "user_story": "As a user on https://the-internet.herokuapp.com/dropdown, I want to pick an option from the dropdown so that my selection is applied. Acceptance criteria: the select element '#dropdown' initially shows the disabled prompt 'Please select an option'; selecting the option with text 'Option 2' makes the select's value '2' and the 'Option 2' option becomes the selected one.",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "```typescript\nimport { test, expect } from '@playwright/test';\n\ntest.describe('Dropdown Selection', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/dropdown');\n  });\n\n  test('should display disabled prompt initially', async ({ page }) => {\n    const dropdown = page.locator('#dropdown');\n    const selectedOption = dropdown.locator('option[selected]');\n    \n    await expect(selectedOption).toHaveText('Please select an option');\n    await expect(dropdown).toHaveValue('');\n  });\n\n  test('should select Option 2 and update the dropdown value', async ({ page }) => {\n    const dropdown = page.locator('#dropdown');\n    \n    await dropdown.selectOption('2');\n    \n    await expect(dropdown).toHaveValue('2');\n    const selectedOption = dropdown.locator('option[selected]');\n    await expect(selectedOption).toHaveText('Option 2');\n  });\n\n  test('should verify Option 2 is the selected option after selection', async ({ page }) => {\n    const dropdown = page.locator('#dropdown');\n    \n    await dropdown.selectOption('Option 2');\n    \n    const option2 = page.locator('#dropdown option[value=\"2\"]');\n    await expect(option2).toHaveAttribute('selected', '');\n    await expect(dropdown).toHaveValue('2');\n  });\n});\n```",
+  "prompt_tokens": 215,
+  "completion_tokens": 354,
+  "latency_s": 2.82,
+  "timestamp": "2026-07-20T06:47:21.827744"
+}

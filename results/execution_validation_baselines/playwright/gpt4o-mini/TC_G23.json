@@ -1,0 +1,13 @@
+{
+  "id": "TC_G23",
+  "category": "navigation",
+  "complexity": "medium",
+  "user_story": "As a visitor to https://the-internet.herokuapp.com, I want to navigate from the home page to an example page and back so that I can explore the catalogue of examples. Acceptance criteria: the home page shows the heading 'Welcome to the-internet'; clicking the link with text 'A/B Testing' navigates to a URL containing '/abtest' and shows an 'h3' heading; navigating back returns to the home page with the 'Available Examples' heading visible.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Navigation from home page to example page and back', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com');\n  });\n\n  test('should display home page heading and navigate to A/B Testing page', async ({ page }) => {\n    const homeHeading = await page.getByRole('heading', { name: 'Welcome to the-internet' });\n    await expect(homeHeading).toBeVisible();\n\n    const abTestingLink = await page.getByText('A/B Testing');\n    await abTestingLink.click();\n\n    await expect(page).toHaveURL(/.*\\/abtest/);\n    const abTestingHeading = await page.getByRole('heading', { level: 3 });\n    await expect(abTestingHeading).toBeVisible();\n  });\n\n  test('should navigate back to home page and display available examples heading', async ({ page }) => {\n    await page.getByText('A/B Testing').click();\n    await page.goBack();\n\n    const availableExamplesHeading = await page.getByRole('heading', { name: 'Available Examples' });\n    await expect(availableExamplesHeading).toBeVisible();\n  });\n});",
+  "prompt_tokens": 213,
+  "completion_tokens": 257,
+  "latency_s": 4.35,
+  "timestamp": "2026-07-20T06:43:45.844963"
+}

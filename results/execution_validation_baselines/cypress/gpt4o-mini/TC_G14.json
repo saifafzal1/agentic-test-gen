@@ -1,0 +1,13 @@
+{
+  "id": "TC_G14",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a user who mistyped my password, I want a clear failure message at https://the-internet.herokuapp.com/login so that I can correct it. Acceptance criteria: submitting username 'tomsmith' with wrong password 'wrongpassword' via '#username', '#password' and 'button[type=\"submit\"]' keeps me on the login page and shows the flash banner '.flash.error' with text containing 'Your password is invalid!'.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Login Page Error Handling', () => {\n    beforeEach(() => {\n        cy.visit('https://the-internet.herokuapp.com/login');\n    });\n\n    it('should display an error message for incorrect password', () => {\n        cy.get('#username').type('tomsmith');\n        cy.get('#password').type('wrongpassword');\n        cy.get('button[type=\"submit\"]').click();\n        \n        cy.url().should('eq', 'https://the-internet.herokuapp.com/login');\n        cy.get('.flash.error').should('be.visible')\n            .and('contain.text', 'Your password is invalid!');\n    });\n\n    it('should remain on the login page after failed login attempt', () => {\n        cy.get('#username').type('tomsmith');\n        cy.get('#password').type('wrongpassword');\n        cy.get('button[type=\"submit\"]').click();\n        \n        cy.url().should('eq', 'https://the-internet.herokuapp.com/login');\n        cy.get('.flash.error').should('be.visible')\n            .and('contain.text', 'Your password is invalid!');\n    });\n});",
+  "prompt_tokens": 182,
+  "completion_tokens": 222,
+  "latency_s": 2.69,
+  "timestamp": "2026-07-20T06:41:36.694109"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_G16",
+  "category": "modal_dialog",
+  "complexity": "medium",
+  "user_story": "As a user on https://the-internet.herokuapp.com/javascript_alerts, I want to confirm a JavaScript dialog so that my choice is recorded. Acceptance criteria: clicking the button with text 'Click for JS Confirm' opens a native confirm dialog; accepting it makes the result element '#result' show 'You clicked: Ok'; dismissing it on a second attempt makes '#result' show 'You clicked: Cancel'.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('JavaScript Confirm Dialog', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/javascript_alerts');\n  });\n\n  it('should show \"You clicked: Ok\" when confirming the dialog', () => {\n    cy.window().then((win) => {\n      cy.stub(win, 'confirm').returns(true);\n    });\n\n    cy.contains('button', 'Click for JS Confirm').click();\n\n    cy.get('#result').should('contain', 'You clicked: Ok');\n  });\n\n  it('should show \"You clicked: Cancel\" when dismissing the dialog', () => {\n    cy.window().then((win) => {\n      cy.stub(win, 'confirm').returns(false);\n    });\n\n    cy.contains('button', 'Click for JS Confirm').click();\n\n    cy.get('#result').should('contain', 'You clicked: Cancel');\n  });\n\n  it('should handle multiple confirm dialogs with different responses', () => {\n    cy.window().then((win) => {\n      cy.stub(win, 'confirm').returns(true);\n    });\n\n    cy.contains('button', 'Click for JS Confirm').click();\n    cy.get('#result').should('contain', 'You clicked: Ok');\n\n    cy.window().then((win) => {\n      win.confirm.restore();\n      cy.stub(win, 'confirm').returns(false);\n    });\n\n    cy.contains('button', 'Click for JS Confirm').click();\n    cy.get('#result').should('contain', 'You clicked: Cancel');\n  });\n\n  it('should verify the button exists and is clickable', () => {\n    cy.contains('button', 'Click for JS Confirm')\n      .should('be.visible')\n      .should('be.enabled');\n  });\n});",
+  "prompt_tokens": 197,
+  "completion_tokens": 448,
+  "latency_s": 3.03,
+  "timestamp": "2026-07-20T06:45:04.869085"
+}

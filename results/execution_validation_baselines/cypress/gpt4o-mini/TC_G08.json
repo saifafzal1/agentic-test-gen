@@ -1,0 +1,13 @@
+{
+  "id": "TC_G08",
+  "category": "payment_flow",
+  "complexity": "complex",
+  "user_story": "As a customer on https://www.saucedemo.com, I want to complete a full checkout so that my order is confirmed. Acceptance criteria: after logging in with 'standard_user' / 'secret_sauce' and adding the backpack via [data-test=\"add-to-cart-sauce-labs-backpack\"], clicking the cart link '.shopping_cart_link' then [data-test=\"checkout\"] opens the information form; filling [data-test=\"firstName\"] with 'Saif', [data-test=\"lastName\"] with 'Afzal', [data-test=\"postalCode\"] with '201301' and clicking [data-test=\"continue\"] shows the overview page with an item total; clicking [data-test=\"finish\"] shows the confirmation header '.complete-header' with text 'Thank you for your order!'.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Checkout Flow', () => {\n    beforeEach(() => {\n        cy.visit('https://www.saucedemo.com');\n        cy.get('[data-test=\"username\"]').type('standard_user');\n        cy.get('[data-test=\"password\"]').type('secret_sauce');\n        cy.get('[data-test=\"login-button\"]').click();\n    });\n\n    it('should complete checkout successfully', () => {\n        cy.get('[data-test=\"add-to-cart-sauce-labs-backpack\"]').click();\n        cy.get('.shopping_cart_link').click();\n        cy.get('[data-test=\"checkout\"]').click();\n        cy.get('[data-test=\"firstName\"]').type('Saif');\n        cy.get('[data-test=\"lastName\"]').type('Afzal');\n        cy.get('[data-test=\"postalCode\"]').type('201301');\n        cy.get('[data-test=\"continue\"]').click();\n        cy.get('.summary_total_label').should('exist');\n        cy.get('[data-test=\"finish\"]').click();\n        cy.get('.complete-header').should('have.text', 'Thank you for your order!');\n    });\n\n    it('should show error for missing first name', () => {\n        cy.get('[data-test=\"add-to-cart-sauce-labs-backpack\"]').click();\n        cy.get('.shopping_cart_link').click();\n        cy.get('[data-test=\"checkout\"]').click();\n        cy.get('[data-test=\"lastName\"]').type('Afzal');\n        cy.get('[data-test=\"postalCode\"]').type('201301');\n        cy.get('[data-test=\"continue\"]').click();\n        cy.get('.error-message-container').should('exist');\n    });\n});",
+  "prompt_tokens": 258,
+  "completion_tokens": 331,
+  "latency_s": 4.66,
+  "timestamp": "2026-07-20T06:41:13.548742"
+}

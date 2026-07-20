@@ -1,0 +1,13 @@
+{
+  "id": "TC_G23",
+  "category": "navigation",
+  "complexity": "medium",
+  "user_story": "As a visitor to https://the-internet.herokuapp.com, I want to navigate from the home page to an example page and back so that I can explore the catalogue of examples. Acceptance criteria: the home page shows the heading 'Welcome to the-internet'; clicking the link with text 'A/B Testing' navigates to a URL containing '/abtest' and shows an 'h3' heading; navigating back returns to the home page with the 'Available Examples' heading visible.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Navigation between home page and example pages', () => {\n  const baseUrl = 'https://the-internet.herokuapp.com';\n\n  beforeEach(() => {\n    cy.visit(baseUrl);\n  });\n\n  it('should display welcome heading on home page and navigate to A/B Testing example', () => {\n    // Verify home page displays correct heading\n    cy.get('h1').should('contain', 'Welcome to the-internet');\n\n    // Click on A/B Testing link\n    cy.contains('a', 'A/B Testing').click();\n\n    // Verify URL contains /abtest\n    cy.url().should('include', '/abtest');\n\n    // Verify h3 heading is present on the example page\n    cy.get('h3').should('be.visible');\n  });\n\n  it('should navigate back to home page and display Available Examples heading', () => {\n    // Navigate to A/B Testing example\n    cy.contains('a', 'A/B Testing').click();\n\n    // Verify we are on the abtest page\n    cy.url().should('include', '/abtest');\n\n    // Navigate back to home page\n    cy.go('back');\n\n    // Verify we are back on the home page\n    cy.url().should('eq', baseUrl + '/');\n\n    // Verify the Available Examples heading is visible\n    cy.contains('h2', 'Available Examples').should('be.visible');\n  });\n\n  it('should handle navigation when clicking multiple links sequentially', () => {\n    // Verify initial home page state\n    cy.get('h1').should('contain', 'Welcome to the-internet');\n\n    // Navigate to A/B Testing\n    cy.contains('a', 'A/B Testing').click();\n    cy.url().should('include', '/abtest');\n\n    // Go back to home\n    cy.go('back');\n    cy.contains('h2', 'Available Examples').should('be.visible');\n\n    // Navigate to another example to verify the pattern works\n    cy.contains('a', 'Broken Images').click();\n    cy.url().should('include', '/broken_images');\n\n    // Go back again\n    cy.go('back');\n    cy.get('h1').should('contain', 'Welcome to the-internet');\n  });\n});",
+  "prompt_tokens": 209,
+  "completion_tokens": 546,
+  "latency_s": 4.36,
+  "timestamp": "2026-07-20T06:45:37.488451"
+}

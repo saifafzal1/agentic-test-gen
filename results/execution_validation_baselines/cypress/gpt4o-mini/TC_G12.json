@@ -1,0 +1,13 @@
+{
+  "id": "TC_G12",
+  "category": "accessibility",
+  "complexity": "medium",
+  "user_story": "As a screen-reader user, I want product images and login fields on https://www.saucedemo.com to carry accessible attributes so that assistive technology can describe them. Acceptance criteria: the login fields [data-test=\"username\"] and [data-test=\"password\"] each have a non-empty 'placeholder' attribute; after logging in with 'standard_user' / 'secret_sauce', every product image inside '.inventory_item' ('img.inventory_item_img') has a non-empty 'alt' attribute.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Accessibility attributes for login fields and product images', () => {\n    beforeEach(() => {\n        cy.visit('https://www.saucedemo.com');\n    });\n\n    it('should have non-empty placeholder attributes for login fields', () => {\n        cy.get('[data-test=\"username\"]').should('have.attr', 'placeholder').and('not.be.empty');\n        cy.get('[data-test=\"password\"]').should('have.attr', 'placeholder').and('not.be.empty');\n    });\n\n    it('should have non-empty alt attributes for product images after logging in', () => {\n        cy.get('[data-test=\"username\"]').type('standard_user');\n        cy.get('[data-test=\"password\"]').type('secret_sauce');\n        cy.get('[data-test=\"login-button\"]').click();\n\n        cy.get('.inventory_item img.inventory_item_img').each(($img) => {\n            cy.wrap($img).should('have.attr', 'alt').and('not.be.empty');\n        });\n    });\n});",
+  "prompt_tokens": 194,
+  "completion_tokens": 201,
+  "latency_s": 2.71,
+  "timestamp": "2026-07-20T06:41:30.679584"
+}

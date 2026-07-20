@@ -1,0 +1,13 @@
+{
+  "id": "TC_G21",
+  "category": "table_list",
+  "complexity": "complex",
+  "user_story": "As a data reviewer on https://the-internet.herokuapp.com/tables, I want the example table to expose its rows and columns so that I can verify records. Acceptance criteria: table '#table1' has a header row containing the column headings 'Last Name', 'First Name', 'Email' and 'Due'; the table body contains 4 rows; one row contains the email 'jsmith@gmail.com' in the same row as the last name 'Smith'.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Data Reviewer Table Verification', () => {\n    beforeEach(() => {\n        cy.visit('https://the-internet.herokuapp.com/tables');\n    });\n\n    it('should verify the table header and rows', () => {\n        cy.get('#table1 thead tr').within(() => {\n            cy.get('th').eq(0).should('have.text', 'Last Name');\n            cy.get('th').eq(1).should('have.text', 'First Name');\n            cy.get('th').eq(2).should('have.text', 'Email');\n            cy.get('th').eq(3).should('have.text', 'Due');\n        });\n\n        cy.get('#table1 tbody tr').should('have.length', 4);\n    });\n\n    it('should verify the presence of specific email and last name in the same row', () => {\n        cy.get('#table1 tbody tr').each(($row) => {\n            cy.wrap($row).within(() => {\n                cy.get('td').eq(2).invoke('text').then((email) => {\n                    if (email.trim() === 'jsmith@gmail.com') {\n                        cy.get('td').eq(0).should('have.text', 'Smith');\n                    }\n                });\n            });\n        });\n    });\n});",
+  "prompt_tokens": 189,
+  "completion_tokens": 264,
+  "latency_s": 3.55,
+  "timestamp": "2026-07-20T06:42:00.433010"
+}

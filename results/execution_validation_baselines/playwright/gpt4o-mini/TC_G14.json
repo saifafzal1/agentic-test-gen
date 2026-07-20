@@ -1,0 +1,13 @@
+{
+  "id": "TC_G14",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a user who mistyped my password, I want a clear failure message at https://the-internet.herokuapp.com/login so that I can correct it. Acceptance criteria: submitting username 'tomsmith' with wrong password 'wrongpassword' via '#username', '#password' and 'button[type=\"submit\"]' keeps me on the login page and shows the flash banner '.flash.error' with text containing 'Your password is invalid!'.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Error Handling', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/login');\n  });\n\n  test('should display error message for invalid password', async ({ page }) => {\n    await page.fill('#username', 'tomsmith');\n    await page.fill('#password', 'wrongpassword');\n    await page.click('button[type=\"submit\"]');\n\n    const errorMessage = await page.getByRole('alert');\n    await expect(errorMessage).toContainText('Your password is invalid!');\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/login');\n  });\n\n  test('should remain on login page after failed login attempt', async ({ page }) => {\n    await page.fill('#username', 'tomsmith');\n    await page.fill('#password', 'wrongpassword');\n    await page.click('button[type=\"submit\"]');\n\n    const errorBanner = await page.locator('.flash.error');\n    await expect(errorBanner).toBeVisible();\n    await expect(errorBanner).toContainText('Your password is invalid!');\n  });\n});",
+  "prompt_tokens": 205,
+  "completion_tokens": 239,
+  "latency_s": 5.31,
+  "timestamp": "2026-07-20T06:43:11.232719"
+}

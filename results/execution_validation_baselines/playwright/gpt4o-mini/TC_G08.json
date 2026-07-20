@@ -1,0 +1,13 @@
+{
+  "id": "TC_G08",
+  "category": "payment_flow",
+  "complexity": "complex",
+  "user_story": "As a customer on https://www.saucedemo.com, I want to complete a full checkout so that my order is confirmed. Acceptance criteria: after logging in with 'standard_user' / 'secret_sauce' and adding the backpack via [data-test=\"add-to-cart-sauce-labs-backpack\"], clicking the cart link '.shopping_cart_link' then [data-test=\"checkout\"] opens the information form; filling [data-test=\"firstName\"] with 'Saif', [data-test=\"lastName\"] with 'Afzal', [data-test=\"postalCode\"] with '201301' and clicking [data-test=\"continue\"] shows the overview page with an item total; clicking [data-test=\"finish\"] shows the confirmation header '.complete-header' with text 'Thank you for your order!'.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Checkout Flow', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com');\n    await page.fill('[data-test=\"username\"]', 'standard_user');\n    await page.fill('[data-test=\"password\"]', 'secret_sauce');\n    await page.click('[data-test=\"login-button\"]');\n  });\n\n  test('Complete checkout process', async ({ page }) => {\n    await page.click('[data-test=\"add-to-cart-sauce-labs-backpack\"]');\n    await page.click('.shopping_cart_link');\n    await page.click('[data-test=\"checkout\"]');\n\n    await page.fill('[data-test=\"firstName\"]', 'Saif');\n    await page.fill('[data-test=\"lastName\"]', 'Afzal');\n    await page.fill('[data-test=\"postalCode\"]', '201301');\n    await page.click('[data-test=\"continue\"]');\n\n    const itemTotal = await page.locator('.summary_subtotal_label').textContent();\n    expect(itemTotal).toContain('Item total:');\n  });\n\n  test('Confirm order completion', async ({ page }) => {\n    await page.click('[data-test=\"finish\"]');\n    const confirmationHeader = await page.locator('.complete-header').textContent();\n    expect(confirmationHeader).toBe('Thank you for your order!');\n  });\n});",
+  "prompt_tokens": 281,
+  "completion_tokens": 291,
+  "latency_s": 3.37,
+  "timestamp": "2026-07-20T06:42:44.813940"
+}

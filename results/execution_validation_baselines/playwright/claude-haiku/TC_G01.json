@@ -1,0 +1,13 @@
+{
+  "id": "TC_G01",
+  "category": "authentication",
+  "complexity": "simple",
+  "user_story": "As a registered customer, I want to log in to the Sauce Demo store at https://www.saucedemo.com so that I can reach the product catalogue. Acceptance criteria: the login form has a username field [data-test=\"username\"], a password field [data-test=\"password\"] and a login button [data-test=\"login-button\"]; logging in with username 'standard_user' and password 'secret_sauce' redirects to a URL containing '/inventory.html' and shows the page title element '.title' with the text 'Products'.",
+  "framework": "playwright",
+  "model": "claude-haiku",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Sauce Demo Login', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://www.saucedemo.com');\n  });\n\n  test('should display login form with required fields', async ({ page }) => {\n    const usernameField = page.locator('[data-test=\"username\"]');\n    const passwordField = page.locator('[data-test=\"password\"]');\n    const loginButton = page.locator('[data-test=\"login-button\"]');\n\n    await expect(usernameField).toBeVisible();\n    await expect(passwordField).toBeVisible();\n    await expect(loginButton).toBeVisible();\n  });\n\n  test('should successfully log in with valid credentials and redirect to inventory', async ({ page }) => {\n    const usernameField = page.locator('[data-test=\"username\"]');\n    const passwordField = page.locator('[data-test=\"password\"]');\n    const loginButton = page.locator('[data-test=\"login-button\"]');\n\n    await usernameField.fill('standard_user');\n    await passwordField.fill('secret_sauce');\n    await loginButton.click();\n\n    await page.waitForURL('**/inventory.html');\n    expect(page.url()).toContain('/inventory.html');\n\n    const titleElement = page.locator('.title');\n    await expect(titleElement).toHaveText('Products');\n  });\n\n  test('should display error message with invalid credentials', async ({ page }) => {\n    const usernameField = page.locator('[data-test=\"username\"]');\n    const passwordField = page.locator('[data-test=\"password\"]');\n    const loginButton = page.locator('[data-test=\"login-button\"]');\n\n    await usernameField.fill('invalid_user');\n    await passwordField.fill('wrong_password');\n    await loginButton.click();\n\n    const errorMessage = page.locator('[data-test=\"error\"]');\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 250,
+  "completion_tokens": 501,
+  "latency_s": 3.28,
+  "timestamp": "2026-07-20T06:45:45.793821"
+}

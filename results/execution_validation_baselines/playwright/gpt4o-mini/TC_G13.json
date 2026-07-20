@@ -1,0 +1,13 @@
+{
+  "id": "TC_G13",
+  "category": "authentication",
+  "complexity": "simple",
+  "user_story": "As a returning user, I want to log in to the secure area at https://the-internet.herokuapp.com/login so that I can access protected content. Acceptance criteria: the form has fields '#username' and '#password' and a submit button 'button[type=\"submit\"]'; logging in with username 'tomsmith' and password 'SuperSecretPassword!' navigates to a URL containing '/secure' and shows the flash banner '.flash.success' with text containing 'You logged into a secure area!'.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login functionality', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/login');\n  });\n\n  test('should log in with valid credentials', async ({ page }) => {\n    await page.getByLabel('Username').fill('tomsmith');\n    await page.getByLabel('Password').fill('SuperSecretPassword!');\n    await page.getByRole('button', { name: 'Log in' }).click();\n\n    await expect(page).toHaveURL(/.*\\/secure/);\n    const successMessage = page.getByText('You logged into a secure area!');\n    await expect(successMessage).toBeVisible();\n  });\n\n  test('should show error message with invalid credentials', async ({ page }) => {\n    await page.getByLabel('Username').fill('invalidUser');\n    await page.getByLabel('Password').fill('invalidPassword');\n    await page.getByRole('button', { name: 'Log in' }).click();\n\n    const errorMessage = page.getByText('Your username is invalid!');\n    await expect(errorMessage).toBeVisible();\n  });\n});",
+  "prompt_tokens": 218,
+  "completion_tokens": 246,
+  "latency_s": 3.51,
+  "timestamp": "2026-07-20T06:43:05.613901"
+}

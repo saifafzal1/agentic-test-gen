@@ -1,0 +1,13 @@
+{
+  "id": "TC_G22",
+  "category": "notifications",
+  "complexity": "medium",
+  "user_story": "As a user on https://the-internet.herokuapp.com/notification_message_rendered, I want an on-screen notification after I trigger an action so that I get feedback. Acceptance criteria: clicking the 'Click here' link loads a new notification; the flash element '#flash' becomes visible and its text contains either 'Action successful' or 'Action unsuccessful'; the flash can be dismissed via its close icon '.close'.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Notification Message Tests', () => {\n    beforeEach(() => {\n        cy.visit('https://the-internet.herokuapp.com/notification_message_rendered');\n    });\n\n    it('should display a success notification when the link is clicked', () => {\n        cy.get('a[href=\"/notification_message_rendered\"]').click();\n        cy.get('#flash').should('be.visible');\n        cy.get('#flash').should('contain.text', 'Action successful');\n    });\n\n    it('should display an error notification when the link is clicked', () => {\n        cy.get('a[href=\"/notification_message_rendered\"]').click();\n        cy.get('#flash').should('be.visible');\n        cy.get('#flash').should('contain.text', 'Action unsuccessful');\n    });\n\n    it('should dismiss the notification when the close icon is clicked', () => {\n        cy.get('a[href=\"/notification_message_rendered\"]').click();\n        cy.get('#flash').should('be.visible');\n        cy.get('.close').click();\n        cy.get('#flash').should('not.be.visible');\n    });\n});",
+  "prompt_tokens": 177,
+  "completion_tokens": 217,
+  "latency_s": 3.24,
+  "timestamp": "2026-07-20T06:42:03.982384"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_G15",
+  "category": "crud_operations",
+  "complexity": "medium",
+  "user_story": "As a user of the element manager at https://the-internet.herokuapp.com/add_remove_elements/, I want to add and delete elements so that the list reflects my actions. Acceptance criteria: clicking the 'Add Element' button (button[onclick=\"addElement()\"]) twice creates two delete buttons '.added-manually'; clicking one delete button leaves exactly one '.added-manually' button on the page.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Element Manager', () => {\n    beforeEach(() => {\n        cy.visit('https://the-internet.herokuapp.com/add_remove_elements/');\n    });\n\n    it('should add two elements and verify their presence', () => {\n        cy.get('button[onclick=\"addElement()\"]').click();\n        cy.get('button[onclick=\"addElement()\"]').click();\n        cy.get('.added-manually').should('have.length', 2);\n    });\n\n    it('should delete one element and verify one remains', () => {\n        cy.get('button[onclick=\"addElement()\"]').click();\n        cy.get('button[onclick=\"addElement()\"]').click();\n        cy.get('.added-manually').first().click();\n        cy.get('.added-manually').should('have.length', 1);\n    });\n});",
+  "prompt_tokens": 174,
+  "completion_tokens": 166,
+  "latency_s": 2.79,
+  "timestamp": "2026-07-20T06:41:39.788396"
+}

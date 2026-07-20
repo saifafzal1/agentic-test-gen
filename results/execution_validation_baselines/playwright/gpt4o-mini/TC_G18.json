@@ -1,0 +1,13 @@
+{
+  "id": "TC_G18",
+  "category": "file_upload",
+  "complexity": "medium",
+  "user_story": "As a user on https://the-internet.herokuapp.com/upload, I want to upload a file so that the server confirms what it received. Acceptance criteria: selecting a small text file with the file input '#file-upload' and clicking the submit button '#file-submit' navigates to a page with the heading 'File Uploaded!' and shows the uploaded file's name inside '#uploaded-files'.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('File Upload', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/upload');\n  });\n\n  test('should upload a file and confirm upload', async ({ page }) => {\n    const filePath = 'path/to/your/small-text-file.txt'; // Update with the actual file path\n    await page.getByLabel('File input').setInputFiles(filePath);\n    await page.getByRole('button', { name: 'Upload' }).click();\n\n    await expect(page.getByRole('heading', { name: 'File Uploaded!' })).toBeVisible();\n    await expect(page.getById('uploaded-files')).toHaveText('small-text-file.txt'); // Update with the actual file name\n  });\n\n  test('should not upload a file if none is selected', async ({ page }) => {\n    await page.getByRole('button', { name: 'Upload' }).click();\n\n    await expect(page.getByRole('heading', { name: 'File Uploaded!' })).not.toBeVisible();\n    await expect(page.getById('uploaded-files')).toHaveText('');\n  });\n});",
+  "prompt_tokens": 195,
+  "completion_tokens": 252,
+  "latency_s": 3.22,
+  "timestamp": "2026-07-20T06:43:25.917187"
+}

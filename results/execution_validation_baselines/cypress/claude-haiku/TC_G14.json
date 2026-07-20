@@ -1,0 +1,13 @@
+{
+  "id": "TC_G14",
+  "category": "error_states",
+  "complexity": "simple",
+  "user_story": "As a user who mistyped my password, I want a clear failure message at https://the-internet.herokuapp.com/login so that I can correct it. Acceptance criteria: submitting username 'tomsmith' with wrong password 'wrongpassword' via '#username', '#password' and 'button[type=\"submit\"]' keeps me on the login page and shows the flash banner '.flash.error' with text containing 'Your password is invalid!'.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Login with Invalid Password', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/login');\n  });\n\n  it('should display error message when submitting with wrong password', () => {\n    cy.get('#username').type('tomsmith');\n    cy.get('#password').type('wrongpassword');\n    cy.get('button[type=\"submit\"]').click();\n\n    cy.url().should('include', '/login');\n    cy.get('.flash.error').should('be.visible');\n    cy.get('.flash.error').should('contain', 'Your password is invalid!');\n  });\n\n  it('should remain on login page and show error for empty password field', () => {\n    cy.get('#username').type('tomsmith');\n    cy.get('button[type=\"submit\"]').click();\n\n    cy.url().should('include', '/login');\n    cy.get('.flash.error').should('be.visible');\n  });\n\n  it('should display error message when submitting with empty username and wrong password', () => {\n    cy.get('#password').type('wrongpassword');\n    cy.get('button[type=\"submit\"]').click();\n\n    cy.url().should('include', '/login');\n    cy.get('.flash.error').should('be.visible');\n  });\n\n  it('should allow user to correct password after initial failure', () => {\n    cy.get('#username').type('tomsmith');\n    cy.get('#password').type('wrongpassword');\n    cy.get('button[type=\"submit\"]').click();\n\n    cy.get('.flash.error').should('be.visible');\n\n    cy.get('#password').clear().type('SuperSecretPassword!');\n    cy.get('button[type=\"submit\"]').click();\n\n    cy.url().should('include', '/secure');\n    cy.get('.flash.success').should('contain', 'You logged into a secure area!');\n  });\n});",
+  "prompt_tokens": 205,
+  "completion_tokens": 468,
+  "latency_s": 4.07,
+  "timestamp": "2026-07-20T06:44:57.351693"
+}

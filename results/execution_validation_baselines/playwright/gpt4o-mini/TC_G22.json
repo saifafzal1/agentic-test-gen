@@ -1,0 +1,13 @@
+{
+  "id": "TC_G22",
+  "category": "notifications",
+  "complexity": "medium",
+  "user_story": "As a user on https://the-internet.herokuapp.com/notification_message_rendered, I want an on-screen notification after I trigger an action so that I get feedback. Acceptance criteria: clicking the 'Click here' link loads a new notification; the flash element '#flash' becomes visible and its text contains either 'Action successful' or 'Action unsuccessful'; the flash can be dismissed via its close icon '.close'.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Message Tests', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/notification_message_rendered');\n  });\n\n  test('should display a successful notification when clicking the link', async ({ page }) => {\n    await page.getByText('Click here').click();\n    const flash = page.getByRole('alert');\n    await expect(flash).toBeVisible();\n    await expect(flash).toHaveText(/Action successful/);\n  });\n\n  test('should display an unsuccessful notification when clicking the link', async ({ page }) => {\n    await page.getByText('Click here').click();\n    const flash = page.getByRole('alert');\n    await expect(flash).toBeVisible();\n    await expect(flash).toHaveText(/Action unsuccessful/);\n    \n    await page.getByRole('button', { name: 'close' }).click();\n    await expect(flash).not.toBeVisible();\n  });\n});",
+  "prompt_tokens": 200,
+  "completion_tokens": 219,
+  "latency_s": 3.33,
+  "timestamp": "2026-07-20T06:43:41.185278"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_G07",
+  "category": "crud_operations",
+  "complexity": "medium",
+  "user_story": "As a customer on https://www.saucedemo.com, I want to add and remove a product from my cart so that the cart badge stays accurate. Acceptance criteria: after logging in with 'standard_user' / 'secret_sauce', clicking [data-test=\"add-to-cart-sauce-labs-backpack\"] makes the cart badge '.shopping_cart_badge' show '1' and the button label change to 'Remove'; clicking [data-test=\"remove-sauce-labs-backpack\"] removes the badge from the page.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Cart Badge and Add/Remove Product Functionality', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n    cy.get('[data-test=\"inventory-container\"]').should('be.visible');\n  });\n\n  it('should add product to cart and display badge with correct count', () => {\n    cy.get('[data-test=\"add-to-cart-sauce-labs-backpack\"]').should('be.visible').click();\n    \n    cy.get('.shopping_cart_badge').should('be.visible').and('have.text', '1');\n    \n    cy.get('[data-test=\"add-to-cart-sauce-labs-backpack\"]').should('not.exist');\n    cy.get('[data-test=\"remove-sauce-labs-backpack\"]').should('be.visible').and('contain.text', 'Remove');\n  });\n\n  it('should remove product from cart and remove badge from page', () => {\n    cy.get('[data-test=\"add-to-cart-sauce-labs-backpack\"]').click();\n    \n    cy.get('.shopping_cart_badge').should('have.text', '1');\n    \n    cy.get('[data-test=\"remove-sauce-labs-backpack\"]').click();\n    \n    cy.get('.shopping_cart_badge').should('not.exist');\n    \n    cy.get('[data-test=\"add-to-cart-sauce-labs-backpack\"]').should('be.visible').and('contain.text', 'Add to cart');\n  });\n\n  it('should handle multiple add and remove operations maintaining accurate badge count', () => {\n    cy.get('[data-test=\"add-to-cart-sauce-labs-backpack\"]').click();\n    cy.get('.shopping_cart_badge').should('have.text', '1');\n    \n    cy.get('[data-test=\"add-to-cart-sauce-labs-bike-light\"]').click();\n    cy.get('.shopping_cart_badge').should('have.text', '2');\n    \n    cy.get('[data-test=\"remove-sauce-labs-backpack\"]').click();\n    cy.get('.shopping_cart_badge').should('have.text', '1');\n    \n    cy.get('[data-test=\"remove-sauce-labs-bike-light\"]').click();\n    cy.get('.shopping_cart_badge').should('not.exist');\n  });\n});",
+  "prompt_tokens": 226,
+  "completion_tokens": 640,
+  "latency_s": 7.16,
+  "timestamp": "2026-07-20T06:44:23.418903"
+}

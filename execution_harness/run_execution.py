@@ -21,8 +21,20 @@ from pathlib import Path
 HARNESS_DIR = Path(__file__).parent
 BASE_DIR    = HARNESS_DIR.parent
 RESULTS_DIR = BASE_DIR / "results" / "execution_validation"
+BASELINES_DIR = BASE_DIR / "results" / "execution_validation_baselines"
 STORIES     = BASE_DIR / "data" / "execution_validation" / "grounded_stories.jsonl"
 OUT_DIR     = RESULTS_DIR / "execution_outcomes"
+
+FENCE_RE = re.compile(r"^```[a-zA-Z]*\s*\n|\n?```\s*$")
+
+
+def strip_fences(script: str) -> str:
+    """Remove wrapping markdown code fences (baseline models emit them)."""
+    s = script.strip()
+    if s.startswith("```"):
+        s = re.sub(r"^```[a-zA-Z]*\s*\n", "", s)
+        s = re.sub(r"\n?```\s*$", "", s)
+    return s
 
 CY_SPEC_DIR = HARNESS_DIR / "cypress" / "e2e"
 PW_SPEC_DIR = HARNESS_DIR / "pw_specs"
@@ -96,7 +108,8 @@ def run_playwright(spec_path: Path, base_url: str) -> dict:
     failed = stats.get("unexpected", 0)
     tests = passed + failed + stats.get("skipped", 0) + stats.get("flaky", 0)
     failures = []
-    for suite in rep.get("suites", []):
+
+    def walk(suite):
         for spec in suite.get("specs", []):
             for t in spec.get("tests", []):
                 if t.get("status") not in ("expected", "flaky"):
@@ -105,6 +118,11 @@ def run_playwright(spec_path: Path, base_url: str) -> dict:
                     if results and results[0].get("error"):
                         msg = (results[0]["error"].get("message") or "")[:300]
                     failures.append({"title": spec.get("title", ""), "message": msg})
+        for child in suite.get("suites", []):
+            walk(child)
+
+    for suite in rep.get("suites", []):
+        walk(suite)
     # Compile/collection errors surface as zero tests plus top-level errors
     if tests == 0:
         detail = "; ".join(e.get("message", "")[:200] for e in rep.get("errors", [])) \
@@ -118,19 +136,35 @@ def run_playwright(spec_path: Path, base_url: str) -> dict:
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--model", choices=["phi3", "gemma4"], default=None)
+    ap.add_argument("--model", default=None,
+                    choices=["phi3", "gemma4", "gpt4o-mini", "claude-haiku"])
     ap.add_argument("--framework", choices=["cypress", "playwright"], default=None)
+    ap.add_argument("--source", choices=["finetuned", "baselines", "all"],
+                    default="finetuned",
+                    help="Which generation outputs to execute")
     args = ap.parse_args()
 
     base_urls = load_base_urls()
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    models = [args.model] if args.model else ["phi3", "gemma4"]
+    FT_MODELS = ["phi3", "gemma4"]
+    BL_MODELS = ["gpt4o-mini", "claude-haiku"]
+    if args.source == "finetuned":
+        models = FT_MODELS
+    elif args.source == "baselines":
+        models = BL_MODELS
+    else:
+        models = FT_MODELS + BL_MODELS
+    if args.model:
+        models = [args.model]
     frameworks = [args.framework] if args.framework else ["cypress", "playwright"]
 
     for model in models:
         for framework in frameworks:
-            gen_dir = RESULTS_DIR / model / framework
+            is_baseline = model in BL_MODELS
+            # Baseline layout is <framework>/<model>; BMAD is <model>/<framework>
+            gen_dir = (BASELINES_DIR / framework / model) if is_baseline \
+                      else (RESULTS_DIR / model / framework)
             records = sorted(gen_dir.glob("TC_G*.json"))
             if not records:
                 print(f"[{model}/{framework}] no generated records yet — skipping")
@@ -140,8 +174,10 @@ def main():
             outcomes = []
             for rec_path in records:
                 rec = json.loads(rec_path.read_text())
-                tc_id = rec["tc_id"]
-                script = rec["final_script"]
+                tc_id = rec.get("tc_id") or rec["id"]
+                script = rec.get("final_script") or rec["generated_script"]
+                if is_baseline:
+                    script = strip_fences(script)
                 base_url = base_urls[tc_id]
 
                 if framework == "cypress":
@@ -158,7 +194,9 @@ def main():
                     PW_SPEC_DIR.mkdir(parents=True, exist_ok=True)
                     for old in PW_SPEC_DIR.glob("*.spec.*"):
                         old.unlink()
-                    spec = PW_SPEC_DIR / f"{tc_id}.spec.js"
+                    # .ts uniformly: Playwright transpiles it, plain JS remains
+                    # valid, and TS-syntax scripts stop failing collection.
+                    spec = PW_SPEC_DIR / f"{tc_id}.spec.ts"
                     spec.write_text(script)
                     try:
                         result = run_playwright(spec, base_url)

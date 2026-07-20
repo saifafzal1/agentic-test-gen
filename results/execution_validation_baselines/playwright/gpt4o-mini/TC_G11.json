@@ -1,0 +1,13 @@
+{
+  "id": "TC_G11",
+  "category": "responsive",
+  "complexity": "medium",
+  "user_story": "As a mobile customer, I want the Sauce Demo store at https://www.saucedemo.com to remain usable on a small screen so that I can shop from my phone. Acceptance criteria: with the viewport set to 375x812 (mobile portrait), logging in with 'standard_user' / 'secret_sauce' shows the inventory page; the burger menu button '#react-burger-menu-btn' is visible at this viewport and clicking it opens the side menu container '.bm-menu' with the logout link '#logout_sidebar_link' visible inside it.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Sauce Demo Mobile Responsiveness', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.setViewportSize({ width: 375, height: 812 });\n    await page.goto('https://www.saucedemo.com');\n  });\n\n  test('User can log in and see inventory page', async ({ page }) => {\n    await page.fill(getByLabel('Username'), 'standard_user');\n    await page.fill(getByLabel('Password'), 'secret_sauce');\n    await page.click(getByRole('button', { name: /login/i }));\n    await expect(page.getByText('Products')).toBeVisible();\n  });\n\n  test('Burger menu is visible and opens side menu', async ({ page }) => {\n    await page.fill(getByLabel('Username'), 'standard_user');\n    await page.fill(getByLabel('Password'), 'secret_sauce');\n    await page.click(getByRole('button', { name: /login/i }));\n    \n    const burgerMenuButton = page.getByRole('button', { name: /open menu/i });\n    await expect(burgerMenuButton).toBeVisible();\n    await burgerMenuButton.click();\n    \n    const sideMenu = page.locator('.bm-menu');\n    await expect(sideMenu).toBeVisible();\n    const logoutLink = sideMenu.locator('#logout_sidebar_link');\n    await expect(logoutLink).toBeVisible();\n  });\n});",
+  "prompt_tokens": 227,
+  "completion_tokens": 304,
+  "latency_s": 4.86,
+  "timestamp": "2026-07-20T06:42:58.193726"
+}

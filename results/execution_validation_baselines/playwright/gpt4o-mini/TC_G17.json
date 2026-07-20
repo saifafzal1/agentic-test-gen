@@ -1,0 +1,13 @@
+{
+  "id": "TC_G17",
+  "category": "async_await",
+  "complexity": "complex",
+  "user_story": "As a user on https://the-internet.herokuapp.com/dynamic_loading/1, I want the page to reveal hidden content after an asynchronous wait so that I see the loaded result. Acceptance criteria: the '#finish' element is hidden initially; clicking the Start button ('#start button') shows a loading indicator '#loading'; after the loading indicator disappears, the '#finish' element becomes visible with the text 'Hello World!' (allow up to 10 seconds for the load to complete).",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dynamic Loading Test', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/dynamic_loading/1');\n  });\n\n  test('should reveal hidden content after loading', async ({ page }) => {\n    const startButton = page.getByRole('button', { name: 'Start' });\n    await expect(page.getByText('Hello World!')).toBeHidden();\n    await startButton.click();\n    await expect(page.getByText('Loading...')).toBeVisible();\n    await expect(page.getByText('Loading...')).toBeHidden({ timeout: 10000 });\n    await expect(page.getByText('Hello World!')).toBeVisible();\n  });\n\n  test('should show loading indicator during async wait', async ({ page }) => {\n    const startButton = page.getByRole('button', { name: 'Start' });\n    await startButton.click();\n    await expect(page.getByText('Loading...')).toBeVisible();\n    await page.waitForTimeout(1000); // Wait for a second to ensure loading is visible\n    await expect(page.getByText('Loading...')).toBeVisible();\n  });\n});",
+  "prompt_tokens": 217,
+  "completion_tokens": 259,
+  "latency_s": 3.34,
+  "timestamp": "2026-07-20T06:43:22.392795"
+}

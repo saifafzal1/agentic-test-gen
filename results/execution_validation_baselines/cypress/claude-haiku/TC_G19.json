@@ -1,0 +1,13 @@
+{
+  "id": "TC_G19",
+  "category": "form_validation",
+  "complexity": "simple",
+  "user_story": "As a user on https://the-internet.herokuapp.com/checkboxes, I want checkbox states to change only when I toggle them so that the form reflects my choices. Acceptance criteria: the page has two 'input[type=\"checkbox\"]' elements, the first initially unchecked and the second initially checked; checking the first makes both checked; unchecking the second leaves only the first checked.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Checkbox Toggle Functionality', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/checkboxes');\n  });\n\n  it('should have correct initial checkbox states', () => {\n    cy.get('input[type=\"checkbox\"]').should('have.length', 2);\n    cy.get('input[type=\"checkbox\"]').eq(0).should('not.be.checked');\n    cy.get('input[type=\"checkbox\"]').eq(1).should('be.checked');\n  });\n\n  it('should check first checkbox and verify both are checked', () => {\n    cy.get('input[type=\"checkbox\"]').eq(0).click();\n    cy.get('input[type=\"checkbox\"]').eq(0).should('be.checked');\n    cy.get('input[type=\"checkbox\"]').eq(1).should('be.checked');\n  });\n\n  it('should uncheck second checkbox and leave only first checked', () => {\n    cy.get('input[type=\"checkbox\"]').eq(0).click();\n    cy.get('input[type=\"checkbox\"]').eq(1).click();\n    cy.get('input[type=\"checkbox\"]').eq(0).should('be.checked');\n    cy.get('input[type=\"checkbox\"]').eq(1).should('not.be.checked');\n  });\n\n  it('should handle multiple toggle operations correctly', () => {\n    const firstCheckbox = cy.get('input[type=\"checkbox\"]').eq(0);\n    const secondCheckbox = cy.get('input[type=\"checkbox\"]').eq(1);\n\n    firstCheckbox.click();\n    firstCheckbox.should('be.checked');\n    secondCheckbox.should('be.checked');\n\n    secondCheckbox.click();\n    firstCheckbox.should('be.checked');\n    secondCheckbox.should('not.be.checked');\n\n    firstCheckbox.click();\n    firstCheckbox.should('not.be.checked');\n    secondCheckbox.should('not.be.checked');\n  });\n});",
+  "prompt_tokens": 191,
+  "completion_tokens": 489,
+  "latency_s": 3.37,
+  "timestamp": "2026-07-20T06:45:19.821422"
+}

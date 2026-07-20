@@ -1,0 +1,13 @@
+{
+  "id": "TC_G21",
+  "category": "table_list",
+  "complexity": "complex",
+  "user_story": "As a data reviewer on https://the-internet.herokuapp.com/tables, I want the example table to expose its rows and columns so that I can verify records. Acceptance criteria: table '#table1' has a header row containing the column headings 'Last Name', 'First Name', 'Email' and 'Due'; the table body contains 4 rows; one row contains the email 'jsmith@gmail.com' in the same row as the last name 'Smith'.",
+  "framework": "playwright",
+  "model": "gpt4o-mini",
+  "generated_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Data Reviewer Table Verification', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/tables');\n  });\n\n  test('Verify table header contains correct column headings', async ({ page }) => {\n    const headerRow = await page.getByRole('row', { name: 'Last Name First Name Email Due' });\n    expect(await headerRow.innerText()).toContain('Last Name');\n    expect(await headerRow.innerText()).toContain('First Name');\n    expect(await headerRow.innerText()).toContain('Email');\n    expect(await headerRow.innerText()).toContain('Due');\n  });\n\n  test('Verify table body contains correct number of rows and specific email', async ({ page }) => {\n    const tableRows = await page.getByRole('row', { name: 'Smith jsmith@gmail.com' });\n    const allRows = await page.locator('#table1 tbody tr').count();\n    expect(allRows).toBe(4);\n    expect(await tableRows.innerText()).toContain('Smith');\n    expect(await tableRows.innerText()).toContain('jsmith@gmail.com');\n  });\n});",
+  "prompt_tokens": 212,
+  "completion_tokens": 252,
+  "latency_s": 3.99,
+  "timestamp": "2026-07-20T06:43:37.549207"
+}

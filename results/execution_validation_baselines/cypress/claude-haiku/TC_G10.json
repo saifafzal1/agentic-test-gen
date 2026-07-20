@@ -1,0 +1,13 @@
+{
+  "id": "TC_G10",
+  "category": "navigation",
+  "complexity": "simple",
+  "user_story": "As a customer on https://www.saucedemo.com, I want to open a product's detail page and return to the catalogue so that I can keep browsing. Acceptance criteria: after logging in with 'standard_user' / 'secret_sauce', clicking the first product name '.inventory_item_name' navigates to a URL containing 'inventory-item.html'; clicking the back button [data-test=\"back-to-products\"] returns to a URL containing '/inventory.html' with the '.title' element showing 'Products'.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Product Detail Navigation', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n    cy.url().should('include', '/inventory.html');\n  });\n\n  it('should navigate to product detail page when clicking first product name', () => {\n    cy.get('.inventory_item_name').first().click();\n    cy.url().should('include', 'inventory-item.html');\n  });\n\n  it('should return to catalogue when clicking back button', () => {\n    cy.get('.inventory_item_name').first().click();\n    cy.url().should('include', 'inventory-item.html');\n    cy.get('[data-test=\"back-to-products\"]').click();\n    cy.url().should('include', '/inventory.html');\n    cy.get('.title').should('contain', 'Products');\n  });\n\n  it('should handle navigation when multiple products exist', () => {\n    cy.get('.inventory_item_name').should('have.length.greaterThan', 1);\n    cy.get('.inventory_item_name').eq(1).click();\n    cy.url().should('include', 'inventory-item.html');\n    cy.get('[data-test=\"back-to-products\"]').click();\n    cy.url().should('include', '/inventory.html');\n    cy.get('.title').should('be.visible').and('contain', 'Products');\n  });\n});",
+  "prompt_tokens": 224,
+  "completion_tokens": 407,
+  "latency_s": 2.91,
+  "timestamp": "2026-07-20T06:44:38.939778"
+}

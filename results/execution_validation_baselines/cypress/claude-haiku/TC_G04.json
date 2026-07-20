@@ -1,0 +1,13 @@
+{
+  "id": "TC_G04",
+  "category": "form_validation",
+  "complexity": "simple",
+  "user_story": "As a visitor to https://www.saucedemo.com, I want the login form to validate required fields so that I know what is missing. Acceptance criteria: clicking the login button [data-test=\"login-button\"] with both fields empty shows the error container [data-test=\"error\"] with text containing 'Username is required'; entering only username 'standard_user' and clicking login shows an error containing 'Password is required'.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Login Form Validation', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should display username required error when both fields are empty', () => {\n    cy.get('[data-test=\"login-button\"]').click();\n    cy.get('[data-test=\"error\"]').should('be.visible');\n    cy.get('[data-test=\"error\"]').should('contain', 'Username is required');\n  });\n\n  it('should display password required error when only username is entered', () => {\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"login-button\"]').click();\n    cy.get('[data-test=\"error\"]').should('be.visible');\n    cy.get('[data-test=\"error\"]').should('contain', 'Password is required');\n  });\n\n  it('should clear error message when user starts typing in empty username field', () => {\n    cy.get('[data-test=\"login-button\"]').click();\n    cy.get('[data-test=\"error\"]').should('be.visible');\n    cy.get('[data-test=\"username\"]').type('a');\n    cy.get('[data-test=\"error\"]').should('not.exist');\n  });\n\n  it('should display error when password field is empty after entering username', () => {\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"password\"]').click();\n    cy.get('[data-test=\"password\"]').blur();\n    cy.get('[data-test=\"login-button\"]').click();\n    cy.get('[data-test=\"error\"]').should('contain', 'Password is required');\n  });\n});",
+  "prompt_tokens": 201,
+  "completion_tokens": 428,
+  "latency_s": 3.36,
+  "timestamp": "2026-07-20T06:44:05.742552"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "TC_G23",
+  "category": "navigation",
+  "complexity": "medium",
+  "user_story": "As a visitor to https://the-internet.herokuapp.com, I want to navigate from the home page to an example page and back so that I can explore the catalogue of examples. Acceptance criteria: the home page shows the heading 'Welcome to the-internet'; clicking the link with text 'A/B Testing' navigates to a URL containing '/abtest' and shows an 'h3' heading; navigating back returns to the home page with the 'Available Examples' heading visible.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Navigation from Home Page to Example Page', () => {\n    beforeEach(() => {\n        cy.visit('https://the-internet.herokuapp.com');\n    });\n\n    it('should display the home page with the correct heading', () => {\n        cy.contains('h1', 'Welcome to the-internet').should('be.visible');\n    });\n\n    it('should navigate to A/B Testing page and back to home page', () => {\n        cy.contains('A/B Testing').click();\n        cy.url().should('include', '/abtest');\n        cy.contains('h3', 'A/B Test').should('be.visible');\n\n        cy.go('back');\n        cy.contains('h1', 'Available Examples').should('be.visible');\n    });\n});",
+  "prompt_tokens": 190,
+  "completion_tokens": 153,
+  "latency_s": 3.35,
+  "timestamp": "2026-07-20T06:42:07.641835"
+}

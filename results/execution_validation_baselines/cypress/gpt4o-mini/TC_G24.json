@@ -1,0 +1,13 @@
+{
+  "id": "TC_G24",
+  "category": "api_response_handling",
+  "complexity": "complex",
+  "user_story": "As a tester on https://the-internet.herokuapp.com/status_codes, I want to verify how the site reports HTTP status codes so that response handling can be checked end to end. Acceptance criteria: clicking the link with text '200' navigates to a URL containing '/status_codes/200' and the page body text contains 'This page returned a 200 status code'; returning to /status_codes and clicking the link with text '404' shows body text containing 'This page returned a 404 status code'.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('HTTP Status Codes Verification', () => {\n    beforeEach(() => {\n        cy.visit('https://the-internet.herokuapp.com/status_codes');\n    });\n\n    it('should navigate to 200 status code page and verify content', () => {\n        cy.contains('200').click();\n        cy.url().should('include', '/status_codes/200');\n        cy.contains('This page returned a 200 status code').should('be.visible');\n    });\n\n    it('should navigate to 404 status code page and verify content', () => {\n        cy.go('back');\n        cy.contains('404').click();\n        cy.url().should('include', '/status_codes/404');\n        cy.contains('This page returned a 404 status code').should('be.visible');\n    });\n});",
+  "prompt_tokens": 200,
+  "completion_tokens": 159,
+  "latency_s": 2.97,
+  "timestamp": "2026-07-20T06:42:10.919479"
+}

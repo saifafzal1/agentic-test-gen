@@ -61,6 +61,10 @@ parser.add_argument("--model",     choices=MODELS,     help="Model to run")
 parser.add_argument("--framework", choices=FRAMEWORKS, help="Framework to generate")
 parser.add_argument("--all",       action="store_true", help="Run all 6 combinations sequentially")
 parser.add_argument("--limit",     type=int, default=None, help="Limit to first N records (for testing)")
+parser.add_argument("--data",      type=str, default=None,
+                    help="Override dataset JSONL (default data/{framework}_dataset.jsonl)")
+parser.add_argument("--out-dir",   type=str, default=None,
+                    help="Override base results dir (default baselines/results)")
 args = parser.parse_args()
 
 if not args.all and (not args.model or not args.framework):
@@ -171,7 +175,7 @@ def run_single(model_key: str, framework: str):
     print(f"{'='*60}")
 
     # Load dataset
-    data_file = DATA_DIR / f"{framework}_dataset.jsonl"
+    data_file = Path(args.data) if args.data else DATA_DIR / f"{framework}_dataset.jsonl"
     records = []
     with open(data_file) as f:
         for line in f:
@@ -186,7 +190,7 @@ def run_single(model_key: str, framework: str):
     print(f"   Dataset : {len(records)} records from {data_file.name}")
 
     # Output dir
-    out_dir = RESULTS_DIR / framework / model_key
+    out_dir = (Path(args.out_dir) if args.out_dir else RESULTS_DIR) / framework / model_key
     out_dir.mkdir(parents=True, exist_ok=True)
 
     # System prompt

@@ -1,0 +1,13 @@
+{
+  "id": "TC_G04",
+  "category": "form_validation",
+  "complexity": "simple",
+  "user_story": "As a visitor to https://www.saucedemo.com, I want the login form to validate required fields so that I know what is missing. Acceptance criteria: clicking the login button [data-test=\"login-button\"] with both fields empty shows the error container [data-test=\"error\"] with text containing 'Username is required'; entering only username 'standard_user' and clicking login shows an error containing 'Password is required'.",
+  "framework": "cypress",
+  "model": "gpt4o-mini",
+  "generated_script": "describe('Login Form Validation', () => {\n    beforeEach(() => {\n        cy.visit('https://www.saucedemo.com');\n    });\n\n    it('should show error when both fields are empty', () => {\n        cy.get('[data-test=\"login-button\"]').click();\n        cy.get('[data-test=\"error\"]').should('be.visible').and('contain', 'Username is required');\n    });\n\n    it('should show error when only username is entered', () => {\n        cy.get('[data-test=\"username\"]').type('standard_user');\n        cy.get('[data-test=\"login-button\"]').click();\n        cy.get('[data-test=\"error\"]').should('be.visible').and('contain', 'Password is required');\n    });\n});",
+  "prompt_tokens": 180,
+  "completion_tokens": 149,
+  "latency_s": 2.03,
+  "timestamp": "2026-07-20T06:40:55.433163"
+}

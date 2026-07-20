@@ -1,0 +1,13 @@
+{
+  "id": "TC_G03",
+  "category": "authentication",
+  "complexity": "medium",
+  "user_story": "As a signed-in customer on https://www.saucedemo.com, I want to log out from the side menu so that my session ends securely. Acceptance criteria: after logging in with 'standard_user' / 'secret_sauce', clicking the burger menu button '#react-burger-menu-btn' opens the side menu, clicking the logout link '#logout_sidebar_link' returns me to the login page, and the login button [data-test=\"login-button\"] is visible again.",
+  "framework": "cypress",
+  "model": "claude-haiku",
+  "generated_script": "describe('Logout from Side Menu', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n    cy.get('[data-test=\"inventory-container\"]').should('be.visible');\n  });\n\n  it('should successfully logout via side menu and return to login page', () => {\n    cy.get('#react-burger-menu-btn').click();\n    cy.get('#logout_sidebar_link').should('be.visible');\n    cy.get('#logout_sidebar_link').click();\n    cy.url().should('eq', 'https://www.saucedemo.com/');\n    cy.get('[data-test=\"login-button\"]').should('be.visible');\n  });\n\n  it('should display side menu when burger menu button is clicked', () => {\n    cy.get('#react-burger-menu-btn').click();\n    cy.get('.bm-menu').should('be.visible');\n    cy.get('#logout_sidebar_link').should('be.visible');\n    cy.get('#inventory_sidebar_link').should('be.visible');\n    cy.get('#about_sidebar_link').should('be.visible');\n    cy.get('#reset_sidebar_link').should('be.visible');\n  });\n\n  it('should handle logout when side menu is already open', () => {\n    cy.get('#react-burger-menu-btn').click();\n    cy.get('.bm-menu').should('be.visible');\n    cy.get('#logout_sidebar_link').click();\n    cy.url().should('eq', 'https://www.saucedemo.com/');\n    cy.get('[data-test=\"login-button\"]').should('be.visible');\n    cy.get('.bm-menu').should('not.be.visible');\n  });\n\n  it('should not allow access to inventory after logout', () => {\n    cy.get('#react-burger-menu-btn').click();\n    cy.get('#logout_sidebar_link').click();\n    cy.url().should('eq', 'https://www.saucedemo.com/');\n    cy.visit('https://www.saucedemo.com/inventory.html');\n    cy.url().should('eq', 'https://www.saucedemo.com/');\n    cy.get('[data-test=\"login-button\"]').should('be.visible');\n  });\n});",
+  "prompt_tokens": 213,
+  "completion_tokens": 631,
+  "latency_s": 4.39,
+  "timestamp": "2026-07-20T06:44:02.072818"
+}
