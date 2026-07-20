@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to view different HTTP status code pages so that I can understand the responses returned by the server. Acceptance Criteria: 1. When I click on the link '200', I should be taken to the page displaying the 200 status code. 2. When I click on the link '404', I should be taken to the page displaying the 404 status code. 3. The page should contain the heading 'Status Codes'.",
+  "complexity": "simple",
+  "cypress_script": "describe('HTTP Status Codes Page', () => { it('should navigate to 200 status code page', () => { cy.visit('https://the-internet.herokuapp.com/status_codes'); cy.contains('200').click(); cy.url().should('include', 'status_codes/200'); cy.get('#content').should('contain', 'Status Codes HTTP status codes are a standard set of numbers'); }); it('should navigate to 404 status code page', () => { cy.visit('https://the-internet.herokuapp.com/status_codes'); cy.contains('404').click(); cy.url().should('include', 'status_codes/404'); cy.get('#content').should('contain', 'Status Codes HTTP status codes are a standard set of numbers'); }); });",
+  "playwright_script": "import { test, expect } from '@playwright/test'; test('HTTP Status Codes Page', async ({ page }) => { await page.goto('https://the-internet.herokuapp.com/status_codes'); await page.click('text=200'); await expect(page).toHaveURL(/status_codes\\/200/); await expect(page.locator('#content')).toContainText('Status Codes HTTP status codes are a standard set of numbers'); await page.goto('https://the-internet.herokuapp.com/status_codes'); await page.click('text=404'); await expect(page).toHaveURL(/status_codes\\/404/); await expect(page.locator('#content')).toContainText('Status Codes HTTP status codes are a standard set of numbers'); });",
+  "id": "GC_the-internet_09_0",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/status_codes",
+  "category": "api_response_handling",
+  "latency_s": 6.9
+}

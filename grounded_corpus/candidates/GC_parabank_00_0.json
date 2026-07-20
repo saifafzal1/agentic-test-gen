@@ -1,0 +1,20 @@
+{
+  "user_story": "As a user, I want to log in to my bank account using my username and password so that I can access my banking services securely.",
+  "acceptance_criteria": [
+    "The login page title should be 'ParaBank | Welcome | Online Banking'.",
+    "The page should display a heading 'Customer Login'.",
+    "The username input field should be present with name 'username' and class 'input'.",
+    "The password input field should be present with name 'password' and class 'input'.",
+    "The login button should be present with value 'Log In' and class 'button'.",
+    "Upon entering valid credentials and clicking 'Log In', the user should be redirected to the account dashboard."
+  ],
+  "complexity": "medium",
+  "cypress_script": "describe('Bank Login and Navigation', () => { it('should log in successfully with valid credentials', () => { cy.visit('https://parabank.parasoft.com/parabank/index.htm'); cy.get('input[name=\"username\"]').type('validUsername'); cy.get('input[name=\"password\"]').type('validPassword'); cy.get('input[value=\"Log In\"]').click(); cy.url().should('include', '/account.htm'); }); it('should show an error with invalid credentials', () => { cy.visit('https://parabank.parasoft.com/parabank/index.htm'); cy.get('input[name=\"username\"]').type('invalidUsername'); cy.get('input[name=\"password\"]').type('invalidPassword'); cy.get('input[value=\"Log In\"]').click(); cy.get('div#bodyPanel').should('contain', 'The username and password could not be verified.'); }); });",
+  "playwright_script": "import { test, expect } from '@playwright/test'; test('Bank Login and Navigation', async ({ page }) => { await page.goto('https://parabank.parasoft.com/parabank/index.htm'); await page.fill('input[name=\"username\"]', 'validUsername'); await page.fill('input[name=\"password\"]', 'validPassword'); await page.click('input[value=\"Log In\"]'); await expect(page).toHaveURL(/.*account.htm/); }); test('should show an error with invalid credentials', async ({ page }) => { await page.goto('https://parabank.parasoft.com/parabank/index.htm'); await page.fill('input[name=\"username\"]', 'invalidUsername'); await page.fill('input[name=\"password\"]', 'invalidPassword'); await page.click('input[value=\"Log In\"]'); await expect(page.locator('div#bodyPanel')).toContainText('The username and password could not be verified.'); }); }",
+  "id": "GC_parabank_00_0",
+  "app": "parabank",
+  "base_url": "https://parabank.parasoft.com",
+  "page": "/parabank/index.htm",
+  "category": "authentication",
+  "latency_s": 6.1
+}

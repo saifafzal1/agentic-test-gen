@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to be able to submit a contact form on the Practice Software Testing website so that I can reach out for support or inquiries. The form should validate inputs to ensure that required fields are filled out correctly before submission.",
+  "complexity": "medium",
+  "cypress_script": "describe('Contact Form Validation', () => { it('should submit the form successfully with valid inputs', () => { cy.visit('https://practicesoftwaretesting.com/contact'); cy.get('#first_name').type('John'); cy.get('#last_name').type('Doe'); cy.get('#email').type('john.doe@example.com'); cy.get('#subject').select('Customer service'); cy.get('#message').type('This is a test message.'); cy.get('input[data-test=\"contact-submit\"]').click(); cy.get('div[data-test=\"notification-bar\"]').should('contain', 'View the Documentation for this application.'); }); it('should show validation errors when required fields are empty', () => { cy.visit('https://practicesoftwaretesting.com/contact'); cy.get('input[data-test=\"contact-submit\"]').click(); cy.get('#first_name').should('have.class', 'ng-invalid'); cy.get('#last_name').should('have.class', 'ng-invalid'); cy.get('#email').should('have.class', 'ng-invalid'); cy.get('#message').should('have.class', 'ng-invalid'); }); });",
+  "playwright_script": "import { test, expect } from '@playwright/test'; test('Contact Form Validation', async ({ page }) => { await page.goto('https://practicesoftwaretesting.com/contact'); await page.fill('#first_name', 'John'); await page.fill('#last_name', 'Doe'); await page.fill('#email', 'john.doe@example.com'); await page.selectOption('#subject', 'customer-service'); await page.fill('#message', 'This is a test message.'); await page.click('input[data-test=\"contact-submit\"]'); await expect(page.locator('div[data-test=\"notification-bar\"]').textContent()).toContain('View the Documentation for this application.'); await page.goto('https://practicesoftwaretesting.com/contact'); await page.click('input[data-test=\"contact-submit\"]'); await expect(page.locator('#first_name')).toHaveClass(/ng-invalid/); await expect(page.locator('#last_name')).toHaveClass(/ng-invalid/); await expect(page.locator('#email')).toHaveClass(/ng-invalid/); await expect(page.locator('#message')).toHaveClass(/ng-invalid/); });",
+  "id": "GC_practicesoftwaretesting_02_0",
+  "app": "practicesoftwaretesting",
+  "base_url": "https://practicesoftwaretesting.com",
+  "page": "/contact",
+  "category": "form_validation",
+  "latency_s": 6.7
+}

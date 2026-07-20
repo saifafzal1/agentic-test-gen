@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to be able to interact with checkboxes on the checkbox form so that I can select or deselect options as needed. Acceptance Criteria: 1. The form with id 'checkboxes' should be present on the page. 2. There should be two checkboxes available for selection, represented by 'input' elements of type 'checkbox'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Checkbox Form', () => { it('should allow the user to check the first checkbox', () => { cy.visit('https://the-internet.herokuapp.com/checkboxes'); cy.get('input[type=\"checkbox\"]').first().check(); cy.get('input[type=\"checkbox\"]').first().should('be.checked'); }); it('should allow the user to uncheck the second checkbox', () => { cy.visit('https://the-internet.herokuapp.com/checkboxes'); cy.get('input[type=\"checkbox\"]').last().uncheck(); cy.get('input[type=\"checkbox\"]').last().should('not.be.checked'); }); });",
+  "playwright_script": "import { test, expect } from '@playwright/test'; test('Checkbox Form', async ({ page }) => { await page.goto('https://the-internet.herokuapp.com/checkboxes'); await page.locator('input[type=\"checkbox\"]').first().check(); expect(await page.locator('input[type=\"checkbox\"]').first().isChecked()).toBeTruthy(); await page.locator('input[type=\"checkbox\"]').last().uncheck(); expect(await page.locator('input[type=\"checkbox\"]').last().isChecked()).toBeFalsy(); });",
+  "id": "GC_the-internet_01_0",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/checkboxes",
+  "category": "form_validation",
+  "latency_s": 6.9
+}

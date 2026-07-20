@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to search for products in the product list so that I can find specific items easily. Acceptance Criteria: 1. When I enter a valid product name in the search input (selector: '#search_product') and click the search button (selector: '#submit_search'), I should see the relevant products listed. 2. If I enter a product name that does not exist, I should see a message indicating no products were found.",
+  "complexity": "medium",
+  "cypress_script": "describe('Product Search Functionality', () => { it('should display relevant products when a valid product name is searched', () => { cy.visit('https://automationexercise.com/products'); cy.get('#search_product').type('Tshirt'); cy.get('#submit_search').click(); cy.contains('Tshirt').should('be.visible'); }); it('should display a no products found message when an invalid product name is searched', () => { cy.visit('https://automationexercise.com/products'); cy.get('#search_product').type('NonExistentProduct'); cy.get('#submit_search').click(); cy.contains('No products found').should('be.visible'); }); });",
+  "playwright_script": "import { test, expect } from '@playwright/test'; test('Product Search Functionality', async ({ page }) => { await page.goto('https://automationexercise.com/products'); await page.fill('#search_product', 'Tshirt'); await page.click('#submit_search'); await expect(page.locator('text=Tshirt')).toBeVisible(); await page.fill('#search_product', 'NonExistentProduct'); await page.click('#submit_search'); await expect(page.locator('text=No products found')).toBeVisible(); });",
+  "id": "GC_automationexercise_01_0",
+  "app": "automationexercise",
+  "base_url": "https://automationexercise.com",
+  "page": "/products",
+  "category": "search_filter",
+  "latency_s": 6.7
+}

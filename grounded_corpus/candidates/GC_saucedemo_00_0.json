@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to log in to the application using my username and password so that I can access the main features of the application. Acceptance Criteria: 1. The user must be able to enter their username in the input field with [data-test='username']. 2. The user must be able to enter their password in the input field with [data-test='password']. 3. Upon clicking the login button with [data-test='login-button'], the user should be successfully logged in if the credentials are correct. 4. If the user enters incorrect credentials, an error message should be displayed.",
+  "complexity": "simple",
+  "cypress_script": "describe('Login Page Tests', () => { it('should log in with valid credentials', () => { cy.visit('https://www.saucedemo.com/'); cy.get('[data-test=\"username\"]').type('standard_user'); cy.get('[data-test=\"password\"]').type('secret_sauce'); cy.get('[data-test=\"login-button\"]').click(); cy.url().should('not.include', '/'); }); it('should show error with invalid credentials', () => { cy.visit('https://www.saucedemo.com/'); cy.get('[data-test=\"username\"]').type('invalid_user'); cy.get('[data-test=\"password\"]').type('wrong_password'); cy.get('[data-test=\"login-button\"]').click(); cy.get('.error-message-container').should('be.visible'); }); });",
+  "playwright_script": "import { test, expect } from '@playwright/test'; test('Login Page Tests', async ({ page }) => { await page.goto('https://www.saucedemo.com/'); await page.fill('[data-test=\"username\"]', 'standard_user'); await page.fill('[data-test=\"password\"]', 'secret_sauce'); await page.click('[data-test=\"login-button\"]'); await expect(page).not.toHaveURL(/\\/login/); await page.goto('https://www.saucedemo.com/'); await page.fill('[data-test=\"username\"]', 'invalid_user'); await page.fill('[data-test=\"password\"]', 'wrong_password'); await page.click('[data-test=\"login-button\"]'); await expect(page.locator('.error-message-container')).toBeVisible(); });",
+  "id": "GC_saucedemo_00_0",
+  "app": "saucedemo",
+  "base_url": "https://www.saucedemo.com",
+  "page": "/",
+  "category": "authentication",
+  "latency_s": 9.4
+}

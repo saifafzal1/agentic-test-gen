@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to interact with JavaScript alert dialogs so that I can confirm actions and receive notifications. Acceptance Criteria: 1. When I click the button with text 'Click for JS Alert', an alert should appear with the message 'I am a JS Alert'. 2. When I click the button with text 'Click for JS Confirm', an alert should appear asking for confirmation. 3. When I click the button with text 'Click for JS Prompt', an alert should appear that allows me to input text.",
+  "complexity": "simple",
+  "cypress_script": "describe('JavaScript Alerts', () => { it('should display JS Alert and accept it', () => { cy.visit('https://the-internet.herokuapp.com/javascript_alerts'); cy.contains('button', 'Click for JS Alert').click(); cy.on('window:alert', (txt) => { expect(txt).to.eq('I am a JS Alert'); }); cy.get('#result').should('have.text', 'You successfully clicked an alert'); }); it('should display JS Confirm and cancel it', () => { cy.visit('https://the-internet.herokuapp.com/javascript_alerts'); cy.contains('button', 'Click for JS Confirm').click(); cy.on('window:confirm', () => false); cy.get('#result').should('have.text', 'You clicked: Cancel'); }); });",
+  "playwright_script": "import { test, expect } from '@playwright/test'; test('JavaScript Alerts', async ({ page }) => { await page.goto('https://the-internet.herokuapp.com/javascript_alerts'); await page.click('button:has-text(\"Click for JS Alert\")'); page.on('dialog', dialog => { expect(dialog.message()).toBe('I am a JS Alert'); dialog.accept(); }); await expect(page.locator('#result')).toHaveText('You successfully clicked an alert'); await page.click('button:has-text(\"Click for JS Confirm\")'); page.on('dialog', dialog => { dialog.dismiss(); }); await expect(page.locator('#result')).toHaveText('You clicked: Cancel'); });",
+  "id": "GC_the-internet_07_0",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/javascript_alerts",
+  "category": "modal_dialog",
+  "latency_s": 5.7
+}

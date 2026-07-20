@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to log into the application using my credentials so that I can access the secure area. Acceptance Criteria: 1. The login form must contain an input field with id 'username' for entering the username. 2. The login form must contain an input field with id 'password' for entering the password. 3. Upon entering valid credentials (username 'tomsmith' and password 'SuperSecretPassword!') and clicking the 'Login' button, I should be redirected to the secure area. 4. If I enter invalid credentials, I should see an error message in the 'flash-messages' div.",
+  "complexity": "simple",
+  "cypress_script": "describe('Login Form Tests', () => { it('should log in with valid credentials', () => { cy.visit('https://the-internet.herokuapp.com/login'); cy.get('#username').type('tomsmith'); cy.get('#password').type('SuperSecretPassword!'); cy.get('button.radius').click(); cy.url().should('include', '/secure'); }); it('should show error message with invalid credentials', () => { cy.visit('https://the-internet.herokuapp.com/login'); cy.get('#username').type('invalidUser'); cy.get('#password').type('invalidPassword'); cy.get('button.radius').click(); cy.get('#flash-messages').should('contain', 'Your username is invalid!'); }); });",
+  "playwright_script": "import { test, expect } from '@playwright/test'; test('Login Form Tests', async ({ page }) => { await page.goto('https://the-internet.herokuapp.com/login'); await page.fill('#username', 'tomsmith'); await page.fill('#password', 'SuperSecretPassword!'); await page.click('button.radius'); await expect(page).toHaveURL(/.*secure/); await page.goto('https://the-internet.herokuapp.com/login'); await page.fill('#username', 'invalidUser'); await page.fill('#password', 'invalidPassword'); await page.click('button.radius'); const errorMessage = await page.locator('#flash-messages').innerText(); expect(errorMessage).toContain('Your username is invalid!'); });",
+  "id": "GC_the-internet_00_0",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/login",
+  "category": "authentication",
+  "latency_s": 5.1
+}

@@ -1,0 +1,67 @@
+{
+  "apps": [
+    {
+      "key": "the-internet",
+      "base_url": "https://the-internet.herokuapp.com",
+      "auth": null,
+      "pages": [
+        {"path": "/login", "feature": "login form", "category": "authentication"},
+        {"path": "/checkboxes", "feature": "checkbox form", "category": "form_validation"},
+        {"path": "/dropdown", "feature": "dropdown selection", "category": "search_filter"},
+        {"path": "/add_remove_elements/", "feature": "add and remove elements", "category": "crud_operations"},
+        {"path": "/dynamic_loading/1", "feature": "asynchronously loaded content", "category": "async_await"},
+        {"path": "/upload", "feature": "file upload", "category": "file_upload"},
+        {"path": "/tables", "feature": "sortable data tables", "category": "table_list"},
+        {"path": "/javascript_alerts", "feature": "javascript alert dialogs", "category": "modal_dialog"},
+        {"path": "/notification_message_rendered", "feature": "notification messages", "category": "notifications"},
+        {"path": "/status_codes", "feature": "http status code pages", "category": "api_response_handling"}
+      ]
+    },
+    {
+      "key": "saucedemo",
+      "base_url": "https://www.saucedemo.com",
+      "auth": {
+        "path": "/",
+        "steps": [
+          ["fill", "[data-test=\"username\"]", "standard_user"],
+          ["fill", "[data-test=\"password\"]", "secret_sauce"],
+          ["click", "[data-test=\"login-button\"]"]
+        ]
+      },
+      "pages": [
+        {"path": "/", "feature": "login page", "category": "authentication"},
+        {"path": "/inventory.html", "feature": "product catalogue with sorting", "category": "table_list", "requires_auth": true},
+        {"path": "/cart.html", "feature": "shopping cart", "category": "crud_operations", "requires_auth": true}
+      ]
+    },
+    {
+      "key": "parabank",
+      "base_url": "https://parabank.parasoft.com",
+      "auth": null,
+      "pages": [
+        {"path": "/parabank/index.htm", "feature": "bank login and navigation", "category": "authentication"},
+        {"path": "/parabank/register.htm", "feature": "customer registration form", "category": "form_validation"}
+      ]
+    },
+    {
+      "key": "automationexercise",
+      "base_url": "https://automationexercise.com",
+      "auth": null,
+      "pages": [
+        {"path": "/login", "feature": "login and signup forms", "category": "authentication"},
+        {"path": "/products", "feature": "product list with search", "category": "search_filter"},
+        {"path": "/contact_us", "feature": "contact form", "category": "form_validation"}
+      ]
+    },
+    {
+      "key": "practicesoftwaretesting",
+      "base_url": "https://practicesoftwaretesting.com",
+      "auth": null,
+      "pages": [
+        {"path": "/", "feature": "tool shop product catalogue with filters", "category": "search_filter"},
+        {"path": "/auth/login", "feature": "login form", "category": "authentication"},
+        {"path": "/contact", "feature": "contact form with validation", "category": "form_validation"}
+      ]
+    }
+  ]
+}

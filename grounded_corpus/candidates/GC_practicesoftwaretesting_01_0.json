@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to log in to my account using my email and password so that I can access my personalized dashboard. Acceptance Criteria: 1. The login form should have an input field with id 'email' where the user can enter their email. 2. The login form should have an input field with id 'password' where the user can enter their password. 3. The login button should be available with data-test 'login-submit' to submit the form. 4. Upon successful login, the user should be redirected to their dashboard. 5. If the login fails, an appropriate error message should be displayed.",
+  "complexity": "medium",
+  "cypress_script": "describe('Login Form', () => { it('should log in successfully with valid credentials', () => { cy.visit('https://practicesoftwaretesting.com/auth/login'); cy.get('#email').type('valid@example.com'); cy.get('#password').type('validPassword'); cy.get('[data-test=\"login-submit\"]').click(); // Add assertion for successful login redirect here }); it('should show an error message with invalid credentials', () => { cy.visit('https://practicesoftwaretesting.com/auth/login'); cy.get('#email').type('invalid@example.com'); cy.get('#password').type('wrongPassword'); cy.get('[data-test=\"login-submit\"]').click(); // Add assertion for error message here }); });",
+  "playwright_script": "import { test, expect } from '@playwright/test'; test('Login Form', async ({ page }) => { await page.goto('https://practicesoftwaretesting.com/auth/login'); await page.fill('#email', 'valid@example.com'); await page.fill('#password', 'validPassword'); await page.click('[data-test=\"login-submit\"]'); // Add assertion for successful login redirect here }); test('should show an error message with invalid credentials', async ({ page }) => { await page.goto('https://practicesoftwaretesting.com/auth/login'); await page.fill('#email', 'invalid@example.com'); await page.fill('#password', 'wrongPassword'); await page.click('[data-test=\"login-submit\"]'); // Add assertion for error message here }); }",
+  "id": "GC_practicesoftwaretesting_01_0",
+  "app": "practicesoftwaretesting",
+  "base_url": "https://practicesoftwaretesting.com",
+  "page": "/auth/login",
+  "category": "authentication",
+  "latency_s": 5.7
+}

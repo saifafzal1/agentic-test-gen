@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to search for tools in the product catalogue so that I can find specific tools quickly. I should be able to enter a search term in the search box and filter the results by eco-friendly options.",
+  "complexity": "simple",
+  "cypress_script": "describe('Tool Shop Product Catalogue Search', () => { it('should search for tools successfully', () => { cy.visit('https://practicesoftwaretesting.com/'); cy.get('#search-query').type('hammer'); cy.get('[data-test=\"search-submit\"]').click(); cy.url().should('include', 'hammer'); }); it('should show no results for an invalid search', () => { cy.visit('https://practicesoftwaretesting.com/'); cy.get('#search-query').type('nonexistenttool'); cy.get('[data-test=\"search-submit\"]').click(); cy.get('.text-center').should('contain', 'No results found'); }); });",
+  "playwright_script": "import { test, expect } from '@playwright/test'; test('Tool Shop Product Catalogue Search', async ({ page }) => { await page.goto('https://practicesoftwaretesting.com/'); await page.fill('#search-query', 'hammer'); await page.click('[data-test=\"search-submit\"]'); await expect(page).toHaveURL(/.*hammer/); await page.fill('#search-query', 'nonexistenttool'); await page.click('[data-test=\"search-submit\"]'); await expect(page.locator('.text-center')).toContainText('No results found'); });",
+  "id": "GC_practicesoftwaretesting_00_0",
+  "app": "practicesoftwaretesting",
+  "base_url": "https://practicesoftwaretesting.com",
+  "page": "/",
+  "category": "search_filter",
+  "latency_s": 5.1
+}
