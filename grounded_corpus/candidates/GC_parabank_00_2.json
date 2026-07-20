@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to log into my bank account from the ParaBank website so that I can manage my finances. I should be able to enter my username and password and click the 'Log In' button to access my account. Additionally, I want to see the 'Forgot login info?' and 'Register' links for assistance if needed.",
+  "complexity": "simple",
+  "cypress_script": "describe('Bank Login and Navigation', () => {\n  it('should log in successfully with valid credentials', () => {\n    cy.visit('https://parabank.parasoft.com/parabank/index.htm');\n    cy.get('input[name=\"username\"]').type('validUsername');\n    cy.get('input[name=\"password\"]').type('validPassword');\n    cy.get('input[type=\"submit\"]').click();\n    cy.url().should('not.include', 'index.htm');\n  });\n  it('should show an error message with invalid credentials', () => {\n    cy.visit('https://parabank.parasoft.com/parabank/index.htm');\n    cy.get('input[name=\"username\"]').type('invalidUsername');\n    cy.get('input[name=\"password\"]').type('invalidPassword');\n    cy.get('input[type=\"submit\"]').click();\n    cy.get('a').contains('Forgot login info?').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test } from '@playwright/test';\n\ntest.describe('Bank Login and Navigation', () => {\n  test('should log in successfully with valid credentials', async ({ page }) => {\n    await page.goto('https://parabank.parasoft.com/parabank/index.htm');\n    await page.fill('input[name=\"username\"]', 'validUsername');\n    await page.fill('input[name=\"password\"]', 'validPassword');\n    await page.click('input[type=\"submit\"]');\n    await page.waitForURL('**/*');\n  });\n  test('should show an error message with invalid credentials', async ({ page }) => {\n    await page.goto('https://parabank.parasoft.com/parabank/index.htm');\n    await page.fill('input[name=\"username\"]', 'invalidUsername');\n    await page.fill('input[name=\"password\"]', 'invalidPassword');\n    await page.click('input[type=\"submit\"]');\n    await page.locator('a').withText('Forgot login info?').isVisible();\n  });\n});",
+  "id": "GC_parabank_00_2",
+  "app": "parabank",
+  "base_url": "https://parabank.parasoft.com",
+  "page": "/parabank/index.htm",
+  "category": "authentication",
+  "latency_s": 15.6
+}

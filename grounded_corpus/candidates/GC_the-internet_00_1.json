@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to log into the application using my credentials so that I can access the secure area of the application.\n\nAcceptance Criteria:\n1. The login form should have an input field with id 'username' that accepts a valid username.\n2. The login form should have an input field with id 'password' that accepts a valid password.\n3. When the user enters the correct username 'tomsmith' and the password 'SuperSecretPassword!' and clicks the button with text 'Login', they should be redirected to the secure area.\n4. If the user enters incorrect credentials and clicks the button with text 'Login', they should remain on the login page.\n5. The login form must be visibly present on the page under the heading 'Login Page'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Login Form', () => {\n  it('should log in with valid credentials', () => {\n    cy.visit('https://the-internet.herokuapp.com/login');\n    cy.get('#username').type('tomsmith');\n    cy.get('#password').type('SuperSecretPassword!');\n    cy.get('button.radius').click();\n    cy.url().should('not.include', '/login');\n  });\n\n  it('should not log in with invalid credentials', () => {\n    cy.visit('https://the-internet.herokuapp.com/login');\n    cy.get('#username').type('invalidUser');\n    cy.get('#password').type('wrongPassword');\n    cy.get('button.radius').click();\n    cy.url().should('include', '/login');\n  });\n});",
+  "playwright_script": "import { test } from '@playwright/test';\n\ntest.describe('Login Form', () => {\n  test('should log in with valid credentials', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/login');\n    await page.fill('#username', 'tomsmith');\n    await page.fill('#password', 'SuperSecretPassword!');\n    await page.click('button.radius');\n    await page.waitForURL('https://the-internet.herokuapp.com/secure');\n  });\n\n  test('should not log in with invalid credentials', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/login');\n    await page.fill('#username', 'invalidUser');\n    await page.fill('#password', 'wrongPassword');\n    await page.click('button.radius');\n    await page.waitForURL('https://the-internet.herokuapp.com/login');\n  });\n});",
+  "id": "GC_the-internet_00_1",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/login",
+  "category": "authentication",
+  "latency_s": 8.9
+}

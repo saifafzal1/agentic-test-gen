@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to be able to add and remove elements dynamically from the page so that I can test the functionality of adding and removing elements in a web application.\n\nAcceptance Criteria:\n1. When I click the button with the text 'Add Element', a new element is added to the page.\n2. The added elements should be visible in the div with id 'elements'.\n3. I should be able to click on the added elements to remove them.\n4. The URL should remain the same during these actions.",
+  "complexity": "simple",
+  "cypress_script": "describe('Add and Remove Elements', () => {\n  it('should add an element when the button is clicked', () => {\n    cy.visit('https://the-internet.herokuapp.com/add_remove_elements/');\n    cy.get('button').contains('Add Element').click();\n    cy.get('#elements').children().should('have.length', 1);\n  });\n\n  it('should not show any elements when remove is called on a non-existent element', () => {\n    cy.visit('https://the-internet.herokuapp.com/add_remove_elements/');\n    cy.get('#elements').children().should('have.length', 0);\n  });\n});",
+  "playwright_script": "import { test } from '@playwright/test';\n\ntest.describe('Add and Remove Elements', () => {\n  test('should add an element when the button is clicked', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/add_remove_elements/');\n    await page.click('button:has-text(\"Add Element\")');\n    const elements = await page.locator('#elements').count();\n    test.expect(elements).toBe(1);\n  });\n\n  test('should not show any elements when remove is called on a non-existent element', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/add_remove_elements/');\n    const elements = await page.locator('#elements').count();\n    test.expect(elements).toBe(0);\n  });\n});",
+  "id": "GC_the-internet_03_1",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/add_remove_elements/",
+  "category": "crud_operations",
+  "latency_s": 7.6
+}

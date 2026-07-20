@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to select an option from the dropdown menu so that I can filter the results based on my choice.\n\nAcceptance Criteria:\n1. The dropdown menu with id 'dropdown' should be visible on the page.\n2. When the user selects 'Option 1' from the dropdown, the selection should be accepted and the dropdown should show 'Option 1' as the selected value.\n3. When the user selects an empty value from the dropdown (default 'Please select an option'), no option should be selected.",
+  "complexity": "simple",
+  "cypress_script": "describe('Dropdown Selection Test', () => {\n  it('should select an option from the dropdown and display it', () => {\n    cy.visit('https://the-internet.herokuapp.com/dropdown');\n    cy.get('#dropdown').select('1');\n    cy.get('#dropdown').should('have.value', '1');\n  });\n  it('should remain unselected when the default option is selected', () => {\n    cy.visit('https://the-internet.herokuapp.com/dropdown');\n    cy.get('#dropdown').select('');\n    cy.get('#dropdown').should('have.value', '');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dropdown Selection Test', () => {\n  test('should select an option from the dropdown and display it', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/dropdown');\n    await page.selectOption('#dropdown', '1');\n    const selectedValue = await page.locator('#dropdown').inputValue();\n    expect(selectedValue).toBe('1');\n  });\n  test('should remain unselected when the default option is selected', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/dropdown');\n    await page.selectOption('#dropdown', '');\n    const selectedValue = await page.locator('#dropdown').inputValue();\n    expect(selectedValue).toBe('');\n  });\n});",
+  "id": "GC_the-internet_02_2",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/dropdown",
+  "category": "search_filter",
+  "latency_s": 8.2
+}

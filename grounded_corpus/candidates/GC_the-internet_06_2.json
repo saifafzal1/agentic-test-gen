@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to view sortable data tables on the application's tables page, so that I can analyze and interact with the data presented in a clear and structured format. Acceptance Criteria: 1. The page should contain the heading 'Data Tables'. 2. The page should feature two tables with IDs 'table1' and 'table2'. 3. Each table should include the action links 'edit' and 'delete'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Sortable Data Tables', () => {\n  it('should display the sortable data tables', () => {\n    cy.visit('https://the-internet.herokuapp.com/tables');\n    cy.get('h1').should('contain', 'Data Tables');\n    cy.get('#table1').should('be.visible');\n    cy.get('#table2').should('be.visible');\n  });\n\n  it('should not find an element that does not exist', () => {\n    cy.visit('https://the-internet.herokuapp.com/tables');\n    cy.get('#nonexistent').should('not.exist');\n  });\n});",
+  "playwright_script": "import { test } from '@playwright/test';\n\ntest.describe('Sortable Data Tables', () => {\n  test('should display the sortable data tables', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/tables');\n    await page.locator('h1').isVisible();\n    await page.locator('#table1').isVisible();\n    await page.locator('#table2').isVisible();\n  });\n\n  test('should not find an element that does not exist', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/tables');\n    const nonexistent = await page.locator('#nonexistent').count();\n    expect(nonexistent).toBe(0);\n  });\n});",
+  "id": "GC_the-internet_06_2",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/tables",
+  "category": "table_list",
+  "latency_s": 11.2
+}

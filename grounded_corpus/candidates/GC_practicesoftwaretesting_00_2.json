@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to filter the tool shop product catalogue to find eco-friendly products easily, so that I can make a more sustainable choice when purchasing tools.",
+  "complexity": "simple",
+  "cypress_script": "describe('Tool Shop Product Catalogue', () => {\n  it('should filter eco-friendly products successfully', () => {\n    cy.visit('https://practicesoftwaretesting.com/');\n    cy.get('[data-test=\"eco-friendly-filter\"]').check();\n    cy.get('[data-test=\"search-submit\"]').click();\n    // Assert that the URL reflects the filter action\n    cy.url().should('include', 'eco_friendly=true');\n  });\n\n  it('should not return results when filtering without selecting any items', () => {\n    cy.visit('https://practicesoftwaretesting.com/');\n    cy.get('[data-test=\"search-submit\"]').click();\n    // Assert that the current URL is still the homepage\n    cy.url().should('eq', 'https://practicesoftwaretesting.com/');\n  });\n});",
+  "playwright_script": "test.describe('Tool Shop Product Catalogue', () => {\n  test('should filter eco-friendly products successfully', async ({ page }) => {\n    await page.goto('https://practicesoftwaretesting.com/');\n    await page.check('[data-test=\"eco-friendly-filter\"]');\n    await page.click('[data-test=\"search-submit\"]');\n    // Assert that the URL reflects the filter action\n    await page.waitForURL('https://practicesoftwaretesting.com/?eco_friendly=true');\n  });\n\n  test('should not return results when filtering without selecting any items', async ({ page }) => {\n    await page.goto('https://practicesoftwaretesting.com/');\n    await page.click('[data-test=\"search-submit\"]');\n    // Assert that the current URL is still the homepage\n    await page.waitForURL('https://practicesoftwaretesting.com/');\n  });\n});",
+  "id": "GC_practicesoftwaretesting_00_2",
+  "app": "practicesoftwaretesting",
+  "base_url": "https://practicesoftwaretesting.com",
+  "page": "/",
+  "category": "search_filter",
+  "latency_s": 7.7
+}

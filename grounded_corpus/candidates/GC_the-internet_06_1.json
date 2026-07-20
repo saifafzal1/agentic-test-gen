@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to view sortable data tables on the application so that I can easily read and manage the information presented. The system should display a table with sortable columns including 'Last Name', 'First Name', 'Email', 'Due', 'Web Site', and 'Action'. Acceptance Criteria: The page should have the heading 'Data Tables' displayed as one of the 'headings'. The tables should have IDs 'table1' and 'table2', and the action links should include 'edit' and 'delete' for each row.",
+  "complexity": "medium",
+  "cypress_script": "describe('Sortable Data Tables', () => {\n  it('should display the sortable data tables', () => {\n    cy.visit('https://the-internet.herokuapp.com/tables');\n    cy.get('h1').should('contain', 'Data Tables');\n    cy.get('#table1').should('be.visible');\n    cy.get('#table2').should('be.visible');\n  });\n  it('should have action links for each row', () => {\n    cy.visit('https://the-internet.herokuapp.com/tables');\n    cy.get('#table1 a').should('have.length', 16);\n    cy.get('#table1 a').contains('edit').should('be.visible');\n    cy.get('#table1 a').contains('delete').should('be.visible');\n  });\n});",
+  "playwright_script": "test.describe('Sortable Data Tables', () => {\n  test('should display the sortable data tables', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/tables');\n    await page.locator('h1').waitFor();\n    await expect(page.locator('h1')).toHaveText('Data Tables');\n    await expect(page.locator('#table1')).toBeVisible();\n    await expect(page.locator('#table2')).toBeVisible();\n  });\n  test('should have action links for each row', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/tables');\n    const actionLinksCount = await page.locator('#table1 a').count();\n    expect(actionLinksCount).toBe(16);\n    await expect(page.locator('#table1 a:has-text(\"edit\")')).toBeVisible();\n    await expect(page.locator('#table1 a:has-text(\"delete\")')).toBeVisible();\n  });\n});",
+  "id": "GC_the-internet_06_1",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/tables",
+  "category": "table_list",
+  "latency_s": 7.6
+}

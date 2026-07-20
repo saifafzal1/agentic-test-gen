@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to be able to search for products on the product list page, so that I can quickly find the items I am interested in. Acceptance Criteria: When I enter a valid product name in the search input with id 'search_product' and click the search button with id 'submit_search', I should see a filtered list of products relevant to my search. If there are no matching products, I should see no products displayed.",
+  "complexity": "medium",
+  "cypress_script": "describe('Product Search Functionality', () => {\n    it('should display filtered products when a valid search term is entered', () => {\n        cy.visit('https://automationexercise.com/products');\n        cy.get('#search_product').type('Tshirt');\n        cy.get('#submit_search').click();\n        cy.url().should('include', 'search=Tshirt');\n        cy.get('.google-anno').should('be.visible');\n    });\n\n    it('should display no products when an invalid search term is entered', () => {\n        cy.visit('https://automationexercise.com/products');\n        cy.get('#search_product').type('NonExistentProduct');\n        cy.get('#submit_search').click();\n        cy.url().should('include', 'search=NonExistentProduct');\n        cy.get('.google-anno').should('not.exist');\n    });\n});",
+  "playwright_script": "test.describe('Product Search Functionality', () => {\n    test('should display filtered products when a valid search term is entered', async ({ page }) => {\n        await page.goto('https://automationexercise.com/products');\n        await page.fill('#search_product', 'Tshirt');\n        await page.click('#submit_search');\n        await page.waitForURL(/.*search=Tshirt/);\n        const productVisible = await page.isVisible('.google-anno');\n        expect(productVisible).toBe(true);\n    });\n\n    test('should display no products when an invalid search term is entered', async ({ page }) => {\n        await page.goto('https://automationexercise.com/products');\n        await page.fill('#search_product', 'NonExistentProduct');\n        await page.click('#submit_search');\n        await page.waitForURL(/.*search=NonExistentProduct/);\n        const productVisible = await page.isVisible('.google-anno');\n        expect(productVisible).toBe(false);\n    });\n});",
+  "id": "GC_automationexercise_01_2",
+  "app": "automationexercise",
+  "base_url": "https://automationexercise.com",
+  "page": "/products",
+  "category": "search_filter",
+  "latency_s": 10.4
+}

@@ -39,11 +39,16 @@ def execute(framework: str, script: str, tc_id: str, base_url: str) -> dict:
 def main():
     CORPUS_DIR.mkdir(exist_ok=True)
     corpus_path = CORPUS_DIR / "grounded_corpus.jsonl"
-    report, admitted = [], 0
-    existing = set()
+    report_path = CORPUS_DIR / "admission_report.json"
+    admitted = 0
+    # Resume support: skip anything already admitted OR already adjudicated
+    # in a previous filter run (rejects stay rejected; regenerate under a
+    # new candidate id to retry).
+    report = json.loads(report_path.read_text()) if report_path.exists() else []
+    existing = {r["id"] + "/" + r["framework"] for r in report}
     if corpus_path.exists():
-        existing = {json.loads(l)["id"] + "/" + json.loads(l)["framework"]
-                    for l in corpus_path.open() if l.strip()}
+        existing |= {json.loads(l)["id"] + "/" + json.loads(l)["framework"]
+                     for l in corpus_path.open() if l.strip()}
 
     with corpus_path.open("a") as corpus:
         for cand_path in sorted(CANDIDATES.glob("GC_*.json")):
@@ -78,9 +83,9 @@ def main():
                     corpus.flush()
                     admitted += 1
 
-    (CORPUS_DIR / "admission_report.json").write_text(json.dumps(report, indent=2))
-    total = len(report)
-    print(f"\nAdmitted {admitted}/{total} candidate scripts into {corpus_path}")
+    report_path.write_text(json.dumps(report, indent=2))
+    print(f"\nAdmitted {admitted} new scripts this run; report now covers "
+          f"{len(report)} adjudications; corpus at {corpus_path}")
 
 
 if __name__ == "__main__":

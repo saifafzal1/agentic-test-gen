@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to log into the Swag Labs application so that I can access my account and use the application's features.\n\nAcceptance Criteria:\n1. The user can enter a valid username in the input field with [data-test=\"username\"].\n2. The user can enter a valid password in the input field with [data-test=\"password\"].\n3. The user can click the login button with [data-test=\"login-button\"].\n4. Upon successful login, the user is redirected to the main application page (the URL should change).\n5. If the user enters an invalid username or password, an error message should not be shown, and the URL should not change.",
+  "complexity": "simple",
+  "cypress_script": "describe('Login Page', () => {\n  it('should successfully log in with valid credentials', () => {\n    cy.visit('https://www.saucedemo.com/')\n    cy.get('[data-test=\"username\"]').type('standard_user')\n    cy.get('[data-test=\"password\"]').type('secret_sauce')\n    cy.get('[data-test=\"login-button\"]').click()\n    cy.url().should('not.contain', 'saucedemo.com')\n  })\n\n  it('should not log in with invalid credentials', () => {\n    cy.visit('https://www.saucedemo.com/')\n    cy.get('[data-test=\"username\"]').type('invalid_user')\n    cy.get('[data-test=\"password\"]').type('wrong_password')\n    cy.get('[data-test=\"login-button\"]').click()\n    cy.url().should('equal', 'https://www.saucedemo.com/')\n  })\n})",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Page', () => {\n  test('should successfully log in with valid credentials', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/')\n    await page.fill('[data-test=\"username\"]', 'standard_user')\n    await page.fill('[data-test=\"password\"]', 'secret_sauce')\n    await page.click('[data-test=\"login-button\"]')\n    await expect(page).toHaveURL(/^(?!.*saucedemo.com).*$/)\n  })\n\n  test('should not log in with invalid credentials', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/')\n    await page.fill('[data-test=\"username\"]', 'invalid_user')\n    await page.fill('[data-test=\"password\"]', 'wrong_password')\n    await page.click('[data-test=\"login-button\"]')\n    await expect(page).toHaveURL('https://www.saucedemo.com/')\n  })\n})",
+  "id": "GC_saucedemo_00_2",
+  "app": "saucedemo",
+  "base_url": "https://www.saucedemo.com",
+  "page": "/",
+  "category": "authentication",
+  "latency_s": 11.2
+}

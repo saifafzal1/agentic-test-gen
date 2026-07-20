@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to be able to select checkboxes so that I can submit my preferences. The checkbox functionality should allow me to check and uncheck each checkbox independently.\n\nAcceptance Criteria:\n1. The page should display the heading 'Checkboxes'.\n2. There should be two checkboxes available for selection, represented by the elements with type 'checkbox'.\n3. The user should be able to check and uncheck each checkbox independently without any error messages.\n4. The page URL should remain as 'https://the-internet.herokuapp.com/checkboxes' during interactions.",
+  "complexity": "simple",
+  "cypress_script": "describe('Checkboxes Form', () => {\n  it('should allow checking and unchecking checkboxes', () => {\n    cy.visit('https://the-internet.herokuapp.com/checkboxes');\n    cy.get('input[type=checkbox]').first().check();\n    cy.get('input[type=checkbox]').first().should('be.checked');\n    cy.get('input[type=checkbox]').first().uncheck();\n    cy.get('input[type=checkbox]').first().should('not.be.checked');\n  });\n  it('should not change URL when interacting with checkboxes', () => {\n    cy.visit('https://the-internet.herokuapp.com/checkboxes');\n    cy.get('input[type=checkbox]').first().check();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/checkboxes');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Checkboxes Form', () => {\n  test('should allow checking and unchecking checkboxes', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/checkboxes');\n    const checkbox1 = page.locator('input[type=checkbox]').nth(0);\n    await checkbox1.check();\n    await expect(checkbox1).toBeChecked();\n    await checkbox1.uncheck();\n    await expect(checkbox1).not.toBeChecked();\n  });\n  test('should not change URL when interacting with checkboxes', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/checkboxes');\n    const checkbox1 = page.locator('input[type=checkbox]').nth(0);\n    await checkbox1.check();\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/checkboxes');\n  });\n});",
+  "id": "GC_the-internet_01_1",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/checkboxes",
+  "category": "form_validation",
+  "latency_s": 11.3
+}

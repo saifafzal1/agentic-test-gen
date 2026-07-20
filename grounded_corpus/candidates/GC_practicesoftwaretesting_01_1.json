@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to log in to my account using my email and password so that I can access my personalized dashboard. Acceptance Criteria: \n1. The login form should have an input field with id 'email' for entering the email. \n2. The login form should have an input field with id 'password' for entering the password. \n3. There should be a submit button with data-test 'login-submit' to submit the form. \n4. Upon successful login, the user should be redirected to the homepage.",
+  "complexity": "simple",
+  "cypress_script": "describe('Login Form', () => {\n  it('should log in successfully with valid credentials', () => {\n    cy.visit('https://practicesoftwaretesting.com/auth/login');\n    cy.get('#email').type('user@example.com');\n    cy.get('#password').type('password123');\n    cy.get('[data-test=\"login-submit\"]').click();\n    cy.url().should('eq', 'https://practicesoftwaretesting.com/')\n  });\n  it('should show an error for invalid credentials', () => {\n    cy.visit('https://practicesoftwaretesting.com/auth/login');\n    cy.get('#email').type('invalid@example.com');\n    cy.get('#password').type('wrongpassword');\n    cy.get('[data-test=\"login-submit\"]').click();\n    cy.url().should('eq', 'https://practicesoftwaretesting.com/auth/login');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Form', () => {\n  test('should log in successfully with valid credentials', async ({ page }) => {\n    await page.goto('https://practicesoftwaretesting.com/auth/login');\n    await page.fill('#email', 'user@example.com');\n    await page.fill('#password', 'password123');\n    await page.click('[data-test=\"login-submit\"]');\n    await expect(page).toHaveURL('https://practicesoftwaretesting.com/');\n  });\n  test('should show an error for invalid credentials', async ({ page }) => {\n    await page.goto('https://practicesoftwaretesting.com/auth/login');\n    await page.fill('#email', 'invalid@example.com');\n    await page.fill('#password', 'wrongpassword');\n    await page.click('[data-test=\"login-submit\"]');\n    await expect(page).toHaveURL('https://practicesoftwaretesting.com/auth/login');\n  });\n});",
+  "id": "GC_practicesoftwaretesting_01_1",
+  "app": "practicesoftwaretesting",
+  "base_url": "https://practicesoftwaretesting.com",
+  "page": "/auth/login",
+  "category": "authentication",
+  "latency_s": 12.0
+}

@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to submit a contact form so that I can send feedback to the website administrators. The form should include fields for my name, email, subject, and message. Upon submitting the form, I should be redirected to a success page if the submission is valid.",
+  "complexity": "medium",
+  "cypress_script": "describe('Contact Form Submission', () => {\n  it('should submit the contact form successfully', () => {\n    cy.visit('https://automationexercise.com/contact_us');\n    cy.get('input[name=\"name\"]').type('John Doe');\n    cy.get('input[name=\"email\"]').type('john.doe@example.com');\n    cy.get('input[name=\"subject\"]').type('Inquiry');\n    cy.get('textarea#message').type('This is a test message.');\n    cy.get('input[name=\"submit\"]').click();\n    cy.url().should('include', '/contact_us');\n  });\n\n  it('should not submit the contact form with missing fields', () => {\n    cy.visit('https://automationexercise.com/contact_us');\n    cy.get('input[name=\"submit\"]').click();\n    cy.url().should('include', '/contact_us');\n  });\n});",
+  "playwright_script": "import { test } from '@playwright/test';\n\n test.describe('Contact Form Submission', () => {\n   test('should submit the contact form successfully', async ({ page }) => {\n     await page.goto('https://automationexercise.com/contact_us');\n     await page.fill('input[name=\"name\"]', 'John Doe');\n     await page.fill('input[name=\"email\"]', 'john.doe@example.com');\n     await page.fill('input[name=\"subject\"]', 'Inquiry');\n     await page.fill('textarea#message', 'This is a test message.');\n     await page.click('input[name=\"submit\"]');\n     await page.waitForURL('**/contact_us');\n   });\n\n   test('should not submit the contact form with missing fields', async ({ page }) => {\n     await page.goto('https://automationexercise.com/contact_us');\n     await page.click('input[name=\"submit\"]');\n     await page.waitForURL('**/contact_us');\n   });\n });",
+  "id": "GC_automationexercise_02_1",
+  "app": "automationexercise",
+  "base_url": "https://automationexercise.com",
+  "page": "/contact_us",
+  "category": "form_validation",
+  "latency_s": 7.8
+}

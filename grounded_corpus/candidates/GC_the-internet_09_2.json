@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to be able to navigate to the HTTP status code pages so that I can view the page corresponding to different status codes. Acceptance Criteria:\n1. When I click on the '200' link, I am taken to the URL that contains 'status_codes/200'.\n2. When I click on the '404' link, I am taken to the URL that contains 'status_codes/404'.",
+  "complexity": "simple",
+  "cypress_script": "describe('HTTP Status Codes Page', () => {\n    it('should navigate to the 200 status code page', () => {\n        cy.visit('https://the-internet.herokuapp.com/status_codes');\n        cy.contains('200').click();\n        cy.url().should('include', 'status_codes/200');\n    });\n\n    it('should navigate to the 404 status code page', () => {\n        cy.visit('https://the-internet.herokuapp.com/status_codes');\n        cy.contains('404').click();\n        cy.url().should('include', 'status_codes/404');\n    });\n});",
+  "playwright_script": "import { test } from '@playwright/test';\n\ntest.describe('HTTP Status Codes Page', () => {\n    test('should navigate to the 200 status code page', async ({ page }) => {\n        await page.goto('https://the-internet.herokuapp.com/status_codes');\n        await page.click('text=200');\n        await page.waitForURL(/.*status_codes\\/200/);\n    });\n\n    test('should navigate to the 404 status code page', async ({ page }) => {\n        await page.goto('https://the-internet.herokuapp.com/status_codes');\n        await page.click('text=404');\n        await page.waitForURL(/.*status_codes\\/404/);\n    });\n});",
+  "id": "GC_the-internet_09_2",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/status_codes",
+  "category": "api_response_handling",
+  "latency_s": 5.8
+}

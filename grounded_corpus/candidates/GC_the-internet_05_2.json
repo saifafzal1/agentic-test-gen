@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to upload a file so that I can share documents with the application.\nAcceptance Criteria:\n1. The user can select a file using the input element with id 'file-upload'.\n2. Upon clicking the button with id 'file-submit', the application processes the file upload.\n3. The page's URL must remain the same after the upload action for successful uploads, and the user must be able to still see the 'File Uploader' heading.\n4. The application displays an appropriate message on failure for unsupported file types or empty input.",
+  "complexity": "medium",
+  "cypress_script": "describe('File Upload Tests', () => {\n  it('should successfully upload a file', () => {\n    cy.visit('https://the-internet.herokuapp.com/upload');\n    cy.get('#file-upload').attachFile('example.txt');\n    cy.get('#file-submit').click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/upload');\n    cy.get('h1').should('contain.text', 'File Uploader');\n  });\n\n  it('should fail to upload with no file selected', () => {\n    cy.visit('https://the-internet.herokuapp.com/upload');\n    cy.get('#file-submit').click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/upload');\n    cy.get('h1').should('contain.text', 'File Uploader');\n  });\n});",
+  "playwright_script": "import { test } from '@playwright/test';\ntest.describe('File Upload Tests', () => {\n  test('should successfully upload a file', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/upload');\n    await page.setInputFiles('#file-upload', 'example.txt');\n    await page.click('#file-submit');\n    await page.waitForURL('https://the-internet.herokuapp.com/upload');\n    await expect(page.locator('h1')).toHaveText('File Uploader');\n  });\n\n  test('should fail to upload with no file selected', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/upload');\n    await page.click('#file-submit');\n    await page.waitForURL('https://the-internet.herokuapp.com/upload');\n    await expect(page.locator('h1')).toHaveText('File Uploader');\n  });\n});",
+  "id": "GC_the-internet_05_2",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/upload",
+  "category": "file_upload",
+  "latency_s": 8.1
+}

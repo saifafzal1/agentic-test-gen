@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to see notification messages displayed on the notification messages page so that I can be informed of important actions or alerts.\n\nAcceptance Criteria:\n1. When I visit the notification messages page at 'https://the-internet.herokuapp.com/notification_message_rendered', I should see the heading 'Notification Message' in the DOM.\n2. The notification message should be displayed within the element with id 'flash-messages'.\n3. The footer of the page should indicate 'Powered by Elemental Selenium' within the element with id 'page-footer'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Notification Messages Page', () => {\n  it('should display the notification message on successful action', () => {\n    cy.visit('https://the-internet.herokuapp.com/notification_message_rendered');\n    cy.get('h1').contains('Notification Message');\n    cy.get('#flash-messages').should('be.visible');\n    cy.url().should('include', '/notification_message_rendered');\n  });\n\n  it('should not display any messages when the page is loaded without actions', () => {\n    cy.visit('https://the-internet.herokuapp.com/notification_message_rendered');\n    cy.get('#flash-messages').should('not.exist');\n    cy.url().should('include', '/notification_message_rendered');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Notification Messages Page', () => {\n  test('should display the notification message on successful action', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/notification_message_rendered');\n    await expect(page.locator('h1')).toHaveText('Notification Message');\n    await expect(page.locator('#flash-messages')).toBeVisible();\n    await expect(page).toHaveURL(/notification_message_rendered/);\n  });\n\n  test('should not display any messages when the page is loaded without actions', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/notification_message_rendered');\n    await expect(page.locator('#flash-messages')).toHaveCount(0);\n    await expect(page).toHaveURL(/notification_message_rendered/);\n  });\n});",
+  "id": "GC_the-internet_08_1",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/notification_message_rendered",
+  "category": "notifications",
+  "latency_s": 14.7
+}

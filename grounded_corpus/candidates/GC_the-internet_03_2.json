@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to add and remove elements on the page so that I can dynamically control the number of elements displayed to me.  Acceptance Criteria: \n- I should be able to click the 'Add Element' button to add a new element to the list. \n- Upon adding an element, the element should be present in the DOM under the <div id='elements'>. \n- I should be able to click on the added element to remove it. \n- If I remove the element, it should no longer be visible in the <div id='elements'>.",
+  "complexity": "simple",
+  "cypress_script": "describe('Add and Remove Elements', () => {\n  it('should allow the user to add an element', () => {\n    cy.visit('https://the-internet.herokuapp.com/add_remove_elements/');\n    cy.get('button').contains('Add Element').click();\n    cy.get('#elements').children().should('have.length', 1);\n  });\n  it('should allow the user to remove an element', () => {\n    cy.visit('https://the-internet.herokuapp.com/add_remove_elements/');\n    cy.get('button').contains('Add Element').click();\n    cy.get('#elements').children().should('have.length', 1);\n    cy.get('#elements').children('button').click();\n    cy.get('#elements').children().should('have.length', 0);\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Add and Remove Elements', () => {\n  test('should allow the user to add an element', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/add_remove_elements/');\n    await page.click('button:has-text(\"Add Element\")');\n    const elements = await page.locator('#elements').count();\n    expect(elements).toBe(1);\n  });\n  test('should allow the user to remove an element', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/add_remove_elements/');\n    await page.click('button:has-text(\"Add Element\")');\n    let elements = await page.locator('#elements').count();\n    expect(elements).toBe(1);\n    await page.locator('#elements').locator('button').click();\n    elements = await page.locator('#elements').count();\n    expect(elements).toBe(0);\n  });\n});",
+  "id": "GC_the-internet_03_2",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/add_remove_elements/",
+  "category": "crud_operations",
+  "latency_s": 10.4
+}

@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to log into the secure area of the application so that I can access restricted content. Acceptance criteria: \n1. I can enter my username into the input field with id 'username'. \n2. I can enter my password into the input field with id 'password'. \n3. When I click the button with class 'radius' and text 'Login', I should be redirected to the appropriate page based on my credentials.",
+  "complexity": "medium",
+  "cypress_script": "describe('Login Form', () => {\n  it('should log in successfully with valid credentials', () => {\n    cy.visit('https://the-internet.herokuapp.com/login');\n    cy.get('#username').type('tomsmith');\n    cy.get('#password').type('SuperSecretPassword!');\n    cy.get('button.radius').click();\n    cy.url().should('not.include', '/login');\n  });\n\n  it('should display error with invalid credentials', () => {\n    cy.visit('https://the-internet.herokuapp.com/login');\n    cy.get('#username').type('wronguser');\n    cy.get('#password').type('wrongpassword');\n    cy.get('button.radius').click();\n    cy.url().should('include', '/login');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Form', () => {\n  test('should log in successfully with valid credentials', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/login');\n    await page.fill('#username', 'tomsmith');\n    await page.fill('#password', 'SuperSecretPassword!');\n    await page.click('button.radius');\n    await page.waitForURL('https://the-internet.herokuapp.com/secure');\n  });\n\n  test('should display error with invalid credentials', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/login');\n    await page.fill('#username', 'wronguser');\n    await page.fill('#password', 'wrongpassword');\n    await page.click('button.radius');\n    await page.waitForURL('https://the-internet.herokuapp.com/login');\n  });\n});",
+  "id": "GC_the-internet_00_2",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/login",
+  "category": "authentication",
+  "latency_s": 6.5
+}

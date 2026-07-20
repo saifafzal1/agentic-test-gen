@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to select options from a dropdown list so that I can filter my choices accordingly.\n\nAcceptance Criteria:\n1. The dropdown element should be visible with the id 'dropdown'.\n2. The default option in the dropdown should display 'Please select an option'.\n3. Selecting 'Option 1' should allow me to choose that option.\n4. Selecting 'Option 2' should allow me to choose that option.",
+  "complexity": "simple",
+  "cypress_script": "describe('Dropdown Selection Tests', () => {\n  it('should select Option 1 from the dropdown', () => {\n    cy.visit('https://the-internet.herokuapp.com/dropdown');\n    cy.get('#dropdown').select('1');\n    cy.get('#dropdown').should('have.value', '1');\n  });\n\n  it('should not allow selection of an empty option', () => {\n    cy.visit('https://the-internet.herokuapp.com/dropdown');\n    cy.get('#dropdown').select('');\n    cy.get('#dropdown').should('have.value', '');\n  });\n});",
+  "playwright_script": "import { test } from '@playwright/test';\n\ntest.describe('Dropdown Selection Tests', () => {\n  test('should select Option 1 from the dropdown', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/dropdown');\n    await page.selectOption('#dropdown', '1');\n    const selectedValue = await page.$eval('#dropdown', el => el.value);\n    test.expect(selectedValue).toBe('1');\n  });\n\n  test('should not allow selection of an empty option', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/dropdown');\n    await page.selectOption('#dropdown', '');\n    const selectedValue = await page.$eval('#dropdown', el => el.value);\n    test.expect(selectedValue).toBe('');\n  });\n});",
+  "id": "GC_the-internet_02_1",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/dropdown",
+  "category": "search_filter",
+  "latency_s": 8.1
+}

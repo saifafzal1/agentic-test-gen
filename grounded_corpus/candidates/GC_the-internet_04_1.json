@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to see the content load asynchronously when I click the 'Start' button, so that I can verify the dynamic loading functionality works correctly. Acceptance Criteria: 1. When I visit the page at 'https://the-internet.herokuapp.com/dynamic_loading/1', I can see the button with the text 'Start' inside the div with id 'start'. 2. After clicking the 'Start' button, I should see the div with id 'finish' containing the text 'Hello World!'.",
+  "complexity": "medium",
+  "cypress_script": "describe('Asynchronously Loaded Content', () => {\n  it('should display the content after clicking Start', () => {\n    cy.visit('https://the-internet.herokuapp.com/dynamic_loading/1');\n    cy.get('div#start button').click();\n    cy.get('div#finish').should('be.visible');\n  });\n\n  it('should not display the content before clicking Start', () => {\n    cy.visit('https://the-internet.herokuapp.com/dynamic_loading/1');\n    cy.get('div#finish').should('not.be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Asynchronously Loaded Content', () => {\n  test('should display the content after clicking Start', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/dynamic_loading/1');\n    await page.click('div#start button');\n    await expect(page.locator('div#finish')).toBeVisible();\n  });\n\n  test('should not display the content before clicking Start', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/dynamic_loading/1');\n    await expect(page.locator('div#finish')).not.toBeVisible();\n  });\n});",
+  "id": "GC_the-internet_04_1",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/dynamic_loading/1",
+  "category": "async_await",
+  "latency_s": 5.1
+}

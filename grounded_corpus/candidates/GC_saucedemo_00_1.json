@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to log in to my account on the Swag Labs website so that I can access my dashboard. Acceptance Criteria: \n1. When the user enters a valid username 'standard_user' in the input field with the selector [data-test=\"username\"] and the password 'secret_sauce' in the input field with the selector [data-test=\"password\"], and clicks the login button with the selector [data-test=\"login-button\"], the user should be redirected to the dashboard page.\n2. If the user enters an invalid username or password, an error message should be displayed and the URL should not change.",
+  "complexity": "simple",
+  "cypress_script": "describe('Login Page Tests', () => {\n  it('should log in with valid credentials', () => {\n    cy.visit('https://www.saucedemo.com/');\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n    cy.url().should('include', '/inventory.html');\n  });\n  it('should show an error with invalid credentials', () => {\n    cy.visit('https://www.saucedemo.com/');\n    cy.get('[data-test=\"username\"]').type('invalid_user');\n    cy.get('[data-test=\"password\"]').type('wrong_password');\n    cy.get('[data-test=\"login-button\"]').click();\n    cy.url().should('eq', 'https://www.saucedemo.com/');\n  });\n});",
+  "playwright_script": "import { test } from '@playwright/test';\n\ntest.describe('Login Page Tests', () => {\n  test('should log in with valid credentials', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/');\n    await page.fill('[data-test=\"username\"]', 'standard_user');\n    await page.fill('[data-test=\"password\"]', 'secret_sauce');\n    await page.click('[data-test=\"login-button\"]');\n    await page.waitForURL(/.*inventory.html/);\n  });\n  test('should show an error with invalid credentials', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/');\n    await page.fill('[data-test=\"username\"]', 'invalid_user');\n    await page.fill('[data-test=\"password\"]', 'wrong_password');\n    await page.click('[data-test=\"login-button\"]');\n    await page.waitForURL('https://www.saucedemo.com/');\n  });\n});",
+  "id": "GC_saucedemo_00_1",
+  "app": "saucedemo",
+  "base_url": "https://www.saucedemo.com",
+  "page": "/",
+  "category": "authentication",
+  "latency_s": 11.2
+}
