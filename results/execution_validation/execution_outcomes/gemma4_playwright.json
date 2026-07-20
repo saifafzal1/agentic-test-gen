@@ -4,7 +4,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should successfully log in a registered customer and reach the product catalogue",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Username')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      },
+      {
+        "title": "should display error message when login credentials are invalid",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Username')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G01",
     "model": "gemma4",
     "framework": "playwright",
@@ -17,7 +26,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should display locked out error message when using locked user credentials",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      },
+      {
+        "title": "should not navigate to inventory page when locked out user attempts login",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G02",
     "model": "gemma4",
     "framework": "playwright",
@@ -30,7 +48,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should successfully log out a signed-in user from the side menu",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      },
+      {
+        "title": "should handle logout when side menu is not open",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G03",
     "model": "gemma4",
     "framework": "playwright",
@@ -43,7 +70,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should display error when both username and password fields are empty",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/Password is required/i)\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/Passwor"
+      },
+      {
+        "title": "should display error when only password field is filled",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel(/username/i)\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G04",
     "model": "gemma4",
     "framework": "playwright",
@@ -56,7 +92,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should display exactly 6 complete product cards after successful login",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      },
+      {
+        "title": "should handle login failure and display no product cards",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G05",
     "model": "gemma4",
     "framework": "playwright",
@@ -69,7 +114,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should sort products by price in ascending order when selecting \"lohi\"",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      },
+      {
+        "title": "should handle edge case when sorting with multiple items having the same price",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G06",
     "model": "gemma4",
     "framework": "playwright",
@@ -82,7 +136,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should successfully add and remove a product from the cart",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      },
+      {
+        "title": "should handle multiple items in cart and remove them individually",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G07",
     "model": "gemma4",
     "framework": "playwright",
@@ -95,7 +158,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should successfully complete a full checkout with standard user credentials",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      },
+      {
+        "title": "should handle checkout with invalid postal code and prevent order completion",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G08",
     "model": "gemma4",
     "framework": "playwright",
@@ -108,7 +180,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should display error when postal code is missing on checkout",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      },
+      {
+        "title": "should allow checkout when all required fields are filled",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G09",
     "model": "gemma4",
     "framework": "playwright",
@@ -121,7 +202,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should navigate to product detail page and return to catalogue",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      },
+      {
+        "title": "should handle navigation when product detail page is not found",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G10",
     "model": "gemma4",
     "framework": "playwright",
@@ -134,7 +224,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should display inventory page and burger menu on mobile viewport",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      },
+      {
+        "title": "should open side menu with logout link on mobile viewport",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G11",
     "model": "gemma4",
     "framework": "playwright",
@@ -147,7 +246,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should display accessible product images and login fields",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Username')\nExpected: \u001b[32m\"Enter your username\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" with timeout 5000ms\u001b[22m\n"
+      },
+      {
+        "title": "should handle login with invalid credentials and still display accessible fields",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Username')\nExpected: \u001b[32m\"Enter your username\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveAttribute\" with timeout 5000ms\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G12",
     "model": "gemma4",
     "framework": "playwright",
@@ -160,7 +268,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should successfully log in a returning user and access secure area",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Secure Area')\nExpected: visible\nError: strict mode violation: getByText('Secure Area') resolved to 3 elements:\n    1) <div id=\"flash\" data-alert=\"\" class=\"flash success\">\u2026</div> aka getByTe"
+      },
+      {
+        "title": "should display error message when login fails with invalid credentials",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.flash.error')\nTimeout: 5000ms\n\u001b[32m- Expected substring  - 1\u001b[39m\n\u001b[31m+ Received string     + 4\u001b[39m\n\n\u001b[32m- Invalid username or password\u001b[39m\n\u001b[31m+\u001b[39m\n\u001b[31m+        "
+      }
+    ],
     "tc_id": "TC_G13",
     "model": "gemma4",
     "framework": "playwright",
@@ -186,7 +303,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should add and delete elements successfully",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: /delete element/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getB"
+      },
+      {
+        "title": "should handle multiple additions and deletions correctly",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-testid=\"added-manually\"]')\nExpected: \u001b[32m3\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiti"
+      }
+    ],
     "tc_id": "TC_G15",
     "model": "gemma4",
     "framework": "playwright",
@@ -199,7 +325,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should handle JS confirm dialog and record user choice",
+        "message": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"confirm-dialog\"]').getByRole('button', { name: /ok/i })\u001b[22m\n"
+      },
+      {
+        "title": "should handle JS confirm dialog and record user choice when dismissing",
+        "message": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"confirm-dialog\"]').getByRole('button', { name: /cancel/i })\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G16",
     "model": "gemma4",
     "framework": "playwright",
@@ -212,7 +347,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should reveal hidden content after asynchronous load",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: /finish/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('b"
+      },
+      {
+        "title": "should handle slow loading and still reveal content",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: /finish/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('b"
+      }
+    ],
     "tc_id": "TC_G17",
     "model": "gemma4",
     "framework": "playwright",
@@ -225,7 +369,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should successfully upload a file and display confirmation",
+        "message": "Error: ENOENT: no such file or directory, stat 'test-document.pdf'"
+      },
+      {
+        "title": "should handle file upload failure and display error message",
+        "message": "Error: ENOENT: no such file or directory, stat 'large-file.zip'"
+      }
+    ],
     "tc_id": "TC_G18",
     "model": "gemma4",
     "framework": "playwright",
@@ -238,7 +391,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should toggle checkbox states correctly when clicking",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoBeChecked\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('checkbox', { name: /checkbox 1/i })\nExpected: not checked\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"not toBeChecked\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waitin"
+      },
+      {
+        "title": "should maintain correct checkbox states when toggling checkbox 2",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoBeChecked\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('checkbox', { name: /checkbox 1/i })\nExpected: not checked\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"not toBeChecked\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waitin"
+      }
+    ],
     "tc_id": "TC_G19",
     "model": "gemma4",
     "framework": "playwright",
@@ -251,7 +413,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should select an option from the dropdown and apply the value",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('combobox', { name: /Please select an option/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiti"
+      },
+      {
+        "title": "should handle selecting the first and last options",
+        "message": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('option', { name: /Option 1/i })\u001b[22m\n\u001b[2m    - locator resolved to <option value=\"1\">Option 1</option>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 \u00d7 waiting for element to be visible, enabled and "
+      }
+    ],
     "tc_id": "TC_G20",
     "model": "gemma4",
     "framework": "playwright",
@@ -264,7 +435,7 @@
     "tests": 0,
     "passed": 0,
     "failed": 0,
-    "detail": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_G21.spec.js: Unexpected token, expected \",\" (20:38)\n\n  18 |     const headerCells = page.locator('[; Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
+    "detail": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_G21.spec.ts: Unexpected token, expected \",\" (20:38)\n\n  18 |     const headerCells = page.locator('[; Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
     "tc_id": "TC_G21",
     "model": "gemma4",
     "framework": "playwright",
@@ -277,7 +448,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should display notification after clicking the action link",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-testid=\"close-button\"]')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[dat"
+      },
+      {
+        "title": "should handle notification with unsuccessful action and dismiss it",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Action unsuccessful\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[39m\n\u001b[31m            Action unsuccesful, please try again\u001b[39m\n\u001b[31m            \u00d7\u001b[39m\n\u001b[31m          \"\u001b[39m"
+      }
+    ],
     "tc_id": "TC_G22",
     "model": "gemma4",
     "framework": "playwright",
@@ -290,7 +470,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should navigate from home page to example page and back successfully",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: /Welcome to the Internet/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waitin"
+      },
+      {
+        "title": "should handle navigation when example page does not exist",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: /Welcome to the Internet/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waitin"
+      }
+    ],
     "tc_id": "TC_G23",
     "model": "gemma4",
     "framework": "playwright",
@@ -303,7 +492,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should display correct status code message when clicking 200",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/Response time/)\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/Response time/)"
+      },
+      {
+        "title": "should display correct status code message when clicking 404",
+        "message": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: '400' })\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G24",
     "model": "gemma4",
     "framework": "playwright",

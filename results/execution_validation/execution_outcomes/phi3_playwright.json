@@ -4,7 +4,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should successfully log in with valid credentials and redirect to product catalogue",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      },
+      {
+        "title": "should display error message when logging in with invalid credentials",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G01",
     "model": "phi3",
     "framework": "playwright",
@@ -17,7 +26,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should display clear error message when locked-out user attempts to log in",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      },
+      {
+        "title": "should not display error message when user is not locked out",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G02",
     "model": "phi3",
     "framework": "playwright",
@@ -30,7 +48,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should log out successfully and return to login page",
+        "message": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Sign in')\u001b[22m\n"
+      },
+      {
+        "title": "should handle logout failure and display error message",
+        "message": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Sign in')\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G03",
     "model": "phi3",
     "framework": "playwright",
@@ -43,7 +70,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should display error messages for missing required fields",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: /login/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('bu"
+      },
+      {
+        "title": "should display error messages when only username is entered",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: /login/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('bu"
+      }
+    ],
     "tc_id": "TC_G04",
     "model": "phi3",
     "framework": "playwright",
@@ -56,7 +92,7 @@
     "tests": 0,
     "passed": 0,
     "failed": 0,
-    "detail": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_G05.spec.js: Identifier 'loginButton' has already been declared. (19:10)\n\n  17 |     const emailInp; Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
+    "detail": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_G05.spec.ts: Identifier 'loginButton' has already been declared. (19:10)\n\n  17 |     const emailInp; Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
     "tc_id": "TC_G05",
     "model": "phi3",
     "framework": "playwright",
@@ -69,7 +105,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should sort products by price in ascending order when selecting \"lohi\" from sort dropdown",
+        "message": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Email')\u001b[22m\n"
+      },
+      {
+        "title": "should handle empty product list when no items are available",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/No products found/i)\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/No product"
+      }
+    ],
     "tc_id": "TC_G06",
     "model": "phi3",
     "framework": "playwright",
@@ -82,7 +127,7 @@
     "tests": 0,
     "passed": 0,
     "failed": 0,
-    "detail": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_G07.spec.js: Identifier 'loginButton' has already been declared. (16:10)\n\n  14 |     const password; Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
+    "detail": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_G07.spec.ts: Identifier 'loginButton' has already been declared. (16:10)\n\n  14 |     const password; Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
     "tc_id": "TC_G07",
     "model": "phi3",
     "framework": "playwright",
@@ -95,7 +140,7 @@
     "tests": 0,
     "passed": 0,
     "failed": 0,
-    "detail": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_G08.spec.js: Unexpected token (93:21)\n\n  91 |     await passwordInput.fill('secret_sauce');\n  92 | ; Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
+    "detail": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_G08.spec.ts: Unexpected token (93:21)\n\n  91 |     await passwordInput.fill('secret_sauce');\n  92 | ; Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
     "tc_id": "TC_G08",
     "model": "phi3",
     "framework": "playwright",
@@ -108,7 +153,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should display error when postal code is missing",
+        "message": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /sign in/i })\u001b[22m\n"
+      },
+      {
+        "title": "should allow checkout with all required fields filled",
+        "message": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /sign in/i })\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G09",
     "model": "phi3",
     "framework": "playwright",
@@ -121,7 +175,7 @@
     "tests": 0,
     "passed": 0,
     "failed": 0,
-    "detail": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_G10.spec.js: Unterminated string constant. (106:18)\n\n  104 |     });\n  105 |     await page.route('; Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
+    "detail": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_G10.spec.ts: Unterminated string constant. (106:18)\n\n  104 |     });\n  105 |     await page.route('; Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
     "tc_id": "TC_G10",
     "model": "phi3",
     "framework": "playwright",
@@ -134,7 +188,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should display inventory page and burger menu on mobile portrait viewport",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Username')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      },
+      {
+        "title": "should open and close burger menu on mobile portrait viewport",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button')\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G11",
     "model": "phi3",
     "framework": "playwright",
@@ -147,7 +210,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should have accessible attributes for product images and login fields",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Username')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Username')\u001b[22m\n"
+      },
+      {
+        "title": "should handle login failure and maintain accessible product images",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-testid=\"login-form\"]')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-"
+      }
+    ],
     "tc_id": "TC_G12",
     "model": "phi3",
     "framework": "playwright",
@@ -160,7 +232,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should successfully log in a returning user and navigate to secure area with success flash banner",
+        "message": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /submit/i })\u001b[22m\n"
+      },
+      {
+        "title": "should display error message when login fails due to invalid credentials",
+        "message": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /submit/i })\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G13",
     "model": "phi3",
     "framework": "playwright",
@@ -173,7 +254,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should display clear failure message when password is invalid",
+        "message": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /submit/i })\u001b[22m\n"
+      },
+      {
+        "title": "should not display error message when password is correct",
+        "message": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /submit/i })\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G14",
     "model": "phi3",
     "framework": "playwright",
@@ -186,7 +276,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should add two elements and delete one, leaving one added-manually button on the page",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31mPromise {}\u001b[39m"
+      },
+      {
+        "title": "should handle adding and deleting multiple elements with error handling",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31mPromise {}\u001b[39m"
+      }
+    ],
     "tc_id": "TC_G15",
     "model": "phi3",
     "framework": "playwright",
@@ -199,7 +298,7 @@
     "tests": 0,
     "passed": 0,
     "failed": 0,
-    "detail": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_G16.spec.js: Identifier 'confirmButton' has already been declared. (25:10)\n\n  23 |     \n  24 |     ; Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
+    "detail": "SyntaxError: /Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/pw_specs/TC_G16.spec.ts: Identifier 'confirmButton' has already been declared. (25:10)\n\n  23 |     \n  24 |     ; Error: No tests found.\nMake sure that arguments are regular expressions matching test files.\nYou may need to escape symbols like \"$\" or \"*\" and quote the arguments.",
     "tc_id": "TC_G16",
     "model": "phi3",
     "framework": "playwright",
@@ -212,7 +311,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should reveal hidden content after asynchronous load",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/dynamic loading/i)\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/dynamic load"
+      },
+      {
+        "title": "should handle failed content load gracefully",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('Loading...')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Loading...')\u001b[22m\n\u001b[2m    1"
+      }
+    ],
     "tc_id": "TC_G17",
     "model": "phi3",
     "framework": "playwright",
@@ -225,7 +333,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should successfully upload a small text file and display confirmation",
+        "message": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel(/select file/i)\u001b[22m\n"
+      },
+      {
+        "title": "should handle empty file selection and display error message",
+        "message": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /submit/i })\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G18",
     "model": "phi3",
     "framework": "playwright",
@@ -238,7 +355,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should toggle checkbox states correctly and update form state",
+        "message": "TypeError: (0 , _test.expect)(...).toBeUnchecked is not a function"
+      },
+      {
+        "title": "should handle unchecking second checkbox and leave only first checked",
+        "message": "TypeError: (0 , _test.expect)(...).toBeUnchecked is not a function"
+      }
+    ],
     "tc_id": "TC_G19",
     "model": "phi3",
     "framework": "playwright",
@@ -251,7 +377,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should display disabled prompt and allow selection of option 2",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status')\nExpected substring: \u001b[32m\"Please select an option\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000m"
+      },
+      {
+        "title": "should handle selection of multiple options and apply them",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status')\nExpected substring: \u001b[32m\"Please select an option\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" with timeout 5000m"
+      }
+    ],
     "tc_id": "TC_G20",
     "model": "phi3",
     "framework": "playwright",
@@ -264,7 +399,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should verify table #table1 has correct header and rows",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: /last name|first name|email|due/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  -"
+      },
+      {
+        "title": "should verify table #table1 has correct data in each cell",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: /last name|first name|email|due/i })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  -"
+      }
+    ],
     "tc_id": "TC_G21",
     "model": "phi3",
     "framework": "playwright",
@@ -277,7 +421,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should display notification with success message on click",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('flash')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('flash')\u001b[22m\n"
+      },
+      {
+        "title": "should display notification with error message on click",
+        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('flash')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('flash')\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G22",
     "model": "phi3",
     "framework": "playwright",
@@ -290,7 +443,16 @@
     "tests": 2,
     "passed": 0,
     "failed": 2,
-    "failures": [],
+    "failures": [
+      {
+        "title": "should navigate from home page to A/B Testing example page and back",
+        "message": "Error: locator.click: Error: strict mode violation: getByRole('link', { name: /a/i }) resolved to 30 elements:\n    1) <a href=\"/abtest\">A/B Testing</a> aka getByRole('link', { name: 'A/B Testing' })\n    2) <a href=\"/add_remove_elements/\">Add/Remove Elements</a> aka getByRole('link', { name: 'Add/Rem"
+      },
+      {
+        "title": "should handle navigation to A/B Testing page with invalid link",
+        "message": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: /invalid/i })\u001b[22m\n"
+      }
+    ],
     "tc_id": "TC_G23",
     "model": "phi3",
     "framework": "playwright",

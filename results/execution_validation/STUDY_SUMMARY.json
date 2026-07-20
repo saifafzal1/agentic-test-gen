@@ -1,65 +1,108 @@
 {
-  "study": "Tier-2 execution-based validation, 24 grounded stories x 4 fine-tuned systems",
-  "per_combo": [
+  "study": "Execution-based validation: 24 grounded stories x 8 systems against live applications",
+  "per_system": [
     {
-      "model": "gemma4",
+      "system": "claude-haiku",
+      "kind": "zero-shot baseline",
       "framework": "cypress",
       "records": 24,
-      "bmad_accepted": 24,
-      "avg_bmad_score": 0.79,
-      "specs_passing": 0,
+      "specs_fully_passing": 13,
+      "specs_partially_passing": 11,
+      "load_errors_timeouts": 0,
+      "tests_passing": 71,
+      "tests_total": 88,
+      "test_pass_rate_pct": 80.7
+    },
+    {
+      "system": "claude-haiku",
+      "kind": "zero-shot baseline",
+      "framework": "playwright",
+      "records": 24,
+      "specs_fully_passing": 9,
+      "specs_partially_passing": 6,
+      "load_errors_timeouts": 0,
+      "tests_passing": 37,
+      "tests_total": 73,
+      "test_pass_rate_pct": 50.7
+    },
+    {
+      "system": "gemma4",
+      "kind": "fine-tuned",
+      "framework": "cypress",
+      "records": 24,
+      "specs_fully_passing": 0,
+      "specs_partially_passing": 0,
+      "load_errors_timeouts": 0,
+      "tests_passing": 0,
       "tests_total": 48,
-      "tests_passing": 0,
-      "load_errors": 0,
-      "saucedemo_passing": "0/12",
-      "theinternet_passing": "0/12"
+      "test_pass_rate_pct": 0.0
     },
     {
-      "model": "gemma4",
+      "system": "gemma4",
+      "kind": "fine-tuned",
       "framework": "playwright",
       "records": 24,
-      "bmad_accepted": 24,
-      "avg_bmad_score": 0.839,
-      "specs_passing": 1,
-      "tests_total": 46,
+      "specs_fully_passing": 1,
+      "specs_partially_passing": 0,
+      "load_errors_timeouts": 1,
       "tests_passing": 2,
-      "load_errors": 1,
-      "saucedemo_passing": "0/12",
-      "theinternet_passing": "1/12"
+      "tests_total": 46,
+      "test_pass_rate_pct": 4.3
     },
     {
-      "model": "phi3",
+      "system": "gpt4o-mini",
+      "kind": "zero-shot baseline",
       "framework": "cypress",
       "records": 24,
-      "bmad_accepted": 23,
-      "avg_bmad_score": 0.779,
-      "specs_passing": 0,
-      "tests_total": 40,
-      "tests_passing": 0,
-      "load_errors": 0,
-      "saucedemo_passing": "0/12",
-      "theinternet_passing": "0/12"
+      "specs_fully_passing": 15,
+      "specs_partially_passing": 5,
+      "load_errors_timeouts": 0,
+      "tests_passing": 35,
+      "tests_total": 50,
+      "test_pass_rate_pct": 70.0
     },
     {
-      "model": "phi3",
+      "system": "gpt4o-mini",
+      "kind": "zero-shot baseline",
       "framework": "playwright",
       "records": 24,
-      "bmad_accepted": 21,
-      "avg_bmad_score": 0.783,
-      "specs_passing": 1,
-      "tests_total": 38,
+      "specs_fully_passing": 5,
+      "specs_partially_passing": 7,
+      "load_errors_timeouts": 1,
+      "tests_passing": 17,
+      "tests_total": 46,
+      "test_pass_rate_pct": 37.0
+    },
+    {
+      "system": "phi3",
+      "kind": "fine-tuned",
+      "framework": "cypress",
+      "records": 24,
+      "specs_fully_passing": 0,
+      "specs_partially_passing": 0,
+      "load_errors_timeouts": 0,
+      "tests_passing": 0,
+      "tests_total": 40,
+      "test_pass_rate_pct": 0.0
+    },
+    {
+      "system": "phi3",
+      "kind": "fine-tuned",
+      "framework": "playwright",
+      "records": 24,
+      "specs_fully_passing": 1,
+      "specs_partially_passing": 0,
+      "load_errors_timeouts": 5,
       "tests_passing": 2,
-      "load_errors": 5,
-      "saucedemo_passing": "0/12",
-      "theinternet_passing": "1/12"
+      "tests_total": 38,
+      "test_pass_rate_pct": 5.3
     }
   ],
-  "overall": {
-    "specs_fully_passing": 2,
-    "specs_total": 96,
-    "individual_tests_passing": 4,
-    "individual_tests_total": 172,
-    "bmad_static_accept": 92
+  "aggregate": {
+    "finetuned_specs_passing": "2/96",
+    "baseline_specs_passing": "42/96",
+    "finetuned_test_pass": "4/172",
+    "baseline_test_pass": "160/257"
   },
-  "headline_finding": "BMAD static acceptance 92/96 (95.8%) vs execution pass 2/96 (2.1%). Dominant failure: models impose the training corpus selector convention (data-testid) over the explicit real selectors stated in the story (47/48 cypress scripts; 24/48 playwright). Secondary: invented URL routes, nonexistent custom commands (cy.login), fabricated network intercepts."
+  "headline_finding": "Complete ranking inversion under execution. On static metrics (dissertation ch.5) the fine-tuned models beat both commercial baselines on every measure without exception; under genuine execution against live applications the baselines pass 42/96 specs fully (43.8%) versus 2/96 (2.1%) for the fine-tuned systems. Root cause: fine-tuned models impose training-corpus conventions (data-testid selectors, invented routes, fabricated intercepts) over the explicit real selectors stated in each story, while zero-shot baselines follow the stated selectors. Static quality and execution readiness are anti-correlated in this setting; grounding, not framework fluency, is the binding constraint. The fine-tuned playwright combos were re-executed as .spec.ts to rule out harness TS-syntax artifacts; results were identical."
 }
