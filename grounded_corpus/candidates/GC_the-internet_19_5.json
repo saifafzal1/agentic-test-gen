@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to interact with the horizontal range slider control so that I can select a value within a specified range. \nAcceptance Criteria: \n1. The slider can be moved left and right, and the value displayed in the span with id 'range' updates accordingly. \n2. The initial value of the slider should be '0'. \n3. The URL must remain the same when the slider is moved.",
+  "complexity": "simple",
+  "cypress_script": "describe('Horizontal Range Slider Control', () => {\n  it('should update the value when slider is moved (happy path)', () => {\n    cy.visit('https://the-internet.herokuapp.com/horizontal_slider');\n    cy.get('input[type=\"range\"]').invoke('val', 5).trigger('input');\n    cy.get('span#range').should('have.text', '5');\n  });\n\n  it('should not change URL when slider is moved (edge case)', () => {\n    cy.visit('https://the-internet.herokuapp.com/horizontal_slider');\n    cy.get('input[type=\"range\"]').invoke('val', 10).trigger('input');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/horizontal_slider');\n    cy.get('span#range').should('have.text', '10');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Horizontal Range Slider Control', () => {\n  test('should update the value when slider is moved (happy path)', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/horizontal_slider');\n    await page.locator('input[type=\"range\"]').fill('5');\n    await page.locator('input[type=\"range\"]').dispatchEvent('input');\n    await expect(page.locator('span#range')).toHaveText('5');\n  });\n\n  test('should not change URL when slider is moved (edge case)', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/horizontal_slider');\n    await page.locator('input[type=\"range\"]').fill('10');\n    await page.locator('input[type=\"range\"]').dispatchEvent('input');\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/horizontal_slider');\n    await expect(page.locator('span#range')).toHaveText('10');\n  });\n});",
+  "id": "GC_the-internet_19_5",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/horizontal_slider",
+  "category": "search_filter",
+  "latency_s": 8.3
+}

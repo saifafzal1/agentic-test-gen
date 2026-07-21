@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to navigate through the multi-level navigation menu so that I can access different sections of the application easily. Acceptance Criteria: 1. When the user clicks on 'Main Item 1', the URL should not change and the text 'Main Item 1' should remain visible. 2. When the user clicks on 'Sub Item', the URL should not change and the text 'Sub Item' should remain visible.",
+  "complexity": "simple",
+  "cypress_script": "describe('Multi-level navigation menu', () => {\n  it('should navigate to Sub Item when clicked', () => {\n    cy.visit('https://demoqa.com/menu');\n    cy.contains('Main Item 1').click();\n    cy.contains('Sub Item').click();\n    cy.url().should('include', '/menu');\n  });\n\n  it('should not change URL when clicking on Main Item 1', () => {\n    cy.visit('https://demoqa.com/menu');\n    cy.contains('Main Item 1').click();\n    cy.url().should('include', '/menu');\n    cy.contains('Main Item 1').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Multi-level navigation menu', () => {\n  test('should navigate to Sub Item when clicked', async ({ page }) => {\n    await page.goto('https://demoqa.com/menu');\n    await page.click('text=Main Item 1');\n    await page.click('text=Sub Item');\n    await expect(page).toHaveURL(/.*menu/);\n  });\n\n  test('should not change URL when clicking on Main Item 1', async ({ page }) => {\n    await page.goto('https://demoqa.com/menu');\n    await page.click('text=Main Item 1');\n    await expect(page).toHaveURL(/.*menu/);\n    await expect(page.locator('text=Main Item 1')).toBeVisible();\n  });\n});",
+  "id": "GC_demoqa_08_3",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/menu",
+  "category": "navigation",
+  "latency_s": 10.1
+}

@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to select a date using the date picker so that I can easily choose dates for scheduling. Acceptance Criteria: 1. The date input field with id 'datePickerMonthYearInput' is present and functional. 2. Selecting a valid date updates the input to the selected date. 3. The URL remains the same when attempting to select an invalid date.",
+  "complexity": "simple",
+  "cypress_script": "describe('Date Picker Functionality', () => {\n  it('should select a valid date', () => {\n    cy.visit('https://demoqa.com/date-picker');\n    cy.get('#datePickerMonthYearInput').click();\n    cy.get('.react-datepicker__day--018').click(); // Assuming this is the correct day\n    cy.get('#datePickerMonthYearInput').should('have.value', '07/18/2026');\n  });\n\n  it('should not change URL on invalid date selection', () => {\n    cy.visit('https://demoqa.com/date-picker');\n    cy.get('#datePickerMonthYearInput').click();\n    cy.get('.react-datepicker__day--outside-month').click(); // Assuming this is an invalid date selection\n    cy.url().should('eq', 'https://demoqa.com/date-picker');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Date Picker Functionality', () => {\n  test('should select a valid date', async ({ page }) => {\n    await page.goto('https://demoqa.com/date-picker');\n    await page.click('#datePickerMonthYearInput');\n    await page.click('.react-datepicker__day--018'); // Assuming this is the correct day\n    const dateValue = await page.inputValue('#datePickerMonthYearInput');\n    expect(dateValue).toBe('07/18/2026');\n  });\n\n  test('should not change URL on invalid date selection', async ({ page }) => {\n    await page.goto('https://demoqa.com/date-picker');\n    await page.click('#datePickerMonthYearInput');\n    await page.click('.react-datepicker__day--outside-month'); // Assuming this is an invalid date selection\n    expect(page.url()).toBe('https://demoqa.com/date-picker');\n  });\n});",
+  "id": "GC_demoqa_11_2",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/date-picker",
+  "category": "search_filter",
+  "latency_s": 11.8
+}

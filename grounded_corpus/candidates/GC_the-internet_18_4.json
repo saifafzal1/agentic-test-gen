@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to navigate the multi-level dropdown navigation menu on the JQueryUI page so that I can access various resources. Acceptance criteria: 1. The user should be able to click on 'Enabled' (selector: 'a:contains(\"Enabled\")') and see the submenu items 'Downloads', 'PDF', 'CSV', 'Excel', and 'Back to JQuery UI'. 2. The user should not be able to interact with 'Disabled' (selector: 'li#ui-id-1') and 'Should not see this' (selector: 'li#ui-id-2').",
+  "complexity": "simple",
+  "cypress_script": "describe('Multi-Level Dropdown Navigation Menu', () => {\n  it('should display submenu items when Enabled is clicked', () => {\n    cy.visit('https://the-internet.herokuapp.com/jqueryui/menu');\n    cy.get('a:contains(\"Enabled\")').click();\n    cy.get('li#ui-id-4').should('be.visible');\n    cy.get('li#ui-id-5').should('be.visible');\n    cy.get('li#ui-id-6').should('be.visible');\n    cy.get('li#ui-id-7').should('be.visible');\n    cy.get('li#ui-id-8').should('be.visible');\n  });\n\n  it('should not allow interaction with Disabled item', () => {\n    cy.visit('https://the-internet.herokuapp.com/jqueryui/menu');\n    cy.get('li#ui-id-1').should('be.visible');\n    cy.get('li#ui-id-1').click({ force: true });\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/jqueryui/menu');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Multi-Level Dropdown Navigation Menu', () => {\n  test('should display submenu items when Enabled is clicked', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/jqueryui/menu');\n    await page.click('a:has-text(\"Enabled\")');\n    await expect(page.locator('li#ui-id-4')).toBeVisible();\n    await expect(page.locator('li#ui-id-5')).toBeVisible();\n    await expect(page.locator('li#ui-id-6')).toBeVisible();\n    await expect(page.locator('li#ui-id-7')).toBeVisible();\n    await expect(page.locator('li#ui-id-8')).toBeVisible();\n  });\n\n  test('should not allow interaction with Disabled item', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/jqueryui/menu');\n    await expect(page.locator('li#ui-id-1')).toBeVisible();\n    await page.click('li#ui-id-1');\n    await expect(page.url()).toBe('https://the-internet.herokuapp.com/jqueryui/menu');\n  });\n});",
+  "id": "GC_the-internet_18_4",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/jqueryui/menu",
+  "category": "navigation",
+  "latency_s": 9.0
+}

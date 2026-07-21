@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to interact with the buttons on the Buttons page so that I can verify their functionality through single clicks, double clicks, and right clicks. Acceptance criteria: When I click the button with id 'sp5Bi', it should perform its action. When I double-click the button with id 'doubleClickBtn', it should perform its action. When I right-click the button with id 'rightClickBtn', it should perform its action.",
+  "complexity": "simple",
+  "cypress_script": "describe('Buttons functionality tests', () => {\n  it('should successfully click the Click Me button', () => {\n    cy.visit('https://demoqa.com/buttons');\n    cy.get('button#sp5Bi').click();\n    // Assert that the URL did not change, or another relevant element is still visible\n  });\n\n  it('should not perform an action on a right-click without appropriate event handling', () => {\n    cy.visit('https://demoqa.com/buttons');\n    cy.get('button#rightClickBtn').rightclick();\n    // Assert the URL did not change or that another element is still visible\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\n test.describe('Buttons functionality tests', () => {\n   test('should successfully click the Click Me button', async ({ page }) => {\n     await page.goto('https://demoqa.com/buttons');\n     await page.click('button#sp5Bi');\n     // Assert that the URL did not change, or another relevant element is still visible\n   });\n\n   test('should not perform an action on a right-click without appropriate event handling', async ({ page }) => {\n     await page.goto('https://demoqa.com/buttons');\n     await page.click('button#rightClickBtn', { button: 'right' });\n     // Assert the URL did not change or that another element is still visible\n   });\n });",
+  "id": "GC_demoqa_13_2",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/buttons",
+  "category": "navigation",
+  "latency_s": 5.9
+}

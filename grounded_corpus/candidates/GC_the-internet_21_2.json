@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to interact with action buttons on the Challenging DOM page so that I can perform actions related to the data table. Acceptance Criteria: I can see buttons with texts 'baz', 'bar', and 'qux' identified by IDs '77b59e10-6723-013f-e66b-76e3324c8978', '77b5c700-6723-013f-e66c-76e3324c8978', and '77b5efe0-6723-013f-e66d-76e3324c8978' respectively, and I can click on these buttons to initiate respective actions.",
+  "complexity": "simple",
+  "cypress_script": "describe('Challenging DOM action buttons', () => {\n  it('should successfully click the baz button', () => {\n    cy.visit('https://the-internet.herokuapp.com/challenging_dom');\n    cy.get('a#77b59e10-6723-013f-e66b-76e3324c8978').should('be.visible').click();\n    // Add assertions here related to the expected outcome after clicking baz\n  });\n\n  it('should not navigate when clicking on an invalid action', () => {\n    cy.visit('https://the-internet.herokuapp.com/challenging_dom');\n    cy.get('a#77b5c700-6723-013f-e66c-76e3324c8978').should('be.visible').click();\n    // Assuming this button leads to an action that does not change the page\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/challenging_dom');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Challenging DOM action buttons', () => {\n  test('should successfully click the baz button', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/challenging_dom');\n    await expect(page.locator('a#77b59e10-6723-013f-e66b-76e3324c8978')).toBeVisible();\n    await page.locator('a#77b59e10-6723-013f-e66b-76e3324c8978').click();\n    // Add assertions here related to the expected outcome after clicking baz\n  });\n\n  test('should not navigate when clicking on an invalid action', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/challenging_dom');\n    await expect(page.locator('a#77b5c700-6723-013f-e66c-76e3324c8978')).toBeVisible();\n    await page.locator('a#77b5c700-6723-013f-e66c-76e3324c8978').click();\n    // Assuming this button leads to an action that does not change the page\n    await expect(page.url()).toBe('https://the-internet.herokuapp.com/challenging_dom');\n  });\n});",
+  "id": "GC_the-internet_21_2",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/challenging_dom",
+  "category": "table_list",
+  "latency_s": 7.1
+}

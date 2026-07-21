@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to navigate through the multi-level dropdown menu so that I can access different functionalities easily. Acceptance criteria: 1. The menu should display options: 'Disabled', 'Should not see this', 'Enabled', 'Downloads', 'PDF', 'CSV', 'Excel', and 'Back to JQuery UI'. 2. Clicking on 'PDF' should navigate to the corresponding PDF download link. 3. The 'Disabled' option should be visible but not clickable.",
+  "complexity": "simple",
+  "cypress_script": "describe('Multi-level Dropdown Navigation Menu', () => {\n  it('should navigate to PDF download when clicking on PDF', () => {\n    cy.visit('https://the-internet.herokuapp.com/jqueryui/menu');\n    cy.get('#menu').should('be.visible');\n    cy.get('li').contains('PDF').click();\n    cy.url().should('include', '/download/jqueryui/menu/menu.pdf');\n  });\n  it('should not allow clicking on Disabled option', () => {\n    cy.visit('https://the-internet.herokuapp.com/jqueryui/menu');\n    cy.get('#menu').should('be.visible');\n    cy.get('li').contains('Disabled').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Multi-level Dropdown Navigation Menu', () => {\n  test('should navigate to PDF download when clicking on PDF', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/jqueryui/menu');\n    await expect(page.locator('#menu')).toBeVisible();\n    await page.locator('li').withText('PDF').click();\n    await expect(page).toHaveURL(/.*\\/download\\/jqueryui\\/menu\\/menu.pdf/);\n  });\n  test('should not allow clicking on Disabled option', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/jqueryui/menu');\n    await expect(page.locator('#menu')).toBeVisible();\n    await expect(page.locator('li').withText('Disabled')).toBeVisible();\n  });\n});",
+  "id": "GC_the-internet_18_0",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/jqueryui/menu",
+  "category": "navigation",
+  "latency_s": 7.2
+}

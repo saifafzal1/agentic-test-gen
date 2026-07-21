@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to select a date using the date picker so that I can easily input a specific date. Acceptance Criteria: The date picker input identified by the selector 'input#datePickerMonthYearInput' must allow the user to select a date and display it correctly. If the user attempts to submit an empty date, the URL must remain the same and the input field should still be visible.",
+  "complexity": "simple",
+  "cypress_script": "describe('Date Picker Functionality', () => {\n  it('should allow the user to select a date successfully', () => {\n    cy.visit('https://demoqa.com/date-picker');\n    cy.get('#datePickerMonthYearInput').type('07/21/2026').should('have.value', '07/21/2026');\n  });\n  it('should not change the URL when the date input is empty', () => {\n    cy.visit('https://demoqa.com/date-picker');\n    cy.get('#datePickerMonthYearInput').clear();\n    cy.url().should('eq', 'https://demoqa.com/date-picker');\n    cy.get('#datePickerMonthYearInput').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Date Picker Functionality', () => {\n  test('should allow the user to select a date successfully', async ({ page }) => {\n    await page.goto('https://demoqa.com/date-picker');\n    await page.fill('#datePickerMonthYearInput', '07/21/2026');\n    const inputValue = await page.inputValue('#datePickerMonthYearInput');\n    expect(inputValue).toBe('07/21/2026');\n  });\n\n  test('should not change the URL when the date input is empty', async ({ page }) => {\n    await page.goto('https://demoqa.com/date-picker');\n    await page.fill('#datePickerMonthYearInput', '');\n    expect(page.url()).toBe('https://demoqa.com/date-picker');\n    await expect(page.locator('#datePickerMonthYearInput')).toBeVisible();\n  });\n});",
+  "id": "GC_demoqa_11_3",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/date-picker",
+  "category": "search_filter",
+  "latency_s": 7.7
+}

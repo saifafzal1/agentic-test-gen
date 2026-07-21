@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to navigate through the multi-level dropdown menu so that I can access various options like Downloads and file formats. Acceptance criteria: When I visit 'https://the-internet.herokuapp.com/jqueryui/menu', I should see the menu with the items: 'Disabled', 'Should not see this', 'Enabled', 'Downloads', 'PDF', 'CSV', 'Excel', 'Back to JQuery UI'. The URL should not change when I interact with the 'Disabled' menu item.",
+  "complexity": "simple",
+  "cypress_script": "describe('Multi-Level Dropdown Navigation Menu', () => {\n  it('should navigate to Downloads when clicked', () => {\n    cy.visit('https://the-internet.herokuapp.com/jqueryui/menu');\n    cy.get('#menu')\n      .contains('Downloads')\n      .click();\n    cy.url().should('include', '/download/jqueryui/menu/');\n  });\n\n  it('should not allow interaction with Disabled menu item', () => {\n    cy.visit('https://the-internet.herokuapp.com/jqueryui/menu');\n    cy.get('#menu')\n      .contains('Disabled')\n      .should('be.visible');\n    cy.get('#menu')\n      .contains('Disabled')\n      .click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/jqueryui/menu');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Multi-Level Dropdown Navigation Menu', () => {\n  test('should navigate to Downloads when clicked', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/jqueryui/menu');\n    await page.click('#menu >> text=Downloads');\n    await expect(page).toHaveURL(/download/jqueryui/menu/);\n  });\n\n  test('should not allow interaction with Disabled menu item', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/jqueryui/menu');\n    await expect(page.locator('#menu >> text=Disabled')).toBeVisible();\n    await page.click('#menu >> text=Disabled');\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/jqueryui/menu');\n  });\n});",
+  "id": "GC_the-internet_18_3",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/jqueryui/menu",
+  "category": "navigation",
+  "latency_s": 6.8
+}

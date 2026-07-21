@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to see tooltips with information about elements when I hover over them, so that I can understand their functionality better. Acceptance Criteria: When I hover over the input field with id 'toolTipTextField', a tooltip should appear with the text 'You hovered over the Text Field'. When I hover over the button with id 'toolTipButton', a tooltip should appear with the text 'You hovered over the Button'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Tool Tips Functionality', () => {\n  it('should display tooltip on hover over input field', () => {\n    cy.visit('https://demoqa.com/tool-tips');\n    cy.get('#toolTipTextField').trigger('mouseover');\n    cy.get('.tooltip').should('be.visible');\n    cy.get('.tooltip').should('contain', 'You hovered over the Text Field');\n  });\n\n  it('should not display tooltip when not hovering', () => {\n    cy.visit('https://demoqa.com/tool-tips');\n    cy.get('#toolTipTextField').should('be.visible');\n    cy.get('.tooltip').should('not.exist');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Tool Tips Functionality', () => {\n  test('should display tooltip on hover over input field', async ({ page }) => {\n    await page.goto('https://demoqa.com/tool-tips');\n    await page.hover('#toolTipTextField');\n    const tooltip = await page.locator('.tooltip');\n    await expect(tooltip).toBeVisible();\n    await expect(tooltip).toHaveText('You hovered over the Text Field');\n  });\n\n  test('should not display tooltip when not hovering', async ({ page }) => {\n    await page.goto('https://demoqa.com/tool-tips');\n    const tooltip = await page.locator('.tooltip');\n    await expect(tooltip).not.toBeVisible();\n  });\n});",
+  "id": "GC_demoqa_12_3",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/tool-tips",
+  "category": "user_profile",
+  "latency_s": 5.0
+}

@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to navigate through the multi-level navigation menu so that I can access different sections of the application easily. Acceptance Criteria: \n1. When I click on 'Main Item 1', the menu should not change the URL. \n2. When I click on 'Sub Item', I should be able to see 'Sub Sub List \u00bb' as a nested option. \n3. Clicking on 'Sub Sub Item 1' should take me to the same URL without changing it, but I should see the corresponding content.",
+  "complexity": "medium",
+  "cypress_script": "describe('Multi-Level Navigation Menu', () => {\n  it('should navigate to Sub Item and show nested options', () => {\n    cy.visit('https://demoqa.com/menu');\n    cy.get('a').contains('Main Item 1').click();\n    cy.get('a').contains('Sub Item').should('be.visible');\n    cy.get('a').contains('Sub Sub List \u00bb').should('be.visible');\n  });\n  it('should not change URL on Sub Item click', () => {\n    cy.visit('https://demoqa.com/menu');\n    cy.get('a').contains('Main Item 1').click();\n    cy.url().should('eq', 'https://demoqa.com/menu');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\n test.describe('Multi-Level Navigation Menu', () => {\n   test('should navigate to Sub Item and show nested options', async ({ page }) => {\n     await page.goto('https://demoqa.com/menu');\n     await page.click('text=Main Item 1');\n     await expect(page.locator('text=Sub Item')).toBeVisible();\n     await expect(page.locator('text=Sub Sub List \u00bb')).toBeVisible();\n   });\n   test('should not change URL on Sub Item click', async ({ page }) => {\n     await page.goto('https://demoqa.com/menu');\n     await page.click('text=Main Item 1');\n     expect(page.url()).toBe('https://demoqa.com/menu');\n   });\n });",
+  "id": "GC_demoqa_08_4",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/menu",
+  "category": "navigation",
+  "latency_s": 8.4
+}

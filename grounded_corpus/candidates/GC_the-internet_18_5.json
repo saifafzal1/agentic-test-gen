@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to navigate through a multi-level dropdown menu on the jQuery UI Menu page so that I can access different functionalities such as downloading files. Acceptance Criteria: When the user clicks on 'Downloads', the menu items 'PDF', 'CSV', and 'Excel' should be visible. Clicking on 'PDF' should not change the page URL, and the user should still see the menu items. The menu should include options such as 'Disabled', 'Should not see this', and 'Enabled'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Multi-level dropdown navigation menu', () => {\n  it('should display menu items when Downloads is clicked', () => {\n    cy.visit('https://the-internet.herokuapp.com/jqueryui/menu');\n    cy.get('#menu').contains('Downloads').click();\n    cy.get('#menu').should('contain', 'PDF');\n    cy.get('#menu').should('contain', 'CSV');\n    cy.get('#menu').should('contain', 'Excel');\n  });\n\n  it('should not change the URL when clicking on PDF', () => {\n    cy.visit('https://the-internet.herokuapp.com/jqueryui/menu');\n    cy.get('#menu').contains('Downloads').click();\n    cy.get('#menu').contains('PDF').click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/jqueryui/menu');\n    cy.get('#menu').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Multi-level dropdown navigation menu', () => {\n  test('should display menu items when Downloads is clicked', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/jqueryui/menu');\n    await page.click('#menu >> text=Downloads');\n    await expect(page.locator('#menu')).toContainText('PDF');\n    await expect(page.locator('#menu')).toContainText('CSV');\n    await expect(page.locator('#menu')).toContainText('Excel');\n  });\n\n  test('should not change the URL when clicking on PDF', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/jqueryui/menu');\n    await page.click('#menu >> text=Downloads');\n    await page.click('#menu >> text=PDF');\n    await expect(page.url()).toBe('https://the-internet.herokuapp.com/jqueryui/menu');\n    await expect(page.locator('#menu')).toBeVisible();\n  });\n});",
+  "id": "GC_the-internet_18_5",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/jqueryui/menu",
+  "category": "navigation",
+  "latency_s": 7.6
+}

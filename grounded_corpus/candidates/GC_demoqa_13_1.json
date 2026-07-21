@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to interact with buttons on the Buttons page so that I can test the click, double-click, and right-click functionalities. Acceptance Criteria: 1. When I click the button with id 'sp5Bi' (text: 'Click Me'), the appropriate action occurs. 2. When I double-click the button with id 'doubleClickBtn' (text: 'Double Click Me'), the appropriate action occurs. 3. When I right-click the button with id 'rightClickBtn' (text: 'Right Click Me'), the appropriate action occurs.",
+  "complexity": "simple",
+  "cypress_script": "describe('Buttons functionality tests', () => {\n  it('should perform a single click on the Click Me button', () => {\n    cy.visit('https://demoqa.com/buttons');\n    cy.get('button#sp5Bi').click();\n    // Assuming some action occurs; validating URL remains the same\n    cy.url().should('eq', 'https://demoqa.com/buttons');\n  });\n\n  it('should not change URL on double-clicking the Double Click Me button', () => {\n    cy.visit('https://demoqa.com/buttons');\n    cy.get('button#doubleClickBtn').dblclick();\n    // Validating URL remains the same\n    cy.url().should('eq', 'https://demoqa.com/buttons');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Buttons functionality tests', () => {\n  test('should perform a single click on the Click Me button', async ({ page }) => {\n    await page.goto('https://demoqa.com/buttons');\n    await page.click('button#sp5Bi');\n    // Assuming some action occurs; validating URL remains the same\n    await expect(page).toHaveURL('https://demoqa.com/buttons');\n  });\n\n  test('should not change URL on double-clicking the Double Click Me button', async ({ page }) => {\n    await page.goto('https://demoqa.com/buttons');\n    await page.dblclick('button#doubleClickBtn');\n    // Validating URL remains the same\n    await expect(page).toHaveURL('https://demoqa.com/buttons');\n  });\n});",
+  "id": "GC_demoqa_13_1",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/buttons",
+  "category": "navigation",
+  "latency_s": 14.9
+}

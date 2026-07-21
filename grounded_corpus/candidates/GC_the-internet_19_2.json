@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to interact with the horizontal range slider control so that I can select a value between 0 and 100. Acceptance criteria: The slider should be adjustable and the displayed value should update according to the slider's position. The slider is represented by the input element of type 'range' and the current value is displayed in the span element with id 'range'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Horizontal Slider Control', () => {\n  it('should adjust the slider and display the correct value', () => {\n    cy.visit('https://the-internet.herokuapp.com/horizontal_slider');\n    cy.get('input[type=\"range\"]').invoke('val', 50).trigger('change');\n    cy.get('#range').should('have.text', '50');\n  });\n  it('should not change the value when the slider is not adjusted', () => {\n    cy.visit('https://the-internet.herokuapp.com/horizontal_slider');\n    cy.get('#range').should('have.text', '0');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Horizontal Slider Control', () => {\n  test('should adjust the slider and display the correct value', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/horizontal_slider');\n    const slider = await page.locator('input[type=\"range\"]');\n    await slider.fill('50');\n    await slider.dispatchEvent('change');\n    const rangeValue = await page.locator('#range');\n    await expect(rangeValue).toHaveText('50');\n  });\n  test('should not change the value when the slider is not adjusted', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/horizontal_slider');\n    const rangeValue = await page.locator('#range');\n    await expect(rangeValue).toHaveText('0');\n  });\n});",
+  "id": "GC_the-internet_19_2",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/horizontal_slider",
+  "category": "search_filter",
+  "latency_s": 8.0
+}

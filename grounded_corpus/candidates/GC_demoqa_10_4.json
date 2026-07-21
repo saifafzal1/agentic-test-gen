@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to adjust the value of the slider so that I can select a specific range value easily. I should be able to see the value displayed next to the slider as I adjust it.",
+  "complexity": "simple",
+  "cypress_script": "describe('Slider Control Tests', () => {\n  it('should adjust the slider value correctly', () => {\n    cy.visit('https://demoqa.com/slider');\n    cy.get('#slider').invoke('val', 75).trigger('input');\n    cy.get('#sliderValue').should('have.value', '75');\n  });\n\n  it('should not change the value if the slider is not moved', () => {\n    cy.visit('https://demoqa.com/slider');\n    cy.get('#slider').invoke('val', 25).trigger('input');\n    cy.get('#sliderValue').should('have.value', '25');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Slider Control Tests', () => {\n  test('should adjust the slider value correctly', async ({ page }) => {\n    await page.goto('https://demoqa.com/slider');\n    await page.locator('#slider').fill('75');\n    await expect(page.locator('#sliderValue')).toHaveValue('75');\n  });\n\n  test('should not change the value if the slider is not moved', async ({ page }) => {\n    await page.goto('https://demoqa.com/slider');\n    await page.locator('#slider').fill('25');\n    await expect(page.locator('#sliderValue')).toHaveValue('25');\n  });\n});",
+  "id": "GC_demoqa_10_4",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/slider",
+  "category": "search_filter",
+  "latency_s": 7.5
+}

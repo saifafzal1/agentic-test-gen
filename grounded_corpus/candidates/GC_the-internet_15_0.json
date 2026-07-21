@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to navigate between the iframe example links on the Frames page so that I can explore the nested frames and iframe functionalities. Acceptance Criteria: \n1. When I click on the link with text 'Nested Frames', I should be redirected to the URL '/nested_frames'. \n2. When I click on the link with text 'iFrame', I should be redirected to the URL '/iframe'. \n3. The page should contain a div with id 'content' that includes the text 'Frames Nested Frames iFrame'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Frames Page Navigation', () => {\n  it('should navigate to Nested Frames', () => {\n    cy.visit('https://the-internet.herokuapp.com/frames');\n    cy.get('a').contains('Nested Frames').click();\n    cy.url().should('include', '/nested_frames');\n  });\n\n  it('should not navigate to an invalid link', () => {\n    cy.visit('https://the-internet.herokuapp.com/frames');\n    cy.get('a').contains('Invalid Link').should('not.exist');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/frames');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Frames Page Navigation', () => {\n  test('should navigate to Nested Frames', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/frames');\n    await page.click('text=Nested Frames');\n    await expect(page).toHaveURL(/.*nested_frames/);\n  });\n\n  test('should not navigate to an invalid link', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/frames');\n    const invalidLink = page.locator('text=Invalid Link');\n    await expect(invalidLink).toBeHidden();\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/frames');\n  });\n});",
+  "id": "GC_the-internet_15_0",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/frames",
+  "category": "navigation",
+  "latency_s": 6.5
+}

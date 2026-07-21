@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to interact with action buttons on the Challenging DOM page so that I can perform actions like 'baz', 'bar', and 'qux'. Acceptance Criteria: \n1. The button with text 'baz' should be present and clickable. \n2. The button with text 'bar' should be present and clickable. \n3. The button with text 'qux' should be present and clickable.",
+  "complexity": "simple",
+  "cypress_script": "describe('Challenging DOM Action Buttons', () => {\n  it('should click the baz button', () => {\n    cy.visit('https://the-internet.herokuapp.com/challenging_dom');\n    cy.get('a.button').contains('baz').click();\n    // Add assertion to verify the expected outcome after clicking baz button\n  });\n\n  it('should not navigate when clicking an unknown button', () => {\n    cy.visit('https://the-internet.herokuapp.com/challenging_dom');\n    cy.get('a.button').contains('non-existent').click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/challenging_dom');\n    cy.get('div#content').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Challenging DOM Action Buttons', () => {\n  test('should click the baz button', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/challenging_dom');\n    await page.click('a.button:has-text(\"baz\")');\n    // Add assertion to verify the expected outcome after clicking baz button\n  });\n\n  test('should not navigate when clicking an unknown button', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/challenging_dom');\n    await page.click('a.button:has-text(\"non-existent\")');\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/challenging_dom');\n    await expect(page.locator('div#content')).toBeVisible();\n  });\n});",
+  "id": "GC_the-internet_21_5",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/challenging_dom",
+  "category": "table_list",
+  "latency_s": 4.7
+}

@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to interact with buttons on the Buttons page to verify their functionality, such as clicking, double-clicking, and right-clicking, so that I can ensure they behave as expected.\n\nAcceptance Criteria:\n1. When I click the button with the ID 'sp5Bi', I should see a visible change on the page.\n2. When I double-click the button with the ID 'doubleClickBtn', I should see a visible change on the page.\n3. When I right-click the button with the ID 'rightClickBtn', I should see a visible change on the page.",
+  "complexity": "simple",
+  "cypress_script": "describe('Buttons Interaction Tests', () => {\n  it('should click the Click Me button', () => {\n    cy.visit('https://demoqa.com/buttons');\n    cy.get('button#sp5Bi').click();\n    cy.url().should('include', '/buttons');\n  });\n\n  it('should not navigate when right-clicking the Right Click Me button', () => {\n    cy.visit('https://demoqa.com/buttons');\n    cy.get('button#rightClickBtn').rightclick();\n    cy.url().should('include', '/buttons');\n    cy.get('button#rightClickBtn').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Buttons Interaction Tests', () => {\n  test('should click the Click Me button', async ({ page }) => {\n    await page.goto('https://demoqa.com/buttons');\n    await page.click('button#sp5Bi');\n    expect(page.url()).toContain('/buttons');\n  });\n\n  test('should not navigate when right-clicking the Right Click Me button', async ({ page }) => {\n    await page.goto('https://demoqa.com/buttons');\n    await page.click('button#rightClickBtn', { button: 'right' });\n    expect(page.url()).toContain('/buttons');\n    const buttonVisible = await page.isVisible('button#rightClickBtn');\n    expect(buttonVisible).toBe(true);\n  });\n});",
+  "id": "GC_demoqa_13_4",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/buttons",
+  "category": "navigation",
+  "latency_s": 6.6
+}

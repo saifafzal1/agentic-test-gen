@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to interact with action buttons on the Challenging DOM page so that I can perform actions on the data table. Acceptance criteria: When I click on the button with class 'button alert' and text 'bar', it should be visible on the page. The button with class 'button success' and text 'qux' should also be visible. The button with class 'button' and text 'baz' should be present. The page should not navigate away when these buttons are clicked, and I should remain on the Challenging DOM page.",
+  "complexity": "simple",
+  "cypress_script": "describe('Challenging DOM Action Buttons', () => {\n  it('should display action buttons correctly', () => {\n    cy.visit('https://the-internet.herokuapp.com/challenging_dom');\n    cy.get('a.button').should('be.visible');\n    cy.get('a.button.alert').should('be.visible');\n    cy.get('a.button.success').should('be.visible');\n  });\n\n  it('should not navigate away from the page when clicking buttons', () => {\n    cy.visit('https://the-internet.herokuapp.com/challenging_dom');\n    cy.get('a.button.alert').click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/challenging_dom');\n    cy.get('a.button.success').click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/challenging_dom');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Challenging DOM Action Buttons', () => {\n  test('should display action buttons correctly', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/challenging_dom');\n    await expect(page.locator('a.button')).toBeVisible();\n    await expect(page.locator('a.button.alert')).toBeVisible();\n    await expect(page.locator('a.button.success')).toBeVisible();\n  });\n\n  test('should not navigate away from the page when clicking buttons', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/challenging_dom');\n    await page.locator('a.button.alert').click();\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/challenging_dom');\n    await page.locator('a.button.success').click();\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/challenging_dom');\n  });\n});",
+  "id": "GC_the-internet_21_4",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/challenging_dom",
+  "category": "table_list",
+  "latency_s": 8.8
+}

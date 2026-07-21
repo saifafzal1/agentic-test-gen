@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to interact with the horizontal range slider control to set and see the value dynamically so that I can filter my search results based on a specific range. Acceptance Criteria: The slider should be visible, and its initial value should be '0' as displayed in the <span id='range'> element. When I adjust the slider, the value displayed in the <span id='range'> should update accordingly.",
+  "complexity": "simple",
+  "cypress_script": "describe('Horizontal Slider Control', () => {\n  it('should display the initial value of the slider', () => {\n    cy.visit('https://the-internet.herokuapp.com/horizontal_slider');\n    cy.get('input[type=\"range\"]').should('be.visible');\n    cy.get('span#range').should('have.text', '0');\n  });\n\n  it('should not change the URL when the slider is adjusted', () => {\n    cy.visit('https://the-internet.herokuapp.com/horizontal_slider');\n    cy.get('input[type=\"range\"]').invoke('val', 50).trigger('input');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/horizontal_slider');\n    cy.get('span#range').should('have.text', '50');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Horizontal Slider Control', () => {\n  test('should display the initial value of the slider', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/horizontal_slider');\n    await expect(page.locator('input[type=\"range\"]')).toBeVisible();\n    await expect(page.locator('span#range')).toHaveText('0');\n  });\n\n  test('should not change the URL when the slider is adjusted', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/horizontal_slider');\n    await page.locator('input[type=\"range\"]').fill('50');\n    await page.locator('input[type=\"range\"]').dispatchEvent('input');\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/horizontal_slider');\n    await expect(page.locator('span#range')).toHaveText('50');\n  });\n});",
+  "id": "GC_the-internet_19_1",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/horizontal_slider",
+  "category": "search_filter",
+  "latency_s": 8.7
+}

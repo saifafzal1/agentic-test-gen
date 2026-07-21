@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to see tooltips with information about elements when I hover over them, so that I can understand their functionality without clicking on them. Acceptance Criteria: 1. When I hover over the input field with id 'toolTipTextField', a tooltip appears. 2. When I hover over the button with id 'toolTipButton', a tooltip appears. 3. The URL remains 'https://demoqa.com/tool-tips' after hovering.",
+  "complexity": "simple",
+  "cypress_script": "describe('Tool Tips Functionality', () => {\n  it('should display tooltip on input field hover', () => {\n    cy.visit('https://demoqa.com/tool-tips');\n    cy.get('#toolTipTextField').trigger('mouseover');\n    cy.get('#toolTipTextField').should('be.visible');\n  });\n  it('should not change URL on hover', () => {\n    cy.visit('https://demoqa.com/tool-tips');\n    cy.url().should('eq', 'https://demoqa.com/tool-tips');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Tool Tips Functionality', () => {\n  test('should display tooltip on input field hover', async ({ page }) => {\n    await page.goto('https://demoqa.com/tool-tips');\n    const tooltipField = page.locator('#toolTipTextField');\n    await tooltipField.hover();\n    await expect(tooltipField).toBeVisible();\n  });\n  test('should not change URL on hover', async ({ page }) => {\n    await page.goto('https://demoqa.com/tool-tips');\n    await page.locator('#toolTipTextField').hover();\n    await expect(page).toHaveURL('https://demoqa.com/tool-tips');\n  });\n});",
+  "id": "GC_demoqa_12_2",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/tool-tips",
+  "category": "user_profile",
+  "latency_s": 5.6
+}

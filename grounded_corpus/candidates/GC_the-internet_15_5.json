@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to navigate between the iframe example links on the Frames page so that I can access related content. Acceptance criteria: 1. The user should be able to click the link 'Nested Frames' and be redirected to the URL '/nested_frames'. 2. The user should be able to click the link 'iFrame' and be redirected to the URL '/iframe'. 3. The footer element with ID 'page-footer' should be visible after navigation.",
+  "complexity": "simple",
+  "cypress_script": "describe('Frames Page Navigation', () => {\n  it('should navigate to Nested Frames', () => {\n    cy.visit('https://the-internet.herokuapp.com/frames');\n    cy.get('a').contains('Nested Frames').click();\n    cy.url().should('include', '/nested_frames');\n    cy.get('#page-footer').should('be.visible');\n  });\n  it('should not navigate on invalid link click', () => {\n    cy.visit('https://the-internet.herokuapp.com/frames');\n    cy.get('a').contains('iFrame').click();\n    cy.url().should('include', '/iframe');\n    cy.get('#content').should('be.visible');\n    cy.get('#page-footer').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Frames Page Navigation', () => {\n  test('should navigate to Nested Frames', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/frames');\n    await page.click('text=Nested Frames');\n    await expect(page).toHaveURL(/.*nested_frames/);\n    await expect(page.locator('#page-footer')).toBeVisible();\n  });\n  test('should not navigate on invalid link click', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/frames');\n    await page.click('text=iFrame');\n    await expect(page).toHaveURL(/.*iframe/);\n    await expect(page.locator('#content')).toBeVisible();\n    await expect(page.locator('#page-footer')).toBeVisible();\n  });\n});",
+  "id": "GC_the-internet_15_5",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/frames",
+  "category": "navigation",
+  "latency_s": 6.6
+}

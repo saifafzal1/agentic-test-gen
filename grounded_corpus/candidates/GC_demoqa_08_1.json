@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to navigate through the multi-level navigation menu to access different sections of the application so that I can easily find the features I need.",
+  "complexity": "simple",
+  "cypress_script": "describe('Multi-Level Navigation Menu', () => {\n  it('should navigate to the Text Box page when the Text Box link is clicked', () => {\n    cy.visit('https://demoqa.com/menu');\n    cy.get('a.router-link').contains('Text Box').click();\n    cy.url().should('include', '/text-box');\n  });\n\n  it('should not navigate when a non-clickable item is clicked', () => {\n    cy.visit('https://demoqa.com/menu');\n    cy.get('a').contains('Main Item 1').click();\n    cy.url().should('eq', 'https://demoqa.com/menu');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Multi-Level Navigation Menu', () => {\n  test('should navigate to the Text Box page when the Text Box link is clicked', async ({ page }) => {\n    await page.goto('https://demoqa.com/menu');\n    await page.click('a.router-link:has-text(\"Text Box\")');\n    await expect(page).toHaveURL(/.*text-box/);\n  });\n\n  test('should not navigate when a non-clickable item is clicked', async ({ page }) => {\n    await page.goto('https://demoqa.com/menu');\n    await page.click('a:has-text(\"Main Item 1\")');\n    await expect(page).toHaveURL('https://demoqa.com/menu');\n  });\n});",
+  "id": "GC_demoqa_08_1",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/menu",
+  "category": "navigation",
+  "latency_s": 8.3
+}

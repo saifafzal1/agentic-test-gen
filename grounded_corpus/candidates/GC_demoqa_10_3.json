@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to adjust the value of the slider so that I can select a specific numerical value. The slider control should reflect the current value in a separate display input field.",
+  "complexity": "simple",
+  "cypress_script": "describe('Slider Control Tests', () => {\n  it('should adjust the slider and display the correct value', () => {\n    cy.visit('https://demoqa.com/slider');\n    cy.get('#slider').invoke('val', 50).trigger('input');\n    cy.get('#sliderValue').should('have.value', '50');\n  });\n\n  it('should not change the value if the slider is moved out of range', () => {\n    cy.visit('https://demoqa.com/slider');\n    cy.get('#slider').invoke('val', 100).trigger('input');\n    cy.get('#sliderValue').should('have.value', '100');\n    cy.get('#slider').invoke('val', -1).trigger('input');\n    cy.get('#sliderValue').should('have.value', '100');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Slider Control Tests', () => {\n  test('should adjust the slider and display the correct value', async ({ page }) => {\n    await page.goto('https://demoqa.com/slider');\n    await page.locator('#slider').fill('50');\n    await page.locator('#slider').dispatchEvent('input');\n    await expect(page.locator('#sliderValue')).toHaveValue('50');\n  });\n\n  test('should not change the value if the slider is moved out of range', async ({ page }) => {\n    await page.goto('https://demoqa.com/slider');\n    await page.locator('#slider').fill('100');\n    await page.locator('#slider').dispatchEvent('input');\n    await expect(page.locator('#sliderValue')).toHaveValue('100');\n    await page.locator('#slider').fill('-1');\n    await page.locator('#slider').dispatchEvent('input');\n    await expect(page.locator('#sliderValue')).toHaveValue('100');\n  });\n});",
+  "id": "GC_demoqa_10_3",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/slider",
+  "category": "search_filter",
+  "latency_s": 7.9
+}

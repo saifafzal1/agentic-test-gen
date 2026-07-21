@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to interact with buttons on the Buttons page so that I can trigger different actions like clicking, double-clicking, and right-clicking. Acceptance criteria: 1. When I click the button with id 'sp5Bi', the expected action occurs. 2. When I double-click the button with id 'doubleClickBtn', the expected action occurs. 3. When I right-click the button with id 'rightClickBtn', the expected action occurs.",
+  "complexity": "simple",
+  "cypress_script": "describe('Buttons Page Tests', () => {\n  it('should successfully click the Click Me button', () => {\n    cy.visit('https://demoqa.com/buttons');\n    cy.get('button#sp5Bi').click();\n    cy.url().should('eq', 'https://demoqa.com/buttons');\n  });\n  it('should not change URL on right-clicking the Right Click Me button', () => {\n    cy.visit('https://demoqa.com/buttons');\n    cy.get('button#rightClickBtn').rightclick();\n    cy.url().should('eq', 'https://demoqa.com/buttons');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Buttons Page Tests', () => {\n  test('should successfully click the Click Me button', async ({ page }) => {\n    await page.goto('https://demoqa.com/buttons');\n    await page.click('button#sp5Bi');\n    expect(page.url()).toBe('https://demoqa.com/buttons');\n  });\n  test('should not change URL on right-clicking the Right Click Me button', async ({ page }) => {\n    await page.goto('https://demoqa.com/buttons');\n    await page.click('button#rightClickBtn', { button: 'right' });\n    expect(page.url()).toBe('https://demoqa.com/buttons');\n  });\n});",
+  "id": "GC_demoqa_13_3",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/buttons",
+  "category": "navigation",
+  "latency_s": 6.3
+}

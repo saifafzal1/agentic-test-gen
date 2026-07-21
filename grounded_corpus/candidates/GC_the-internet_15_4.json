@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to navigate between the iframe example links on the Frames page so that I can access different content related to frames. Acceptance Criteria: When I visit the page at 'https://the-internet.herokuapp.com/frames', I should see the links 'Nested Frames' and 'iFrame'. Clicking on 'Nested Frames' should change the URL to 'https://the-internet.herokuapp.com/nested_frames', while clicking on 'iFrame' should change the URL to 'https://the-internet.herokuapp.com/iframe'. Additionally, the link to 'Elemental Selenium' should be visible in the footer section.",
+  "complexity": "simple",
+  "cypress_script": "describe('Frames Page Navigation', () => {\n  it('should navigate to Nested Frames', () => {\n    cy.visit('https://the-internet.herokuapp.com/frames');\n    cy.get('a').contains('Nested Frames').click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/nested_frames');\n  });\n  it('should not navigate to an invalid link', () => {\n    cy.visit('https://the-internet.herokuapp.com/frames');\n    cy.get('a').contains('iFrame').click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/iframe');\n    cy.get('#flash-messages').should('not.exist');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Frames Page Navigation', () => {\n  test('should navigate to Nested Frames', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/frames');\n    await page.click('text=Nesting Frames');\n    expect(page.url()).toBe('https://the-internet.herokuapp.com/nested_frames');\n  });\n  test('should not navigate to an invalid link', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/frames');\n    await page.click('text=iFrame');\n    expect(page.url()).toBe('https://the-internet.herokuapp.com/iframe');\n    const flashMessages = page.locator('#flash-messages');\n    expect(await flashMessages.count()).toBe(0);\n  });\n});",
+  "id": "GC_the-internet_15_4",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/frames",
+  "category": "navigation",
+  "latency_s": 6.8
+}

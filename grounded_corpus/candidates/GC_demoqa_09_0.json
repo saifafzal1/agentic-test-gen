@@ -1,0 +1,17 @@
+{
+  "user_story": "As a user, I want to interact with the collapsible accordion sections on the Accordian page so that I can view additional information about various topics. When I click on a section, it should expand to show the content related to that section. I should be able to collapse it again by clicking on the section header. The sections are 'What is Lorem Ipsum?', 'Where does it come from?', and 'Why do we use it?'.",
+  "acceptance_criteria": [
+    "The button with class 'accordion-button' and text 'What is Lorem Ipsum?' should be visible.",
+    "The button with class 'accordion-button collapsed' and text 'Where does it come from?' should be visible.",
+    "The button with class 'accordion-button collapsed' and text 'Why do we use it?' should be visible."
+  ],
+  "complexity": "simple",
+  "cypress_script": "cy.visit('https://demoqa.com/accordian')\n  .get('.accordion-button')\n  .contains('What is Lorem Ipsum?')\n  .click()\n  .get('.accordion-button')\n  .contains('What is Lorem Ipsum?')\n  .should('not.have.class', 'collapsed')\n  .get('.accordion-button')\n  .contains('Where does it come from?')\n  .click()\n  .get('.accordion-button')\n  .contains('Where does it come from?')\n  .should('have.class', 'collapsed')\n  .get('.accordion-button')\n  .contains('What is Lorem Ipsum?')\n  .click()\n  .get('.accordion-button')\n  .contains('What is Lorem Ipsum?')\n  .should('have.class', 'collapsed')\n  .get('.accordion-button')\n  .contains('Why do we use it?')\n  .click()\n  .get('.accordion-button')\n  .contains('Why do we use it?')\n  .should('have.class', 'collapsed')",
+  "playwright_script": "import { test, expect } from '@playwright/test';\ntest.describe('Accordion Interaction', () => {\n  test('expand and collapse accordion sections', async ({ page }) => {\n    await page.goto('https://demoqa.com/accordian');\n    await page.locator('button.accordion-button').filter({ hasText: 'What is Lorem Ipsum?' }).click();\n    await expect(page.locator('button.accordion-button').filter({ hasText: 'What is Lorem Ipsum?' })).toHaveClass(/collapsed/, { timeout: 5000 });\n    await page.locator('button.accordion-button').filter({ hasText: 'Where does it come from?' }).click();\n    await expect(page.locator('button.accordion-button').filter({ hasText: 'Where does it come from?' })).not.toHaveClass(/collapsed/, { timeout: 5000 });\n    await page.locator('button.accordion-button').filter({ hasText: 'What is Lorem Ipsum?' }).click();\n    await expect(page.locator('button.accordion-button').filter({ hasText: 'What is Lorem Ipsum?' })).toHaveClass(/collapsed/, { timeout: 5000 });\n    await page.locator('button.accordion-button').filter({ hasText: 'Why do we use it?' }).click();\n    await expect(page.locator('button.accordion-button').filter({ hasText: 'Why do we use it?' })).toHaveClass(/collapsed/, { timeout: 5000 });\n  });\n});",
+  "id": "GC_demoqa_09_0",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/accordian",
+  "category": "navigation",
+  "latency_s": 15.4
+}

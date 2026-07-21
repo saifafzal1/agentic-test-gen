@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to navigate through the floating menu links on the page so that I can access different sections of the website easily. Acceptance Criteria: \n1. When I click the 'Home' link, I should remain on the same page and the URL should not change. \n2. When I click the 'News' link, I should remain on the same page and the URL should not change. \n3. When I click the 'Contact' link, I should remain on the same page and the URL should not change. \n4. When I click the 'About' link, I should remain on the same page and the URL should not change. \n5. When I click the 'Elemental Selenium' link, I should be redirected to 'http://elementalselenium.com/'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Floating Navigation Menu Links', () => {\n  it('should navigate to Home link', () => {\n    cy.visit('https://the-internet.herokuapp.com/floating_menu');\n    cy.get('a').contains('Home').click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/floating_menu');\n  });\n  it('should navigate to Elemental Selenium link', () => {\n    cy.visit('https://the-internet.herokuapp.com/floating_menu');\n    cy.get('a').contains('Elemental Selenium').click();\n    cy.url().should('eq', 'http://elementalselenium.com/');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Floating Navigation Menu Links', () => {\n  test('should navigate to Home link', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/floating_menu');\n    await page.click('a:has-text(\"Home\")');\n    expect(page.url()).toBe('https://the-internet.herokuapp.com/floating_menu');\n  });\n  test('should navigate to Elemental Selenium link', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/floating_menu');\n    await page.click('a:has-text(\"Elemental Selenium\")');\n    expect(page.url()).toBe('http://elementalselenium.com/');\n  });\n});",
+  "id": "GC_the-internet_17_3",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/floating_menu",
+  "category": "navigation",
+  "latency_s": 8.3
+}

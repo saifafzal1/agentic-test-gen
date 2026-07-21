@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to interact with a horizontal range slider so that I can select a value between the minimum and maximum range. Acceptance criteria: The slider should be visible and functional; when I adjust the slider, the displayed value should update accordingly. The slider is represented by the input element of type 'range': {\"tag\": \"input\", \"type\": \"range\", \"value\": \"0\"}. The current value of the slider is shown in the span element with id 'range': {\"tag\": \"span\", \"id\": \"range\", \"text\": \"0\"}.",
+  "complexity": "simple",
+  "cypress_script": "describe('Horizontal Slider Control', () => {\n  it('should adjust the slider value on interaction', () => {\n    cy.visit('https://the-internet.herokuapp.com/horizontal_slider');\n    cy.get('input[type=\"range\"]').invoke('val', 50).trigger('input');\n    cy.get('span#range').should('have.text', '50');\n  });\n\n  it('should not change the URL when the slider is adjusted', () => {\n    cy.visit('https://the-internet.herokuapp.com/horizontal_slider');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/horizontal_slider');\n    cy.get('input[type=\"range\"]').invoke('val', 75).trigger('input');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/horizontal_slider');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Horizontal Slider Control', () => {\n  test('should adjust the slider value on interaction', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/horizontal_slider');\n    await page.locator('input[type=\"range\"]').fill('50');\n    await page.locator('input[type=\"range\"]').dispatchEvent('input');\n    const rangeValue = await page.locator('span#range').innerText();\n    expect(rangeValue).toBe('50');\n  });\n\n  test('should not change the URL when the slider is adjusted', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/horizontal_slider');\n    const initialUrl = page.url();\n    await page.locator('input[type=\"range\"]').fill('75');\n    await page.locator('input[type=\"range\"]').dispatchEvent('input');\n    expect(page.url()).toBe(initialUrl);\n  });\n});",
+  "id": "GC_the-internet_19_3",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/horizontal_slider",
+  "category": "search_filter",
+  "latency_s": 9.0
+}

@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to interact with collapsible accordion sections so that I can view additional information as needed. I should be able to click on each section to expand it and see the corresponding content. The accordion should allow only one section to be open at a time.",
+  "complexity": "simple",
+  "cypress_script": "describe('Accordion functionality', () => {\n  it('should expand the section when clicked', () => {\n    cy.visit('https://demoqa.com/accordian');\n    cy.get('button.accordion-button').contains('What is Lorem Ipsum?').click();\n    cy.get('button.accordion-button').contains('What is Lorem Ipsum?').should('not.have.class', 'collapsed');\n  });\n\n  it('should not expand another section when one is already open', () => {\n    cy.visit('https://demoqa.com/accordian');\n    cy.get('button.accordion-button').contains('What is Lorem Ipsum?').click();\n    cy.get('button.accordion-button').contains('Where does it come from?').click();\n    cy.get('button.accordion-button').contains('What is Lorem Ipsum?').should('have.class', 'collapsed');\n    cy.get('button.accordion-button').contains('Where does it come from?').should('not.have.class', 'collapsed');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Accordion functionality', () => {\n  test('should expand the section when clicked', async ({ page }) => {\n    await page.goto('https://demoqa.com/accordian');\n    await page.click('button.accordion-button:has-text(\"What is Lorem Ipsum?\")');\n    const isCollapsed = await page.isVisible('button.accordion-button:has-text(\"What is Lorem Ipsum?\")');\n    expect(isCollapsed).toBeFalsy();\n  });\n\n  test('should not expand another section when one is already open', async ({ page }) => {\n    await page.goto('https://demoqa.com/accordian');\n    await page.click('button.accordion-button:has-text(\"What is Lorem Ipsum?\")');\n    await page.click('button.accordion-button:has-text(\"Where does it come from?\")');\n    const isFirstCollapsed = await page.isVisible('button.accordion-button:has-text(\"What is Lorem Ipsum?\")');\n    expect(isFirstCollapsed).toBeTruthy();\n    const isSecondNotCollapsed = await page.isVisible('button.accordion-button:has-text(\"Where does it come from?\")');\n    expect(isSecondNotCollapsed).toBeFalsy();\n  });\n});",
+  "id": "GC_demoqa_09_1",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/accordian",
+  "category": "navigation",
+  "latency_s": 12.2
+}

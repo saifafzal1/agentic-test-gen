@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to select a date using the date picker so that I can easily choose a specific day for my event. The date picker should allow me to enter a date in the format 'MM/DD/YYYY' and should display the selected date correctly. Acceptance Criteria: 1. The date picker input field with id 'datePickerMonthYearInput' should be visible. 2. When a valid date is entered, the date should be reflected in the input field. 3. Entering an invalid date should not change the input field's value and the URL should remain the same.",
+  "complexity": "simple",
+  "cypress_script": "describe('Date Picker Functionality', () => {\n  it('should select a valid date successfully', () => {\n    cy.visit('https://demoqa.com/date-picker');\n    cy.get('#datePickerMonthYearInput').type('07/21/2026');\n    cy.get('#datePickerMonthYearInput').should('have.value', '07/21/2026');\n  });\n  it('should not change the input when an invalid date is entered', () => {\n    cy.visit('https://demoqa.com/date-picker');\n    cy.get('#datePickerMonthYearInput').type('invalid date');\n    cy.get('#datePickerMonthYearInput').should('have.value', '07/21/2026');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Date Picker Functionality', () => {\n  test('should select a valid date successfully', async ({ page }) => {\n    await page.goto('https://demoqa.com/date-picker');\n    await page.fill('#datePickerMonthYearInput', '07/21/2026');\n    const value = await page.inputValue('#datePickerMonthYearInput');\n    expect(value).toBe('07/21/2026');\n  });\n  test('should not change the input when an invalid date is entered', async ({ page }) => {\n    await page.goto('https://demoqa.com/date-picker');\n    await page.fill('#datePickerMonthYearInput', 'invalid date');\n    const value = await page.inputValue('#datePickerMonthYearInput');\n    expect(value).toBe('07/21/2026');\n  });\n});",
+  "id": "GC_demoqa_11_1",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/date-picker",
+  "category": "search_filter",
+  "latency_s": 10.6
+}

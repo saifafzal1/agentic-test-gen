@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to interact with various buttons on the demoqa buttons page to verify their functionalities, including clicking, double-clicking, and right-clicking, so that I can confirm that these actions work as expected.",
+  "complexity": "simple",
+  "cypress_script": "describe('Buttons Functionality', () => {\n  it('should successfully click the Click Me button', () => {\n    cy.visit('https://demoqa.com/buttons');\n    cy.get('button#sp5Bi').click();\n    cy.url().should('eq', 'https://demoqa.com/buttons');\n  });\n  it('should handle double-click on the Double Click Me button', () => {\n    cy.visit('https://demoqa.com/buttons');\n    cy.get('button#doubleClickBtn').dblclick();\n    cy.url().should('eq', 'https://demoqa.com/buttons');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\n test.describe('Buttons Functionality', () => {\n   test('should successfully click the Click Me button', async ({ page }) => {\n     await page.goto('https://demoqa.com/buttons');\n     await page.click('button#sp5Bi');\n     expect(page.url()).toBe('https://demoqa.com/buttons');\n   });\n   test('should handle double-click on the Double Click Me button', async ({ page }) => {\n     await page.goto('https://demoqa.com/buttons');\n     await page.dblclick('button#doubleClickBtn');\n     expect(page.url()).toBe('https://demoqa.com/buttons');\n   });\n});",
+  "id": "GC_demoqa_13_5",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/buttons",
+  "category": "navigation",
+  "latency_s": 5.2
+}

@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to navigate through the floating menu links so that I can easily access different sections of the website.\n\nAcceptance Criteria:\n- The floating menu should contain the links 'Home', 'News', 'Contact', and 'About', which are visible to the user.\n- Each link should redirect the user to the appropriate section without errors, maintaining visibility of the menu on scroll.",
+  "complexity": "simple",
+  "cypress_script": "describe('Floating Navigation Menu Links', () => {\n  it('should navigate to Home section', () => {\n    cy.visit('https://the-internet.herokuapp.com/floating_menu');\n    cy.get('a').contains('Home').click();\n    cy.url().should('include', '#home');\n  });\n\n  it('should remain on the same page when an invalid link is clicked', () => {\n    cy.visit('https://the-internet.herokuapp.com/floating_menu');\n    cy.get('a').contains('About').click();\n    cy.url().should('include', '#about');\n    cy.get('#menu').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Floating Navigation Menu Links', () => {\n  test('should navigate to Home section', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/floating_menu');\n    await page.click('a:text(\"Home\")');\n    await expect(page).toHaveURL(/.*#home/);\n  });\n\n  test('should remain on the same page when an invalid link is clicked', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/floating_menu');\n    await page.click('a:text(\"About\")');\n    await expect(page).toHaveURL(/.*#about/);\n    await expect(page.locator('#menu')).toBeVisible();\n  });\n});",
+  "id": "GC_the-internet_17_5",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/floating_menu",
+  "category": "navigation",
+  "latency_s": 7.1
+}

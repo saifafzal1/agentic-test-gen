@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to navigate the multi-level dropdown menu so that I can access different sections such as Downloads and view file types like PDF, CSV, and Excel. Acceptance Criteria: The menu should include the following elements: 'Disabled', 'Should not see this', 'Enabled', 'Downloads', 'PDF', 'CSV', 'Excel', and 'Back to JQuery UI'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Multi-level Dropdown Navigation Menu', () => {\n  it('should navigate to Downloads when clicked', () => {\n    cy.visit('https://the-internet.herokuapp.com/jqueryui/menu');\n    cy.get('#menu').contains('Downloads').click();\n    cy.url().should('include', '/download/jqueryui/menu/menu.pdf');\n  });\n\n  it('should not allow interaction with disabled menu item', () => {\n    cy.visit('https://the-internet.herokuapp.com/jqueryui/menu');\n    cy.get('#ui-id-1').should('be.visible');\n    cy.get('#ui-id-1').click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/jqueryui/menu');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Multi-level Dropdown Navigation Menu', () => {\n  test('should navigate to Downloads when clicked', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/jqueryui/menu');\n    await page.click('text=Downloads');\n    await expect(page).toHaveURL(/\\/download\\/jqueryui\\/menu\\/menu.pdf/);\n  });\n\n  test('should not allow interaction with disabled menu item', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/jqueryui/menu');\n    await expect(page.locator('#ui-id-1')).toBeVisible();\n    await page.click('#ui-id-1');\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/jqueryui/menu');\n  });\n});",
+  "id": "GC_the-internet_18_2",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/jqueryui/menu",
+  "category": "navigation",
+  "latency_s": 5.7
+}

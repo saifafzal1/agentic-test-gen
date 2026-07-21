@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to adjust the slider to change the value displayed so that I can select a specific value easily. The slider should reflect the current value in the input field as I move it. Acceptance Criteria: \n1. The slider input with id 'slider' should be adjustable. \n2. The value displayed in the input field with id 'sliderValue' should update accordingly when the slider is moved.",
+  "complexity": "simple",
+  "cypress_script": "describe('Slider Functionality', () => {\n  it('should update the value when slider is moved', () => {\n    cy.visit('https://demoqa.com/slider');\n    cy.get('#slider').invoke('val', 75).trigger('input');\n    cy.get('#sliderValue').should('have.value', '75');\n  });\n\n  it('should not change the value when slider is not moved', () => {\n    cy.visit('https://demoqa.com/slider');\n    cy.get('#sliderValue').should('have.value', '25');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Slider Functionality', () => {\n  test('should update the value when slider is moved', async ({ page }) => {\n    await page.goto('https://demoqa.com/slider');\n    await page.locator('#slider').fill('75');\n    await page.locator('#slider').dispatchEvent('input');\n    await expect(page.locator('#sliderValue')).toHaveValue('75');\n  });\n\n  test('should not change the value when slider is not moved', async ({ page }) => {\n    await page.goto('https://demoqa.com/slider');\n    await expect(page.locator('#sliderValue')).toHaveValue('25');\n  });\n});",
+  "id": "GC_demoqa_10_1",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/slider",
+  "category": "search_filter",
+  "latency_s": 7.3
+}

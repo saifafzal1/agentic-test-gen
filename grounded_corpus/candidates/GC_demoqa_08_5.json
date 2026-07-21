@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to navigate through a multi-level navigation menu to access various sections of the application easily. This will enhance my experience by allowing me to quickly find the features I need. Acceptance criteria: When I click on 'Main Item 1', I should see 'Sub Item' and 'SUB SUB LIST \u00bb'. Clicking on 'SUB SUB LIST \u00bb' should reveal 'Sub Sub Item 1' and 'Sub Sub Item 2'.",
+  "complexity": "medium",
+  "cypress_script": "describe('Multi-level Navigation Menu', () => {\n  it('should navigate to sub items upon clicking Main Item 1', () => {\n    cy.visit('https://demoqa.com/menu');\n    cy.get('a').contains('Main Item 1').click();\n    cy.get('a').contains('Sub Item').should('be.visible');\n    cy.get('a').contains('SUB SUB LIST \u00bb').should('be.visible').click();\n    cy.get('a').contains('Sub Sub Item 1').should('be.visible');\n    cy.get('a').contains('Sub Sub Item 2').should('be.visible');\n  });\n\n  it('should not navigate on clicking Sub Item without action', () => {\n    cy.visit('https://demoqa.com/menu');\n    cy.get('a').contains('Main Item 1').click();\n    cy.get('a').contains('Sub Item').click();\n    cy.url().should('eq', 'https://demoqa.com/menu');\n    cy.get('a').contains('Main Item 1').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Multi-level Navigation Menu', () => {\n  test('should navigate to sub items upon clicking Main Item 1', async ({ page }) => {\n    await page.goto('https://demoqa.com/menu');\n    await page.click('a:text(\"Main Item 1\")');\n    await expect(page.locator('a:text(\"Sub Item\")')).toBeVisible();\n    await expect(page.locator('a:text(\"SUB SUB LIST \u00bb\")')).toBeVisible();\n    await page.click('a:text(\"SUB SUB LIST \u00bb\")');\n    await expect(page.locator('a:text(\"Sub Sub Item 1\")')).toBeVisible();\n    await expect(page.locator('a:text(\"Sub Sub Item 2\")')).toBeVisible();\n  });\n\n  test('should not navigate on clicking Sub Item without action', async ({ page }) => {\n    await page.goto('https://demoqa.com/menu');\n    await page.click('a:text(\"Main Item 1\")');\n    await page.click('a:text(\"Sub Item\")');\n    await expect(page).toHaveURL('https://demoqa.com/menu');\n    await expect(page.locator('a:text(\"Main Item 1\")')).toBeVisible();\n  });\n});",
+  "id": "GC_demoqa_08_5",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/menu",
+  "category": "navigation",
+  "latency_s": 11.0
+}

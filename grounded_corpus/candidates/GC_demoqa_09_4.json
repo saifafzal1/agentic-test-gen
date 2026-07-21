@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to interact with the collapsible accordion sections on the Accordian page so that I can view information on 'What is Lorem Ipsum?', 'Where does it come from?', and 'Why do we use it?'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Accordion Functionality', () => {\n  it('should expand the first accordion section', () => {\n    cy.visit('https://demoqa.com/accordian');\n    cy.get('button.accordion-button').contains('What is Lorem Ipsum?').click();\n    cy.url().should('eq', 'https://demoqa.com/accordian');\n  });\n\n  it('should not expand any other sections when the first is collapsed', () => {\n    cy.visit('https://demoqa.com/accordian');\n    cy.get('button.accordion-button').contains('What is Lorem Ipsum?').click();\n    cy.get('button.accordion-button.collapsed').contains('Where does it come from?').should('be.visible');\n    cy.get('button.accordion-button.collapsed').contains('Why do we use it?').should('be.visible');\n    cy.url().should('eq', 'https://demoqa.com/accordian');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Accordion Functionality', () => {\n  test('should expand the first accordion section', async ({ page }) => {\n    await page.goto('https://demoqa.com/accordian');\n    await page.locator('button.accordion-button').withText('What is Lorem Ipsum?').click();\n    await expect(page).toHaveURL('https://demoqa.com/accordian');\n  });\n\n  test('should not expand any other sections when the first is collapsed', async ({ page }) => {\n    await page.goto('https://demoqa.com/accordian');\n    await page.locator('button.accordion-button').withText('What is Lorem Ipsum?').click();\n    await expect(page.locator('button.accordion-button.collapsed').withText('Where does it come from?')).toBeVisible();\n    await expect(page.locator('button.accordion-button.collapsed').withText('Why do we use it?')).toBeVisible();\n    await expect(page).toHaveURL('https://demoqa.com/accordian');\n  });\n});",
+  "id": "GC_demoqa_09_4",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/accordian",
+  "category": "navigation",
+  "latency_s": 8.6
+}

@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to adjust the value of the slider so that I can easily select a value between the minimum and maximum range. The slider should visually reflect the selected value in the input field next to it. Acceptance Criteria: 1. The user can interact with the slider by moving it left or right. 2. The value displayed in the input field with the id 'sliderValue' should update to match the position of the slider with id 'slider'. 3. The initial value of the slider should be 25 and reflect this in the input field.",
+  "complexity": "simple",
+  "cypress_script": "describe('Slider Control Tests', () => {\n  beforeEach(() => {\n    cy.visit('https://demoqa.com/slider');\n  });\n\n  it('should update the slider value correctly', () => {\n    cy.get('#slider').invoke('val', 75).trigger('input');\n    cy.get('#sliderValue').should('have.value', '75');\n  });\n\n  it('should not allow slider to exceed maximum value', () => {\n    cy.get('#slider').invoke('val', 150).trigger('input');\n    cy.get('#sliderValue').should('have.value', '150');\n    cy.get('#slider').invoke('val').should('not.be.greaterThan', 100);\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Slider Control Tests', () => {\n  test.beforeEach(async ({ page }) => {\n    await page.goto('https://demoqa.com/slider');\n  });\n\n  test('should update the slider value correctly', async ({ page }) => {\n    await page.locator('#slider').evaluate(slider => slider.value = 75);\n    await page.locator('#slider').dispatchEvent('input');\n    const sliderValue = await page.locator('#sliderValue').inputValue();\n    expect(sliderValue).toBe('75');\n  });\n\n  test('should not allow slider to exceed maximum value', async ({ page }) => {\n    await page.locator('#slider').evaluate(slider => slider.value = 150);\n    await page.locator('#slider').dispatchEvent('input');\n    const sliderValue = await page.locator('#sliderValue').inputValue();\n    expect(sliderValue).toBe('150');\n    const sliderVal = await page.locator('#slider').inputValue();\n    expect(sliderVal).not.toBeGreaterThan('100');\n  });\n});",
+  "id": "GC_demoqa_10_2",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/slider",
+  "category": "search_filter",
+  "latency_s": 8.8
+}

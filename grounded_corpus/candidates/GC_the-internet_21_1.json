@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to interact with action buttons on the Challenging DOM page so that I can test the functionality of various buttons. Acceptance Criteria: \n1. The button with text 'baz' should be present and clickable. \n2. The button with text 'bar' should be present and clickable. \n3. The button with text 'qux' should be present and clickable. \n4. The edit links should be present for each row in the data table. \n5. The delete links should be present for each row in the data table.",
+  "complexity": "simple",
+  "cypress_script": "describe('Challenging DOM Action Buttons', () => {\n  it('should click the baz button successfully', () => {\n    cy.visit('https://the-internet.herokuapp.com/challenging_dom');\n    cy.get('a.button').contains('baz').should('be.visible').click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/challenging_dom');\n  });\n  it('should not change the URL when clicking a non-existent button', () => {\n    cy.visit('https://the-internet.herokuapp.com/challenging_dom');\n    cy.get('a.button').contains('non-existent').should('not.exist');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/challenging_dom');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\n test.describe('Challenging DOM Action Buttons', () => {\n   test('should click the baz button successfully', async ({ page }) => {\n     await page.goto('https://the-internet.herokuapp.com/challenging_dom');\n     const bazButton = page.locator('a.button').withText('baz');\n     await expect(bazButton).toBeVisible();\n     await bazButton.click();\n     await expect(page).toHaveURL('https://the-internet.herokuapp.com/challenging_dom');\n   });\n   test('should not change the URL when clicking a non-existent button', async ({ page }) => {\n     await page.goto('https://the-internet.herokuapp.com/challenging_dom');\n     const nonExistentButton = page.locator('a.button').withText('non-existent');\n     await expect(nonExistentButton).toBeHidden();\n     await expect(page).toHaveURL('https://the-internet.herokuapp.com/challenging_dom');\n   });\n });",
+  "id": "GC_the-internet_21_1",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/challenging_dom",
+  "category": "table_list",
+  "latency_s": 5.3
+}

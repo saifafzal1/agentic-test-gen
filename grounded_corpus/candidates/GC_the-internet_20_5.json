@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to retrieve my password using the forgotten password recovery form so that I can regain access to my account. The form should accept my email address and allow me to submit a request to recover my password.",
+  "complexity": "simple",
+  "cypress_script": "describe('Forgot Password Recovery Form', () => {\n  it('should successfully submit the form with a valid email', () => {\n    cy.visit('https://the-internet.herokuapp.com/forgot_password');\n    cy.get('input#email').type('test@example.com');\n    cy.get('button#form_submit').click();\n    cy.url().should('include', 'forgot_password');\n    cy.get('div#flash-messages').should('be.visible');\n  });\n\n  it('should not navigate away when the form is submitted empty', () => {\n    cy.visit('https://the-internet.herokuapp.com/forgot_password');\n    cy.get('button#form_submit').click();\n    cy.url().should('include', 'forgot_password');\n    cy.get('div#flash-messages').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Forgot Password Recovery Form', () => {\n  test('should successfully submit the form with a valid email', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/forgot_password');\n    await page.fill('input#email', 'test@example.com');\n    await page.click('button#form_submit');\n    await expect(page).toHaveURL(/forgot_password/);\n    await expect(page.locator('div#flash-messages')).toBeVisible();\n  });\n\n  test('should not navigate away when the form is submitted empty', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/forgot_password');\n    await page.click('button#form_submit');\n    await expect(page).toHaveURL(/forgot_password/);\n    await expect(page.locator('div#flash-messages')).toBeVisible();\n  });\n});",
+  "id": "GC_the-internet_20_5",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/forgot_password",
+  "category": "user_profile",
+  "latency_s": 7.3
+}

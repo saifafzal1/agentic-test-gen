@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to adjust the value of the slider so that I can select a desired value accurately. This will allow me to filter results based on the selected value range.",
+  "complexity": "simple",
+  "cypress_script": "describe('Slider Value Control', () => {\n  it('should adjust the slider to a new value', () => {\n    cy.visit('https://demoqa.com/slider');\n    cy.get('#slider').invoke('val', 75).trigger('input');\n    cy.get('#sliderValue').should('have.value', '75');\n  });\n\n  it('should not change the value when slider is at minimum', () => {\n    cy.visit('https://demoqa.com/slider');\n    cy.get('#slider').invoke('val', 0).trigger('input');\n    cy.get('#sliderValue').should('have.value', '0');\n    cy.get('#slider').invoke('val', -10).trigger('input');\n    cy.get('#sliderValue').should('have.value', '0');\n  });\n});",
+  "playwright_script": "test.describe('Slider Value Control', () => {\n  test('should adjust the slider to a new value', async ({ page }) => {\n    await page.goto('https://demoqa.com/slider');\n    await page.locator('#slider').evaluate(el => el.value = 75);\n    await page.locator('#slider').dispatchEvent('input');\n    const sliderValue = await page.locator('#sliderValue').inputValue();\n    expect(sliderValue).toBe('75');\n  });\n\n  test('should not change the value when slider is at minimum', async ({ page }) => {\n    await page.goto('https://demoqa.com/slider');\n    await page.locator('#slider').evaluate(el => el.value = 0);\n    await page.locator('#slider').dispatchEvent('input');\n    let sliderValue = await page.locator('#sliderValue').inputValue();\n    expect(sliderValue).toBe('0');\n    await page.locator('#slider').evaluate(el => el.value = -10);\n    await page.locator('#slider').dispatchEvent('input');\n    sliderValue = await page.locator('#sliderValue').inputValue();\n    expect(sliderValue).toBe('0');\n  });\n});",
+  "id": "GC_demoqa_10_5",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/slider",
+  "category": "search_filter",
+  "latency_s": 7.8
+}

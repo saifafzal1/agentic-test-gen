@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to select a date using the date picker so that I can easily choose a date without manual entry. Acceptance Criteria: The date picker input with id 'datePickerMonthYearInput' should allow the user to select a date, and the selected date should be displayed correctly in the input field.",
+  "complexity": "simple",
+  "cypress_script": "describe('Date Picker Functionality', () => {\n  it('should select a date successfully', () => {\n    cy.visit('https://demoqa.com/date-picker');\n    cy.get('#datePickerMonthYearInput').click();\n    cy.get('.react-datepicker__day--021').click(); // Assuming this is the correct day in the date picker\n    cy.get('#datePickerMonthYearInput').should('have.value', '07/21/2026');\n  });\n\n  it('should not change the URL when no date is selected', () => {\n    cy.visit('https://demoqa.com/date-picker');\n    cy.get('#datePickerMonthYearInput').click();\n    cy.get('.react-datepicker__close-icon').click(); // Close without selecting a date\n    cy.url().should('eq', 'https://demoqa.com/date-picker');\n    cy.get('#datePickerMonthYearInput').should('have.value', '07/21/2026');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Date Picker Functionality', () => {\n  test('should select a date successfully', async ({ page }) => {\n    await page.goto('https://demoqa.com/date-picker');\n    await page.click('#datePickerMonthYearInput');\n    await page.click('.react-datepicker__day--021'); // Assuming this is the correct day in the date picker\n    const value = await page.locator('#datePickerMonthYearInput').inputValue();\n    expect(value).toBe('07/21/2026');\n  });\n\n  test('should not change the URL when no date is selected', async ({ page }) => {\n    await page.goto('https://demoqa.com/date-picker');\n    await page.click('#datePickerMonthYearInput');\n    await page.click('.react-datepicker__close-icon'); // Close without selecting a date\n    await expect(page).toHaveURL('https://demoqa.com/date-picker');\n    const value = await page.locator('#datePickerMonthYearInput').inputValue();\n    expect(value).toBe('07/21/2026');\n  });\n});",
+  "id": "GC_demoqa_11_0",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/date-picker",
+  "category": "search_filter",
+  "latency_s": 12.1
+}

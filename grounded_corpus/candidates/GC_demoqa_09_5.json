@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to interact with the collapsible accordion sections on the Accordian page so that I can view additional information when needed. \nAcceptance Criteria:\n1. The button with class 'accordion-button' and text 'What is Lorem Ipsum?' should be clickable and expand to show the relevant content.\n2. The button with class 'accordion-button collapsed' and text 'Where does it come from?' should be clickable and expand to show the relevant content.\n3. The button with class 'accordion-button collapsed' and text 'Why do we use it?' should be clickable and expand to show the relevant content.\n4. After clicking on the 'What is Lorem Ipsum?' button, the URL should remain 'https://demoqa.com/accordian'.\n5. The accordion sections should collapse when clicking on an already expanded section.",
+  "complexity": "simple",
+  "cypress_script": "describe('Accordion Functionality', () => {\n  it('should expand the What is Lorem Ipsum section', () => {\n    cy.visit('https://demoqa.com/accordian');\n    cy.get('.accordion-button').contains('What is Lorem Ipsum?').click();\n    cy.url().should('eq', 'https://demoqa.com/accordian');\n  });\n\n  it('should not change URL when clicking on an already expanded section', () => {\n    cy.visit('https://demoqa.com/accordian');\n    cy.get('.accordion-button').contains('What is Lorem Ipsum?').click();\n    cy.get('.accordion-button').contains('What is Lorem Ipsum?').click();\n    cy.url().should('eq', 'https://demoqa.com/accordian');\n  });\n});",
+  "playwright_script": "import { test } from '@playwright/test';\n\ntest.describe('Accordion Functionality', () => {\n  test('should expand the What is Lorem Ipsum section', async ({ page }) => {\n    await page.goto('https://demoqa.com/accordian');\n    await page.click('button.accordion-button:has-text(\"What is Lorem Ipsum?\")');\n    await page.waitForURL('https://demoqa.com/accordian');\n  });\n\n  test('should not change URL when clicking on an already expanded section', async ({ page }) => {\n    await page.goto('https://demoqa.com/accordian');\n    await page.click('button.accordion-button:has-text(\"What is Lorem Ipsum?\")');\n    await page.click('button.accordion-button:has-text(\"What is Lorem Ipsum?\")');\n    await page.waitForURL('https://demoqa.com/accordian');\n  });\n});",
+  "id": "GC_demoqa_09_5",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/accordian",
+  "category": "navigation",
+  "latency_s": 67.2
+}

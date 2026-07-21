@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to interact with the multi-level dropdown navigation menu so that I can access various resources easily. Acceptance Criteria: \n1. The menu should display options 'Disabled', 'Should not see this', 'Enabled', 'Downloads', 'PDF', 'CSV', 'Excel', and 'Back to JQuery UI' when I hover over the menu. \n2. The 'Disabled' option should be visible but not clickable. \n3. Clicking on 'PDF' should navigate to the correct resource, and the URL should change to '/download/jqueryui/menu/menu.pdf'. \n4. The option 'Should not see this' should remain visible but not interactable.",
+  "complexity": "simple",
+  "cypress_script": "describe('Multi-level dropdown navigation menu', () => {\n  it('should navigate to the PDF download when clicked', () => {\n    cy.visit('https://the-internet.herokuapp.com/jqueryui/menu');\n    cy.get('#menu').trigger('mouseover');\n    cy.contains('PDF').click();\n    cy.url().should('include', '/download/jqueryui/menu/menu.pdf');\n  });\n\n  it('should not allow interaction with the Disabled menu item', () => {\n    cy.visit('https://the-internet.herokuapp.com/jqueryui/menu');\n    cy.get('#menu').trigger('mouseover');\n    cy.contains('Disabled').should('be.visible');\n    cy.contains('Disabled').click();\n    cy.url().should('not.include', 'Disabled');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Multi-level dropdown navigation menu', () => {\n  test('should navigate to the PDF download when clicked', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/jqueryui/menu');\n    await page.hover('#menu');\n    await page.click('text=PDF');\n    await expect(page).toHaveURL(/.*download\\/jqueryui\\/menu\\/menu.pdf/);\n  });\n\n  test('should not allow interaction with the Disabled menu item', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/jqueryui/menu');\n    await page.hover('#menu');\n    await expect(page.locator('text=Disabled')).toBeVisible();\n    await page.locator('text=Disabled').click();\n    await expect(page).not.toHaveURL(/.*Disabled/);\n  });\n});",
+  "id": "GC_the-internet_18_1",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/jqueryui/menu",
+  "category": "navigation",
+  "latency_s": 6.2
+}

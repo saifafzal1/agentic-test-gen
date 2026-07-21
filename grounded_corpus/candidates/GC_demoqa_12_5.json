@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to see tooltips with helpful information when I hover over certain elements on the Tool Tips page, so that I can understand their functions better.",
+  "complexity": "simple",
+  "cypress_script": "describe('Tool Tips Page', () => {\n  it('should display tooltip on hover over the button', () => {\n    cy.visit('https://demoqa.com/tool-tips');\n    cy.get('#toolTipButton').trigger('mouseover');\n    cy.get('.tooltip-inner').should('be.visible');\n  });\n\n  it('should not display tooltip when not hovering', () => {\n    cy.visit('https://demoqa.com/tool-tips');\n    cy.get('#toolTipButton').should('be.visible');\n    cy.get('.tooltip-inner').should('not.exist');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Tool Tips Page', () => {\n  test('should display tooltip on hover over the button', async ({ page }) => {\n    await page.goto('https://demoqa.com/tool-tips');\n    const button = page.locator('#toolTipButton');\n    await button.hover();\n    const tooltip = page.locator('.tooltip-inner');\n    await expect(tooltip).toBeVisible();\n  });\n\n  test('should not display tooltip when not hovering', async ({ page }) => {\n    await page.goto('https://demoqa.com/tool-tips');\n    const button = page.locator('#toolTipButton');\n    await expect(button).toBeVisible();\n    const tooltip = page.locator('.tooltip-inner');\n    await expect(tooltip).not.toBeVisible();\n  });\n});",
+  "id": "GC_demoqa_12_5",
+  "app": "demoqa",
+  "base_url": "https://demoqa.com",
+  "page": "/tool-tips",
+  "category": "user_profile",
+  "latency_s": 7.8
+}

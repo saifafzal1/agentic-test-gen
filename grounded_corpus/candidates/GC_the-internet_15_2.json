@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to navigate between the iframe example links on the Frames page so that I can access the Nested Frames and iFrame functionalities. Acceptance criteria: When I click the link 'Nested Frames', I should be redirected to the URL '/nested_frames'. When I click the link 'iFrame', I should be redirected to the URL '/iframe'.",
+  "complexity": "simple",
+  "cypress_script": "describe('Frames Navigation Tests', () => {\n  it('should navigate to Nested Frames page', () => {\n    cy.visit('https://the-internet.herokuapp.com/frames');\n    cy.get('a[href=\"/nested_frames\"]').click();\n    cy.url().should('include', '/nested_frames');\n  });\n\n  it('should navigate to iFrame page', () => {\n    cy.visit('https://the-internet.herokuapp.com/frames');\n    cy.get('a[href=\"/iframe\"]').click();\n    cy.url().should('include', '/iframe');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Frames Navigation Tests', () => {\n  test('should navigate to Nested Frames page', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/frames');\n    await page.click('a[href=\"/nested_frames\"]');\n    expect(page.url()).toContain('/nested_frames');\n  });\n\n  test('should navigate to iFrame page', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/frames');\n    await page.click('a[href=\"/iframe\"]');\n    expect(page.url()).toContain('/iframe');\n  });\n});",
+  "id": "GC_the-internet_15_2",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/frames",
+  "category": "navigation",
+  "latency_s": 5.9
+}

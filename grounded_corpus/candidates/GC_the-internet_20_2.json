@@ -1,0 +1,12 @@
+{
+  "user_story": "As a user, I want to recover my password by providing my email address on the forgotten password recovery form so that I can regain access to my account. Acceptance Criteria: \n1. The form should contain an input field with id 'email' for the user to enter their email address. \n2. There should be a button with id 'form_submit' that the user can click to submit the form. \n3. After submitting the form with a valid email, the user should remain on the same page if the email field is empty.",
+  "complexity": "simple",
+  "cypress_script": "describe('Forgot Password Recovery Form', () => {\n  it('should submit the form with a valid email', () => {\n    cy.visit('https://the-internet.herokuapp.com/forgot_password');\n    cy.get('#email').type('test@example.com');\n    cy.get('#form_submit').click();\n    cy.url().should('include', '/forgot_password');\n  });\n\n  it('should not change the URL when submitting an empty form', () => {\n    cy.visit('https://the-internet.herokuapp.com/forgot_password');\n    cy.get('#form_submit').click();\n    cy.url().should('include', '/forgot_password');\n    cy.get('#flash-messages').should('be.visible');\n  });\n});",
+  "playwright_script": "import { test, expect } from '@playwright/test';\ntest.describe('Forgot Password Recovery Form', () => {\n  test('should submit the form with a valid email', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/forgot_password');\n    await page.fill('#email', 'test@example.com');\n    await page.click('#form_submit');\n    await expect(page).toHaveURL(/forgot_password/);\n  });\n\n  test('should not change the URL when submitting an empty form', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/forgot_password');\n    await page.click('#form_submit');\n    await expect(page).toHaveURL(/forgot_password/);\n    await expect(page.locator('#flash-messages')).toBeVisible();\n  });\n});",
+  "id": "GC_the-internet_20_2",
+  "app": "the-internet",
+  "base_url": "https://the-internet.herokuapp.com",
+  "page": "/forgot_password",
+  "category": "user_profile",
+  "latency_s": 9.6
+}
