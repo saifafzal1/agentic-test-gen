@@ -1,0 +1,29 @@
+{
+  "tc_id": "TC_G13",
+  "framework": "cypress",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.645,
+  "total_latency_s": 20.188,
+  "final_script": "describe('Login Functionality', () => {\n  it('should log in successfully with valid credentials', () => {\n    cy.visit('https://the-internet.herokuapp.com/login');\n    cy.get('#username').type('tomsmith');\n    cy.get('#password').type('SuperSecretPassword!');\n    cy.get('button[type=\"submit\"]').click();\n    cy.url().should('include', '/secure');\n    cy.get('.flash.success').contains('You logged into a secure area!').should('be.visible');\n  });\n\n  it('should not change the URL when logging in with invalid credentials', () => {\n    cy.visit('https://the-internet.herokuapp.com/login');\n    cy.get('#username').type('invalidUser');\n    cy.get('#password').type('InvalidPassword!');\n    cy.get('button[type=\"submit\"]').click();\n    cy.url().should('include', '/login');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.645,
+        "syntax": 0.675,
+        "assertion": 0.75,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 3,
+        "feedback": "Missing required elements: beforeEach(",
+        "complete": true
+      },
+      "latency_s": 20.188,
+      "feedback_used": ""
+    }
+  ]
+}

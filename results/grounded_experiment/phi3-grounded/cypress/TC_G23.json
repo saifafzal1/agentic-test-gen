@@ -1,0 +1,29 @@
+{
+  "tc_id": "TC_G23",
+  "framework": "cypress",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.72,
+  "total_latency_s": 13.387,
+  "final_script": "describe('Example Page Navigation', () => {\n  it('should navigate to the example page and back', () => {\n    cy.visit('https://the-internet.herokuapp.com/examples');\n    cy.get('a').contains('A/B Testing').click();\n    cy.url().should('include', '/abtest');\n    cy.get('h3').contains('A/B Testing').should('be.visible');\n    cy.get('a').contains('Available Examples').click();\n    cy.url().should('include', '/examples');\n    cy.get('h3').contains('Available Examples').should('be.visible');\n  });\n\n  it('should not change URL when clicking the same link', () => {\n    cy.visit('https://the-internet.herokuapp.com/examples');\n    cy.get('a').contains('A/B Testing').click();\n    cy.url().should('include', '/abtest');\n    cy.get('a').contains('A/B Testing').click();\n    cy.url().should('include', '/abtest');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.72,
+        "syntax": 0.675,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 6,
+        "feedback": "Missing required elements: beforeEach(",
+        "complete": true
+      },
+      "latency_s": 13.387,
+      "feedback_used": ""
+    }
+  ]
+}

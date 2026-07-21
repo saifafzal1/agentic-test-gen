@@ -1,0 +1,63 @@
+{
+  "tc_id": "TC_G05",
+  "framework": "cypress",
+  "model_key": "phi3-grounded",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.504,
+  "total_latency_s": 50.222,
+  "final_script": "describe('Product Listing Tests', () => {\n  it('should display the product list with complete cards', () => {\n    cy.visit('https://www.saucedemo.com');\n    cy.get('a[href=\"#user_login\"]').click();\n    cy.get('#user_name').type('standard_user');\n    cy.get('#user_password').type('secret_sauce');\n    cy.get('input[name=\"user_password\"]').should('be.visible');\n    cy.get('input[name=\"user_password\"]').should('have.attr', 'value', 'secret_sauce');\n    cy.get('input[name=\"user_password\"]').click();\n    cy.get('input[name=\"user_password\"]').type('secret_sauce');\n    cy.get('input[name=\"user_password\"]').click();\n    cy.get('a[href=\"#user_login\"]').click();\n    cy.url().should('include', '/inventory');\n    cy.get('.inventory_item').should('have.length', 6);\n  });\n\n  it('should not change the URL when clicking on a product card', () => {\n    cy.visit('https://www.saucedemo.com');\n    cy.get('a[href=\"#user_login\"]').click();\n    cy.get('#user_name').type('standard_user');\n    cy.get('#user You've provided a detailed user story and the corresponding Cypress script. However, you've requested a Jira user story for a different scenario. Please provide the new user story so I can generate the Cypress script for you.",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.504,
+        "syntax": 0.135,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 4,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: beforeEach(",
+        "complete": false
+      },
+      "latency_s": 21.511,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.504,
+        "syntax": 0.135,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 4,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: beforeEach(",
+        "complete": false
+      },
+      "latency_s": 14.404,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: beforeEach("
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.504,
+        "syntax": 0.135,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 4,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: beforeEach(",
+        "complete": false
+      },
+      "latency_s": 14.307,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: beforeEach("
+    }
+  ]
+}

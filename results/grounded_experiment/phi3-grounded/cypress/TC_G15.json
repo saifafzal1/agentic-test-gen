@@ -1,0 +1,29 @@
+{
+  "tc_id": "TC_G15",
+  "framework": "cypress",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.72,
+  "total_latency_s": 66.38,
+  "final_script": "describe('Element Manager Functionality', () => {\n  it('should add and delete elements correctly', () => {\n    cy.visit('https://the-internet.herokuapp.com/add_remove_elements/');\n    cy.get('button[onclick=\"addElement()\"]').click();\n    cy.get('button[onclick=\"addElement()\"]').click();\n    cy.get('button[onclick=\"deleteElement(1)\"]').click();\n    cy.url().should('include', '/add_remove_elements/');\n    cy.get('button[onclick=\"deleteElement(1)\"]').click();\n    cy.url().should('include', '/add_remove_elements/');\n    cy.get('button[onclick=\"deleteElement(1)\"]').click();\n    cy.get('button[onclick=\"deleteElement(1)\"]').should('be.visible');\n  });\n\n  it('should not change the URL when adding or deleting elements', () => {\n    cy.visit('https://the-internet.herokuapp.com/add_remove_elements/');\n    cy.get('button[onclick=\"addElement()\"]').click();\n    cy.url().should('include', '/add_remove_elements/');\n    cy.get('button[onclick=\"deleteElement(1)\"]').click();\n    cy.url().should('include', '/add_remove_elements/');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.72,
+        "syntax": 0.675,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 5,
+        "feedback": "Missing required elements: beforeEach(",
+        "complete": true
+      },
+      "latency_s": 66.38,
+      "feedback_used": ""
+    }
+  ]
+}

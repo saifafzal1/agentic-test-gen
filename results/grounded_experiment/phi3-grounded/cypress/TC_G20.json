@@ -1,0 +1,29 @@
+{
+  "tc_id": "TC_G20",
+  "framework": "cypress",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.72,
+  "total_latency_s": 12.589,
+  "final_script": "describe('Dropdown Component Tests', () => {\n  it('should display the dropdown with disabled option', () => {\n    cy.visit('https://the-internet.herokuapp.com/dropdown');\n    cy.get('#dropdown').should('be.visible');\n    cy.get('#dropdown').contains('Option 1').should('be.visible');\n    cy.get('#dropdown').contains('Option 2').should('be.visible');\n    cy.get('#dropdown').contains('Option 3').should('be.visible');\n    cy.get('#dropdown').contains('Option 4').should('be.visible');\n    cy.get('#dropdown').contains('Option 5').should('be.visible');\n  });\n\n  it('should not change the URL when selecting an option', () => {\n    cy.visit('https://the-internet.herokuapp.com/dropdown');\n    cy.get('#dropdown').select('Option 2');\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/dropdown');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.72,
+        "syntax": 0.675,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 7,
+        "feedback": "Missing required elements: beforeEach(",
+        "complete": true
+      },
+      "latency_s": 12.589,
+      "feedback_used": ""
+    }
+  ]
+}

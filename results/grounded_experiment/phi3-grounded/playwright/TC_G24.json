@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_G24",
+  "framework": "playwright",
+  "model_key": "phi3-grounded",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.512,
+  "total_latency_s": 748.789,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('HTTP Status Codes Handling', () => {\n  test('should handle 200 status code correctly', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/status_codes');\n    await page.click('a#status-200');\n    await expect(page).toHaveURL(/.*status_codes\\/200/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*status_codes/);\n    await expect(page).toHaveURL(/.*",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.512,
+        "syntax": 0.155,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 55,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 113.078,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.512,
+        "syntax": 0.155,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 85,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 301.258,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.512,
+        "syntax": 0.155,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 115,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 334.453,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G04",
+  "framework": "playwright",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.76,
+  "total_latency_s": 15.917,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Form Validation', () => {\n  test('should not submit the form with empty fields', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/login');\n    await page.click('a#login-button');\n    await expect(page.locator('input[name=\"user_name\"]')).toBeVisible();\n    await expect(page.locator('input[name=\"password\"]')).toBeVisible();\n    await expect(page.locator('div#error')).toBeVisible();\n    await expect(page.locator('div#error')).toHaveTextContaining('Username is required');\n  });\n\n  test('should submit the form with valid username and empty password', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/login');\n    await page.click('a#login-button');\n    await page.fill('input[name=\"user_name\"]', 'standard_user');\n    await page.fill('input[name=\"password\"]');\n    await expect(page.locator('div#error')).toBeVisible();\n    await expect(page.locator('div#error')).toHaveTextContaining('Password is required');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.76,
+        "syntax": 0.775,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 15.917,
+      "feedback_used": ""
+    }
+  ]
+}

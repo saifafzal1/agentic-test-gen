@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G23",
+  "framework": "playwright",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.685,
+  "total_latency_s": 12.308,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('The Internet Examples Catalogue', () => {\n  test('should navigate to the A/B Testing example page and return to the home page', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/');\n    await page.click('a#abtest');\n    await expect(page).toHaveURL(/.*\\/abtest/);\n    await page.click('a#abtest');\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/');\n  });\n\n  test('should not change URL when clicking the A/B Testing link on the home page', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/');\n    await page.click('a#abtest');\n    await expect(page).toHaveURL('https://the-internet.herokuapp.com/');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.685,
+        "syntax": 0.775,
+        "assertion": 0.75,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 3,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 12.308,
+      "feedback_used": ""
+    }
+  ]
+}

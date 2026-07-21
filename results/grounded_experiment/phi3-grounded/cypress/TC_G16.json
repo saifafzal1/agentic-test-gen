@@ -1,0 +1,29 @@
+{
+  "tc_id": "TC_G16",
+  "framework": "cypress",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.72,
+  "total_latency_s": 34.932,
+  "final_script": "describe('JavaScript Alerts Tests', () => {\n  it('should confirm the alert dialog', () => {\n    cy.visit('https://the-internet.herokuapp.com/javascript_alerts');\n    cy.get('#confirmButton').click();\n    cy.on('window:confirm', (text) => {\n      return true;\n    });\n    cy.url().should('include', '/javascript_alerts');\n    cy.get('#result').should('be.visible');\n    cy.url().should('include', '/javascript_alerts');\n    cy.get('#result').should('contain', 'You clicked: Ok');\n  });\n\n  it('should not change the URL when clicking the button again', () => {\n    cy.visit('https://the-internet.herokuapp.com/javascript_alerts');\n    cy.get('#confirmButton').click();\n    cy.get('#confirmButton').click();\n    cy.url().should('include', '/javascript_alerts');\n    cy.get('#result').should('be.visible');\n    cy.get('#result').should('contain', 'You clicked: Cancel');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.72,
+        "syntax": 0.675,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 7,
+        "feedback": "Missing required elements: beforeEach(",
+        "complete": true
+      },
+      "latency_s": 34.932,
+      "feedback_used": ""
+    }
+  ]
+}

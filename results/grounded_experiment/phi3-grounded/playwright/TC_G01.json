@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G01",
+  "framework": "playwright",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.76,
+  "total_latency_s": 18.237,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Sauce Demo Store Login Functionality', () => {\n  test('should log in successfully with valid credentials', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/login');\n    await page.fill('#username', 'standard_user');\n    await page.fill('#password', 'secret_sauce');\n    await page.click('#login-button');\n    await expect(page).toHaveURL(/.*inventory.html/);\n    await expect(page.locator('.title')).toBeVisible();\n    await expect(page.locator('.title')).toHaveText('Products');\n  });\n\n  test('should not change URL or page title on login failure', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/login');\n    await page.fill('#username', 'wrong_user');\n    await page.fill('#password', 'wrong_password');\n    await page.click('#login-button');\n    await expect(page).toHaveURL('https://www.saucedemo.com/login');\n    await expect(page.locator('.title')).toBeVisible();\n    await expect(page.locator('.title')).toHaveText('Products');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.76,
+        "syntax": 0.775,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 6,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 18.237,
+      "feedback_used": ""
+    }
+  ]
+}

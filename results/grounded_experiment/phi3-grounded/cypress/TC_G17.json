@@ -1,0 +1,63 @@
+{
+  "tc_id": "TC_G17",
+  "framework": "cypress",
+  "model_key": "phi3-grounded",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.57,
+  "total_latency_s": 32.025,
+  "final_script": "describe('Dynamic Loading Tests', () => {\n  it('should not change the URL when the button is clicked', () => {\n    cy.visit('https://the-internet.herokuapp.com/dynamic_loading/1');\n    cy.get('#start button').click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/dynamic_loading/1');\n  });\n\n  it('should not change the URL when the button is clicked again', () => {\n    cy.visit('https://the-internet.herokuapp.com/dynamic_loading/1');\n    cy.get('#start button').click();\n    cy.get('#start button').click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/dynamic_loading/1');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.57,
+        "syntax": 0.675,
+        "assertion": 0.5,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 2,
+        "feedback": "Missing required elements: beforeEach(; Insufficient assertions \u2014 found 2 in 2 block(s), need at least 4",
+        "complete": true
+      },
+      "latency_s": 10.82,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.57,
+        "syntax": 0.675,
+        "assertion": 0.5,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 2,
+        "feedback": "Missing required elements: beforeEach(; Insufficient assertions \u2014 found 2 in 2 block(s), need at least 4",
+        "complete": true
+      },
+      "latency_s": 10.709,
+      "feedback_used": "Missing required elements: beforeEach(; Insufficient assertions \u2014 found 2 in 2 block(s), need at least 4"
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.57,
+        "syntax": 0.675,
+        "assertion": 0.5,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 2,
+        "feedback": "Missing required elements: beforeEach(; Insufficient assertions \u2014 found 2 in 2 block(s), need at least 4",
+        "complete": true
+      },
+      "latency_s": 10.496,
+      "feedback_used": "Missing required elements: beforeEach(; Insufficient assertions \u2014 found 2 in 2 block(s), need at least 4"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "tc_id": "TC_G21",
+  "framework": "cypress",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.72,
+  "total_latency_s": 17.727,
+  "final_script": "describe('Example Table Functionality', () => {\n  it('should display the example table with correct data', () => {\n    cy.visit('https://the-internet.herokuapp.com/tables');\n    cy.get('#table1').should('be.visible');\n    cy.get('#table1').contains('Last Name').should('be.visible');\n    cy.get('#table1').contains('First Name').should('be.visible');\n    cy.get('#table1').contains('Email').should('be.visible');\n    cy.get('#table1').contains('Due').should('be.visible');\n    cy.get('#table1').contains('Last Name', { text: 'Smith' }).should('be.visible');\n    cy.get('#table1').contains('First Name', { text: 'John' }).should('be.visible');\n    cy.get('#table1').contains('Email', { text: 'jsmith@gmail.com' }).should('be.visible');\n    cy.get('#table1').contains('Due', { text: '2023-04-01' }).should('be.visible');\n  });\n\n  it('should not change the URL when clicking the table', () => {\n    cy.visit('https://the-internet.herokuapp.com/tables');\n    cy.get('#table1').click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/tables');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.72,
+        "syntax": 0.675,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 10,
+        "feedback": "Missing required elements: beforeEach(",
+        "complete": true
+      },
+      "latency_s": 17.727,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G02",
+  "framework": "playwright",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.76,
+  "total_latency_s": 16.27,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Login Functionality', () => {\n  test('should not log in with valid credentials', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/login');\n    await page.fill('#user_name', 'locked_out_user');\n    await page.fill('#password', 'secret_sauce');\n    await page.click('input[data-test=\"submit\"]');\n    await expect(page).toHaveURL(/.*saucedemo.com/);\n  });\n\n  test('should display the error message when logging in with locked-out user', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/login');\n    await page.fill('#user_name', 'locked_out_user');\n    await page.fill('#password', 'secret_sauce');\n    await page.click('input[data-test=\"submit\"]');\n    await expect(page).toHaveURL(/.*saucedemo.com/);\n    await expect(page.locator('[data-test=\"error\"]')).toBeVisible();\n    await expect(page.locator('[data-test=\"error\"]')).toHaveTextContaining('Sorry, this user has been locked out');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.76,
+        "syntax": 0.775,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 4,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 16.27,
+      "feedback_used": ""
+    }
+  ]
+}

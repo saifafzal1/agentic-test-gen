@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G17",
+  "framework": "playwright",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.76,
+  "total_latency_s": 11.142,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Dynamic Content Loading Functionality', () => {\n  test('should not reveal the hidden content initially', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/dynamic_loading/1');\n    await expect(page.locator('#finish')).toBeVisible();\n  });\n\n  test('should reveal the hidden content after clicking the Start button', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/dynamic_loading/1');\n    await page.click('#start button');\n    await expect(page.locator('#loading')).toBeVisible();\n    await expect(page.locator('#finish')).toBeVisible();\n    await expect(page.locator('#finish')).toHaveText('Hello World!');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.76,
+        "syntax": 0.775,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 4,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 11.142,
+      "feedback_used": ""
+    }
+  ]
+}

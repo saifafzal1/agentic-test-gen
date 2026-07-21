@@ -1,0 +1,29 @@
+{
+  "tc_id": "TC_G08",
+  "framework": "cypress",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.72,
+  "total_latency_s": 560.195,
+  "final_script": "describe('Sauce Labs Backpack Checkout', () => {\n  it('should complete the checkout process successfully', () => {\n    cy.visit('https://www.saucedemo.com');\n    cy.get('a[data-test=\"sign_in\"]').click();\n    cy.get('a[data-test=\"standard_user\"]').click();\n    cy.get('input[data-test=\"user_name\"]').type('standard_user');\n    cy.get('input[data-test=\"password\"]').type('secret_sauce');\n    cy.get('input[data-test=\"user_name\"]').type('standard_user');\n    cy.get('input[data-test=\"password\"]').type('secret_sauce');\n    cy.get('a[data-test=\"sign_in\"]').click();\n    cy.get('a[data-test=\"add-to-cart-sauce-labs-backpack\"]').click();\n    cy.get('a[data-test=\"cart\"]').click();\n    cy.get('a[data-test=\"checkout\"]').click();\n    cy.get('input[data-test=\"firstName\"]').type('Saif');\n    cy.get('input[data-test=\"lastName\"]').type('Afzal');\n    cy.get('input[data-test=\"postalCode\"]').type('201301');\n    cy.get('input[data-test=\"continue\"]').click();\n    cy.url().should('include', '/checkout');\n    cy.get('#itemTotal').should('be.visible');\n    cy.get('a[data-test=\"finish\"]').click();\n    cy.url().should('include', '/checkout');\n    cy.get('.complete-header').should('contain', 'Thank you for your order!');\n  });\n\n  it('should not complete the checkout process with empty fields', () => {\n    cy.visit('https://www.saucedemo.com');\n    cy.get('a[data-test=\"sign_in\"]').click();\n    cy.get('a[data-test=\"standard_user\"]').click();\n    cy.get('input[data-test=\"user_name\"]').type('standard_user');\n    cy.get('input[data-test=\"password\"]').type('secret_sauce');\n    cy.get('input[data-test=\"user_name\"]').type('standard_user');\n    cy.get('input[data-test=\"password\"]').type('secret_sauce');\n    cy.get('a[data-test=\"sign_in\"]').click();\n    cy.get('a[data-test=\"add-to-cart-sauce-labs-backpack\"]').click();\n    cy.get('a[data-test=\"cart\"]').click();\n    cy.get('a[data-test=\"checkout\"]').click();\n    cy.get('input[data-test=\"firstName\"]').should('be.visible');\n    cy.get('input[data-test=\"lastName\"]').should('be.visible');\n    cy.get('input[data-test=\"postalCode\"]').should('be.visible');\n    cy.get('input[data-test=\"continue\"]').click();\n    cy.url().should('include', '/checkout');\n    cy.get('#itemTotal').should('be.visible');\n    cy.get('a[data-test=\"finish\"]').click();\n    cy.url().should('include', '/checkout');\n    cy.get('.complete-header').should('contain', 'Thank you for your order!');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.72,
+        "syntax": 0.675,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 11,
+        "feedback": "Missing required elements: beforeEach(",
+        "complete": true
+      },
+      "latency_s": 560.195,
+      "feedback_used": ""
+    }
+  ]
+}

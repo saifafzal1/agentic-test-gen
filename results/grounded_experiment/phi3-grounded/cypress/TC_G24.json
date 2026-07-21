@@ -1,0 +1,29 @@
+{
+  "tc_id": "TC_G24",
+  "framework": "cypress",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.72,
+  "total_latency_s": 12.536,
+  "final_script": "describe('HTTP Status Codes Page', () => {\n  it('should display the 200 status code page correctly', () => {\n    cy.visit('https://the-internet.herokuapp.com/status_codes');\n    cy.get('a[href=\"#/status_codes/200\"]').click();\n    cy.url().should('include', '/status_codes/200');\n    cy.contains('This page returned a 200 status code').should('be.visible');\n  });\n\n  it('should not change URL when clicking the 404 status code link', () => {\n    cy.visit('https://the-internet.herokuapp.com/status_codes');\n    cy.get('a[href=\"#/status_codes/404\"]').click();\n    cy.url().should('include', '/status_codes');\n    cy.get('a[href=\"#/status_codes/404\"]').click();\n    cy.url().should('include', '/status_codes');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.72,
+        "syntax": 0.675,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 4,
+        "feedback": "Missing required elements: beforeEach(",
+        "complete": true
+      },
+      "latency_s": 12.536,
+      "feedback_used": ""
+    }
+  ]
+}

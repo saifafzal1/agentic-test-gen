@@ -1,0 +1,29 @@
+{
+  "tc_id": "TC_G18",
+  "framework": "cypress",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.72,
+  "total_latency_s": 10.855,
+  "final_script": "describe('File Upload Functionality', () => {\n  it('should upload a file successfully', () => {\n    cy.visit('https://the-internet.herokuapp.com/upload');\n    cy.get('#file-upload').attachFile('./sample.txt');\n    cy.get('#file-submit').click();\n    cy.url().should('include', '/upload');\n    cy.get('#uploaded-files').contains('sample.txt').should('be.visible');\n  });\n\n  it('should not change URL when no file is selected', () => {\n    cy.visit('https://the-internet.herokuapp.com/upload');\n    cy.url().should('include', '/upload');\n    cy.get('#file-upload').should('be.visible');\n    cy.get('#file-submit').click();\n    cy.url().should('include', '/upload');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.72,
+        "syntax": 0.675,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 5,
+        "feedback": "Missing required elements: beforeEach(",
+        "complete": true
+      },
+      "latency_s": 10.855,
+      "feedback_used": ""
+    }
+  ]
+}

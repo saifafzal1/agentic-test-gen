@@ -1,0 +1,63 @@
+{
+  "tc_id": "TC_G09",
+  "framework": "cypress",
+  "model_key": "phi3-grounded",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.504,
+  "total_latency_s": 2144.945,
+  "final_script": "describe('Checkout Form Validation', () => {\n  it('should submit the form with complete data', () => {\n    cy.visit('https://www.saucedemo.com');\n    cy.get('a[data-test=\"sign_in\"]').click();\n    cy.get('a[data-test=\"standard_user\"]').click();\n    cy.get('input[data-test=\"user_name\"]').type('standard_user');\n    cy.get('input[data-test=\"password\"]').type('secret_sauce');\n    cy.get('input[data-test=\"user_name\"]').type('standard_user');\n    cy.get('input[data-test=\"password\"]').type('secret_sauce');\n    cy.get('input[data-test=\"user_name\"]').should('be.visible');\n    cy.get('input[data-test=\"password\"]').should('be.visible');\n    cy.get('input[data-test=\"user_name\"]').should('have.attr', 'required');\n    cy.get('input[data-test=\"password\"]').should('have.attr', 'required');\n    cy.get('input[data-test=\"user_name\"]').should('be.visible');\n    cy.get('input[data-test=\"password\"]').should('be.visible');\n    cy.get('input[data-test=\"user_name\"]').should('have.attr', 'required');\n    cy.get('input[data-test=\"password\"]').should('have.attr', 'required');\n    cy.get('input[data-test=\"user_name\"]').should('be.visible');\n    cy.get('input[data-test=\"password\"]').should('be.visible');\n    cy.get('input[data-test=\"user_name\"]').should('have.attr', 'required');\n    cy.get('input[data-test=\"password\"]').should('have.attr', 'required');\n    cy.get('input[data-test=\"user_name\"]').should('be.visible');\n    cy.get('input[data-test=\"password\"]').should('be.visible');\n    cy.get('input[data-test=\"user_name\"]').should('have.attr', 'required');\n    cy.get('input[data-test=\"password\"]').should('have.attr', 'required');\n    cy.get('input[data-test=\"user_name\"]').should('be.visible');\n    cy.get('input[data-test=\"password\"]').should('be.visible');\n    cy.get('input[data-test=\"user_name\"]').should('have.attr', 'required');\n    cy.get('input[data-test=\"password\"]').should('have.attr', 'required');\n    cy.get('input[data-test=\"user_name\"]').should('be.visible');\n    cy.get('input[data-test=\"password\"]').should('be.visible');\n    cy.get('input[data-test=\"user_name\"]').should('have.attr', 'required');\n    cy.get('input[data-test=\"password\"]').should('have.attr', 'required');\n    cy.get('input[data-test=\"user_name\"]').should('be.visible');\n    cy.get('input[data-test=\"password\"]').should('be.visible');\n    cy.get('input[data-test=\"user_name\"]').should('have.attr', 'required');\n    cy.get('input[data-test=\"password\"]').should('have.attr', 'required');\n    cy.get('input[data-test=\"user_name\"]').should('be.visible');\n    cy.get('input[data-test=\"password\"]').should('be.visible');\n    cy.get('input[data-test=\"user_name\"]').should('have.attr', 'required');\n    cy.get('input[data-test=\"password\"]').should('have.attr', 'required');\n    cy.get('input[data-test=\"user_name\"]').should('be.visible');\n    cy.get('input[data-test=\"password\"]').should('be.visible');\n    cy.get('input[data-test=\"user_name\"]').should('have.attr', 'required');\n    cy.get('input[data-test=\"password\"]').should('have.attr', 'required');\n    cy.",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.504,
+        "syntax": 0.135,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 36,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: beforeEach(",
+        "complete": false
+      },
+      "latency_s": 615.769,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.504,
+        "syntax": 0.135,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 25,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: beforeEach(",
+        "complete": false
+      },
+      "latency_s": 764.293,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: beforeEach("
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.504,
+        "syntax": 0.135,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 25,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: beforeEach(",
+        "complete": false
+      },
+      "latency_s": 764.883,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Missing required elements: beforeEach("
+    }
+  ]
+}

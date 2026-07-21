@@ -1,0 +1,29 @@
+{
+  "tc_id": "TC_G10",
+  "framework": "cypress",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.645,
+  "total_latency_s": 17.926,
+  "final_script": "describe('Product Detail Page Navigation', () => {\n  it('should navigate to the product detail page', () => {\n    cy.visit('https://www.saucedemo.com');\n    cy.get('a[data-test=\"inventory_item_name\"]').click();\n    cy.url().should('include', '/inventory-item.html');\n  });\n\n  it('should return to the product catalogue', () => {\n    cy.visit('https://www.saucedemo.com');\n    cy.get('a[data-test=\"inventory_item_name\"]').click();\n    cy.get('a[data-test=\"back-to-products\"]').click();\n    cy.url().should('include', '/inventory.html');\n    cy.get('.title').should('have.text', 'Products');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.645,
+        "syntax": 0.675,
+        "assertion": 0.75,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 3,
+        "feedback": "Missing required elements: beforeEach(",
+        "complete": true
+      },
+      "latency_s": 17.926,
+      "feedback_used": ""
+    }
+  ]
+}

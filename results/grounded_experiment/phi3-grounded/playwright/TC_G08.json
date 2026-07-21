@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G08",
+  "framework": "playwright",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.76,
+  "total_latency_s": 114.077,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Checkout Flow', () => {\n  test('should complete the checkout process successfully', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/');\n    await page.login('standard_user', 'secret_sauce');\n    await page.click('a[data-test=\"add-to-cart-sauce-labs-backpack\"]');\n    await page.click('a[data-test=\"checkout\"]');\n    await expect(page).toHaveURL(/.*saucedemo.com/);\n    await expect(page.locator('a[data-test=\"continue\"]')).toBeVisible();\n    await expect(page.locator('a[data-test=\"finish\"]')).toBeVisible();\n    await page.click('a[data-test=\"continue\"]');\n    await expect(page).toHaveURL(/.*saucedemo.com/);\n    await expect(page.locator('a[data-test=\"finish\"]')).toBeVisible();\n    await page.click('a[data-test=\"finish\"]');\n    await expect(page).toHaveURL(/.*saucedemo.com/);\n    await expect(page.locator('a[data-test=\"continue\"]')).toBeVisible();\n    await expect(page.locator('a[data-test=\"finish\"]')).toBeVisible();\n  });\n\n  test('should not change the URL after clicking the cart link', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/');\n    await page.click('a[data-test=\"checkout\"]');\n    await expect(page).toHaveURL(/.*saucedemo.com/);\n    await expect(page.locator('a[data-test=\"continue\"]')).toBeVisible();\n    await expect(page.locator('a[data-test=\"finish\"]')).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.76,
+        "syntax": 0.775,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 11,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 114.077,
+      "feedback_used": ""
+    }
+  ]
+}

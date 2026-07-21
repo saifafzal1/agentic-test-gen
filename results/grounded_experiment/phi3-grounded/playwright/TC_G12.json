@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G12",
+  "framework": "playwright",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.76,
+  "total_latency_s": 23.888,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Accessibility Tests', () => {\n  test('should have accessible product images and login fields', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com');\n    await page.fill('#username', 'standard_user');\n    await page.fill('#password', 'secret_sauce');\n    await page.click('input[data-test=\"submit\"]');\n    await expect(page).toHaveURL(/.*saucedemo.com/);\n    await expect(page.locator('img.inventory_item_img')).toBeVisible();\n    await expect(page.locator('img.inventory_item_img')).toHaveAttribute('alt');\n  });\n\n  test('should not have visible product images after logging out', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com');\n    await page.fill('#username', 'standard_user');\n    await page.fill('#password', 'secret_sauce');\n    await page.click('input[data-test=\"submit\"]');\n    await expect(page).toHaveURL(/.*saucedemo.com/);\n    await expect(page.locator('img.inventory_item_img')).toBeVisible();\n    await expect(page.locator('img.inventory_item_img')).toHaveAttribute('alt');\n    await page.click('a[data-test=\"logout\"]');\n    await expect(page).toHaveURL(/.*saucedemo.com/);\n    await expect(page.locator('img.inventory_item_img')).toBeVisible();\n    await expect(page.locator('img.inventory_item_img')).toHaveAttribute('alt');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.76,
+        "syntax": 0.775,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 9,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 23.888,
+      "feedback_used": ""
+    }
+  ]
+}

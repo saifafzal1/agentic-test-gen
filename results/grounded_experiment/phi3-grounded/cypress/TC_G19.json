@@ -1,0 +1,57 @@
+{
+  "tc_id": "TC_G19",
+  "framework": "cypress",
+  "model_key": "phi3-grounded",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.468,
+  "total_latency_s": 45.245,
+  "final_script": "describe('Checkboxes Form', () => {\n  it('should toggle checkboxes correctly', () => {\n    cy.visit('https://the-internet.herokuapp.com/checkboxes');\n    cy.get('input[type=\"checkbox\"]').eq(0).should('be.visible');\n    cy.get('input[type=\"checkbox\"]').eq(1).should('be.visible');\n    cy.get('input[type=\"checkbox\"]').eq(0).click();\n    cy.get('input[type=\"checkbox\"]').eq(0).should('be.checked');\n    cy.get('input[type=\"checkbox\"]').eq(1).should('be.checked');\n    cy.get('input[type=\"checkbox\"]').eq(0).click();\n    cy.get('input[type=\"checkbox\"]').eq(1).should('be.checked');\n  });\n\n  it('should not change the state of unchecked checkboxes', () => {\n    cy.visit('https://the You are a senior QA automation engineer specialising in Cypress. Given a Jira user story, generate a complete, production-quality Cypress test script. Return ONLY the raw Cypress JavaScript \u2014 no markdown fences, no explanations. Include describe(), beforeEach(), and at least 2 it() blocks (happy path + edge case).",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.418,
+        "syntax": 0.17,
+        "assertion": 0.6667,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 4,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Insufficient assertions \u2014 found 4 in 3 block(s), need at least 6",
+        "complete": false
+      },
+      "latency_s": 14.512,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.468,
+        "syntax": 0.17,
+        "assertion": 0.8333,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 5,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 16.034,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Insufficient assertions \u2014 found 4 in 3 block(s), need at least 6"
+    },
+    {
+      "iteration": 3,
+      "score": {
+        "total": 0.418,
+        "syntax": 0.17,
+        "assertion": 0.6667,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 4,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.; Insufficient assertions \u2014 found 4 in 3 block(s), need at least 6",
+        "complete": false
+      },
+      "latency_s": 14.699,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

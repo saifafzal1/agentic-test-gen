@@ -1,0 +1,37 @@
+{
+  "experiment": "Grounded-corpus retrain vs dissertation adapters, 24 held-out-app stories (saucedemo+the-internet, UNSEEN in grounded training)",
+  "phi3_dissertation": {
+    "cypress": {
+      "full": 0,
+      "partial": 0,
+      "tp": 0,
+      "tt": 40
+    },
+    "playwright": {
+      "full": 1,
+      "partial": 0,
+      "tp": 2,
+      "tt": 38
+    }
+  },
+  "phi3_grounded": {
+    "cypress": {
+      "full": 2,
+      "partial": 5,
+      "tp": 9,
+      "tt": 38
+    },
+    "playwright": {
+      "full": 0,
+      "partial": 2,
+      "tp": 2,
+      "tt": 46
+    }
+  },
+  "selector_bias": {
+    "dissertation_cypress": "47/48 scripts imposed data-testid",
+    "grounded_cypress": "0/24",
+    "grounded_playwright": "0/24"
+  },
+  "headline": "Training on the execution-verified grounded corpus ELIMINATED the data-testid convention bias entirely (47/48 -> 0/48) on apps never seen during grounded training. Execution improved on Cypress (0/24 -> 2/24 full +5 partial; 0/40 -> 9/38 individual tests) but only modestly, and Playwright stayed flat -- confirming that training-time grounding removes the learned bias yet full execution on UNSEEN apps still needs inference-time grounding (injecting the target app DOM), since the model cannot know a novel apps exact selectors from training alone."
+}

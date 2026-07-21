@@ -1,0 +1,42 @@
+{
+  "tc_id": "TC_G06",
+  "framework": "playwright",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.685,
+  "total_latency_s": 314.383,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Product Sorting Functionality', () => {\n  test('should sort products by price in ascending order', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/');\n    await page.login('standard_user', 'secret_sauce');\n    await page.selectOption('#product_sort_container', 'lohi');\n    await expect(page.locator('.inventory_item_price')).toBeVisible();\n    await expect(page.locator('.inventory_item_price')).toHaveAttribute('data-test', 'inventory_item_price');\n  });\n\n  test('should not change the URL when sorting', async ({ page }) => {\n    await page.goto('https://www.saucedemo.com/');\n    await page.login('standard_user', 'secret_sauce');\n    await page.selectOption('#product_sort_container', 'lohi');\n    await expect(page).toHaveURL('https://www.saucedemo.com/');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.512,
+        "syntax": 0.155,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 40,
+        "feedback": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block.",
+        "complete": false
+      },
+      "latency_s": 297.554,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.685,
+        "syntax": 0.775,
+        "assertion": 0.75,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 3,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 16.829,
+      "feedback_used": "Script was truncated \u2014 braces/parens are unbalanced. Write the COMPLETE script including all closing braces and the final }); do not stop mid-block."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G09",
+  "framework": "playwright",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.715,
+  "total_latency_s": 17.162,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Checkout Form Validation', () => {\n  test('should submit the form with valid data', async ({ page }) => {\n    await test.beforeEach(async ({ page }) => {\n      await page.goto('https://www.saucedemo.com/');\n      await page.fill('input[name=\"firstName\"]', 'Saif');\n      await page.fill('input[name=\"lastName\"]', 'Afzal');\n      await page.click('input[name=\"continue\"]');\n    });\n    await expect(page).toHaveURL(/.*checkout/);\n  });\n\n  test('should not submit the form with missing required fields', async ({ page }) => {\n    await test.beforeEach(async ({ page }) => {\n      await page.goto('https://www.saucedemo.com/');\n      await page.click('a[data-test=\"add-to-cart-sauce-labs-backpack\"]');\n      await page.click('a[data-test=\"checkout\"]');\n      await page.click('input[name=\"continue\"]');\n    });\n    await expect(page).toHaveURL(/.*checkout/);\n    await expect(page.locator('a[data-test=\"continue\"]')).toBeVisible();\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.715,
+        "syntax": 0.85,
+        "assertion": 0.75,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 3,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 17.162,
+      "feedback_used": ""
+    }
+  ]
+}

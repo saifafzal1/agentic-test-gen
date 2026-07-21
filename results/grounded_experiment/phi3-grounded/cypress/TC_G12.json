@@ -1,0 +1,29 @@
+{
+  "tc_id": "TC_G12",
+  "framework": "cypress",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.645,
+  "total_latency_s": 12.853,
+  "final_script": "describe('Accessible Product Images and Login Fields', () => {\n  it('should have accessible login fields with placeholders', () => {\n    cy.visit('https://www.saucedemo.com');\n    cy.get('[data-test=\"username\"]').should('have.attr', 'placeholder');\n    cy.get('[data-test=\"password\"]').should('have.attr', 'placeholder');\n  });\n\n  it('should not change the URL after logging in', () => {\n    cy.visit('https://www.saucedemo.com');\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"loginButton\"]').click();\n    cy.url().should('eq', 'https://www.saucedemo.com');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.645,
+        "syntax": 0.675,
+        "assertion": 0.75,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 3,
+        "feedback": "Missing required elements: beforeEach(",
+        "complete": true
+      },
+      "latency_s": 12.853,
+      "feedback_used": ""
+    }
+  ]
+}

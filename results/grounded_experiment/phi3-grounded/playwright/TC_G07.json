@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G07",
+  "framework": "playwright",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 90.514,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Sauce Labs Backpack Add/Remove Tests', () => {\n  test('should add the backpack to the cart', async ({ page }) => {\n    await test.beforeEach(async ({ page }) => {\n      await page.goto('https://www.saucedemo.com');\n      await page.login('standard_user', 'secret_sauce');\n    });\n    await page.click('[data-test=\"add-to-cart-sauce-labs-backpack\"]');\n    await expect(page.locator('.shopping_cart_badge')).toBeVisible();\n    await expect(page.locator('.shopping_cart_badge')).toHaveURL('https://www.saucedemo.com/cart');\n  });\n\n  test('should not change the URL when removing the backpack', async ({ page }) => {\n    await test.beforeEach(async ({ page }) => {\n      await page.goto('https://www.saucedemo.com');\n      await page.login('standard_user', 'secret_sauce');\n      await page.click('[data-test=\"add-to-cart-sauce-labs-backpack\"]');\n    });\n    await page.click('[data-test=\"remove-sauce-labs-backpack\"]');\n    await expect(page.locator('.shopping_cart_badge')).toBeVisible();\n    await expect(page.locator('.shopping_cart_badge')).toHaveURL('https://www.saucedemo.com/cart');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.79,
+        "syntax": 0.85,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 4,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 90.514,
+      "feedback_used": ""
+    }
+  ]
+}

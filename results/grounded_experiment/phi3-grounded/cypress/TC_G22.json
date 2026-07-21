@@ -1,0 +1,29 @@
+{
+  "tc_id": "TC_G22",
+  "framework": "cypress",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.72,
+  "total_latency_s": 12.473,
+  "final_script": "describe('Notification Message Rendered Tests', () => {\n  it('should display the notification with a success message', () => {\n    cy.visit('https://the-internet.herokuapp.com/notification_message_rendered');\n    cy.get('a[href=\"#/notification_message_rendered\"]').click();\n    cy.get('#flash').should('be.visible');\n    cy.get('#flash').contains('Action successful').should('be.visible');\n    cy.get('#flash .close').click();\n    cy.url().should('include', '/notification_message_rendered');\n  });\n\n  it('should not change the URL when clicking the link without triggering an action', () => {\n    cy.visit('https://the-internet.herokuapp.com/notification_message_rendered');\n    cy.get('a[href=\"#/notification_message_rendered\"]').click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/notification_message_rendered');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.72,
+        "syntax": 0.675,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 4,
+        "feedback": "Missing required elements: beforeEach(",
+        "complete": true
+      },
+      "latency_s": 12.473,
+      "feedback_used": ""
+    }
+  ]
+}

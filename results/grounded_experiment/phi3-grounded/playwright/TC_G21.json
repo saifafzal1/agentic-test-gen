@@ -1,0 +1,27 @@
+{
+  "tc_id": "TC_G21",
+  "framework": "playwright",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.76,
+  "total_latency_s": 13.838,
+  "final_script": "import { test, expect } from '@playwright/test';\n\ntest.describe('Example Table Functionality', () => {\n  test('should display the correct number of rows and columns', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/tables');\n    const table = page.locator('#table1');\n    const rows = await table.countByRole('row');\n    const columns = await table.countByRole('column');\n    expect(rows).toBeGreaterThan(0);\n    expect(columns).toBeGreaterThan(0);\n  });\n\n  test('should contain the correct email in the table', async ({ page }) => {\n    await page.goto('https://the-internet.herokuapp.com/tables');\n    const table = page.locator('#table1');\n    const emailRow = await table.locator('[data-test=\"row-jsmith@gmail.com\"]');\n    await expect(emailRow).toBeVisible();\n    await expect(emailRow).toHaveURL('https://the-internet.herokuapp.com/tables');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.76,
+        "syntax": 0.775,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [],
+        "assertion_count": 4,
+        "feedback": "Script meets quality threshold.",
+        "complete": true
+      },
+      "latency_s": 13.838,
+      "feedback_used": ""
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "tc_id": "TC_G14",
+  "framework": "cypress",
+  "model_key": "phi3-grounded",
+  "accepted": true,
+  "iterations": 2,
+  "best_score": 0.72,
+  "total_latency_s": 54.082,
+  "final_script": "describe('Login Page - Password Validation', () => {\n  it('should not change the URL when the password is incorrect', () => {\n    cy.visit('https://the-internet.herokuapp.com/login');\n    cy.get('#username').type('tomsmith');\n    cy.get('#password').type('wrongpassword');\n    cy.get('button[type=\"submit\"]').click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/login');\n    cy.get('.flash.error').should('contain', 'Your password is invalid!');\n  });\n\n  it('should not change the URL when the username is incorrect', () => {\n    cy.visit('https://the-internet.herokuapp.com/login');\n    cy.get('#username').type('wronguser');\n    cy.get('#password').type('wrongpassword');\n    cy.get('button[type=\"submit\"]').click();\n    cy.url().should('eq', 'https://the-internet.herokuapp.com/login');\n    cy.get('.flash.error').should('contain', 'Your password is invalid!');\n  });\n});",
+  "history": [
+    {
+      "iteration": 1,
+      "score": {
+        "total": 0.57,
+        "syntax": 0.675,
+        "assertion": 0.5,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 2,
+        "feedback": "Missing required elements: beforeEach(; Insufficient assertions \u2014 found 2 in 2 block(s), need at least 4",
+        "complete": true
+      },
+      "latency_s": 27.259,
+      "feedback_used": ""
+    },
+    {
+      "iteration": 2,
+      "score": {
+        "total": 0.72,
+        "syntax": 0.675,
+        "assertion": 1.0,
+        "rouge_l": 0.5,
+        "missing_keywords": [
+          "beforeEach("
+        ],
+        "assertion_count": 4,
+        "feedback": "Missing required elements: beforeEach(",
+        "complete": true
+      },
+      "latency_s": 26.823,
+      "feedback_used": "Missing required elements: beforeEach(; Insufficient assertions \u2014 found 2 in 2 block(s), need at least 4"
+    }
+  ]
+}
