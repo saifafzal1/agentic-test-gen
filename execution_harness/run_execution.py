@@ -137,7 +137,8 @@ def run_playwright(spec_path: Path, base_url: str) -> dict:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", default=None,
-                    choices=["phi3", "gemma4", "gpt4o-mini", "claude-haiku"])
+                    choices=["phi3", "gemma4", "gpt4o-mini", "claude-haiku",
+                             "phi3-grounded"])
     ap.add_argument("--framework", choices=["cypress", "playwright"], default=None)
     ap.add_argument("--source", choices=["finetuned", "baselines", "all"],
                     default="finetuned",
@@ -159,12 +160,18 @@ def main():
         models = [args.model]
     frameworks = [args.framework] if args.framework else ["cypress", "playwright"]
 
+    GROUNDED_DIR = BASE_DIR / "results" / "grounded_experiment"
     for model in models:
         for framework in frameworks:
             is_baseline = model in BL_MODELS
-            # Baseline layout is <framework>/<model>; BMAD is <model>/<framework>
-            gen_dir = (BASELINES_DIR / framework / model) if is_baseline \
-                      else (RESULTS_DIR / model / framework)
+            # Layouts: baseline <framework>/<model>; grounded-experiment and
+            # BMAD both <model>/<framework> under their respective roots.
+            if model == "phi3-grounded":
+                gen_dir = GROUNDED_DIR / model / framework
+            elif is_baseline:
+                gen_dir = BASELINES_DIR / framework / model
+            else:
+                gen_dir = RESULTS_DIR / model / framework
             records = sorted(gen_dir.glob("TC_G*.json"))
             if not records:
                 print(f"[{model}/{framework}] no generated records yet — skipping")

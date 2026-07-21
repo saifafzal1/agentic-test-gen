@@ -55,7 +55,7 @@ def _summary_row(results: list) -> dict:
 def main():
     parser = argparse.ArgumentParser(description="Run BMAD loop over dataset")
     parser.add_argument("--framework",  choices=["cypress", "playwright"], default="cypress")
-    parser.add_argument("--model",      choices=["phi3", "gemma4"],        default="phi3")
+    parser.add_argument("--model",      choices=["phi3", "gemma4", "phi3-grounded"], default="phi3")
     parser.add_argument("--max-iters",  type=int,   default=DEFAULT_MAX_ITERS,
                         help=f"Max correction iterations (default {DEFAULT_MAX_ITERS})")
     parser.add_argument("--threshold",  type=float, default=DEFAULT_THRESHOLD,

@@ -38,6 +38,15 @@ MODEL_REGISTRY = {
             "playwright": "saifafzal1/phi3-mini-playwright-qlora",
         },
     },
+    "phi3-grounded": {
+        "display"   : "microsoft/Phi-3-mini-4k-instruct (grounded corpus)",
+        "base_path" : str(BASE_DIR / "fine_tuning" / "phi3-base-model"),
+        "adapters"  : {
+            "cypress"   : str(BASE_DIR / "fine_tuning" / "phi3-cypress-grounded"),
+            "playwright": str(BASE_DIR / "fine_tuning" / "phi3-playwright-grounded"),
+        },
+        "hf_adapters": {},
+    },
     "gemma4": {
         "display"   : "google/gemma-3-4b-it",
         "base_path" : str(BASE_DIR / "fine_tuning" / "gemma4-base-model"),
@@ -173,7 +182,7 @@ def load_model(model_key: str, framework: str):
     adapter_path = cfg["adapters"][framework]
     print(f"⏳ Loading {model_key}/{framework} on {device}...")
 
-    if model_key == "phi3":
+    if model_key.startswith("phi3"):
         result = _load_phi3(cfg["base_path"], adapter_path)
     else:
         result = _load_gemma4(cfg["base_path"], adapter_path)
@@ -193,7 +202,7 @@ def _build_prompt(model_key: str, framework: str,
         f'Complexity: {complexity}\n'
         f'Return the {framework.capitalize()} script only.'
     )
-    if model_key == "phi3":
+    if model_key.startswith("phi3"):
         return (
             f"<|system|>\n{system}<|end|>\n"
             f"<|user|>\n{user}<|end|>\n"
