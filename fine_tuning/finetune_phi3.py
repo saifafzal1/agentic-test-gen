@@ -64,19 +64,21 @@ import wandb
 # ── Config ───────────────────────────────────────────────────────────────────
 BASE_DIR   = Path(__file__).parent.parent
 MODEL_ID   = str(Path(__file__).parent / "phi3-base-model")   # local path — avoids re-download via HF hub
-DATA_FILE  = BASE_DIR / "data" / f"{FRAMEWORK}_dataset.jsonl"
-OUTPUT_DIR = Path(__file__).parent / f"phi3-{FRAMEWORK}"
+DATA_FILE  = Path(os.environ.get("FT_DATA_FILE",
+                  BASE_DIR / "data" / f"{FRAMEWORK}_dataset.jsonl"))
+OUTPUT_DIR = Path(os.environ.get("FT_OUTPUT_DIR",
+                  Path(__file__).parent / f"phi3-{FRAMEWORK}"))
 WANDB_KEY  = os.environ.get("WANDB_API_KEY", "")
 
-# Training hyperparameters
-EPOCHS        = 3
+# Training hyperparameters (env-overridable for the smaller grounded corpus)
+EPOCHS        = int(os.environ.get("FT_EPOCHS", 3))
 BATCH_SIZE    = 1       # MPS: keep at 1
-GRAD_ACCUM    = 8       # effective batch = 8
+GRAD_ACCUM    = int(os.environ.get("FT_GRAD_ACCUM", 8))  # effective batch = 8
 LEARNING_RATE = 2e-4
 MAX_SEQ_LEN   = 2048    # Phi-3-mini supports up to 4k; 2k fits our dataset
-WARMUP_STEPS  = 10
-SAVE_STEPS    = 50
-EVAL_STEPS    = 50
+WARMUP_STEPS  = int(os.environ.get("FT_WARMUP_STEPS", 10))
+SAVE_STEPS    = int(os.environ.get("FT_SAVE_STEPS", 50))
+EVAL_STEPS    = int(os.environ.get("FT_EVAL_STEPS", 50))
 LORA_R        = 16
 LORA_ALPHA    = 32
 LORA_DROPOUT  = 0.05
