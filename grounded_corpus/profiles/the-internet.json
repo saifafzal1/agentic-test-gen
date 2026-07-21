@@ -962,6 +962,612 @@
           }
         ]
       }
+    },
+    {
+      "path": "/frames",
+      "feature": "navigation between iframe example links",
+      "category": "navigation",
+      "url": "https://the-internet.herokuapp.com/frames",
+      "dom": {
+        "title": "The Internet",
+        "headings": [
+          "Frames"
+        ],
+        "inputs": [],
+        "buttons": [],
+        "links": [
+          {
+            "tag": "a",
+            "href": "/nested_frames",
+            "text": "Nested Frames"
+          },
+          {
+            "tag": "a",
+            "href": "/iframe",
+            "text": "iFrame"
+          },
+          {
+            "tag": "a",
+            "href": "http://elementalselenium.com/",
+            "text": "Elemental Selenium"
+          }
+        ],
+        "selects": [],
+        "data_test_elements": [],
+        "ids": [
+          {
+            "tag": "div",
+            "id": "flash-messages",
+            "class": "large-12 columns"
+          },
+          {
+            "tag": "div",
+            "id": "content",
+            "class": "large-12 columns",
+            "text": "Frames Nested Frames iFrame"
+          },
+          {
+            "tag": "div",
+            "id": "page-footer",
+            "class": "row",
+            "text": "Powered by Elemental Selenium"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/nested_frames",
+      "feature": "nested frame layout navigation",
+      "category": "navigation",
+      "url": "https://the-internet.herokuapp.com/nested_frames",
+      "dom": {
+        "title": "",
+        "headings": [],
+        "inputs": [],
+        "buttons": [],
+        "links": [],
+        "selects": [],
+        "data_test_elements": [],
+        "ids": []
+      }
+    },
+    {
+      "path": "/floating_menu",
+      "feature": "floating navigation menu links",
+      "category": "navigation",
+      "url": "https://the-internet.herokuapp.com/floating_menu",
+      "dom": {
+        "title": "The Internet",
+        "headings": [
+          "Floating Menu"
+        ],
+        "inputs": [],
+        "buttons": [],
+        "links": [
+          {
+            "tag": "a",
+            "href": "#home",
+            "text": "Home"
+          },
+          {
+            "tag": "a",
+            "href": "#news",
+            "text": "News"
+          },
+          {
+            "tag": "a",
+            "href": "#contact",
+            "text": "Contact"
+          },
+          {
+            "tag": "a",
+            "href": "#about",
+            "text": "About"
+          },
+          {
+            "tag": "a",
+            "href": "http://elementalselenium.com/",
+            "text": "Elemental Selenium"
+          }
+        ],
+        "selects": [],
+        "data_test_elements": [],
+        "ids": [
+          {
+            "tag": "div",
+            "id": "flash-messages",
+            "class": "large-12 columns"
+          },
+          {
+            "tag": "div",
+            "id": "content",
+            "class": "large-12 columns",
+            "text": "#menu { z-index: 100; position: absolute; left: 30%; } #menu"
+          },
+          {
+            "tag": "div",
+            "id": "menu",
+            "text": "Home News Contact About"
+          },
+          {
+            "tag": "div",
+            "id": "page-footer",
+            "class": "row",
+            "text": "Powered by Elemental Selenium"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/jqueryui/menu",
+      "feature": "multi-level dropdown navigation menu",
+      "category": "navigation",
+      "url": "https://the-internet.herokuapp.com/jqueryui/menu",
+      "dom": {
+        "title": "The Internet",
+        "headings": [
+          "JQueryUI - Menu"
+        ],
+        "inputs": [],
+        "buttons": [],
+        "links": [
+          {
+            "tag": "a",
+            "href": "http://api.jqueryui.com/menu/",
+            "text": "JQuery UI Menus"
+          },
+          {
+            "tag": "a",
+            "href": "#",
+            "text": "Disabled"
+          },
+          {
+            "tag": "a",
+            "href": "#",
+            "text": "Should not see this"
+          },
+          {
+            "tag": "a",
+            "href": "#",
+            "text": "Enabled"
+          },
+          {
+            "tag": "a",
+            "href": "#",
+            "text": "Downloads"
+          },
+          {
+            "tag": "a",
+            "href": "/download/jqueryui/menu/menu.pdf",
+            "text": "PDF"
+          },
+          {
+            "tag": "a",
+            "href": "/download/jqueryui/menu/menu.csv",
+            "text": "CSV"
+          },
+          {
+            "tag": "a",
+            "href": "/download/jqueryui/menu/menu.xls",
+            "text": "Excel"
+          },
+          {
+            "tag": "a",
+            "href": "/jqueryui",
+            "text": "Back to JQuery UI"
+          },
+          {
+            "tag": "a",
+            "href": "http://elementalselenium.com/",
+            "text": "Elemental Selenium"
+          }
+        ],
+        "selects": [],
+        "data_test_elements": [],
+        "ids": [
+          {
+            "tag": "div",
+            "id": "flash-messages",
+            "class": "large-12 columns"
+          },
+          {
+            "tag": "div",
+            "id": "content",
+            "class": "large-12 columns",
+            "text": "jQuery UI Menu $(function() { $( \"#menu\" ).menu(); }); .ui-m"
+          },
+          {
+            "tag": "ul",
+            "id": "menu",
+            "class": "ui-menu ui-widget ui-widget-content",
+            "text": "Disabled Should not see this Enabled Downloads PDF CSV Excel"
+          },
+          {
+            "tag": "li",
+            "id": "ui-id-1",
+            "class": "ui-state-disabled ui-menu-item",
+            "text": "Disabled Should not see this"
+          },
+          {
+            "tag": "li",
+            "id": "ui-id-2",
+            "class": "ui-menu-item",
+            "text": "Should not see this"
+          },
+          {
+            "tag": "li",
+            "id": "ui-id-3",
+            "class": "ui-menu-item",
+            "text": "Enabled Downloads PDF CSV Excel Back to JQuery UI"
+          },
+          {
+            "tag": "li",
+            "id": "ui-id-4",
+            "class": "ui-menu-item",
+            "text": "Downloads PDF CSV Excel"
+          },
+          {
+            "tag": "li",
+            "id": "ui-id-5",
+            "class": "ui-menu-item",
+            "text": "PDF"
+          },
+          {
+            "tag": "li",
+            "id": "ui-id-6",
+            "class": "ui-menu-item",
+            "text": "CSV"
+          },
+          {
+            "tag": "li",
+            "id": "ui-id-7",
+            "class": "ui-menu-item",
+            "text": "Excel"
+          },
+          {
+            "tag": "li",
+            "id": "ui-id-8",
+            "class": "ui-menu-item",
+            "text": "Back to JQuery UI"
+          },
+          {
+            "tag": "div",
+            "id": "page-footer",
+            "class": "row",
+            "text": "Powered by Elemental Selenium"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/horizontal_slider",
+      "feature": "horizontal range slider control",
+      "category": "search_filter",
+      "url": "https://the-internet.herokuapp.com/horizontal_slider",
+      "dom": {
+        "title": "The Internet",
+        "headings": [
+          "Horizontal Slider"
+        ],
+        "inputs": [
+          {
+            "tag": "input",
+            "type": "range",
+            "value": "0"
+          }
+        ],
+        "buttons": [],
+        "links": [
+          {
+            "tag": "a",
+            "href": "http://elementalselenium.com/",
+            "text": "Elemental Selenium"
+          }
+        ],
+        "selects": [],
+        "data_test_elements": [],
+        "ids": [
+          {
+            "tag": "div",
+            "id": "flash-messages",
+            "class": "large-12 columns"
+          },
+          {
+            "tag": "div",
+            "id": "content",
+            "class": "large-12 columns",
+            "text": "Horizontal Slider Set the focus on the slider (by clicking o"
+          },
+          {
+            "tag": "span",
+            "id": "range",
+            "text": "0"
+          },
+          {
+            "tag": "div",
+            "id": "page-footer",
+            "class": "row",
+            "text": "Powered by Elemental Selenium"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/forgot_password",
+      "feature": "forgotten password recovery form",
+      "category": "user_profile",
+      "url": "https://the-internet.herokuapp.com/forgot_password",
+      "dom": {
+        "title": "The Internet",
+        "headings": [
+          "Forgot Password"
+        ],
+        "inputs": [
+          {
+            "tag": "input",
+            "id": "email",
+            "name": "email",
+            "type": "text"
+          }
+        ],
+        "buttons": [
+          {
+            "tag": "button",
+            "id": "form_submit",
+            "type": "submit",
+            "class": "radius",
+            "text": "Retrieve password"
+          }
+        ],
+        "links": [
+          {
+            "tag": "a",
+            "href": "http://elementalselenium.com/",
+            "text": "Elemental Selenium"
+          }
+        ],
+        "selects": [],
+        "data_test_elements": [],
+        "ids": [
+          {
+            "tag": "div",
+            "id": "flash-messages",
+            "class": "large-12 columns"
+          },
+          {
+            "tag": "div",
+            "id": "content",
+            "class": "large-12 columns",
+            "text": "Forgot Password E-mail Retrieve password"
+          },
+          {
+            "tag": "form",
+            "id": "forgot_password",
+            "name": "forgot_password",
+            "text": "E-mail Retrieve password"
+          },
+          {
+            "tag": "input",
+            "id": "email",
+            "name": "email",
+            "type": "text"
+          },
+          {
+            "tag": "button",
+            "id": "form_submit",
+            "type": "submit",
+            "class": "radius",
+            "text": "Retrieve password"
+          },
+          {
+            "tag": "div",
+            "id": "page-footer",
+            "class": "row",
+            "text": "Powered by Elemental Selenium"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/challenging_dom",
+      "feature": "action buttons and data table",
+      "category": "table_list",
+      "url": "https://the-internet.herokuapp.com/challenging_dom",
+      "dom": {
+        "title": "The Internet",
+        "headings": [
+          "Challenging DOM"
+        ],
+        "inputs": [],
+        "buttons": [
+          {
+            "tag": "a",
+            "id": "77b59e10-6723-013f-e66b-76e3324c8978",
+            "class": "button",
+            "text": "baz"
+          },
+          {
+            "tag": "a",
+            "id": "77b5c700-6723-013f-e66c-76e3324c8978",
+            "class": "button alert",
+            "text": "bar"
+          },
+          {
+            "tag": "a",
+            "id": "77b5efe0-6723-013f-e66d-76e3324c8978",
+            "class": "button success",
+            "text": "qux"
+          }
+        ],
+        "links": [
+          {
+            "tag": "a",
+            "id": "77b59e10-6723-013f-e66b-76e3324c8978",
+            "class": "button",
+            "text": "baz"
+          },
+          {
+            "tag": "a",
+            "id": "77b5c700-6723-013f-e66c-76e3324c8978",
+            "class": "button alert",
+            "text": "bar"
+          },
+          {
+            "tag": "a",
+            "id": "77b5efe0-6723-013f-e66d-76e3324c8978",
+            "class": "button success",
+            "text": "qux"
+          },
+          {
+            "tag": "a",
+            "href": "#edit",
+            "text": "edit"
+          },
+          {
+            "tag": "a",
+            "href": "#delete",
+            "text": "delete"
+          },
+          {
+            "tag": "a",
+            "href": "#edit",
+            "text": "edit"
+          },
+          {
+            "tag": "a",
+            "href": "#delete",
+            "text": "delete"
+          },
+          {
+            "tag": "a",
+            "href": "#edit",
+            "text": "edit"
+          },
+          {
+            "tag": "a",
+            "href": "#delete",
+            "text": "delete"
+          },
+          {
+            "tag": "a",
+            "href": "#edit",
+            "text": "edit"
+          },
+          {
+            "tag": "a",
+            "href": "#delete",
+            "text": "delete"
+          },
+          {
+            "tag": "a",
+            "href": "#edit",
+            "text": "edit"
+          },
+          {
+            "tag": "a",
+            "href": "#delete",
+            "text": "delete"
+          },
+          {
+            "tag": "a",
+            "href": "#edit",
+            "text": "edit"
+          },
+          {
+            "tag": "a",
+            "href": "#delete",
+            "text": "delete"
+          },
+          {
+            "tag": "a",
+            "href": "#edit",
+            "text": "edit"
+          },
+          {
+            "tag": "a",
+            "href": "#delete",
+            "text": "delete"
+          },
+          {
+            "tag": "a",
+            "href": "#edit",
+            "text": "edit"
+          },
+          {
+            "tag": "a",
+            "href": "#delete",
+            "text": "delete"
+          },
+          {
+            "tag": "a",
+            "href": "#edit",
+            "text": "edit"
+          },
+          {
+            "tag": "a",
+            "href": "#delete",
+            "text": "delete"
+          },
+          {
+            "tag": "a",
+            "href": "#edit",
+            "text": "edit"
+          },
+          {
+            "tag": "a",
+            "href": "#delete",
+            "text": "delete"
+          },
+          {
+            "tag": "a",
+            "href": "http://elementalselenium.com/",
+            "text": "Elemental Selenium"
+          }
+        ],
+        "selects": [],
+        "data_test_elements": [],
+        "ids": [
+          {
+            "tag": "div",
+            "id": "flash-messages",
+            "class": "large-12 columns"
+          },
+          {
+            "tag": "div",
+            "id": "content",
+            "class": "large-12 columns",
+            "text": "Challenging DOM The hardest part in automated web testing is"
+          },
+          {
+            "tag": "a",
+            "id": "77b59e10-6723-013f-e66b-76e3324c8978",
+            "class": "button",
+            "text": "baz"
+          },
+          {
+            "tag": "a",
+            "id": "77b5c700-6723-013f-e66c-76e3324c8978",
+            "class": "button alert",
+            "text": "bar"
+          },
+          {
+            "tag": "a",
+            "id": "77b5efe0-6723-013f-e66d-76e3324c8978",
+            "class": "button success",
+            "text": "qux"
+          },
+          {
+            "tag": "canvas",
+            "id": "canvas"
+          },
+          {
+            "tag": "div",
+            "id": "page-footer",
+            "class": "row",
+            "text": "Powered by Elemental Selenium"
+          }
+        ]
+      }
     }
   ]
 }
