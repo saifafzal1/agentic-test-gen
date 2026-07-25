@@ -30,10 +30,12 @@ commercial baselines holds without a single exception across both
 frameworks and across all sixteen functional categories in the dataset,
 and every one of the ten paired Wilcoxon signed-rank comparisons
 conducted was significant at p \textless{} $10^{-22}$. Second, this
-improvement is not obtained at the expense of syntactic reliability:
-once evaluated on the complete dataset rather than a partial sample,
-fine-tuned and baseline systems are statistically indistinguishable on
-syntax validity ($\chi^2$ = 0.00, p = 1.00). Third, the agentic correction
+improvement is not obtained at the expense of parse-level syntactic
+reliability: once evaluated on the complete dataset rather than a
+partial sample, fine-tuned and baseline systems are statistically
+indistinguishable on syntax validity ($\chi^2$ = 0.00, p = 1.00), with
+the stricter framework-load check of Section 5.6 adding a modest,
+Playwright-specific qualification. Third, the agentic correction
 loop itself is an effective mechanism for closing the residual gap
 between a first-attempt generation and an acceptable script, with the
 strongest configuration --- Gemma 4 E4B on Cypress --- reaching a 100\%
@@ -120,29 +122,102 @@ conditions under which this study was conducted.
   application under test. A script can therefore be judged syntactically
   valid and lexically close to the reference while still failing at
   runtime --- for example, if a selector it references does not exist in
-  the target application's actual DOM. This is discussed further as a
-  priority direction for future work below.
+  the target application's actual DOM. This limitation is examined
+  empirically in the pilot study reported in the next section.
 \end{itemize}
+
+\section{A Pilot Execution-Based Validation Study}
+
+The metric-validity limitation identified above was judged consequential
+enough to warrant direct empirical examination before submission of this
+report. A pilot study was therefore conducted in which twenty-four new
+user stories were authored against two live, publicly hosted
+demonstration applications --- the Sauce Demo storefront and
+the-internet test playground --- with each story embedding the
+application's real URL, its documented demonstration credentials, and
+its actual DOM selectors in the acceptance criteria, so that a generated
+script can genuinely pass or fail when executed. The stories span
+fifteen of the dataset's sixteen functional categories across all three
+complexity tiers. All four fine-tuned adapters generated scripts for
+these stories through the unmodified BMAD loop, both commercial
+baselines generated scripts for the same stories, and all 192 resulting
+scripts were executed headlessly against the live applications.
+
+\begin{longtable}[]{@{}llll@{}}
+\caption{Pilot execution outcomes on 24 grounded stories per
+system}\tabularnewline
+\toprule
+\endhead
+\textbf{System} & \textbf{Framework} & \textbf{Specs fully passing} &
+\textbf{Individual tests passing} \\
+GPT-4o-mini & Cypress & 15/24 & 35/50 (70\%) \\
+Claude Haiku & Cypress & 13/24 & 71/88 (81\%) \\
+Claude Haiku & Playwright & 9/24 & 37/73 (51\%) \\
+GPT-4o-mini & Playwright & 5/24 & 17/46 (37\%) \\
+Gemma 4 E4B & Playwright & 1/24 & 2/46 (4\%) \\
+Phi-3 Mini & Playwright & 1/24 & 2/38 (5\%) \\
+Gemma 4 E4B & Cypress & 0/24 & 0/48 (0\%) \\
+Phi-3 Mini & Cypress & 0/24 & 0/40 (0\%) \\
+\bottomrule
+\end{longtable}
+
+The static quality pattern of Chapter 5 reproduced cleanly on these new
+stories: the BMAD composite accepted 92 of 96 fine-tuned generations
+(95.8\%), with Gemma 4 E4B again perfect on both frameworks. Under
+genuine execution, however, the ranking inverted completely: the
+zero-shot baselines fully passed 42 of 96 specs (43.8\%) against 2 of 96
+(2.1\%) for the fine-tuned systems. Inspection of every failure located
+the cause with unusual precision. Forty-seven of the forty-eight
+fine-tuned Cypress scripts, and twenty-four of the forty-eight
+Playwright scripts, used the training corpus's \texttt{data-testid}
+selector convention in place of the real selectors stated explicitly in
+the story's acceptance criteria; the remaining failures trace to
+invented URL routes, calls to custom commands that do not exist, and
+network-interception waits for requests the applications never issue.
+The two fully passing fine-tuned specs are precisely the stories whose
+assertions rest on visible text and URLs rather than attribute
+selectors. The commercial baselines, by contrast, followed the selectors
+they were given.
+
+The interpretation is that two distinct properties have been separated
+by this experiment. Static metrics measure \emph{framework fluency} ---
+command vocabulary, structure, assertion idiom --- which fine-tuning
+demonstrably improves and on which every conclusion of Chapter 5 stands
+unchanged. Execution additionally requires \emph{application grounding}:
+the correspondence of every selector, route, and expected text to the
+actual application under test. Fine-tuning on a synthetic corpus, as
+configured in this study, actively damaged grounding --- the adapters
+learned the corpus's conventions deeply enough to impose them over
+explicit contrary instructions --- while the instruction-tuned
+commercial baselines, weaker on every static measure, preserved it. This
+finding does not overturn the results of Chapter 5, whose claims concern
+semantic alignment with reference implementations; it delimits their
+scope, and it converts the execution-based-validation direction of the
+next section from a speculative proposal into an evidence-based one with
+a precisely identified target: grounding the generator in the
+application under test.
 
 \section{Future Work}
 
 The limitations identified above translate directly into concrete
 directions for extending this research.
 
-\subsection{Execution-Based Validation}
+\subsection{Execution-Based Validation and Application Grounding}
 
-The most consequential extension is to move beyond static and lexical
-evaluation toward execution-based validation: running each generated
-script against a live or containerised instance of the target
-application and recording pass, fail, or runtime-error outcomes. This
-would close the remaining gap between ``the script looks correct'' and
-``the script actually verifies the intended behaviour,'' and would allow
-the BMAD loop's Measure stage to incorporate a genuine
-functional-correctness signal alongside the current static heuristics. A
-natural implementation path is a sandboxed headless-browser execution
-stage inserted between the current syntax check and the composite-score
-computation, feeding pass/fail outcomes back as an additional term in
-the acceptance threshold.
+The pilot study of the previous section provides a first measurement;
+the full extension remains the most consequential direction, and the
+pilot sharpens its target. Scaling execution-based validation beyond
+twenty-four stories, and feeding pass/fail outcomes back into the BMAD
+loop's Measure stage as a genuine functional-correctness term in the
+acceptance threshold, addresses the instrument. The pilot's central
+finding, however, is that the binding constraint is application
+grounding: supplying the generator with the real DOM of the application
+under test --- for example by retrieving actual selectors from a live
+page or the application source at generation time, by constraining
+decoding to selectors known to exist, or by fine-tuning on corpora whose
+stories and scripts are grounded in real applications rather than
+synthetic conventions --- so that framework fluency and grounding are
+learned together rather than traded against each other.
 
 \subsection{Human Evaluation}
 
@@ -201,9 +276,12 @@ before the shared Build--Measure--Assess--Decide cycle proceeds.
 Taken as a whole, this dissertation provides statistically robust
 evidence that parameter-efficient fine-tuning, combined with an agentic
 self-correction loop, can substantially improve an open-weight language
-model's ability to translate natural-language user stories into usable
-end-to-end test scripts, without sacrificing syntactic reliability
-relative to considerably larger zero-shot commercial systems. The scale
+model's ability to translate natural-language user stories into
+framework-fluent end-to-end test scripts, without sacrificing
+parse-level syntactic reliability relative to considerably larger
+zero-shot commercial systems --- while the execution pilot of Section
+6.3 identifies application grounding as the decisive further requirement
+for scripts that run against a live application unmodified. The scale
 of the improvement, its consistency across every category and framework
 tested, and the rigour with which measurement artefacts were identified
 and corrected during the evaluation process together support the
