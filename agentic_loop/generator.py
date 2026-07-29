@@ -86,6 +86,10 @@ def _select_device() -> str:
 
 device = _select_device()
 
+# bf16 is native on CUDA/MPS but emulated (slow) and poorly supported on
+# CPU; use float32 there so a CPU/Windows-Docker run actually works.
+model_dtype = torch.float32 if device == "cpu" else torch.bfloat16
+
 _model_cache: dict = {}
 
 
@@ -121,7 +125,7 @@ def _load_phi3(base_path: str, adapter_path: str):
 
     base = AutoModelForCausalLM.from_pretrained(
         base_path,
-        torch_dtype=torch.bfloat16,
+        torch_dtype=model_dtype,
         trust_remote_code=False,
         attn_implementation="eager",
     )
@@ -144,7 +148,7 @@ def _load_gemma4(base_path: str, adapter_path: str):
 
     base = Gemma4ForConditionalGeneration.from_pretrained(
         base_path,
-        torch_dtype=torch.bfloat16,
+        torch_dtype=model_dtype,
         trust_remote_code=True,
     )
     base = base.to(device)

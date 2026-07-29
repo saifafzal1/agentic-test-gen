@@ -47,7 +47,10 @@ dl saifafzal1/phi3-mini-playwright-qlora  fine_tuning/phi3-playwright
 dl saifafzal1/gemma4-E4B-cypress-qlora    fine_tuning/gemma4-cypress
 dl saifafzal1/gemma4-E4B-playwright-qlora fine_tuning/gemma4-playwright
 
-echo "=== Running BMAD loop: model=$RUN_MODEL framework=$RUN_FRAMEWORK data=$RUN_DATA ==="
+LIMIT_ARG=()
+[[ -n "${RUN_LIMIT:-}" ]] && LIMIT_ARG=(--limit "$RUN_LIMIT")   # e.g. RUN_LIMIT=2 for a CPU smoke test
+
+echo "=== Running BMAD loop: model=$RUN_MODEL framework=$RUN_FRAMEWORK data=$RUN_DATA ${LIMIT_ARG[*]:-} ==="
 exec python -m agentic_loop.run_loop \
   --model "$RUN_MODEL" --framework "$RUN_FRAMEWORK" \
-  --data "$RUN_DATA" --out-dir "$RUN_OUT_DIR"
+  --data "$RUN_DATA" --out-dir "$RUN_OUT_DIR" "${LIMIT_ARG[@]}"

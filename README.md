@@ -127,9 +127,21 @@ cannot do GPU-in-Docker at all.
 - **Run the exact commands above** in PowerShell or WSL — they are
   OS-neutral because settings come from `docker/.env`, not inline vars, and
   the compose volume paths are relative (no `$(pwd)` needed).
-- **No NVIDIA GPU?** The `inference` container still runs, on CPU (slow —
-  smoke-test scope). The `execution` container is GPU-free and fully fast.
-  To force CPU, delete the `deploy:` block in `docker/docker-compose.yml`.
+- **No NVIDIA GPU (CPU-only Windows box):** the recommended split is —
+  - **`execution` container: use it fully.** GPU-free, fast, runs the
+    Cypress/Playwright metrics capture on dummy + practical data. This is
+    the main value on a CPU machine.
+  - **`inference` container: smoke test only.** It runs on CPU but a
+    3.8–4B model is minutes per story. The code now loads **float32 on CPU**
+    (bf16 is emulated/slow there), and `docker/.env` ships with
+    `RUN_LIMIT=2` + `RUN_MODEL=phi3` so a first run generates just 2 stories
+    with the *smaller* model to prove the pipeline end-to-end. Do **not**
+    attempt full runs or Gemma on CPU — Gemma (4B) likely won't fit in a
+    typical laptop's RAM, and a full 279-story CPU run could take days.
+  - **Delete the `deploy:` block** in `docker/docker-compose.yml` so compose
+    doesn't demand a GPU that isn't there.
+  - Needs ~8 GB free RAM for the Phi-3 smoke test (float32) plus ~8 GB disk
+    for its base model.
 - **Disk:** ~35 GB of model downloads land in the persistent `hf_cache`
   volume on first run; ensure WSL2 has the space.
 
