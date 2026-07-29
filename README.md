@@ -101,21 +101,43 @@ are in `docker/`.
   against the live demo apps and captures pass/fail metrics on both the
   dummy (synthetic 279) and practical (grounded, live-app) data.
 
+Configure once via an env file (works identically on every OS — inline
+`VAR=value` before the command does **not** work in Windows PowerShell):
 ```bash
-# 1. Generate on a GPU host (HF_TOKEN needs read access to the adapters)
-HF_TOKEN=hf_xxx RUN_MODEL=phi3 RUN_FRAMEWORK=cypress \
-  docker compose -f docker/docker-compose.yml run --rm inference
-
+cp docker/.env.example docker/.env      # then edit docker/.env, set HF_TOKEN
+```
+```bash
+# 1. Generate (GPU host recommended)
+docker compose --env-file docker/.env -f docker/docker-compose.yml run --rm inference
 # 2. Execute the generated scripts + capture metrics (any host)
-EXEC_MODEL=phi3 EXEC_FRAMEWORK=cypress \
-  docker compose -f docker/docker-compose.yml run --rm execution
+docker compose --env-file docker/.env -f docker/docker-compose.yml run --rm execution
 ```
 
-**Important — GPU vs Mac:** Docker on macOS **cannot access Apple Silicon
-MPS**, so the `inference` container runs on CPU there (minutes per script;
-use the native steps above for real Mac runs). The GPU path is for a Linux
-CUDA host — where `agentic_loop/generator.py` now auto-selects `cuda`. The
-`execution` container is GPU-free and works anywhere.
+### Windows (Docker Desktop + WSL2)
+Windows is a **first-class GPU host** for this — better than a Mac, which
+cannot do GPU-in-Docker at all.
+
+- **Prerequisites:** Docker Desktop with the **WSL2 backend** enabled. For
+  GPU: an NVIDIA GPU with a current driver — CUDA works through WSL2 with
+  **no extra toolkit install** (Docker Desktop wires it up). Verify with
+  `docker run --rm --gpus all nvidia/cuda:12.4.1-base-ubuntu22.04 nvidia-smi`.
+- **Clone cleanly:** `git clone` normally — the repo's `.gitattributes`
+  forces LF on the shell scripts, and the Dockerfiles strip any stray CR as
+  a second safety net, so the classic `bash\r` container error can't occur.
+- **Run the exact commands above** in PowerShell or WSL — they are
+  OS-neutral because settings come from `docker/.env`, not inline vars, and
+  the compose volume paths are relative (no `$(pwd)` needed).
+- **No NVIDIA GPU?** The `inference` container still runs, on CPU (slow —
+  smoke-test scope). The `execution` container is GPU-free and fully fast.
+  To force CPU, delete the `deploy:` block in `docker/docker-compose.yml`.
+- **Disk:** ~35 GB of model downloads land in the persistent `hf_cache`
+  volume on first run; ensure WSL2 has the space.
+
+**GPU vs Mac vs Windows:** macOS Docker **cannot reach Apple Silicon MPS**
+(CPU-only in a container — use the native steps above there). A Linux or
+**Windows+WSL2 CUDA host** gets real GPU acceleration, where
+`agentic_loop/generator.py` now auto-selects `cuda`. The `execution`
+container is GPU-free everywhere.
 
 > These Docker files are provided as reproducibility scaffolding and
 > should be validated on their first build on an actual CUDA host (they

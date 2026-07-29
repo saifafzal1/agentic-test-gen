@@ -43,6 +43,8 @@ COPY evaluation/   ./evaluation/
 COPY data/         ./data/
 COPY run_pipeline.sh .
 COPY docker/entrypoint-inference.sh /usr/local/bin/entrypoint-inference.sh
-RUN chmod +x /usr/local/bin/entrypoint-inference.sh
+# Strip any CR (handles a Windows CRLF checkout) and make executable.
+RUN sed -i 's/\r$//' /usr/local/bin/entrypoint-inference.sh \
+    && chmod +x /usr/local/bin/entrypoint-inference.sh
 
 ENTRYPOINT ["/usr/local/bin/entrypoint-inference.sh"]

@@ -33,6 +33,8 @@ RUN cd execution_harness && npm ci && npx playwright install --with-deps chromiu
 COPY execution_harness/ ./execution_harness/
 COPY data/execution_validation/ ./data/execution_validation/
 COPY docker/entrypoint-execution.sh /usr/local/bin/entrypoint-execution.sh
-RUN chmod +x /usr/local/bin/entrypoint-execution.sh
+# Strip any CR (handles a Windows CRLF checkout) and make executable.
+RUN sed -i 's/\r$//' /usr/local/bin/entrypoint-execution.sh \
+    && chmod +x /usr/local/bin/entrypoint-execution.sh
 
 ENTRYPOINT ["/usr/local/bin/entrypoint-execution.sh"]

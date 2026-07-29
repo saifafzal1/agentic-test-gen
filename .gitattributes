@@ -1,0 +1,8 @@
+# Force LF line endings on files that run inside Linux Docker containers,
+# so a Windows checkout (core.autocrlf=true) doesn't inject CRLF and break
+# the shells with "/usr/bin/env: 'bash\r': No such file or directory".
+*.sh            text eol=lf
+*.py            text eol=lf
+Dockerfile*     text eol=lf
+docker/*        text eol=lf
+*.jsonl         text eol=lf
