@@ -1,0 +1,19 @@
+# Keep multi-GB weights and local artifacts out of the build context
+.venv/
+fine_tuning/*base-model/
+fine_tuning/*cypress*/
+fine_tuning/*playwright*/
+fine_tuning/gemma-finetuned*/
+**/__pycache__/
+**/*.pyc
+**/node_modules/
+execution_harness/cypress/
+execution_harness/pw_specs/
+execution_harness/cy_load_specs/
+execution_harness/test-results/
+logs/
+grounded_corpus/candidates*/
+writing/
+notebooks/
+.git/
+*.log

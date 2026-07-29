@@ -1,0 +1,48 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# GPU inference container — QLoRA adapters + BMAD agentic loop
+# ─────────────────────────────────────────────────────────────────────────────
+# Runs the model half of the pipeline (Phi-3 / Gemma 4 generation) on an
+# NVIDIA CUDA host. Base models + private adapters are pulled from the
+# HuggingFace Hub at container start (see docker/entrypoint-inference.sh),
+# so NO training and NO baked-in weights are required.
+#
+# REQUIRES a CUDA GPU host with the NVIDIA Container Toolkit. This image
+# gives no speed-up on an Apple-Silicon Mac: Docker cannot reach MPS, so a
+# Mac run falls back to CPU. Use the native (non-Docker) path on a Mac.
+#
+# Build:
+#   docker build -f docker/Dockerfile.inference -t agentic-inference:latest .
+# Run (GPU host):
+#   docker run --rm --gpus all \
+#     -e HF_TOKEN=hf_xxx \
+#     -e RUN_MODEL=phi3 -e RUN_FRAMEWORK=cypress \
+#     -e RUN_DATA=data/execution_validation/grounded_stories.jsonl \
+#     -v $(pwd)/results:/app/results \
+#     agentic-inference:latest
+# ─────────────────────────────────────────────────────────────────────────────
+FROM nvidia/cuda:12.4.1-cudnn-runtime-ubuntu22.04
+
+ENV DEBIAN_FRONTEND=noninteractive PYTHONUNBUFFERED=1 HF_HOME=/app/.hf_cache
+WORKDIR /app
+
+# Python 3.12 + build basics
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        python3.12 python3.12-venv python3-pip git curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && ln -sf /usr/bin/python3.12 /usr/bin/python
+
+# Python deps (layer-cached separately from source)
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt \
+    && pip install --no-cache-dir "huggingface_hub[cli]"
+
+# Source (respect .dockerignore — model dirs, results, node_modules excluded)
+COPY agentic_loop/ ./agentic_loop/
+COPY evaluation/   ./evaluation/
+COPY data/         ./data/
+COPY run_pipeline.sh .
+COPY docker/entrypoint-inference.sh /usr/local/bin/entrypoint-inference.sh
+RUN chmod +x /usr/local/bin/entrypoint-inference.sh
+
+ENTRYPOINT ["/usr/local/bin/entrypoint-inference.sh"]

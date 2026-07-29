@@ -74,7 +74,17 @@ SYSTEM_PROMPTS = {
 # the marker text (which would leave the hallucinated continuation in place).
 STOP_MARKERS = ["<start_of_turn>", "<end_of_turn>", "<|user|>", "<|system|>", "<|assistant|>", "<|end|>"]
 
-device = "mps" if (not MOCK_MODEL and torch.backends.mps.is_available()) else "cpu"
+def _select_device() -> str:
+    """Prefer CUDA (Linux/Docker GPU host) → MPS (Apple Silicon) → CPU."""
+    if MOCK_MODEL:
+        return "cpu"
+    if torch.cuda.is_available():
+        return "cuda"
+    if torch.backends.mps.is_available():
+        return "mps"
+    return "cpu"
+
+device = _select_device()
 
 _model_cache: dict = {}
 
@@ -278,5 +288,7 @@ def generate(model_key: str, framework: str, user_story: str,
     gc.collect()
     if device == "mps":
         torch.mps.empty_cache()
+    elif device == "cuda":
+        torch.cuda.empty_cache()
 
     return script, round(latency, 3)

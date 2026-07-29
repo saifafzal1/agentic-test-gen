@@ -1,0 +1,48 @@
+# End-to-end pipeline via two containers:
+#   inference  → downloads models from HF, runs BMAD generation (needs a GPU host)
+#   execution  → runs the generated scripts against live apps, captures metrics
+#
+# The shared ./results volume is how generation output reaches the executor.
+# Run inference first, then execution:
+#   HF_TOKEN=hf_xxx docker compose -f docker/docker-compose.yml run inference
+#   docker compose -f docker/docker-compose.yml run execution
+#
+# NOTE: the inference GPU reservation below requires a CUDA host + NVIDIA
+# Container Toolkit. On a Mac, drop the `deploy:` block — it will run on CPU
+# (slow; use the native path for real Mac runs).
+services:
+  inference:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.inference
+    image: agentic-inference:latest
+    environment:
+      HF_TOKEN: ${HF_TOKEN:?set HF_TOKEN (HF read token for the private adapters)}
+      RUN_MODEL: ${RUN_MODEL:-phi3}
+      RUN_FRAMEWORK: ${RUN_FRAMEWORK:-cypress}
+      RUN_DATA: ${RUN_DATA:-data/execution_validation/grounded_stories.jsonl}
+      RUN_OUT_DIR: ${RUN_OUT_DIR:-results/execution_validation}
+    volumes:
+      - ../results:/app/results
+      - hf_cache:/app/.hf_cache          # persist downloads across runs
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  execution:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.execution
+    image: agentic-execution:latest
+    environment:
+      EXEC_MODEL: ${EXEC_MODEL:-}
+      EXEC_FRAMEWORK: ${EXEC_FRAMEWORK:-}
+    volumes:
+      - ../results:/app/results
+
+volumes:
+  hf_cache:

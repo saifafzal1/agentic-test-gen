@@ -87,6 +87,40 @@ python -u fine_tuning/finetune_gemma4.py --framework playwright
 Requires an Apple-Silicon Mac (MPS, bf16) or a CUDA GPU; ~1 h per Phi-3
 adapter and 3–5 h per Gemma adapter on an M4 Pro (48 GB).
 
+## Run via Docker (no local setup)
+
+Two containers reproduce the pipeline end to end; they share the
+`./results` volume (generation output feeds the executor). Definitions
+are in `docker/`.
+
+- **`inference`** — downloads base models + the four private adapters
+  from HuggingFace at start (no training, no baked-in weights) and runs
+  the BMAD loop. **Needs a CUDA GPU host + the NVIDIA Container Toolkit.**
+- **`execution`** — GPU-free; built on the official Playwright image
+  (browsers preinstalled) plus Cypress, it runs the generated scripts
+  against the live demo apps and captures pass/fail metrics on both the
+  dummy (synthetic 279) and practical (grounded, live-app) data.
+
+```bash
+# 1. Generate on a GPU host (HF_TOKEN needs read access to the adapters)
+HF_TOKEN=hf_xxx RUN_MODEL=phi3 RUN_FRAMEWORK=cypress \
+  docker compose -f docker/docker-compose.yml run --rm inference
+
+# 2. Execute the generated scripts + capture metrics (any host)
+EXEC_MODEL=phi3 EXEC_FRAMEWORK=cypress \
+  docker compose -f docker/docker-compose.yml run --rm execution
+```
+
+**Important — GPU vs Mac:** Docker on macOS **cannot access Apple Silicon
+MPS**, so the `inference` container runs on CPU there (minutes per script;
+use the native steps above for real Mac runs). The GPU path is for a Linux
+CUDA host — where `agentic_loop/generator.py` now auto-selects `cuda`. The
+`execution` container is GPU-free and works anywhere.
+
+> These Docker files are provided as reproducibility scaffolding and
+> should be validated on their first build on an actual CUDA host (they
+> were authored, not yet built, in the environment that produced them).
+
 ## Notes
 - The four adapter repos are **private**; the token in step 2 must have
   access. Base models (`microsoft/Phi-3-mini-4k-instruct`,

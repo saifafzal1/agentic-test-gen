@@ -1,0 +1,38 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Execution + metrics container — runs generated scripts against live apps
+# ─────────────────────────────────────────────────────────────────────────────
+# GPU-free. Uses the official Playwright image (browsers preinstalled),
+# adds Cypress and Python, and runs the execution harness that captures
+# pass/fail metrics on both DUMMY data (synthetic 279 dataset) and
+# PRACTICAL data (grounded stories against live demo apps).
+#
+# Build:
+#   docker build -f docker/Dockerfile.execution -t agentic-execution:latest .
+# Run (executes whatever generations are mounted under results/):
+#   docker run --rm \
+#     -v $(pwd)/results:/app/results \
+#     -e EXEC_MODEL=phi3 -e EXEC_FRAMEWORK=cypress \
+#     agentic-execution:latest
+# ─────────────────────────────────────────────────────────────────────────────
+FROM mcr.microsoft.com/playwright:v1.55.0-jammy
+
+ENV PYTHONUNBUFFERED=1
+WORKDIR /app
+
+# Python (the Node/browser stack is already in the base image)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        python3 python3-pip \
+    && rm -rf /var/lib/apt/lists/* \
+    && ln -sf /usr/bin/python3 /usr/bin/python
+
+# Harness Node deps (Cypress + @playwright/test) — cache on package.json
+COPY execution_harness/package.json execution_harness/package-lock.json ./execution_harness/
+RUN cd execution_harness && npm ci && npx playwright install --with-deps chromium
+
+# Harness source + the grounded story definitions the runner reads
+COPY execution_harness/ ./execution_harness/
+COPY data/execution_validation/ ./data/execution_validation/
+COPY docker/entrypoint-execution.sh /usr/local/bin/entrypoint-execution.sh
+RUN chmod +x /usr/local/bin/entrypoint-execution.sh
+
+ENTRYPOINT ["/usr/local/bin/entrypoint-execution.sh"]
