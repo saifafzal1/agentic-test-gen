@@ -1,0 +1,29 @@
+# Core dependencies for the agentic test-script generation pipeline.
+# Pinned to the versions used to produce the dissertation results
+# (Python 3.12, Apple Silicon MPS / bf16).
+#
+# Fresh-machine setup:  python3.12 -m venv .venv && source .venv/bin/activate
+#                       pip install -r requirements.txt
+# See README.md for the full no-training reproduction steps.
+
+# ── Model loading, fine-tuning, inference ──
+torch==2.11.0
+transformers==5.8.0
+peft==0.19.1
+trl==1.4.0
+accelerate==1.13.0
+datasets==4.8.5
+tokenizers==0.22.2
+safetensors==0.7.0
+huggingface-hub          # provides `huggingface-cli` for the adapter/base-model downloads
+
+# ── Evaluation & statistics ──
+scipy==1.17.1
+numpy==2.4.4
+
+# ── Zero-shot baselines (API clients) ──
+openai==2.36.0
+anthropic==0.100.0
+
+# ── Utilities ──
+python-dotenv==1.2.2
