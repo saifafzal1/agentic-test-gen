@@ -6,7 +6,13 @@
 \documentclass[12pt]{report}
 
 \usepackage{fontspec}
+\usepackage{etoolbox}
 \usepackage{longtable}
+% Reduce table width (faculty feedback): tighter inter-column padding, and
+% a smaller font inside every longtable, so tables size to content rather
+% than stretching. longtables are horizontally centred by default.
+\setlength{\tabcolsep}{4pt}
+\AtBeginEnvironment{longtable}{\small}
 \usepackage{booktabs}
 \usepackage{graphicx}
 % WILP guideline sec 1.2(a): 9" x 11" quarto ("thesis size"); sec 1.2(c): 1" margins.

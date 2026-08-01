@@ -41,6 +41,44 @@ between a first-attempt generation and an acceptable script, with the
 strongest configuration --- Gemma 4 E4B on Cypress --- reaching a 100\%
 acceptance rate across all 279 held-out stories.
 
+These conclusions map directly onto the three research gaps identified
+in the literature review (Table~2.1), each of which this dissertation
+set out to close and now resolves in turn.
+
+\textbf{Gap 1 --- no framework-idiomatic UI test-script fine-tuning.}
+The literature evaluated general-purpose program synthesis and
+arbitrary unit-test generation, but no prior work fine-tuned a model on
+the selector conventions and assertion idioms of a named commercial UI
+test framework. This gap is closed by the four framework-isolated QLoRA
+adapters trained in this work: on the held-out set, every fine-tuned
+system outperformed every zero-shot commercial baseline on ground-truth
+ROUGE-L across both Cypress and Playwright and across all sixteen
+functional categories without a single exception (Section~5.4,
+Table~5.3), confirmed by ten paired Wilcoxon tests each significant at p
+\textless{} $10^{-22}$ (Section~5.5).
+
+\textbf{Gap 2 --- QLoRA feasibility unexamined on Apple Silicon.}
+Existing QLoRA and PEFT studies reported results almost exclusively on
+CUDA-capable NVIDIA hardware, leaving the technique's behaviour on
+Apple's MPS backend unreported. This gap is closed by training all four
+adapters to convergence on an Apple M4 Pro under MPS, and by identifying
+and documenting the three concrete adaptations MPS required relative to
+a conventional CUDA configuration --- bfloat16 in place of float16,
+correction of the completion-only masking collator, and disabled output
+buffering (Section~4.4) --- so that the feasibility, and its practical
+preconditions, are now on record.
+
+\textbf{Gap 3 --- no agentic correction loop for UI test scripts.}
+Agentic self-correction frameworks had been demonstrated for general
+code generation and conversation, but not applied to the iterative,
+static-analysis-guided correction of UI test scripts, nor evaluated with
+paired statistical rigour. This gap is closed by the BMAD loop, which
+accepted 1{,}077 of 1{,}116 generations across the complete dataset
+(96.5\%), with Gemma~4 E4B on Cypress reaching a perfect 279/279, and by
+the paired evaluation design --- one-way ANOVA, ten Wilcoxon signed-rank
+tests, and a chi-square test of independence over the same held-out
+items scored across every system (Chapter~5).
+
 Beyond the headline quantitative result, this work makes three further
 contributions that are methodological rather than purely empirical. The
 evaluation design pairs every one of the 279 stories across all eight
