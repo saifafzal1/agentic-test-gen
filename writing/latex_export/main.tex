@@ -3,13 +3,14 @@
 % math symbols -- chi-square, multiplication sign, superscript exponents --
 % that pdfLaTeX will not render correctly).
 % Overleaf reads the "%!TeX program" line above to auto-select the engine.
-\documentclass[12pt, a4paper]{report}
+\documentclass[12pt]{report}
 
 \usepackage{fontspec}
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{graphicx}
-\usepackage[margin=1in]{geometry}
+% WILP guideline sec 1.2(a): 9" x 11" quarto ("thesis size"); sec 1.2(c): 1" margins.
+\usepackage[paperwidth=9in, paperheight=11in, margin=1in]{geometry}
 \usepackage{hyperref}
 % Double spacing per WILP guideline sec 1.2(b) ("typed in double space").
 \usepackage{setspace}
@@ -57,6 +58,8 @@
 \input{Implementation_Chapter}
 \input{Evaluation_Chapter}
 \input{Conclusion_Chapter}
+
+\input{Appendices}
 
 \input{BackMatter}
 
