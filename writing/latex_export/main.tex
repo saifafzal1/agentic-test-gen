@@ -41,6 +41,10 @@
 \input{CertificatePage}
 \input{FrontMatter}
 
+% Show section and subsection subheadings in the Table of Contents
+% (report class default is chapters + sections + subsections; set
+% explicitly so subheadings always appear regardless of prior config).
+\setcounter{tocdepth}{2}
 \tableofcontents
 \listoffigures
 \listoftables
