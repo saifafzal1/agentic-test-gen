@@ -54,7 +54,17 @@ dataset into framework-isolated JSON Lines files, one containing only
 Cypress reference scripts and one containing only Playwright reference
 scripts, so that fine-tuning and baseline evaluation for a given
 framework never has visibility of the other framework's syntax during
-training or prompting.
+training or prompting. Figure~4.2 shows this generation-and-validation
+flow: each candidate record is produced by Claude Haiku, checked by a
+heuristic validator against framework-specific syntax rules, and either
+admitted to \texttt{dataset\_final.json} or regenerated (up to three
+attempts) on failure.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\textwidth]{images/dataset_generation.png}
+\caption{Dataset generation flowchart}
+\end{figure}
 
 \section{Zero-Shot Baseline Inference}
 
