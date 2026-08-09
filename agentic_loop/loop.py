@@ -65,11 +65,13 @@ def _generate(
     complexity:     str,
     feedback:       str = "",
     max_new_tokens: int = DEFAULT_MAX_TOKENS,
+    dom_context:    str = "",
 ) -> tuple:
     """
     In-process generation call. When feedback is non-empty the previous
     issues are appended to the user story so the model has explicit
-    correction guidance.
+    correction guidance. dom_context (optional) is passed through for
+    inference-time grounding.
     """
     story = user_story if not feedback else (
         f"{user_story}\n\n"
@@ -83,6 +85,7 @@ def _generate(
         category       = category,
         complexity     = complexity,
         max_new_tokens = max_new_tokens,
+        dom_context    = dom_context,
     )
 
 
@@ -99,6 +102,7 @@ def run(
     threshold:  float = DEFAULT_THRESHOLD,
     max_iters:  int   = DEFAULT_MAX_ITERS,
     max_tokens: int   = DEFAULT_MAX_TOKENS,
+    dom_context: str  = "",
 ) -> LoopResult:
     """
     Run the BMAD loop for a single user story.
@@ -125,6 +129,7 @@ def run(
         script, elapsed = _generate(
             user_story, framework, model_key,
             category, complexity, feedback, current_max_tokens,
+            dom_context=dom_context,
         )
         total_latency += elapsed
 
