@@ -1,0 +1,14 @@
+{
+  "tc_id": "TC_G24",
+  "condition": "repaired",
+  "model": "phi3",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 83.131,
+  "dom_context_used": true,
+  "dom_context_chars": 239,
+  "final_script": "describe('HTTP Status Code Reporting', () => {\n  beforeEach(() => {\n    cy.visit('/status_codes');\n  });\n\n  it('should navigate to and display correct status code page content', () => {\n    // Verify initial page is loaded\n    cy.get('#page-footer').should('contain', 'Status Codes');\n\n    // Click the link for status code 200\n    cy.get('[data-testid=\"200\"]').click();\n\n    // Verify navigation to correct URL\n    cy.url().should('include', '/status_codes/200');\n\n    // Verify page body contains expected text\n    cy.get('#content').should('contain', 'This page returned a 200 status code');\n\n    // Verify navigation back to /status_codes\n    cy.visit('/status_codes');\n\n    // Verify page is back to initial state\n    cy.get('#page-footer').should('contain', 'Status Codes');\n  });\n\n  it('should handle 404 status code and display appropriate message', () => {\n    // Verify initial page is loaded\n    cy.get('#page-footer').should('contain', 'Status Codes');\n\n    // Click the link for status code 404\n    cy.get('[data-testid=\"404\"]').click();\n\n    // Verify navigation to correct URL\n    cy.url().should('include', '/status_codes/404');\n\n    // Verify page body contains expected text\n    cy.get('#content').should('contain', 'This page returned a 404 status code');\n\n    // Verify navigation back to /status_codes\n    cy.visit('/status_codes');\n\n    // Verify page is back to initial state\n    cy.get('#page-footer').should('contain', 'Status Codes');\n  });\n});",
+  "selectors_repaired": 6
+}

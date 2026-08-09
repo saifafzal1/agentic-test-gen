@@ -1,0 +1,454 @@
+[
+  {
+    "status": "failed",
+    "tests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "Login to Sauce Demo Store should successfully log in with valid credentials and redirect to product catalogue",
+        "message": "Timed out retrying after 5000ms: `cy.wait()` timed out waiting `5000ms` for the 1st request to the route: `loginRequest`. No request ever occurred.\n\nhttps://on.cypress.io/wait"
+      },
+      {
+        "title": "Login to Sauce Demo Store should display error message when login fails due to invalid credentials",
+        "message": "`cy.wait()` could not find a registered alias for: `@loginRequest`.\nYou have not aliased anything yet."
+      }
+    ],
+    "tc_id": "TC_G01",
+    "condition": "repaired",
+    "selectors_repaired": 12
+  },
+  {
+    "status": "failed",
+    "tests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "Locked-out Customer Login Error State should display error message when logging in with locked-out user credentials",
+        "message": "Timed out retrying after 10000ms: Expected to find element: `[data-testid=\"error\"]`, but never found it."
+      },
+      {
+        "title": "Locked-out Customer Login Error State should not navigate away from login page when error occurs",
+        "message": "Timed out retrying after 10000ms: expected 'https://www.saucedemo.com/' to include '/login'"
+      }
+    ],
+    "tc_id": "TC_G02",
+    "condition": "repaired",
+    "selectors_repaired": 13
+  },
+  {
+    "status": "failed",
+    "tests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "Logout Functionality - Sauce Labs should log out successfully and return to login page",
+        "message": "Timed out retrying after 10000ms: expected 'https://www.saucedemo.com/inventory.html' to include '/dashboard'"
+      },
+      {
+        "title": "Logout Functionality - Sauce Labs should handle logout when user is already logged out",
+        "message": "Timed out retrying after 10000ms: Expected to find element: `#logout_sidebar_link`, but never found it."
+      }
+    ],
+    "tc_id": "TC_G03",
+    "condition": "repaired",
+    "selectors_repaired": 16
+  },
+  {
+    "status": "failed",
+    "tests": 3,
+    "passed": 0,
+    "failed": 3,
+    "failures": [
+      {
+        "title": "Login Form Validation should display error messages when required fields are empty",
+        "message": "Timed out retrying after 10000ms: Expected to find element: `[data-testid=\"error\"]`, but never found it."
+      },
+      {
+        "title": "Login Form Validation should display error messages when password field is empty",
+        "message": "Timed out retrying after 10000ms: Expected to find element: `[data-testid=\"error\"]`, but never found it."
+      },
+      {
+        "title": "Login Form Validation should display error messages when both fields are empty",
+        "message": "Timed out retrying after 10000ms: Expected to find element: `[data-testid=\"error\"]`, but never found it."
+      }
+    ],
+    "tc_id": "TC_G04",
+    "condition": "repaired",
+    "selectors_repaired": 8
+  },
+  {
+    "status": "failed",
+    "tests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "Inventory Page - Product List Display should display complete product cards with non-empty names and prices",
+        "message": "Timed out retrying after 10000ms: expected '<div.inventory_list>' to contain '6'"
+      },
+      {
+        "title": "Inventory Page - Product List Display should handle edge case when product list is empty",
+        "message": "`cy.visit()` failed trying to load:\n\nhttps://www.saucedemo.com/inventory\n\nThe response we received from your web server was:\n\n  > 404: Not Found\n\nThis was considered a failure because the status code was not `2xx`.\n\nIf you do not want status codes to cause failures pass the option: `failOnStatusCode"
+      }
+    ],
+    "tc_id": "TC_G05",
+    "condition": "repaired",
+    "selectors_repaired": 18
+  },
+  {
+    "status": "failed",
+    "tests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "Product Sorting by Price should sort products by price in ascending order when selecting \"lohi\" option",
+        "message": "Timed out retrying after 5000ms: `cy.wait()` timed out waiting `5000ms` for the 1st request to the route: `getProducts`. No request ever occurred.\n\nhttps://on.cypress.io/wait"
+      },
+      {
+        "title": "Product Sorting by Price should handle edge case where no products are available",
+        "message": "Timed out retrying after 5000ms: `cy.wait()` timed out waiting `5000ms` for the 1st request to the route: `getProducts`. No request ever occurred.\n\nhttps://on.cypress.io/wait"
+      }
+    ],
+    "tc_id": "TC_G06",
+    "condition": "repaired",
+    "selectors_repaired": 21
+  },
+  {
+    "status": "failed",
+    "tests": 1,
+    "passed": 0,
+    "failed": 1,
+    "failures": [
+      {
+        "title": "Add and Remove Product from Cart \"before each\" hook for \"should add product to cart and update cart badge\"",
+        "message": "Timed out retrying after 5000ms: `cy.wait()` timed out waiting `5000ms` for the 1st request to the route: `loginRequest`. No request ever occurred.\n\nhttps://on.cypress.io/wait\n\nBecause this error occurred during a `before each` hook we are skipping the remaining tests in the current suite: `Add and "
+      }
+    ],
+    "tc_id": "TC_G07",
+    "condition": "repaired",
+    "selectors_repaired": 10
+  },
+  {
+    "status": "failed",
+    "tests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "Complete Checkout Flow - Sauce Labs Backpack should complete checkout with valid user credentials and backpack item",
+        "message": "Timed out retrying after 10000ms: expected '<div.primary_header>' to contain 'Sauce Labs'"
+      },
+      {
+        "title": "Complete Checkout Flow - Sauce Labs Backpack should handle invalid login and show error message",
+        "message": "Timed out retrying after 10000ms: Expected to find element: `[data-testid=\"error-message\"]`, but never found it."
+      }
+    ],
+    "tc_id": "TC_G08",
+    "condition": "repaired",
+    "selectors_repaired": 21
+  },
+  {
+    "status": "failed",
+    "tests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "Checkout Form Validation - Required Fields should display error when only first name is filled and postal code is missing",
+        "message": "Timed out retrying after 10000ms: Expected to find element: `[data-test=\"firstName\"]`, but never found it."
+      },
+      {
+        "title": "Checkout Form Validation - Required Fields should successfully submit form when all required fields are filled",
+        "message": "Timed out retrying after 10000ms: Expected to find element: `[data-test=\"firstName\"]`, but never found it."
+      }
+    ],
+    "tc_id": "TC_G09",
+    "condition": "repaired",
+    "selectors_repaired": 12
+  },
+  {
+    "status": "failed",
+    "tests": 1,
+    "passed": 0,
+    "failed": 1,
+    "failures": [
+      {
+        "title": "Product Detail Page Navigation \"before each\" hook for \"should navigate to product detail page and return to catalogue on back button click\"",
+        "message": "`cy.visit()` failed trying to load:\n\nhttps://www.saucedemo.com/login\n\nThe response we received from your web server was:\n\n  > 404: Not Found\n\nThis was considered a failure because the status code was not `2xx`.\n\nIf you do not want status codes to cause failures pass the option: `failOnStatusCode: fa"
+      }
+    ],
+    "tc_id": "TC_G10",
+    "condition": "repaired",
+    "selectors_repaired": 10
+  },
+  {
+    "status": "failed",
+    "tests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "Mobile Responsive Sauce Demo Store should display inventory page on mobile portrait viewport with burger menu visible",
+        "message": "`cy.viewport()` could not find a preset for: `375x812`. Available presets are: macbook-16, macbook-15, macbook-13, macbook-11, ipad-2, ipad-mini, iphone-xr, iphone-x, iphone-6+, iphone-se2, iphone-8, iphone-7, iphone-6, iphone-5, iphone-4, iphone-3, samsung-s10, samsung-note9\n\nhttps://on.cypress.io/"
+      },
+      {
+        "title": "Mobile Responsive Sauce Demo Store should handle burger menu button click and close on mobile portrait viewport",
+        "message": "`cy.viewport()` could not find a preset for: `375x812`. Available presets are: macbook-16, macbook-15, macbook-13, macbook-11, ipad-2, ipad-mini, iphone-xr, iphone-x, iphone-6+, iphone-se2, iphone-8, iphone-7, iphone-6, iphone-5, iphone-4, iphone-3, samsung-s10, samsung-note9\n\nhttps://on.cypress.io/"
+      }
+    ],
+    "tc_id": "TC_G11",
+    "condition": "repaired",
+    "selectors_repaired": 19
+  },
+  {
+    "status": "failed",
+    "tests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "Accessible Product Images and Login Fields should have accessible attributes on login fields and product images",
+        "message": "Timed out retrying after 10000ms: expected '<input#login-button.submit-button.btn_action>' to have attribute 'aria-label'"
+      },
+      {
+        "title": "Accessible Product Images and Login Fields should handle login with standard_user and display accessible product images after login",
+        "message": "Timed out retrying after 5000ms: `cy.wait()` timed out waiting `5000ms` for the 1st request to the route: `loginSuccess`. No request ever occurred.\n\nhttps://on.cypress.io/wait"
+      }
+    ],
+    "tc_id": "TC_G12",
+    "condition": "repaired",
+    "selectors_repaired": 12
+  },
+  {
+    "status": "failed",
+    "tests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "Login to Secure Area should successfully log in and navigate to secure area with flash success message",
+        "message": "Timed out retrying after 5000ms: `cy.wait()` timed out waiting `5000ms` for the 1st request to the route: `loginRequest`. No request ever occurred.\n\nhttps://on.cypress.io/wait"
+      },
+      {
+        "title": "Login to Secure Area should handle login failure and display error message",
+        "message": "Timed out retrying after 5000ms: `cy.wait()` timed out waiting `5000ms` for the 1st request to the route: `loginRequest`. No request ever occurred.\n\nhttps://on.cypress.io/wait"
+      }
+    ],
+    "tc_id": "TC_G13",
+    "condition": "repaired",
+    "selectors_repaired": 7
+  },
+  {
+    "status": "failed",
+    "tests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "Login Page - Password Mistyping Error Handling should display clear failure message when password is mistyped",
+        "message": "Timed out retrying after 5000ms: `cy.wait()` timed out waiting `5000ms` for the 1st request to the route: `loginRequest`. No request ever occurred.\n\nhttps://on.cypress.io/wait"
+      },
+      {
+        "title": "Login Page - Password Mistyping Error Handling should not display error message when password is correct",
+        "message": "Timed out retrying after 5000ms: `cy.wait()` timed out waiting `5000ms` for the 1st request to the route: `loginRequest`. No request ever occurred.\n\nhttps://on.cypress.io/wait"
+      }
+    ],
+    "tc_id": "TC_G14",
+    "condition": "repaired",
+    "selectors_repaired": 2
+  },
+  {
+    "status": "failed",
+    "tests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "Element Manager - Add and Delete Elements should add two elements and display two delete buttons, then delete one to leave one button",
+        "message": "Timed out retrying after 10000ms: expected '<div#elements>' to contain '0 elements'"
+      },
+      {
+        "title": "Element Manager - Add and Delete Elements should handle edge case where no elements are present and cannot delete",
+        "message": "Timed out retrying after 10000ms: expected '<div#elements>' to contain '0 elements'"
+      }
+    ],
+    "tc_id": "TC_G15",
+    "condition": "repaired",
+    "selectors_repaired": 9
+  },
+  {
+    "status": "failed",
+    "tests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "JavaScript Alert Confirmation should display confirm dialog and record user choice",
+        "message": "Timed out retrying after 10000ms: expected '<div#flash-messages.large-12.columns>' to contain 'Welcome to JavaScript Alerts'"
+      },
+      {
+        "title": "JavaScript Alert Confirmation should display cancel dialog and record user choice on second click",
+        "message": "Timed out retrying after 10000ms: expected '<div#flash-messages.large-12.columns>' to contain 'Welcome to JavaScript Alerts'"
+      }
+    ],
+    "tc_id": "TC_G16",
+    "condition": "repaired",
+    "selectors_repaired": 13
+  },
+  {
+    "status": "failed",
+    "tests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "Dynamic Content Loading - The Internet should reveal hidden content after asynchronous load with loading indicator",
+        "message": "Timed out retrying after 10000ms: Expected to find element: `[data-testid=\"loading\"]`, but never found it."
+      },
+      {
+        "title": "Dynamic Content Loading - The Internet should handle failed content load and display error message",
+        "message": "Timed out retrying after 5000ms: `cy.wait()` timed out waiting `5000ms` for the 1st request to the route: `loadContent`. No request ever occurred.\n\nhttps://on.cypress.io/wait"
+      }
+    ],
+    "tc_id": "TC_G17",
+    "condition": "repaired",
+    "selectors_repaired": 10
+  },
+  {
+    "status": "failed",
+    "tests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "File Upload Confirmation should successfully upload a small text file and display confirmation",
+        "message": "`cy.selectFile(\"cypress/fixtures/sample-text.txt\")` failed because the file does not exist at the following path:\n\n`/Users/saif.afzal/Documents/Dissertation/agentic-test-gen/execution_harness/cypress/fixtures/sample-text.txt`\n\nhttps://on.cypress.io/selectfile"
+      },
+      {
+        "title": "File Upload Confirmation should handle empty file selection and display error message",
+        "message": "Timed out retrying after 10000ms: `cy.clear()` failed because it requires a valid clearable element.\n\nThe element cleared was:\n\n  > `<input id=\"file-upload\" type=\"file\" name=\"file\">`\n\nA clearable element matches one of the following selectors:\n  'a[href]'\n  'area[href]'\n  'input'\n  'select'\n  'texta"
+      }
+    ],
+    "tc_id": "TC_G18",
+    "condition": "repaired",
+    "selectors_repaired": 0
+  },
+  {
+    "status": "failed",
+    "tests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "Checkbox State Management should toggle checkbox states and update form correctly",
+        "message": "Timed out retrying after 10000ms: expected '<input>' to have value 'false', but the value was 'on'"
+      },
+      {
+        "title": "Checkbox State Management should handle edge case: unchecking all checkboxes",
+        "message": "Timed out retrying after 10000ms: expected '<input>' to have value 'false', but the value was 'on'"
+      }
+    ],
+    "tc_id": "TC_G19",
+    "condition": "repaired",
+    "selectors_repaired": 0
+  },
+  {
+    "status": "failed",
+    "tests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "Dropdown Selection Test should display disabled prompt and allow selection of an option",
+        "message": "Timed out retrying after 10000ms: expected '<select#dropdown>' to have class 'disabled'"
+      },
+      {
+        "title": "Dropdown Selection Test should handle edge case when selecting disabled option",
+        "message": "`cy.click()` cannot be called on a `<select>` element. Use `cy.select()` command instead to change the value.\n\nhttps://on.cypress.io/select"
+      }
+    ],
+    "tc_id": "TC_G20",
+    "condition": "repaired",
+    "selectors_repaired": 0
+  },
+  {
+    "status": "failed",
+    "tests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "Table Data Review - #table1 should verify table #table1 has correct header and rows",
+        "message": "Timed out retrying after 10000ms: expected '<tr>' to contain 'Due'"
+      },
+      {
+        "title": "Table Data Review - #table1 should handle empty table rows gracefully",
+        "message": "Timed out retrying after 5000ms: `cy.wait()` timed out waiting `5000ms` for the 1st request to the route: `getTableData`. No request ever occurred.\n\nhttps://on.cypress.io/wait"
+      }
+    ],
+    "tc_id": "TC_G21",
+    "condition": "repaired",
+    "selectors_repaired": 0
+  },
+  {
+    "status": "failed",
+    "tests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "Notification Message Rendered should display notification with success message after clicking \"Click here\" link",
+        "message": "Timed out retrying after 10000ms: expected '<div#page-footer.row>' to contain 'Footer'"
+      },
+      {
+        "title": "Notification Message Rendered should display error notification with unsuccessful message when action fails",
+        "message": "Timed out retrying after 10000ms: expected '<div#page-footer.row>' to contain 'Footer'"
+      }
+    ],
+    "tc_id": "TC_G22",
+    "condition": "repaired",
+    "selectors_repaired": 16
+  },
+  {
+    "status": "failed",
+    "tests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "Navigation - Home to Example Page and Back should navigate from home page to example page and back",
+        "message": "Timed out retrying after 10000ms: Expected to find element: `[data-testid=\"Welcome to the-internet\"]`, but never found it."
+      },
+      {
+        "title": "Navigation - Home to Example Page and Back should handle navigation to non-existent page and return to home",
+        "message": "Timed out retrying after 10000ms: Expected to find element: `[data-testid=\"Welcome to the-internet\"]`, but never found it."
+      }
+    ],
+    "tc_id": "TC_G23",
+    "condition": "repaired",
+    "selectors_repaired": 2
+  },
+  {
+    "status": "failed",
+    "tests": 2,
+    "passed": 0,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "HTTP Status Code Reporting should navigate to and display correct status code page content",
+        "message": "Timed out retrying after 10000ms: expected '<div#page-footer.row>' to contain 'Status Codes'"
+      },
+      {
+        "title": "HTTP Status Code Reporting should handle 404 status code and display appropriate message",
+        "message": "Timed out retrying after 10000ms: expected '<div#page-footer.row>' to contain 'Status Codes'"
+      }
+    ],
+    "tc_id": "TC_G24",
+    "condition": "repaired",
+    "selectors_repaired": 6
+  }
+]

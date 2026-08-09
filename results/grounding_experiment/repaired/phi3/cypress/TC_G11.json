@@ -1,0 +1,14 @@
+{
+  "tc_id": "TC_G11",
+  "condition": "repaired",
+  "model": "phi3",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 41.701,
+  "dom_context_used": true,
+  "dom_context_chars": 2361,
+  "final_script": "describe('Mobile Responsive Sauce Demo Store', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should display inventory page on mobile portrait viewport with burger menu visible', () => {\n    cy.viewport('375x812');\n    cy.get('[data-test=\"login-container\"]').should('be.visible');\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n    cy.get('#page_wrapper').should('contain', 'Inventory');\n    cy.get('#react-burger-menu-btn').should('be.visible');\n    cy.get('[data-test=\"open-menu\"]').click();\n    cy.get('[data-testid=\"bm-menu\"]').should('be.visible');\n    cy.get('[data-test=\"logout-sidebar-link\"]').should('be.visible');\n    cy.get('[data-test=\"close-menu\"]').click();\n    cy.get('#react-burger-cross-btn').should('be.visible');\n  });\n\n  it('should handle burger menu button click and close on mobile portrait viewport', () => {\n    cy.viewport('375x812');\n    cy.get('[data-test=\"login-container\"]').should('be.visible');\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n    cy.get('#page_wrapper').should('contain', 'Inventory');\n    cy.get('#react-burger-menu-btn').click();\n    cy.get('[data-testid=\"bm-menu\"]').should('be.visible');\n    cy.get('[data-test=\"close-menu\"]').click();\n    cy.get('#react-burger-menu-btn').should('not.exist');\n    cy.get('#page_wrapper').should('contain', 'Inventory');\n  });\n});",
+  "selectors_repaired": 19
+}

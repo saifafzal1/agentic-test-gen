@@ -30,3 +30,42 @@ Deterministic selector-repair: post-generation, rewrite `data-testid="X"` -> `da
 (and nearest-match) using the same real DOM inventory, then re-execute. Expected to flip many of
 the 16 selector-name failures to passing — testing whether ENFORCED grounding recovers execution
 where SUGGESTED grounding did not. This is the compelling next experiment.
+
+---
+
+# Task 7 — Enforced selector-repair result: ALSO zero lift (the deeper finding)
+
+```
+specs fully passing:   OFF 0/24  ->  ON 0/24  ->  REPAIRED 0/24
+individual tests:      OFF 0/40  ->  ON 0/44  ->  REPAIRED 0/47   (237 selectors repaired)
+```
+
+Even after deterministically rewriting 237 invented selectors to the REAL ones from the DOM
+inventory, not one spec or test passes. Residual failure taxonomy (24 specs):
+
+| Count | Residual blocker |
+|-------|------------------|
+| 8 | Invented network wait — `cy.wait('@loginRequest')` for a login REST API saucedemo has no such call |
+| 8 | Invented app behaviour — asserts redirect to `/dashboard` (real: `/inventory.html`); invented counts/text |
+| 5 | Dynamic selector absent from the static crawl (`data-test="error"` appears only after a failed login) |
+| 2 | Invented route — `cy.visit('/inventory')` (missing `.html`) -> 404 |
+| 1 | Framework API misuse — `cy.viewport('375x812')` is not a valid Cypress preset |
+
+## Synthesis — the paper's argument
+
+1. Static metrics (dissertation Ch.5): fine-tuning wins on every measure.
+2. Execution (pilot): ranking inverts — fine-tuned 2/96 vs baselines 42/96.
+3. **Diagnosis (this experiment):** the deficit is NOT merely selector convention. Fine-tuning on
+   synthetic data taught the model to hallucinate an entire fictional application contract —
+   selectors *and* API routes *and* network calls *and* redirect targets *and* framework-API forms.
+   - Prompt-injection grounding (suggest real selectors): **0 lift** — model overrides them.
+   - Enforced selector-repair (force real selectors): **0 lift** — scripts still fail on the *other*
+     hallucinated dimensions.
+4. The only intervention that helped was **training-time grounding** (grounded-corpus retrain:
+   convention bias eliminated 47/48 -> 0/48), because it addresses the root — the model's tendency
+   to invent — rather than patching one symptom at inference time.
+
+**Conclusion:** inference-time selector grounding is a dead end for these models; deployable
+generation requires grounding the *whole* contract, best achieved by training on
+execution-validated (grounded) data and/or an execution-feedback signal inside the correction
+loop — not by post-hoc selector patching.

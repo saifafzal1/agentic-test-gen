@@ -1,0 +1,14 @@
+{
+  "tc_id": "TC_G21",
+  "condition": "repaired",
+  "model": "phi3",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 202.706,
+  "dom_context_used": true,
+  "dom_context_chars": 239,
+  "final_script": "describe('Table Data Review - #table1', () => {\n  beforeEach(() => {\n    cy.visit('/tables');\n  });\n\n  it('should verify table #table1 has correct header and rows', () => {\n    // Verify table header exists\n    cy.get('[id=\"table1\"]').should('be.visible');\n    cy.get('[id=\"table1\"]').should('contain', 'Last Name');\n    cy.get('[id=\"table1\"]').should('contain', 'First Name');\n    cy.get('[id=\"table1\"]').should('contain', 'Email');\n    cy.get('[id=\"table1\"]').should('contain', 'Due');\n\n    // Verify table body contains 4 rows\n    cy.get('[id=\"table1\"]').then((table) => {\n      const rows = table.find('tr');\n      cy.wrap(rows).should('have.length', 5);\n      cy.wrap(rows).first().should('contain', 'Last Name');\n      cy.wrap(rows).last().should('contain', 'Due');\n    });\n\n    // Verify specific row contains email 'jsmith@gmail.com'\n    cy.get('[id=\"table1\"]').then((table) => {\n      cy.wrap(table.find('tr')).first().then((firstRow) => {\n        cy.wrap(firstRow).should('contain', 'Smith');\n        cy.wrap(firstRow).first('td').then((cell) => {\n          cy.wrap(cell).should('contain', 'jsmith@gmail.com');\n        });\n      });\n    });\n  });\n\n  it('should handle empty table rows gracefully', () => {\n    // Intercept the API call to get table data\n    cy.intercept('GET', '/api/tables/table1').as('getTableData');\n    cy.wait('@getTableData');\n\n    // Verify table is empty\n    cy.get('[id=\"table1\"]').should('be.visible');\n    cy.get('[id=\"table1\"]').then((table) => {\n      cy.wrap(table).should('have.length', 1);\n      cy.wrap(table).first().should('contain', 'No data available');\n    });\n\n    // Verify empty row is displayed\n    cy.get('[id=\"table1\"]').then((table) => {\n      cy.wrap(table.find('tr')).first().should('contain', 'No data available');\n    });\n  });\n});",
+  "selectors_repaired": 0
+}

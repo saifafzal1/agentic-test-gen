@@ -1,0 +1,14 @@
+{
+  "tc_id": "TC_G09",
+  "condition": "repaired",
+  "model": "phi3",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 154.976,
+  "dom_context_used": true,
+  "dom_context_chars": 2361,
+  "final_script": "describe('Checkout Form Validation - Required Fields', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n    cy.get('[data-test=\"login-container\"]').click();\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n    cy.get('[data-test=\"shopping-cart-link\"]').click();\n  });\n\n  it('should display error when only first name is filled and postal code is missing', () => {\n    cy.get('[data-test=\"firstName\"]').type('Saif');\n    cy.get('[data-test=\"lastName\"]').type('Afzal');\n    cy.get('[data-test=\"continue\"]').click();\n    cy.get('[data-testid=\"error\"]').should('be.visible');\n    cy.get('[data-testid=\"error\"]').should('contain', 'Postal Code is required');\n  });\n\n  it('should successfully submit form when all required fields are filled', () => {\n    cy.get('[data-test=\"firstName\"]').type('Saif');\n    cy.get('[data-test=\"lastName\"]').type('Afzal');\n    cy.get('[data-test=\"postalCode\"]').type('12345');\n    cy.get('[data-test=\"continue\"]').click();\n    cy.url().should('include', '/checkout');\n    cy.get('[data-testid=\"error\"]').should('not.exist');\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Thank you for your order');\n  });\n});",
+  "selectors_repaired": 12
+}

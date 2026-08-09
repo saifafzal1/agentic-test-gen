@@ -1,0 +1,14 @@
+{
+  "tc_id": "TC_G15",
+  "condition": "repaired",
+  "model": "phi3",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 126.413,
+  "dom_context_used": true,
+  "dom_context_chars": 239,
+  "final_script": "describe('Element Manager - Add and Delete Elements', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/add_remove_elements/');\n  });\n\n  it('should add two elements and display two delete buttons, then delete one to leave one button', () => {\n    // Verify initial state\n    cy.get('#content').should('be.visible');\n    cy.get('#elements').should('contain', '0 elements');\n\n    // Click 'Add Element' button twice\n    cy.get('[data-testid=\"Add Element\"]').click();\n    cy.get('#elements').should('contain', '1 element');\n    cy.get('[data-testid=\"Add Element\"]').click();\n    cy.get('#elements').should('contain', '2 elements');\n\n    // Verify two delete buttons are present\n    cy.get('[data-testid=\"added-manually\"]').should('have.length', 2);\n\n    // Click first delete button\n    cy.get('[data-testid=\"added-manually\"]').first().click();\n\n    // Verify only one delete button remains\n    cy.get('[data-testid=\"added-manually\"]').should('have.length', 1);\n\n    // Verify list reflects deletion\n    cy.get('#elements').should('contain', '1 element');\n  });\n\n  it('should handle edge case where no elements are present and cannot delete', () => {\n    // Verify initial state with no elements\n    cy.get('#content').should('be.visible');\n    cy.get('#elements').should('contain', '0 elements');\n\n    // Click 'Add Element' button\n    cy.get('[data-testid=\"Add Element\"]').click();\n    cy.get('#elements').should('contain', '1 element');\n\n    // Attempt to delete when no elements exist\n    cy.get('[data-testid=\"added-manually\"]').first().click();\n\n    // Verify no error message and no delete button is shown\n    cy.get('[data-testid=\"error-message\"]').should('not.exist');\n    cy.get('[data-testid=\"added-manually\"]').should('not.exist');\n\n    // Verify list still shows one element\n    cy.get('#elements').should('contain', '1 element');\n  });\n});",
+  "selectors_repaired": 9
+}
