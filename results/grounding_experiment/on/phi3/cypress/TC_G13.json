@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G13",
+  "condition": "on",
+  "model": "phi3",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 116.097,
+  "dom_context_used": true,
+  "dom_context_chars": 327,
+  "final_script": "describe('Login to Secure Area', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should successfully log in and navigate to secure area with flash success message', () => {\n    // Intercept the login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n\n    // Fill in the login form\n    cy.get('[name=\"username\"]').type('tomsmith');\n    cy.get('[name=\"password\"]').type('SuperSecretPassword!');\n\n    // Click the login button\n    cy.get('[type=\"submit\"]').click();\n\n    // Wait for the login API response\n    cy.wait('@loginRequest');\n\n    // Verify successful navigation\n    cy.url().should('include', '/secure');\n\n    // Verify flash success message is displayed\n    cy.get('[data-testid=\"flash-messages\"]').should('be.visible');\n    cy.get('[data-testid=\"flash-messages\"]').should('contain', 'You logged into a secure area!');\n\n    // Verify user is redirected to secure content\n    cy.get('[data-testid=\"content\"]').should('be.visible');\n\n    // Verify login form is cleared\n    cy.get('[name=\"username\"]').should('have.value', '');\n    cy.get('[name=\"password\"]').should('have.value', '');\n  });\n\n  it('should handle login failure and display error message', () => {\n    // Intercept the login API call with a failed response\n    cy.intercept('POST', '/api/auth/login', {\n      statusCode: 401,\n      body: { error: 'Invalid credentials' }\n    }).as('loginRequest');\n\n    // Fill in the login form with incorrect credentials\n    cy.get('[name=\"username\"]').type('invaliduser');\n    cy.get('[name=\"password\"]').type('WrongPassword');\n\n    // Click the login button\n    cy.get('[type=\"submit\"]').click();\n\n    // Wait for the failed login API response\n    cy.wait('@loginRequest');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"flash-messages\"]').should('be.visible');\n    cy.get('[data-testid=\"flash-messages\"]').should('contain', 'Login failed');\n\n    // Verify user is not redirected to secure content\n    cy.get('[data-testid=\"content\"]').should('not.exist');\n\n    // Verify error message contains specific text\n    cy.get('[data-testid=\"flash-messages\"]').should('contain', 'Invalid credentials');\n  });\n});"
+}

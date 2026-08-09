@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G04",
+  "condition": "off",
+  "model": "phi3",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 94.471,
+  "dom_context_used": false,
+  "dom_context_chars": 0,
+  "final_script": "describe('Login Form Validation', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should display error messages when required fields are empty', () => {\n    // Intercept the login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n\n    // Verify error container is visible\n    cy.get('[data-testid=\"error\"]').should('be.visible');\n\n    // Verify error message is displayed for empty username\n    cy.get('[data-testid=\"error\"]').should('contain', 'Username is required');\n\n    // Verify error container is visible\n    cy.get('[data-testid=\"error\"]').should('be.visible');\n\n    // Verify error message is displayed for empty password\n    cy.get('[data-testid=\"error\"]').should('contain', 'Password is required');\n  });\n\n  it('should display error messages when only one required field is filled', () => {\n    // Intercept the login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n\n    // Fill in only the username field\n    cy.get('[data-testid=\"username-input\"]').type('standard_user');\n\n    // Verify error container is visible\n    cy.get('[data-testid=\"error\"]').should('be.visible');\n\n    // Verify error message is displayed for empty password\n    cy.get('[data-testid=\"error\"]').should('contain', 'Password is required');\n\n    // Verify error container is visible\n    cy.get('[data-testid=\"error\"]').should('be.visible');\n\n    // Verify error message is displayed for empty username\n    cy.get('[data-testid=\"error\"]').should('contain', 'Username is required');\n  });\n});"
+}

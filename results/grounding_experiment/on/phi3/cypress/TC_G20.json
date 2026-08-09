@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G20",
+  "condition": "on",
+  "model": "phi3",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 325.147,
+  "dom_context_used": true,
+  "dom_context_chars": 292,
+  "final_script": "describe('Dropdown Selection Test', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/dropdown');\n  });\n\n  it('should display disabled prompt and allow selection of an option', () => {\n    // Verify initial state: disabled prompt is visible\n    cy.get('[id=\"dropdown\"]').should('be.visible');\n    cy.get('[id=\"dropdown\"]').should('contain', 'Please select an option');\n\n    // Intercept the API call to get dropdown options\n    cy.intercept('GET', '/api/dropdown-options').as('getDropdownOptions');\n\n    // Verify dropdown is disabled\n    cy.get('[id=\"dropdown\"]').should('have.class', 'disabled');\n\n    // Click on the dropdown to open\n    cy.get('[id=\"dropdown\"]').click();\n\n    // Verify options are visible\n    cy.get('[id=\"dropdown\"]').should('not.have.class', 'disabled');\n    cy.get('[id=\"dropdown\"]').should('contain', '1=Option 1');\n    cy.get('[id=\"dropdown\"]').should('contain', '2=Option 2');\n\n    // Select 'Option 2'\n    cy.get('[id=\"dropdown\"]').click();\n    cy.get('[id=\"dropdown\"]').should('contain', '2=Option 2');\n\n    // Verify selection is applied\n    cy.get('[id=\"dropdown\"]').should('have.class', 'selected');\n    cy.get('[id=\"dropdown\"]').should('contain', '2=Option 2');\n\n    // Verify value is set\n    cy.get('[id=\"dropdown\"]').should('have.attr', 'value', '2');\n\n    // Verify prompt is no longer visible\n    cy.get('[id=\"dropdown\"]').should('not.contain', 'Please select an option');\n  });\n\n  it('should handle edge case when selecting disabled option', () => {\n    // Verify initial state: disabled prompt is visible\n    cy.get('[id=\"dropdown\"]').should('be.visible');\n    cy.get('[id=\"dropdown\"]').should('contain', 'Please select an option');\n\n    // Click on the dropdown to open\n    cy.get('[id=\"dropdown\"]').click();\n\n    // Verify options are visible\n    cy.get('[id=\"dropdown\"]').should('not.have.class', 'disabled');\n\n    // Attempt to select disabled option\n    cy.get('[id=\"dropdown\"]').click();\n    cy.get('[id=\"dropdown\"]').should('contain', 'Please select an option');\n\n    // Verify prompt remains visible\n    cy.get('[id=\"dropdown\"]').should('contain', 'Please select an option');\n\n    // Verify no selection is applied\n    cy.get('[id=\"dropdown\"]').should('not.have.attr', 'value');\n    cy.get('[id=\"dropdown\"]').should('not.contain', '2=Option 2');\n  });\n});"
+}

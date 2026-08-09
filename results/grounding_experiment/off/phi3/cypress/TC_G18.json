@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G18",
+  "condition": "off",
+  "model": "phi3",
+  "framework": "cypress",
+  "accepted": false,
+  "iterations": 3,
+  "best_score": 0.518,
+  "total_latency_s": 813.132,
+  "dom_context_used": false,
+  "dom_context_chars": 0,
+  "final_script": "describe('File Upload Confirmation', () => {\n  beforeEach(() => {\n    cy.visit('/upload');\n  });\n\n  it('should successfully upload a small text file and display confirmation', () => {\n    // Intercept the file upload API endpoint\n    cy.intercept('POST', '/api/upload').as('uploadFile');\n\n    // Find the file input and select a small text file\n    cy.get('[data-testid=\"file-upload\"]').selectFile('cypress/fixtures/sample-text.txt', {\n      force: true\n    });\n\n    // Find and click the submit button\n    cy.get('[data-testid=\"file-submit\"]').click();\n\n    // Wait for the upload API call to complete\n    cy.wait('@uploadFile');\n\n    // Verify the success page is displayed\n    cy.get('[data-testid=\"success-page\"]').should('be.visible');\n\n    // Verify the page title contains 'File Uploaded!'\n    cy.get('[data-testid=\"page-title\"]').should('contain', 'File Uploaded!');\n\n    // Verify the uploaded file's name is displayed\n    cy.get('[data-testid=\"uploaded-files\"]').should('be.visible');\n    cy.get('[data-testid=\"uploaded-files\"]').should('contain', 'sample-text.txt');\n\n    // Verify the success message is visible\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'File successfully uploaded');\n  });\n\n  it('should handle empty file selection and display error message', () => {\n    // Intercept the file upload API endpoint\n    cy.intercept('POST', '/api/upload').as('uploadFile');\n\n    // Find the file input and clear it\n    cy.get('[data-testid=\"file-upload\"]').selectFile('cypress/fixtures/empty.txt', {\n      force: true\n    });\n\n    // Find and click the submit button\n    cy.get('[data-testid=\"file-submit\"]').click();\n\n    // Wait for the upload API call to complete\n    cy.wait('@uploadFile');\n\n    // Verify the error page is displayed\n    cy.get('[data-testid=\"error-page\"]').should('be.visible');\n\n    // Verify the error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please select a file to upload');\n\n    // Verify the file input is still visible for retry\n    cy.get('[data-testid=\"file-upload\"]').should('be.visible');\n  });\n});"
+}

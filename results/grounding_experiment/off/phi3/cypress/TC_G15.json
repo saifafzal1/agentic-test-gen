@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G15",
+  "condition": "off",
+  "model": "phi3",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 247.248,
+  "dom_context_used": false,
+  "dom_context_chars": 0,
+  "final_script": "describe('Element Manager - Add and Delete Elements', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/add_remove_elements/');\n  });\n\n  it('should add two elements and display two delete buttons, then delete one to leave one button', () => {\n    // Verify initial state\n    cy.get('[data-testid=\"element-list\"]').should('be.visible');\n    cy.get('[data-testid=\"add-element-btn\"]').should('be.visible');\n    cy.get('[data-testid=\"element-list\"]').should('contain', '1 element');\n\n    // Click 'Add Element' button twice\n    cy.get('[data-testid=\"add-element-btn\"]').click();\n    cy.get('[data-testid=\"element-list\"]').should('contain', '2 elements');\n    cy.get('[data-testid=\"add-element-btn\"]').click();\n    cy.get('[data-testid=\"element-list\"]').should('contain', '3 elements');\n\n    // Verify two delete buttons are visible\n    cy.get('[data-testid=\"delete-btn-1\"]').should('be.visible');\n    cy.get('[data-testid=\"delete-btn-2\"]').should('be.visible');\n\n    // Click first delete button\n    cy.get('[data-testid=\"delete-btn-1\"]').click();\n\n    // Verify only one delete button remains\n    cy.get('[data-testid=\"delete-btn-1\"]').should('be.visible');\n    cy.get('[data-testid=\"delete-btn-2\"]').should('not.exist');\n\n    // Verify list reflects one remaining element\n    cy.get('[data-testid=\"element-list\"]').should('contain', '1 element');\n  });\n\n  it('should handle edge case where no elements are initially present', () => {\n    // Verify initial state with no elements\n    cy.get('[data-testid=\"element-list\"]').should('be.visible');\n    cy.get('[data-testid=\"element-list\"]').should('contain', '0 elements');\n\n    // Click 'Add Element' button\n    cy.get('[data-testid=\"add-element-btn\"]').click();\n    cy.get('[data-testid=\"element-list\"]').should('contain', '1 element');\n\n    // Verify delete button appears\n    cy.get('[data-testid=\"delete-btn-1\"]').should('be.visible');\n\n    // Click delete button\n    cy.get('[data-testid=\"delete-btn-1\"]').click();\n\n    // Verify list reflects one less element\n    cy.get('[data-testid=\"element-list\"]').should('contain', '0 elements');\n  });\n});"
+}

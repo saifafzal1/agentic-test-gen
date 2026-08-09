@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G14",
+  "condition": "on",
+  "model": "phi3",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 107.41,
+  "dom_context_used": true,
+  "dom_context_chars": 327,
+  "final_script": "describe('Login Page - Password Mistyping Error Handling', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should display clear failure message when password is mistyped', () => {\n    // Intercept the login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n\n    // Fill in the username\n    cy.get('[name=\"username\"]').type('tomsmith');\n\n    // Fill in the password with a mistyped value\n    cy.get('[name=\"password\"]').type('wrongpassword');\n\n    // Submit the form\n    cy.get('[type=\"submit\"]').click();\n\n    // Wait for the API response\n    cy.wait('@loginRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(400);\n    });\n\n    // Verify the flash error message is displayed\n    cy.get('[data-testid=\"flash-messages\"]').should('be.visible');\n    cy.get('[data-testid=\"flash-error\"]').should('contain', 'Your password is invalid!');\n\n    // Verify the user is not redirected\n    cy.url().should('include', '/login');\n\n    // Verify the error message is clear and not generic\n    cy.get('[data-testid=\"flash-error\"]').should('have.css', 'color', 'red');\n    cy.get('[data-testid=\"flash-error\"]').should('not.contain', 'An error occurred');\n  });\n\n  it('should not display error message when password is correct', () => {\n    // Fill in the username\n    cy.get('[name=\"username\"]').type('tomsmith');\n\n    // Fill in the password with a correct value\n    cy.get('[name=\"password\"]').type('correctpassword123');\n\n    // Submit the form\n    cy.get('[type=\"submit\"]').click();\n\n    // Wait for the API response\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n    cy.wait('@loginRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify the user is redirected to the dashboard\n    cy.url().should('include', '/dashboard');\n\n    // Verify the flash error message is not displayed\n    cy.get('[data-testid=\"flash-messages\"]').should('not.exist');\n  });\n});"
+}

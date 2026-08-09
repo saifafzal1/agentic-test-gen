@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G23",
+  "condition": "on",
+  "model": "phi3",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 87.511,
+  "dom_context_used": true,
+  "dom_context_chars": 1032,
+  "final_script": "describe('Navigation - Home to Example Page and Back', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should navigate from home page to example page and back', () => {\n    // Verify home page is visible\n    cy.get('[data-testid=\"content\"]').should('be.visible');\n    cy.get('[data-testid=\"Welcome to the-internet\"]').should('contain', 'Welcome');\n\n    // Click the A/B Testing link\n    cy.get('[data-testid=\"A/B Testing\"]').click();\n\n    // Verify navigation to /abtest page\n    cy.url().should('include', '/abtest');\n\n    // Verify the page title or heading is visible\n    cy.get('[data-testid=\"h3\"]').should('be.visible');\n    cy.get('[data-testid=\"h3\"]').should('contain', 'A/B Testing');\n\n    // Verify navigation back to home page\n    cy.get('[data-testid=\"Home\"]').click();\n\n    // Verify home page is restored\n    cy.url().should('include', '/');\n    cy.get('[data-testid=\"Welcome to the-internet\"]').should('be.visible');\n    cy.get('[data-testid=\"Available Examples\"]').should('be.visible');\n  });\n\n  it('should handle navigation to non-existent page and return to home', () => {\n    // Verify home page is visible\n    cy.get('[data-testid=\"content\"]').should('be.visible');\n    cy.get('[data-testid=\"Welcome to the-internet\"]').should('contain', 'Welcome');\n\n    // Click a non-existent link\n    cy.get('[data-testid=\"Nested Frames\"]').click();\n\n    // Verify navigation to 404 page\n    cy.url().should('include', '/404');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Page not found');\n\n    // Verify navigation back to home page\n    cy.get('[data-testid=\"Home\"]').click();\n\n    // Verify home page is restored\n    cy.url().should('include', '/');\n    cy.get('[data-testid=\"Welcome to the-internet\"]').should('be.visible');\n    cy.get('[data-testid=\"Available Examples\"]').should('be.visible');\n  });\n});"
+}

@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G01",
+  "condition": "off",
+  "model": "phi3",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 92.473,
+  "dom_context_used": false,
+  "dom_context_chars": 0,
+  "final_script": "describe('Customer Login to Sauce Demo Store', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should successfully log in with valid credentials and redirect to product catalogue', () => {\n    // Intercept the login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n\n    // Fill in the login form\n    cy.get('[data-testid=\"username\"]').type('standard_user');\n    cy.get('[data-testid=\"password\"]').type('secret_sauce');\n\n    // Click the login button\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for the login API response\n    cy.wait('@loginRequest');\n\n    // Verify successful login redirect\n    cy.url().should('include', '/inventory.html');\n\n    // Verify page title is set\n    cy.get('[data-testid=\"title\"]').should('contain', 'Products');\n\n    // Verify product catalogue is visible\n    cy.get('[data-testid=\"product-list\"]').should('be.visible');\n  });\n\n  it('should display error message when login fails due to invalid credentials', () => {\n    // Intercept the login API call with invalid credentials\n    cy.intercept('POST', '/api/auth/login', {\n      statusCode: 401,\n      body: { error: 'Invalid username or password' }\n    }).as('loginRequest');\n\n    // Fill in the login form with invalid credentials\n    cy.get('[data-testid=\"username\"]').type('wrong_user');\n    cy.get('[data-testid=\"password\"]').type('incorrect_password');\n\n    // Click the login button\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for the login API response\n    cy.wait('@loginRequest');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid username or password');\n\n    // Verify login button is still clickable\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n  });\n});"
+}

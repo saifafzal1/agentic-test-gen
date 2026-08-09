@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G02",
+  "condition": "off",
+  "model": "phi3",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 62.421,
+  "dom_context_used": false,
+  "dom_context_chars": 0,
+  "final_script": "describe('Locked-Out Customer Login Error Message', () => {\n  beforeEach(() => {\n    cy.visit('/login');\n  });\n\n  it('should display error message when logging in with locked-out user credentials', () => {\n    cy.get('[data-testid=\"username-input\"]').type('locked_out_user');\n    cy.get('[data-testid=\"password-input\"]').type('secret_sauce');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    cy.get('[data-testid=\"error-container\"]').should('be.visible');\n    cy.get('[data-testid=\"error-container\"]').should('contain', 'Sorry, this user has been locked out');\n    cy.get('[data-testid=\"error-container\"]').should('have.class', 'error-message');\n    cy.get('[data-testid=\"error-container\"]').should('have.text', 'Sorry, this user has been locked out');\n    cy.get('[data-testid=\"error-container\"]').should('be.visible');\n    cy.get('[data-testid=\"error-container\"]').should('contain', 'Please contact support');\n    cy.get('[data-testid=\"error-container\"]').should('contain', 'to reset your account');\n  });\n\n  it('should not display error message when logging in with valid credentials', () => {\n    cy.get('[data-testid=\"username-input\"]').type('valid_user');\n    cy.get('[data-testid=\"password-input\"]').type('correct_password');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    cy.get('[data-testid=\"error-container\"]').should('not.exist');\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"welcome-message\"]').should('be.visible');\n    cy.get('[data-testid=\"welcome-message\"]').should('contain', 'Welcome back');\n  });\n});"
+}

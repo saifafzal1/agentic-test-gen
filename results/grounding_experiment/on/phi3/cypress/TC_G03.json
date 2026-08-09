@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G03",
+  "condition": "on",
+  "model": "phi3",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 41.028,
+  "dom_context_used": true,
+  "dom_context_chars": 2361,
+  "final_script": "describe('Logout Functionality - Sauce Labs', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should log out successfully and return to login page', () => {\n    // Verify login page is visible\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n    cy.get('[data-testid=\"username\"]').should('be.visible');\n    cy.get('[data-testid=\"password\"]').should('be.visible');\n\n    // Fill in login credentials\n    cy.get('[data-testid=\"username\"]').type('standard_user');\n    cy.get('[data-testid=\"password\"]').type('secret_sauce');\n\n    // Click login button\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Verify login was successful and user is redirected to dashboard\n    cy.url().should('include', '/dashboard');\n    cy.get('[data-testid=\"active-option\"]').should('contain', 'dashboard');\n\n    // Verify logout link is visible\n    cy.get('[data-testid=\"logout_sidebar_link\"]').should('be.visible');\n\n    // Click logout link\n    cy.get('[data-testid=\"logout_sidebar_link\"]').click();\n\n    // Verify user is redirected back to login page\n    cy.url().should('include', '/login');\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n\n    // Verify login button is visible again\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n  });\n\n  it('should handle logout when user is already logged out', () => {\n    // Verify login page is visible\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n\n    // Click logout link\n    cy.get('[data-testid=\"logout_sidebar_link\"]').click();\n\n    // Verify user is redirected to login page\n    cy.url().should('include', '/login');\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n\n    // Verify logout link is still visible\n    cy.get('[data-testid=\"logout_sidebar_link\"]').should('be.visible');\n\n    // Verify logout button is still visible\n    cy.get('[data-testid=\"logout_sidebar_link\"]').should('be.visible');\n  });\n});"
+}

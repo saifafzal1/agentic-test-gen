@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G22",
+  "condition": "on",
+  "model": "phi3",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 156.11,
+  "dom_context_used": true,
+  "dom_context_chars": 217,
+  "final_script": "describe('Notification Message Rendered', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/notification_message_rendered');\n  });\n\n  it('should display notification with success message after clicking \"Click here\" link', () => {\n    // Verify initial page state\n    cy.get('[data-testid=\"content\"]').should('be.visible');\n    cy.get('[data-testid=\"page-footer\"]').should('contain', 'Footer');\n\n    // Click the \"Click here\" link\n    cy.get('[data-testid=\"Click here\"]').click();\n\n    // Verify flash element appears\n    cy.get('[data-testid=\"flash-messages\"]').should('be.visible');\n    cy.get('[data-testid=\"flash-messages\"]').should('contain', 'Action successful');\n\n    // Verify close icon is present\n    cy.get('[data-testid=\"flash-messages\"]').should('contain', '.close');\n\n    // Verify notification text is displayed\n    cy.get('[data-testid=\"flash-messages\"]').should('contain', 'Action successful');\n\n    // Verify close icon works\n    cy.get('[data-testid=\"flash-messages\"]').click();\n    cy.get('[data-testid=\"flash-messages\"]').should('not.exist');\n  });\n\n  it('should display error notification with unsuccessful message when action fails', () => {\n    // Verify initial page state\n    cy.get('[data-testid=\"content\"]').should('be.visible');\n    cy.get('[data-testid=\"page-footer\"]').should('contain', 'Footer');\n\n    // Click the \"Click here\" link\n    cy.get('[data-testid=\"Click here\"]').click();\n\n    // Verify flash element appears\n    cy.get('[data-testid=\"flash-messages\"]').should('be.visible');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"flash-messages\"]').should('contain', 'Action unsuccessful');\n\n    // Verify close icon is present\n    cy.get('[data-testid=\"flash-messages\"]').should('contain', '.close');\n\n    // Verify notification text is displayed\n    cy.get('[data-testid=\"flash-messages\"]').should('contain', 'Action unsuccessful');\n\n    // Verify close icon works\n    cy.get('[data-testid=\"flash-messages\"]').click();\n    cy.get('[data-testid=\"flash-messages\"]').should('not.exist');\n  });\n});"
+}

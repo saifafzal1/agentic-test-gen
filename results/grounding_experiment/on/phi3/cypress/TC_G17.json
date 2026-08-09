@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G17",
+  "condition": "on",
+  "model": "phi3",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 245.67,
+  "dom_context_used": true,
+  "dom_context_chars": 239,
+  "final_script": "describe('Dynamic Content Loading - The Internet', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/dynamic_loading/1');\n  });\n\n  it('should reveal hidden content after asynchronous load with loading indicator', () => {\n    // Verify initial state: loading indicator is visible, finish button is hidden\n    cy.get('[data-testid=\"loading\"]').should('be.visible');\n    cy.get('[data-testid=\"finish\"]').should('not.exist');\n\n    // Click the Start button to initiate loading\n    cy.get('[data-testid=\"start\"]').click();\n\n    // Wait for the loading indicator to disappear\n    cy.get('[data-testid=\"loading\"]').should('not.exist');\n\n    // Verify loading indicator is gone\n    cy.get('[data-testid=\"loading\"]').should('not.exist');\n\n    // Verify the finish button is now visible\n    cy.get('[data-testid=\"finish\"]').should('be.visible');\n\n    // Verify the content is loaded and visible\n    cy.get('[data-testid=\"content\"]').should('contain', 'Hello World!');\n\n    // Verify the page footer is still visible\n    cy.get('[data-testid=\"page-footer\"]').should('be.visible');\n  });\n\n  it('should handle failed content load and display error message', () => {\n    // Mock the async load to fail\n    cy.intercept('GET', '/api/content', {\n      statusCode: 500,\n      body: { error: 'Internal Server Error' }\n    }).as('loadContent');\n\n    // Click the Start button to initiate loading\n    cy.get('[data-testid=\"start\"]').click();\n\n    // Wait for the failed load response\n    cy.wait('@loadContent');\n\n    // Verify loading indicator is still visible\n    cy.get('[data-testid=\"loading\"]').should('be.visible');\n\n    // Verify the finish button is still visible but disabled\n    cy.get('[data-testid=\"finish\"]').should('be.visible');\n    cy.get('[data-testid=\"finish\"]').should('have.attr', 'disabled');\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"flash-messages\"]').should('contain', 'Failed to load content');\n\n    // Verify the page footer is still visible\n    cy.get('[data-testid=\"page-footer\"]').should('be.visible');\n  });\n});"
+}

@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G11",
+  "condition": "on",
+  "model": "phi3",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 41.701,
+  "dom_context_used": true,
+  "dom_context_chars": 2361,
+  "final_script": "describe('Mobile Responsive Sauce Demo Store', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should display inventory page on mobile portrait viewport with burger menu visible', () => {\n    cy.viewport('375x812');\n    cy.get('[data-testid=\"login-container\"]').should('be.visible');\n    cy.get('[data-testid=\"username\"]').type('standard_user');\n    cy.get('[data-testid=\"password\"]').type('secret_sauce');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.get('[data-testid=\"page-wrapper\"]').should('contain', 'Inventory');\n    cy.get('[data-testid=\"react-burger-menu-btn\"]').should('be.visible');\n    cy.get('[data-testid=\"open-menu\"]').click();\n    cy.get('[data-testid=\"bm-menu\"]').should('be.visible');\n    cy.get('[data-testid=\"logout-sidebar-link\"]').should('be.visible');\n    cy.get('[data-testid=\"close-menu\"]').click();\n    cy.get('[data-testid=\"react-burger-cross-btn\"]').should('be.visible');\n  });\n\n  it('should handle burger menu button click and close on mobile portrait viewport', () => {\n    cy.viewport('375x812');\n    cy.get('[data-testid=\"login-container\"]').should('be.visible');\n    cy.get('[data-testid=\"username\"]').type('standard_user');\n    cy.get('[data-testid=\"password\"]').type('secret_sauce');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.get('[data-testid=\"page-wrapper\"]').should('contain', 'Inventory');\n    cy.get('[data-testid=\"react-burger-menu-btn\"]').click();\n    cy.get('[data-testid=\"bm-menu\"]').should('be.visible');\n    cy.get('[data-testid=\"close-menu\"]').click();\n    cy.get('[data-testid=\"react-burger-menu-btn\"]').should('not.exist');\n    cy.get('[data-testid=\"page-wrapper\"]').should('contain', 'Inventory');\n  });\n});"
+}

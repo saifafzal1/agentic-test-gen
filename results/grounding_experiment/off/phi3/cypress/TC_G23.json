@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G23",
+  "condition": "off",
+  "model": "phi3",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 324.096,
+  "dom_context_used": false,
+  "dom_context_chars": 0,
+  "final_script": "describe('Navigation Between Home and Example Pages', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should navigate from home page to example page and back', () => {\n    // Verify initial state on home page\n    cy.get('[data-testid=\"welcome-heading\"]').should('be.visible').should('contain', 'Welcome to the-internet');\n    cy.get('[data-testid=\"available-examples-heading\"]').should('be.visible').should('contain', 'Available Examples');\n\n    // Click the A/B Testing link\n    cy.get('[data-testid=\"ab-test-link\"]').click();\n\n    // Verify navigation to example page\n    cy.url().should('include', '/abtest');\n    cy.get('[data-testid=\"example-heading\"]').should('be.visible').should('contain', 'A/B Testing Example');\n\n    // Verify example page content\n    cy.get('[data-testid=\"example-content\"]').should('be.visible');\n    cy.get('[data-testid=\"example-description\"]').should('contain', 'This is an A/B testing example');\n\n    // Navigate back to home page\n    cy.get('[data-testid=\"back-link\"]').click();\n\n    // Verify return to home page\n    cy.url().should('include', '/');\n    cy.get('[data-testid=\"welcome-heading\"]').should('be.visible').should('contain', 'Welcome to the-internet');\n    cy.get('[data-testid=\"available-examples-heading\"]').should('be.visible').should('contain', 'Available Examples');\n  });\n\n  it('should handle navigation to non-existent page gracefully', () => {\n    // Verify initial state on home page\n    cy.get('[data-testid=\"welcome-heading\"]').should('be.visible').should('contain', 'Welcome to the-internet');\n\n    // Click a broken link\n    cy.get('[data-testid=\"broken-link\"]').click();\n\n    // Verify error state or fallback content\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Page not found');\n    cy.get('[data-testid=\"fallback-content\"]').should('be.visible').should('contain', 'Try a valid URL');\n\n    // Verify navigation back to home page\n    cy.get('[data-testid=\"back-link\"]').click();\n\n    // Verify return to home page\n    cy.url().should('include', '/');\n    cy.get('[data-testid=\"welcome-heading\"]').should('be.visible').should('contain', 'Welcome to the-internet');\n  });\n});"
+}
