@@ -193,13 +193,22 @@ def load_model(model_key: str, framework: str):
 
 
 def _build_prompt(model_key: str, framework: str,
-                   user_story: str, category: str, complexity: str) -> str:
-    """Build the inference prompt matching the fine-tuning template exactly."""
+                   user_story: str, category: str, complexity: str,
+                   dom_context: str = "") -> str:
+    """Build the inference prompt matching the fine-tuning template exactly.
+
+    dom_context (inference-time grounding, default off): when a non-empty
+    real-selector inventory is supplied it is injected into the user turn;
+    when empty the prompt is byte-identical to the ungrounded pilot path,
+    preserving a clean grounding OFF vs ON comparison.
+    """
     system = SYSTEM_PROMPTS[framework]
+    grounding = f"\n{dom_context}\n" if dom_context else ""
     user = (
         f'User story: "{user_story}"\n'
         f'Category: {category}\n'
         f'Complexity: {complexity}\n'
+        f'{grounding}'
         f'Return the {framework.capitalize()} script only.'
     )
     if model_key.startswith("phi3"):
@@ -249,9 +258,13 @@ def _mock_generate(framework: str) -> str:
 
 
 def generate(model_key: str, framework: str, user_story: str,
-             category: str, complexity: str, max_new_tokens: int) -> tuple:
+             category: str, complexity: str, max_new_tokens: int,
+             dom_context: str = "") -> tuple:
     """
     Generate a test script in-process (no HTTP). Returns (script, latency_s).
+
+    dom_context: optional real-selector inventory for inference-time grounding
+    (grounding ON). Empty (default) reproduces the ungrounded path exactly.
     """
     if MOCK_MODEL:
         load_model(model_key, framework)
@@ -260,7 +273,7 @@ def generate(model_key: str, framework: str, user_story: str,
         return script, round(time.time() - t0, 3)
 
     tokenizer, model = load_model(model_key, framework)
-    prompt = _build_prompt(model_key, framework, user_story, category, complexity)
+    prompt = _build_prompt(model_key, framework, user_story, category, complexity, dom_context)
 
     inputs = tokenizer(prompt, return_tensors="pt").to(device)
     t0 = time.time()

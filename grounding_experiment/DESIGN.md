@@ -86,7 +86,7 @@ passes over 24 stories each — small, ~1–2 evenings total including execution
 
 - [x] Task 1 — branch `inference-grounding` + this design doc
 - [ ] Task 2 — DOM-context builder (`grounding_experiment/dom_context.py`)
-- [ ] Task 3 — `generate()` gains `dom_context` injection
+- [x] Task 3 — generate() gains dom_context injection (OFF byte-identical, verified)
 - [ ] Task 4 — OFF vs ON generation over the 24 stories
 - [ ] Task 5 — execute against live apps
 - [ ] Task 6 — analysis (lift table + selector-adherence)
