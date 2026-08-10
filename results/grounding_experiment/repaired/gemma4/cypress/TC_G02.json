@@ -1,0 +1,14 @@
+{
+  "tc_id": "TC_G02",
+  "condition": "repaired",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 81.263,
+  "dom_context_used": true,
+  "dom_context_chars": 2361,
+  "final_script": "describe('Locked Out User Login Error Message', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should display locked out error message when attempting to log in with locked user', () => {\n    cy.get('[data-test=\"username\"]').type('locked_out_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n\n    cy.get('[data-testid=\"error\"]').should('be.visible');\n    cy.get('[data-testid=\"error\"]').should('contain', 'Sorry, this user has been locked out');\n    cy.get('[data-test=\"login-container\"]').should('be.visible');\n    cy.get('[data-test=\"username\"]').should('have.value', 'locked_out_user');\n    cy.get('[data-test=\"password\"]').should('have.value', 'secret_sauce');\n  });\n\n  it('should not navigate to inventory page when locked out user attempts login', () => {\n    cy.get('[data-test=\"username\"]').type('locked_out_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n\n    cy.get('[data-testid=\"error\"]').should('be.visible');\n    cy.get('[data-test=\"inventory-container\"]').should('not.exist');\n    cy.get('[data-test=\"login-container\"]').should('be.visible');\n    cy.get('[data-test=\"login-container\"]').should('contain', 'Sorry, this user has been locked out');\n  });\n});",
+  "selectors_repaired": 12
+}

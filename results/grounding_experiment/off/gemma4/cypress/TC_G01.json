@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G01",
+  "condition": "off",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 87.398,
+  "dom_context_used": false,
+  "dom_context_chars": 0,
+  "final_script": "describe('Sauce Demo Login - Product Catalogue Access', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should successfully log in with valid credentials and redirect to product catalogue', () => {\n    // Verify login form elements are visible\n    cy.get('[data-test=\"username\"]').should('be.visible');\n    cy.get('[data-test=\"password\"]').should('be.visible');\n    cy.get('[data-test=\"login-button\"]').should('be.visible');\n\n    // Fill in login form with valid credentials\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n\n    // Click login button\n    cy.get('[data-test=\"login-button\"]').click();\n\n    // Verify successful login by checking for redirect to inventory page\n    cy.url().should('include', '/inventory.html');\n\n    // Verify product catalogue page title is displayed\n    cy.get('[data-testid=\"title\"]').should('be.visible');\n    cy.get('[data-testid=\"title\"]').should('contain', 'Products');\n\n    // Verify inventory items are visible\n    cy.get('[data-testid=\"inventory-item\"]').should('have.length.greaterThan', 0);\n  });\n\n  it('should display error message when login fails with invalid password', () => {\n    // Fill in login form with valid username and invalid password\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('wrongpassword');\n\n    // Click login button\n    cy.get('[data-test=\"login-button\"]').click();\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Username and password do not match');\n\n    // Verify user is still on login page\n    cy.url().should('include', '/');\n\n    // Verify login button is still enabled\n    cy.get('[data-test=\"login-button\"]').should('not.be.disabled');\n  });\n});"
+}

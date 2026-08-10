@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G11",
+  "condition": "on",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 77.358,
+  "dom_context_used": true,
+  "dom_context_chars": 2361,
+  "final_script": "describe('Sauce Demo Mobile Responsiveness', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n    cy.viewport(375, 860);\n  });\n\n  it('should display inventory page and burger menu on mobile viewport after successful login', () => {\n    cy.get('[data-testid=\"user-name\"]').type('standard_user');\n    cy.get('[data-testid=\"password\"]').type('secret_sauce');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    cy.url().should('include', '/inventory.');\n    cy.get('[data-testid=\"inventory-container\"]').should('be.visible');\n    cy.get('[data-testid=\"inventory-list\"]').should('be.visible');\n    cy.get('[data-testid=\"inventory-item-sauce-labs-backpack\"]').should('be.visible');\n    cy.get('[data-testid=\"inventory-item-sauce-labs-backpack\"]').should('contain', '$19.99');\n\n    cy.get('[data-testid=\"react-burger-menu-btn\"]').should('be.visible');\n    cy.get('[data-testid=\"react-burger-menu-btn\"]').should('contain', 'Menu');\n  });\n\n  it('should open side menu with logout link when burger menu is clicked on mobile viewport', () => {\n    cy.get('[data-testid=\"user-name\"]').type('standard_user');\n    cy.get('[data-testid=\"password\"]').type('secret_sauce');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    cy.get('[data-testid=\"inventory-container\"]').should('be.visible');\n    cy.get('[data-testid=\"react-burger-menu-btn\"]').click();\n\n    cy.get('[data-testid=\"bm-menu\"]').should('be.visible');\n    cy.get('[data-testid=\"logout-sidebar-link\"]').should('be.visible');\n    cy.get('[data-testid=\"logout-sidebar-link\"]').should('contain', 'Logout');\n    cy.get('[data-testid=\"reset-sidebar-link\"]').should('be.visible');\n    cy.get('[data-testid=\"reset-sidebar-link\"]').should('contain', 'Reset');\n\n    cy.get('[data-testid=\"close-menu\"]').click();\n    cy.get('[data-testid=\"bm-menu\"]').should('not.exist');\n  });\n});"
+}

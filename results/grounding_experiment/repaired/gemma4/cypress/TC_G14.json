@@ -1,0 +1,14 @@
+{
+  "tc_id": "TC_G14",
+  "condition": "repaired",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 75.17,
+  "dom_context_used": true,
+  "dom_context_chars": 327,
+  "final_script": "describe('Login Page - Password Validation', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/login');\n  });\n\n  it('should display error message when submitting wrong password', () => {\n    cy.get('[name=\"username\"]').type('tomsmith');\n    cy.get('[name=\"password\"]').type('wrongpassword');\n    cy.get('[type=\"submit\"]').click();\n\n    cy.get('#flash-messages').should('be.visible');\n    cy.get('#flash-messages').should('contain', 'Your password is invalid!');\n    cy.get('#flash-messages').should('have.class', 'flash-error');\n    cy.url().should('include', '/login');\n  });\n\n  it('should not display error message when submitting correct credentials', () => {\n    cy.get('[name=\"username\"]').type('tomsmith');\n    cy.get('[name=\"password\"]').type('Password123!');\n    cy.get('[type=\"submit\"]').click();\n\n    cy.url().should('include', '/secure');\n    cy.get('#flash-messages').should('not.exist');\n  });\n});",
+  "selectors_repaired": 4
+}

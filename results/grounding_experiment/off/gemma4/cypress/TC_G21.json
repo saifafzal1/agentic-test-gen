@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G21",
+  "condition": "off",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 78.732,
+  "dom_context_used": false,
+  "dom_context_chars": 0,
+  "final_script": "describe('Table Data Review - Table Rows and Columns', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/tables');\n  });\n\n  it('should display table with correct header and row count', () => {\n    // Verify table exists\n    cy.get('[data-testid=\"table-container\"]').should('be.visible');\n    \n    // Verify table element exists\n    cy.get('[data-testid=\"table-data\"]').should('be.visible');\n    \n    // Verify table has a header row\n    cy.get('[data-testid=\"table-header\"]').should('be.visible');\n    \n    // Verify header contains correct column headings\n    cy.get('[data-testid=\"table-header\"]').within(() => {\n      cy.get('th').should('have.length', 4);\n      cy.get('th').first().should('contain', 'Last Name');\n      cy.get('th').eq(1).should('contain', 'First Name');\n      cy.get('th').eq(2).should('contain', 'Email');\n      cy.get('th').eq(3).should('contain', 'Due');\n    });\n    \n    // Verify table body contains 4 rows\n    cy.get('[data-testid=\"table-body\"]').within(() => {\n      cy.get('tr').should('have.length', 4);\n    });\n  });\n\n  it('should verify specific row data and column values', () => {\n    // Verify table has at least one row\n    cy.get('[data-testid=\"table-body\"]').should('be.visible');\n    \n    // Verify the first row contains expected data\n    cy.get('[data-testid=\"table-body tr:first-child\"]').within(() => {\n      cy.get('td').first().should('contain', 'Smith');\n      cy.get('td').eq(1).should('contain', 'John');\n      cy.get('td').eq(2).should('contain', 'jsmith@gmail.com');\n      cy.get('td').eq(3).should('contain', '2023-10-15');\n    });\n    \n    // Verify the last row contains expected data\n    cy.get('[data-testid=\"table-body tr:last-child\"]').within(() => {\n      cy.get('td').first().should('contain', 'Johnson');\n      cy.get('td').eq(1).should('contain', 'Jane');\n      cy.get('td').eq(2).should('contain', 'johnson@example.com');\n      cy.get('td').eq(3).should('contain', '2023-11-01');\n    });\n    \n    // Verify all rows have 4 cells\n    cy.get('[data-testid=\"table-body tr\"]').each(($row) => {\n      cy.wrap($row).within(() => {\n        cy.get('td').should('have.length', 4);\n      });\n    });\n  });\n});"
+}

@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G18",
+  "condition": "on",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 75.197,
+  "dom_context_used": true,
+  "dom_context_chars": 337,
+  "final_script": "describe('File Upload Functionality', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/upload');\n  });\n\n  it('should successfully upload a file and display confirmation', () => {\n    // Create a dummy file for upload\n    const testFile = new File(['content of test file'], 'test-document.pdf', { type: 'application/pdf' });\n\n    // Upload the file by attaching it to the file input\n    cy.get('[type=\"file\"]').selectFile(testFile);\n\n    // Verify the file name appears in the input field\n    cy.get('[type=\"file\"]').should('have.value', 'test-document.pdf');\n\n    // Click the submit button\n    cy.get('[type=\"submit\"]').click();\n\n    // Verify navigation to the success page\n    cy.url().should('include', '/upload');\n\n    // Verify success heading is displayed\n    cy.get('[data-testid=\"success-heading\"]').should('be.visible').should('contain', 'File Uploaded!');\n\n    // Verify uploaded file name is displayed in the confirmation area\n    cy.get('[data-testid=\"uploaded-file-name\"]').should('be.visible').should('contain', 'test-document.pdf');\n\n    // Verify the file preview is visible\n    cy.get('[data-testid=\"file-preview\"]').should('be.visible');\n  });\n\n  it('should handle file upload with invalid file type and display error', () => {\n    // Create a dummy file with an invalid type\n    const invalidFile = new File(['invalid content'], 'image.jpg', { type: 'image/jpeg' });\n\n    // Upload the invalid file\n    cy.get('[type=\"file\"]').selectFile(invalidFile);\n\n    // Click the submit button\n    cy.get('[type=\"submit\"]').click();\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Invalid file type');\n\n    // Verify success heading is NOT displayed\n    cy.get('[data-testid=\"success-heading\"]').should('not.exist');\n\n    // Verify uploaded file name is NOT displayed\n    cy.get('[data-testid=\"uploaded-file-name\"]').should('not.exist');\n\n    // Verify the file input still has the invalid file selected\n    cy.get('[type=\"file\"]').should('have.value', 'image.jpg');\n  });\n});"
+}

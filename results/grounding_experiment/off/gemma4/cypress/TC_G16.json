@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G16",
+  "condition": "off",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 77.619,
+  "dom_context_used": false,
+  "dom_context_chars": 0,
+  "final_script": "describe('JavaScript Confirm Dialog', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/javascript_alerts');\n  });\n\n  it('should record the user choice when confirming a JavaScript dialog', () => {\n    cy.get('[data-testid=\"confirm-button\"]').click();\n    cy.get('[data-testid=\"confirm-dialog\"]').should('be.visible');\n    cy.get('[data-testid=\"confirm-button\"]').click();\n    cy.get('[data-testid=\"result\"]').should('contain', 'You clicked: Ok');\n    cy.get('[data-testid=\"result\"]').should('have.class', 'success');\n  });\n\n  it('should record the user choice when dismissing a JavaScript dialog', () => {\n    cy.get('[data-testid=\"confirm-button\"]').click();\n    cy.get('[data-testid=\"confirm-dialog\"]').should('be.visible');\n    cy.get('[data-testid=\"confirm-button\"]').click();\n    cy.get('[data-testid=\"result\"]').should('contain', 'You clicked: Cancel');\n    cy.get('[data-testid=\"result\"]').should('have.class', 'error');\n  });\n});"
+}

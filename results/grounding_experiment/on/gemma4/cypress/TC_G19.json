@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G19",
+  "condition": "on",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 74.831,
+  "dom_context_used": true,
+  "dom_context_chars": 244,
+  "final_script": "describe('Checkbox States - Checkbox Interaction', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/checkboxes');\n  });\n\n  it('should toggle checkbox states correctly when interacting with checkboxes', () => {\n    // Verify initial state\n    cy.get('[type=\"checkbox\"]').first().should('not.be.checked');\n    cy.get('[type=\"checkbox\"]').last().should('be.checked');\n\n    // Check the first checkbox\n    cy.get('[type=\"checkbox\"]').first().click();\n    cy.get('[type=\"checkbox\"]').first().should('be.checked');\n    cy.get('[type=\"checkbox\"]').last().should('be.checked');\n\n    // Uncheck the second checkbox\n    cy.get('[type=\"checkbox\"]').last().click();\n    cy.get('[type=\"checkbox\"]').last().should('not.be.checked');\n    cy.get('[type=\"checkbox\"]').first().should('be.checked');\n\n    // Check the second checkbox again\n    cy.get('[type=\"checkbox\"]').last().click();\n    cy.get('[type=\"checkbox\"]').last().should('be.checked');\n    cy.get('[type=\"checkbox\"]').first().should('be.checked');\n  });\n\n  it('should maintain correct checkbox states when toggling between checkboxes', () => {\n    // Verify initial state\n    cy.get('[type=\"checkbox\"]').first().should('not.be.checked');\n    cy.get('[type=\"checkbox\"]').last().should('be.checked');\n\n    // Check the first checkbox\n    cy.get('[type=\"checkbox\"]').first().click();\n    cy.get('[type=\"checkbox\"]').first().should('be.checked');\n    cy.get('[type=\"checkbox\"]').last().should('be.checked');\n\n    // Uncheck the first checkbox\n    cy.get('[type=\"checkbox\"]').first().click();\n    cy.get('[type=\"checkbox\"]').first().should('not.be.checked');\n    cy.get('[type=\"checkbox\"]').last().should('be.checked');\n\n    // Check the second checkbox\n    cy.get('[type=\"checkbox\"]').last().click();\n    cy.get('[type=\"checkbox\"]').last().should('be.checked');\n    cy.get('[type=\"checkbox\"]').first().should('not.be.checked');\n\n    // Uncheck the second checkbox\n    cy.get('[type=\"checkbox\"]').last().click();\n    cy.get('[type=\"checkbox\"]').last().should('not.be.checked');\n    cy.get('[type=\"checkbox\"]').first().should('not.be.checked');\n  });\n});"
+}

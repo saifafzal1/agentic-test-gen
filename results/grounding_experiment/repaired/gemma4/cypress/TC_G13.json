@@ -1,0 +1,14 @@
+{
+  "tc_id": "TC_G13",
+  "condition": "repaired",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 75.018,
+  "dom_context_used": true,
+  "dom_context_chars": 327,
+  "final_script": "describe('Returning User Login - Secure Area Access', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/login');\n  });\n\n  it('should successfully log in a returning user and access secure area', () => {\n    cy.get('[name=\"username\"]').type('tomsmith');\n    cy.get('[name=\"password\"]').type('SuperSecretPassword!');\n    cy.get('[type=\"submit\"]').click();\n    cy.url().should('include', '/secure');\n    cy.get('#flash-messages').should('be.visible');\n    cy.get('#flash-messages').should('contain', 'You logged into a secure area!');\n    cy.get('#content').should('be.visible');\n    cy.get('#content').should('contain', 'Welcome');\n  });\n\n  it('should display error message when login fails with invalid credentials', () => {\n    cy.get('[name=\"username\"]').type('tomsmith');\n    cy.get('[name=\"password\"]').type('WrongPassword');\n    cy.get('[type=\"submit\"]').click();\n    cy.url().should('include', '/login');\n    cy.get('#flash-messages').should('be.visible');\n    cy.get('#flash-messages').should('contain', 'Invalid username or password');\n    cy.get('#content').should('not.exist');\n  });\n});",
+  "selectors_repaired": 7
+}

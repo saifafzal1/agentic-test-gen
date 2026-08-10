@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G24",
+  "condition": "on",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 75.002,
+  "dom_context_used": true,
+  "dom_context_chars": 239,
+  "final_script": "describe('HTTP Status Code Reporting', () => {\n  beforeEach(() => {\n    cy.visit('/status_codes');\n  });\n\n  it('should navigate to correct status code page and display success message for 200', () => {\n    cy.get('[data-testid=\"link-200\"]').click();\n    cy.url().should('include', '/status_codes/200');\n    cy.get('[data-testid=\"content\"]').should('contain', 'This page returned a 200 status code');\n    cy.get('[data-testid=\"content\"]').should('be.visible');\n  });\n\n  it('should navigate to correct status code page and display error message for 400', () => {\n    cy.get('[data-testid=\"link-400\"]').click();\n    cy.url().should('include', '/status/codes/440');\n    cy.get('[data-testid=\"content\"]').should('contain', 'This page returned a 400 status code');\n    cy.get('[data-testid=\"content\"]').should('be.visible');\n  });\n\n  it('should navigate to correct status code page and display error message for 500', () => {\n    cy.get('[data-testid=\"link-500\"]').click();\n    cy.url().should('include', '/status/codes/500');\n    cy.get('[data-testid=\"content\"]').should('contain', 'This page returned a 500 status code');\n    cy.get('[data-testid=\"content\"]').should('be.visible');\n  });\n\n  it('should navigate to correct status code page and display error message for 404', () => {\n    cy.get('[data-testid=\"link-401\"]').click();\n    cy.url().should('include', '/status/codes/440');\n    cy.get('[data-testid=\"content\"]').should('contain', 'This page returned a 440 status code');\n    cy.get('[data-testid=\"content\"]').should('be.visible');\n  });\n});"
+}

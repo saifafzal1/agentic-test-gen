@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G17",
+  "condition": "on",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 74.975,
+  "dom_context_used": true,
+  "dom_context_chars": 239,
+  "final_script": "describe('Dynamic Loading - Async Wait', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/dynamic_loading/1');\n  });\n\n  it('should reveal hidden content after asynchronous loading completes', () => {\n    // Verify initial state\n    cy.get('[data-testid=\"finish-element\"]').should('be.visible');\n    cy.get('[data-testid=\"finish-element\"]').should('contain', 'Hello World!');\n    cy.get('[data-testid=\"loading-indicator\"]').should('not.exist');\n\n    // Click the start button to initiate async load\n    cy.get('[data-testid=\"start-button\"]').click();\n\n    // Verify loading indicator appears\n    cy.get('[data-testid=\"loading-indicator\"]').should('be.visible');\n    cy.get('[data-testid=\"loading-indicator\"]').should('contain', 'Loading...');\n\n    // Wait for the loading indicator to disappear (async operation)\n    cy.get('[data-testid=\"loading-indicator\"]').should('not.exist');\n\n    // Verify hidden content is now visible and contains expected text\n    cy.get('[data-testid=\"finish-element\"]').should('be.visible');\n    cy.get('[data-testid=\"finish-element\"]').should('contain', 'Hello World!');\n  });\n\n  it('should handle timeout when async operation does not complete', () => {\n    // Intercept the async call and delay it beyond the timeout\n    cy.intercept('GET', '/api/load-data', (req) => {\n      req.reply((res) => {\n        res.delay(15000);\n        res.send({ statusCode: 200, body: { data: 'Hello World!' } });\n      });\n    }).as('delayedLoad');\n\n    // Click the start button\n    cy.get('[data-testid=\"start-button\"]').click();\n\n    // Verify loading indicator appears\n    cy.get('[data-testid=\"loading-indicator\"]').should('be.visible');\n\n    // Wait for the delayed request, which should exceed the 10-second timeout\n    cy.wait('@delayedLoad', { timeout: 10000 });\n\n    // Verify the loading indicator is still visible or an error state is shown\n    cy.get('[data-testid=\"loading-indicator\"]').should('be.visible');\n\n    // Verify finish element is not visible or still in loading state\n    cy.get('[data-testid=\"finish-element\"]').should('not.exist');\n  });\n});"
+}

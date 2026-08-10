@@ -1,0 +1,14 @@
+{
+  "tc_id": "TC_G03",
+  "condition": "repaired",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 77.489,
+  "dom_context_used": true,
+  "dom_context_chars": 2361,
+  "final_script": "describe('Logout from Side Menu', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n  });\n\n  it('should successfully log out from the side menu and return to login page', () => {\n    // Verify user is logged in\n    cy.get('[data-test=\"inventory-container\"]').should('be.visible');\n    cy.get('[data-test=\"inventory-list\"]').should('be.visible');\n    cy.get('[data-test=\"inventory-item-name\"]').first().should('contain', 'Sauce Labs Backpack');\n\n    // Open side menu\n    cy.get('#react-burger-menu-btn').click();\n    cy.get('[data-test=\"inventory-sidebar-link\"]').should('be.visible');\n\n    // Click logout link\n    cy.get('[data-test=\"logout-sidebar-link\"]').click();\n\n    // Verify logout success - redirected to login page\n    cy.url().should('include', '/login');\n    cy.get('[data-test=\"login-container\"]').should('be.visible');\n    cy.get('[data-test=\"username\"]').should('be.visible');\n    cy.get('[data-test=\"password\"]').should('be.visible');\n    cy.get('[data-test=\"login-button\"]').should('be.visible');\n  });\n\n  it('should handle logout when side menu is not open', () => {\n    // Verify user is logged in\n    cy.get('[data-test=\"inventory-container\"]').should('be.visible');\n\n    // Attempt to click logout without opening menu (should not exist or be visible)\n    cy.get('[data-test=\"logout-sidebar-link\"]').should('not.exist');\n\n    // Open side menu\n    cy.get('#react-burger-menu-btn').click();\n    cy.get('[data-test=\"inventory-sidebar-link\"]').should('be.visible');\n\n    // Verify logout link is now visible\n    cy.get('[data-test=\"logout-sidebar-link\"]').should('be.visible');\n\n    // Click logout\n    cy.get('[data-test=\"logout-sidebar-link\"]').click();\n\n    // Verify logout success\n    cy.url().should('include', '/login');\n    cy.get('[data-test=\"login-container\"]').should('be.visible');\n    cy.get('[data-test=\"username\"]').should('be.visible');\n  });\n});",
+  "selectors_repaired": 21
+}

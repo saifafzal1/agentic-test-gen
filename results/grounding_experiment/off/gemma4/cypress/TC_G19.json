@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G19",
+  "condition": "off",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 78.401,
+  "dom_context_used": false,
+  "dom_context_chars": 0,
+  "final_script": "describe('Checkbox States - Toggle Behavior', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/checkboxes');\n  });\n\n  it('should toggle checkbox states correctly when interacting with the first checkbox', () => {\n    // Verify initial state\n    cy.get('[data-testid=\"checkbox-1\"]').should('not. be checked');\n    cy.get('[data-testid=\"checkbox-2\"]').should('be. checked');\n\n    // Check the first checkbox\n    cy.get('[data-testid=\"checkbox-1\"]').click();\n    cy.get('[data-testid=\"checkbox-1\"]').should('be. checked');\n    cy.get('[data-testid=\"checkbox-2\"]').should('be. checked');\n\n    // Uncheck the first checkbox\n    cy.get('[data-testid=\"checkbox-1\"]').click();\n    cy.get('[data-testid=\"checkbox-1\"]').should('not. be checked');\n    cy.get('[data-testid=\"checkbox-2\"]').should('be. checked');\n\n    // Check the first checkbox again\n    cy.get('[data-testid=\"checkbox-1\"]').click();\n    cy.get('[data-testid=\"checkbox-1\"]').should('be. checked');\n    cy.get('[data-testid=\"checkbox-2\"]').should('be. checked');\n  });\n\n  it('should maintain correct state when unchecking the second checkbox', () => {\n    // Verify initial state\n    cy.get('[data-testid=\"checkbox-1\"]').should('not. be checked');\n    cy.get('[data-testid=\"checkbox-2\"]').should('be. checked');\n\n    // Check the first checkbox\n    cy.get('[data-testid=\"checkbox-1\"]').click();\n    cy.get('[data-testid=\"checkbox-1\"]').should('be. checked');\n    cy.get('[data-testid=\"checkbox-2\"]').should('be. checked');\n\n    // Uncheck the second checkbox\n    cy.get('[data-testid=\"checkbox-2\"]').click();\n    cy.get('[data-testid=\"checkbox-2\"]').should('not. be checked');\n    cy.get('[data-testid=\"checkbox-1\"]').should('be. checked');\n\n    // Check the second checkbox again\n    cy.get('[data-testid=\"checkbox-2\"]').click();\n    cy.get('[data-testid=\"checkbox-2\"]').should('be. checked');\n    cy.get('[data-testid=\"checkbox-1\"]').should('be. checked');\n  });\n});"
+}

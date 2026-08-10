@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G22",
+  "condition": "on",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 75.093,
+  "dom_context_used": true,
+  "dom_context_chars": 217,
+  "final_script": "describe('Notification Message Rendered', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/notification_message_rendered');\n  });\n\n  it('should display notification when clicking the action link', () => {\n    cy.get('[data-testid=\"click-here-link\"]').click();\n    cy.get('[data-testid=\"flash-messages\"]').should('be.visible');\n    cy.get('[data-testid=\"flash-messages\"]').should('contain', 'Action successful');\n    cy.get('[data-testid=\"flash-messages\"]').should('have.class', 'success');\n    cy.get('[data-testid=\"flash-messages\"]').should('contain', 'Notification message');\n    cy.get('[data-testid=\"flash-messages\"]').should('be.visible');\n  });\n\n  it('should dismiss notification when clicking the close icon', () => {\n    cy.get('[data-testid=\"click-here-link\"]').click();\n    cy.get('[data-testid=\"flash-messages\"]').should('be.visible');\n    cy.get('[data-testid=\"flash-messages\"]').should('contain', 'Action successful');\n    cy.get('[data-testid=\"flash-messages\"]').find('[data-testid=\"close-icon\"]').click();\n    cy.get('[data-testid=\"flash-messages\"]').should('not.exist');\n  });\n});"
+}

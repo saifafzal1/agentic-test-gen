@@ -1,0 +1,14 @@
+{
+  "tc_id": "TC_G09",
+  "condition": "repaired",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 77.628,
+  "dom_context_used": true,
+  "dom_context_chars": 2361,
+  "final_script": "describe('Checkout Form Required Field Validation', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should display error when postal code is missing during checkout', () => {\n    // Login with standard user\n    cy.get('[name=\"user-name\"]').type('standard_user');\n    cy.get('[name=\"password\"]').type('secret_sauce');\n    cy.get('[name=\"login-button\"]').click();\n\n    // Add backpack to cart\n    cy.get('[data-test=\"add-to-cart-sauce-labs-backpack\"]').click();\n\n    // Navigate to cart and checkout\n    cy.get('[data-test=\"shopping-cart-link\"]').click();\n    cy.get('[data-test=\"checkout\"]').click();\n\n    // Fill only first and last name\n    cy.get('[name=\"firstName\"]').type('Saif');\n    cy.get('[name=\"lastName\"]').type('Afzal');\n\n    // Attempt to continue without postal code\n    cy.get('[name=\"continue\"]').click();\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error\"]').should('be.visible');\n    cy.get('[data-testid=\"error\"]').should('contain', 'Postal Code is required');\n\n    // Verify user is still on checkout page\n    cy.url().should('include', '/checkout');\n  });\n\n  it('should successfully submit checkout form when all required fields are filled', () => {\n    // Login with standard user\n    cy.get('[name=\"user-name\"]').type('standard_user');\n    cy.get('[name=\"password\"]').type('secret_sauce');\n    cy.get('[name=\"login-button\"]').click();\n\n    // Add backpack to cart\n    cy.get('[data-test=\"add-to-cart-sauce-labs-backpack\"]').click();\n\n    // Navigate to cart and checkout\n    cy.get('[data-test=\"shopping-cart-link\"]').click();\n    cy.get('[data-test=\"checkout\"]').click();\n\n    // Fill all required fields\n    cy.get('[name=\"firstName\"]').type('Saif');\n    cy.get('[name=\"lastName\"]').type('Afzal');\n    cy.get('[name=\"postalCode\"]').type('12345');\n\n    // Click continue and verify success\n    cy.get('[name=\"continue\"]').click();\n\n    // Verify success message or next step is reached\n    cy.get('[data-testid=\"error\"]').should('not.exist');\n    cy.get('[data-testid=\"finish-checkout-button\"]').should('be.visible');\n    cy.get('[data-testid=\"finish-checkout-button\"]').click();\n\n    // Verify order confirmation page\n    cy.url().should('include', '/checkout-complete');\n    cy.get('[data-testid=\"order-confirmation-title\"]').should('contain', 'Thank You');\n  });\n});",
+  "selectors_repaired": 6
+}

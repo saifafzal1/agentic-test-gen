@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G23",
+  "condition": "off",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 80.422,
+  "dom_context_used": false,
+  "dom_context_chars": 0,
+  "final_script": "describe('Navigation from Home Page to Example Page and Back', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com');\n  });\n\n  it('should navigate from home page to example page and back successfully', () => {\n    // Verify home page content\n    cy.get('h1').should('contain', 'Welcome to the internet');\n    cy.get('[data-testid=\"available-examples-heading\"]').should('be.visible');\n    cy.get('[data-testid=\"available-examples-heading\"]').should('contain', 'Available Examples');\n\n    // Navigate to example page\n    cy.get('[data-testid=\"ab-testing-link\"]').should('be.visible');\n    cy.get('[data-testid=\"ab-testing-link\"]').click();\n\n    // Verify navigation to example page\n    cy.url().should('include', '/abtest');\n    cy.get('h3').should('be.visible');\n    cy.get('h3').should('contain', 'A/B Testing');\n\n    // Navigate back to home page\n    cy.go('back');\n\n    // Verify return to home page\n    cy.url().should('include', '/');\n    cy.get('[data-testid=\"available-examples-heading\"]').should('be.visible');\n    cy.get('[data-testid=\"available-examples-heading\"]').should('contain', 'Available Examples');\n  });\n\n  it('should handle navigation when example page link is missing or broken', () => {\n    // Verify home page content\n    cy.get('h1').should('contain', 'Welcome to the internet');\n    cy.get('[data-testid=\"available-examples-heading\"]').should('be.visible');\n\n    // Attempt to click a non-existent link\n    cy.get('[data-testid=\"non-existent-link\"]').should('not.exist');\n\n    // Verify home page remains unchanged\n    cy.url().should('include', '/');\n    cy.get('[data-testid=\"available-examples-heading\"]').should('be.visible');\n\n    // Verify navigation back button still works\n    cy.visit('https://the-internet.herokuapp.com/abtest');\n    cy.get('h3').should('contain', 'A/B Testing');\n    cy.go('back');\n    cy.url().should('include', '/');\n    cy.get('[data-testid=\"available-examples-heading\"]').should('be.visible');\n  });\n});"
+}

@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G10",
+  "condition": "off",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 77.852,
+  "dom_context_used": false,
+  "dom_context_chars": 0,
+  "final_script": "describe('Product Detail Page Navigation', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com/');\n  });\n\n  it('should navigate to product detail page and return to catalogue', () => {\n    // Login\n    cy.get('[data-testid=\"user-name\"]').type('standard_user');\n    cy.get('[data-testid=\"password\"]').type('secret_sauce');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Verify login success\n    cy.get('[data-testid=\"inventory-item\"]').should('be.visible');\n    cy.get('[data-testid=\"inventory-item\"]').should('have.length.greaterThan', 0);\n\n    // Navigate to product detail page\n    cy.get('[data-testid=\"inventory-item-name\"]').first().click();\n\n    // Verify navigation to product detail page\n    cy.url().should('include', 'inventory-item.html');\n    cy.get('[data-testid=\"product-detail-title\"]').should('be.visible');\n    cy.get('[data-testid=\"product-detail-title\"]').should('contain', 'Sauce Labs Backpack');\n\n    // Return to catalogue\n    cy.get('[data-testid=\"back-to-products\"]').click();\n\n    // Verify return to catalogue\n    cy.url().should('include', 'inventory.html');\n    cy.get('[data-testid=\"inventory-item\"]').should('be.visible');\n    cy.get('[data-testid=\"inventory-item\"]').should('have.length.greaterThan', 0);\n    cy.get('[data-testid=\"inventory-item\"]').first().should('contain', 'Sauce Labs Backpack');\n  });\n\n  it('should handle navigation when product detail page is not found', () => {\n    // Login\n    cy.get('[data-testid=\"user-name\"]').type('standard_user');\n    cy.get('[data-testid=\"password\"]').type('secret_sauce');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Attempt to navigate to a non-existent product\n    cy.get('[data-testid=\"inventory-item-name\"]').eq(1).click();\n\n    // Verify error message or fallback\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Product not found');\n\n    // Verify user is still on inventory page\n    cy.url().should('include', 'inventory.html');\n    cy.get('[data-testid=\"inventory-item\"]').should('be.visible');\n\n    // Verify back button still works\n    cy.get('[data-testid=\"back-to-products\"]').click();\n    cy.url().should('include', 'inventory.html');\n  });\n});"
+}

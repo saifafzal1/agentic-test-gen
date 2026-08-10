@@ -1,0 +1,14 @@
+{
+  "tc_id": "TC_G08",
+  "condition": "repaired",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 79.496,
+  "dom_context_used": true,
+  "dom_context_chars": 2361,
+  "final_script": "describe('Checkout Flow - Full Order Confirmation', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should successfully complete checkout with valid credentials and item in cart', () => {\n    // Login with standard user\n    cy.get('[name=\"user-name\"]').type('standard_user');\n    cy.get('[name=\"password\"]').type('secret_sauce');\n    cy.get('[name=\"login-button\"]').click();\n\n    // Add backpack to cart\n    cy.get('[data-test=\"add-to-cart-sauce-labs-backpack\"]').click();\n\n    // Navigate to cart\n    cy.get('[data-test=\"shopping-cart-link\"]').click();\n\n    // Proceed to checkout\n    cy.get('[data-test=\"checkout\"]').click();\n\n    // Fill in checkout form\n    cy.get('[name=\"firstName\"]').type('Saif');\n    cy.get('[name=\"lastName\"]').type('Afzal');\n    cy.get('[name=\"postalCode\"]').type('20001');\n    cy.get('[name=\"continue\"]').click();\n\n    // Verify overview page\n    cy.get('[data-testid=\"continue-button\"]').should('be.visible');\n    cy.get('[data-testid=\"item-total\"]').should('contain', '$109.97');\n\n    // Complete order\n    cy.get('[data-testid=\"finish-button\"]').click();\n\n    // Verify confirmation page\n    cy.get('[data-testid=\"complete-header\"]').should('be.visible');\n    cy.get('[data-testid=\"complete-header\"]').should('contain', 'Thank you for your order!');\n    cy.get('[data-testid=\"confirmation-message\"]').should('contain', 'Your order has been placed');\n  });\n\n  it('should handle checkout with invalid postal code and prevent order completion', () => {\n    // Login with standard user\n    cy.get('[name=\"user-name\"]').type('standard_user');\n    cy.get('[name=\"password\"]').type('secret_sauce');\n    cy.get('[name=\"login-button\"]').click();\n\n    // Add backpack to cart\n    cy.get('[data-test=\"add-to-cart-sauce-labs-backpack\"]').click();\n\n    // Navigate to cart\n    cy.get('[data-test=\"shopping-cart-link\"]').click();\n\n    // Proceed to checkout\n    cy.get('[data-test=\"checkout\"]').click();\n\n    // Fill in checkout form with invalid postal code\n    cy.get('[name=\"firstName\"]').type('Saif');\n    cy.get('[name=\"lastName\"]').type('Afzal');\n    cy.get('[name=\"postalCode\"]').type('invalid-zip');\n    cy.get('[name=\"continue\"]').click();\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Please enter a valid postal code');\n\n    // Verify finish button is disabled or not visible\n    cy.get('[data-testid=\"finish-button\"]').should('not.exist');\n  });\n});",
+  "selectors_repaired": 6
+}

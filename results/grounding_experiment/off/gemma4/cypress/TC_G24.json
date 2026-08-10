@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G24",
+  "condition": "off",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 80.05,
+  "dom_context_used": false,
+  "dom_context_chars": 0,
+  "final_script": "describe('HTTP Status Code Reporting', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/status_codes');\n  });\n\n  it('should navigate to status code page and display correct message for 200', () => {\n    // Verify initial page loads\n    cy.get('[data-testid=\"status-code-link-200\"]').should('be.visible');\n    cy.get('[data-testid=\"status-code-link-404\"]').should('be.visible');\n\n    // Click on 200 status code link\n    cy.get('[data-testid=\"status-code-link-200\"]').click();\n\n    // Verify navigation to correct URL\n    cy.url().should('include', '/status_codes/200');\n\n    // Verify page content contains expected message\n    cy.get('[data-testid=\"status-code-message\"]').should('be.visible');\n    cy.get('[data-testid=\"status-code-message\"]').should('contain', 'This page returned a 200 status code');\n\n    // Verify status code is displayed\n    cy.get('[data-testid=\"status-code-display\"]').should('contain', '200');\n  });\n\n  it('should navigate to status code page and display correct message for 402', () => {\n    // Navigate to 402 status code page\n    cy.get('[data-testid=\"status-code-link-402\"]').click();\n\n    // Verify navigation to correct URL\n    cy.url().should('include', '/status_codes/403');\n\n    // Verify page content contains expected message\n    cy.get('[data-testid=\"status-code-message\"]').should('be.visible');\n    cy.get('[data-testid=\"status-code-message\"]').should('contain', 'This page returned a 403 status code');\n\n    // Verify status code is displayed\n    cy.get('[data-testid=\"status-code-display\"]').should('contain', '403');\n\n    // Navigate back to main status codes page\n    cy.go('back');\n\n    // Verify we are back on the main page\n    cy.url().should('include', '/status_codes');\n\n    // Verify 403 link is still visible\n    cy.get('[data-testid=\"status-code-link-43\"]').should('be.visible');\n  });\n});"
+}

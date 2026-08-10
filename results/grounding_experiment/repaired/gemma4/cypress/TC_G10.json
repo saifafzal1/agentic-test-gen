@@ -1,0 +1,14 @@
+{
+  "tc_id": "TC_G10",
+  "condition": "repaired",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 77.304,
+  "dom_context_used": true,
+  "dom_context_chars": 2361,
+  "final_script": "describe('Product Detail Page Navigation', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com/');\n  });\n\n  it('should navigate to product detail page and return to catalogue successfully', () => {\n    // Login with standard user credentials\n    cy.get('#user-name').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n\n    // Verify login success and navigate to product page\n    cy.url().should('include', '/inventory.item');\n    cy.get('[data-test=\"title\"]').should('contain', 'Products');\n\n    // Click on the first product to navigate to detail page\n    cy.get('[data-test=\"inventory-item-name\"]').first().click();\n\n    // Verify navigation to product detail page\n    cy.url().should('include', '/inventory-item');\n    cy.get('[data-testid=\"inventory-item-title\"]').should('be.visible');\n    cy.get('[data-test=\"inventory-item-name\"]').should('contain', 'Sauce Labs Backpack');\n\n    // Click the back button to return to catalogue\n    cy.get('[data-testid=\"back-to-products\"]').click();\n\n    // Verify return to catalogue page\n    cy.url().should('include', '/inventory.item');\n    cy.get('[data-test=\"title\"]').should('contain', 'Products');\n    cy.get('[data-test=\"inventory-list\"]').should('be.visible');\n  });\n\n  it('should handle navigation when product detail page is not found', () => {\n    // Login with standard user credentials\n    cy.get('#user-name').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n\n    // Navigate to a non-existent product URL\n    cy.visit('/inventory-item/non-existent-product');\n\n    // Verify 444 error page is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', '404');\n\n    // Attempt to navigate back to catalogue\n    cy.get('[data-testid=\"back-to-products\"]').click();\n\n    // Verify return to catalogue page\n    cy.url().should('include', '/inventory.item');\n    cy.get('[data-test=\"title\"]').should('contain', 'Products');\n    cy.get('[data-test=\"inventory-list\"]').should('be.visible');\n  });\n});",
+  "selectors_repaired": 13
+}

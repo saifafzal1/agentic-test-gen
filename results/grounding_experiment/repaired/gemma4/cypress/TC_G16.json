@@ -1,0 +1,14 @@
+{
+  "tc_id": "TC_G16",
+  "condition": "repaired",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 74.751,
+  "dom_context_used": true,
+  "dom_context_chars": 291,
+  "final_script": "describe('JavaScript Confirm Dialog', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/javascript_alerts');\n  });\n\n  it('should record user choice when confirming a JavaScript dialog', () => {\n    cy.get('[data-testid=\"Click for JS Confirm\"]').click();\n    cy.get('#result').should('be.visible');\n    cy.get('#result').should('contain', 'You clicked: Ok');\n  });\n\n  it('should record user choice when dismissing a JavaScript dialog', () => {\n    cy.get('[data-testid=\"Click for JS Confirm\"]').click();\n    cy.get('#result').should('be.visible');\n    cy.get('#result').should('contain', 'You clicked: Cancel');\n  });\n});",
+  "selectors_repaired": 4
+}

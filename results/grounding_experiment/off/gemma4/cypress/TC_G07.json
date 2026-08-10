@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G07",
+  "condition": "off",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 77.148,
+  "dom_context_used": false,
+  "dom_context_chars": 0,
+  "final_script": "describe('Add and Remove Product from Cart', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should add a product to cart and update cart badge', () => {\n    cy.get('[data-testid=\"user-name\"]').type('standard_user');\n    cy.get('[data-testid=\"password\"]').type('secret_sauce');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.url().should('include', '/cart.item');\n    cy.get('[data-testid=\"add-to-cart-sauce-labs-backpack\"]').click();\n    cy.get('[data-testid=\"shopping_cart_badge\"]').should('be.visible');\n    cy.get('[data-testid=\"shopping_cart_badge\"]').should('contain', '1');\n    cy.get('[data-testid=\"add-to-cart-sauce-labs-backpack\"]').should('contain', 'Remove');\n    cy.get('[data-testid=\"remove-sauce-labs-backpack\"]').should('be.visible');\n  });\n\n  it('should remove a product from cart and update cart badge', () => {\n    cy.get('[data-testid=\"user-name\"]').type('standard_user');\n    cy.get('[data-testid=\"password\"]').type('secret_sauce');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.get('[data-testid=\"add-to-cart-sauce-labs-backpack\"]').click();\n    cy.get('[data-testid=\"shopping_cart_badge\"]').should('contain', '1');\n    cy.get('[data-testid=\"remove-sauce-labs-backpack\"]').click();\n    cy.get('[data-testid=\"shopping_cart_badge\"]').should('not.exist');\n    cy.get('[data-testid=\"add-to-cart-sauce-labs-backpack\"]').should('contain', 'Add to cart');\n    cy.get('[data-testid=\"remove-sauce-labs-backpack\"]').should('not.exist');\n  });\n});"
+}

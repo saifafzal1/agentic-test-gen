@@ -1,0 +1,14 @@
+{
+  "tc_id": "TC_G20",
+  "condition": "repaired",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 74.72,
+  "dom_context_used": true,
+  "dom_context_chars": 292,
+  "final_script": "describe('Dropdown Selection - Dropdown Component', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/dropdown');\n  });\n\n  it('should select an option from the dropdown and apply the value', () => {\n    // Verify initial state\n    cy.get('#dropdown').should('be.visible');\n    cy.get('#dropdown').should('have.value', '');\n    cy.get('#dropdown').should('contain', 'Please select an option');\n\n    // Select the second option\n    cy.get('#dropdown').select('Option 2');\n\n    // Verify selection was applied\n    cy.get('#dropdown').should('have.value', '2');\n    cy.get('#dropdown').should('contain', 'Option 2');\n    cy.get('#dropdown').should('not.contain', 'Please select an option');\n  });\n\n  it('should handle selecting the first option and verify value', () => {\n    // Verify initial state\n    cy.get('#dropdown').should('be.visible');\n    cy.get('#dropdown').should('have.value', '');\n\n    // Select the first option\n    cy.get('#dropdown').select('Option 1');\n\n    // Verify selection was applied\n    cy.get('#dropdown').should('have.value', '1');\n    cy.get('#dropdown').should('contain', 'Option 1');\n    cy.get('#dropdown').should('not.contain', 'Please select an option');\n  });\n});",
+  "selectors_repaired": 13
+}

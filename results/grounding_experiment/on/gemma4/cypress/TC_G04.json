@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G04",
+  "condition": "on",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 80.075,
+  "dom_context_used": true,
+  "dom_context_chars": 2361,
+  "final_script": "describe('Login Form Validation', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com/');\n  });\n\n  it('should display error messages when both username and password fields are empty', () => {\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.get('[data-testid=\"error\"]').should('be.visible');\n    cy.get('[data-testid=\"error\"]').should('contain', 'Username is required');\n    cy.get('[data-testid=\"error\"]').should('contain', 'Password is required');\n  });\n\n  it('should display error message when only username is provided and password is empty', () => {\n    cy.get('[data-testid=\"username\"]').type('standard_user');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.get('[data-testid=\"error\"]').should('be.visible');\n    cy.get('[data-testid=\"error\"]').should('contain', 'Password is required');\n    cy.get('[data-testid=\"error\"]').should('not.contain', 'Username is required');\n  });\n});"
+}

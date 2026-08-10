@@ -1,0 +1,13 @@
+{
+  "tc_id": "TC_G18",
+  "condition": "off",
+  "model": "gemma4",
+  "framework": "cypress",
+  "accepted": true,
+  "iterations": 1,
+  "best_score": 0.79,
+  "total_latency_s": 77.32,
+  "dom_context_used": false,
+  "dom_context_chars": 0,
+  "final_script": "describe('File Upload - File Input and Submission', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/upload');\n  });\n\n  it('should successfully upload a file and display confirmation', () => {\n    // Create a dummy file for upload\n    const testFile = Cypress.Buffer.from('This is a test file content');\n    \n    // Intercept the file upload API endpoint\n    cy.intercept('POST', '/upload').as('fileUpload');\n    \n    // Upload the file by attaching the buffer to the file input\n    cy.get('[data-testid=\"file-upload\"]').selectFile(testFile, { force: true });\n    \n    // Verify the file name is displayed before submission\n    cy.get('[data-testid=\"uploaded-file-name\"]').should('contain', 'test-file.txt');\n    \n    // Click the submit button\n    cy.get('[data-testid=\"file-submit\"]').click();\n    \n    // Wait for the API call\n    cy.wait('@fileUpload');\n    \n    // Verify navigation to the success page\n    cy.url().should('include', '/upload');\n    \n    // Verify success heading is displayed\n    cy.get('[data-testid=\"success-heading\"]').should('be.visible').should('contain', 'File Uploaded!');\n    \n    // Verify the uploaded file name is displayed in the confirmation area\n    cy.get('[data-testid=\"uploaded-files\"]').should('be.visible').should('contain', 'test-file.txt');\n  });\n\n  it('should handle file upload with invalid file type and display error', () => {\n    // Create a dummy file with an invalid extension\n    const invalidFile = Cypress.Buffer.from('This is not a valid file');\n    \n    // Intercept the file upload API endpoint\n    cy.intercept('POST', '/upload', { statusCode: 400, body: { error: 'Invalid file type' } }).as('fileUploadError');\n    \n    // Attempt to upload the invalid file\n    cy.get('[data-testid=\"file-upload\"]').selectFile(invalidFile, { force: true });\n    \n    // Click the submit button\n    cy.get('[data-testid=\"file-submit\"]').click();\n    \n    // Wait for the error response\n    cy.wait('@fileUploadError');\n    \n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible').should('contain', 'Invalid file type');\n    \n    // Verify success heading is NOT displayed\n    cy.get('[data-testid=\"success-heading\"]').should('not.exist');\n    \n    // Verify uploaded files list is empty\n    cy.get('[data-testid=\"uploaded-files\"]').should('not.exist');\n  });\n});"
+}
