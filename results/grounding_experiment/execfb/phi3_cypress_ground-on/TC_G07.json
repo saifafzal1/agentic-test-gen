@@ -1,0 +1,47 @@
+{
+  "tc_id": "TC_G07",
+  "model": "phi3",
+  "framework": "cypress",
+  "grounding": true,
+  "max_iters": 4,
+  "accepted": false,
+  "best_status": "failed",
+  "best_tests": 1,
+  "best_passed": 0,
+  "iterations": 4,
+  "history": [
+    {
+      "iter": 1,
+      "status": "failed",
+      "tests": 1,
+      "passed": 0,
+      "failed": 1,
+      "static_score": 0.79
+    },
+    {
+      "iter": 2,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    },
+    {
+      "iter": 3,
+      "status": "failed",
+      "tests": 1,
+      "passed": 0,
+      "failed": 1,
+      "static_score": 0.79
+    },
+    {
+      "iter": 4,
+      "status": "failed",
+      "tests": 1,
+      "passed": 0,
+      "failed": 1,
+      "static_score": 0.79
+    }
+  ],
+  "final_script": "describe('Add and Remove Product from Cart', () => {\n  beforeEach(() => {\n    cy.visit('/');\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n    cy.get('[data-testid=\"username\"]').type('standard_user');\n    cy.get('[data-testid=\"password\"]').type('secret_sauce');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.wait('@loginRequest');\n    cy.get('[data-testid=\"shopping-cart-link\"]').should('be.visible');\n  });\n\n  it('should add product to cart and update cart badge', () => {\n    cy.get('[data-testid=\"add-to-cart-sauce-labs-backpack\"]').click();\n    cy.get('[data-testid=\"shopping-cart-badge\"]').should('contain', '1');\n    cy.get('[data-testid=\"shopping-cart-badge\"]').should('have.css', 'display', 'block');\n    cy.get('[data-testid=\"add-to-cart-sauce-labs-backpack\"]').should('have.attr', 'aria-disabled', 'false');\n    cy.get('[data-testid=\"add-to-cart-sauce-labs-backpack\"]').should('have.text', 'Remove');\n    cy.get('[data-testid=\"shopping-cart-badge\"]').should('have.css', 'color', 'green');\n  });\n\n  it('should remove product from cart and update cart badge', () => {\n    cy.get('[data-testid=\"add-to-cart-sauce-labs-backpack\"]').click();\n    cy.get('[data-testid=\"remove-sauce-labs-backpack\"]').click();\n    cy.get('[data-testid=\"shopping-cart-badge\"]').should('contain', '0');\n    cy.get('[data-testid=\"shopping-cart-badge\"]').should('have.css', 'display', 'none');\n    cy.get('[data-testid=\"add-to-cart-sauce-labs-backpack\"]').should('have.attr', 'aria-disabled', 'true');\n    cy.get('[data-testid=\"add-to-cart-sauce-labs-backpack\"]').should('have.text', 'Add to cart');\n  });\n});"
+}

@@ -1,0 +1,47 @@
+{
+  "tc_id": "TC_G11",
+  "model": "phi3",
+  "framework": "cypress",
+  "grounding": true,
+  "max_iters": 4,
+  "accepted": false,
+  "best_status": "failed",
+  "best_tests": 2,
+  "best_passed": 0,
+  "iterations": 4,
+  "history": [
+    {
+      "iter": 1,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    },
+    {
+      "iter": 2,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    },
+    {
+      "iter": 3,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    },
+    {
+      "iter": 4,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    }
+  ],
+  "final_script": "describe('Mobile Responsive Sauce Demo Store', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should display inventory page on mobile portrait viewport with burger menu visible', () => {\n    cy.viewport('375x812');\n    cy.get('[data-testid=\"login-container\"]').should('be.visible');\n    cy.get('[data-testid=\"username\"]').type('standard_user');\n    cy.get('[data-testid=\"password\"]').type('secret_sauce');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.get('[data-testid=\"page-wrapper\"]').should('contain', 'Inventory');\n    cy.get('[data-testid=\"react-burger-menu-btn\"]').should('be.visible');\n    cy.get('[data-testid=\"open-menu\"]').click();\n    cy.get('[data-testid=\"bm-menu\"]').should('be.visible');\n    cy.get('[data-testid=\"logout-sidebar-link\"]').should('be.visible');\n    cy.get('[data-testid=\"close-menu\"]').click();\n    cy.get('[data-testid=\"react-burger-cross-btn\"]').should('be.visible');\n  });\n\n  it('should handle burger menu button click and close on mobile portrait viewport', () => {\n    cy.viewport('375x812');\n    cy.get('[data-testid=\"login-container\"]').should('be.visible');\n    cy.get('[data-testid=\"username\"]').type('standard_user');\n    cy.get('[data-testid=\"password\"]').type('secret_sauce');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.get('[data-testid=\"page-wrapper\"]').should('contain', 'Inventory');\n    cy.get('[data-testid=\"react-burger-menu-btn\"]').click();\n    cy.get('[data-testid=\"bm-menu\"]').should('be.visible');\n    cy.get('[data-testid=\"close-menu\"]').click();\n    cy.get('[data-testid=\"react-burger-menu-btn\"]').should('not.exist');\n    cy.get('[data-testid=\"page-wrapper\"]').should('contain', 'Inventory');\n  });\n});"
+}

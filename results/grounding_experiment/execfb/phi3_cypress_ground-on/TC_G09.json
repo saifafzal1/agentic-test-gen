@@ -1,0 +1,47 @@
+{
+  "tc_id": "TC_G09",
+  "model": "phi3",
+  "framework": "cypress",
+  "grounding": true,
+  "max_iters": 4,
+  "accepted": false,
+  "best_status": "failed",
+  "best_tests": 1,
+  "best_passed": 0,
+  "iterations": 4,
+  "history": [
+    {
+      "iter": 1,
+      "status": "failed",
+      "tests": 1,
+      "passed": 0,
+      "failed": 1,
+      "static_score": 0.79
+    },
+    {
+      "iter": 2,
+      "status": "failed",
+      "tests": 1,
+      "passed": 0,
+      "failed": 1,
+      "static_score": 0.79
+    },
+    {
+      "iter": 3,
+      "status": "failed",
+      "tests": 1,
+      "passed": 0,
+      "failed": 1,
+      "static_score": 0.79
+    },
+    {
+      "iter": 4,
+      "status": "failed",
+      "tests": 1,
+      "passed": 0,
+      "failed": 1,
+      "static_score": 0.79
+    }
+  ],
+  "final_script": "describe('Checkout Form Validation - Required Fields', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n    cy.get('[data-testid=\"login-container\"]').click();\n    cy.get('[data-testid=\"username\"]').type('standard_user');\n    cy.get('[data-testid=\"password\"]').type('secret_sauce');\n    cy.get('[data-testid=\"login-button\"]').click();\n    cy.get('[data-testid=\"shopping-cart-link\"]').click();\n  });\n\n  it('should display error when only first name is filled and postal code is missing', () => {\n    cy.get('[data-testid=\"firstName\"]').type('Saif');\n    cy.get('[data-testid=\"lastName\"]').type('Afzal');\n    cy.get('[data-testid=\"continue\"]').click();\n    cy.get('[data-testid=\"error\"]').should('be.visible');\n    cy.get('[data-testid=\"error\"]').should('contain', 'Postal Code is required');\n  });\n\n  it('should successfully submit form when all required fields are filled', () => {\n    cy.get('[data-testid=\"firstName\"]').type('Saif');\n    cy.get('[data-testid=\"lastName\"]').type('Afzal');\n    cy.get('[data-testid=\"postalCode\"]').type('12345');\n    cy.get('[data-testid=\"continue\"]').click();\n    cy.url().should('include', '/checkout');\n    cy.get('[data-testid=\"error\"]').should('not.exist');\n    cy.get('[data-testid=\"success-message\"]').should('be.visible');\n    cy.get('[data-testid=\"success-message\"]').should('contain', 'Thank you for your order');\n  });\n});"
+}

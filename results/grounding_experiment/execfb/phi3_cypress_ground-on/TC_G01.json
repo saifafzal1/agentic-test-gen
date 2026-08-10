@@ -1,0 +1,47 @@
+{
+  "tc_id": "TC_G01",
+  "model": "phi3",
+  "framework": "cypress",
+  "grounding": true,
+  "max_iters": 4,
+  "accepted": false,
+  "best_status": "failed",
+  "best_tests": 2,
+  "best_passed": 0,
+  "iterations": 4,
+  "history": [
+    {
+      "iter": 1,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    },
+    {
+      "iter": 2,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    },
+    {
+      "iter": 3,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    },
+    {
+      "iter": 4,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    }
+  ],
+  "final_script": "describe('Login to Sauce Demo Store', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should successfully log in with valid credentials and redirect to product catalogue', () => {\n    // Intercept the login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n\n    // Fill in the login form\n    cy.get('[data-testid=\"username\"]').type('standard_user');\n    cy.get('[data-testid=\"password\"]').type('secret_sauce');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for the login API call to complete\n    cy.wait('@loginRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n\n    // Verify redirection to product catalogue\n    cy.url().should('include', '/inventory.html');\n    cy.get('[data-testid=\"title\"]').should('contain', 'Products');\n\n    // Verify page title is visible\n    cy.get('[data-testid=\"title\"]').should('be.visible');\n\n    // Verify inventory list is visible\n    cy.get('[data-testid=\"inventory-container\"]').should('be.visible');\n    cy.get('[data-testid=\"inventory-list\"]').should('be.visible');\n\n    // Verify first item is visible\n    cy.get('[data-testid=\"inventory-item\"]').first().should('be.visible');\n  });\n\n  it('should display error message when login fails due to invalid credentials', () => {\n    // Fill in the login form with invalid credentials\n    cy.get('[data-testid=\"username\"]').type('invalid_user');\n    cy.get('[data-testid=\"password\"]').type('wrong_password');\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for the login API call to complete\n    cy.wait('@loginRequest').then((interception) => {\n      expect(interception.response.statusCode).to.equal(401);\n    });\n\n    // Verify error message is displayed\n    cy.get('[data-testid=\"error-message\"]').should('be.visible');\n    cy.get('[data-testid=\"error-message\"]').should('contain', 'Invalid username or password');\n\n    // Verify login button is still visible for retry\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n  });\n});"
+}

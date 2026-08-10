@@ -1,0 +1,47 @@
+{
+  "tc_id": "TC_G16",
+  "model": "phi3",
+  "framework": "cypress",
+  "grounding": true,
+  "max_iters": 4,
+  "accepted": false,
+  "best_status": "failed",
+  "best_tests": 2,
+  "best_passed": 0,
+  "iterations": 4,
+  "history": [
+    {
+      "iter": 1,
+      "status": "load_error",
+      "tests": 0,
+      "passed": 0,
+      "failed": 0,
+      "static_score": 0.518
+    },
+    {
+      "iter": 2,
+      "status": "load_error",
+      "tests": 0,
+      "passed": 0,
+      "failed": 0,
+      "static_score": 0.518
+    },
+    {
+      "iter": 3,
+      "status": "load_error",
+      "tests": 0,
+      "passed": 0,
+      "failed": 0,
+      "static_score": 0.518
+    },
+    {
+      "iter": 4,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    }
+  ],
+  "final_script": "describe('JavaScript Alert Confirmation', () => {\n  beforeEach(() => {\n    cy.visit('/javascript_alerts');\n  });\n\n  it('should display confirm dialog and record user choice', () => {\n    // Verify initial page state\n    cy.get('[data-testid=\"flash-messages\"]').should('be.visible');\n    cy.get('[data-testid=\"flash-messages\"]').should('contain', 'Welcome to JavaScript Alerts');\n\n    // Click the confirm button to open confirm dialog\n    cy.get('[data-testid=\"Click for JS Confirm\"]').click();\n\n    // Verify confirm dialog appears\n    cy.get('[data-testid=\"confirm-dialog\"]').should('be.visible');\n    cy.get('[data-testid=\"confirm-dialog\"]').should('contain', 'Confirm Action');\n\n    // Intercept the confirmation API call\n    cy.intercept('POST', '/api/confirm-action').as('confirmAction');\n\n    // Click the 'OK' button in the confirm dialog\n    cy.get('[data-testid=\"confirm-dialog\"]').within(() => {\n      cy.get('[data-testid=\"confirm-ok\"]').click();\n    });\n\n    // Verify result element shows 'You clicked: Ok'\n    cy.get('[data-testid=\"result\"]').should('be.visible');\n    cy.get('[data-testid=\"result\"]').should('contain', 'You clicked: Ok');\n\n    // Verify confirmation API was called\n    cy.wait('@confirmAction').then((interception) => {\n      expect(interception.response.statusCode).to.equal(200);\n    });\n  });\n\n  it('should display cancel dialog and record user choice on second click', () => {\n    // Verify initial page state\n    cy.get('[data-testid=\"flash-messages\"]').should('be.visible');\n    cy.get('[data-testid=\"flash-messages\"]').should('contain', 'Welcome to JavaScript Alerts');\n\n    // Click the confirm button to open confirm dialog\n    cy.get('[data-testid=\"Click for JS Confirm\"]').click();\n\n    // Verify confirm dialog appears\n    cy.get('[data-testid=\"confirm-dialog\"]').should('be.visible');\n    cy.get('[data-testid=\"confirm-dialog\"]').should('contain', 'Confirm Action');\n\n    // Click the 'Cancel' button in the confirm dialog\n    cy.get('[data-testid=\"confirm-dialog\"]').within(() => {\n      cy.get('[data-testid=\"confirm-cancel\"]').click();\n    });\n\n    // Verify result element shows 'You clicked: Cancel'\n    cy.get('[data-testid=\"result\"]').should('be.visible');\n    cy.get('[data-testid=\"result\"]').should('contain', 'You clicked: Cancel');\n\n    // Verify confirmation API was called with cancel action\n    cy.wait('@confirmAction').then((interception) => {\n      expect(interception.request.body.action).to.equal('cancel');\n    });\n  });\n});"
+}

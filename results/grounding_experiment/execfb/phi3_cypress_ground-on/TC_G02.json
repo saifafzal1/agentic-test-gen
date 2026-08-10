@@ -1,0 +1,47 @@
+{
+  "tc_id": "TC_G02",
+  "model": "phi3",
+  "framework": "cypress",
+  "grounding": true,
+  "max_iters": 4,
+  "accepted": false,
+  "best_status": "failed",
+  "best_tests": 2,
+  "best_passed": 0,
+  "iterations": 4,
+  "history": [
+    {
+      "iter": 1,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    },
+    {
+      "iter": 2,
+      "status": "failed",
+      "tests": 1,
+      "passed": 0,
+      "failed": 1,
+      "static_score": 0.79
+    },
+    {
+      "iter": 3,
+      "status": "failed",
+      "tests": 1,
+      "passed": 0,
+      "failed": 1,
+      "static_score": 0.79
+    },
+    {
+      "iter": 4,
+      "status": "failed",
+      "tests": 1,
+      "passed": 0,
+      "failed": 1,
+      "static_score": 0.79
+    }
+  ],
+  "final_script": "describe('Locked-out Customer Login Error State', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should display error message when logging in with locked-out user credentials', () => {\n    cy.get('[data-testid=\"username\"]').type('locked_out_user');\n    cy.get('[data-testid=\"password\"]').type('secret_sauce');\n    cy.get('[data-testid=\"login-button\"]').click();\n    \n    cy.get('[data-testid=\"error\"]').should('be.visible');\n    cy.get('[data-testid=\"error\"]').should('contain', 'Sorry, this user has been locked out');\n    cy.get('[data-testid=\"login-container\"]').should('contain', 'Login');\n    cy.get('[data-testid=\"login-credentials-container\"]').should('be.visible');\n    cy.get('[data-testid=\"login-credentials\"]').should('contain', 'Username');\n    cy.get('[data-testid=\"login-credentials\"]').should('contain', 'Password');\n    cy.get('[data-testid=\"page-wrapper\"]').should('contain', 'Login');\n  });\n\n  it('should not navigate away from login page when error occurs', () => {\n    cy.get('[data-testid=\"username\"]').type('locked_out_user');\n    cy.get('[data-testid=\"password\"]').type('wrong_password');\n    \n    cy.get('[data-testid=\"login-button\"]').click();\n    \n    cy.url().should('include', '/login');\n    cy.get('[data-testid=\"error\"]').should('be.visible');\n    cy.get('[data-testid=\"error\"]').should('contain', 'Sorry, this user has been locked out');\n    cy.get('[data-testid=\"page-wrapper\"]').should('contain', 'Login');\n    cy.get('[data-testid=\"header-container\"]').should('contain', 'Sauce Labs');\n  });\n});"
+}

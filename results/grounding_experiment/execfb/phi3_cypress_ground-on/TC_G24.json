@@ -1,0 +1,47 @@
+{
+  "tc_id": "TC_G24",
+  "model": "phi3",
+  "framework": "cypress",
+  "grounding": true,
+  "max_iters": 4,
+  "accepted": false,
+  "best_status": "failed",
+  "best_tests": 2,
+  "best_passed": 0,
+  "iterations": 4,
+  "history": [
+    {
+      "iter": 1,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    },
+    {
+      "iter": 2,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    },
+    {
+      "iter": 3,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    },
+    {
+      "iter": 4,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    }
+  ],
+  "final_script": "describe('HTTP Status Code Reporting', () => {\n  beforeEach(() => {\n    cy.visit('/status_codes');\n  });\n\n  it('should navigate to and display correct status code page content', () => {\n    // Verify initial page is loaded\n    cy.get('[data-testid=\"page-footer\"]').should('contain', 'Status Codes');\n\n    // Click the link for status code 200\n    cy.get('[data-testid=\"200\"]').click();\n\n    // Verify navigation to correct URL\n    cy.url().should('include', '/status_codes/200');\n\n    // Verify page body contains expected text\n    cy.get('[data-testid=\"content\"]').should('contain', 'This page returned a 200 status code');\n\n    // Verify navigation back to /status_codes\n    cy.visit('/status_codes');\n\n    // Verify page is back to initial state\n    cy.get('[data-testid=\"page-footer\"]').should('contain', 'Status Codes');\n  });\n\n  it('should handle 404 status code and display appropriate message', () => {\n    // Verify initial page is loaded\n    cy.get('[data-testid=\"page-footer\"]').should('contain', 'Status Codes');\n\n    // Click the link for status code 404\n    cy.get('[data-testid=\"404\"]').click();\n\n    // Verify navigation to correct URL\n    cy.url().should('include', '/status_codes/404');\n\n    // Verify page body contains expected text\n    cy.get('[data-testid=\"content\"]').should('contain', 'This page returned a 404 status code');\n\n    // Verify navigation back to /status_codes\n    cy.visit('/status_codes');\n\n    // Verify page is back to initial state\n    cy.get('[data-testid=\"page-footer\"]').should('contain', 'Status Codes');\n  });\n});"
+}

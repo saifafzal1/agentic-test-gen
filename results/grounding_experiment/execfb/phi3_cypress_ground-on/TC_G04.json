@@ -1,0 +1,47 @@
+{
+  "tc_id": "TC_G04",
+  "model": "phi3",
+  "framework": "cypress",
+  "grounding": true,
+  "max_iters": 4,
+  "accepted": false,
+  "best_status": "failed",
+  "best_tests": 3,
+  "best_passed": 0,
+  "iterations": 4,
+  "history": [
+    {
+      "iter": 1,
+      "status": "failed",
+      "tests": 3,
+      "passed": 0,
+      "failed": 3,
+      "static_score": 0.79
+    },
+    {
+      "iter": 2,
+      "status": "failed",
+      "tests": 3,
+      "passed": 0,
+      "failed": 3,
+      "static_score": 0.79
+    },
+    {
+      "iter": 3,
+      "status": "failed",
+      "tests": 7,
+      "passed": 0,
+      "failed": 7,
+      "static_score": 0.79
+    },
+    {
+      "iter": 4,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    }
+  ],
+  "final_script": "describe('Login Form Validation', () => {\n  beforeEach(() => {\n    cy.visit('/');\n  });\n\n  it('should display error messages when required fields are empty', () => {\n    // Intercept the login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n\n    // Verify error container is visible\n    cy.get('[data-testid=\"error\"]').should('be.visible');\n\n    // Fill in only the username field\n    cy.get('[data-testid=\"user-name\"]').type('standard_user');\n\n    // Click login button\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error\"]').should('contain', 'Username is required');\n\n    // Verify login button is disabled\n    cy.get('[data-testid=\"login-button\"]').should('be.disabled');\n\n    // Verify error container is still visible\n    cy.get('[data-testid=\"error\"]').should('be.visible');\n  });\n\n  it('should display error messages when password field is empty', () => {\n    // Intercept the login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n\n    // Fill in only the username field\n    cy.get('[data-testid=\"user-name\"]').type('standard_user');\n\n    // Click login button\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Verify error message appears\n    cy.get('[data-testid=\"error\"]').should('contain', 'Password is required');\n\n    // Verify login button is disabled\n    cy.get('[data-testid=\"login-button\"]').should('be.disabled');\n\n    // Verify error container is still visible\n    cy.get('[data-testid=\"error\"]').should('be.visible');\n  });\n\n  it('should display error messages when both fields are empty', () => {\n    // Intercept the login API call\n    cy.intercept('POST', '/api/auth/login').as('loginRequest');\n\n    // Click login button with both fields empty\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Verify error container is visible\n    cy.get('[data-testid=\"error\"]').should('be.visible');\n\n    // Verify error message contains both required fields\n    cy.get('[data-testid=\"error\"]').should('contain', 'Username is required');\n    cy.get('[data-testid=\"error\"]').should('contain', 'Password is required');\n\n    // Verify login button is disabled\n    cy.get('[data-testid=\"login-button\"]').should('be.disabled');\n\n    // Verify error container is still visible\n    cy.get('[data-testid=\"error\"]').should('be.visible');\n  });\n});"
+}

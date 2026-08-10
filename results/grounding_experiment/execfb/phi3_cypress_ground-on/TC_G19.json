@@ -1,0 +1,47 @@
+{
+  "tc_id": "TC_G19",
+  "model": "phi3",
+  "framework": "cypress",
+  "grounding": true,
+  "max_iters": 4,
+  "accepted": false,
+  "best_status": "failed",
+  "best_tests": 2,
+  "best_passed": 0,
+  "iterations": 4,
+  "history": [
+    {
+      "iter": 1,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    },
+    {
+      "iter": 2,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    },
+    {
+      "iter": 3,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    },
+    {
+      "iter": 4,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    }
+  ],
+  "final_script": "describe('Checkbox State Management', () => {\n  beforeEach(() => {\n    cy.visit('https://the-internet.herokuapp.com/checkboxes');\n  });\n\n  it('should toggle checkbox states and update form correctly', () => {\n    // Verify initial state: first checkbox unchecked, second checked\n    cy.get('[type=\"checkbox\"]').eq(0).should('have.value', 'false');\n    cy.get('[type=\"checkbox\"]').eq(1).should('have.value', 'true');\n\n    // Verify form displays initial state\n    cy.get('[type=\"checkbox\"]').eq(0).should('be.checked');\n    cy.get('[type=\"checkbox\"]').eq(1).should('be.checked');\n\n    // Toggle first checkbox\n    cy.get('[type=\"checkbox\"]').eq(0).click();\n\n    // Verify both checkboxes are now checked\n    cy.get('[type=\"checkbox\"]').eq(0).should('have.value', 'true');\n    cy.get('[type=\"checkbox\"]').eq(1).should('have.value', 'true');\n\n    // Verify form reflects updated state\n    cy.get('[type=\"checkbox\"]').eq(0).should('be.checked');\n    cy.get('[type=\"checkbox\"]').eq(1).should('be.checked');\n\n    // Toggle second checkbox\n    cy.get('[type=\"checkbox\"]').eq(1).click();\n\n    // Verify only first checkbox remains checked\n    cy.get('[type=\"checkbox\"]').eq(0).should('have.value', 'true');\n    cy.get('[type=\"checkbox\"]').eq(1).should('not.have.value');\n\n    // Verify form reflects final state\n    cy.get('[type=\"checkbox\"]').eq(0).should('be.checked');\n    cy.get('[type=\"checkbox\"]').eq(1).should('not.be.checked');\n  });\n\n  it('should handle edge case: unchecking all checkboxes', () => {\n    // Verify initial state: first checkbox unchecked, second checked\n    cy.get('[type=\"checkbox\"]').eq(0).should('have.value', 'false');\n    cy.get('[type=\"checkbox\"]').eq(1).should('have.value', 'true');\n\n    // Toggle first checkbox\n    cy.get('[type=\"checkbox\"]').eq(0).click();\n\n    // Verify both checkboxes are now checked\n    cy.get('[type=\"checkbox\"]').eq(0).should('have.value', 'true');\n    cy.get('[type=\"checkbox\"]').eq(1).should('have.value', 'true');\n\n    // Toggle second checkbox\n    cy.get('[type=\"checkbox\"]').eq(1).click();\n\n    // Verify only first checkbox remains checked\n    cy.get('[type=\"checkbox\"]').eq(0).should('have.value', 'true');\n    cy.get('[type=\"checkbox\"]').eq(1).should('not.have.value');\n\n    // Toggle first checkbox again\n    cy.get('[type=\"checkbox\"]').eq(0).click();\n\n    // Verify both checkboxes are now unchecked\n    cy.get('[type=\"checkbox\"]').eq(0).should('have.value', 'false');\n    cy.get('[type=\"checkbox\"]').eq(1).should('have.value', 'false');\n\n    // Verify form reflects all unchecked state\n    cy.get('[type=\"checkbox\"]').eq(0).should('not.be.checked');\n    cy.get('[type=\"checkbox\"]').eq(1).should('not.be.checked');\n  });\n});"
+}

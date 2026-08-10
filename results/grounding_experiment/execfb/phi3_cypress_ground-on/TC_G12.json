@@ -1,0 +1,47 @@
+{
+  "tc_id": "TC_G12",
+  "model": "phi3",
+  "framework": "cypress",
+  "grounding": true,
+  "max_iters": 4,
+  "accepted": false,
+  "best_status": "failed",
+  "best_tests": 2,
+  "best_passed": 0,
+  "iterations": 4,
+  "history": [
+    {
+      "iter": 1,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    },
+    {
+      "iter": 2,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    },
+    {
+      "iter": 3,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    },
+    {
+      "iter": 4,
+      "status": "failed",
+      "tests": 2,
+      "passed": 0,
+      "failed": 2,
+      "static_score": 0.79
+    }
+  ],
+  "final_script": "describe('Accessible Product Images and Login Fields', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should have accessible attributes on login fields and product images', () => {\n    // Verify login fields have non-empty placeholder attributes\n    cy.get('[data-testid=\"username\"]').should('have.attr', 'placeholder', 'Username');\n    cy.get('[data-testid=\"password\"]').should('have.attr', 'placeholder', 'Password');\n\n    // Verify login button is visible and has accessible attributes\n    cy.get('[data-testid=\"login-button\"]').should('be.visible');\n    cy.get('[data-testid=\"login-button\"]').should('have.attr', 'aria-label', 'Login');\n\n    // Verify product images have non-empty alt attributes\n    cy.get('[data-testid=\"inventory-item\"]').each(($item) => {\n      cy.wrap($item).should('have.attr', 'alt');\n    });\n\n    // Verify at least one product image has a descriptive alt attribute\n    cy.get('[data-testid=\"inventory-item-img-link\"]').first().then((img) => {\n      cy.wrap(img).should('have.attr', 'alt', 'Product image');\n    });\n\n    // Verify login form is visible and accessible\n    cy.get('[data-testid=\"login-credentials-container\"]').should('be.visible');\n    cy.get('[data-testid=\"login-credentials\"]').should('have.attr', 'aria-label', 'Login credentials');\n  });\n\n  it('should handle login with standard_user and display accessible product images after login', () => {\n    // Intercept login API call\n    cy.intercept('POST', '/api/auth/login', {\n      statusCode: 200,\n      body: {\n        token: 'valid-token',\n        user: {\n          id: 1,\n          username: 'standard_user',\n          email: 'standard_user@example.com'\n        }\n      }\n    }).as('loginSuccess');\n\n    // Fill login form with valid credentials\n    cy.get('[data-testid=\"username\"]').type('standard_user');\n    cy.get('[data-testid=\"password\"]').type('secret_sauce');\n\n    // Click login button\n    cy.get('[data-testid=\"login-button\"]').click();\n\n    // Wait for login API call to complete\n    cy.wait('@loginSuccess');\n\n    // Verify login was successful and user is redirected\n    cy.url().should('include', '/dashboard');\n\n    // Verify product images still have accessible attributes after login\n    cy.get('[data-testid=\"inventory-item\"]').each(($item) => {\n      cy.wrap($item).should('have.attr', 'alt');\n    });\n\n    // Verify login form is no longer visible\n    cy.get('[data-testid=\"login-credentials-container\"]').should('not.exist');\n  });\n});"
+}
