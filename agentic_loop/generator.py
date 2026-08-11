@@ -47,6 +47,18 @@ MODEL_REGISTRY = {
         },
         "hf_adapters": {},
     },
+    "gemma4-base": {
+        "display"   : "google/gemma-4-E4B-it (BASE, no adapter)",
+        "base_path" : str(BASE_DIR / "fine_tuning" / "gemma4-base-model"),
+        "adapters"  : {"cypress": None, "playwright": None},
+        "hf_adapters": {},
+    },
+    "phi3-base": {
+        "display"   : "microsoft/Phi-3-mini-4k-instruct (BASE, no adapter)",
+        "base_path" : str(BASE_DIR / "fine_tuning" / "phi3-base-model"),
+        "adapters"  : {"cypress": None, "playwright": None},
+        "hf_adapters": {},
+    },
     "gemma4": {
         "display"   : "google/gemma-3-4b-it",
         "base_path" : str(BASE_DIR / "fine_tuning" / "gemma4-base-model"),
@@ -102,7 +114,7 @@ def _stop_token_ids(model_key: str, tokenizer) -> list:
     ids = set()
     if tokenizer.eos_token_id is not None:
         ids.add(tokenizer.eos_token_id)
-    extra_token = "<end_of_turn>" if model_key == "gemma4" else "<|end|>"
+    extra_token = "<end_of_turn>" if model_key.startswith("gemma4") else "<|end|>"
     extra_id = tokenizer.convert_tokens_to_ids(extra_token)
     if isinstance(extra_id, int) and extra_id >= 0 and extra_id != tokenizer.unk_token_id:
         ids.add(extra_id)
@@ -125,6 +137,9 @@ def _load_phi3(base_path: str, adapter_path: str):
         attn_implementation="eager",
     )
     base = base.to(device)
+    if adapter_path is None:
+        base.eval()
+        return tokenizer, base
     model = PeftModel.from_pretrained(base, adapter_path)
     model.eval()
     return tokenizer, model
@@ -163,6 +178,9 @@ def _load_gemma4(base_path: str, adapter_path: str):
     except (ImportError, AttributeError) as e:
         print(f"   ⚠️  ClippableLinear unwrap skipped: {e}")
 
+    if adapter_path is None:
+        base.eval()
+        return tokenizer, base
     model = PeftModel.from_pretrained(base, adapter_path)
     model.eval()
     return tokenizer, model
