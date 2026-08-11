@@ -1,0 +1,10 @@
+{
+  "tc_id": "TC_G07",
+  "model": "qwen-coder-14b",
+  "status": "failed",
+  "tests": 2,
+  "passed": 1,
+  "failed": 1,
+  "uses_data_testid": false,
+  "final_script": "describe('Add and Remove Product from Cart', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n  });\n\n  it('should add a product to the cart', () => {\n    cy.get('[data-test=\"add-to-cart-sauce-labs-backpack\"]').click();\n    cy.get('.shopping_cart_badge').should('have.text', '1');\n    cy.get('[data-test=\"add-to-cart-sauce-labs-backpack\"]').should('have.text', 'Remove');\n  });\n\n  it('should remove a product from the cart', () => {\n    cy.get('[data-test=\"add-to-cart-sauce-labs-backpack\"]').click();\n    cy.get('[data-test=\"remove-sauce-labs-backpack\"]').click();\n    cy.get('.shopping_cart_badge').should('not.exist');\n    cy.get('[data-test=\"add-to-cart-sauce-labs-backpack\"]').should('have.text', 'Add to cart');\n  });\n});"
+}

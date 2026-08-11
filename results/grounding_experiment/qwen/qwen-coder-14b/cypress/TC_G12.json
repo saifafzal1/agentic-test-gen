@@ -1,0 +1,10 @@
+{
+  "tc_id": "TC_G12",
+  "model": "qwen-coder-14b",
+  "status": "passed",
+  "tests": 2,
+  "passed": 2,
+  "failed": 0,
+  "uses_data_testid": false,
+  "final_script": "describe('Accessibility Test for Saucedemo', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should have non-empty placeholder attributes for login fields', () => {\n    cy.get('[data-test=\"username\"]').should('have.attr', 'placeholder').and('not.be.empty');\n    cy.get('[data-test=\"password\"]').should('have.attr', 'placeholder').and('not.be.empty');\n  });\n\n  it('should have non-empty alt attributes for product images after login', () => {\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n\n    cy.get('.inventory_item').each(($item) => {\n      cy.wrap($item).find('img.inventory_item_img').should('have.attr', 'alt').and('not.be.empty');\n    });\n  });\n});"
+}

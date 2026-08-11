@@ -1,0 +1,10 @@
+{
+  "tc_id": "TC_G01",
+  "model": "qwen-coder-14b",
+  "status": "passed",
+  "tests": 1,
+  "passed": 1,
+  "failed": 0,
+  "uses_data_testid": false,
+  "final_script": "describe('Login to Sauce Demo', () => {\n  it('should log in with valid credentials', () => {\n    cy.visit('https://www.saucedemo.com');\n\n    // Check for the presence of the login form elements\n    cy.get('[data-test=\"username\"]').should('be.visible');\n    cy.get('[data-test=\"password\"]').should('be.visible');\n    cy.get('[data-test=\"login-button\"]').should('be.visible');\n\n    // Enter valid credentials\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n\n    // Click the login button\n    cy.get('[data-test=\"login-button\"]').click();\n\n    // Verify successful login\n    cy.url().should('include', '/inventory.html');\n    cy.get('.title').should('have.text', 'Products');\n  });\n});"
+}

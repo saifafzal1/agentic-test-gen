@@ -1,0 +1,10 @@
+{
+  "tc_id": "TC_G06",
+  "model": "qwen-coder-14b",
+  "status": "passed",
+  "tests": 1,
+  "passed": 1,
+  "failed": 0,
+  "uses_data_testid": false,
+  "final_script": "describe('Sorting products by price', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n  });\n\n  it('should sort products by price in ascending order', () => {\n    cy.get('[data-test=\"product-sort-container\"]').select('lohi');\n\n    cy.get('.inventory_item_price').then(($prices) => {\n      const prices = $prices.map((index, element) => {\n        return parseFloat(Cypress.$(element).text().replace('$', ''));\n      }).get();\n\n      const sortedPrices = [...prices].sort((a, b) => a - b);\n\n      expect(prices).to.deep.equal(sortedPrices);\n    });\n  });\n});"
+}

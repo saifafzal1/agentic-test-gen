@@ -1,0 +1,10 @@
+{
+  "tc_id": "TC_G08",
+  "model": "qwen-coder-14b",
+  "status": "passed",
+  "tests": 1,
+  "passed": 1,
+  "failed": 0,
+  "uses_data_testid": false,
+  "final_script": "describe('Sauce Demo Checkout Flow', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n  });\n\n  it('should complete a full checkout', () => {\n    // Add backpack to cart\n    cy.get('[data-test=\"add-to-cart-sauce-labs-backpack\"]').click();\n\n    // Go to cart\n    cy.get('.shopping_cart_link').click();\n\n    // Click checkout\n    cy.get('[data-test=\"checkout\"]').click();\n\n    // Fill out information form\n    cy.get('[data-test=\"firstName\"]').type('Saif');\n    cy.get('[data-test=\"lastName\"]').type('Afzal');\n    cy.get('[data-test=\"postalCode\"]').type('201301');\n    cy.get('[data-test=\"continue\"]').click();\n\n    // Verify overview page\n    cy.get('.summary_subtotal_label').should('contain', 'Item total: $29.99');\n\n    // Click finish\n    cy.get('[data-test=\"finish\"]').click();\n\n    // Verify confirmation header\n    cy.get('.complete-header').should('have.text', 'Thank you for your order!');\n  });\n});"
+}

@@ -1,0 +1,10 @@
+{
+  "tc_id": "TC_G11",
+  "model": "qwen-coder-14b",
+  "status": "passed",
+  "tests": 1,
+  "passed": 1,
+  "failed": 0,
+  "uses_data_testid": false,
+  "final_script": "describe('Sauce Demo Store - Mobile Responsiveness', () => {\n  it('should be usable on a small screen', () => {\n    cy.viewport(375, 812); // Set viewport to mobile portrait\n\n    // Visit the Sauce Demo store\n    cy.visit('https://www.saucedemo.com');\n\n    // Log in with standard_user / secret_sauce\n    cy.get('#user-name').type('standard_user');\n    cy.get('#password').type('secret_sauce');\n    cy.get('#login-button').click();\n\n    // Verify that the inventory page is shown\n    cy.get('.inventory_list').should('be.visible');\n\n    // Verify that the burger menu button is visible\n    cy.get('#react-burger-menu-btn').should('be.visible');\n\n    // Click the burger menu button to open the side menu\n    cy.get('#react-burger-menu-btn').click();\n\n    // Verify that the side menu container is open\n    cy.get('.bm-menu').should('be.visible');\n\n    // Verify that the logout link is visible inside the side menu\n    cy.get('#logout_sidebar_link').should('be.visible');\n  });\n});"
+}

@@ -1,0 +1,10 @@
+{
+  "tc_id": "TC_G04",
+  "model": "qwen-coder-14b",
+  "status": "passed",
+  "tests": 2,
+  "passed": 2,
+  "failed": 0,
+  "uses_data_testid": false,
+  "final_script": "describe('Login form validation', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n  });\n\n  it('should display error for missing username', () => {\n    cy.get('[data-test=\"login-button\"]').click();\n    cy.get('[data-test=\"error\"]').should('be.visible').and('contain.text', 'Username is required');\n  });\n\n  it('should display error for missing password', () => {\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"login-button\"]').click();\n    cy.get('[data-test=\"error\"]').should('be.visible').and('contain.text', 'Password is required');\n  });\n});"
+}

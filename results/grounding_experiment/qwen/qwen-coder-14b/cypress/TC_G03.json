@@ -1,0 +1,10 @@
+{
+  "tc_id": "TC_G03",
+  "model": "qwen-coder-14b",
+  "status": "failed",
+  "tests": 1,
+  "passed": 0,
+  "failed": 1,
+  "uses_data_testid": false,
+  "final_script": "describe('Logout functionality', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n    cy.get('[data-test=\"username\"]').type('standard_user');\n    cy.get('[data-test=\"password\"]').type('secret_sauce');\n    cy.get('[data-test=\"login-button\"]').click();\n  });\n\n  it('should log out from the side menu', () => {\n    cy.get('#react-burger-menu-btn').click();\n    cy.get('#logout_sidebar_link').click();\n    cy.url().should('include', '/login');\n    cy.get('[data-test=\"login-button\"]').should('be.visible');\n  });\n});"
+}

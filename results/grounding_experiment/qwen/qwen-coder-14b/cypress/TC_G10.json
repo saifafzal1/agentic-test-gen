@@ -1,0 +1,10 @@
+{
+  "tc_id": "TC_G10",
+  "model": "qwen-coder-14b",
+  "status": "passed",
+  "tests": 1,
+  "passed": 1,
+  "failed": 0,
+  "uses_data_testid": false,
+  "final_script": "describe('Product Detail Page Navigation', () => {\n  beforeEach(() => {\n    cy.visit('https://www.saucedemo.com');\n    cy.get('#user-name').type('standard_user');\n    cy.get('#password').type('secret_sauce');\n    cy.get('#login-button').click();\n  });\n\n  it('should navigate to product detail page and back to catalogue', () => {\n    // Navigate to product detail page\n    cy.get('.inventory_item_name').first().click();\n    cy.url().should('include', 'inventory-item.html');\n\n    // Go back to catalogue\n    cy.get('[data-test=\"back-to-products\"]').click();\n    cy.url().should('include', '/inventory.html');\n    cy.get('.title').should('have.text', 'Products');\n  });\n});"
+}
