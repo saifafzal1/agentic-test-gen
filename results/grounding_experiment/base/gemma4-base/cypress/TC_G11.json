@@ -1,0 +1,11 @@
+{
+  "tc_id": "TC_G11",
+  "model": "gemma4-base",
+  "status": "load_error",
+  "tests": 0,
+  "passed": 0,
+  "failed": 0,
+  "static_score": 0.55,
+  "latency_s": 64.867,
+  "final_script": "```javascript\n// Set viewport to 355x812 (or 375x812 as specified)\ncy.viewport('mobile'); // Use 'mobile' or specify dimensions like cy.viewport({ width: 375, height: 812 })\n\n// Test case 1: Successful login and verification\ncy.get('#standard_user').type('standard_user');\ncy.get('#password').type('secret_sauce');\ncy.get('#login-button').click();\n\n// Verify inventory page is visible\ncy.url().should('include', '/inventory.html');\n\n// Test case 2: Burger menu interaction (assuming the menu is accessible after login)\n// Note: This test assumes the user is logged in and the menu is visible on the inventory page.\ncy.get('#react-burger-menu-btn').click();\n\n// Verify side menu container is visible\ncy.get('.bm-menu').should('be.visible');\n\n// Verify logout link is visible inside the menu\ncy.get('#logout_sidebar_link').should('be.visible');\n```\n```"
+}
